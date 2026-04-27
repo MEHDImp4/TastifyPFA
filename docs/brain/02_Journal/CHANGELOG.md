@@ -1,3 +1,8 @@
+## [2026-04-28] - 00:00
+### Added
+- Completed technical research for Phase 3: Auth API & Login Page.
+- Generated `.planning/phases/03-auth-api-login/03-RESEARCH.md` detailing implementation strategy for HttpOnly refresh tokens in SimpleJWT and race-condition-safe Axios interceptors.
+
 ## [2026-04-27] - 23:30
 ### Added
 - Extracted and structured critical knowledge from `cahier_de_charge_tastify.md` into the Obsidian Brain.
