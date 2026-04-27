@@ -7,8 +7,8 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 ## Phases
 
 - [x] **Phase 1: Project Skeleton** - Docker, Django, React Vite, MySQL, Redis base config.
-- [ ] **Phase 2: User Model & RBAC** [RESEARCH] - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
-- [ ] **Phase 3: Auth API & Login Page** [RESEARCH] - JWT setup, Login UI across all apps.
+- [x] **Phase 2: User Model & RBAC** - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
+- [ ] **Phase 3: Auth API & Login Page** [PLAN] - JWT setup, Login UI across all apps.
 - [ ] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
 - [ ] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.
 - [ ] **Phase 6: Plats Model & API** - Dishes, pricing, prep times.
@@ -27,7 +27,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [ ] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock.
 - [ ] **Phase 20: Automated Deductions** - Django signals linking orders to stock decrementation.
 - [ ] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users.
-- [ ] **Phase 22: HR Frontend** - Back-Office UI for employee management.
+- [ ] **Phase 22: HR Frontend** - Back-office HR UI.
 - [ ] **Phase 23: Reservations Model & API** - Availability logic.
 - [ ] **Phase 24: Reservations Client UI** - Portail Client booking flow.
 - [ ] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
@@ -54,13 +54,19 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Custom User model with roles.
 **Depends on**: Phase 1
 **Success Criteria**: 1. `GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT` roles exist.
-**Plans**: TBD
+**Plans**:
+- [x] 02-01-PLAN.md — Custom User model with Role field.
+- [x] 02-02-PLAN.md — RBAC logic and DRF permissions.
+- [x] 02-03-PLAN.md — Dev seeding for all roles.
 
 ### Phase 3: Auth API & Login Page
 **Goal**: JWT endpoints and Login UI.
 **Depends on**: Phase 2
 **Success Criteria**: 1. Users can log in and receive JWT.
-**Plans**: TBD
+**Plans**:
+- [ ] 03-01-PLAN.md — Backend JWT & Secure Endpoints.
+- [ ] 03-02-PLAN.md — Shared Frontend Auth Infrastructure.
+- [ ] 03-03-PLAN.md — Multi-SPA Integration & Verification.
 
 ### Phase 4: Categories Model & API
 **Goal**: Category DB and REST API.
@@ -261,9 +267,9 @@ Phases execute in numeric order: 1 → 35
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Project Skeleton | 0/0 | Not started | - |
-| 2. User Model & RBAC | 0/3 | Not started | - |
-| 3. Auth API & Login Page | 0/0 | Not started | - |
+| 1. Project Skeleton | 3/3 | Completed | 2026-04-26 |
+| 2. User Model & RBAC | 3/3 | Completed | 2026-04-27 |
+| 3. Auth API & Login Page | 0/3 | Planning | - |
 | 4. Categories Model & API | 0/0 | Not started | - |
 | 5. Categories Frontend | 0/0 | Not started | - |
 | 6. Plats Model & API | 0/0 | Not started | - |
