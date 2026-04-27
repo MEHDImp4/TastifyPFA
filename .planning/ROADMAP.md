@@ -7,7 +7,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 ## Phases
 
 - [x] **Phase 1: Project Skeleton** - Docker, Django, React Vite, MySQL, Redis base config.
-- [ ] **Phase 2: User Model & RBAC** - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
+- [ ] **Phase 2: User Model & RBAC** [CONTEXT] - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
 - [ ] **Phase 3: Auth API & Login Page** - JWT setup, Login UI across all apps.
 - [ ] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
 - [ ] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.

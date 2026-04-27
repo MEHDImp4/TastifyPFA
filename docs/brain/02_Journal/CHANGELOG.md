@@ -1,3 +1,8 @@
+## [2026-04-27] - 22:45
+### Added
+- Captured context for Phase 2: User Model & RBAC in `.planning/phases/02-user-model-rbac/02-CONTEXT.md`.
+- Resolved hierarchical role structure and localized permission strategy.
+
 ## [2026-04-27] - 22:30
 ### Added
 - Completed Phase 1: Project Skeleton.
