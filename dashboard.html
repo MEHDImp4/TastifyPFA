@@ -43,7 +43,6 @@
         body {
             background-color: hsl(220, 10%, 10%);
             color: hsl(0, 0%, 95%);
-            /* Subtle noise overlay */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
         }
         .card {
@@ -51,68 +50,66 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 1rem;
         }
+        /* Custom scrollbar for inner elements */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
-<body class="min-h-screen p-6 md:p-10">
-    <div class="max-w-6xl mx-auto space-y-8">
+<body class="h-screen overflow-hidden p-4 md:p-6">
+    <div class="h-full max-w-[1400px] mx-auto flex flex-col gap-4">
         
         <!-- Header -->
-        <header class="animate-fade-up flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-gray-400 mt-1">Autonomous AI Development Dashboard</p>
+                <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard</p>
             </div>
             
-            <div class="w-full md:w-64 bg-black/30 p-4 rounded-xl border border-white/5">
-                <div class="flex justify-between text-sm mb-2">
+            <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
+                <div class="flex justify-between text-xs mb-2">
                     <span class="font-medium text-gray-300">Project Progress</span>
                     <!-- PERCENT_START --><span class="text-primary font-bold">5%</span><!-- PERCENT_END -->
                 </div>
-                <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
                     <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 5%"></div><!-- PERCENT_END -->
                 </div>
             </div>
         </header>
 
         <!-- Stats Row -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-up" style="animation-delay: 0.1s;">
-            <div class="card p-6">
-                <h3 class="text-gray-400 text-sm font-medium">Completed Phases</h3>
-                <div class="mt-2 text-3xl font-bold">
-                    <!-- STAT_PHASES_START -->0<!-- STAT_PHASES_END -->
-                </div>
+        <div class="grid grid-cols-3 gap-4 shrink-0 animate-fade-up" style="animation-delay: 0.1s;">
+            <div class="card p-4 flex flex-col justify-center">
+                <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Completed Phases</h3>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_PHASES_START -->0<!-- STAT_PHASES_END --></div>
             </div>
-            <div class="card p-6">
-                <h3 class="text-gray-400 text-sm font-medium">Finished Tasks</h3>
-                <div class="mt-2 text-3xl font-bold">
-                    <!-- STAT_TASKS_START -->3<!-- STAT_TASKS_END -->
-                </div>
+            <div class="card p-4 flex flex-col justify-center">
+                <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->3<!-- STAT_TASKS_END --></div>
             </div>
-            <div class="card p-6 flex flex-col justify-center">
-                <h3 class="text-gray-400 text-sm font-medium mb-3">Current Status</h3>
-                <div>
-                    <!-- STATUS_BADGE_START -->
+            <div class="card p-4 flex flex-col justify-center">
+                <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
+                <div><!-- STATUS_BADGE_START -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                         <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
                         Phase 1: Setup Infrastructure
                     </span>
-                    <!-- STATUS_BADGE_END -->
-                </div>
+                    <!-- STATUS_BADGE_END --></div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content Grid -->
+        <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 animate-fade-up" style="animation-delay: 0.2s;">
             
-            <!-- Main Content Area -->
-            <div class="lg:col-span-2 space-y-6 animate-fade-up" style="animation-delay: 0.2s;">
-                
-                <!-- Roadmap -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-                        Roadmap
+            <!-- Left Column: Roadmap Summary & Tech Stack -->
+            <div class="lg:col-span-3 flex flex-col gap-4 overflow-hidden">
+                <div class="card p-4 flex flex-col flex-1 min-h-0">
+                    <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        Roadmap Overview
                     </h2>
-                    <div class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                    <div class="flex-1 overflow-y-auto space-y-3 pr-2">
                         <!-- PHASES_START -->
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-blue-500 block animate-pulse"></span></div>
@@ -180,42 +177,27 @@
                         <!-- PHASES_END -->
                     </div>
                 </div>
-
-                <!-- Activity Stream -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Activity Stream
-                    </h2>
-                    <div class="relative border-l border-white/10 ml-3 pl-6 space-y-6">
-                        <!-- LOGS_START -->
-                        <div class="relative">
-                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
-                            <div class="text-sm text-gray-500 mb-1">Just now</div>
-                            <p class="text-gray-300">Restructured roadmap to 35 vertical-slice phases.</p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
-                            <div class="text-sm text-gray-500 mb-1">5 mins ago</div>
-                            <p class="text-gray-300">Created GSD planning framework.</p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
-                            <div class="text-sm text-gray-500 mb-1">5 mins ago</div>
-                            <p class="text-gray-300">Dashboard created and initialized.</p>
-                        </div>
-                        <!-- LOGS_END -->
+                <div class="card p-4 shrink-0">
+                    <h2 class="text-base font-bold mb-3">Tech Stack</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Django</div>
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Vite</div>
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Tailwind CSS</div>
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">TypeScript</div>
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Docker</div>
+                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">MySQL</div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Detailed Phases -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-                        Suivi Détaillé des Phases
-                    </h2>
-                    <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
-                        <!-- DETAILED_PHASES_START -->
+            <!-- Middle Column: Detailed Phases -->
+            <div class="lg:col-span-6 card p-4 flex flex-col min-h-0 overflow-hidden">
+                <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    Suivi Détaillé des Phases
+                </h2>
+                <div class="flex-1 overflow-y-auto space-y-2 pr-2">
+                    <!-- DETAILED_PHASES_START -->
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4><p class="text-xs text-gray-400 mt-1">Docker, Django, React Vite, MySQL, Redis base config.</p></div>
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
@@ -357,17 +339,14 @@
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
                         </div>
                         <!-- DETAILED_PHASES_END -->
-                    </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6 animate-fade-up" style="animation-delay: 0.3s;">
-                
-                <!-- Chart -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold mb-4">Task Distribution</h2>
-                    <div class="relative h-48 w-full flex items-center justify-center">
+            <!-- Right Column: Chart & Activity -->
+            <div class="lg:col-span-3 flex flex-col gap-4 overflow-hidden">
+                <div class="card p-4 shrink-0">
+                    <h2 class="text-base font-bold mb-2">Task Distribution</h2>
+                    <div class="relative h-32 w-full flex items-center justify-center">
                         <canvas id="taskChart"></canvas>
                         <!-- CHART_DATA_START -->
                         <script>
@@ -379,20 +358,36 @@
                         <!-- CHART_DATA_END -->
                     </div>
                 </div>
-
-                <!-- Tech Stack -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold mb-4">Tech Stack</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Django</div>
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Vite</div>
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Tailwind CSS</div>
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">TypeScript</div>
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Docker</div>
-                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">MySQL</div>
+                
+                <div class="card p-4 flex flex-col flex-1 min-h-0">
+                    <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Activity Stream
+                    </h2>
+                    <div class="flex-1 overflow-y-auto pr-2">
+                        <div class="relative border-l border-white/10 ml-2 pl-4 space-y-5 pt-1">
+                            <!-- LOGS_START -->
+                        <div class="relative">
+                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
+                            <div class="text-sm text-gray-500 mb-1">Just now</div>
+                            <p class="text-gray-300">Restructured roadmap to 35 vertical-slice phases.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
+                            <div class="text-sm text-gray-500 mb-1">5 mins ago</div>
+                            <p class="text-gray-300">Created GSD planning framework.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
+                            <div class="text-sm text-gray-500 mb-1">5 mins ago</div>
+                            <p class="text-gray-300">Dashboard created and initialized.</p>
+                        </div>
+                        <!-- LOGS_END -->
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
