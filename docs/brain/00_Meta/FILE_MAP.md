@@ -1,18 +1,46 @@
-# File Map
+# FILE_MAP — TastifyPFA
 
-This file acts as a directory for the codebase architecture, helping the agent to quickly understand where features and configurations reside.
+> Updated when repo structure changes. Source of truth for layout.
 
-## Core Structure
-- `/` - Root directory, contains configuration files, mandates, and the dashboard.
-- `/docs/cahier_de_charge_tastify.md` - The master project specifications.
-- `/docs/brain/` - Obsidian knowledge base for architecture, features, notes, and journals.
-  - `00_Meta/PROJECT_OVERVIEW.md` - High-level summary of the tech stack and modules.
-- `/.planning/` - GSD framework directory for agent planning.
+## Repository layout
 
-## Backend (To Be Implemented)
-- Location: TBD
+```
+tastify-pfa/
+├── backend/                       # Django + Daphne + Channels (Phase 1 Plan 02)
+│   ├── tastify_backend/
+│   │   ├── settings/{base,dev,prod}.py
+│   │   ├── urls.py
+│   │   ├── asgi.py                # Daphne entry — ProtocolTypeRouter
+│   │   └── wsgi.py
+│   ├── core/                      # Root config app (base models, middleware stubs)
+│   ├── apps/                      # Domain apps (added Phase 2+)
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/                      # 4 independent Vite SPAs (Phase 1 Plan 03)
+│   ├── back-office/               # GERANT  — Vite :3000 — /back-office/
+│   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
+│   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
+│   └── portail-client/            # CLIENT  — Vite :3003 — /
+├── nginx/
+│   └── nginx.conf                 # Reverse proxy (Phase 1 Plan 04)
+├── tests/
+│   └── smoke/test_services.sh     # Wave 0 smoke harness (Phase 1 Plan 04)
+├── docs/                          # Obsidian Brain
+├── .planning/                     # GSD framework
+├── docker-compose.yml             # 7 services (Phase 1 Plan 04)
+├── .env / .env.example            # Single root env (Phase 1 Plan 01)
+├── README.md
+├── DESIGN.md
+├── GEMINI.md
+└── CLAUDE.md
+```
 
-## Frontend (To Be Implemented)
-- Location: TBD
-
-*(This file will be automatically updated as the project structure evolves.)*
+## Service routing (Nginx :80)
+| Path prefix       | Upstream            | Role          |
+|-------------------|---------------------|---------------|
+| `/api/`           | backend:8000        | Django REST   |
+| `/ws/`            | backend:8000        | Channels WS (Phase 13+) |
+| `/back-office/`   | backoffice:3000     | GERANT        |
+| `/salle/`         | salle:3001          | SERVEUR       |
+| `/kds/`           | kds:3002            | CUISINIER     |
+| `/`               | portail:3003        | CLIENT        |
