@@ -13,3 +13,4 @@ and this project adheres to semantic tracking for development.
 - Add `dashboard.html` for real-time project status and health tracking.
 - Add `docs/brain/` Obsidian architecture (Inbox, Journal, Architecture, Features, Resources).
 - Add `FILE_MAP.md` and `Home.md` to establish knowledge base anchors.
+- Add `CLAUDE.md` mirroring `GEMINI.md` rules for compatibility.
