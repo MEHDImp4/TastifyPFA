@@ -66,10 +66,10 @@
             <div class="w-full md:w-64 bg-black/30 p-4 rounded-xl border border-white/5">
                 <div class="flex justify-between text-sm mb-2">
                     <span class="font-medium text-gray-300">Project Progress</span>
-                    <!-- PERCENT_START --><span class="text-primary font-bold">0%</span><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><span class="text-primary font-bold">5%</span><!-- PERCENT_END -->
                 </div>
                 <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 0%"></div><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 5%"></div><!-- PERCENT_END -->
                 </div>
             </div>
         </header>
@@ -79,13 +79,13 @@
             <div class="card p-6">
                 <h3 class="text-gray-400 text-sm font-medium">Completed Phases</h3>
                 <div class="mt-2 text-3xl font-bold">
-                    <!-- STAT_PHASES_START -->0<!-- STAT_PHASES_END -->
+                    <!-- STAT_PHASES_START -->1<!-- STAT_PHASES_END -->
                 </div>
             </div>
             <div class="card p-6">
                 <h3 class="text-gray-400 text-sm font-medium">Finished Tasks</h3>
                 <div class="mt-2 text-3xl font-bold">
-                    <!-- STAT_TASKS_START -->2<!-- STAT_TASKS_END -->
+                    <!-- STAT_TASKS_START -->3<!-- STAT_TASKS_END -->
                 </div>
             </div>
             <div class="card p-6 flex flex-col justify-center">
@@ -94,7 +94,7 @@
                     <!-- STATUS_BADGE_START -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                         <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
-                        Initializing Project
+                        Phase 1: Setup Infrastructure
                     </span>
                     <!-- STATUS_BADGE_END -->
                 </div>
@@ -115,10 +115,52 @@
                     <div class="space-y-4">
                         <!-- PHASES_START -->
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300 line-through">Phase 0: Project Setup</h4>
+                                <p class="text-sm text-gray-500 mt-1">Directory structure, mandates, and architecture.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-blue-500 block animate-pulse"></span></div>
                             <div>
-                                <h4 class="font-semibold">Phase 0: Project Setup</h4>
-                                <p class="text-sm text-gray-400 mt-1">Initializing directory structure, mandates, and architecture.</p>
+                                <h4 class="font-semibold text-white">Phase 1: Setup Infrastructure</h4>
+                                <p class="text-sm text-gray-400 mt-1">Docker, MySQL, Redis, Django structure.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 2: Core Backend & Auth</h4>
+                                <p class="text-sm text-gray-500 mt-1">Django models, JWT, RBAC, Menu and Auth endpoints.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 3: Advanced Backend & WebSockets</h4>
+                                <p class="text-sm text-gray-500 mt-1">Orders, KDS orchestrator, Stocks, HR, Reservations.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 4: Frontend SPA Implementation</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office, Salle, KDS, Portail Client.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 5: AI & Payment</h4>
+                                <p class="text-sm text-gray-500 mt-1">Recommender system, Sentiment analysis, Split Bill.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 6: Finalization & Deployment</h4>
+                                <p class="text-sm text-gray-500 mt-1">Load testing, optimization, deployment.</p>
                             </div>
                         </div>
                         <!-- PHASES_END -->
@@ -136,12 +178,12 @@
                         <div class="relative">
                             <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
                             <div class="text-sm text-gray-500 mb-1">Just now</div>
-                            <p class="text-gray-300">Ingested Cahier de Charges and generated Project Overview.</p>
+                            <p class="text-gray-300">Created GSD planning framework and 6 phases.</p>
                         </div>
                         <div class="relative">
                             <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
-                            <div class="text-sm text-gray-500 mb-1">1 min ago</div>
-                            <p class="text-gray-300">Added CLAUDE.md mirroring GEMINI.md rules.</p>
+                            <div class="text-sm text-gray-500 mb-1">2 mins ago</div>
+                            <p class="text-gray-300">Ingested Cahier de Charges and generated Project Overview.</p>
                         </div>
                         <div class="relative">
                             <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
