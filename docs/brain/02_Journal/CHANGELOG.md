@@ -16,3 +16,4 @@ and this project adheres to semantic tracking for development.
 - Add `CLAUDE.md` mirroring `GEMINI.md` rules for compatibility.
 - Ingested `cahier_de_charge_tastify.md` specifications and created `PROJECT_OVERVIEW.md`.
 - Initialized `.planning/` GSD framework with 6 architectural phases mapped from the specifications.
+- Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
