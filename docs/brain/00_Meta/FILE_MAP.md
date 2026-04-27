@@ -6,32 +6,45 @@
 
 ```
 tastify-pfa/
-├── backend/                       # Django + Daphne + Channels (Phase 1 Plan 02)
+├── backend/                       # Django + Daphne + Channels
 │   ├── tastify_backend/
 │   │   ├── settings/{base,dev,prod}.py
 │   │   ├── urls.py
 │   │   ├── asgi.py                # Daphne entry — ProtocolTypeRouter
 │   │   └── wsgi.py
-│   ├── core/                      # Root config app (base models, middleware stubs)
-│   ├── apps/                      # Domain apps (added Phase 2+)
+│   ├── core/                      # Root config app
+│   ├── apps/                      # Domain apps
+│   │   └── users/                 # Custom User model, Auth (Phase 2 & 3)
+│   │       ├── views/auth.py      # Cookie-based JWT views
+│   │       ├── serializers.py     # Custom JWT claims
+│   │       ├── urls.py
+│   │       └── tests/test_auth.py
 │   ├── requirements.txt
 │   └── Dockerfile
-├── frontend/                      # 4 independent Vite SPAs (Phase 1 Plan 03)
+├── frontend/                      # 4 independent Vite SPAs
+│   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
+│   │   ├── auth/                  # Zustand Store, Login UI, Axios instance
+│   │   └── assets/                # Shared logo, icons
 │   ├── back-office/               # GERANT  — Vite :3000 — /back-office/
 │   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
 │   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
 ├── nginx/
-│   └── nginx.conf                 # Reverse proxy (Phase 1 Plan 04)
+│   └── nginx.conf                 # Reverse proxy
 ├── tests/
-│   └── smoke/test_services.sh     # Wave 0 smoke harness (Phase 1 Plan 04)
+│   └── smoke/test_services.sh     # Wave 0 smoke harness
 ├── docs/                          # Obsidian Brain
+│   ├── brain/                     # Knowledge base
+│   └── cahier_de_charge_tastify.md
 ├── .planning/                     # GSD framework
-├── phases/                    # Phase-specific plans, summaries, and UAT
-│   ├── 01-project-skeleton/   # Phase 1 files
-│   ├── 02-user-model-rbac/    # Phase 2 files (02-CONTEXT.md, 02-RESEARCH.md, 02-01-PLAN.md, 02-02-PLAN.md, 02-03-PLAN.md)
-│   └── 03-auth-api-login/     # Phase 3 files (03-CONTEXT.md, 03-RESEARCH.md, 03-01-PLAN.md, 03-02-PLAN.md, 03-03-PLAN.md)├── docker-compose.yml             # 7 services (Phase 1 Plan 04)
-├── .env / .env.example            # Single root env (Phase 1 Plan 01)
+│   ├── ROADMAP.md                 # Current phase tracking
+│   ├── PROJECT.md                 # Tech stack and decisions
+│   └── phases/                    # Phase-specific files
+│       ├── 01-project-skeleton/   # Wave 1: Infrastructure
+│       ├── 02-user-model-rbac/    # Wave 2: User Core
+│       └── 03-auth-api-login/     # Wave 3: JWT & Login (Finalized)
+├── docker-compose.yml             # 8 services (inc. db, redis)
+├── .env / .env.example            # Single root env
 ├── README.md
 ├── DESIGN.md
 ├── GEMINI.md
