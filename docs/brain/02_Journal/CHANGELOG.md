@@ -1,3 +1,7 @@
+## [2026-04-28] - 00:35
+### Changed
+- Refined UI branding: Globally increased logo size across all applications (Login: `w-32`, Dashboard: `w-24`) to improve brand visibility and visual balance.
+
 ## [2026-04-28] - 00:30
 ### Changed
 - Rewrote `DESIGN.md` to strictly follow the **ECO-FRESH** color palette defined in the Cahier des Charges (`#264653`, `#2A9D8F`, `#E9C46A`, `#F4A261`).
