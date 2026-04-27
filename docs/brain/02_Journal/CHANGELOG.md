@@ -1,6 +1,17 @@
-# Changelog
+## [2026-04-27] - 21:00
+### Added
+- Created `.planning/phases/01-project-skeleton/01-UAT.md` for User Acceptance Testing.
 
-All notable changes to this project will be documented in this file.
+### Fixed
+- N/A
+
+### Changed
+- Updated `dashboard.html` to reflect Phase 1 UAT gap.
+
+### Discovered
+- **Critical Gap:** Phase 1 execution stopped before Plan 04 (Docker Compose & Nginx integration). `docker-compose.yml` and `nginx/` are missing. Recovery plan documented in `01-UAT.md`.
+
+---
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to semantic tracking for development.

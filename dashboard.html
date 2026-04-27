@@ -91,9 +91,9 @@
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
                 <div><!-- STATUS_BADGE_START -->
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Phase 1: Executed
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+                        <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                        Phase 1: UAT Gap Found
                     </span>
                     <!-- STATUS_BADGE_END --></div>
             </div>
@@ -427,6 +427,19 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { family: '"Plus Jakarta Sans", sans-serif' },
+                            bodyFont: { family: '"Plus Jakarta Sans", sans-serif' },
+                            padding: 10,
+                            cornerRadius: 8,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>roundColor: 'rgba(0, 0, 0, 0.8)',
                             titleFont: { family: '"Plus Jakarta Sans", sans-serif' },
                             bodyFont: { family: '"Plus Jakarta Sans", sans-serif' },
                             padding: 10,

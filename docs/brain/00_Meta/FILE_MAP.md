@@ -27,6 +27,8 @@ tastify-pfa/
 │   └── smoke/test_services.sh     # Wave 0 smoke harness (Phase 1 Plan 04)
 ├── docs/                          # Obsidian Brain
 ├── .planning/                     # GSD framework
+│   ├── phases/                    # Phase-specific plans, summaries, and UAT
+│   │   └── 01-project-skeleton/   # Phase 1 files (01-xx-PLAN, 01-UAT.md)
 ├── docker-compose.yml             # 7 services (Phase 1 Plan 04)
 ├── .env / .env.example            # Single root env (Phase 1 Plan 01)
 ├── README.md
