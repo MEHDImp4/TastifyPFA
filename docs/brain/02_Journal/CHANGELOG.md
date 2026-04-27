@@ -1,9 +1,23 @@
-## [2026-04-28] - 00:15
+## [2026-04-27] - 23:55
+### Added
+- Completed Execution of Phase 3: Auth API & Login Page.
+- Implemented secure JWT backend with `djangorestframework-simplejwt`:
+  - HttpOnly cookies for refresh tokens to prevent XSS.
+  - Refresh token rotation and blacklisting for enhanced security.
+  - Custom claims (role, username) in access tokens.
+- Developed shared frontend auth infrastructure in `frontend/_shared/`:
+  - Zustand `useAuthStore` for global authentication state.
+  - Axios `axiosInstance` with automatic token refresh interceptors and request queueing.
+- Created premium `Login.tsx` shared component with "Eco-Fresh" branding.
+- Integrated auth flow into all 4 SPAs (`back-office`, `salle`, `kds`, `portail-client`) with role-based UI and session persistence.
+- Verified entire flow with automated tests (4/4 passed) and manual E2E checks.
+
+## [2026-04-27] - 23:45
 ### Added
 - Generated execution plans for Phase 3: Auth API & Login Page.
 - Created `03-01-PLAN.md`, `03-02-PLAN.md`, and `03-03-PLAN.md` covering backend JWT security, shared frontend infrastructure, and multi-SPA integration.
 
-## [2026-04-28] - 00:00
+## [2026-04-27] - 23:35
 ### Added
 - Completed technical research for Phase 3: Auth API & Login Page.
 - Generated `.planning/phases/03-auth-api-login/03-RESEARCH.md` detailing implementation strategy for HttpOnly refresh tokens in SimpleJWT and race-condition-safe Axios interceptors.
