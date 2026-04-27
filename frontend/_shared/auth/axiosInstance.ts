@@ -6,10 +6,10 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Crucial for HttpOnly cookies
+  withCredentials: true, // Essentiel pour le support des cookies HttpOnly (Refresh Token)
 })
 
-// Request interceptor to add Bearer token
+// Intercepteur de requête : injection du token d'accès Bearer dans les en-têtes
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().accessToken
@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response interceptor to handle token refresh
+// Intercepteur de réponse : gestion automatisée du rafraîchissement des tokens (401)
 let isRefreshing = false
 let failedQueue: any[] = []
 
@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null)
         useAuthStore.getState().clearAuth()
-        // Optional: redirect to login
+        // Optionnel : rediriger vers la page de connexion ici
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false

@@ -10,7 +10,7 @@ def read_roadmap():
     with open(ROADMAP_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Extract phases list
+    # Extraction de la liste des phases via regex
     phase_pattern = re.compile(r'- \[(x| |/)\] \*\*Phase (\d+(?:\.\d+)?): ([^*]+)\*\*(?: (\[[A-Z]+\]))? - (.*)')
     for match in phase_pattern.finditer(content):
         status_char = match.group(1)
@@ -45,9 +45,7 @@ def update_dashboard():
     in_progress_phases = sum(1 for p in phases if p["status"] == "in_progress")
     todo_phases = total_phases - completed_phases - in_progress_phases
     
-    # For tasks, we can approximate based on phases or read plans. Let's just use phases.
-    # The dashboard had "tasks" which might be plans, but let's sync them to phases for simplicity or calculate plans.
-    # To be perfectly accurate, let's count directories in .planning/phases/
+    # Calcul précis de l'avancement via les fichiers de planification dans .planning/phases/
     tasks_done = 0
     tasks_total = 0
     phases_dir = os.path.join(ROOT_DIR, ".planning", "phases")
@@ -55,21 +53,21 @@ def update_dashboard():
         for p in os.listdir(phases_dir):
             p_path = os.path.join(phases_dir, p)
             if os.path.isdir(p_path):
-                # count plans
+                # Comptage des fichiers PLAN vs SUMMARY pour déterminer le ratio de complétion
                 for f in os.listdir(p_path):
                     if f.endswith("-PLAN.md"):
                         tasks_total += 1
                     if f.endswith("-SUMMARY.md"):
                         tasks_done += 1
                         
-    # If no tasks scanned, default to phases
+    # Fallback sur le statut global des phases si aucun plan n'est trouvé
     if tasks_total == 0:
         tasks_total = total_phases
         tasks_done = completed_phases
         
     progress_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
     
-    # Generate HTML for Roadmap Overview (Short)
+    # Génération du HTML pour l'aperçu du Roadmap (version courte et détaillée)
     phases_html = []
     detailed_html = []
     
@@ -118,7 +116,7 @@ def update_dashboard():
                             {badge}
                         </div>''')
 
-    # Status Badge Logic
+    # Détermination du badge de statut global
     current_status_badge = ""
     if in_progress_phases > 0:
         current_status_badge = '''                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -143,7 +141,7 @@ def update_dashboard():
                             }};
                         </script>'''
 
-    # Read dashboard and replace markers
+    # Mise à jour du fichier dashboard.html via remplacement des marqueurs
     with open(DASHBOARD_FILE, 'r', encoding='utf-8') as f:
         dash_content = f.read()
 

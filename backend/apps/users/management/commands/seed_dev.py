@@ -38,7 +38,7 @@ class Command(BaseCommand):
             }
         ]
 
-        # Use a dummy password
+        # Mot de passe générique pour l'environnement de développement
         dummy_password = 'password123'
 
         for user_data in users_data:

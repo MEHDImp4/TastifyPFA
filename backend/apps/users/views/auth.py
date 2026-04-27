@@ -13,7 +13,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             refresh_token = response.data.get('refresh')
-            # Set cookie
+            # Configuration du cookie HttpOnly pour le token de rafraîchissement
             response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE'],
                 value=refresh_token,
@@ -22,13 +22,13 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 httponly=True,
                 samesite='Lax'
             )
-            # Remove refresh token from response body
+            # Retrait du refresh token de la réponse JSON pour limiter l'exposition XSS
             del response.data['refresh']
         return response
 
 class CookieTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
-        # Extract refresh token from cookie if not in body
+        # Récupération du token depuis le cookie si non présent dans le body
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
         if refresh_token:
             request.data['refresh'] = refresh_token
@@ -37,7 +37,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         
         if response.status_code == 200 and 'refresh' in response.data:
             new_refresh_token = response.data.get('refresh')
-            # Set new refresh token in cookie if rotated
+            # Mise à jour du cookie sécurisé suite à la rotation du token
             response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE'],
                 value=new_refresh_token,

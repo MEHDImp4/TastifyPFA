@@ -3,7 +3,7 @@ from .base import *  # noqa: F401,F403
 DEBUG = False
 
 CORS_ALLOWED_ORIGINS = [
-    # Populate with real prod origins before deploy
+    # À remplir avec les domaines de production réels avant le déploiement
 ]
 CORS_ALLOW_CREDENTIALS = True
 
