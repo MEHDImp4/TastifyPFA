@@ -11,18 +11,23 @@ def read_roadmap():
         content = f.read()
     
     # Extract phases list
-    phase_pattern = re.compile(r'- \[(x| |/)\] \*\*Phase (\d+(?:\.\d+)?): ([^*]+)\*\* (?:\[.*?\] )?- (.*)')
+    phase_pattern = re.compile(r'- \[(x| |/)\] \*\*Phase (\d+(?:\.\d+)?): ([^*]+)\*\*(?: (\[[A-Z]+\]))? - (.*)')
     for match in phase_pattern.finditer(content):
         status_char = match.group(1)
         phase_num = match.group(2)
         title = match.group(3).strip()
-        desc = match.group(4).strip()
+        tag = match.group(4)
+        desc = match.group(5).strip()
         
         status = "todo"
         if status_char == "x":
             status = "done"
         elif status_char == "/":
             status = "in_progress"
+        elif tag == "[PLAN]":
+            status = "planned"
+        elif tag == "[CONTEXT]":
+            status = "discussed"
             
         phases.append({
             "num": phase_num,
@@ -81,6 +86,18 @@ def update_dashboard():
             text_color = "text-white"
             desc_color = "text-gray-400"
             badge = '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/20 whitespace-nowrap">En cours</span>'
+        elif p["status"] == "planned":
+            dot_color = "bg-yellow-500"
+            opacity_class = ""
+            text_color = "text-white"
+            desc_color = "text-gray-400"
+            badge = '<span class="px-2 py-1 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/20 whitespace-nowrap">Planifié</span>'
+        elif p["status"] == "discussed":
+            dot_color = "bg-blue-500"
+            opacity_class = ""
+            text_color = "text-white"
+            desc_color = "text-gray-400"
+            badge = '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/20 whitespace-nowrap">Contexte Capturé</span>'
         else:
             dot_color = "bg-gray-500"
             opacity_class = "opacity-50"
