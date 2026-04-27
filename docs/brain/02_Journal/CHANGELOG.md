@@ -6,6 +6,11 @@
 - Populated `01_Inbox/IDEAS.md` and `05_Resources/LINKS.md`.
 - Updated `Home.md` to link to the new knowledge base files.
 
+## [2026-04-27] - 23:15
+### Added
+- Generated execution plans for Phase 2: User Model & RBAC.
+- Created `02-01-PLAN.md`, `02-02-PLAN.md`, and `02-03-PLAN.md` covering model creation, RBAC logic, and dev seeding.
+
 ## [2026-04-27] - 23:00
 ### Added
 - Completed technical research for Phase 2: User Model & RBAC.

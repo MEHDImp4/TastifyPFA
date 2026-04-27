@@ -262,7 +262,7 @@ Phases execute in numeric order: 1 → 35
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Skeleton | 0/0 | Not started | - |
-| 2. User Model & RBAC | 0/0 | Not started | - |
+| 2. User Model & RBAC | 0/3 | Not started | - |
 | 3. Auth API & Login Page | 0/0 | Not started | - |
 | 4. Categories Model & API | 0/0 | Not started | - |
 | 5. Categories Frontend | 0/0 | Not started | - |

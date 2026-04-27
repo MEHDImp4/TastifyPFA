@@ -29,7 +29,7 @@ tastify-pfa/
 ├── .planning/                     # GSD framework
 ├── phases/                    # Phase-specific plans, summaries, and UAT
 │   ├── 01-project-skeleton/   # Phase 1 files
-│   └── 02-user-model-rbac/    # Phase 2 files (02-CONTEXT.md, 02-RESEARCH.md)├── docker-compose.yml             # 7 services (Phase 1 Plan 04)
+│   └── 02-user-model-rbac/    # Phase 2 files (02-CONTEXT.md, 02-RESEARCH.md, 02-01-PLAN.md, 02-02-PLAN.md, 02-03-PLAN.md)├── docker-compose.yml             # 7 services (Phase 1 Plan 04)
 ├── .env / .env.example            # Single root env (Phase 1 Plan 01)
 ├── README.md
 ├── DESIGN.md
