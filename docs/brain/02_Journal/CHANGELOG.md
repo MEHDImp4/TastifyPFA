@@ -1,3 +1,8 @@
+## [2026-04-27] - 23:00
+### Added
+- Completed technical research for Phase 2: User Model & RBAC.
+- Generated `.planning/phases/02-user-model-rbac/02-RESEARCH.md` detailing implementation strategy for custom User model, TextChoices for roles, and DRF permissions.
+
 ## [2026-04-27] - 22:45
 ### Added
 - Captured context for Phase 2: User Model & RBAC in `.planning/phases/02-user-model-rbac/02-CONTEXT.md`.
