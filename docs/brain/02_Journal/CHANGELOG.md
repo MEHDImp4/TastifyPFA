@@ -1,3 +1,13 @@
+## [2026-04-28] - 00:30
+### Changed
+- Rewrote `DESIGN.md` to strictly follow the **ECO-FRESH** color palette defined in the Cahier des Charges (`#264653`, `#2A9D8F`, `#E9C46A`, `#F4A261`).
+- Integrated **Emil Kowalski's** design engineering principles:
+  - Enforced `scale(0.97)` press states on interactive elements.
+  - Mandated explicit property transitions (no `transition: all`).
+  - Implemented origin-aware popover logic and avoided `scale(0)` on entry animations.
+  - Added a **Design Audit** framework for high-end UI reviews.
+- Synchronized project dashboard with the updated design system state. (Commit: `ff312c4`)
+
 ## [2026-04-28] - 00:25
 ### Fixed
 - Silenced TypeScript `baseUrl` deprecation warnings in all frontend `tsconfig.json` files (`back-office`, `kds`, `portail-client`, `salle`) by adding `ignoreDeprecations: "6.0"`.
