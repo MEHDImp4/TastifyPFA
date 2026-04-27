@@ -2,6 +2,11 @@
 ### Changed
 - UI Refinement: Massive +50% logo scale increase across all applications (Login: `w-72`, Dashboard: `w-48`) for high-impact brand presence.
 
+## [2026-04-28] - 00:40
+### Added
+- Created `docs/brain/05_Resources/DEV_CREDENTIALS.md` containing the usernames and passwords for the 4 development test roles (`gerant_test`, `serveur_test`, `cuisinier_test`, `client_test`).
+- Synchronized `FILE_MAP.md` to include the new credentials resource.
+
 ## [2026-04-28] - 00:30
 ### Changed
 - Rewrote `DESIGN.md` to strictly follow the **ECO-FRESH** color palette defined in the Cahier des Charges (`#264653`, `#2A9D8F`, `#E9C46A`, `#F4A261`).

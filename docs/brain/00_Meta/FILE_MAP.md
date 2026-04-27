@@ -35,6 +35,7 @@ tastify-pfa/
 │   └── smoke/test_services.sh     # Wave 0 smoke harness
 ├── docs/                          # Obsidian Brain
 │   ├── brain/                     # Knowledge base
+│   │   └── 05_Resources/DEV_CREDENTIALS.md # Test logins
 │   └── cahier_de_charge_tastify.md
 ├── .planning/                     # GSD framework
 │   ├── ROADMAP.md                 # Current phase tracking
