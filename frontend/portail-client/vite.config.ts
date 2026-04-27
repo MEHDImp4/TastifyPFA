@@ -7,8 +7,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL('./shared', import.meta.url))
-    }
+      '@shared': fileURLToPath(new URL('./shared', import.meta.url)),
+      'axios': fileURLToPath(new URL('./node_modules/axios', import.meta.url)),
+      'zustand': fileURLToPath(new URL('./node_modules/zustand', import.meta.url)),
+      'lucide-react': fileURLToPath(new URL('./node_modules/lucide-react', import.meta.url)),
+    },
+    preserveSymlinks: true,
   },
   server: {
     host: '0.0.0.0',
