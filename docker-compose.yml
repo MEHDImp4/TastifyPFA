@@ -1,0 +1,106 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - tastify-network
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - tastify-network
+
+  backend:
+    build:
+      context: ./backend
+    env_file: .env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tastify-network
+
+  backoffice:
+    build:
+      context: ./frontend/back-office
+    volumes:
+      - ./frontend/back-office:/app
+      - /app/node_modules
+    networks:
+      - tastify-network
+
+  salle:
+    build:
+      context: ./frontend/salle
+    volumes:
+      - ./frontend/salle:/app
+      - /app/node_modules
+    networks:
+      - tastify-network
+
+  kds:
+    build:
+      context: ./frontend/kds
+    volumes:
+      - ./frontend/kds:/app
+      - /app/node_modules
+    networks:
+      - tastify-network
+
+  portail:
+    build:
+      context: ./frontend/portail-client
+    volumes:
+      - ./frontend/portail-client:/app
+      - /app/node_modules
+    networks:
+      - tastify-network
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - backoffice
+      - salle
+      - kds
+      - portail
+    networks:
+      - tastify-network
+
+networks:
+  tastify-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:

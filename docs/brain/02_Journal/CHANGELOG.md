@@ -1,3 +1,16 @@
+## [2026-04-27] - 22:00
+### Added
+- Created `nginx/nginx.conf` for reverse proxy and HMR support.
+- Created `docker-compose.yml` for orchestrating all 7 services.
+- Created `tests/smoke/test_services.sh` for automated infrastructure verification.
+
+### Fixed
+- Scaffolded missing Plan 04 infrastructure.
+
+### Changed
+- Updated `dashboard.html` to reflect Infrastructure Ready state.
+- Updated `01-UAT.md` with progress on recovery plan.
+
 ## [2026-04-27] - 21:00
 ### Added
 - Created `.planning/phases/01-project-skeleton/01-UAT.md` for User Acceptance Testing.

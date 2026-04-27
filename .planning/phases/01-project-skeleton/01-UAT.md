@@ -22,21 +22,26 @@ verification_date: 2026-04-27
 
 | ID | Feature / Requirement | Test Case | Status | Observation |
 |---|---|---|---|---|
-| UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ❌ FAIL | `docker-compose.yml` is missing. |
-| UAT-2.2 | Nginx Routing | Access `/api/`, `/back-office/`, `/salle/`, etc. | ❌ FAIL | Nginx configuration and container missing. |
-| UAT-2.3 | Database Connectivity | Django connects to MySQL. | ❌ FAIL | Database service not defined/started. |
-| UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ❌ FAIL | Redis service not defined/started. |
+| UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ⚠️ BLOCKED | `docker-compose.yml` created, but Docker daemon is not running. |
+| UAT-2.2 | Nginx Routing | Access `/api/`, `/back-office/`, `/salle/`, etc. | ⚠️ BLOCKED | `nginx/nginx.conf` created, waiting for container. |
+| UAT-2.3 | Database Connectivity | Django connects to MySQL. | ⚠️ BLOCKED | Configuration ready, waiting for service startup. |
+| UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ⚠️ BLOCKED | Configuration ready, waiting for service startup. |
 
 ---
 
 ## Gap Diagnosis
 
-**Finding:** Phase 1 execution stopped after Task 01-03. **Plan 04 (Docker Compose & Nginx integration)** was deferred in `01-03-SUMMARY.md` but never created or executed.
+**Finding:** Phase 1 execution stopped after Task 01-03. **Plan 04 (Docker Compose & Nginx integration)** was missing.
+
+**Status:**
+- [x] Task 1: Create Nginx configuration (`nginx/nginx.conf`).
+- [x] Task 2: Create `docker-compose.yml`.
+- [x] Task 3: Create Smoke Test Harness (`tests/smoke/test_services.sh`).
+- [ ] Task 4: Start services (Blocked by Docker Daemon).
 
 **Impact:**
-- No unified way to start the project.
-- No reverse proxy (Nginx) to route between services.
-- Success criteria for Phase 1 ("Services start via Docker") is NOT met.
+- Files are ready for execution.
+- Success criteria for Phase 1 ("Services start via Docker") remains pending until Docker is started.
 
 ---
 
