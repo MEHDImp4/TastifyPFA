@@ -6,6 +6,14 @@
 - Populated `01_Inbox/IDEAS.md` and `05_Resources/LINKS.md`.
 - Updated `Home.md` to link to the new knowledge base files.
 
+## [2026-04-27] - 23:30
+### Added
+- Completed Execution of Phase 2: User Model & RBAC.
+- Implemented custom `Utilisateur` model extending `AbstractUser` with a `Role` `TextChoices` ENUM (`GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT`).
+- Configured Django settings to use `users.Utilisateur` as the default auth model.
+- Created robust DRF permission classes (`IsGerant`, `IsServeurOrGerant`, `IsCuisinierOrGerant`) enforcing a hierarchical RBAC.
+- Implemented `seed_dev` management command to seamlessly create test users for all 4 roles.
+
 ## [2026-04-27] - 23:15
 ### Added
 - Generated execution plans for Phase 2: User Model & RBAC.
