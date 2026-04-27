@@ -1,3 +1,11 @@
+## [2026-04-27] - 23:30
+### Added
+- Extracted and structured critical knowledge from `cahier_de_charge_tastify.md` into the Obsidian Brain.
+- Populated `03_Architecture/` with `DATABASE_SCHEMA.md`, `API_DESIGN.md`, and `TECH_STACK.md`.
+- Populated `04_Features/` with `RBAC_MODEL.md`, `BACKOFFICE_GERANT.md`, `KDS_CUISINE.md`, `SALLE_SERVEUR.md`, and `PORTAIL_CLIENT.md`.
+- Populated `01_Inbox/IDEAS.md` and `05_Resources/LINKS.md`.
+- Updated `Home.md` to link to the new knowledge base files.
+
 ## [2026-04-27] - 23:00
 ### Added
 - Completed technical research for Phase 2: User Model & RBAC.
