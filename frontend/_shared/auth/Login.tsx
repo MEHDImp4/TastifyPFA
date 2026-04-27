@@ -44,50 +44,51 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4 font-sans text-white">
-      <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-[#141414] rounded-2xl border border-white/5 shadow-2xl overflow-hidden p-8">
-          <div className="flex flex-col items-center mb-8">
-            <div class="w-16 h-16 bg-blue-600/10 rounded-xl flex items-center justify-center mb-4 border border-blue-500/20">
-              <img src={logo} alt="Tastify" className="w-10 h-10" />
+    <div className="min-h-screen flex items-center justify-center bg-background p-6 font-sans text-foreground">
+      <div className="w-full max-w-[400px] animate-enter">
+        <div className="bg-surface rounded-3xl border border-white/5 shadow-2xl overflow-hidden p-10">
+          <div className="flex flex-col items-center mb-10">
+            <div className="mb-6 relative">
+              <div className="absolute inset-0 bg-teal/20 blur-2xl rounded-full" />
+              <img src={logo} alt="Tastify" className="w-20 h-20 relative z-10" />
             </div>
-
-            <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-            <p className="text-gray-400 text-sm mt-2 text-center">
-              Connectez-vous pour accéder à votre espace de travail.
+            
+            <h1 className="text-2xl font-bold tracking-tight text-white mb-2">{title}</h1>
+            <p className="text-foreground-muted text-sm text-center px-4 leading-relaxed">
+              Connectez-vous pour accéder à votre interface de gestion restaurant.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 ml-1">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold text-teal uppercase tracking-[0.1em] ml-1">
                 Utilisateur
               </label>
               <div className="relative group">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted group-focus-within:text-teal transition-colors" />
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all placeholder:text-gray-600"
-                  placeholder="Votre nom d'utilisateur"
+                  className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
+                  placeholder="nom_utilisateur"
                   required
                   autoComplete="username"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 ml-1">
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold text-teal uppercase tracking-[0.1em] ml-1">
                 Mot de passe
               </label>
               <div className="relative group">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted group-focus-within:text-teal transition-colors" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-12 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all placeholder:text-gray-600"
+                  className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-12 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
@@ -95,16 +96,16 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-white transition-colors p-1"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-4 rounded-xl flex items-center gap-2 animate-in fade-in zoom-in-95">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+              <div className="bg-error/10 border border-error/20 text-error text-[13px] p-4 rounded-2xl flex items-center gap-3 animate-enter">
+                <span className="w-1.5 h-1.5 rounded-full bg-error shrink-0" />
                 {error}
               </div>
             )}
@@ -112,7 +113,7 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 mt-2"
+              className="w-full bg-teal hover:bg-teal/90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl transition-all shadow-[0_10px_20px_rgba(42,157,143,0.2)] flex items-center justify-center gap-3 mt-4"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -122,9 +123,9 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-white/5 text-center">
-            <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
-              Tastify Ecosystem &copy; 2026
+          <div className="mt-10 pt-8 border-t border-white/5 text-center">
+            <p className="text-[10px] text-foreground-muted uppercase tracking-[0.2em] font-bold opacity-50">
+              Tastify Ecosystem &bull; 2026
             </p>
           </div>
         </div>

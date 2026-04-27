@@ -1,3 +1,7 @@
+## [2026-04-28] - 00:25
+### Fixed
+- Silenced TypeScript `baseUrl` deprecation warnings in all frontend `tsconfig.json` files (`back-office`, `kds`, `portail-client`, `salle`) by adding `ignoreDeprecations: "6.0"`.
+
 ## [2026-04-27] - 23:55
 ### Added
 - Completed Execution of Phase 3: Auth API & Login Page.

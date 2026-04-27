@@ -8,8 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@shared': fileURLToPath(new URL('./shared', import.meta.url)),
-      'zustand': fileURLToPath(new URL('./node_modules/zustand/esm/index.mjs', import.meta.url)),
-      'axios': fileURLToPath(new URL('./node_modules/axios/index.js', import.meta.url)),
     },
     preserveSymlinks: true,
   },
