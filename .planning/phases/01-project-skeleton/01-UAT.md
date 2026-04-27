@@ -22,10 +22,10 @@ verification_date: 2026-04-27
 
 | ID | Feature / Requirement | Test Case | Status | Observation |
 |---|---|---|---|---|
-| UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ⚠️ BLOCKED | `docker-compose.yml` created, but Docker daemon is not running. |
-| UAT-2.2 | Nginx Routing | Access `/api/`, `/back-office/`, `/salle/`, etc. | ⚠️ BLOCKED | `nginx/nginx.conf` created, waiting for container. |
-| UAT-2.3 | Database Connectivity | Django connects to MySQL. | ⚠️ BLOCKED | Configuration ready, waiting for service startup. |
-| UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ⚠️ BLOCKED | Configuration ready, waiting for service startup. |
+| UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ✅ PASS | All services up and running. |
+| UAT-2.2 | Nginx Routing | Access `/api/`, `/back-office/`, `/salle/`, etc. | ✅ PASS | Routing configured and verified. |
+| UAT-2.3 | Database Connectivity | Django connects to MySQL. | ✅ PASS | Migrations applied successfully. |
+| UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ✅ PASS | Redis PONG received. |
 
 ---
 
@@ -37,11 +37,11 @@ verification_date: 2026-04-27
 - [x] Task 1: Create Nginx configuration (`nginx/nginx.conf`).
 - [x] Task 2: Create `docker-compose.yml`.
 - [x] Task 3: Create Smoke Test Harness (`tests/smoke/test_services.sh`).
-- [ ] Task 4: Start services (Blocked by Docker Daemon).
+- [x] Task 4: Start services and verify.
 
 **Impact:**
-- Files are ready for execution.
-- Success criteria for Phase 1 ("Services start via Docker") remains pending until Docker is started.
+- Full infrastructure is wired and verified.
+- Success criteria for Phase 1 ("Services start via Docker") is MET.
 
 ---
 

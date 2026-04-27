@@ -1,3 +1,13 @@
+## [2026-04-27] - 22:30
+### Added
+- Completed Phase 1: Project Skeleton.
+- Verified all 8 Docker services are running and healthy.
+- Applied initial Django database migrations.
+- Verified Nginx routing for all services (API + 4 SPAs).
+
+### Fixed
+- Fixed backend `Dockerfile` by switching to `python:3.12-slim-bookworm` to resolve repository issues.
+
 ## [2026-04-27] - 22:00
 ### Added
 - Created `nginx/nginx.conf` for reverse proxy and HMR support.
