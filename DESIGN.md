@@ -1,83 +1,80 @@
-# TastifyPFA Design System
+# TastifyPFA Design System: The ECO-FRESH Manifesto
 
-This document establishes the comprehensive design system for TastifyPFA, focusing on a premium, modern UI.
+This document defines the visual and interactive identity of TastifyPFA. We don't just build functional software; we build interfaces that feel right through trained taste and obsessive attention to unseen details.
 
-## Vision
-**"Efficiency without fatigue."**
-The design must provide a premium feel with maximum usability. We support both Dark (default) and Light modes, with Dark mode serving as the primary focus for our aesthetics.
+## 1. Vision: "Organic Efficiency"
+TastifyPFA combines the warmth of Moroccan hospitality with the precision of a high-end tool. The interface must be fast, tactile, and professional.
 
-## Color Palette
+## 2. Color Palette (ECO-FRESH)
+Derived from the official specification, these tokens form the foundation of our identity.
 
-Define these core CSS tokens in our global stylesheets. Ensure high contrast across both modes.
+| Token | Hex | Role | Usage |
+| --- | --- | --- | --- |
+| **Dark (Ardoise)** | `#264653` | Background / Depth | Deep surfaces, sidebars, and primary dark mode background. |
+| **Teal (Emerald)** | `#2A9D8F` | Primary / Success | Primary buttons, success states, and brand highlights. |
+| **Amber (Sand)** | `#E9C46A` | Warning / Accent | Secondary actions, warnings, and highlighting selected states. |
+| **Orange (Clay)** | `#F4A261` | Secondary / Call to Action | Promotional elements, specific UI accents. |
+| **Terracotta (Red)** | `#E76F51` | Error / Destructive | Delete buttons, errors, and critical alerts. |
 
-### Dark Mode (Default)
-- **Primary**: `hsl(210, 100%, 50%)` - (A sharp, vibrant blue)
-- **Secondary**: `hsl(215, 15%, 20%)` - (Subtle gray-blue for accents)
-- **Accent**: `hsl(280, 100%, 65%)` - (Vibrant purple for highlights)
-- **Background**: `hsl(220, 10%, 10%)` - (Deep near-black)
-- **Surface**: `hsl(220, 10%, 14%)` - (Slightly lighter than background)
-- **Foreground**: `hsl(0, 0%, 95%)` - (Off-white for readability)
-- **Error**: `hsl(0, 100%, 65%)` - (Clear red)
-- **Success**: `hsl(145, 65%, 45%)` - (Clean green)
+### Semantic Layers (Dark Mode Focus)
+- **Background**: `#1a323b` (A deeper shade of Ardoise for maximum contrast).
+- **Surface**: `#264653` (The standard Ardoise for cards/containers).
+- **Surface Elevated**: `#325a6a` (Subtle 1px border or slightly lighter background for depth).
 
-### Light Mode
-- **Primary**: `hsl(210, 100%, 45%)`
-- **Secondary**: `hsl(215, 15%, 90%)`
-- **Accent**: `hsl(280, 100%, 60%)`
-- **Background**: `hsl(0, 0%, 98%)`
-- **Surface**: `hsl(0, 0%, 100%)`
-- **Foreground**: `hsl(220, 10%, 15%)`
-- **Error**: `hsl(0, 100%, 50%)`
-- **Success**: `hsl(145, 65%, 35%)`
+## 3. Typography
+We use **Inter** for its clarity and neutral tone, allowing the brand colors to shine.
+- **Headlines**: Semi-bold (600), tight tracking (-0.02em).
+- **Body**: Regular (400), generous line-height (1.6) for readability.
+- **Labels/Numbers**: Medium (500), tabular figures for prices/quantities.
 
-## Typography
+## 4. Animation Decision Framework
+Animations are not decorations; they are feedback. We follow Emil Kowalski’s principles for "Correctness."
 
-Use system fonts mapped over the Inter family.
-- **Font Stack**: `font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`
-- **Weights**: 
-  - Regular: `400`
-  - Medium: `500`
-  - Semibold: `600`
-  - Bold: `700`
-- **Sizes**: Follow standard Tailwind classes (`text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl`, etc.).
+### The "Invisible" Rules
+| Aspect | Decision | Rationale |
+| --- | --- | --- |
+| **Press Feedback** | `scale(0.97)` on `:active` | Instant confirmation that the UI "heard" the user. |
+| **Entry Transitions** | `scale(0.95)` → `scale(1)` | Nothing in the real world appears from `scale(0)`. |
+| **Duration** | 150ms - 250ms | SNAPPY. Anything slower feels like lag. |
+| **Easing** | `cubic-bezier(0.23, 1, 0.32, 1)` | A strong ease-out for responsive feedback. |
+| **Property Control** | NEVER use `transition: all` | Specify exact properties (transform, opacity) for GPU performance. |
 
-## Elevation & Depth
+### Frequency-Based Motion
+- **100+ times/day (Scanning QR, Kitchen actions)**: NO animation. Zero latency.
+- **Occasional (Modals, Toasts)**: Standard ease-out (200ms).
+- **Rare (Success celebration)**: Spring-based, playful motion.
 
-Use tonal layers instead of classic drop shadows for Dark Mode.
-- **Surface Level 1**: `bg-surface` border `border-white/5`
-- **Surface Level 2**: `bg-surface-elevated` border `border-white/10`
-- Avoid heavy `box-shadow` in dark mode; rely on subtle borders and background lightness shifts.
+## 5. Component Engineering Standards
 
-## Shapes & Radius
+### Buttons
+- **Shape**: `rounded-lg` (8px). Organic but professional.
+- **Motion**: 
+  - Hover: Subtle brightness increase (10%).
+  - Active: `scale(0.97)` + 160ms ease-out.
+- **Validation**: Must pass WCAG AA contrast against Ardoise background.
 
-Use an organic design language.
-- **Avoid**: `rounded-none`, strict sharp edges unless required by system components.
-- **Standard Radius**: `rounded-xl` and `rounded-2xl` for containers, modals, and larger cards.
-- **Small Radius**: `rounded-lg` for buttons and inputs.
+### Cards & Modals
+- **Surface**: Ardoise (`#264653`) with a `1px` border of `white/10`.
+- **Depth**: Use background lightness shifts instead of heavy shadows.
+- **Modals**: Must animate from the center with a subtle `scale(0.95)` and `blur(2px)` entry.
 
-## Animations (Emil Kowalski Principles)
+### Popovers (Dropdowns, Tooltips)
+- **Origin-Aware**: Must scale from their trigger point, not the center.
+- **Logic**: Tooltips should skip delay on subsequent hovers if one is already open.
 
-Animations must feel snappy, physical, and purposeful.
-- **No `transition-all`**: Always specify exactly what properties are animating (e.g., `transition-opacity`, `transition-transform`).
-- **Duration**: UI duration must be `< 200ms`.
-- **Easing**: Use `ease-out` for entries.
-- **Press States**: Use `active:scale-[0.97]` for interactive elements (buttons, cards).
-- **Scaling**: Never scale from 0. Scale from 0.95 minimum.
+## 6. Design Audit (Design Engineering Review)
 
-## Components Standards
+Apply this checklist to every UI PR:
 
-- **Buttons**: `rounded-lg`, distinct hover state (slight brightness increase), `active:scale-[0.97]`, explicit transition properties.
-- **Cards**: `rounded-2xl`, `bg-surface`, `border border-white/5` (in dark mode), subtle inner padding.
-- **Inputs**: `rounded-lg`, clearly defined focus ring (`ring-2 ring-primary/50`), subtle background.
-- **Modals**: `rounded-2xl`, entry animation `ease-out duration-150` scale from `0.95`.
-- **Sidebar**: Defined as a tonal layer distinct from the main background, cleanly separated by a 1px border.
-- **Navbar**: Glassmorphic or solid surface background, sticky, high contrast text.
+| Before | After | Why |
+| --- | --- | --- |
+| `transition: all 300ms` | `transition: transform 180ms ease-out` | Avoid `all` for perf; 300ms is too slow for UI. |
+| Modal pops in instantly | `scale(0.95) + opacity: 0` entry | Prevents jarring visual shifts. |
+| Button has no press state | `transform: scale(0.97)` on `:active` | Essential physical feedback. |
+| Popover scales from center | `transform-origin: [trigger]` | Establishes spatial consistency. |
+| Sharp corners (`0px`) | `rounded-xl` (12px) | Matches the "Organic Efficiency" vision. |
 
-## Anti-patterns (Never Do This)
-
-- ❌ Using `text-white` directly on a `bg-primary` button without considering contrast ratios or design tokens.
-- ❌ Using `transition-all` anywhere in the codebase.
-- ❌ Mixing Light and Dark mode palettes arbitrarily.
-- ❌ Using heavy, dark drop-shadows on deep black backgrounds.
-- ❌ Scaling elements from `scale-0` on entry.
-- ❌ Hard corners (`rounded-none`) on main UI components.
+## 7. Performance & Accessibility
+- **GPU Only**: Only animate `transform` and `opacity`.
+- **Reduced Motion**: Respect `prefers-reduced-motion` by swapping transforms for simple opacities.
+- **Touch Targets**: Minimum `44px` height for all mobile-interactive elements (Salle & Client interfaces).
