@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastifyPFA - Project Dashboard</title>
+    <!-- Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: 'hsl(210, 100%, 50%)',
+                        surface: 'hsl(220, 10%, 14%)',
+                        background: 'hsl(220, 10%, 10%)',
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.4s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: hsl(220, 10%, 10%);
+            color: hsl(0, 0%, 95%);
+            /* Subtle noise overlay */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+        }
+        .card {
+            background-color: hsl(220, 10%, 14%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-10">
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="animate-fade-up flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">TastifyPFA</h1>
+                <p class="text-gray-400 mt-1">Autonomous AI Development Dashboard</p>
+            </div>
+            
+            <div class="w-full md:w-64 bg-black/30 p-4 rounded-xl border border-white/5">
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="font-medium text-gray-300">Project Progress</span>
+                    <!-- PERCENT_START --><span class="text-primary font-bold">0%</span><!-- PERCENT_END -->
+                </div>
+                <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 0%"></div><!-- PERCENT_END -->
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-up" style="animation-delay: 0.1s;">
+            <div class="card p-6">
+                <h3 class="text-gray-400 text-sm font-medium">Completed Phases</h3>
+                <div class="mt-2 text-3xl font-bold">
+                    <!-- STAT_PHASES_START -->0<!-- STAT_PHASES_END -->
+                </div>
+            </div>
+            <div class="card p-6">
+                <h3 class="text-gray-400 text-sm font-medium">Finished Tasks</h3>
+                <div class="mt-2 text-3xl font-bold">
+                    <!-- STAT_TASKS_START -->0<!-- STAT_TASKS_END -->
+                </div>
+            </div>
+            <div class="card p-6 flex flex-col justify-center">
+                <h3 class="text-gray-400 text-sm font-medium mb-3">Current Status</h3>
+                <div>
+                    <!-- STATUS_BADGE_START -->
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
+                        Initializing Project
+                    </span>
+                    <!-- STATUS_BADGE_END -->
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Main Content Area -->
+            <div class="lg:col-span-2 space-y-6 animate-fade-up" style="animation-delay: 0.2s;">
+                
+                <!-- Roadmap -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        Roadmap
+                    </h2>
+                    <div class="space-y-4">
+                        <!-- PHASES_START -->
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-blue-500 block animate-pulse"></span></div>
+                            <div>
+                                <h4 class="font-semibold">Phase 0: Project Setup</h4>
+                                <p class="text-sm text-gray-400 mt-1">Initializing directory structure, mandates, and architecture.</p>
+                            </div>
+                        </div>
+                        <!-- PHASES_END -->
+                    </div>
+                </div>
+
+                <!-- Activity Stream -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Activity Stream
+                    </h2>
+                    <div class="relative border-l border-white/10 ml-3 pl-6 space-y-6">
+                        <!-- LOGS_START -->
+                        <div class="relative">
+                            <div class="absolute -left-[31px] bg-surface border border-white/10 w-4 h-4 rounded-full mt-1.5"></div>
+                            <div class="text-sm text-gray-500 mb-1">Just now</div>
+                            <p class="text-gray-300">Dashboard created and initialized.</p>
+                        </div>
+                        <!-- LOGS_END -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6 animate-fade-up" style="animation-delay: 0.3s;">
+                
+                <!-- Chart -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold mb-4">Task Distribution</h2>
+                    <div class="relative h-48 w-full flex items-center justify-center">
+                        <canvas id="taskChart"></canvas>
+                        <!-- CHART_DATA_START -->
+                        <script>
+                            const chartData = {
+                                labels: ['Todo', 'In Progress', 'Done'],
+                                data: [100, 0, 0]
+                            };
+                        </script>
+                        <!-- CHART_DATA_END -->
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold mb-4">Tech Stack</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Django</div>
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Vite</div>
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Tailwind CSS</div>
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">TypeScript</div>
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">Docker</div>
+                        <div class="p-3 rounded-lg bg-white/5 border border-white/5 text-center text-sm font-medium">MySQL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('taskChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        data: chartData.data,
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.1)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { family: '"Plus Jakarta Sans", sans-serif' },
+                            bodyFont: { family: '"Plus Jakarta Sans", sans-serif' },
+                            padding: 10,
+                            cornerRadius: 8,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
