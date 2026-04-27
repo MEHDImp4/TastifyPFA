@@ -74,7 +74,18 @@ Apply this checklist to every UI PR:
 | Popover scales from center | `transform-origin: [trigger]` | Establishes spatial consistency. |
 | Sharp corners (`0px`) | `rounded-xl` (12px) | Matches the "Organic Efficiency" vision. |
 
-## 7. Performance & Accessibility
+## 7. Responsive & Fluid Strategy
+The interface must feel native on every device, from KDS tablets to client smartphones.
+
+### Rules of Responsiveness
+- **Mobile-First**: Styles are written for mobile by default and enhanced for desktop via `@media (min-width: ...)`.
+- **Fluid Layouts**: Use relative units (`%`, `vh`, `vw`) and Flexbox/Grid. Avoid fixed pixel widths on containers.
+- **Stack Shifting**: Multi-column layouts must gracefully collapse into single columns without loss of functionality.
+- **Adaptive Typography**: Use `clamp()` for headlines to ensure they remain legible and proportional across all screen sizes.
+
+## 8. Performance & Accessibility
 - **GPU Only**: Only animate `transform` and `opacity`.
 - **Reduced Motion**: Respect `prefers-reduced-motion` by swapping transforms for simple opacities.
-- **Touch Targets**: Minimum `44px` height for all mobile-interactive elements (Salle & Client interfaces).
+- **Touch Targets**: Minimum `44px` height/width for ALL interactive elements.
+- **No Hover Dependency**: Critical actions must never be hidden behind a hover state, as touch devices do not support hover.
+- **Pointer Media Queries**: Gate hover effects behind `@media (hover: hover) and (pointer: fine)` to prevent "sticky" hover states on mobile.
