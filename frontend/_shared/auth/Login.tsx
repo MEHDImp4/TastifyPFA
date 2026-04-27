@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
 import { useAuthStore } from './useAuthStore'
+import logo from '@shared/assets/logo.svg'
 
 interface LoginProps {
   onSuccess: (role: string) => void
@@ -47,9 +48,10 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
       <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="bg-[#141414] rounded-2xl border border-white/5 shadow-2xl overflow-hidden p-8">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-16 h-16 bg-blue-600/10 rounded-xl flex items-center justify-center mb-4 border border-blue-500/20">
-              <img src="/logo.svg" alt="Tastify" className="w-10 h-10" />
+            <div class="w-16 h-16 bg-blue-600/10 rounded-xl flex items-center justify-center mb-4 border border-blue-500/20">
+              <img src={logo} alt="Tastify" className="w-10 h-10" />
             </div>
+
             <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
             <p className="text-gray-400 text-sm mt-2 text-center">
               Connectez-vous pour accéder à votre espace de travail.
