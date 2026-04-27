@@ -24,9 +24,9 @@ function App() {
     <main className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center gap-8 p-6">
       <div className="w-full max-w-[440px] animate-enter">
         <div className="bg-surface rounded-3xl border border-white/5 p-10 shadow-2xl text-center">
-          <div className="w-24 h-24 bg-amber/10 rounded-2xl flex items-center justify-center mb-8 border border-amber/20 mx-auto relative">
+          <div className="w-40 h-40 bg-amber/10 rounded-2xl flex items-center justify-center mb-8 border border-amber/20 mx-auto relative">
              <div className="absolute inset-0 bg-amber/10 blur-xl rounded-full" />
-            <img src={logo} alt="Tastify" className="w-24 relative z-10" />
+            <img src={logo} alt="Tastify" className="w-32 relative z-10" />
           </div>
           
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Portail Client</h1>

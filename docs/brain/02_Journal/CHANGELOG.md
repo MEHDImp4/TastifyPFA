@@ -1,6 +1,6 @@
 ## [2026-04-28] - 00:35
 ### Changed
-- Refined UI branding: Globally increased logo size across all applications (Login: `w-32`, Dashboard: `w-24`) to improve brand visibility and visual balance.
+- UI Polish: Significantly increased logo scale across all applications (Login: `w-48`, Dashboard: `w-32`) and adjusted container spacing for better brand impact.
 
 ## [2026-04-28] - 00:30
 ### Changed
