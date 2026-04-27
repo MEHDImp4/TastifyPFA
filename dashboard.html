@@ -70,10 +70,10 @@
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
                 <div class="flex justify-between text-xs mb-2">
                     <span class="font-medium text-gray-300">Project Progress</span>
-                    <!-- PERCENT_START --><span class="text-primary font-bold">11%</span><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><span class="text-primary font-bold">2%</span><!-- PERCENT_END -->
                 </div>
                 <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 11%"></div><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 2%"></div><!-- PERCENT_END -->
                 </div>
             </div>
         </header>
@@ -86,16 +86,16 @@
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->11<!-- STAT_TASKS_END --></div>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->3<!-- STAT_TASKS_END --></div>
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
                 <div><!-- STATUS_BADGE_START -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Phase 1: Complete & Verified
+                        Phase validée
                     </span>
-                    <!-- STATUS_BADGE_END --></div>
+                        <!-- STATUS_BADGE_END --></div>
             </div>
         </div>
 
@@ -111,11 +111,11 @@
                     </h2>
                     <div class="flex-1 overflow-y-auto space-y-3 pr-2">
                         <!-- PHASES_START -->
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
                             <div>
                                 <h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4>
-                                <p class="text-sm text-gray-400 mt-1">Docker, Django, React Vite, MySQL, Redis.</p>
+                                <p class="text-sm text-gray-400 mt-1">Docker, Django, React Vite, MySQL, Redis base config.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -128,50 +128,232 @@
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 3: Auth API & Login</h4>
+                                <h4 class="font-semibold text-gray-300">Phase 3: Auth API & Login Page</h4>
                                 <p class="text-sm text-gray-500 mt-1">JWT setup, Login UI across all apps.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 4-7: Menu Management</h4>
-                                <p class="text-sm text-gray-500 mt-1">Categories, Plats Models, APIs & Frontends.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 4: Categories Model & API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Database model and DRF endpoints.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 8-12: Orders & Tables</h4>
-                                <p class="text-sm text-gray-500 mt-1">Salle Map, Order constraints, REST API, Order Taking UI.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 5: Categories Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office UI for managing categories.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 13-17: Kitchen WebSockets</h4>
-                                <p class="text-sm text-gray-500 mt-1">Channels, KDS orchestrator, Live order push & status.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 6: Plats Model & API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Dishes, pricing, prep times.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 18-22: Stocks & HR</h4>
-                                <p class="text-sm text-gray-500 mt-1">Ingredients, Auto-deductions, Employee management.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 7: Plats Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office UI for managing dishes.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 23-29: Reservations, Pay & Ops</h4>
-                                <p class="text-sm text-gray-500 mt-1">Booking, QR Split Bill, Check-lists & Celery.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 8: Tables Model & API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Table status, capacities.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 30-35: AI & Polish</h4>
-                                <p class="text-sm text-gray-500 mt-1">Recommendations, Sentiment, Dashboards, PWA, Testing.</p>
+                                <h4 class="font-semibold text-gray-300">Phase 9: Tables Map Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Interactive SVG/Canvas map in Salle UI.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 10: Commandes Model</h4>
+                                <p class="text-sm text-gray-500 mt-1">DB constraints, lines, signals for `montant_total`.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 11: Commandes REST API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Endpoints for creating orders.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 12: Order Taking Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Salle UI for selecting dishes and validating orders.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 13: WebSocket Infrastructure</h4>
+                                <p class="text-sm text-gray-500 mt-1">Django Channels, Daphne, Redis Layer.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 14: KDS Base Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Cuisine SPA base, WebSocket connection.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 15: KDS Orchestrator Logic</h4>
+                                <p class="text-sm text-gray-500 mt-1">Backend calculation of `heure_lancement`.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 16: Order Push to KDS</h4>
+                                <p class="text-sm text-gray-500 mt-1">Real-time push from Salle to Cuisine.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 17: Order Status Updates</h4>
+                                <p class="text-sm text-gray-500 mt-1">Cuisine marks dishes as ready -> real-time push to Salle.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 18: Ingredients & Stock Model</h4>
+                                <p class="text-sm text-gray-500 mt-1">Alerts, thresholds.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 19: Stock Management Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office UI for entering stock.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 20: Automated Deductions</h4>
+                                <p class="text-sm text-gray-500 mt-1">Django signals linking orders to stock decrementation.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 21: Employees (HR) Model & API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Employee profiles linked to Users.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 22: HR Frontend</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office UI for employee management.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 23: Reservations Model & API</h4>
+                                <p class="text-sm text-gray-500 mt-1">Availability logic.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 24: Reservations Client UI</h4>
+                                <p class="text-sm text-gray-500 mt-1">Portail Client booking flow.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 25: Reservations Admin UI</h4>
+                                <p class="text-sm text-gray-500 mt-1">Validation via Back-Office/Salle.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 26: QR Payment & Split Bill Logic</h4>
+                                <p class="text-sm text-gray-500 mt-1">Backend calculation for equal/individual splits.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 27: Encaissement UI</h4>
+                                <p class="text-sm text-gray-500 mt-1">Salle UI modal and Client QR landing page.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 28: Celery Infrastructure & Check-list Model</h4>
+                                <p class="text-sm text-gray-500 mt-1">Async workers, beat schedules.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 29: Check-list UI & Cron Job</h4>
+                                <p class="text-sm text-gray-500 mt-1">Back-Office daily check-list execution.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 30: AI Recommender System</h4>
+                                <p class="text-sm text-gray-500 mt-1">scikit-learn model, API, and Portail Client integration.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 31: AI Sentiment Analysis</h4>
+                                <p class="text-sm text-gray-500 mt-1">HuggingFace BERT integration for reviews.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 32: Back-Office Dashboard KPIs</h4>
+                                <p class="text-sm text-gray-500 mt-1">Real-time stats and Recharts integration.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 33: Loyalty Program</h4>
+                                <p class="text-sm text-gray-500 mt-1">Points logic, Bronze/Silver/Gold tiers in Client UI.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 34: PWA Offline Capabilities</h4>
+                                <p class="text-sm text-gray-500 mt-1">Service Workers for Salle & KDS.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Phase 35: Load Testing & Optimization</h4>
+                                <p class="text-sm text-gray-500 mt-1">Locust scripts, Nginx proxy fine-tuning.</p>
                             </div>
                         </div>
                         <!-- PHASES_END -->
@@ -200,7 +382,7 @@
                     <!-- DETAILED_PHASES_START -->
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4><p class="text-xs text-gray-400 mt-1">Docker, Django, React Vite, MySQL, Redis base config.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/20 whitespace-nowrap">Exécuté</span>
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/20 whitespace-nowrap">Terminé</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 2: User Model & RBAC</h4><p class="text-xs text-gray-400 mt-1">AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).</p></div>
@@ -235,7 +417,7 @@
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">DB constraints, lines, signals for montant_total.</p></div>
+                            <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">DB constraints, lines, signals for `montant_total`.</p></div>
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -255,7 +437,7 @@
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 15: KDS Orchestrator Logic</h4><p class="text-xs text-gray-400 mt-1">Backend calculation of heure_lancement.</p></div>
+                            <div><h4 class="font-semibold text-white">Phase 15: KDS Orchestrator Logic</h4><p class="text-xs text-gray-400 mt-1">Backend calculation of `heure_lancement`.</p></div>
                             <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/20 whitespace-nowrap">Non planifiée</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -352,7 +534,7 @@
                         <script>
                             const chartData = {
                                 labels: ['Todo', 'In Progress', 'Done'],
-                                data: [31, 0, 11]
+                                data: [34, 0, 1]
                             };
                         </script>
                         <!-- CHART_DATA_END -->
