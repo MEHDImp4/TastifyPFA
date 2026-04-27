@@ -1,3 +1,9 @@
+## [2026-04-28] - 00:36
+### Fixed
+- Resolved widespread IDE "Module not found" and JSX type errors across all SPAs:
+  - Corrected `@shared` path alias in `tsconfig.json` files to point to the correct `../_shared/` directory.
+  - Restored missing `node_modules` by running `npm install` in each frontend application.
+
 ## [2026-04-28] - 00:35
 ### Changed
 - UI Refinement: Massive +50% logo scale increase across all applications (Login: `w-72`, Dashboard: `w-48`) for high-impact brand presence.
