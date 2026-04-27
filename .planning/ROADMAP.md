@@ -64,9 +64,9 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Phase 2
 **Success Criteria**: 1. Users can log in and receive JWT.
 **Plans**:
-- [ ] 03-01-PLAN.md — Backend JWT & Secure Endpoints.
-- [ ] 03-02-PLAN.md — Shared Frontend Auth Infrastructure.
-- [ ] 03-03-PLAN.md — Multi-SPA Integration & Verification.
+- [x] 03-01-PLAN.md — Backend JWT & Secure Endpoints.
+- [x] 03-02-PLAN.md — Shared Frontend Auth Infrastructure.
+- [x] 03-03-PLAN.md — Multi-SPA Integration & Verification.
 
 ### Phase 4: Categories Model & API
 **Goal**: Category DB and REST API.
@@ -302,3 +302,4 @@ Phases execute in numeric order: 1 → 35
 | 33. Loyalty Program | 0/0 | Not started | - |
 | 34. PWA Offline Capabilities | 0/0 | Not started | - |
 | 35. Load Testing & Optimization | 0/0 | Not started | - |
+ed | - |
