@@ -14,3 +14,4 @@ and this project adheres to semantic tracking for development.
 - Add `docs/brain/` Obsidian architecture (Inbox, Journal, Architecture, Features, Resources).
 - Add `FILE_MAP.md` and `Home.md` to establish knowledge base anchors.
 - Add `CLAUDE.md` mirroring `GEMINI.md` rules for compatibility.
+- Ingested `cahier_de_charge_tastify.md` specifications and created `PROJECT_OVERVIEW.md`.
