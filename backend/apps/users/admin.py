@@ -13,4 +13,3 @@ class UtilisateurAdmin(UserAdmin):
     )
 
 admin.site.register(Utilisateur, UtilisateurAdmin)
-000000
