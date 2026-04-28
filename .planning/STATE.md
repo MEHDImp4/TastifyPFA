@@ -1,8 +1,8 @@
 # Planning State
 
 **Last Updated:** 2026-04-28
-**Stopped At:** Phase 8 Plan 01 complete
-**Resume File:** .planning/phases/08-tables-model-api/08-02-PLAN.md
+**Stopped At:** Phase 8 Plan 02 complete
+**Resume File:** .planning/phases/08-tables-model-api/08-03-PLAN.md
 
 ## Notes
 
@@ -13,6 +13,7 @@
 - Phase 8 context locked with 6 decisions: pos_x/pos_y included, SERVEUR status-flip deferred to Phase 12, app name apps/tables/, 12 seed tables, visibility mirrors Categorie pattern, 4-value Statut enum.
 - Phase 8 plans split into 3: app scaffold+model (08-01), serializer+viewset+URL (08-02), seed+integration tests (08-03).
 - Phase 8 Plan 01 complete: Table model with 8 fields, Statut enum (4 values), soft-delete, pos_x/pos_y, 0001_initial migration applied, 3 tests green.
+- Phase 8 Plan 02 complete: TableSerializer, TableViewSet (split RBAC + visibility), URL wiring at /api/tables/, 8 RBAC tests green.
 
 ## Decisions
 
