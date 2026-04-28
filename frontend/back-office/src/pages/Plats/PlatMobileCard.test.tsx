@@ -8,6 +8,7 @@ const mockPlat: Plat = {
   nom: 'Burger Classic',
   description: 'Un délicieux burger',
   prix: 15.5,
+  temps_preparation: 15,
   image: 'burger.jpg',
   categorie: 1,
   categorie_detail: { id: 1, nom: 'Burgers', est_active: true },
