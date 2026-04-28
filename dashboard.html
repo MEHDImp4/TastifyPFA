@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-29 01:12:00<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-29 01:20:00<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -86,14 +86,14 @@
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->25<!-- STAT_TASKS_END --></div>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->26<!-- STAT_TASKS_END --></div>
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
                 <div><!-- STATUS_BADGE_START -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Dependencies fixed
+                        Unified Back-Office
                     </span>
                             <!-- STATUS_BADGE_END --></div>
             </div>
@@ -550,7 +550,7 @@
                         <script>
                             const chartData = {
                                 labels: ['Todo', 'In Progress', 'Done'],
-                                data: [25, 0, 10]
+                                data: [24, 0, 11]
                             };
                         </script>
                             <!-- CHART_DATA_END -->
@@ -565,6 +565,11 @@
                     <div class="flex-1 overflow-y-auto pr-2">
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-29 01:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Centralized Tables management within Back-Office. Moved Map components to `_shared` and added internal `/tables` route. Consistent sidebar and UI experience. Commit: 2ee677a.</p>
+                            </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-29 01:00</div>
@@ -594,76 +599,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed Foundation of Phase 9: Tables Map Frontend (Plan 01).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented core SVG map visualization in the Salle UI.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `TableItem` and `TableMap` components with status-based coloring and fallback grid logic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Integrated `MapView` page with initial polling (10s) and error handling.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified authenticated users in Salle UI see the visual grid/map of tables.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Visual Assets & Data**:</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Generated 13 high-quality AI images for the dishes menu using `generate_image`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `media/plats/` directory and synchronized 13 assets with appropriate naming.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Renamed test dish `hgfx` (id: 10) to "Zaalouk" for a more professional menu.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added 3 new premium dishes: "Mechoui", "Rfissa", and "Tanjia Marrakchia".</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated the database to link all 13 active dishes with their respective professional images.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified 100% database/filesystem synchronization for image assets.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **React Router Maintenance**:</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved console warnings by opting in to React Router v7 future flags (`v7_startTransition`, `v7_relativeSplatPath`) in `back-office`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed `ignoreDeprecations: "6.0"` error in all `tsconfig.json` files by reverting to `"5.0"` (compatible with current TS 5.9.3).</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
