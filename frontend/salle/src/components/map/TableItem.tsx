@@ -58,16 +58,34 @@ export const TableItem: React.FC<TableItemProps> = ({
       onDragStart?.(table.id, event);
     }
   };
+
+  const handlePointerUp = (event: React.PointerEvent<SVGGElement>) => {
+    if (!isEditMode) {
+      event.preventDefault();
+      handleClick();
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<SVGGElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleClick();
+    }
+  };
   
   return (
     <motion.g
       data-testid={`table-${table.id}`}
+      role="button"
+      tabIndex={isEditMode ? -1 : 0}
+      aria-label={`Table ${table.numero}, ${table.capacite} places, statut ${table.statut}`}
       initial={false}
       animate={{ x, y }}
       whileHover={{ scale: isEditMode ? 1.02 : 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={handleClick}
       onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onKeyDown={handleKeyDown}
       style={{ cursor: isEditMode ? 'grab' : 'pointer', touchAction: 'none' }}
     >
       {isRound ? (

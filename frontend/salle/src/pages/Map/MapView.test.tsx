@@ -55,6 +55,16 @@ describe('MapView', () => {
     expect(screen.getByText('0 modification')).toBeInTheDocument()
   })
 
+  it('shows selected table details when a table is activated', async () => {
+    render(<MapView />)
+
+    fireEvent.pointerUp(await screen.findByTestId('table-1'))
+
+    expect(screen.getByRole('heading', { name: 'Table 1' })).toBeInTheDocument()
+    expect(screen.getByText('LIBRE')).toBeInTheDocument()
+    expect(screen.getByText('4')).toBeInTheDocument()
+  })
+
   it('hides edit controls from SERVEUR users', async () => {
     setUserRole('SERVEUR')
 

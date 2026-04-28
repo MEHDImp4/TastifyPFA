@@ -15,6 +15,7 @@ export const MapView: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [dirtyTables, setDirtyTables] = useState<Record<number, TablePosition>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
 
   const isGerant = user?.role === 'GERANT';
   const dirtyCount = Object.keys(dirtyTables).length;
@@ -117,8 +118,7 @@ export const MapView: React.FC = () => {
   };
 
   const handleTableClick = (table: Table) => {
-    console.log('Table clicked:', table);
-    alert(`Table ${table.numero} selected (Statut: ${table.statut})`);
+    setSelectedTable(table);
   };
 
   if (loading) {
@@ -199,15 +199,53 @@ export const MapView: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="max-w-5xl mx-auto">
+        <div className="mx-auto grid max-w-6xl gap-6 xl:grid-cols-[minmax(0,1fr)_280px]">
           <TableMap
             tables={tables}
             isEditMode={isEditMode}
             onTableClick={handleTableClick}
             onTablePositionChange={handlePositionChange}
           />
+
+          <aside className="rounded-3xl border border-white/10 bg-surface p-5">
+            {selectedTable ? (
+              <div className="space-y-5">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-teal">Table sélectionnée</p>
+                  <h2 className="mt-2 text-3xl font-bold text-white">Table {selectedTable.numero}</h2>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
+                    <p className="text-xs uppercase tracking-wider text-foreground-muted">Statut</p>
+                    <p className="mt-1 font-bold text-white">{selectedTable.statut}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
+                    <p className="text-xs uppercase tracking-wider text-foreground-muted">Places</p>
+                    <p className="mt-1 font-bold text-white">{selectedTable.capacite}</p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedTable(null)}
+                  className="min-h-11 w-full rounded-full border border-white/10 bg-surface-elevated px-4 font-bold text-foreground-muted transition-colors duration-200 hover:text-white active:scale-[0.97]"
+                >
+                  Fermer
+                </button>
+              </div>
+            ) : (
+              <div className="flex min-h-48 flex-col justify-center">
+                <p className="text-xs font-bold uppercase tracking-wider text-teal">Service</p>
+                <h2 className="mt-2 text-xl font-bold text-white">Aucune table sélectionnée</h2>
+                <p className="mt-2 text-sm leading-6 text-foreground-muted">
+                  Touchez une table sur le plan pour afficher ses détails.
+                </p>
+              </div>
+            )}
+          </aside>
           
-          <div className="mt-8 flex flex-wrap justify-center gap-6">
+          <div className="xl:col-span-2 mt-2 flex flex-wrap justify-center gap-6">
             <LegendItem color="bg-[#2A9D8F]" label="Libre" />
             <LegendItem color="bg-[#E76F51]" label="Occupée" />
             <LegendItem color="bg-[#E9C46A]" label="Encaissement" />

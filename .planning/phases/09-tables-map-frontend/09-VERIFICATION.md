@@ -16,6 +16,8 @@ Passed. Phase 9 delivers the Salle table map foundation and the GERANT-only edit
 ## Automated Checks
 - `npm run test -- --run` in `frontend/salle`: 2 files, 12 tests passed.
 - `npm run build` in `frontend/salle`: TypeScript build and Vite production build passed.
+- Regression 2026-04-29: `npm run test -- --run` in `frontend/salle`: 2 files, 15 tests passed after table activation fix.
+- Regression 2026-04-29: `npm run build` in `frontend/salle`: passed after table activation fix.
 
 ## Must-Have Coverage
 - Interactive map: covered by Plan 09-01 and preserved by Plan 09-02.
@@ -26,6 +28,7 @@ Passed. Phase 9 delivers the Salle table map foundation and the GERANT-only edit
 - Collision feedback: covered by `TableMap.test.tsx`.
 - Batch PATCH persistence and cancel behavior: covered by `MapView.test.tsx`.
 - Polling guard during edit mode: covered by `MapView.test.tsx`.
+- Table activation: covered by pointer-up, keyboard, and selected-details regression tests.
 
 ## Human Verification
 None required for this phase.

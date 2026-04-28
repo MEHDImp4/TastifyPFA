@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { Table } from '@shared/types/tables'
 import {
@@ -95,5 +95,35 @@ describe('TableMap', () => {
 
     expect(screen.getByTestId('table-1-circle')).toHaveAttribute('stroke', '#E76F51')
     expect(screen.getByTestId('table-2-circle')).toHaveAttribute('stroke', '#E76F51')
+  })
+
+  it('activates a table on pointer release in service mode', () => {
+    const handleTableClick = vi.fn()
+
+    render(
+      <TableMap
+        tables={[makeTable({ id: 1, numero: 7 })]}
+        onTableClick={handleTableClick}
+      />,
+    )
+
+    fireEvent.pointerUp(screen.getByTestId('table-1'))
+
+    expect(handleTableClick).toHaveBeenCalledWith(expect.objectContaining({ numero: 7 }))
+  })
+
+  it('supports keyboard activation for table selection', () => {
+    const handleTableClick = vi.fn()
+
+    render(
+      <TableMap
+        tables={[makeTable({ id: 1, numero: 7 })]}
+        onTableClick={handleTableClick}
+      />,
+    )
+
+    fireEvent.keyDown(screen.getByRole('button', { name: /table 7/i }), { key: 'Enter' })
+
+    expect(handleTableClick).toHaveBeenCalledWith(expect.objectContaining({ numero: 7 }))
   })
 })

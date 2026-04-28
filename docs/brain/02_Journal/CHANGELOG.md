@@ -1,4 +1,15 @@
 
+## [2026-04-29] - 00:17
+### Fixed
+- Fixed Salle table activation by switching SVG table selection to pointer-up and keyboard activation instead of relying on brittle SVG click behavior.
+- Replaced the temporary browser alert with an in-page selected-table details panel so users get visible feedback after selecting a table.
+- Added regression tests for pointer and keyboard table activation plus selected table details rendering.
+
+### Validation
+- `npm run test -- --run` in `frontend/salle`: 15/15 tests passed.
+- `npm run build` in `frontend/salle`: passed.
+- Commit: pending
+
 ## [2026-04-28] - 23:58
 ### Added
 - Completed Phase 9 Plan 02: GERANT-only Salle table map editor.
