@@ -1,3 +1,13 @@
+## [2026-04-28] - 09:15
+### Added
+- Phase 4 Context Captured: Categories Model & API.
+- Established implementation strategy for the `menu` app:
+  - Confirmed `Categorie` model fields: `nom`, `description`, `ordre_affichage`, `image`, `est_active`.
+  - Defined strict RBAC: Gérant (Full CRUD), Others (Read-only).
+  - Resolved visibility logic: Inactive categories hidden for all except Gérant.
+  - Mandated soft delete behavior (`est_active=False`) to preserve data integrity for dishes.
+- Created `.planning/phases/04-categories-model-api/04-CONTEXT.md` to guide research and planning.
+
 ## [2026-04-28] - 09:09
 ### Fixed
 - Definitively resolved all IDE TypeScript errors in `frontend/_shared/`:
