@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Categorie
+from .models import Categorie, Plat
 
 
 class CategorieSerializer(serializers.ModelSerializer):
@@ -18,6 +18,32 @@ class CategorieSerializer(serializers.ModelSerializer):
             'description',
             'ordre_affichage',
             'image',
+            'est_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class PlatSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(
+        max_length=None,
+        use_url=True,
+        allow_null=True,
+        required=False,
+    )
+
+    class Meta:
+        model = Plat
+        fields = [
+            'id',
+            'categorie',
+            'nom',
+            'description',
+            'prix',
+            'temps_preparation',
+            'image',
+            'est_disponible',
             'est_active',
             'created_at',
             'updated_at',
