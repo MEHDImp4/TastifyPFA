@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'core',
     'apps.users',
     'apps.menu',
+    'apps.tables',
     'django_cleanup',
 ]
 
