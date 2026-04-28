@@ -1,4 +1,15 @@
 
+## [2026-04-29] - 01:00
+### Fixed
+- Resolved Vite import analysis error: `Failed to resolve import "framer-motion" from "src/components/map/TableItem.tsx"`.
+- Installed `framer-motion` inside the running `tastifypfa-salle-1` Docker container to update its persistent `node_modules` volume.
+- Verified that the Vite dev server hot-reloaded and optimized the new dependency successfully.
+
+### Validation
+- Checked `docker logs tastifypfa-salle-1`: Vite confirmed optimization and successful reload.
+- Dashboard updated with the activity.
+- Commit: `253347e`
+
 ## [2026-04-29] - 00:33
 ### Fixed
 - Fixed the back-office **Tables** navigation entry, which was still a dead `#` link.
