@@ -5,54 +5,127 @@ import { Table, TableStatus } from '@shared/types/tables';
 interface TableItemProps {
   table: Table;
   onClick: (table: Table) => void;
+  onDragStart?: (tableId: number, event: React.PointerEvent<SVGGElement>) => void;
   x: number;
   y: number;
+  isEditMode?: boolean;
+  isOverlapping?: boolean;
 }
 
-const statusColors: Record<TableStatus, string> = {
+export const statusColors: Record<TableStatus, string> = {
   LIBRE: '#2A9D8F',        // Teal
   OCCUPEE: '#E76F51',      // Red/Coral
   RESERVEE: '#264653',     // Dark Slate
   ENCAISSEMENT: '#E9C46A', // Amber
 };
 
-export const TableItem: React.FC<TableItemProps> = ({ table, onClick, x, y }) => {
-  const size = 80; // Standard table size in SVG units
+export const TABLE_CIRCLE_SIZE = 82;
+export const TABLE_RECT_WIDTH = 118;
+export const TABLE_RECT_HEIGHT = 78;
+
+export const getTableDimensions = (table: Pick<Table, 'capacite'>) => {
+  if (table.capacite <= 4) {
+    return { width: TABLE_CIRCLE_SIZE, height: TABLE_CIRCLE_SIZE };
+  }
+
+  return { width: TABLE_RECT_WIDTH, height: TABLE_RECT_HEIGHT };
+};
+
+export const isRoundTable = (table: Pick<Table, 'capacite'>) => table.capacite <= 4;
+
+export const TableItem: React.FC<TableItemProps> = ({
+  table,
+  onClick,
+  onDragStart,
+  x,
+  y,
+  isEditMode = false,
+  isOverlapping = false,
+}) => {
+  const dimensions = getTableDimensions(table);
+  const isRound = isRoundTable(table);
+  const centerX = dimensions.width / 2;
+  const centerY = dimensions.height / 2;
+
+  const handleClick = () => {
+    if (!isEditMode) {
+      onClick(table);
+    }
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<SVGGElement>) => {
+    if (isEditMode) {
+      onDragStart?.(table.id, event);
+    }
+  };
   
   return (
     <motion.g
+      data-testid={`table-${table.id}`}
       initial={false}
       animate={{ x, y }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: isEditMode ? 1.02 : 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={() => onClick(table)}
-      style={{ cursor: 'pointer' }}
+      onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      style={{ cursor: isEditMode ? 'grab' : 'pointer', touchAction: 'none' }}
     >
-      <motion.rect
-        width={size}
-        height={size}
-        rx={12}
-        animate={{ fill: statusColors[table.statut] }}
-        transition={{ duration: 0.4 }}
-        stroke="rgba(255,255,255,0.1)"
-        strokeWidth={2}
-        className="shadow-lg"
-      />
+      {isRound ? (
+        <motion.circle
+          data-testid={`table-${table.id}-circle`}
+          cx={centerX}
+          cy={centerY}
+          r={TABLE_CIRCLE_SIZE / 2}
+          animate={{ fill: statusColors[table.statut] }}
+          transition={{ duration: 0.2 }}
+          stroke={isOverlapping ? '#E76F51' : 'rgba(255,255,255,0.16)'}
+          strokeWidth={isOverlapping ? 5 : 2}
+          filter={isOverlapping ? 'url(#table-overlap-glow)' : undefined}
+        />
+      ) : (
+        <motion.rect
+          data-testid={`table-${table.id}-rect`}
+          width={dimensions.width}
+          height={dimensions.height}
+          rx={14}
+          animate={{ fill: statusColors[table.statut] }}
+          transition={{ duration: 0.2 }}
+          stroke={isOverlapping ? '#E76F51' : 'rgba(255,255,255,0.16)'}
+          strokeWidth={isOverlapping ? 5 : 2}
+          filter={isOverlapping ? 'url(#table-overlap-glow)' : undefined}
+        />
+      )}
+
+      {isEditMode && (
+        <rect
+          x={-7}
+          y={-7}
+          width={dimensions.width + 14}
+          height={dimensions.height + 14}
+          rx={isRound ? dimensions.width / 2 : 18}
+          fill="none"
+          stroke="rgba(233,196,106,0.7)"
+          strokeDasharray="8 8"
+          strokeWidth={2}
+          pointerEvents="none"
+        />
+      )}
+
       <text
-        x={size / 2}
-        y={size / 2}
+        x={centerX}
+        y={centerY - 7}
         textAnchor="middle"
         dominantBaseline="middle"
         fill="white"
-        fontSize="16"
+        fontSize="18"
         fontWeight="bold"
         style={{ pointerEvents: 'none', userSelect: 'none' }}
       >
         {table.numero}
       </text>
       <text
-        x={size / 2}
-        y={size / 2 + 20}
+        x={centerX}
+        y={centerY + 17}
         textAnchor="middle"
         dominantBaseline="middle"
         fill="rgba(255,255,255,0.7)"
