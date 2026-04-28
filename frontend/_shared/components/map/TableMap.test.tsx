@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { Table } from '@shared/types/tables'
+import { Table } from '../../types/tables'
 import {
   clampPosition,
   getOverlappingTableIds,

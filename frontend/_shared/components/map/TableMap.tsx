@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Table } from '@shared/types/tables';
+import { Table } from '../../types/tables';
 import { getTableDimensions, TableItem } from './TableItem';
 
 interface TableMapProps {

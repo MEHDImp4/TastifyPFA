@@ -51,9 +51,9 @@ EXISTING_MAPPING = {
 }
 
 NEW_DISHES = [
-    {'nom': 'Mechoui', 'categorie': 'Plats Principaux', 'prix': 150, 'image': 'mechoui.png'},
-    {'nom': 'Rfissa', 'categorie': 'Plats Principaux', 'prix': 85, 'image': 'rfissa.png'},
-    {'nom': 'Tanjia Marrakchia', 'categorie': 'Plats Principaux', 'prix': 120, 'image': 'tanjia_marrakchia.png'},
+    {'nom': 'Mechoui', 'categorie': 'Plats Principaux', 'prix': 150, 'temps': 45, 'image': 'mechoui.png'},
+    {'nom': 'Rfissa', 'categorie': 'Plats Principaux', 'prix': 85, 'temps': 30, 'image': 'rfissa.png'},
+    {'nom': 'Tanjia Marrakchia', 'categorie': 'Plats Principaux', 'prix': 120, 'temps': 60, 'image': 'tanjia_marrakchia.png'},
 ]
 
 def update_database():
@@ -86,6 +86,7 @@ def update_database():
                 defaults={
                     'categorie': cat,
                     'prix': dish_data['prix'],
+                    'temps_preparation': dish_data.get('temps', 15),
                     'image': f"plats/{dish_data['image']}"
                 }
             )
@@ -93,6 +94,8 @@ def update_database():
                 print(f"Created new dish: {plat.nom}")
             else:
                 plat.image = f"plats/{dish_data['image']}"
+                plat.prix = dish_data['prix']
+                plat.temps_preparation = dish_data.get('temps', 15)
                 plat.save()
                 print(f"Updated existing dish: {plat.nom}")
         except Categorie.DoesNotExist:

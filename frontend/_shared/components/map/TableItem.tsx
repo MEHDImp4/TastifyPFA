@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Table, TableStatus } from '@shared/types/tables';
+import { Table, TableStatus } from '../../types/tables';
 
 interface TableItemProps {
   table: Table;

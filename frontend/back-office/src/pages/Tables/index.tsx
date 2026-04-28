@@ -5,7 +5,7 @@ import { useAuthStore } from '@shared/auth/useAuthStore';
 import { TableMap, TablePosition } from '@shared/components/map/TableMap';
 import { Check, Loader2, Lock, RefreshCw, RotateCcw, Unlock } from 'lucide-react';
 
-export const MapView: React.FC = () => {
+const TablesPage: React.FC = () => {
   const user = useAuthStore((state) => state.user);
   const [tables, setTables] = useState<Table[]>([]);
   const [lastFetchedTables, setLastFetchedTables] = useState<Table[]>([]);
@@ -134,9 +134,9 @@ export const MapView: React.FC = () => {
     <div className="space-y-8 animate-enter">
       <header className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-white tracking-tight">Plan de Salle</h1>
+          <h1 className="text-4xl font-bold text-white tracking-tight">Gestion des Tables</h1>
           <p className="text-foreground-muted mt-1">
-            {isEditMode ? 'Déplacez les tables, puis enregistrez le plan.' : 'Sélectionnez une table pour commencer le service.'}
+            {isEditMode ? 'Déplacez les tables, puis enregistrez le plan.' : 'Visualisez et gérez la disposition physique de votre restaurant.'}
           </p>
         </div>
 
@@ -151,7 +151,7 @@ export const MapView: React.FC = () => {
               onClick={handleToggleEditMode}
               className="min-h-11 rounded-full bg-teal px-5 font-bold text-white transition-colors duration-200 hover:bg-teal/90 active:scale-[0.97]"
             >
-              Mode édition
+              Modifier le plan
             </button>
           )}
 
@@ -236,10 +236,10 @@ export const MapView: React.FC = () => {
               </div>
             ) : (
               <div className="flex min-h-48 flex-col justify-center">
-                <p className="text-xs font-bold uppercase tracking-wider text-teal">Service</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-teal">Information</p>
                 <h2 className="mt-2 text-xl font-bold text-white">Aucune table sélectionnée</h2>
                 <p className="mt-2 text-sm leading-6 text-foreground-muted">
-                  Touchez une table sur le plan pour afficher ses détails.
+                  Cliquez sur une table pour afficher ses détails ou utilisez le mode édition pour réorganiser la salle.
                 </p>
               </div>
             )}
@@ -263,3 +263,5 @@ const LegendItem = ({ color, label }: { color: string, label: string }) => (
     <span className="text-xs font-bold text-foreground-muted uppercase tracking-wider">{label}</span>
   </div>
 );
+
+export default TablesPage;

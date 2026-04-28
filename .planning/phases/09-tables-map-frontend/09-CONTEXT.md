@@ -1,36 +1,42 @@
 ---
 phase: 09-tables-map-frontend
 type: context
-status: draft
+status: final
+last_updated: "2026-04-28T23:55:00.000Z"
 ---
 
 # Phase 9: Tables Map Frontend — Context
 
 ## Goal
-Implement an interactive floor map in the **Interface Salle** (`frontend/salle/`) using SVG. 
-This map will visualize seeded tables (1-12) from Phase 8, representing their physical positions (`pos_x`, `pos_y`) and statuses (`statut`).
+Implement an interactive, draggable floor map in the **Interface Salle** (`frontend/salle/`) that allows Gérants to manage room layout and Waiters to visualize table statuses.
 
 ## Success Criteria
-1. Interface Salle authenticated users see a visual grid/map of tables.
-2. Tables are colored by status:
-   - `LIBRE`: Green (#2A9D8F)
-   - `OCCUPEE`: Red (#E76F51)
-   - `RESERVEE`: Blue (#264653 / Indigo)
-   - `ENCAISSEMENT`: Amber (#E9C46A)
-3. Clicking a table opens a placeholder modal/sidebar (for Phase 12 ordering).
-4. Responsive: Map scales or scrolls correctly on tablets/handhelds.
-5. Real-time ready: Prepared for WebSocket updates (Phase 13).
-
-## Depends on
-- Phase 3 (Auth Infrastructure)
-- Phase 8 (Tables API & Seed Data)
+1. **Interactive Map:** Users see a visual grid/map of tables colored by status (LIBRE, OCCUPEE, etc.).
+2. **Map Editor (GERANT):**
+   - Toggleable "Mode Edition" button.
+   - Drag-and-drop support with **20px grid snapping**.
+   - Batch-save persistence (global "Enregistrer" button).
+3. **Dynamic Shapes:**
+   - Capacity <= 4: Rendered as Circles.
+   - Capacity > 4: Rendered as Rounded Rectangles.
+4. **Collision Feedback:** Overlapping tables show a Red Glow visual warning (no hard block).
+5. **Touch Friendly:** Editor works on tablets but is guarded by the Lock/Unlock toggle.
 
 ## Key Technical Decisions
-- **SVG vs Canvas**: SVG is preferred for interactivity and ease of styling with Tailwind/React.
-- **Draggable Positions**: In this phase, positions are read-only (seeded as 0,0). A GERANT "Map Editor" mode might be considered for a later sub-phase or defered.
-- **Responsive Layout**: Map container should handle panning/zooming if the floor is larger than the screen.
+- **D-09-01: Grid Snapping:** Snap to 20px increments on a 1000x800 SVG coordinate system.
+- **D-09-02: Persistence:** Batch save via individual `PATCH /api/tables/{id}/` requests for dirty tables.
+- **D-09-03: Visuals:** 
+  - LIBRE: `#2A9D8F` (Teal)
+  - OCCUPEE: `#E76F51` (Red/Coral)
+  - RESERVEE: `#264653` (Dark Slate)
+  - ENCAISSEMENT: `#E9C46A` (Amber)
+- **D-09-04: RBAC Editor:** Map Editor controls only visible and functional for users with `GERANT` role.
+
+## Component Architecture
+- `MapView.tsx`: Manages page state (edit mode, dirty state, API polling).
+- `TableMap.tsx`: The SVG container handling coordinate scaling and background grid.
+- `TableItem.tsx`: Individual table element (Rect/Circle) with drag logic and status styling.
 
 ## Required Reading
-- `docs/cahier_de_charge_tastify.md` Section 5.3.1 (Plan de Salle Interactif)
-- `backend/apps/tables/models.py` (Table fields)
-- `DESIGN.md` (Colors and animations)
+- `backend/apps/tables/models.py` (Table fields: `pos_x`, `pos_y`, `numero`, `capacite`)
+- `DESIGN.md` (Gradients and motion standards)

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { AppShell } from './components/layout/AppShell';
 import CategoriesPage from './pages/Categories';
 import PlatsPage from './pages/Plats';
+import TablesPage from './pages/Tables';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 
@@ -35,6 +36,7 @@ function App() {
           <Route index element={<Navigate to="/categories" replace />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/plats" element={<PlatsPage />} />
+          <Route path="/tables" element={<TablesPage />} />
           {/* Add more authenticated routes here */}
         </Route>
 

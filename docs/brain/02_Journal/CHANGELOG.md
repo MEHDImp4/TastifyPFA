@@ -1,4 +1,20 @@
 
+## [2026-04-29] - 01:15
+### Added
+- **Centralized Back-Office**: Integrated the Table Map management directly into the Back-Office application.
+- Moved `TableItem` and `TableMap` components to `frontend/_shared/components/map` to allow code reuse between apps.
+- Created `TablesPage` in `back-office` with a consistent sidebar and UI experience.
+- Updated `back-office` navigation to use internal routing for Tables.
+
+### Fixed
+- Resolved `framer-motion` resolution issues in shared components by adding the dependency to `back-office` and updating Vitest configs.
+- Refactored `salle` app to use the shared map components.
+
+### Validation
+- `npm run test -- --run` in `frontend/salle`: 7/7 tests passed.
+- `docker logs` for both `salle` and `back-office` confirm clean hot-reloads and dependency optimization.
+- Commit: `9e3f4a1`
+
 ## [2026-04-29] - 01:00
 ### Fixed
 - Resolved Vite import analysis error: `Failed to resolve import "framer-motion" from "src/components/map/TableItem.tsx"`.

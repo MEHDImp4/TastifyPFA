@@ -27,7 +27,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
     { name: 'Plats', icon: ChefHat, path: '/plats' },
-    { name: 'Tables', icon: Table, path: '/salle/', external: true },
+    { name: 'Tables', icon: Table, path: '/tables' },
     { name: 'Stock', icon: Package, path: '#' },
     { name: 'RH', icon: Users, path: '#' },
   ];
