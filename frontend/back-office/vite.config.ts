@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL(process.env.VITEST ? '../_shared' : './_shared', import.meta.url)),
+      '@shared': fileURLToPath(new URL('../_shared', import.meta.url)),
     },
     preserveSymlinks: true,
   },

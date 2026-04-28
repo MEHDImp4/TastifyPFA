@@ -1,4 +1,12 @@
-﻿
+
+## [2026-04-28] - 20:50
+### Fixed
+- **React Router Maintenance**:
+  - Resolved console warnings by opting in to React Router v7 future flags (`v7_startTransition`, `v7_relativeSplatPath`) in `back-office`.
+  - Fixed `ignoreDeprecations: "6.0"` error in all `tsconfig.json` files by reverting to `"5.0"` (compatible with current TS 5.9.3).
+  - Corrected `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.
+  - Verified 100% build success in `back-office`.
+
 ## [2026-04-28] - 20:45
 ### Added
 - Completed Foundation of Phase 7: Plats Frontend (Sub-phase 01).
