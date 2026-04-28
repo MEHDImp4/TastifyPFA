@@ -1,3 +1,11 @@
+## [2026-04-28] - 09:09
+### Fixed
+- Definitively resolved all IDE TypeScript errors in `frontend/_shared/`:
+  - Created a Windows directory junction `frontend/_shared/node_modules -> frontend/back-office/node_modules` so TypeScript resolves `react`, `lucide-react`, `zustand`, `axios` from the shared folder without symlink admin rights.
+  - Created `frontend/_shared/tsconfig.json` as a standalone TypeScript context for IDE support.
+  - Created `frontend/_shared/declarations.d.ts` to declare `*.svg` and other asset modules.
+  - `tsc --noEmit` in `back-office` now exits with code 0. (Commit: `472da9b`)
+
 ## [2026-04-28] - 07:55
 ### Fixed
 - Hardened shared frontend infrastructure against IDE resolution errors:
