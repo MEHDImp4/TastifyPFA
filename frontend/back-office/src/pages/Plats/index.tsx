@@ -3,6 +3,8 @@ import axiosInstance from '@shared/auth/axiosInstance';
 import { Plus, Filter } from 'lucide-react';
 import { Category, Plat } from './types';
 import { useResponsiveListView } from './useResponsiveListView';
+import { PlatListTable } from './PlatListTable';
+import { PlatMobileCard } from './PlatMobileCard';
 
 const PlatsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -10,32 +12,82 @@ const PlatsPage: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | 'all'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState<number | null>(null);
 
   const listMode = useResponsiveListView();
 
-  const fetchData = useCallback(async () => {
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get('/categories/');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Failed to fetch categories', err);
+    }
+  }, []);
+
+  const fetchPlats = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const categoriesRes = await axiosInstance.get('/categories/');
-      setCategories(categoriesRes.data);
-
       const platsUrl = selectedCategoryId === 'all' 
         ? '/plats/' 
         : `/plats/?categorie=${selectedCategoryId}`;
-      const platsRes = await axiosInstance.get(platsUrl);
-      setPlats(platsRes.data);
+      const res = await axiosInstance.get(platsUrl);
+      setPlats(res.data);
     } catch (err: any) {
-      console.error('Failed to fetch data', err);
-      setError('Une erreur est survenue lors du chargement des données.');
+      console.error('Failed to fetch plats', err);
+      setError('Une erreur est survenue lors du chargement des plats.');
     } finally {
       setIsLoading(false);
     }
   }, [selectedCategoryId]);
 
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    await Promise.all([fetchCategories(), fetchPlats()]);
+    setIsLoading(false);
+  }, [fetchCategories, fetchPlats]);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleToggleStatus = async (plat: Plat, field: 'est_active' | 'est_disponible') => {
+    setIsProcessing(plat.id);
+    const nextStatus = !plat[field];
+    try {
+      await axiosInstance.patch(`/plats/${plat.id}/`, { [field]: nextStatus });
+      // Optimistic update or refresh
+      setPlats(prev => prev.map(p => p.id === plat.id ? { ...p, [field]: nextStatus } : p));
+    } catch (err) {
+      console.error('Status toggle failed', err);
+      // Could add toast here
+    } finally {
+      setIsProcessing(null);
+    }
+  };
+
+  const handleDelete = async (plat: Plat) => {
+    setIsProcessing(plat.id);
+    try {
+      await axiosInstance.delete(`/plats/${plat.id}/`);
+      setPlats(prev => prev.filter(p => p.id !== plat.id));
+    } catch (err) {
+      console.error('Delete failed', err);
+    } finally {
+      setIsProcessing(null);
+    }
+  };
+
+  const handleEdit = (plat: Plat) => {
+    console.log('Edit plat', plat);
+    // Drawer logic will be in sub-phase 03
+  };
+
+  const handleCreate = () => {
+    console.log('Create new plat');
+    // Drawer logic will be in sub-phase 03
+  };
 
   return (
     <div className="space-y-6">
@@ -45,6 +97,7 @@ const PlatsPage: React.FC = () => {
           <p className="text-foreground-muted">Gérez les plats de votre restaurant.</p>
         </div>
         <button
+          onClick={handleCreate}
           className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors shadow-lg shadow-teal-500/20"
         >
           <Plus size={20} />
@@ -99,13 +152,33 @@ const PlatsPage: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="bg-surface rounded-xl border border-white/5 overflow-hidden">
-          {/* Responsive list will go here in next sub-phases */}
-          <div className="p-10 text-center">
-            <p className="text-foreground-muted">
-              {plats.length} plats trouvés ({listMode === 'desktop' ? 'Mode Bureau' : 'Mode Mobile'})
-            </p>
-          </div>
+        <div className="bg-surface rounded-xl border border-white/5 overflow-hidden shadow-lg">
+          {listMode === 'desktop' ? (
+            <PlatListTable
+              plats={plats}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onToggleStatus={handleToggleStatus}
+              isProcessing={isProcessing}
+            />
+          ) : (
+            <div className="p-4 grid grid-cols-1 gap-4">
+              {plats.length === 0 ? (
+                <p className="p-10 text-center text-foreground-muted">Aucun plat trouvé.</p>
+              ) : (
+                plats.map(plat => (
+                  <PlatMobileCard
+                    key={plat.id}
+                    plat={plat}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onToggleStatus={handleToggleStatus}
+                    isProcessing={isProcessing === plat.id}
+                  />
+                ))
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

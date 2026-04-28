@@ -7,6 +7,17 @@
   - Corrected `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.
   - Verified 100% build success in `back-office`.
 
+## [2026-04-28] - 20:55
+### Added
+- Completed Responsive Plats Surfaces (Sub-phase 02).
+- Built `PlatListTable` (Desktop) and `PlatMobileCard` (Mobile) with integrated status controls and actions.
+- Implemented `PlatStatusControls` for dual management of `est_disponible` and `est_active`.
+- Added optimistic updates and processing states for inline status toggles and deletions.
+- Improved `Switch` UI component with accessibility and disabled state support.
+
+### Validation
+- Verified with 13 automated tests across `Switch`, `PlatListTable`, and `PlatMobileCard`.
+
 ## [2026-04-28] - 20:45
 ### Added
 - Completed Foundation of Phase 7: Plats Frontend (Sub-phase 01).
