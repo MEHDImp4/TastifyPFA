@@ -46,10 +46,10 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
     <div className="min-h-screen flex items-center justify-center bg-background p-6 font-sans text-foreground">
       <div className="w-full max-w-[400px] animate-enter">
         <div className="bg-surface rounded-3xl border border-white/5 shadow-2xl overflow-hidden p-10">
-          <div className="flex flex-col items-center mb-10">
-            <div className="mb-6 relative">
-              <div className="absolute inset-0 bg-teal/20 blur-2xl rounded-full" />
-              <img src={logo} alt="Tastify" className="w-72 relative z-10" />
+          <div className="flex flex-col items-center mb-12 mt-2">
+            <div className="relative">
+              <div className="absolute inset-0 bg-teal/25 blur-3xl rounded-full scale-125" />
+              <img src={logo} alt="Tastify" className="w-[320px] max-w-full relative z-10" />
             </div>
           </div>
 

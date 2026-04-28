@@ -1,7 +1,7 @@
 ## [2026-04-28] - 09:55
 ### Changed
-- UI Refinement: Removed the "Tastify Portail" title and the login description text to simplify the UI to just the hero logo.
-- Modified `Login.tsx` to remove the `title` prop, header element, and description paragraph.
+- UI Refinement: Removed the "Tastify Portail" title and description text.
+- Rebalanced Login UI: Rescaled hero logo to `320px` and adjusted vertical spacing for a more premium, centered aesthetic.
 - Updated all SPAs to remove redundant title properties from Login component usage.
 
 ## [2026-04-28] - 09:15
