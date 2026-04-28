@@ -41,6 +41,7 @@ tastify-pfa/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
 ├── nginx/
 │   └── nginx.conf                 # Reverse proxy
+├── media/                         # User-uploaded content (images)
 ├── tests/
 │   └── smoke/test_services.sh     # Wave 0 smoke harness
 ├── docs/                          # Obsidian Brain
@@ -63,7 +64,9 @@ tastify-pfa/
 ├── README.md
 ├── DESIGN.md
 ├── GEMINI.md
-└── CLAUDE.md
+├── CLAUDE.md
+├── AGENTS.md
+└── dashboard.html
 ```
 
 ## Service routing (Nginx :80)
