@@ -10,6 +10,7 @@ export interface Plat {
   nom: string;
   description: string;
   prix: number;
+  temps_preparation: number;
   image: string;
   categorie: number;
   categorie_detail: Category;

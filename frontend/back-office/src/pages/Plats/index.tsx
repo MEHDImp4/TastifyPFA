@@ -5,6 +5,7 @@ import { Category, Plat } from './types';
 import { useResponsiveListView } from './useResponsiveListView';
 import { PlatListTable } from './PlatListTable';
 import { PlatMobileCard } from './PlatMobileCard';
+import { PlatDrawer } from './PlatDrawer';
 
 const PlatsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -13,6 +14,10 @@ const PlatsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<number | null>(null);
+
+  // Drawer state
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [editingPlat, setEditingPlat] = useState<Plat | null>(null);
 
   const listMode = useResponsiveListView();
 
@@ -57,11 +62,9 @@ const PlatsPage: React.FC = () => {
     const nextStatus = !plat[field];
     try {
       await axiosInstance.patch(`/plats/${plat.id}/`, { [field]: nextStatus });
-      // Optimistic update or refresh
       setPlats(prev => prev.map(p => p.id === plat.id ? { ...p, [field]: nextStatus } : p));
     } catch (err) {
       console.error('Status toggle failed', err);
-      // Could add toast here
     } finally {
       setIsProcessing(null);
     }
@@ -80,14 +83,16 @@ const PlatsPage: React.FC = () => {
   };
 
   const handleEdit = (plat: Plat) => {
-    console.log('Edit plat', plat);
-    // Drawer logic will be in sub-phase 03
+    setEditingPlat(plat);
+    setIsDrawerOpen(true);
   };
 
   const handleCreate = () => {
-    console.log('Create new plat');
-    // Drawer logic will be in sub-phase 03
+    setEditingPlat(null);
+    setIsDrawerOpen(true);
   };
+
+  const selectedCategory = categories.find(c => c.id === selectedCategoryId);
 
   return (
     <div className="space-y-6">
@@ -98,7 +103,7 @@ const PlatsPage: React.FC = () => {
         </div>
         <button
           onClick={handleCreate}
-          className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors shadow-lg shadow-teal-500/20"
+          className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors shadow-lg shadow-teal-500/20 active:scale-[0.98]"
         >
           <Plus size={20} />
           Nouveau Plat
@@ -115,7 +120,7 @@ const PlatsPage: React.FC = () => {
           onClick={() => setSelectedCategoryId('all')}
           className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
             selectedCategoryId === 'all'
-              ? 'bg-teal-500 text-white'
+              ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20'
               : 'bg-surface-elevated text-foreground-muted hover:text-white'
           }`}
         >
@@ -128,7 +133,7 @@ const PlatsPage: React.FC = () => {
             onClick={() => setSelectedCategoryId(cat.id)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
               selectedCategoryId === cat.id
-                ? 'bg-teal-500 text-white'
+                ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20'
                 : 'bg-surface-elevated text-foreground-muted hover:text-white'
             }`}
           >
@@ -153,7 +158,21 @@ const PlatsPage: React.FC = () => {
         </div>
       ) : (
         <div className="bg-surface rounded-xl border border-white/5 overflow-hidden shadow-lg">
-          {listMode === 'desktop' ? (
+          {plats.length === 0 ? (
+            <div className="p-20 text-center space-y-4">
+              <p className="text-foreground-muted text-lg">
+                {selectedCategoryId === 'all' 
+                  ? "Aucun plat n'a été créé pour le moment." 
+                  : `Aucun plat trouvé dans la catégorie "${selectedCategory?.nom}".`}
+              </p>
+              <button
+                onClick={handleCreate}
+                className="text-teal-500 hover:text-teal-400 font-bold transition-colors"
+              >
+                + Ajouter le premier plat {selectedCategoryId !== 'all' && `pour ${selectedCategory?.nom}`}
+              </button>
+            </div>
+          ) : listMode === 'desktop' ? (
             <PlatListTable
               plats={plats}
               onEdit={handleEdit}
@@ -163,24 +182,29 @@ const PlatsPage: React.FC = () => {
             />
           ) : (
             <div className="p-4 grid grid-cols-1 gap-4">
-              {plats.length === 0 ? (
-                <p className="p-10 text-center text-foreground-muted">Aucun plat trouvé.</p>
-              ) : (
-                plats.map(plat => (
-                  <PlatMobileCard
-                    key={plat.id}
-                    plat={plat}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onToggleStatus={handleToggleStatus}
-                    isProcessing={isProcessing === plat.id}
-                  />
-                ))
-              )}
+              {plats.map(plat => (
+                <PlatMobileCard
+                  key={plat.id}
+                  plat={plat}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onToggleStatus={handleToggleStatus}
+                  isProcessing={isProcessing === plat.id}
+                />
+              ))}
             </div>
           )}
         </div>
       )}
+
+      <PlatDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onSuccess={fetchPlats}
+        initialData={editingPlat}
+        categories={categories}
+        defaultCategoryId={selectedCategoryId}
+      />
     </div>
   );
 };

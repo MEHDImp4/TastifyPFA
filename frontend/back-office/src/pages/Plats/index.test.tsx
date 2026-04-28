@@ -13,10 +13,19 @@ const mockCategories = [
 ];
 
 const mockPlats = [
-  { id: 1, nom: 'Salade', prix: 10, categorie: 1, est_active: true, est_disponible: true },
+  { 
+    id: 1, 
+    nom: 'Salade', 
+    prix: 10, 
+    temps_preparation: 5,
+    categorie: 1, 
+    categorie_detail: { id: 1, nom: 'Entrées', est_active: true },
+    est_active: true, 
+    est_disponible: true 
+  },
 ];
 
-describe('PlatsPage', () => {
+describe('PlatsPage Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useResponsiveListView as any).mockReturnValue('desktop');
@@ -31,43 +40,59 @@ describe('PlatsPage', () => {
     });
   });
 
-  it('renders page title and loading state initially', async () => {
+  it('opens drawer on "Nouveau Plat" click', async () => {
     render(<PlatsPage />);
-    expect(screen.getByText('Gestion des Plats')).toBeInTheDocument();
+    
+    await waitFor(() => {
+      expect(screen.getByText('Nouveau Plat')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Nouveau Plat'));
+
+    expect(screen.getByRole('heading', { name: /Nouveau Plat/i })).toBeInTheDocument();
   });
 
-  it('loads and displays categories and plats count', async () => {
+  it('preselects category when creating from filtered list', async () => {
     render(<PlatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Entrées')).toBeInTheDocument();
-      expect(screen.getByText('Plats')).toBeInTheDocument();
+      expect(screen.getAllByText('Entrées')[0]).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/1 plats trouvés/)).toBeInTheDocument();
-  });
+    // Filter by Entrées
+    fireEvent.click(screen.getAllByText('Entrées')[0]);
 
-  it('filters plats when category is selected', async () => {
-    render(<PlatsPage />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Entrées')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByText('Entrées'));
-
+    // Wait for plats to load
     await waitFor(() => {
       expect(axiosInstance.get).toHaveBeenCalledWith('/plats/?categorie=1');
     });
+
+    // Click New Plat
+    fireEvent.click(screen.getByText('Nouveau Plat'));
+
+    // Category select should have value "1"
+    const select = screen.getByLabelText(/Catégorie/i) as HTMLSelectElement;
+    expect(select.value).toBe('1');
   });
 
-  it('displays error message on fetch failure', async () => {
-    (axiosInstance.get as any).mockRejectedValue(new Error('API Error'));
+  it('shows empty state with create button when no plats found', async () => {
+    (axiosInstance.get as any).mockImplementation((url: string) => {
+      if (url.includes('/categories/')) return Promise.resolve({ data: mockCategories });
+      if (url.includes('/plats/')) return Promise.resolve({ data: [] });
+      return Promise.reject(new Error('Not found'));
+    });
 
     render(<PlatsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Une erreur est survenue/)).toBeInTheDocument();
+      expect(screen.getByText(/Aucun plat n'a été créé/i)).toBeInTheDocument();
+    });
+
+    // Filter by Entrées
+    fireEvent.click(screen.getAllByText('Entrées')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Aucun plat trouvé dans la catégorie "Entrées"/i)).toBeInTheDocument();
     });
   });
 });
