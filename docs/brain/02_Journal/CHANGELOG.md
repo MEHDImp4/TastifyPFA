@@ -1,4 +1,25 @@
 ﻿
+## [2026-04-28] - 20:45
+### Added
+- Completed Foundation of Phase 7: Plats Frontend (Sub-phase 01).
+- Implemented `useResponsiveListView` hook for desktop/mobile list mode switching based on a 768px breakpoint.
+- Created typed contracts for `Category` and `Plat` in `types.ts` aligned with the backend API.
+- Implemented `PlatsPage` scaffold with:
+  - Category filter state and UI (horizontal scrollable chips).
+  - Data loading from `/api/categories/` and `/api/plats/` (with filtering).
+  - Error handling and loading states.
+- Registered `/plats` route in `App.tsx` and updated `Sidebar.tsx` navigation.
+
+### Fixed
+- Fixed `@shared` alias resolution in Vitest by dynamically switching between `../_shared` (local) and `./_shared` (Docker) paths in `vite.config.ts`.
+- Updated `App.test.tsx` to include `/back-office` basename in route testing.
+
+### Validation
+- Verified foundation with automated tests:
+  - `App.test.tsx` (3/3 passed)
+  - `useResponsiveListView.test.ts` (3/3 passed)
+  - `PlatsPage/index.test.tsx` (4/4 passed)
+
 ## [2026-04-28] - 20:35
 ### Added
 - Added `.planning/phases/07-plats-frontend/07-RESEARCH.md` to document the verified frontend baseline, API contract, risks, and recommended plan split for dishes management.

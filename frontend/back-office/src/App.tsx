@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { useEffect } from 'react';
 import { AppShell } from './components/layout/AppShell';
 import CategoriesPage from './pages/Categories';
+import PlatsPage from './pages/Plats';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 
@@ -20,13 +21,20 @@ const LoginRoute = () => {
 
 function App() {
   return (
-    <BrowserRouter basename="/back-office">
+    <BrowserRouter 
+      basename="/back-office"
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
         
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/categories" replace />} />
           <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/plats" element={<PlatsPage />} />
           {/* Add more authenticated routes here */}
         </Route>
 

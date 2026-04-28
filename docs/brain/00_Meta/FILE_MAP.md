@@ -32,7 +32,10 @@ tastify-pfa/
 │   │   └── assets/                # Shared logo, icons
 │   ├── back-office/               # GERANT  — Vite :3000 — /back-office/
 │   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
-│   │   └── vitest.config.ts       # Vitest-only config for test environment setup
+│   │   ├── vitest.config.ts       # Vitest-only config for test environment setup
+│   │   └── src/pages/
+│   │       ├── Categories/        # Categories management (Phase 5)
+│   │       └── Plats/             # Plats management (Phase 7)
 │   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
 │   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /

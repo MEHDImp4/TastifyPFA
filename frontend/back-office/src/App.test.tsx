@@ -12,6 +12,11 @@ vi.mock('./pages/Categories', () => ({
   default: () => <div>Categories Page Content</div>,
 }));
 
+// Mock PlatsPage
+vi.mock('./pages/Plats', () => ({
+  default: () => <div>Plats Page Content</div>,
+}));
+
 // Mock Login
 vi.mock('@shared/auth/Login', () => ({
   default: () => <div>Login Form</div>,
@@ -21,7 +26,7 @@ describe('App Routing', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset URL to root before each test
-    window.history.pushState({}, 'Home', '/');
+    window.history.pushState({}, 'Home', '/back-office/');
   });
 
   it('redirects to /login when unauthenticated', () => {
@@ -41,5 +46,15 @@ describe('App Routing', () => {
     expect(screen.getByText('Categories Page Content')).toBeInTheDocument();
     // Should see Sidebar content
     expect(screen.getByText('Catégories')).toBeInTheDocument(); 
+  });
+
+  it('renders plats page when authenticated and visiting /plats', async () => {
+    (useAuthStore as any).mockReturnValue({ isAuthenticated: true });
+    window.history.pushState({}, 'Plats', '/back-office/plats');
+
+    render(<App />);
+
+    expect(screen.getByText('Plats Page Content')).toBeInTheDocument();
+    expect(screen.getByText('Plats')).toBeInTheDocument();
   });
 });

@@ -12,7 +12,7 @@ export const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
-    { name: 'Plats', icon: ChefHat, path: '#' },
+    { name: 'Plats', icon: ChefHat, path: '/plats' },
     { name: 'Tables', icon: Table, path: '#' },
     { name: 'Stock', icon: Package, path: '#' },
     { name: 'RH', icon: Users, path: '#' },
