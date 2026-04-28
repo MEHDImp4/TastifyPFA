@@ -272,7 +272,7 @@ Phases execute in numeric order: 1 → 35
 | 1. Project Skeleton | 3/3 | Completed | 2026-04-26 |
 | 2. User Model & RBAC | 3/3 | Completed | 2026-04-27 |
 | 3. Auth API & Login Page | 3/3 | Completed | 2026-04-28 |
-| 4. Categories Model & API | 0/2 | Not started | - |
+| 4. Categories Model & API | 2/2 | Completed | 2026-04-28 |
 | 5. Categories Frontend | 0/0 | Not started | - |
 | 6. Plats Model & API | 0/0 | Not started | - |
 | 7. Plats Frontend | 0/0 | Not started | - |

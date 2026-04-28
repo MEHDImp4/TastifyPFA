@@ -14,11 +14,16 @@ tastify-pfa/
 │   │   └── wsgi.py
 │   ├── core/                      # Root config app
 │   ├── apps/                      # Domain apps
-│   │   └── users/                 # Custom User model, Auth (Phase 2 & 3)
-│   │       ├── views/auth.py      # Cookie-based JWT views
-│   │       ├── serializers.py     # Custom JWT claims
-│   │       ├── urls.py
-│   │       └── tests/test_auth.py
+│   │   ├── users/                 # Custom User model, Auth (Phase 2 & 3)
+│   │   │   ├── views/auth.py      # Cookie-based JWT views
+│   │   │   ├── serializers.py     # Custom JWT claims
+│   │   │   ├── urls.py
+│   │   │   └── tests/test_auth.py
+│   │   └── menu/                  # Categories & Dishes (Phase 4+)
+│   │       ├── models.py          # Soft-delete Categorie
+│   │       ├── serializers.py
+│   │       ├── views.py
+│   │       └── urls.py
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/                      # 4 independent Vite SPAs
@@ -43,7 +48,8 @@ tastify-pfa/
 │   └── phases/                    # Phase-specific files
 │       ├── 01-project-skeleton/   # Wave 1: Infrastructure
 │       ├── 02-user-model-rbac/    # Wave 2: User Core
-│       └── 03-auth-api-login/     # Wave 3: JWT & Login (Finalized)
+│       ├── 03-auth-api-login/     # Wave 3: JWT & Login
+│       └── 04-categories-model-api/ # Wave 4: Menu Core (Finalized)
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md

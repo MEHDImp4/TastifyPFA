@@ -1,3 +1,12 @@
+## [2026-04-28] - 11:10
+### Added
+- Completed Execution of Phase 4: Categories Model & API.
+- Implemented `menu` app with `Categorie` model supporting soft-delete (`est_active`).
+- Configured REST API for categories with hierarchical RBAC (Gérant Full CRUD, Others Read-only).
+- Verified visibility logic for active/inactive categories via custom `CategorieManager`.
+- Seeded development environment with test categories.
+- Synchronized `dashboard.html` and `ROADMAP.md` (Progress: 11%).
+
 ## [2026-04-28] - 09:55
 ### Changed
 - UI Refinement: Removed the "Tastify Portail" title and description text.
