@@ -51,7 +51,10 @@ tastify-pfa/
 │       ├── 01-project-skeleton/   # Wave 1: Infrastructure
 │       ├── 02-user-model-rbac/    # Wave 2: User Core
 │       ├── 03-auth-api-login/     # Wave 3: JWT & Login
-│       └── 04-categories-model-api/ # Wave 4: Menu Core (Finalized)
+│       ├── 04-categories-model-api/ # Wave 4: Menu Core (Finalized)
+│       ├── 05-categories-frontend/ # Wave 5: Back-office Categories UI
+│       ├── 06-plats-model-api/    # Wave 6: Dish API and backend rules
+│       └── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md

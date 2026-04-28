@@ -1,13 +1,14 @@
 # Planning State
 
 **Last Updated:** 2026-04-28
-**Stopped At:** Completed 06-03-PLAN.md
-**Resume File:** None
+**Stopped At:** Phase 7 context captured
+**Resume File:** .planning/phases/07-plats-frontend/07-CONTEXT.md
 
 ## Notes
 
 - Phase 6 discussion updated the existing placeholder context into the standard GSD context format.
 - Locked decisions cover dish visibility, field scope, category-driven hiding, and basic validation boundaries.
+- Phase 7 context is now captured for the plats back-office UI, locking the responsive list, category filter, inline status, and drawer form behavior.
 
 ## Decisions
 

@@ -26,3 +26,4 @@ The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.conf
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
+Current planning artifacts now extend through `.planning/phases/07-plats-frontend/` for the dishes back-office UI.
