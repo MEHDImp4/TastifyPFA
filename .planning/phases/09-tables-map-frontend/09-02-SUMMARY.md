@@ -66,7 +66,7 @@ completed: 2026-04-28
 
 1. **Map editor implementation and tests** - `27352be` (feat)
 
-**Plan metadata:** pending
+**Plan metadata:** `a25919e` (docs)
 
 ## Files Created/Modified
 - `frontend/salle/vitest.config.ts` - Salle-specific Vitest configuration.

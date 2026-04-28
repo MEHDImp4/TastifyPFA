@@ -12,7 +12,7 @@
 ### Validation
 - `npm run test -- --run` in `frontend/salle`: 12/12 tests passed.
 - `npm run build` in `frontend/salle`: passed.
-- Commit: `27352be`
+- Commits: `27352be`, `a25919e`
 
 ## [2026-04-28] - 23:43
 ### Changed
