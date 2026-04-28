@@ -1,4 +1,21 @@
 
+## [2026-04-28] - 23:43
+### Changed
+- Planned the remaining Phase 9 Map Editor execution slice.
+- Expanded `09-02-PLAN.md` with executable TDD tasks for Salle Vitest setup, dynamic SVG table geometry, GERANT-only edit mode, 20px drag snapping, collision feedback, batch PATCH persistence, and final build verification.
+- Updated `.planning/ROADMAP.md`, `.planning/STATE.md`, `FILE_MAP.md`, and `dashboard.html` to reflect that Phase 9 Plan 02 is ready to execute.
+- Commit: pending
+
+
+## [2026-04-28] - 23:55
+### Changed
+- Finalized Phase 9 Context and Implementation Strategy.
+- Locked decisions for **Map Editor**:
+  - 20px grid snapping for alignment.
+  - Batch-save persistence logic.
+  - Dynamic shapes (Circles/Rects) based on table capacity.
+  - Red glow feedback for table collisions.
+- Updated `09-CONTEXT.md` and `09-02-PLAN.md` with final requirements.
 
 ## [2026-04-28] - 23:45
 ### Added

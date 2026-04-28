@@ -58,7 +58,9 @@ tastify-pfa/
 │       ├── 04-categories-model-api/ # Wave 4: Menu Core (Finalized)
 │       ├── 05-categories-frontend/ # Wave 5: Back-office Categories UI
 │       ├── 06-plats-model-api/    # Wave 6: Dish API and backend rules
-│       └── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
+│       ├── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
+│       ├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
+│       └── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, foundation, and editor plan
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md

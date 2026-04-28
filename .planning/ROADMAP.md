@@ -117,7 +117,9 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Visual table map in Salle UI.
 **Depends on**: Phase 8
 **Success Criteria**: 1. Waiters see tables map.
-**Plans**: TBD
+**Plans**:
+- [x] 09-01-PLAN.md — Table map foundation with SVG visualization, status colors, fallback grid, and polling.
+- [ ] 09-02-PLAN.md — GERANT-only map editor with dynamic shapes, 20px snapping, collision feedback, batch save, and Salle tests.
 
 ### Phase 10: Commandes Model
 **Goal**: Order database tables and constraints.
