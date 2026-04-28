@@ -8,7 +8,7 @@
 ### Validation
 - `npm run test -- --run` in `frontend/salle`: 15/15 tests passed.
 - `npm run build` in `frontend/salle`: passed.
-- Commit: pending
+- Commit: `dae5c1f`
 
 ## [2026-04-28] - 23:58
 ### Added
