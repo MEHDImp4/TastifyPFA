@@ -1,3 +1,9 @@
+## [2026-04-28] - 09:55
+### Changed
+- UI Refinement: Removed the "Tastify Portail" (and other app titles) from the login screen to simplify the UI to just the logo.
+- Modified `Login.tsx` to remove the `title` prop and header element.
+- Updated all SPAs to remove redundant title properties from Login component usage.
+
 ## [2026-04-28] - 09:15
 ### Added
 - Phase 4 Context Captured: Categories Model & API.

@@ -17,7 +17,7 @@ function App() {
   }
 
   if (!isAuthenticated) {
-    return <Login onSuccess={() => {}} title="Tastify KDS" />
+    return <Login onSuccess={() => {}} />
   }
 
   return (

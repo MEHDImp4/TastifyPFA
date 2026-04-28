@@ -17,7 +17,7 @@ function App() {
   }
 
   if (!isAuthenticated) {
-    return <Login onSuccess={() => {}} title="Tastify Back-Office" />
+    return <Login onSuccess={() => {}} />
   }
 
   return (

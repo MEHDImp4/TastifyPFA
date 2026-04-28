@@ -6,10 +6,9 @@ import logo from '@shared/assets/logo.svg'
 
 interface LoginProps {
   onSuccess: (role: string) => void
-  title?: string
 }
 
-const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastify" }) => {
+const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -52,8 +51,6 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
               <div className="absolute inset-0 bg-teal/20 blur-2xl rounded-full" />
               <img src={logo} alt="Tastify" className="w-72 relative z-10" />
             </div>
-            
-            <h1 className="text-2xl font-bold tracking-tight text-white mb-2">{title}</h1>
             <p className="text-foreground-muted text-sm text-center px-4 leading-relaxed">
               Connectez-vous pour accéder à votre interface de gestion restaurant.
             </p>
