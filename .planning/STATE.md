@@ -3,33 +3,26 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 8 complete
-last_updated: "2026-04-28T23:30:00.000Z"
+stopped_at: Phase 9 Plan 01 complete
+last_updated: "2026-04-28T23:45:00.000Z"
 progress:
   total_phases: 10
   completed_phases: 8
-  total_plans: 22
-  completed_plans: 22
-  percent: 100
+  total_plans: 24
+  completed_plans: 23
+  percent: 95
 ---
 
 # Planning State
 
 **Last Updated:** 2026-04-28
-**Stopped At:** Phase 8 complete
-**Resume File:** .planning/phases/09-tables-map-frontend/09-CONTEXT.md
+**Stopped At:** Phase 9 Plan 01 complete
+**Resume File:** .planning/phases/09-tables-map-frontend/09-02-PLAN.md
 
 ## Notes
 
-- Phase 6 discussion updated the existing placeholder context into the standard GSD context format.
-- Locked decisions cover dish visibility, field scope, category-driven hiding, and basic validation boundaries.
-- Phase 7 context is now captured for the plats back-office UI, locking the responsive list, category filter, inline status, and drawer form behavior.
-- Phase 7 research and executable plans are now in place, split into foundation, responsive list surfaces, and drawer workflow.
-- Phase 8 context locked with 6 decisions: pos_x/pos_y included, SERVEUR status-flip deferred to Phase 12, app name apps/tables/, 12 seed tables, visibility mirrors Categorie pattern, 4-value Statut enum.
-- Phase 8 plans split into 3: app scaffold+model (08-01), serializer+viewset+URL (08-02), seed+integration tests (08-03).
-- Phase 8 Plan 01 complete: Table model with 8 fields, Statut enum (4 values), soft-delete, pos_x/pos_y, 0001_initial migration applied, 3 tests green.
-- Phase 8 Plan 02 complete: TableSerializer, TableViewSet (split RBAC + visibility), URL wiring at /api/tables/, 8 RBAC tests green.
 - Phase 8 Plan 03 complete: seed_tables command (12 tables), 10 API tests green. Total Phase 8 coverage: 21 tests green.
+- Phase 9 Plan 01 complete: SVG map foundation, TableItem/TableMap components, MapView integration with polling.
 
 ## Decisions
 

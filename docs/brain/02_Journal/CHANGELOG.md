@@ -1,5 +1,13 @@
 
 
+## [2026-04-28] - 23:45
+### Added
+- Completed Foundation of Phase 9: Tables Map Frontend (Plan 01).
+- Implemented core SVG map visualization in the Salle UI.
+- Created `TableItem` and `TableMap` components with status-based coloring and fallback grid logic.
+- Integrated `MapView` page with initial polling (10s) and error handling.
+- Verified authenticated users in Salle UI see the visual grid/map of tables.
+
 ## [2026-04-28] - 23:35
 ### Added
 - **Visual Assets & Data**:

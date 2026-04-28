@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-28 23:31:36<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-28 23:35:13<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -86,14 +86,14 @@
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->22<!-- STAT_TASKS_END --></div>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->23<!-- STAT_TASKS_END --></div>
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
                 <div><!-- STATUS_BADGE_START -->
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Phase validée
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
+                        En développement
                     </span>
                             <!-- STATUS_BADGE_END --></div>
             </div>
@@ -164,14 +164,14 @@
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
                             <div>
                                 <h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4>
-                                <p class="text-sm text-gray-400 mt-1">Table status, capacities.</p>
+                                <p class="text-sm text-gray-400 mt-1">Table status, capacities. (completed 2026-04-28)</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
-                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 9: Tables Map Frontend</h4>
-                                <p class="text-sm text-gray-500 mt-1">Interactive SVG/Canvas map in Salle UI.</p>
+                                <h4 class="font-semibold text-white">Phase 9: Tables Map Frontend</h4>
+                                <p class="text-sm text-gray-400 mt-1">Interactive SVG/Canvas map in Salle UI.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -425,12 +425,12 @@
                             <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4><p class="text-xs text-gray-400 mt-1">Table status, capacities.</p></div>
+                            <div><h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4><p class="text-xs text-gray-400 mt-1">Table status, capacities. (completed 2026-04-28)</p></div>
                             <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 9: Tables Map Frontend</h4><p class="text-xs text-gray-400 mt-1">Interactive SVG/Canvas map in Salle UI.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-400 border-blue-500/20 whitespace-nowrap">En cours</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">DB constraints, lines, signals for `montant_total`.</p></div>
@@ -550,7 +550,7 @@
                         <script>
                             const chartData = {
                                 labels: ['Todo', 'In Progress', 'Done'],
-                                data: [27, 0, 8]
+                                data: [26, 1, 8]
                             };
                         </script>
                             <!-- CHART_DATA_END -->
@@ -565,6 +565,31 @@
                     <div class="flex-1 overflow-y-auto pr-2">
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed Foundation of Phase 9: Tables Map Frontend (Plan 01).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented core SVG map visualization in the Salle UI.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `TableItem` and `TableMap` components with status-based coloring and fallback grid logic.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Integrated `MapView` page with initial polling (10s) and error handling.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified authenticated users in Salle UI see the visual grid/map of tables.</p>
+                            </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
@@ -614,31 +639,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed `ignoreDeprecations: "6.0"` error in all `tsconfig.json` files by reverting to `"5.0"` (compatible with current TS 5.9.3).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Corrected `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 20:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verified 100% build success in `back-office`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed Phase 8: Tables Model & API.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented `apps/tables` Django app with `Table` model supporting soft-delete.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 23:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `TableSerializer` and `TableViewSet` with hierarchical RBAC (GÃ©rant Full CRUD, Others Read-only).</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

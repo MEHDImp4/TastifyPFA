@@ -1,6 +1,7 @@
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
+import { MapView } from './pages/Map/MapView'
 import logo from '@shared/assets/logo.svg'
 
 function App() {
@@ -21,31 +22,40 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center gap-8 p-6">
-      <div className="w-full max-w-[440px] animate-enter">
-        <div className="bg-surface rounded-3xl border border-white/5 p-10 shadow-2xl text-center">
-          <div className="w-60 h-60 bg-teal/10 rounded-2xl flex items-center justify-center mb-8 border border-teal/20 mx-auto relative">
-             <div className="absolute inset-0 bg-teal/10 blur-xl rounded-full" />
-            <img src={logo} alt="Tastify" className="w-48 relative z-10" />
-          </div>
-          
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Interface Salle</h1>
-          <p className="text-foreground-muted mb-6">Prêt pour le service, <span className="text-teal font-semibold">{user?.username}</span></p>
-          
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal/10 border border-teal/20 text-[11px] font-bold text-teal uppercase tracking-[0.15em]">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
-            {user?.role}
-          </div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      {/* Navigation Header */}
+      <nav className="h-20 border-b border-white/5 bg-surface/50 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-50">
+        <div className="flex items-center gap-4">
+          <img src={logo} alt="Tastify" className="w-10 h-10" />
+          <div className="h-6 w-px bg-white/10" />
+          <span className="text-[11px] font-bold text-teal uppercase tracking-[0.2em]">Interface Salle</span>
         </div>
-      </div>
 
-      <button 
-        onClick={handleLogout}
-        className="text-[11px] text-foreground-muted hover:text-error uppercase tracking-[0.2em] font-bold transition-all active:scale-95 flex items-center gap-2 opacity-60 hover:opacity-100"
-      >
-        Se déconnecter
-      </button>
-    </main>
+        <div className="flex items-center gap-6">
+          <div className="flex flex-col items-end">
+            <span className="text-sm font-bold text-white">{user?.username}</span>
+            <span className="text-[10px] text-teal font-bold uppercase tracking-wider">{user?.role}</span>
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="p-2.5 rounded-full bg-white/5 hover:bg-error/10 text-foreground-muted hover:text-error transition-all active:scale-90 border border-white/5"
+            title="Se déconnecter"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </div>
+      </nav>
+
+      <main className="flex-1 p-6 sm:p-10 max-w-7xl mx-auto w-full">
+        <MapView />
+      </main>
+
+      <footer className="py-6 text-center border-t border-white/5">
+        <p className="text-[10px] text-foreground-muted font-bold uppercase tracking-widest opacity-50">
+          Tastify OS — Plan de Salle v1.0
+        </p>
+      </footer>
+    </div>
   )
 }
 
