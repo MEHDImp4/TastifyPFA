@@ -8,7 +8,7 @@
 ### Validation
 - `npm run test -- --run src/components/layout/AppShell.test.tsx` in `frontend/back-office`: 4/4 tests passed.
 - `npm run build` in `frontend/back-office`: passed.
-- Commit: pending
+- Commit: `a6890dc`
 
 ## [2026-04-29] - 00:17
 ### Fixed
