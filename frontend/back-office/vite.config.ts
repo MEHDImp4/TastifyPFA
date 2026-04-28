@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite'
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
@@ -7,7 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL('./shared', import.meta.url)),
+      '@shared': fileURLToPath(new URL('../_shared', import.meta.url)),
     },
     preserveSymlinks: true,
   },
@@ -25,5 +26,10 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
   },
 })
