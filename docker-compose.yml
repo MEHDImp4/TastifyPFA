@@ -50,7 +50,7 @@ services:
       context: ./frontend/back-office
     volumes:
       - ./frontend/back-office:/app
-      - ./frontend/_shared:/app/shared
+      - ./frontend/_shared:/app/_shared
       - /app/node_modules
     networks:
       - tastify-network
@@ -60,7 +60,7 @@ services:
       context: ./frontend/salle
     volumes:
       - ./frontend/salle:/app
-      - ./frontend/_shared:/app/shared
+      - ./frontend/_shared:/app/_shared
       - /app/node_modules
     networks:
       - tastify-network
@@ -70,7 +70,7 @@ services:
       context: ./frontend/kds
     volumes:
       - ./frontend/kds:/app
-      - ./frontend/_shared:/app/shared
+      - ./frontend/_shared:/app/_shared
       - /app/node_modules
     networks:
       - tastify-network
@@ -80,7 +80,7 @@ services:
       context: ./frontend/portail-client
     volumes:
       - ./frontend/portail-client:/app
-      - ./frontend/_shared:/app/shared
+      - ./frontend/_shared:/app/_shared
       - /app/node_modules
     networks:
       - tastify-network

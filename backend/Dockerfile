@@ -5,10 +5,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        default-libmysqlclient-dev \
+        libmariadb-dev \
         gcc \
         pkg-config \
-        python3-dev \
         curl \
     && rm -rf /var/lib/apt/lists/*
 

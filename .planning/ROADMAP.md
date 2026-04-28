@@ -11,7 +11,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 3: Auth API & Login Page** - JWT setup, Login UI across all apps.
 - [x] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
 - [x] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.
-- [ ] **Phase 6: Plats Model & API** [PLAN] - Dishes, pricing, prep times.
+- [x] **Phase 6: Plats Model & API** [PLAN] - Dishes, pricing, prep times.
 - [ ] **Phase 7: Plats Frontend** - Back-Office UI for managing dishes.
 - [ ] **Phase 8: Tables Model & API** - Table status, capacities.
 - [ ] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in Salle UI.

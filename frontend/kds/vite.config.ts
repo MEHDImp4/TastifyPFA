@@ -4,10 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
+  base: '/kds/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL('../_shared', import.meta.url)),
+      '@shared': fileURLToPath(new URL('./_shared', import.meta.url)),
     },
     preserveSymlinks: true,
   },
@@ -24,6 +25,9 @@ export default defineConfig({
     },
     watch: {
       usePolling: true,
+    },
+    fs: {
+      allow: ['.'],
     },
   },
 })

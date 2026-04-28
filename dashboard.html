@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-28 18:19:08<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-28 19:08:08<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -86,14 +86,14 @@
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->13<!-- STAT_TASKS_END --></div>
+                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->16<!-- STAT_TASKS_END --></div>
             </div>
             <div class="card p-4 flex flex-col justify-center">
                 <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
                 <div><!-- STATUS_BADGE_START -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Contexte phase 6
+                        Phase validée
                     </span>
                             <!-- STATUS_BADGE_END --></div>
             </div>
@@ -146,11 +146,11 @@
                                 <p class="text-sm text-gray-400 mt-1">Back-Office UI for managing categories.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
-                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-yellow-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 6: Plats Model & API</h4>
-                                <p class="text-sm text-gray-500 mt-1">Dishes, pricing, prep times.</p>
+                                <h4 class="font-semibold text-white">Phase 6: Plats Model & API</h4>
+                                <p class="text-sm text-gray-400 mt-1">Dishes, pricing, prep times.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -382,7 +382,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->3<!-- DB_CATS_END --></p>
                         </div>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 6: Plats Model & API</h4><p class="text-xs text-gray-400 mt-1">Dishes, pricing, prep times.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400 border-yellow-500/20 whitespace-nowrap">Planifié</span>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 7: Plats Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-Office UI for managing dishes.</p></div>
@@ -568,57 +568,77 @@
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Captured full Phase 6 context for Plats Model &amp; API.</p>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Captured the full GSD context for Phase 6: Plats Model & API in `.planning/phases/06-plats-model-api/06-CONTEXT.md`.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Locked dish visibility to active, available plats under active categories for non-`GERANT` users.</p>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `.planning/phases/06-plats-model-api/06-DISCUSSION-LOG.md` to preserve the locked alternatives and final user choices.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Locked the Phase 6 field contract to the current `Plat` schema without `badge_chef` or recipe data.</p>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `.planning/STATE.md` with the canonical resume point for the planning workflow.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Recorded that inactive categories hide dishes through queryset filtering only, with no side-effect writes on related plats.</p>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Replaced the older placeholder Phase 6 context with the standard downstream-ready format, including canonical references and code-context sections.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added canonical Phase 6 planning artifacts: `06-CONTEXT.md`, `06-DISCUSSION-LOG.md`, and `.planning/STATE.md`.</p>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `dashboard.html` to reflect the new project state: Phase 6 context captured.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed Execution of Phase 4: Categories Model & API.</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 18:19</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `39d19df` `docs(06): capture phase context`</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented `menu` app with `Categorie` model supporting soft-delete (`est_active`).</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Definitive TypeScript Maintenance**:</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Configured REST API for categories with hierarchical RBAC (Gérant Full CRUD, Others Read-only).</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Silenced `baseUrl` deprecation warnings in all frontend apps using `ignoreDeprecations: "5.0"` (compatible with TS 5.x).</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified visibility logic for active/inactive categories via custom `CategorieManager`.</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed project-wide build regressions in `salle`, `kds`, and `portail-client` by installing missing `@types/node`.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Seeded development environment with test categories.</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Corrected broken `@shared` alias paths in `vite.config.ts` for all apps.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-28 11:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Synchronized `dashboard.html` and `ROADMAP.md` (Progress: 11%).</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed CSS `@import` paths for `theme.css` in all frontend applications.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved named import errors for `axiosInstance` by switching to default imports and using `@shared` aliases.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed strict type inference issues in `_shared/auth/useAuthStore.ts` by adding explicit type casts for initial state.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Removed unused imports (`List`) in `Sidebar.tsx`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-28 13:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verified 100% build success across all 4 frontend SPAs.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

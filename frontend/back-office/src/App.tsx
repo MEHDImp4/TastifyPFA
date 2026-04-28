@@ -20,7 +20,7 @@ const LoginRoute = () => {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/back-office">
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
         

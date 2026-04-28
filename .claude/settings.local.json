@@ -4,7 +4,8 @@
       "WebSearch",
       "Bash(git -C \"C:/Users/mehdi/.claude\" log --oneline -10 -- statusline-command.sh)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "WebFetch(domain:pypi.org)"
     ]
   }
 }
