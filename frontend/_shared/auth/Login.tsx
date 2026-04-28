@@ -51,9 +51,6 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
               <div className="absolute inset-0 bg-teal/20 blur-2xl rounded-full" />
               <img src={logo} alt="Tastify" className="w-72 relative z-10" />
             </div>
-            <p className="text-foreground-muted text-sm text-center px-4 leading-relaxed">
-              Connectez-vous pour accéder à votre interface de gestion restaurant.
-            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
