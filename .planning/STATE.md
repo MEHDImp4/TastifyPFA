@@ -1,8 +1,8 @@
 # Planning State
 
 **Last Updated:** 2026-04-28
-**Stopped At:** Completed 06-02-PLAN.md
-**Resume File:** `.planning/phases/06-plats-model-api/06-03-PLAN.md`
+**Stopped At:** Completed 06-03-PLAN.md
+**Resume File:** None
 
 ## Notes
 
@@ -18,3 +18,5 @@
 - Implemented dual-flag filtering logic for non-GERANTs: `Plat.objects.active().filter(est_disponible=True)`.
 - Ensured `destroy()` performs a soft-delete (setting `est_active=False`) mimicking the `Categorie` implementation.
 - Allowed optional `categorie` filtering logic in `get_queryset` for all authenticated users.
+- Implemented idempotent seeding using get_or_create scoped to (categorie, nom).
+- Used force_authenticate in tests to avoid JWT overhead.

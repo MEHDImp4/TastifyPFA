@@ -90,9 +90,9 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Success Criteria**: 1. API allows CRUD on dishes with RBAC and soft-delete.
 **Requirements**: [PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05]
 **Plans**: 3 plans
-- [ ] 06-01-PLAN.md — Plat model definition, associations, and migrations.
-- [ ] 06-02-PLAN.md — PlatSerializer, PlatViewSet (RBAC + visibility), URL registration.
-- [ ] 06-03-PLAN.md — Dev seeding command and integration tests.
+- [x] 06-01-PLAN.md — Plat model definition, associations, and migrations.
+- [x] 06-02-PLAN.md — PlatSerializer, PlatViewSet (RBAC + visibility), URL registration.
+- [x] 06-03-PLAN.md — Dev seeding command and integration tests.
 
 ### Phase 7: Plats Frontend
 **Goal**: Back-office UI for dishes.
@@ -280,7 +280,7 @@ Phases execute in numeric order: 1 → 35
 | 3. Auth API & Login Page | 3/3 | Completed | 2026-04-28 |
 | 4. Categories Model & API | 2/2 | Completed | 2026-04-28 |
 | 5. Categories Frontend | 2/2 | Completed | 2026-04-28 |
-| 6. Plats Model & API | 2/3 | In progress | - |
+| 6. Plats Model & API | 3/3 | Completed | 2026-04-28 |
 | 7. Plats Frontend | 0/0 | Not started | - |
 | 8. Tables Model & API | 0/0 | Not started | - |
 | 9. Tables Map Frontend | 0/0 | Not started | - |
