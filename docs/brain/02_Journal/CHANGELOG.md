@@ -4,7 +4,7 @@
 - Planned the remaining Phase 9 Map Editor execution slice.
 - Expanded `09-02-PLAN.md` with executable TDD tasks for Salle Vitest setup, dynamic SVG table geometry, GERANT-only edit mode, 20px drag snapping, collision feedback, batch PATCH persistence, and final build verification.
 - Updated `.planning/ROADMAP.md`, `.planning/STATE.md`, `FILE_MAP.md`, and `dashboard.html` to reflect that Phase 9 Plan 02 is ready to execute.
-- Commit: pending
+- Commit: `dcad5e6`
 
 
 ## [2026-04-28] - 23:55
