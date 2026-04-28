@@ -98,7 +98,10 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Back-office UI for dishes.
 **Depends on**: Phase 6
 **Success Criteria**: 1. Manager can visually manage dishes.
-**Plans**: TBD
+**Plans**:
+- [ ] 07-01-PLAN.md — Route wiring, typed contracts, page scaffold, category filter state.
+- [ ] 07-02-PLAN.md — Desktop/mobile list renderers, inline statuses, row/card actions.
+- [ ] 07-03-PLAN.md — Drawer form, strict validation, category-aware create/edit, empty-state flow.
 
 ### Phase 8: Tables Model & API
 **Goal**: Table DB and REST API.
@@ -281,7 +284,7 @@ Phases execute in numeric order: 1 → 35
 | 4. Categories Model & API | 2/2 | Completed | 2026-04-28 |
 | 5. Categories Frontend | 2/2 | Completed | 2026-04-28 |
 | 6. Plats Model & API | 3/3 | Completed | 2026-04-28 |
-| 7. Plats Frontend | 0/0 | Not started | - |
+| 7. Plats Frontend | 0/3 | Planned | - |
 | 8. Tables Model & API | 0/0 | Not started | - |
 | 9. Tables Map Frontend | 0/0 | Not started | - |
 | 10. Commandes Model | 0/0 | Not started | - |

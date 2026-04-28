@@ -1,4 +1,14 @@
 ﻿
+## [2026-04-28] - 20:35
+### Added
+- Added `.planning/phases/07-plats-frontend/07-RESEARCH.md` to document the verified frontend baseline, API contract, risks, and recommended plan split for dishes management.
+- Added `.planning/phases/07-plats-frontend/07-01-PLAN.md`, `07-02-PLAN.md`, and `07-03-PLAN.md` as the executable plan set for Phase 7: Plats Frontend.
+
+### Changed
+- Updated `.planning/ROADMAP.md` to replace the Phase 7 `TBD` placeholder with the three planned execution slices.
+- Updated `.planning/STATE.md` to resume from `07-01-PLAN.md` with Phase 7 marked as planned.
+- Updated `docs/brain/00_Meta/FILE_MAP.md`, `README.md`, and `dashboard.html` to reflect the new Phase 7 planning artifacts and state shift.
+
 ## [2026-04-28] - 20:01
 ### Added
 - Captured the full GSD context for Phase 7: Plats Frontend in `.planning/phases/07-plats-frontend/07-CONTEXT.md`.
