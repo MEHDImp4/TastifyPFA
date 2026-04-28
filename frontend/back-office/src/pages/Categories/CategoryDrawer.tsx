@@ -73,11 +73,11 @@ export function CategoryDrawer({ isOpen, onClose, onSuccess, initialData }: Cate
 
     try {
       if (initialData) {
-        await axiosInstance.patch(`/api/categories/${initialData.id}/`, formData, {
+        await axiosInstance.patch(`/categories/${initialData.id}/`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        await axiosInstance.post('/api/categories/', formData, {
+        await axiosInstance.post('/categories/', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }

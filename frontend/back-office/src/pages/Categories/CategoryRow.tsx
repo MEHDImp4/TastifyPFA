@@ -37,7 +37,7 @@ export function CategoryRow({ category, onEdit, onRefresh }: CategoryRowProps) {
     const nextStatus = !isActive;
     setIsActive(nextStatus);
     try {
-      await axiosInstance.patch(`/api/categories/${category.id}/`, { est_active: nextStatus });
+      await axiosInstance.patch(`/categories/${category.id}/`, { est_active: nextStatus });
       onRefresh();
     } catch (err) {
       setIsActive(!nextStatus);
@@ -47,7 +47,7 @@ export function CategoryRow({ category, onEdit, onRefresh }: CategoryRowProps) {
 
   const handleDelete = async () => {
     try {
-      await axiosInstance.delete(`/api/categories/${category.id}/`);
+      await axiosInstance.delete(`/categories/${category.id}/`);
       onRefresh();
     } catch (err) {
       console.error('Delete failed', err);

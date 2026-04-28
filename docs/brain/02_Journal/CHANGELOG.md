@@ -1,3 +1,7 @@
+﻿
+## [2026-04-28] - 19:31
+### Fixed
+- Fixed 404 error on categories API by removing redundant /api prefix in back-office requests.
 ## [2026-04-28] - 18:19
 ### Added
 - Captured the full GSD context for Phase 6: Plats Model & API in `.planning/phases/06-plats-model-api/06-CONTEXT.md`.
@@ -27,7 +31,7 @@
 ### Added
 - Completed Execution of Phase 4: Categories Model & API.
 - Implemented `menu` app with `Categorie` model supporting soft-delete (`est_active`).
-- Configured REST API for categories with hierarchical RBAC (Gérant Full CRUD, Others Read-only).
+- Configured REST API for categories with hierarchical RBAC (GÃ©rant Full CRUD, Others Read-only).
 - Verified visibility logic for active/inactive categories via custom `CategorieManager`.
 - Seeded development environment with test categories.
 - Synchronized `dashboard.html` and `ROADMAP.md` (Progress: 11%).
@@ -44,8 +48,8 @@
 - Phase 4 Context Captured: Categories Model & API.
 - Established implementation strategy for the `menu` app:
   - Confirmed `Categorie` model fields: `nom`, `description`, `ordre_affichage`, `image`, `est_active`.
-  - Defined strict RBAC: Gérant (Full CRUD), Others (Read-only).
-  - Resolved visibility logic: Inactive categories hidden for all except Gérant.
+  - Defined strict RBAC: GÃ©rant (Full CRUD), Others (Read-only).
+  - Resolved visibility logic: Inactive categories hidden for all except GÃ©rant.
   - Mandated soft delete behavior (`est_active=False`) to preserve data integrity for dishes.
 - Created `.planning/phases/04-categories-model-api/04-CONTEXT.md` to guide research and planning.
 
@@ -219,3 +223,4 @@ and this project adheres to semantic tracking for development.
 - Ingested `cahier_de_charge_tastify.md` specifications and created `PROJECT_OVERVIEW.md`.
 - Initialized `.planning/` GSD framework with 6 architectural phases mapped from the specifications.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
+

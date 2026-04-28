@@ -52,7 +52,7 @@ describe('CategoryRow Component', () => {
     const switchBtn = screen.getByRole('button', { name: '' }); // The Switch component
     fireEvent.click(switchBtn);
 
-    expect(axiosInstance.patch).toHaveBeenCalledWith('/api/categories/1/', { est_active: false });
+    expect(axiosInstance.patch).toHaveBeenCalledWith('/categories/1/', { est_active: false });
   });
 
   it('shows confirmation when delete is clicked', async () => {
@@ -85,7 +85,7 @@ describe('CategoryRow Component', () => {
     const confirmBtn = screen.getByText(/confirmer/i);
     fireEvent.click(confirmBtn);
 
-    expect(axiosInstance.delete).toHaveBeenCalledWith('/api/categories/1/');
+    expect(axiosInstance.delete).toHaveBeenCalledWith('/categories/1/');
     await waitFor(() => expect(onRefresh).toHaveBeenCalled());
   });
 });

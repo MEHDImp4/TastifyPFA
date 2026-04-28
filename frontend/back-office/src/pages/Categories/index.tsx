@@ -22,7 +22,7 @@ export default function CategoriesPage() {
   const fetchCategories = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get('/api/categories/');
+      const response = await axiosInstance.get('/categories/');
       setCategories(response.data);
     } catch (err) {
       console.error('Failed to fetch categories', err);
