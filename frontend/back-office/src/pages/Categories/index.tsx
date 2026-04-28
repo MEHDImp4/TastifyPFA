@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Plus } from 'lucide-react';
-import { axiosInstance } from '../../../_shared/auth/axiosInstance';
+import axiosInstance from '@shared/auth/axiosInstance';
 import { CategoryList } from './CategoryList';
 import { CategoryDrawer } from './CategoryDrawer';
 

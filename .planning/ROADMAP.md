@@ -9,8 +9,8 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 1: Project Skeleton** - Docker, Django, React Vite, MySQL, Redis base config.
 - [x] **Phase 2: User Model & RBAC** - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
 - [x] **Phase 3: Auth API & Login Page** - JWT setup, Login UI across all apps.
-- [ ] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
-- [ ] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.
+- [x] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
+- [x] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.
 - [ ] **Phase 6: Plats Model & API** - Dishes, pricing, prep times.
 - [ ] **Phase 7: Plats Frontend** - Back-Office UI for managing dishes.
 - [ ] **Phase 8: Tables Model & API** - Table status, capacities.
@@ -80,13 +80,19 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Back-office UI for categories.
 **Depends on**: Phase 4
 **Success Criteria**: 1. Manager can visually add/edit categories.
-**Plans**: TBD
+**Plans**:
+- [x] 05-01-PLAN.md — AppShell and Routing setup.
+- [x] 05-02-PLAN.md — Categories CRUD UI implementation.
 
 ### Phase 6: Plats Model & API
 **Goal**: Dish DB and REST API.
 **Depends on**: Phase 4
-**Success Criteria**: 1. API allows CRUD on dishes.
-**Plans**: TBD
+**Success Criteria**: 1. API allows CRUD on dishes with RBAC and soft-delete.
+**Requirements**: [PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05]
+**Plans**: 3 plans
+- [ ] 06-01-PLAN.md — Plat model definition, associations, and migrations.
+- [ ] 06-02-PLAN.md — PlatSerializer, PlatViewSet (RBAC + visibility), URL registration.
+- [ ] 06-03-PLAN.md — Dev seeding command and integration tests.
 
 ### Phase 7: Plats Frontend
 **Goal**: Back-office UI for dishes.
@@ -273,8 +279,8 @@ Phases execute in numeric order: 1 → 35
 | 2. User Model & RBAC | 3/3 | Completed | 2026-04-27 |
 | 3. Auth API & Login Page | 3/3 | Completed | 2026-04-28 |
 | 4. Categories Model & API | 2/2 | Completed | 2026-04-28 |
-| 5. Categories Frontend | 0/0 | Not started | - |
-| 6. Plats Model & API | 0/0 | Not started | - |
+| 5. Categories Frontend | 2/2 | Completed | 2026-04-28 |
+| 6. Plats Model & API | 0/3 | In progress | - |
 | 7. Plats Frontend | 0/0 | Not started | - |
 | 8. Tables Model & API | 0/0 | Not started | - |
 | 9. Tables Map Frontend | 0/0 | Not started | - |

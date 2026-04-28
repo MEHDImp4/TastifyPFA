@@ -1,3 +1,15 @@
+## [2026-04-28] - 13:25
+### Fixed
+- **Definitive TypeScript Maintenance**:
+  - Silenced `baseUrl` deprecation warnings in all frontend apps using `ignoreDeprecations: "5.0"` (compatible with TS 5.x).
+  - Fixed project-wide build regressions in `salle`, `kds`, and `portail-client` by installing missing `@types/node`.
+  - Corrected broken `@shared` alias paths in `vite.config.ts` for all apps.
+  - Fixed CSS `@import` paths for `theme.css` in all frontend applications.
+  - Resolved named import errors for `axiosInstance` by switching to default imports and using `@shared` aliases.
+  - Fixed strict type inference issues in `_shared/auth/useAuthStore.ts` by adding explicit type casts for initial state.
+  - Removed unused imports (`List`) in `Sidebar.tsx`.
+  - Verified 100% build success across all 4 frontend SPAs.
+
 ## [2026-04-28] - 11:10
 ### Added
 - Completed Execution of Phase 4: Categories Model & API.

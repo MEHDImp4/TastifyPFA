@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
-import { axiosInstance } from '../../../../_shared/auth/axiosInstance';
+import axiosInstance from '@shared/auth/axiosInstance';
 import { Switch } from '../../components/ui/Switch';
 
 interface Category {

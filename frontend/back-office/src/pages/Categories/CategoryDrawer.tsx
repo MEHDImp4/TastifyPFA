@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { X } from 'lucide-react';
-import { axiosInstance } from '../../../../_shared/auth/axiosInstance';
+import axiosInstance from '@shared/auth/axiosInstance';
 import { Drawer } from '../../components/ui/Drawer';
 
 interface Category {

@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CategoryDrawer } from './CategoryDrawer';
-import { axiosInstance } from '../../../../_shared/auth/axiosInstance';
+import axiosInstance from '@shared/auth/axiosInstance';
 
 // Mock axiosInstance
-vi.mock('../../../../_shared/auth/axiosInstance', () => ({
-  axiosInstance: {
+vi.mock('@shared/auth/axiosInstance', () => ({
+  default: {
     post: vi.fn(),
     put: vi.fn(),
     patch: vi.fn(),

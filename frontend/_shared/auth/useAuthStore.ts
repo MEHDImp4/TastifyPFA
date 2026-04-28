@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface User {
   username: string
@@ -14,22 +15,29 @@ interface AuthState {
   setAccessToken: (token: string) => void
 }
 
-export const useAuthStore = create<AuthState>((set: any) => ({
-  user: null,
-  accessToken: null,
-  isAuthenticated: false,
-  setAuth: (user, accessToken) => set({ 
-    user, 
-    accessToken, 
-    isAuthenticated: true 
-  }),
-  clearAuth: () => set({ 
-    user: null, 
-    accessToken: null, 
-    isAuthenticated: false 
-  }),
-  setAccessToken: (accessToken) => set({ 
-    accessToken, 
-    isAuthenticated: !!accessToken 
-  }),
-}))
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set: any) => ({
+      user: null as User | null,
+      accessToken: null as string | null,
+      isAuthenticated: false as boolean,
+      setAuth: (user, accessToken) => set({ 
+        user, 
+        accessToken, 
+        isAuthenticated: true 
+      }),
+      clearAuth: () => set({ 
+        user: null, 
+        accessToken: null, 
+        isAuthenticated: false 
+      }),
+      setAccessToken: (accessToken) => set({ 
+        accessToken, 
+        isAuthenticated: !!accessToken 
+      }),
+    }),
+    {
+      name: 'tastify-auth-storage',
+    }
+  )
+)
