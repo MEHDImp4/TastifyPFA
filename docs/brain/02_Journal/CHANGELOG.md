@@ -1,3 +1,11 @@
+## [2026-04-28] - 07:55
+### Fixed
+- Hardened shared frontend infrastructure against IDE resolution errors:
+  - Created `frontend/_shared/tsconfig.json` to establish a dedicated TypeScript context for shared components.
+  - Updated all sub-app `tsconfig.json` files (`back-office`, `kds`, `portail-client`, `salle`) to include the `../_shared` directory.
+  - Eliminated implicit `any` errors in `Login.tsx` and `useAuthStore.ts` by adding explicit types for props, selectors, and event handlers.
+  - Corrected `handleSubmit` to use `React.FormEvent<HTMLFormElement>` for better DOM event typing.
+
 ## [2026-04-28] - 00:36
 ### Fixed
 - Resolved widespread IDE "Module not found" and JSX type errors across all SPAs:

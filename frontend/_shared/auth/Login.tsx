@@ -16,9 +16,9 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const setAuth = useAuthStore((state: any) => state.setAuth)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
@@ -69,7 +69,7 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
                 <input
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                   className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
                   placeholder="nom_utilisateur"
                   required
@@ -87,7 +87,7 @@ const Login: React.FC<LoginProps> = ({ onSuccess, title = "Bienvenue chez Tastif
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-12 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
                   placeholder="••••••••"
                   required
