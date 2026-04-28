@@ -1,4 +1,19 @@
 
+## [2026-04-28] - 23:58
+### Added
+- Completed Phase 9 Plan 02: GERANT-only Salle table map editor.
+- Added capacity-based SVG table shapes, pointer-driven drag placement, 20px grid snapping, bounds clamping, red collision warnings, dirty state tracking, cancel, and batch PATCH persistence.
+- Added Salle Vitest setup with 12 tests covering map geometry, RBAC editor visibility, polling guard, save/cancel behavior, and failed-save handling.
+- Added `09-02-SUMMARY.md` and `09-VERIFICATION.md` for GSD execution traceability.
+
+### Fixed
+- Corrected Salle Vite `@shared` alias to `../_shared` and deduped `react`, `react-dom`, and `zustand` to prevent duplicate React hook failures.
+
+### Validation
+- `npm run test -- --run` in `frontend/salle`: 12/12 tests passed.
+- `npm run build` in `frontend/salle`: passed.
+- Commit: `27352be`
+
 ## [2026-04-28] - 23:43
 ### Changed
 - Planned the remaining Phase 9 Map Editor execution slice.

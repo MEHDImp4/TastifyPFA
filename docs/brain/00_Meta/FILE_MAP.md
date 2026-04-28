@@ -37,6 +37,11 @@ tastify-pfa/
 │   │       ├── Categories/        # Categories management (Phase 5)
 │   │       └── Plats/             # Plats management (Phase 7)
 │   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
+│   │   ├── vite.config.ts         # Salle Vite config with shared alias and dependency dedupe
+│   │   ├── vitest.config.ts       # Vitest-only config for Salle component tests
+│   │   └── src/
+│   │       ├── components/map/    # TableMap/TableItem SVG map and tests
+│   │       └── pages/Map/         # MapView page and editor tests
 │   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
 ├── nginx/
@@ -60,7 +65,7 @@ tastify-pfa/
 │       ├── 06-plats-model-api/    # Wave 6: Dish API and backend rules
 │       ├── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
 │       ├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
-│       └── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, foundation, and editor plan
+│       └── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md

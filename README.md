@@ -23,7 +23,8 @@ Then visit:
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
 The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.config.ts` and test-only settings in `frontend/back-office/vitest.config.ts`.
+The Salle SPA now mirrors that split with `frontend/salle/vite.config.ts` and `frontend/salle/vitest.config.ts`; run Salle component tests from `frontend/salle` with `npm run test -- --run`.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/07-plats-frontend/` with context, research, and executable plans for the dishes back-office UI.
+Current planning artifacts now extend through `.planning/phases/09-tables-map-frontend/` with context, research, execution summaries, and verification for the Salle table map.
