@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { ComponentType } from 'react';
 import { 
   LayoutGrid, 
   LayoutDashboard, 
@@ -14,15 +15,26 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+type NavItem = {
+  name: string;
+  icon: ComponentType<{ className?: string }>;
+  path: string;
+  external?: boolean;
+};
+
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
-  const navItems = [
+  const navItems: NavItem[] = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
     { name: 'Plats', icon: ChefHat, path: '/plats' },
-    { name: 'Tables', icon: Table, path: '#' },
+    { name: 'Tables', icon: Table, path: '/salle/', external: true },
     { name: 'Stock', icon: Package, path: '#' },
     { name: 'RH', icon: Users, path: '#' },
   ];
+
+  const handleNavigate = () => {
+    if (window.innerWidth < 1024) onClose();
+  };
 
   return (
     <>
@@ -50,25 +62,39 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </div>
         
         <div className="flex-1 px-4 space-y-2 py-4">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              onClick={() => {
-                if (window.innerWidth < 1024) onClose();
-              }}
-              className={({ isActive }) => 
-                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive && item.path !== '#'
-                    ? 'bg-teal/10 text-teal' 
-                    : 'text-foreground-muted hover:bg-surface-elevated hover:text-white'
-                }`
-              }
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium">{item.name}</span>
-            </NavLink>
-          ))}
+          {navItems.map((item) => {
+            if (item.external) {
+              return (
+                <a
+                  key={item.name}
+                  href={item.path}
+                  onClick={handleNavigate}
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-foreground-muted hover:bg-surface-elevated hover:text-white"
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.name}</span>
+                </a>
+              );
+            }
+
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                onClick={handleNavigate}
+                className={({ isActive }) => 
+                  `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                    isActive && item.path !== '#'
+                      ? 'bg-teal/10 text-teal' 
+                      : 'text-foreground-muted hover:bg-surface-elevated hover:text-white'
+                  }`
+                }
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="font-medium">{item.name}</span>
+              </NavLink>
+            );
+          })}
         </div>
       </nav>
     </>

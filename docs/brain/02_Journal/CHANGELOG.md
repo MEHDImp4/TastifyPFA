@@ -1,4 +1,15 @@
 
+## [2026-04-29] - 00:33
+### Fixed
+- Fixed the back-office **Tables** navigation entry, which was still a dead `#` link.
+- Tables now opens `/salle/`, the existing Salle table map app where the interactive table page is implemented.
+- Added a regression test to ensure the Tables sidebar link points to `/salle/`.
+
+### Validation
+- `npm run test -- --run src/components/layout/AppShell.test.tsx` in `frontend/back-office`: 4/4 tests passed.
+- `npm run build` in `frontend/back-office`: passed.
+- Commit: pending
+
 ## [2026-04-29] - 00:17
 ### Fixed
 - Fixed Salle table activation by switching SVG table selection to pointer-up and keyboard activation instead of relying on brittle SVG click behavior.

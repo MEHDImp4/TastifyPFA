@@ -47,6 +47,22 @@ describe('AppShell', () => {
     expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 
+  it('links Tables navigation to the Salle table map app', () => {
+    (useAuthStore as any).mockReturnValue({ isAuthenticated: true });
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route element={<AppShell />}>
+            <Route path="/" element={<div>Dashboard Content</div>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: /tables/i })).toHaveAttribute('href', '/salle/');
+  });
+
   it('toggles sidebar on mobile', () => {
     (useAuthStore as any).mockReturnValue({ isAuthenticated: true });
     
