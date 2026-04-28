@@ -4,6 +4,8 @@ from .models import Table
 
 class TableSerializer(serializers.ModelSerializer):
 
+    est_active = serializers.BooleanField(default=True)
+
     class Meta:
         model = Table
         fields = [

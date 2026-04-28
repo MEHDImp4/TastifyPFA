@@ -5,10 +5,16 @@ import {
   ChefHat, 
   Users, 
   Package, 
-  Table 
+  Table,
+  X
 } from 'lucide-react';
 
-export const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const navItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
@@ -19,29 +25,52 @@ export const Sidebar = () => {
   ];
 
   return (
-    <nav className="w-56 h-screen fixed inset-y-0 left-0 bg-surface shadow-lg text-white flex flex-col">
-      <div className="p-6">
-        <h1 className="text-xl font-bold text-teal">Tastify</h1>
-      </div>
-      
-      <div className="flex-1 px-4 space-y-2 py-4">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.path}
-            className={({ isActive }) => 
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive && item.path !== '#'
-                  ? 'bg-teal/10 text-teal' 
-                  : 'text-foreground-muted hover:bg-surface-elevated hover:text-white'
-              }`
-            }
+    <>
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      <nav className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-surface shadow-lg text-white flex flex-col transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="p-6 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-teal">Tastify</h1>
+          <button 
+            onClick={onClose}
+            className="lg:hidden text-foreground-muted hover:text-white"
+            aria-label="Close sidebar"
           >
-            <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.name}</span>
-          </NavLink>
-        ))}
-      </div>
-    </nav>
+            <X size={24} />
+          </button>
+        </div>
+        
+        <div className="flex-1 px-4 space-y-2 py-4">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={() => {
+                if (window.innerWidth < 1024) onClose();
+              }}
+              className={({ isActive }) => 
+                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  isActive && item.path !== '#'
+                    ? 'bg-teal/10 text-teal' 
+                    : 'text-foreground-muted hover:bg-surface-elevated hover:text-white'
+                }`
+              }
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="font-medium">{item.name}</span>
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 };

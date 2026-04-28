@@ -13,7 +13,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 5: Categories Frontend** - Back-Office UI for managing categories.
 - [x] **Phase 6: Plats Model & API** - Dishes, pricing, prep times.
 - [x] **Phase 7: Plats Frontend** - Back-Office UI for managing dishes.
-- [ ] **Phase 8: Tables Model & API** - Table status, capacities.
+- [x] **Phase 8: Tables Model & API** - Table status, capacities. (completed 2026-04-28)
 - [ ] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in Salle UI.
 - [ ] **Phase 10: Commandes Model** - DB constraints, lines, signals for `montant_total`.
 - [ ] **Phase 11: Commandes REST API** - Endpoints for creating orders.
@@ -107,7 +107,10 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Table DB and REST API.
 **Depends on**: Phase 3
 **Success Criteria**: 1. Tables state is queryable.
-**Plans**: TBD
+**Plans**:
+- [x] 08-01-PLAN.md — Table app scaffold, model, migration, soft-delete tests.
+- [x] 08-02-PLAN.md — TableSerializer, TableViewSet (RBAC + visibility), URL registration.
+- [x] 08-03-PLAN.md — Seed command and integration tests.
 
 ### Phase 9: Tables Map Frontend
 **Goal**: Visual table map in Salle UI.
@@ -137,5 +140,5 @@ Phases execute in numeric order: 1 → 35
 | 5. Categories Frontend | 2/2 | Completed | 2026-04-28 |
 | 6. Plats Model & API | 3/3 | Completed | 2026-04-28 |
 | 7. Plats Frontend | 3/3 | Completed | 2026-04-28 |
-| 8. Tables Model & API | 0/0 | Not started | - |
+| 8. Tables Model & API | 3/3 | Complete    | 2026-04-28 |
 ...

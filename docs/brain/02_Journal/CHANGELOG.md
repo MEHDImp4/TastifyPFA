@@ -7,6 +7,18 @@
   - Corrected `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.
   - Verified 100% build success in `back-office`.
 
+## [2026-04-28] - 23:35
+### Added
+- Completed Phase 8: Tables Model & API.
+- Implemented `apps/tables` Django app with `Table` model supporting soft-delete.
+- Added `TableSerializer` and `TableViewSet` with hierarchical RBAC (GÃ©rant Full CRUD, Others Read-only).
+- Consolidated `categories`, `plats`, and `tables` endpoints into a unified `api_router.py`.
+- Created idempotent `seed_tables` command providing 12 test tables with mixed capacities.
+- Verified with 21 automated tests (3 model, 8 rbac, 10 api) passing in Docker.
+
+### Fixed
+- Fixed `est_active` default behavior in `TableSerializer` by adding explicit `default=True` to resolve a DRF creation issue.
+
 ## [2026-04-28] - 21:25
 ### Added
 - Completed Phase 7: Plats Frontend.

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { useAuthStore } from '@shared/auth/useAuthStore';
@@ -45,5 +45,40 @@ describe('AppShell', () => {
 
     expect(screen.getByText('Dashboard Content')).toBeInTheDocument();
     expect(screen.getByRole('navigation')).toBeInTheDocument();
+  });
+
+  it('toggles sidebar on mobile', () => {
+    (useAuthStore as any).mockReturnValue({ isAuthenticated: true });
+    
+    // Mock mobile width
+    vi.stubGlobal('innerWidth', 375);
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route element={<AppShell />}>
+            <Route path="/" element={<div>Dashboard</div>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Sidebar should be off-screen
+    const sidebar = screen.getByRole('navigation');
+    expect(sidebar).toHaveClass('-translate-x-full');
+
+    // Click hamburger
+    const openButton = screen.getByRole('button', { name: /open sidebar/i });
+    fireEvent.click(openButton);
+
+    // Sidebar should be visible
+    expect(sidebar).toHaveClass('translate-x-0');
+
+    // Click close button in sidebar
+    const closeButton = screen.getByRole('button', { name: /close sidebar/i });
+    fireEvent.click(closeButton);
+
+    // Sidebar should be off-screen again
+    expect(sidebar).toHaveClass('-translate-x-full');
   });
 });

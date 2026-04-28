@@ -16,7 +16,7 @@ export function Drawer({ isOpen, onClose, children }: DrawerProps) {
         className="fixed inset-0 bg-black/50 z-40"
         onClick={onClose}
       />
-      <div className="fixed inset-y-0 right-0 w-[400px] bg-surface shadow-2xl p-6 z-50 overflow-y-auto animate-enter">
+      <div className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-surface shadow-2xl p-6 z-50 overflow-y-auto animate-enter">
         {children}
       </div>
     </>

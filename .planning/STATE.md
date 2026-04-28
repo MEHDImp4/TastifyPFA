@@ -1,8 +1,23 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+stopped_at: Phase 8 complete
+last_updated: "2026-04-28T23:30:00.000Z"
+progress:
+  total_phases: 10
+  completed_phases: 8
+  total_plans: 22
+  completed_plans: 22
+  percent: 100
+---
+
 # Planning State
 
 **Last Updated:** 2026-04-28
-**Stopped At:** Phase 8 Plan 02 complete
-**Resume File:** .planning/phases/08-tables-model-api/08-03-PLAN.md
+**Stopped At:** Phase 8 complete
+**Resume File:** .planning/phases/09-tables-map-frontend/09-CONTEXT.md
 
 ## Notes
 
@@ -14,6 +29,7 @@
 - Phase 8 plans split into 3: app scaffold+model (08-01), serializer+viewset+URL (08-02), seed+integration tests (08-03).
 - Phase 8 Plan 01 complete: Table model with 8 fields, Statut enum (4 values), soft-delete, pos_x/pos_y, 0001_initial migration applied, 3 tests green.
 - Phase 8 Plan 02 complete: TableSerializer, TableViewSet (split RBAC + visibility), URL wiring at /api/tables/, 8 RBAC tests green.
+- Phase 8 Plan 03 complete: seed_tables command (12 tables), 10 API tests green. Total Phase 8 coverage: 21 tests green.
 
 ## Decisions
 
@@ -29,3 +45,4 @@
 - Table.delete() mirrors Categorie/Plat: sets est_active=False + save(), no super().delete().
 - Table.Statut TextChoices: LIBRE, OCCUPEE, RESERVEE, ENCAISSEMENT (max_length=20).
 - pos_x/pos_y as FloatField(default=0.0) included per D-08-01 for Phase 9 map dependency.
+- TableSerializer: Added explicit `default=True` to `est_active` to ensure DRF correctly handles its creation default when missing from request data.
