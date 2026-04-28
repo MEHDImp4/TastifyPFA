@@ -31,6 +31,8 @@ tastify-pfa/
 │   │   ├── auth/                  # Zustand Store, Login UI, Axios instance
 │   │   └── assets/                # Shared logo, icons
 │   ├── back-office/               # GERANT  — Vite :3000 — /back-office/
+│   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
+│   │   └── vitest.config.ts       # Vitest-only config for test environment setup
 │   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
 │   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /

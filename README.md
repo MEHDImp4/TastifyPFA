@@ -22,5 +22,7 @@ Then visit:
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
+The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.config.ts` and test-only settings in `frontend/back-office/vitest.config.ts`.
+
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.

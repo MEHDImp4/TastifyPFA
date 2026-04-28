@@ -161,6 +161,21 @@
 - Updated `dashboard.html` to reflect Infrastructure Ready state.
 - Updated `01-UAT.md` with progress on recovery plan.
 
+## [2026-04-28] - 16:58
+### Added
+- Created `frontend/back-office/vitest.config.ts` so Vitest settings no longer force a runtime `vitest` import during `vite dev`.
+
+### Fixed
+- Updated `frontend/back-office/vite.config.ts` to use Vite's config entrypoint instead of `vitest/config`, resolving the back-office dev-server startup failure caused by `ERR_MODULE_NOT_FOUND: Cannot find package 'vitest'`.
+
+### Changed
+- Updated `dashboard.html` activity stream to reflect the current back-office dev-server fix instead of the stale "100% build success" note.
+- Updated `docs/brain/00_Meta/FILE_MAP.md` and `README.md` to record the dedicated Vitest config in the back-office SPA.
+
+### Validation
+- Confirmed the Vitest package resolution error is gone when Vite loads `frontend/back-office/vite.config.ts`.
+- `npm run build` still fails on a pre-existing TypeScript configuration issue: `tsconfig.json` uses an invalid `ignoreDeprecations` value, and sandboxed `vite` startup hits `esbuild` `spawn EPERM` after config load.
+
 ## [2026-04-27] - 21:00
 ### Added
 - Created `.planning/phases/01-project-skeleton/01-UAT.md` for User Acceptance Testing.
