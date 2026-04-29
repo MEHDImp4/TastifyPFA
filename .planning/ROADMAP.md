@@ -17,8 +17,14 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in Salle UI. (completed 2026-04-28)
 - [x] **Phase 10: Commandes Model** - DB constraints, lines, signals for `montant_total`. (completed 2026-04-29)
 
-- [ ] **Phase 11: Commandes REST API** - Endpoints for creating orders.
+- [x] **Phase 11: Commandes REST API** - Endpoints for creating orders. (completed 2026-04-30)
+  - [x] 11-01-PLAN.md — Serializers & ViewSet Foundation (Nested CRUD, RBAC).
+  - [x] 11-02-PLAN.md — Table State Synchronization (Signals).
+  - [x] 11-03-PLAN.md — Custom Actions & Final Verification.
 - [ ] **Phase 12: Order Taking Frontend** - Salle UI for selecting dishes and validating orders.
+  - [ ] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
+  - [ ] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
+  - [ ] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
 - [ ] **Phase 13: WebSocket Infrastructure** - Django Channels, Daphne, Redis Layer.
 - [ ] **Phase 14: KDS Base Frontend** - Cuisine SPA base, WebSocket connection.
 - [ ] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`.
@@ -130,6 +136,24 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] 10-02-PLAN.md — CommandeLigne model with price snapshotting and migrations.
 - [x] 10-03-PLAN.md — Signal implementation for automatic total calculation.
 
+### Phase 11: Commandes REST API
+**Goal**: REST endpoints for order management.
+**Depends on**: Phase 10
+**Success Criteria**: 1. Nested creation works. 2. Table status syncs automatically.
+**Plans**: 3 plans
+- [x] 11-01-PLAN.md — Serializers & ViewSet Foundation (Nested CRUD, RBAC).
+- [x] 11-02-PLAN.md — Table State Synchronization (Signals).
+- [x] 11-03-PLAN.md — Custom Actions & Final Verification.
+
+### Phase 12: Order Taking Frontend
+**Goal**: Build the interactive interface in the Salle UI for selecting dishes and validating orders.
+**Depends on**: Phase 11
+**Success Criteria**: 1. Servers can select items from the menu, review the cart, and submit orders for specific tables.
+**Plans**: 3 plans
+- [ ] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
+- [ ] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
+- [ ] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
+
 ... [rest of file remains unchanged] ...
 
 ## Progress
@@ -149,4 +173,6 @@ Phases execute in numeric order: 1 → 35
 | 8. Tables Model & API | 3/3 | Complete    | 2026-04-28 |
 | 9. Tables Map Frontend | 2/2 | Complete | 2026-04-28 |
 | 10. Commandes Model | 3/3 | Complete | 2026-04-29 |
+| 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
+| 12. Order Taking Frontend | 0/3 | In Progress | |
 ...
