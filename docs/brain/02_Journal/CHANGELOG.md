@@ -17,6 +17,7 @@
 - `npm test` in `frontend/salle`: 20/20 passed.
 - `npm run build` in `frontend/salle`: passed.
 - Backend commandes regression was blocked because Docker Desktop is not running and local Django cannot resolve Docker host `db`.
+- Commit: `ab9ec57`
 
 ## [2026-04-30] - 00:20
 ### Added
