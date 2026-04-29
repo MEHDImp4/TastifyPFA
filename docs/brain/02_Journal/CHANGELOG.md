@@ -1,4 +1,16 @@
 
+## [2026-04-29] - 15:10
+### Added
+- **Category Visual Enrichment**: Generated and integrated premium professional images for core categories ("Entrées", "Plats Principaux", "Desserts").
+- Updated `seed_menu.py` with `update_or_create` logic to ensure existing categories are enriched with images.
+- Created `backend/media/categories/` and synchronized 3 high-quality AI-generated assets.
+
+### Validation
+- Database seeding logic verified with idempotent update support.
+- Filesystem synchronization confirmed for all 3 assets.
+- ROADMAP and Dashboard updated to reflect enrichment.
+- Commit: `8d7c67a`
+
 ## [2026-04-29] - 01:15
 ### Added
 - **Centralized Back-Office**: Integrated the Table Map management directly into the Back-Office application.
