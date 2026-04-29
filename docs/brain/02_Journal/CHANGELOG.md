@@ -1,4 +1,49 @@
 
+## [2026-04-30] - 00:38
+### Added
+- Completed Phase 12: Order Taking Frontend.
+- Added Salle routing for `/tables/:id/order` and table activation from the map.
+- Added `useOrderStore` with isolated per-table carts, item counts, totals, and clear behavior.
+- Added category tabs, dish grid, dish cards, floating cart, and mandatory order review drawer.
+- Added order submission to `POST /api/commandes/` using `table` and nested `lignes`.
+- Added Phase 12 summaries and verification report.
+
+### Validation
+- `npm run test -- useOrderStore.test.ts`: 5/5 passed.
+- `npm run test -- OrderingPage.test.tsx`: 2/2 passed.
+- `npm run test -- DishGrid.test.tsx`: 3/3 passed.
+- `npm run test -- OrderReview.test.tsx`: 3/3 passed.
+- `npm run test -- MapView.test.tsx`: 7/7 passed.
+- `npm test` in `frontend/salle`: 20/20 passed.
+- `npm run build` in `frontend/salle`: passed.
+- Backend commandes regression was blocked because Docker Desktop is not running and local Django cannot resolve Docker host `db`.
+
+## [2026-04-30] - 00:20
+### Added
+- Completed Phase 11: Commandes REST API.
+- Implemented `CommandeViewSet` with support for atomic nested creation of order lines.
+- Implemented ownership-based filtering ensuring `SERVEUR` only sees their own orders.
+- Added Django signals to synchronize `Table.statut` with the order lifecycle (OCCUPEE on create, LIBRE on pay/cancel).
+- Added custom `@action add_items` for appending lines to existing orders.
+- Verified with 23 unit and integration tests covering nested CRUD, RBAC, and table sync.
+
+### Validation
+- `python backend/manage.py test apps.commandes`: 23/23 passed.
+- Verified automatic table state transitions and atomic transaction safety.
+
+## [2026-04-30] - 00:20
+### Added
+- Completed Phase 11: Commandes REST API.
+- Implemented `CommandeViewSet` with support for atomic nested creation of order lines.
+- Implemented ownership-based filtering ensuring `SERVEUR` only sees their own orders.
+- Added Django signals to synchronize `Table.statut` with the order lifecycle (OCCUPEE on create, LIBRE on pay/cancel).
+- Added custom `@action add_items` for appending lines to existing orders.
+- Verified with 23 unit and integration tests covering nested CRUD, RBAC, and table sync.
+
+### Validation
+- `python backend/manage.py test apps.commandes`: 23/23 passed.
+- Verified automatic table state transitions and atomic transaction safety.
+
 ## [2026-04-29] - 16:45
 ### Added
 - Completed Phase 10: Commandes Model.

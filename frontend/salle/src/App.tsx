@@ -1,7 +1,9 @@
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
+import { Route, Routes } from 'react-router-dom'
 import { MapView } from './pages/Map/MapView'
+import { OrderingPage } from './pages/Ordering/OrderingPage'
 import logo from '@shared/assets/logo.svg'
 
 function App() {
@@ -47,7 +49,10 @@ function App() {
       </nav>
 
       <main className="flex-1 p-6 sm:p-10 max-w-7xl mx-auto w-full">
-        <MapView />
+        <Routes>
+          <Route path="/" element={<MapView />} />
+          <Route path="/tables/:id/order" element={<OrderingPage />} />
+        </Routes>
       </main>
 
       <footer className="py-6 text-center border-t border-white/5">

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import axiosInstance from '@shared/auth/axiosInstance'
 import { useAuthStore } from '@shared/auth/useAuthStore'
@@ -6,6 +7,21 @@ import { Table } from '@shared/types/tables'
 import { MapView } from './MapView'
 
 vi.mock('@shared/auth/axiosInstance')
+const navigateMock = vi.fn()
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
+  return {
+    ...actual,
+    useNavigate: () => navigateMock,
+  }
+})
+
+const renderMapView = () => render(
+  <MemoryRouter>
+    <MapView />
+  </MemoryRouter>,
+)
 
 const makeTable = (overrides: Partial<Table> = {}): Table => ({
   id: 1,
@@ -32,6 +48,7 @@ describe('MapView', () => {
   beforeEach(() => {
     vi.useRealTimers()
     vi.clearAllMocks()
+    navigateMock.mockClear()
     localStorage.clear()
     setUserRole('GERANT')
     ;(axiosInstance.get as any).mockResolvedValue({
@@ -44,7 +61,7 @@ describe('MapView', () => {
   })
 
   it('shows edit controls for GERANT users', async () => {
-    render(<MapView />)
+    renderMapView()
 
     expect(await screen.findByText('Mode édition')).toBeInTheDocument()
 
@@ -55,20 +72,18 @@ describe('MapView', () => {
     expect(screen.getByText('0 modification')).toBeInTheDocument()
   })
 
-  it('shows selected table details when a table is activated', async () => {
-    render(<MapView />)
+  it('navigates to ordering when a table is activated', async () => {
+    renderMapView()
 
     fireEvent.pointerUp(await screen.findByTestId('table-1'))
 
-    expect(screen.getByRole('heading', { name: 'Table 1' })).toBeInTheDocument()
-    expect(screen.getByText('LIBRE')).toBeInTheDocument()
-    expect(screen.getByText('4')).toBeInTheDocument()
+    expect(navigateMock).toHaveBeenCalledWith('/tables/1/order')
   })
 
   it('hides edit controls from SERVEUR users', async () => {
     setUserRole('SERVEUR')
 
-    render(<MapView />)
+    renderMapView()
 
     await waitFor(() => {
       expect(screen.getByText('Plan de Salle')).toBeInTheDocument()
@@ -81,7 +96,7 @@ describe('MapView', () => {
   it('does not poll while edit mode is active', async () => {
     const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
 
-    render(<MapView />)
+    renderMapView()
 
     expect(await screen.findByText('Mode édition')).toBeInTheDocument()
     expect(axiosInstance.get).toHaveBeenCalledTimes(1)
@@ -93,7 +108,7 @@ describe('MapView', () => {
   })
 
   it('patches only dirty table positions and refreshes after save', async () => {
-    render(<MapView />)
+    renderMapView()
 
     fireEvent.click(await screen.findByText('Mode édition'))
 
@@ -119,7 +134,7 @@ describe('MapView', () => {
   })
 
   it('restores last fetched positions when cancelling edits', async () => {
-    render(<MapView />)
+    renderMapView()
 
     fireEvent.click(await screen.findByText('Mode édition'))
 
@@ -142,7 +157,7 @@ describe('MapView', () => {
   it('keeps edit mode and local changes visible when saving fails', async () => {
     ;(axiosInstance.patch as any).mockRejectedValue(new Error('save failed'))
 
-    render(<MapView />)
+    renderMapView()
 
     fireEvent.click(await screen.findByText('Mode édition'))
 

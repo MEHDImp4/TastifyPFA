@@ -3,28 +3,28 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: phase_complete
-stopped_at: Phase 10 completed
-last_updated: "2026-04-29T16:45:00.000Z"
+stopped_at: Phase 12 completed
+last_updated: "2026-04-30T00:38:00.000Z"
 progress:
-  total_phases: 10
-  completed_phases: 10
-  total_plans: 27
-  completed_plans: 27
-  percent: 100
+  total_phases: 35
+  completed_phases: 12
+  total_plans: 33
+  completed_plans: 33
+  percent: 34
 ---
 
 # Planning State
 
-**Last Updated:** 2026-04-29
-**Stopped At:** Phase 10 completed
-**Resume File: .planning/phases/10-commandes-model/10-VERIFICATION.md**
+**Last Updated:** 2026-04-30
+**Stopped At:** Phase 12 completed
+**Resume File: .planning/phases/12-order-taking-frontend/12-VERIFICATION.md**
 
 ## Notes
 
-- Phase 8 Complete.
-- Phase 9 Complete.
-- Phase 10 (Commandes Model) completed.
-- Ready to discuss or plan Phase 11 (Commandes REST API).
+- Phase 11 Complete.
+- Phase 12 Complete.
+- Salle order-taking flow delivered: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission.
+- Ready to discuss or plan Phase 13 (WebSocket Infrastructure).
 
 ## Decisions
 
@@ -44,3 +44,5 @@ progress:
 - Commande uses soft-delete by setting `est_active=False`.
 - CommandeLigne snapshots `Plat.prix` into `prix_unitaire` on save when no explicit price is provided.
 - Commande totals are recalculated from non-cancelled lines via Django signals.
+- Salle ordering carts are isolated per `tableId` with a Zustand record registry.
+- Salle order submission uses the Phase 11 `CommandeSerializer` contract: `table` plus nested `lignes`.

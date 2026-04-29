@@ -4,9 +4,11 @@ import { Table } from '@shared/types/tables';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { TableMap, TablePosition } from '@shared/components/map/TableMap';
 import { Check, Loader2, Lock, RefreshCw, RotateCcw, Unlock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const MapView: React.FC = () => {
   const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
   const [tables, setTables] = useState<Table[]>([]);
   const [lastFetchedTables, setLastFetchedTables] = useState<Table[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,6 +121,7 @@ export const MapView: React.FC = () => {
 
   const handleTableClick = (table: Table) => {
     setSelectedTable(table);
+    navigate(`/tables/${table.id}/order`);
   };
 
   if (loading) {

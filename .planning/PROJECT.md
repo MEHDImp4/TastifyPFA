@@ -21,7 +21,7 @@ The project operates under strict adherence to `GEMINI.md` mandates, emphasizing
 
 ## Current State
 
-Phase 05 complete (2026-04-28) — Categories Back-Office Frontend delivered. Tested AppShell layout, Sidebar navigation, and full CRUD UI for categories with image uploads, inline confirmation, and optimistic toggles. 18/18 tests green.
+Phase 12 complete (2026-04-30) — Order Taking Frontend delivered in the Salle SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`. Salle frontend tests pass 20/20 and production build passes.
 
 ## Validated Requirements
 
@@ -37,5 +37,23 @@ Phase 05 complete (2026-04-28) — Categories Back-Office Frontend delivered. Te
 - **D-10** — Image upload with preview for categories. Validated in Phase 05.
 - **D-11** — Optimistic status toggles for categories. Validated in Phase 05.
 - **D-12** — Form validation (required Nom field). Validated in Phase 05.
+- **D-13** — `Plat` model with pricing and prep time. Validated in Phase 06.
+- **D-14** — `Plat` CRUD endpoints with RBAC and visibility filtering. Validated in Phase 06.
+- **D-15** — `Plats` management UI in Back-Office (Desktop/Mobile). Validated in Phase 07.
+- **D-16** — `Table` model with status and capacity. Validated in Phase 08.
+- **D-17** — `Table` CRUD endpoints with RBAC. Validated in Phase 08.
+- **D-18** — Interactive Table Map in Salle UI with editor. Validated in Phase 09.
+- **D-19** — `Commande` and `CommandeLigne` models. Validated in Phase 10.
+- **D-20** — Soft-delete for orders and price snapshotting for lines. Validated in Phase 10.
+- **D-21** — Automatic total calculation via signals. Validated in Phase 10.
+- **D-22** — Atomic nested order creation via `POST /api/commandes/`. Validated in Phase 11.
+- **D-23** — Ownership-based filtering for `SERVEUR` role. Validated in Phase 11.
+- **D-24** — Automatic table status sync (OCCUPEE/LIBRE) via signals. Validated in Phase 11.
+- **D-25** — Custom `add_items` action for existing orders. Validated in Phase 11.
+- **D-26** — Salle table activation routes to a table-specific ordering page. Validated in Phase 12.
+- **D-27** — Per-table cart state is isolated in the Salle frontend. Validated in Phase 12.
+- **D-28** — Servers can browse dishes by category and add/remove quantities. Validated in Phase 12.
+- **D-29** — Servers must review an itemized cart before confirming an order. Validated in Phase 12.
+- **D-30** — Salle order submission posts nested order lines to the commandes API. Validated in Phase 12.
 
-Last updated: 2026-04-28
+Last updated: 2026-04-30

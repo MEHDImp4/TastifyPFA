@@ -49,7 +49,9 @@ tastify-pfa/
 │   │   ├── vite.config.ts         # Salle Vite config with shared alias and dependency dedupe
 │   │   ├── vitest.config.ts       # Vitest-only config with framer-motion inlining
 │   │   └── src/
-│   │       └── pages/Map/         # MapView page and editor tests (Uses shared map components)
+│   │       └── pages/
+│   │           ├── Map/           # MapView page and editor tests (Uses shared map components)
+│   │           └── Ordering/      # Table-specific order-taking flow, cart store, menu browser, review drawer
 │   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
 ├── nginx/
@@ -74,7 +76,9 @@ tastify-pfa/
 │       ├── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
 │       ├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
 │       ├── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
-│       └── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
+│       ├── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
+│       ├── 11-commandes-rest-api/ # Wave 11: Commandes API plans, summaries, verification
+│       └── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md
