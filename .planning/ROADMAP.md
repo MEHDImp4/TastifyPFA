@@ -72,7 +72,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 ### Phase 4: Categories Model & API
 **Goal**: Category DB and REST API.
 **Depends on**: Phase 3
-**Success Criteria**: 1. API allows CRUD on categories with RBAC and soft-delete.
+**Success Criteria**: 1. API allows CRUD on categories with RBAC and soft-delete. 2. Premium images added for core categories.
 **Plans**: 2 plans
 - [x] 04-01-PLAN.md — menu app scaffold, Categorie model, soft delete, media config.
 - [x] 04-02-PLAN.md — CategorieSerializer, CategorieViewSet (RBAC + visibility), URL wiring, tests.

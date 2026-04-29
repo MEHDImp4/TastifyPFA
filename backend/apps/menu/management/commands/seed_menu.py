@@ -4,7 +4,11 @@ from apps.menu.models import Categorie, Plat
 
 SEED_DATA = [
     {
-        'categorie': {'nom': 'Entrées', 'ordre_affichage': 1},
+        'categorie': {
+            'nom': 'Entrées',
+            'ordre_affichage': 1,
+            'image': 'categories/entrees.png'
+        },
         'plats': [
             {'nom': 'Salade César', 'description': 'Salade fraîche avec croûtons', 'prix': '8.50', 'temps_preparation': 10},
             {'nom': 'Soupe Harira', 'description': 'Soupe traditionnelle marocaine', 'prix': '6.00', 'temps_preparation': 15},
@@ -12,7 +16,11 @@ SEED_DATA = [
         ],
     },
     {
-        'categorie': {'nom': 'Plats Principaux', 'ordre_affichage': 2},
+        'categorie': {
+            'nom': 'Plats Principaux',
+            'ordre_affichage': 2,
+            'image': 'categories/plats_principaux.png'
+        },
         'plats': [
             {'nom': 'Tajine Poulet', 'description': 'Tajine de poulet aux olives et citron confit', 'prix': '22.00', 'temps_preparation': 35},
             {'nom': 'Couscous Royal', 'description': 'Couscous avec merguez, poulet et légumes', 'prix': '25.00', 'temps_preparation': 40},
@@ -20,7 +28,11 @@ SEED_DATA = [
         ],
     },
     {
-        'categorie': {'nom': 'Desserts', 'ordre_affichage': 3},
+        'categorie': {
+            'nom': 'Desserts',
+            'ordre_affichage': 3,
+            'image': 'categories/desserts.png'
+        },
         'plats': [
             {'nom': 'Cornes de Gazelle', 'description': 'Gâteaux sablés à la pâte d\'amande', 'prix': '5.00', 'temps_preparation': 5},
             {'nom': 'Chebakia', 'description': 'Gâteaux au miel et sésame', 'prix': '4.50', 'temps_preparation': 5},
@@ -38,15 +50,18 @@ class Command(BaseCommand):
         total_plats = 0
 
         for entry in SEED_DATA:
-            cat, created = Categorie.objects.get_or_create(
+            cat, created = Categorie.objects.update_or_create(
                 nom=entry['categorie']['nom'],
-                defaults={'ordre_affichage': entry['categorie']['ordre_affichage']},
+                defaults={
+                    'ordre_affichage': entry['categorie']['ordre_affichage'],
+                    'image': entry['categorie'].get('image'),
+                },
             )
             if created:
                 total_categories += 1
                 self.stdout.write(self.style.SUCCESS(f'  Created category: {cat.nom}'))
             else:
-                self.stdout.write(f'  Category already exists: {cat.nom}')
+                self.stdout.write(f'  Updated category: {cat.nom}')
 
             for plat_data in entry['plats']:
                 plat, created = Plat.objects.get_or_create(
