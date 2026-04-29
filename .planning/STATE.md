@@ -2,29 +2,29 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-stopped_at: Phase 10 context gathered
-last_updated: "2026-04-29T14:38:56.270Z"
+status: planning_complete
+stopped_at: Phase 10 plans created
+last_updated: "2026-04-29T15:00:00.000Z"
 progress:
   total_phases: 10
   completed_phases: 9
-  total_plans: 24
+  total_plans: 27
   completed_plans: 24
-  percent: 100
+  percent: 88
 ---
 
 # Planning State
 
-**Last Updated:** 2026-04-28
-**Stopped At:** Phase 10 context gathered
-**Resume File:** .planning/phases/10-commandes-model/10-CONTEXT.md
+**Last Updated:** 2026-04-29
+**Stopped At:** Phase 10 plans created
+**Resume File: .planning/phases/10-commandes-model/10-01-PLAN.md**
 
 ## Notes
 
-- Phase 8 Plan 03 complete: seed_tables command (12 tables), 10 API tests green. Total Phase 8 coverage: 21 tests green.
-- Phase 9 Plan 01 complete: SVG map foundation, TableItem/TableMap components, MapView integration with polling.
-- Phase 9 Plan 02 planned: GERANT editor, dynamic geometry, 20px snapping, collision feedback, batch save, and Salle frontend tests/build verification.
-- Phase 9 complete: GERANT map editor implemented and verified with 12 Salle tests plus production build.
+- Phase 8 Complete.
+- Phase 9 Complete.
+- Phase 10 (Commandes Model) plans 01, 02, and 03 created and committed.
+- Ready for execution of Phase 10.
 
 ## Decisions
 

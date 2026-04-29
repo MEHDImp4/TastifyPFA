@@ -1,4 +1,17 @@
 
+## [2026-04-29] - 15:25
+### Changed
+- **Planned Phase 10: Commandes Model**:
+  - Completed technical research on Django signals and recursive total calculation.
+  - Mapped implementation patterns (soft-delete, managers, enums) from existing apps.
+  - Generated executable plans `10-01-PLAN.md`, `10-02-PLAN.md`, and `10-03-PLAN.md` covering model scaffolding, signals, and migrations.
+- Updated `ROADMAP.md` and `STATE.md` to reflect that Phase 10 is ready for execution.
+
+### Validation
+- Research confirmed pattern consistency for soft-delete and status enums.
+- Pitfalls like signal recursion documented in `10-RESEARCH.md`.
+- Patterns mapped in `10-PATTERNS.md`.
+
 ## [2026-04-29] - 15:10
 ### Added
 - **Category Visual Enrichment**: Generated and integrated premium professional images for core categories ("Entrées", "Plats Principaux", "Desserts").
