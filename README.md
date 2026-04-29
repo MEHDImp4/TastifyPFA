@@ -27,4 +27,10 @@ The Salle SPA now mirrors that split with `frontend/salle/vite.config.ts` and `f
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/09-tables-map-frontend/` with context, research, execution summaries, and verification for the Salle table map.
+Current planning artifacts now extend through `.planning/phases/10-commandes-model/` with context, research, execution summaries, and verification for the order model foundation.
+
+## Backend domains
+- `apps.users` — custom users and RBAC.
+- `apps.menu` — categories and dishes.
+- `apps.tables` — restaurant tables.
+- `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.

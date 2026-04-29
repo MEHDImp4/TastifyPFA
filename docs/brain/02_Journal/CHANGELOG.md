@@ -1,4 +1,20 @@
 
+## [2026-04-29] - 16:45
+### Added
+- Completed Phase 10: Commandes Model.
+- Added `apps.commandes` with `Commande` soft-delete model and `CommandeLigne` price snapshot model.
+- Added Django signals to recalculate `Commande.montant_total` from non-cancelled order lines.
+- Added initial `commandes` migration and 13 unit tests covering model defaults, soft-delete, price snapshots, and signal-driven totals.
+- Added Phase 10 execution summaries and verification report.
+
+### Validation
+- `python backend\manage.py check`: passed.
+- `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test python backend\manage.py check`: passed.
+- `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test python backend\manage.py makemigrations --check --dry-run`: passed.
+- `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test python backend\manage.py test apps.commandes`: 13/13 passed.
+- Default MySQL-backed tests were blocked because Docker Desktop was not running and host `db` was unreachable.
+- Commit: pending
+
 ## [2026-04-29] - 15:25
 ### Changed
 - **Planned Phase 10: Commandes Model**:

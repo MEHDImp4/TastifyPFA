@@ -19,11 +19,17 @@ tastify-pfa/
 │   │   │   ├── serializers.py     # Custom JWT claims
 │   │   │   ├── urls.py
 │   │   │   └── tests/test_auth.py
-│   │   └── menu/                  # Categories & Dishes (Phase 4+)
-│   │       ├── models.py          # Soft-delete Categorie
-│   │       ├── serializers.py
-│   │       ├── views.py
-│   │       └── urls.py
+│   │   ├── menu/                  # Categories & Dishes (Phase 4+)
+│   │   │   ├── models.py          # Soft-delete Categorie and Plat models
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   └── urls.py
+│   │   ├── tables/                # Table model, API, and seed data
+│   │   └── commandes/             # Orders, order lines, price snapshots, total signals
+│   │       ├── models.py          # Commande and CommandeLigne
+│   │       ├── signals.py         # montant_total recalculation
+│   │       ├── migrations/
+│   │       └── tests/
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/                      # 4 independent Vite SPAs
@@ -66,9 +72,9 @@ tastify-pfa/
 │       ├── 05-categories-frontend/ # Wave 5: Back-office Categories UI
 │       ├── 06-plats-model-api/    # Wave 6: Dish API and backend rules
 │       ├── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
-├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
-├── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
-└── 10-commandes-model/    # Wave 10: Order model, signals, and total calculation context
+│       ├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
+│       ├── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
+│       └── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
 ├── docker-compose.yml             # 8 services (inc. db, redis)
 ├── .env / .env.example            # Single root env
 ├── README.md
