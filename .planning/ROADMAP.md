@@ -125,7 +125,10 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Order database tables and constraints.
 **Depends on**: Phase 6, Phase 8
 **Success Criteria**: 1. Signals calculate `montant_total`.
-**Plans**: TBD
+**Plans**: 3 plans
+- [ ] 10-01-PLAN.md — App scaffold and Commande model with soft-delete.
+- [ ] 10-02-PLAN.md — CommandeLigne model with price snapshotting and migrations.
+- [ ] 10-03-PLAN.md — Signal implementation for automatic total calculation.
 
 ... [rest of file remains unchanged] ...
 
