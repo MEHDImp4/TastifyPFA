@@ -13,7 +13,7 @@
 - `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test python backend\manage.py makemigrations --check --dry-run`: passed.
 - `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test python backend\manage.py test apps.commandes`: 13/13 passed.
 - Default MySQL-backed tests were blocked because Docker Desktop was not running and host `db` was unreachable.
-- Commit: pending
+- Commit: `53fdeda`
 
 ## [2026-04-29] - 15:25
 ### Changed
