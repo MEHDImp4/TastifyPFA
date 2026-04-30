@@ -12,23 +12,11 @@ interface LoginProps {
   appDescription?: string
   deniedMessage?: string
   variant?: 'staff' | 'client'
+  initialError?: string
 }
 
 const STYLES = {
-  staff: {
-    glow: 'bg-teal/25',
-    label: 'text-teal',
-    focus: 'group-focus-within:text-teal',
-    input: 'focus:border-teal/50 focus:ring-teal/5',
-    button: 'bg-teal hover:bg-teal/90 shadow-[0_10px_20px_rgba(42,157,143,0.2)]',
-  },
-  client: {
-    glow: 'bg-amber/20',
-    label: 'text-amber',
-    focus: 'group-focus-within:text-amber',
-    input: 'focus:border-amber/50 focus:ring-amber/5',
-    button: 'bg-amber hover:bg-amber/90 shadow-[0_10px_20px_rgba(233,196,106,0.18)]',
-  },
+// ... omitted ...
 } as const
 
 const Login: React.FC<LoginProps> = ({
@@ -38,12 +26,20 @@ const Login: React.FC<LoginProps> = ({
   appDescription = 'Connectez-vous a votre espace',
   deniedMessage = "Ce compte n'est pas autorise sur ce portail.",
   variant = 'staff',
+  initialError,
 }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(initialError || null)
+
+  // Sync initialError if it changes
+  React.useEffect(() => {
+    if (initialError) {
+      setError(initialError)
+    }
+  }, [initialError])
 
   const setAuth = useAuthStore((state: any) => state.setAuth)
   const clearAuth = useAuthStore((state: any) => state.clearAuth)

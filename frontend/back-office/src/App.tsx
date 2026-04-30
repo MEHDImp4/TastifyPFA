@@ -34,14 +34,18 @@ const RoleRoute = ({ allowedRoles, children }: { allowedRoles: readonly string[]
   return children;
 };
 
+import { useState, useEffect } from 'react';
+
 const LoginRoute = () => {
   const { isAuthenticated, user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
+  const [kickMessage, setKickMessage] = useState<string | undefined>();
 
   useEffect(() => {
     if (isAuthenticated) {
       if (user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
         clearAuth();
+        setKickMessage("Votre session active n'est pas autorisée sur l'espace Staff. Vous avez été déconnecté.");
         return;
       }
       navigate('/', { replace: true });
@@ -56,6 +60,7 @@ const LoginRoute = () => {
       appDescription="Acces gerant, salle et cuisine"
       deniedMessage="Ce compte est reserve au portail client."
       variant="staff"
+      initialError={kickMessage}
     />
   );
 };

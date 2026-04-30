@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
@@ -7,10 +7,12 @@ import logo from '@shared/assets/logo.svg'
 
 function App() {
   const { isAuthenticated, clearAuth, user } = useAuthStore()
+  const [kickMessage, setKickMessage] = useState<string | undefined>()
 
   useEffect(() => {
     if (isAuthenticated && user?.role && !isRoleAllowed(user.role, CLIENT_ROLES)) {
       clearAuth()
+      setKickMessage("Votre session active n'est pas autorisée sur le portail Client. Vous avez été déconnecté.")
     }
   }, [clearAuth, isAuthenticated, user?.role])
 
@@ -33,6 +35,7 @@ function App() {
         appDescription="Acces reserve aux clients du restaurant"
         deniedMessage="Ce compte est reserve a l'espace staff."
         variant="client"
+        initialError={kickMessage}
       />
     )
   }
