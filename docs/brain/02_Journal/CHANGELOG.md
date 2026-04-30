@@ -11,7 +11,7 @@
 - `npm run build` in `frontend/kds`: passed.
 - `npm run build` in `frontend/portail-client`: passed.
 - `npm run build` in `frontend/back-office`: passed.
-- Commit: pending
+- Commit: `c148cde`
 
 ## [2026-04-30] - 18:05
 ### Fixed
