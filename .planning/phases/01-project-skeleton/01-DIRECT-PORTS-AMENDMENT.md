@@ -35,3 +35,13 @@ Remove the Nginx service from local Docker Compose routing and expose each appli
 - Run `docker compose config` to validate Compose syntax.
 - Run focused frontend tests for routing changes.
 - Run frontend production builds where feasible.
+
+## Runtime Recovery
+
+If a frontend reports missing dependencies after Compose routing changes, recreate frontend containers with fresh anonymous dependency volumes:
+
+```powershell
+docker compose up -d --build --force-recreate -V backoffice salle kds portail
+```
+
+This preserves source bind mounts while replacing stale `/app/node_modules` volumes.
