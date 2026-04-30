@@ -1,8 +1,8 @@
+from django.db import transaction, models
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db import transaction
 
 from apps.users.permissions import IsGerant, IsServeurOrGerant
 from .models import Commande, CommandeLigne
@@ -15,17 +15,35 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        D-11: SERVEUR users only see their own orders.
-        GERANT users see all orders.
-        Only active orders are shown by default.
+        D-11: SERVEUR users only see their own orders for history/terminal states.
+        However, for active service, staff must see all active orders.
         """
         user = self.request.user
         qs = Commande.objects.active()
 
-        if user.role == 'GERANT':
-            return qs
+        # If it's a staff member but not a gerant
+        if user.role != 'GERANT':
+            # They see their own orders OR any order that is still in active service
+            # (not yet PAID or CANCELLED)
+            qs = qs.filter(
+                models.Q(serveur=user) | 
+                models.Q(statut__in=[
+                    Commande.Statut.EN_COURS, 
+                    Commande.Statut.EN_CUISINE, 
+                    Commande.Statut.PRETE
+                ])
+            )
         
-        return qs.filter(serveur=user)
+        # Manual filtering for query params
+        table_id = self.request.query_params.get('table')
+        if table_id:
+            qs = qs.filter(table_id=table_id)
+            
+        statut = self.request.query_params.get('statut')
+        if statut:
+            qs = qs.filter(statut=statut)
+
+        return qs
 
     def perform_create(self, serializer):
         serializer.save()

@@ -54,9 +54,10 @@ export const OrderingPage = () => {
         setCategories(categoriesResponse.data)
         setDishes(dishesResponse.data)
         
-        // If there's an active order, store it (taking the first one)
         if (ordersResponse.data.length > 0) {
           setActiveOrder(ordersResponse.data[0])
+        } else {
+          setActiveOrder(null)
         }
       } catch (err) {
         console.error('Failed to load ordering menu', err)
