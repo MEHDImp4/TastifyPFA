@@ -21,6 +21,7 @@ progress:
 
 ## Notes
 
+- Phase 04 Complete & Verified via UAT.
 - Phase 11 Complete.
 - Phase 12 Complete & Verified via UAT.
 - Salle order-taking flow delivered and consolidated into the staff frontend: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission. Verified by user.

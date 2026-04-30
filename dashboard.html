@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-30 19:41:31<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-30 20:44:27<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -566,6 +566,36 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed User Acceptance Testing (UAT) for Phase 12: Order Taking Frontend.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified 5 core UAT scenarios: Table Navigation, Category Browsing, Cart Management, Order Review, and Order Submission.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Confirmed end-to-end integration between the Salle UI (Serveur role) and the Phase 11 Commandes REST API.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `12-UAT.md` with final PASSED status and completion timestamps.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> User verified all 5 UAT test cases in a live conversational session.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `dashboard.html` and `STATE.md` updated to reflect verified completion.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Applied pending `commandes.0001_initial` migration to the running MySQL database after `/api/commandes/` failed with missing table `commandes_commande`.</p>
@@ -601,49 +631,14 @@
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py test apps.commandes`: 23/23 passed.</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Commit: `fa5a75d`</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Commit: `fa5a75d`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verrouillage des routes staff par role: `SERVEUR` est redirige vers `/salle`, `CUISINIER` vers `/kds`, et les routes gerant restent reservees a `GERANT`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Filtrage de la sidebar staff selon le role pour ne plus afficher les entrees gerant aux serveurs.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Commit: `529fb0e`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/App.test.tsx src/roleAccess.test.ts --run` dans `frontend/back-office`: 8/8 passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` dans `frontend/back-office`: passed avec l'avertissement Vite preexistant de chunk > 500 kB.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Ajout d'un bouton de déconnexion dans la barre latérale (Sidebar) du back-office.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Intégration de la logique de déconnexion (appel API `/users/logout/` et nettoyage de l'état local via `useAuthStore`).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Mise à jour du style pour inclure un feedback tactile (`scale-97`) et des effets de survol conformes au système de design.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
