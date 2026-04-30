@@ -10,7 +10,7 @@
 - `npm run build` in `frontend/back-office`: passed with existing Vite chunk-size warning.
 - `npm run build` in `frontend/portail-client`: passed.
 - `npm run test -- src/roleAccess.test.ts --run` in `frontend/back-office`: 2/2 passed.
-- Commit: pending.
+- Commit: `ae89637`
 
 ## [2026-04-30] - 18:35
 ### Changed
