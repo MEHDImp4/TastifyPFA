@@ -16,7 +16,7 @@
 - `npm run build` in `frontend/salle`: passed with Vite chunk-size warning only.
 - `npm run build` in `frontend/kds`: passed.
 - `npm run build` in `frontend/portail-client`: passed.
-- Commit: pending
+- Commit: `1951ea9`
 
 ## [2026-04-30] - 00:38
 ### Added
