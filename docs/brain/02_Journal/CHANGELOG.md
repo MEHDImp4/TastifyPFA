@@ -13,6 +13,15 @@
 - User verified all UAT test cases and bug fixes in a live conversational session.
 - `dashboard.html` and `STATE.md` updated to reflect verified completion.
 
+## [2026-04-30] - 23:26
+### Added
+- Generated and seeded professional high-quality images for all 21 dishes and 4 categories.
+- Updated `seed_menu` to correctly map image paths in the media directory.
+
+### Validation
+- `seed_menu`: All categories and dishes now have valid image paths.
+- Manual verification of `media/plats/` and `media/categories/` contents.
+
 ## [2026-04-30] - 23:19
 ### Changed
 - Updated `seed_dev` to use `update_or_create`, ensuring all fields (names, emails, roles) are synced for existing users.
