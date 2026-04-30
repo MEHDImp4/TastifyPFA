@@ -91,4 +91,4 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network.
-Shared login access uses `frontend/_shared/auth/roleAccess.ts` so the staff frontend accepts only GERANT/SERVEUR/CUISINIER and the client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.
+Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.

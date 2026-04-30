@@ -1,4 +1,14 @@
-## [2026-04-30] - 19:13
+## [2026-04-30] - 19:30
+### Fixed
+- Verrouillage des routes staff par role: `SERVEUR` est redirige vers `/salle`, `CUISINIER` vers `/kds`, et les routes gerant restent reservees a `GERANT`.
+- Filtrage de la sidebar staff selon le role pour ne plus afficher les entrees gerant aux serveurs.
+- Commit: `529fb0e`
+
+### Validation
+- `npm run test -- src/App.test.tsx src/roleAccess.test.ts --run` dans `frontend/back-office`: 8/8 passed.
+- `npm run build` dans `frontend/back-office`: passed avec l'avertissement Vite preexistant de chunk > 500 kB.
+
+## [2026-04-30] - 19:13
 ### Added
 - Ajout d'un bouton de déconnexion dans la barre latérale (Sidebar) du back-office.
 - Intégration de la logique de déconnexion (appel API `/users/logout/` et nettoyage de l'état local via `useAuthStore`).
