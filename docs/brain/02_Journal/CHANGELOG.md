@@ -1,3 +1,13 @@
+## [2026-04-30] - 20:55
+### Added
+- Created a new server (waiter) user `serveur2_test` to support multi-user testing scenarios.
+- Updated `seed_dev` management command to include the new user in the dev environment.
+- Updated `user.md` and `DEV_CREDENTIALS.md` documentation.
+
+### Validation
+- `docker compose exec backend python manage.py seed_dev`: User `serveur2_test` created successfully.
+- Manual verification of documentation files.
+
 ## [2026-04-30] - 19:55
 ### Added
 - Completed User Acceptance Testing (UAT) for Phase 12: Order Taking Frontend.

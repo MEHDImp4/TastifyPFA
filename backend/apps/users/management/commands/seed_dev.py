@@ -35,6 +35,13 @@ class Command(BaseCommand):
                 'role': User.Role.CLIENT,
                 'first_name': 'Test',
                 'last_name': 'Client'
+            },
+            {
+                'username': 'serveur2_test',
+                'email': 'serveur2@tastify.local',
+                'role': User.Role.SERVEUR,
+                'first_name': 'Second',
+                'last_name': 'Serveur'
             }
         ]
 
