@@ -2,23 +2,15 @@ import { useEffect } from 'react'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
+import { redirectToRoleApp } from '@shared/auth/roleRedirect'
 import logo from '@shared/assets/logo.svg'
-
-const appUrl = (port: number) => `${window.location.protocol}//${window.location.hostname || 'localhost'}:${port}/`
-
-const ROLE_ROUTES: Record<string, string> = {
-  GERANT: appUrl(3000),
-  SERVEUR: appUrl(3001),
-  CUISINIER: appUrl(3002),
-}
 
 function App() {
   const { isAuthenticated, clearAuth, user } = useAuthStore()
 
   useEffect(() => {
     if (isAuthenticated && user?.role) {
-      const path = ROLE_ROUTES[user.role.toUpperCase()]
-      if (path) window.location.replace(path)
+      redirectToRoleApp(user.role)
     }
   }, [isAuthenticated, user?.role])
 
@@ -33,10 +25,7 @@ function App() {
   }
 
   if (!isAuthenticated) {
-    return <Login onSuccess={(role) => {
-      const path = ROLE_ROUTES[role.toUpperCase()]
-      if (path) window.location.replace(path)
-    }} />
+    return <Login onSuccess={(role) => redirectToRoleApp(role)} />
   }
 
   // CLIENT ou rôle inconnu — affiche le portail

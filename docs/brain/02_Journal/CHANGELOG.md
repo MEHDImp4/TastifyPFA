@@ -1,4 +1,18 @@
 
+## [2026-04-30] - 18:19
+### Fixed
+- Added shared role-to-frontend redirect logic so GERANT, SERVEUR, and CUISINIER sessions land on their canonical direct-port apps.
+- Updated Salle, KDS, Portail Client, and Back-Office login flows to redirect authenticated users to the correct frontend port after login.
+- Fixed GERANT login from Salle so it redirects from `http://localhost:3001/` to `http://localhost:3000/`.
+
+### Validation
+- `npm run test -- src/roleRedirect.test.ts --run` in `frontend/salle`: 3/3 passed.
+- `npm run build` in `frontend/salle`: passed with existing Vite chunk-size warning only.
+- `npm run build` in `frontend/kds`: passed.
+- `npm run build` in `frontend/portail-client`: passed.
+- `npm run build` in `frontend/back-office`: passed.
+- Commit: pending
+
 ## [2026-04-30] - 18:05
 ### Fixed
 - Recreated the direct-port frontend containers with fresh `/app/node_modules` volumes after Salle reported a Vite import-analysis error for `react-router-dom`.

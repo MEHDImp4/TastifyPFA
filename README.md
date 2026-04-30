@@ -20,12 +20,14 @@ Then visit:
 - `http://localhost:8000/api/` → Django REST API
 
 Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
+Shared login redirection sends GERANT, SERVEUR, and CUISINIER users to their canonical direct-port apps (`3000`, `3001`, and `3002`) even if they authenticate from another frontend.
 
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
 The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.config.ts` and test-only settings in `frontend/back-office/vitest.config.ts`.
 The Salle SPA now mirrors that split with `frontend/salle/vite.config.ts` and `frontend/salle/vitest.config.ts`; run Salle component tests from `frontend/salle` with `npm run test -- --run`.
+Cross-frontend role redirects live in `frontend/_shared/auth/roleRedirect.ts`, with focused coverage in `frontend/salle/src/roleRedirect.test.ts`.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.

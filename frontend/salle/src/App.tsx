@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
+import { redirectToRoleApp } from '@shared/auth/roleRedirect'
 import { Route, Routes } from 'react-router-dom'
 import { MapView } from './pages/Map/MapView'
 import { OrderingPage } from './pages/Ordering/OrderingPage'
@@ -8,6 +10,12 @@ import logo from '@shared/assets/logo.svg'
 
 function App() {
   const { isAuthenticated, clearAuth, user } = useAuthStore()
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role) {
+      redirectToRoleApp(user.role)
+    }
+  }, [isAuthenticated, user?.role])
 
   const handleLogout = async () => {
     try {
@@ -20,7 +28,7 @@ function App() {
   }
 
   if (!isAuthenticated) {
-    return <Login onSuccess={() => {}} />
+    return <Login onSuccess={(role) => redirectToRoleApp(role)} />
   }
 
   return (

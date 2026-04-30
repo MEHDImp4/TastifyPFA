@@ -6,18 +6,22 @@ import PlatsPage from './pages/Plats';
 import TablesPage from './pages/Tables';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
+import { redirectToRoleApp } from '@shared/auth/roleRedirect';
 
 const LoginRoute = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
+      if (user?.role && redirectToRoleApp(user.role)) return;
       navigate('/', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, user?.role]);
 
-  return <Login onSuccess={() => navigate('/')} />;
+  return <Login onSuccess={(role) => {
+    if (!redirectToRoleApp(role)) navigate('/');
+  }} />;
 };
 
 function App() {
