@@ -204,8 +204,15 @@ def update_dashboard():
         dash_content = f.read()
 
     def replace_section(content, start_marker, end_marker, replacement):
-        pattern = re.compile(rf'({start_marker}).*?({end_marker})', re.DOTALL)
-        return pattern.sub(rf'\g<1>\n{replacement}\n{' ' * 28}\g<2>', content)
+        # Use simple string replacement to avoid regex escape issues
+        start_idx = content.find(start_marker)
+        if start_idx == -1: return content
+        end_idx = content.find(end_marker, start_idx + len(start_marker))
+        if end_idx == -1: return content
+        
+        prefix = content[:start_idx + len(start_marker)]
+        suffix = content[end_idx:]
+        return f"{prefix}\n{replacement}\n{' ' * 28}{suffix}"
         
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<span[^>]*>.*?</span>(<!-- PERCENT_END -->)', rf'\g<1><span class="text-primary font-bold">{progress_percent}%</span>\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<div[^>]*style="width:.*?(<!-- PERCENT_END -->)', rf'\g<1><div class="h-full bg-primary rounded-full" style="width: {progress_percent}%"></div>\g<2>', dash_content)

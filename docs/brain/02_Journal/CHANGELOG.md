@@ -1,3 +1,12 @@
+## [2026-04-30] - 19:06
+### Fixed
+- Resolved TypeScript `baseUrl` deprecation warnings in `portail-client` by removing the deprecated option and normalizing configuration with `back-office`.
+- Verified that retired frontend directories (`salle`, `kds`) are successfully removed from the project structure to address stale IDE errors.
+
+### Validation
+- `npm run build` in `frontend/portail-client`: 100% success.
+- `npm run build` in `frontend/back-office`: 100% success.
+- `Test-Path` confirmed `frontend/salle` and `frontend/kds` are deleted.
 
 ## [2026-04-30] - 18:56
 ### Fixed
