@@ -7,7 +7,7 @@
 ### Validation
 - `npm run test -- src/mediaUrl.test.ts --run` in `frontend/back-office`: 2/2 passed.
 - `npm run build` in `frontend/back-office`: passed with existing Vite chunk-size warning.
-- Commit: pending.
+- Commit: `5b4aac4`
 
 ## [2026-04-30] - 18:45
 ### Changed
