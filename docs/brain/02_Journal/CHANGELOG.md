@@ -14,7 +14,7 @@
 - `docker compose config`: passed.
 - `docker compose up -d --build --remove-orphans`: recreated backend, backoffice, portail, db, and redis.
 - `docker compose ps`: only backend `8000`, backoffice `3000`, portail `3003`, db, and redis are running.
-- Commit: pending.
+- Commit: `24dd423`
 
 ## [2026-04-30] - 18:19
 ### Fixed
