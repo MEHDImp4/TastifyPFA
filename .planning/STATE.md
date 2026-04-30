@@ -22,7 +22,7 @@ progress:
 ## Notes
 
 - Phase 04 Complete & Verified via UAT.
-- Phase 11 Complete.
+- Phase 11 Complete & Verified via UAT.
 - Phase 12 Complete & Verified via UAT.
 - Salle order-taking flow delivered and consolidated into the staff frontend: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission. Verified by user.
 - Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend is exposed on 8000, staff on 3000, and client on 3003.

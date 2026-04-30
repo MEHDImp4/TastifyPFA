@@ -1,3 +1,18 @@
+## [2026-04-30] - 23:25
+### Added
+- Completed User Acceptance Testing (UAT) for Phase 11: Commandes REST API.
+- Verified nested order creation, table status synchronization, ownership filtering, and table availability guards.
+- Updated `11-UAT.md` with final PASSED status and completion timestamps.
+
+### Fixed
+- Fixed `CommandeViewSet` to properly filter active orders by `table_id` and allow cross-server visibility for active service coordination.
+- Fixed `CommandeSerializer` to return `serveur_name` and `plat_details` (id, nom, prix) for enriched frontend display.
+- Fixed `OrderingPage.tsx` state persistence bug where active orders were not cleared when navigating between occupied and free tables.
+
+### Validation
+- User verified all UAT test cases and bug fixes in a live conversational session.
+- `dashboard.html` and `STATE.md` updated to reflect verified completion.
+
 ## [2026-04-30] - 23:19
 ### Changed
 - Updated `seed_dev` to use `update_or_create`, ensuring all fields (names, emails, roles) are synced for existing users.
