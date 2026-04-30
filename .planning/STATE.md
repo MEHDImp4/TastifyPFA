@@ -21,6 +21,7 @@ progress:
 
 ## Notes
 
+- Phase 03 Complete & Verified via UAT.
 - Phase 04 Complete & Verified via UAT.
 - Phase 11 Complete & Verified via UAT.
 - Phase 12 Complete & Verified via UAT.
