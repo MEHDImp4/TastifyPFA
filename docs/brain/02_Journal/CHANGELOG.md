@@ -20,6 +20,7 @@
 - `docker compose up -d --build backend`: rebuilt and restarted backend with migration entrypoint.
 - `docker compose logs --tail=40 backend`: confirmed startup runs migrations before Daphne (`No migrations to apply` after rebuild).
 - `docker compose exec backend python manage.py test apps.commandes`: 23/23 passed.
+- Commit: `fa5a75d`
 
 ## [2026-04-30] - 19:30
 ### Fixed
