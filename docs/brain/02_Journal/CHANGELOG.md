@@ -1,4 +1,18 @@
-## [2026-04-30] - 19:06
+## [2026-04-30] - 19:13
+### Added
+- Ajout d'un bouton de déconnexion dans la barre latérale (Sidebar) du back-office.
+- Intégration de la logique de déconnexion (appel API `/users/logout/` et nettoyage de l'état local via `useAuthStore`).
+- Mise à jour du style pour inclure un feedback tactile (`scale-97`) et des effets de survol conformes au système de design.
+
+### Fixed
+- Correction des chemins `@shared` dans les fichiers `tsconfig.json` des deux frontends pour permettre la résolution des modules partagés lors des builds dans Docker.
+
+### Validation
+- `npm run build` dans `frontend/back-office`: 100% succès.
+- `npm run build` dans `frontend/portail-client`: 100% succès.
+- Vérification visuelle du bouton avec icône `LogOut` et comportement au clic.
+
+## [2026-04-30] - 19:06
 ### Fixed
 - Resolved TypeScript `baseUrl` deprecation warnings in `portail-client` by removing the deprecated option and normalizing configuration with `back-office`.
 - Verified that retired frontend directories (`salle`, `kds`) are successfully removed from the project structure to address stale IDE errors.

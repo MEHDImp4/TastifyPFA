@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ComponentType } from 'react';
 import { 
   LayoutGrid, 
@@ -8,8 +8,11 @@ import {
   Package, 
   Table,
   X,
-  UtensilsCrossed
+  UtensilsCrossed,
+  LogOut
 } from 'lucide-react';
+import { useAuthStore } from '@shared/auth/useAuthStore';
+import axiosInstance from '@shared/auth/axiosInstance';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -24,6 +27,9 @@ type NavItem = {
 };
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const { clearAuth } = useAuthStore();
+  const navigate = useNavigate();
+
   const navItems: NavItem[] = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
@@ -37,6 +43,17 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const handleNavigate = () => {
     if (window.innerWidth < 1024) onClose();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/users/logout/');
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      clearAuth();
+      navigate('/login');
+    }
   };
 
   return (
@@ -64,7 +81,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </button>
         </div>
         
-        <div className="flex-1 px-4 space-y-2 py-4">
+        <div className="flex-1 px-4 space-y-2 py-4 overflow-y-auto min-h-0">
           {navItems.map((item) => {
             if (item.external) {
               return (
@@ -98,6 +115,17 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               </NavLink>
             );
           })}
+        </div>
+
+        {/* Logout Button Section */}
+        <div className="p-4 border-t border-white/5 mt-auto">
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-foreground-muted hover:bg-error/10 hover:text-error w-full group active:scale-[0.97]"
+          >
+            <LogOut className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+            <span className="font-medium">Se déconnecter</span>
+          </button>
         </div>
       </nav>
     </>
