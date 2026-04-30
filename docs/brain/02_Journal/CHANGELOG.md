@@ -1,3 +1,12 @@
+## [2026-04-30] - 22:05
+### Added
+- Created 12 test users (3 for each role: GERANT, SERVEUR, CUISINIER, CLIENT) to support extensive multi-user and concurrency testing.
+- Updated `seed_dev` management command to maintain all 12 test accounts.
+- Updated `user.md` and `DEV_CREDENTIALS.md` documentation.
+
+### Validation
+- `docker compose exec backend python manage.py seed_dev`: All 12 users confirmed in database.
+
 ## [2026-04-30] - 20:55
 ### Added
 - Created a new server (waiter) user `serveur2_test` to support multi-user testing scenarios.

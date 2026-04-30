@@ -8,41 +8,25 @@ class Command(BaseCommand):
         User = get_user_model()
         
         users_data = [
-            {
-                'username': 'gerant_test',
-                'email': 'gerant@tastify.local',
-                'role': User.Role.GERANT,
-                'first_name': 'Test',
-                'last_name': 'Gerant'
-            },
-            {
-                'username': 'serveur_test',
-                'email': 'serveur@tastify.local',
-                'role': User.Role.SERVEUR,
-                'first_name': 'Test',
-                'last_name': 'Serveur'
-            },
-            {
-                'username': 'cuisinier_test',
-                'email': 'cuisinier@tastify.local',
-                'role': User.Role.CUISINIER,
-                'first_name': 'Test',
-                'last_name': 'Cuisinier'
-            },
-            {
-                'username': 'client_test',
-                'email': 'client@tastify.local',
-                'role': User.Role.CLIENT,
-                'first_name': 'Test',
-                'last_name': 'Client'
-            },
-            {
-                'username': 'serveur2_test',
-                'email': 'serveur2@tastify.local',
-                'role': User.Role.SERVEUR,
-                'first_name': 'Second',
-                'last_name': 'Serveur'
-            }
+            # Gérants
+            {'username': 'gerant_test', 'email': 'gerant@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Test', 'last_name': 'Gerant'},
+            {'username': 'gerant2_test', 'email': 'gerant2@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Second', 'last_name': 'Gerant'},
+            {'username': 'gerant3_test', 'email': 'gerant3@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Third', 'last_name': 'Gerant'},
+            
+            # Serveurs
+            {'username': 'serveur_test', 'email': 'serveur@tastify.local', 'role': User.Role.SERVEUR, 'first_name': 'Test', 'last_name': 'Serveur'},
+            {'username': 'serveur2_test', 'email': 'serveur2@tastify.local', 'role': User.Role.SERVEUR, 'first_name': 'Second', 'last_name': 'Serveur'},
+            {'username': 'serveur3_test', 'email': 'serveur3@tastify.local', 'role': User.Role.SERVEUR, 'first_name': 'Third', 'last_name': 'Serveur'},
+            
+            # Cuisiniers
+            {'username': 'cuisinier_test', 'email': 'cuisinier@tastify.local', 'role': User.Role.CUISINIER, 'first_name': 'Test', 'last_name': 'Cuisinier'},
+            {'username': 'cuisinier2_test', 'email': 'cuisinier2@tastify.local', 'role': User.Role.CUISINIER, 'first_name': 'Second', 'last_name': 'Cuisinier'},
+            {'username': 'cuisinier3_test', 'email': 'cuisinier3@tastify.local', 'role': User.Role.CUISINIER, 'first_name': 'Third', 'last_name': 'Cuisinier'},
+            
+            # Clients
+            {'username': 'client_test', 'email': 'client@tastify.local', 'role': User.Role.CLIENT, 'first_name': 'Test', 'last_name': 'Client'},
+            {'username': 'client2_test', 'email': 'client2@tastify.local', 'role': User.Role.CLIENT, 'first_name': 'Second', 'last_name': 'Client'},
+            {'username': 'client3_test', 'email': 'client3@tastify.local', 'role': User.Role.CLIENT, 'first_name': 'Third', 'last_name': 'Client'},
         ]
 
         # Mot de passe générique pour l'environnement de développement
