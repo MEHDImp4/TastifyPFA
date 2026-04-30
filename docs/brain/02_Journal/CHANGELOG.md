@@ -1,4 +1,17 @@
 
+## [2026-04-30] - 18:45
+### Changed
+- Replaced cross-frontend login redirection with role gates.
+- Staff frontend now accepts only `GERANT`, `SERVEUR`, and `CUISINIER`; Portail Client accepts only `CLIENT`.
+- Differentiated login screens: staff login uses the staff label and teal accent, client login uses the client label and amber accent.
+- Removed the obsolete `roleRedirect.ts` helper in favor of `roleAccess.ts`.
+
+### Validation
+- `npm run build` in `frontend/back-office`: passed with existing Vite chunk-size warning.
+- `npm run build` in `frontend/portail-client`: passed.
+- `npm run test -- src/roleAccess.test.ts --run` in `frontend/back-office`: 2/2 passed.
+- Commit: pending.
+
 ## [2026-04-30] - 18:35
 ### Changed
 - Consolidated runtime frontends to one staff app on `3000` and one client app on `3003`.

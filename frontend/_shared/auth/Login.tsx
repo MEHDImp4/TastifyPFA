@@ -3,12 +3,42 @@ import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
 import { useAuthStore } from './useAuthStore'
 import logo from '@shared/assets/logo.svg'
+import { isRoleAllowed } from './roleAccess'
 
 interface LoginProps {
   onSuccess: (role: string) => void
+  allowedRoles?: readonly string[]
+  appLabel?: string
+  appDescription?: string
+  deniedMessage?: string
+  variant?: 'staff' | 'client'
 }
 
-const Login: React.FC<LoginProps> = ({ onSuccess }) => {
+const STYLES = {
+  staff: {
+    glow: 'bg-teal/25',
+    label: 'text-teal',
+    focus: 'group-focus-within:text-teal',
+    input: 'focus:border-teal/50 focus:ring-teal/5',
+    button: 'bg-teal hover:bg-teal/90 shadow-[0_10px_20px_rgba(42,157,143,0.2)]',
+  },
+  client: {
+    glow: 'bg-amber/20',
+    label: 'text-amber',
+    focus: 'group-focus-within:text-amber',
+    input: 'focus:border-amber/50 focus:ring-amber/5',
+    button: 'bg-amber hover:bg-amber/90 shadow-[0_10px_20px_rgba(233,196,106,0.18)]',
+  },
+} as const
+
+const Login: React.FC<LoginProps> = ({
+  onSuccess,
+  allowedRoles,
+  appLabel = 'Tastify',
+  appDescription = 'Connectez-vous a votre espace',
+  deniedMessage = "Ce compte n'est pas autorise sur ce portail.",
+  variant = 'staff',
+}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -16,6 +46,8 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const [error, setError] = useState<string | null>(null)
 
   const setAuth = useAuthStore((state: any) => state.setAuth)
+  const clearAuth = useAuthStore((state: any) => state.clearAuth)
+  const styles = STYLES[variant]
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -29,6 +61,17 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
       })
 
       const { access, role, username: resUsername } = response.data
+      if (allowedRoles && !isRoleAllowed(role, allowedRoles)) {
+        clearAuth()
+        try {
+          await axiosInstance.post('/users/logout/')
+        } catch {
+          // The role gate is enforced client-side even if logout cleanup is unavailable.
+        }
+        setError(deniedMessage)
+        return
+      }
+
       setAuth({ username: resUsername, role }, access)
       onSuccess(role)
     } catch (err: any) {
@@ -48,23 +91,27 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
         <div className="bg-surface rounded-3xl border border-white/5 shadow-2xl overflow-hidden p-10">
           <div className="flex flex-col items-center mb-12 mt-2">
             <div className="relative">
-              <div className="absolute inset-0 bg-teal/25 blur-3xl rounded-full scale-125" />
+              <div className={`absolute inset-0 ${styles.glow} blur-3xl rounded-full scale-125`} />
               <img src={logo} alt="Tastify" className="w-[320px] max-w-full relative z-10" />
+            </div>
+            <div className="text-center mt-6">
+              <h1 className="text-2xl font-bold text-white tracking-tight">{appLabel}</h1>
+              <p className="text-sm text-foreground-muted mt-2">{appDescription}</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-teal uppercase tracking-[0.1em] ml-1">
+              <label className={`text-[11px] font-bold ${styles.label} uppercase tracking-[0.1em] ml-1`}>
                 Utilisateur
               </label>
               <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted group-focus-within:text-teal transition-colors" />
+                <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted ${styles.focus} transition-colors`} />
                 <input
                   type="text"
                   value={username}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-                  className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
+                  className={`w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-4 ${styles.input} transition-all placeholder:text-foreground-muted/30`}
                   placeholder="nom_utilisateur"
                   required
                   autoComplete="username"
@@ -73,16 +120,16 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-teal uppercase tracking-[0.1em] ml-1">
+              <label className={`text-[11px] font-bold ${styles.label} uppercase tracking-[0.1em] ml-1`}>
                 Mot de passe
               </label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted group-focus-within:text-teal transition-colors" />
+                <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted ${styles.focus} transition-colors`} />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                  className="w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-12 text-sm focus:outline-none focus:border-teal/50 focus:ring-4 focus:ring-teal/5 transition-all placeholder:text-foreground-muted/30"
+                  className={`w-full bg-black/20 border border-white/5 rounded-2xl py-3.5 pl-11 pr-12 text-sm focus:outline-none focus:ring-4 ${styles.input} transition-all placeholder:text-foreground-muted/30`}
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
@@ -107,7 +154,7 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-teal hover:bg-teal/90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl transition-all shadow-[0_10px_20px_rgba(42,157,143,0.2)] flex items-center justify-center gap-3 mt-4"
+              className={`w-full ${styles.button} active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-3 mt-4`}
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

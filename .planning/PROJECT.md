@@ -23,7 +23,7 @@ The project operates under strict adherence to `GEMINI.md` mandates, emphasizing
 
 Phase 12 complete (2026-04-30) — Order Taking Frontend delivered and now consolidated into the staff SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`.
 
-Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service and consolidated runtime frontends. Backend is exposed on `localhost:8000`; the staff frontend is exposed on `localhost:3000`; the client frontend is exposed on `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`.
+Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service and consolidated runtime frontends. Backend is exposed on `localhost:8000`; the staff frontend is exposed on `localhost:3000`; the client frontend is exposed on `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`. Login gates reject accounts used from the wrong frontend.
 
 ## Validated Requirements
 

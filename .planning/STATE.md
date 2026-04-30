@@ -25,7 +25,7 @@ progress:
 - Phase 12 Complete.
 - Salle order-taking flow delivered and consolidated into the staff frontend: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission.
 - Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend is exposed on 8000, staff on 3000, and client on 3003.
-- Direct-port login redirect regression fixed: GERANT, SERVEUR, and CUISINIER remain on the unified staff frontend at port 3000; CLIENT redirects to port 3003.
+- Login role gates fixed: GERANT, SERVEUR, and CUISINIER are accepted only on the unified staff frontend at port 3000; CLIENT is accepted only on port 3003.
 - Ready to discuss or plan Phase 13 (WebSocket Infrastructure).
 
 ## Decisions
@@ -49,4 +49,4 @@ progress:
 - Salle ordering carts are isolated per `tableId` with a Zustand record registry.
 - Salle order submission uses the Phase 11 `CommandeSerializer` contract: `table` plus nested `lignes`.
 - Local development routing no longer uses Nginx path prefixes; Vite apps run at root on their own ports and proxy `/api` plus `/media` to `http://backend:8000`.
-- Cross-frontend role redirects are centralized in `frontend/_shared/auth/roleRedirect.ts` and map GERANT/SERVEUR/CUISINIER to port 3000 and CLIENT to port 3003.
+- Cross-frontend role access is centralized in `frontend/_shared/auth/roleAccess.ts` and rejects accounts used from the wrong frontend instead of redirecting them.

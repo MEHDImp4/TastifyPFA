@@ -25,7 +25,7 @@ Remove the Nginx service from local Docker Compose routing and expose the backen
 - `docker-compose.yml` now publishes backend, staff frontend, and client frontend ports directly.
 - The Nginx service is removed from Compose.
 - Each frontend Vite config runs at root and proxies `/api` and `/media` to `http://backend:8000`.
-- Shared role redirects now use absolute URLs with direct frontend ports across Portail Client and the unified staff frontend.
+- Shared role gates reject accounts used from the wrong frontend instead of redirecting between Portail Client and the unified staff frontend.
 - Back-office routing no longer uses the `/back-office` basename.
 - Salle and KDS runtime flows are consolidated into `frontend/back-office`, under `/salle`, `/tables/:id/order`, and `/kds`.
 
@@ -34,7 +34,7 @@ Remove the Nginx service from local Docker Compose routing and expose the backen
 - Run `docker compose config` to validate Compose syntax.
 - Run focused frontend tests for routing changes.
 - Run frontend production builds where feasible.
-- `npm run test -- src/roleRedirect.test.ts --run` in `frontend/back-office`: validates staff roles on port `3000`, client redirect to `3003`, and old Salle/KDS ports redirecting back to the staff frontend.
+- `npm run test -- src/roleAccess.test.ts --run` in `frontend/back-office`: validates staff-only access on port `3000` and client-only access on port `3003`.
 
 ## Runtime Recovery
 

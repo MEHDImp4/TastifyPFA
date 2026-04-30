@@ -2,17 +2,17 @@ import { useEffect } from 'react'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
-import { redirectToRoleApp } from '@shared/auth/roleRedirect'
+import { CLIENT_ROLES, isRoleAllowed } from '@shared/auth/roleAccess'
 import logo from '@shared/assets/logo.svg'
 
 function App() {
   const { isAuthenticated, clearAuth, user } = useAuthStore()
 
   useEffect(() => {
-    if (isAuthenticated && user?.role) {
-      redirectToRoleApp(user.role)
+    if (isAuthenticated && user?.role && !isRoleAllowed(user.role, CLIENT_ROLES)) {
+      clearAuth()
     }
-  }, [isAuthenticated, user?.role])
+  }, [clearAuth, isAuthenticated, user?.role])
 
   const handleLogout = async () => {
     try {
@@ -24,8 +24,17 @@ function App() {
     }
   }
 
-  if (!isAuthenticated) {
-    return <Login onSuccess={(role) => redirectToRoleApp(role)} />
+  if (!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES))) {
+    return (
+      <Login
+        onSuccess={() => undefined}
+        allowedRoles={CLIENT_ROLES}
+        appLabel="Portail Client"
+        appDescription="Acces reserve aux clients du restaurant"
+        deniedMessage="Ce compte est reserve a l'espace staff."
+        variant="client"
+      />
+    )
   }
 
   // CLIENT ou rôle inconnu — affiche le portail

@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
-import { redirectToRoleApp, shouldRedirectToRoleApp } from '@shared/auth/roleRedirect';
+import { isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess';
 import { Sidebar } from './Sidebar';
 
 export const AppShell = () => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, clearAuth } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated && user?.role) {
-      redirectToRoleApp(user.role);
+    if (isAuthenticated && user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
+      clearAuth();
     }
-  }, [isAuthenticated, user?.role]);
+  }, [clearAuth, isAuthenticated, user?.role]);
 
-  if (isAuthenticated && user?.role && shouldRedirectToRoleApp(user.role)) {
+  if (isAuthenticated && user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
     return null;
   }
 

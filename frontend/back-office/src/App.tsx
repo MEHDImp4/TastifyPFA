@@ -9,7 +9,7 @@ import { OrderingPage } from './pages/Staff/Ordering/OrderingPage';
 import { KdsPage } from './pages/Staff/KdsPage';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
-import { redirectToRoleApp } from '@shared/auth/roleRedirect';
+import { isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess';
 
 const StaffEntryRedirect = () => {
   const { user } = useAuthStore();
@@ -22,19 +22,29 @@ const StaffEntryRedirect = () => {
 };
 
 const LoginRoute = () => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (user?.role && redirectToRoleApp(user.role)) return;
+      if (user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
+        clearAuth();
+        return;
+      }
       navigate('/', { replace: true });
     }
-  }, [isAuthenticated, navigate, user?.role]);
+  }, [clearAuth, isAuthenticated, navigate, user?.role]);
 
-  return <Login onSuccess={(role) => {
-    if (!redirectToRoleApp(role)) navigate('/');
-  }} />;
+  return (
+    <Login
+      onSuccess={() => navigate('/')}
+      allowedRoles={STAFF_ROLES}
+      appLabel="Espace Staff"
+      appDescription="Acces gerant, salle et cuisine"
+      deniedMessage="Ce compte est reserve au portail client."
+      variant="staff"
+    />
+  );
 };
 
 function App() {

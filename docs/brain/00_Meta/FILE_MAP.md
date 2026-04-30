@@ -34,7 +34,7 @@ tastify-pfa/
 │   └── Dockerfile
 ├── frontend/                      # 2 independent Vite SPAs
 │   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
-│   │   ├── auth/                  # Zustand Store, Login UI, Axios instance, direct-port role redirects
+│   │   ├── auth/                  # Zustand Store, Login UI, Axios instance, role access gates
 │   │   ├── components/map/        # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │   │   ├── assets/                # Shared logo, icons
 │   │   └── types/                 # Shared TypeScript interfaces
@@ -91,4 +91,4 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network.
-Shared login redirection uses `frontend/_shared/auth/roleRedirect.ts` so authenticated staff roles move to port `3000` and CLIENT users move to port `3003`, even when they log in from another frontend. Ports `3001` and `3002` are retired.
+Shared login access uses `frontend/_shared/auth/roleAccess.ts` so the staff frontend accepts only GERANT/SERVEUR/CUISINIER and the client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.
