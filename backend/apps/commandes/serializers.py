@@ -32,7 +32,8 @@ class CommandeLigneSerializer(serializers.ModelSerializer):
 
 class CommandeSerializer(serializers.ModelSerializer):
     lignes = CommandeLigneSerializer(many=True)
-    serveur_name = serializers.ReadOnlyField(source='serveur.username')
+    serveur_name = serializers.SerializerMethodField()
+    serveur_username = serializers.ReadOnlyField(source='serveur.username')
 
     class Meta:
         model = Commande
@@ -41,6 +42,7 @@ class CommandeSerializer(serializers.ModelSerializer):
             'table',
             'serveur',
             'serveur_name',
+            'serveur_username',
             'statut',
             'montant_total',
             'est_active',
@@ -48,7 +50,13 @@ class CommandeSerializer(serializers.ModelSerializer):
             'updated_at',
             'lignes',
         ]
-        read_only_fields = ['id', 'serveur', 'serveur_name', 'montant_total', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'serveur', 'serveur_name', 'serveur_username', 'montant_total', 'created_at', 'updated_at']
+
+    def get_serveur_name(self, obj):
+        if obj.serveur:
+            full_name = f"{obj.serveur.first_name} {obj.serveur.last_name}".strip()
+            return full_name or obj.serveur.username
+        return None
 
     def validate_table(self, value):
         """

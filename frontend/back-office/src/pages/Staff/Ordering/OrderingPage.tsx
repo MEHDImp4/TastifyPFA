@@ -115,7 +115,7 @@ export const OrderingPage = () => {
   }
 
   // True when there is no active order OR the logged-in user owns it
-  const isOwnOrder = !activeOrder || activeOrder.serveur_name === currentUser?.username
+  const isOwnOrder = !activeOrder || activeOrder.serveur_username === currentUser?.username
 
   if (isLoading) {
     return (
@@ -145,8 +145,8 @@ export const OrderingPage = () => {
                 <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
                   Commande #{activeOrder.id} active
                 </span>
-                <span className="text-[10px] font-bold text-foreground-muted uppercase">
-                  Par {activeOrder.serveur_name || 'Inconnu'}
+                <span className="text-xs font-semibold text-foreground-muted">
+                  Par <span className="font-black text-white">{activeOrder.serveur_name || 'Inconnu'}</span>
                 </span>
               </div>
             )}
@@ -174,25 +174,29 @@ export const OrderingPage = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {activeOrder && activeOrder.lignes.length > 0 && (
+          {activeOrder && (
             <div className="rounded-2xl border border-white/10 bg-surface p-5 shadow-xl">
               <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments commandés</p>
-              <div className="space-y-3">
-                {activeOrder.lignes.map((ligne: any) => (
-                  <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/5 p-3 px-4 transition-colors hover:bg-white/[0.08]">
-                    <div className="flex items-center gap-4">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal/10 text-xs font-black text-teal">
-                        {ligne.quantite}
-                      </span>
-                      <span className="font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+              {activeOrder.lignes.length === 0 ? (
+                <p className="text-sm text-foreground-muted italic">Aucun plat ajouté pour l'instant.</p>
+              ) : (
+                <div className="space-y-3">
+                  {activeOrder.lignes.map((ligne: any) => (
+                    <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/5 p-3 px-4 transition-colors hover:bg-white/[0.08]">
+                      <div className="flex items-center gap-4">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal/10 text-xs font-black text-teal">
+                          {ligne.quantite}
+                        </span>
+                        <span className="font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-teal">En cuisine</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-teal">En cuisine</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           {isOwnOrder && (
