@@ -9,16 +9,29 @@ import { OrderingPage } from './pages/Staff/Ordering/OrderingPage';
 import { KdsPage } from './pages/Staff/KdsPage';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
-import { isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess';
+import {
+  GERANT_ROLES,
+  KDS_ROLES,
+  SALLE_ROLES,
+  STAFF_ROLES,
+  getStaffHomePath,
+  isRoleAllowed,
+} from '@shared/auth/roleAccess';
 
 const StaffEntryRedirect = () => {
   const { user } = useAuthStore();
-  const role = user?.role?.toUpperCase();
 
-  if (role === 'SERVEUR') return <Navigate to="/salle" replace />;
-  if (role === 'CUISINIER') return <Navigate to="/kds" replace />;
+  return <Navigate to={getStaffHomePath(user?.role)} replace />;
+};
 
-  return <Navigate to="/categories" replace />;
+const RoleRoute = ({ allowedRoles, children }: { allowedRoles: readonly string[]; children: JSX.Element }) => {
+  const { user } = useAuthStore();
+
+  if (!isRoleAllowed(user?.role, allowedRoles)) {
+    return <Navigate to={getStaffHomePath(user?.role)} replace />;
+  }
+
+  return children;
 };
 
 const LoginRoute = () => {
@@ -60,12 +73,12 @@ function App() {
         
         <Route element={<AppShell />}>
           <Route index element={<StaffEntryRedirect />} />
-          <Route path="/categories" element={<CategoriesPage />} />
-          <Route path="/plats" element={<PlatsPage />} />
-          <Route path="/tables" element={<TablesPage />} />
-          <Route path="/salle" element={<MapView />} />
-          <Route path="/tables/:id/order" element={<OrderingPage />} />
-          <Route path="/kds" element={<KdsPage />} />
+          <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
+          <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />
+          <Route path="/tables" element={<RoleRoute allowedRoles={GERANT_ROLES}><TablesPage /></RoleRoute>} />
+          <Route path="/salle" element={<RoleRoute allowedRoles={SALLE_ROLES}><MapView /></RoleRoute>} />
+          <Route path="/tables/:id/order" element={<RoleRoute allowedRoles={SALLE_ROLES}><OrderingPage /></RoleRoute>} />
+          <Route path="/kds" element={<RoleRoute allowedRoles={KDS_ROLES}><KdsPage /></RoleRoute>} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

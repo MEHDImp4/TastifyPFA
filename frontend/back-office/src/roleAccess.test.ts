@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CLIENT_ROLES, isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess'
+import { CLIENT_ROLES, getStaffHomePath, isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess'
 
 describe('role app access gates', () => {
   it('allows only staff roles on the staff frontend', () => {
@@ -14,5 +14,12 @@ describe('role app access gates', () => {
     expect(isRoleAllowed('GERANT', CLIENT_ROLES)).toBe(false)
     expect(isRoleAllowed('SERVEUR', CLIENT_ROLES)).toBe(false)
     expect(isRoleAllowed('CUISINIER', CLIENT_ROLES)).toBe(false)
+  })
+
+  it('maps staff roles to their first allowed route', () => {
+    expect(getStaffHomePath('GERANT')).toBe('/categories')
+    expect(getStaffHomePath('SERVEUR')).toBe('/salle')
+    expect(getStaffHomePath('CUISINIER')).toBe('/kds')
+    expect(getStaffHomePath('CLIENT')).toBe('/login')
   })
 })

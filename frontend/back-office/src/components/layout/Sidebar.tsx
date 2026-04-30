@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import axiosInstance from '@shared/auth/axiosInstance';
+import { isRoleAllowed } from '@shared/auth/roleAccess';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -23,23 +24,24 @@ type NavItem = {
   name: string;
   icon: ComponentType<{ className?: string }>;
   path: string;
+  allowedRoles: readonly string[];
   external?: boolean;
 };
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
-  const { clearAuth } = useAuthStore();
+  const { clearAuth, user } = useAuthStore();
   const navigate = useNavigate();
 
   const navItems: NavItem[] = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '#' },
-    { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
-    { name: 'Plats', icon: ChefHat, path: '/plats' },
-    { name: 'Tables', icon: Table, path: '/tables' },
-    { name: 'Salle', icon: UtensilsCrossed, path: '/salle' },
-    { name: 'KDS', icon: ChefHat, path: '/kds' },
-    { name: 'Stock', icon: Package, path: '#' },
-    { name: 'RH', icon: Users, path: '#' },
-  ];
+    { name: 'Dashboard', icon: LayoutDashboard, path: '#', allowedRoles: ['GERANT'] },
+    { name: 'Catégories', icon: LayoutGrid, path: '/categories', allowedRoles: ['GERANT'] },
+    { name: 'Plats', icon: ChefHat, path: '/plats', allowedRoles: ['GERANT'] },
+    { name: 'Tables', icon: Table, path: '/tables', allowedRoles: ['GERANT'] },
+    { name: 'Salle', icon: UtensilsCrossed, path: '/salle', allowedRoles: ['GERANT', 'SERVEUR'] },
+    { name: 'KDS', icon: ChefHat, path: '/kds', allowedRoles: ['GERANT', 'CUISINIER'] },
+    { name: 'Stock', icon: Package, path: '#', allowedRoles: ['GERANT'] },
+    { name: 'RH', icon: Users, path: '#', allowedRoles: ['GERANT'] },
+  ].filter((item) => isRoleAllowed(user?.role, item.allowedRoles));
 
   const handleNavigate = () => {
     if (window.innerWidth < 1024) onClose();
