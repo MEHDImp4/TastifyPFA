@@ -8,7 +8,7 @@ Tastify is an ERP web full-stack dedicated to the management of Moroccan restaur
 - **Frontend:** React 18, Vite 5.x, Tailwind CSS (ECO-FRESH Palette).
 - **Database:** MySQL 8.0, Redis 7 (Broker & Channel Layer).
 - **AI/ML:** scikit-learn (collaborative filtering), HuggingFace Transformers (BERT sentiment analysis).
-- **Infra:** Docker Compose 3.9, Nginx alpine.
+- **Infra:** Docker Compose 3.9 with direct host ports for backend and each Vite SPA.
 
 ## Architecture Rules
 - **Strict Decoupling:** The Django backend must NEVER return HTML templates in production. All communication is exclusively via JSON REST or WebSocket.
@@ -22,6 +22,8 @@ The project operates under strict adherence to `GEMINI.md` mandates, emphasizing
 ## Current State
 
 Phase 12 complete (2026-04-30) — Order Taking Frontend delivered in the Salle SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`. Salle frontend tests pass 20/20 and production build passes.
+
+Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service. Backend is exposed on `localhost:8000`; frontends are exposed directly on `localhost:3000` through `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`.
 
 ## Validated Requirements
 
@@ -55,5 +57,6 @@ Phase 12 complete (2026-04-30) — Order Taking Frontend delivered in the Salle 
 - **D-28** — Servers can browse dishes by category and add/remove quantities. Validated in Phase 12.
 - **D-29** — Servers must review an itemized cart before confirming an order. Validated in Phase 12.
 - **D-30** — Salle order submission posts nested order lines to the commandes API. Validated in Phase 12.
+- **D-31** — Local Docker routing uses direct host ports without Nginx, with Vite API/media proxies. Validated by infrastructure amendment.
 
 Last updated: 2026-04-30

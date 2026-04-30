@@ -38,24 +38,24 @@ tastify-pfa/
 │   │   ├── components/map/        # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │   │   ├── assets/                # Shared logo, icons
 │   │   └── types/                 # Shared TypeScript interfaces
-│   ├── back-office/               # GERANT  — Vite :3000 — /back-office/
+│   ├── back-office/               # GERANT  — Vite :3000 — /
 │   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
 │   │   ├── vitest.config.ts       # Vitest-only config for test environment setup
 │   │   └── src/pages/
 │   │       ├── Categories/        # Categories management (Phase 5)
 │   │       ├── Plats/             # Plats management (Phase 7)
 │   │       └── Tables/            # Centralized Table map management (Added Phase 9)
-│   ├── salle/                     # SERVEUR — Vite :3001 — /salle/
+│   ├── salle/                     # SERVEUR — Vite :3001 — /
 │   │   ├── vite.config.ts         # Salle Vite config with shared alias and dependency dedupe
 │   │   ├── vitest.config.ts       # Vitest-only config with framer-motion inlining
 │   │   └── src/
 │   │       └── pages/
 │   │           ├── Map/           # MapView page and editor tests (Uses shared map components)
 │   │           └── Ordering/      # Table-specific order-taking flow, cart store, menu browser, review drawer
-│   ├── kds/                       # CUISINIER — Vite :3002 — /kds/
+│   ├── kds/                       # CUISINIER — Vite :3002 — /
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
-├── nginx/
-│   └── nginx.conf                 # Reverse proxy
+├── nginx/                         # Legacy reverse-proxy config, not used by docker-compose.yml
+│   └── nginx.conf
 ├── media/                         # User-uploaded content (images)
 ├── tests/
 │   └── smoke/test_services.sh     # Wave 0 smoke harness
@@ -79,7 +79,7 @@ tastify-pfa/
 │       ├── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
 │       ├── 11-commandes-rest-api/ # Wave 11: Commandes API plans, summaries, verification
 │       └── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
-├── docker-compose.yml             # 8 services (inc. db, redis)
+├── docker-compose.yml             # 7 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md
 ├── DESIGN.md
@@ -89,12 +89,14 @@ tastify-pfa/
 └── dashboard.html
 ```
 
-## Service routing (Nginx :80)
-| Path prefix       | Upstream            | Role          |
-|-------------------|---------------------|---------------|
-| `/api/`           | backend:8000        | Django REST   |
-| `/ws/`            | backend:8000        | Channels WS (Phase 13+) |
-| `/back-office/`   | backoffice:3000     | GERANT        |
-| `/salle/`         | salle:3001          | SERVEUR       |
-| `/kds/`           | kds:3002            | CUISINIER     |
-| `/`               | portail:3003        | CLIENT        |
+## Service routing (direct host ports)
+| URL                  | Service            | Role          |
+|----------------------|--------------------|---------------|
+| `localhost:8000/api/`   | backend:8000       | Django REST   |
+| `localhost:8000/ws/`    | backend:8000       | Channels WS (Phase 13+) |
+| `localhost:3000/`       | backoffice:3000    | GERANT        |
+| `localhost:3001/`       | salle:3001         | SERVEUR       |
+| `localhost:3002/`       | kds:3002           | CUISINIER     |
+| `localhost:3003/`       | portail:3003       | CLIENT        |
+
+Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network.

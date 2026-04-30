@@ -26,7 +26,7 @@ describe('App Routing', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset URL to root before each test
-    window.history.pushState({}, 'Home', '/back-office/');
+    window.history.pushState({}, 'Home', '/');
   });
 
   it('redirects to /login when unauthenticated', () => {
@@ -50,7 +50,7 @@ describe('App Routing', () => {
 
   it('renders plats page when authenticated and visiting /plats', async () => {
     (useAuthStore as any).mockReturnValue({ isAuthenticated: true });
-    window.history.pushState({}, 'Plats', '/back-office/plats');
+    window.history.pushState({}, 'Plats', '/plats');
 
     render(<App />);
 

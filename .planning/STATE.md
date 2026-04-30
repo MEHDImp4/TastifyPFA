@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: phase_complete
 stopped_at: Phase 12 completed
-last_updated: "2026-04-30T00:38:00.000Z"
+last_updated: "2026-04-30T12:16:00.000Z"
 progress:
   total_phases: 35
   completed_phases: 12
@@ -17,13 +17,14 @@ progress:
 
 **Last Updated:** 2026-04-30
 **Stopped At:** Phase 12 completed
-**Resume File: .planning/phases/12-order-taking-frontend/12-VERIFICATION.md**
+**Resume File: .planning/phases/01-project-skeleton/01-DIRECT-PORTS-AMENDMENT.md**
 
 ## Notes
 
 - Phase 11 Complete.
 - Phase 12 Complete.
 - Salle order-taking flow delivered: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission.
+- Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend and SPAs are exposed directly on ports 8000, 3000, 3001, 3002, and 3003.
 - Ready to discuss or plan Phase 13 (WebSocket Infrastructure).
 
 ## Decisions
@@ -46,3 +47,4 @@ progress:
 - Commande totals are recalculated from non-cancelled lines via Django signals.
 - Salle ordering carts are isolated per `tableId` with a Zustand record registry.
 - Salle order submission uses the Phase 11 `CommandeSerializer` contract: `table` plus nested `lignes`.
+- Local development routing no longer uses Nginx path prefixes; Vite apps run at root on their own ports and proxy `/api` plus `/media` to `http://backend:8000`.

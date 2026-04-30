@@ -4,10 +4,12 @@ import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
 import logo from '@shared/assets/logo.svg'
 
+const appUrl = (port: number) => `${window.location.protocol}//${window.location.hostname || 'localhost'}:${port}/`
+
 const ROLE_ROUTES: Record<string, string> = {
-  GERANT: '/back-office/',
-  SERVEUR: '/salle/',
-  CUISINIER: '/kds/',
+  GERANT: appUrl(3000),
+  SERVEUR: appUrl(3001),
+  CUISINIER: appUrl(3002),
 }
 
 function App() {

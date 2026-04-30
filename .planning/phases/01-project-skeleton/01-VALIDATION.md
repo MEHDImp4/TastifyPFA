@@ -41,9 +41,9 @@ created: 2026-04-27
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
 | 1-01-01 | 01 | 0 | SC-01 | — | N/A | smoke | `docker compose up --build -d && docker compose ps` | ❌ W0 | ⬜ pending |
-| 1-01-02 | 01 | 1 | SC-02 | — | N/A | smoke | `curl -s -o /dev/null -w "%{http_code}" http://localhost/` | ❌ W0 | ⬜ pending |
-| 1-01-03 | 01 | 1 | SC-03 | T-1-01 | Django returns JSON/404 (not 502) | smoke | `curl -s http://localhost/api/` | ❌ W0 | ⬜ pending |
-| 1-01-04 | 01 | 1 | SC-04 | — | N/A | smoke | `curl -s http://localhost/back-office/` returns HTML | ❌ W0 | ⬜ pending |
+| 1-01-02 | 01 | 1 | SC-02 | — | N/A | smoke | `curl -s -o /dev/null -w "%{http_code}" http://localhost:3003/` | ❌ W0 | ⬜ pending |
+| 1-01-03 | 01 | 1 | SC-03 | T-1-01 | Django returns JSON/404 (not 502) | smoke | `curl -s http://localhost:8000/api/` | ❌ W0 | ⬜ pending |
+| 1-01-04 | 01 | 1 | SC-04 | — | N/A | smoke | `curl -s http://localhost:3000/` returns HTML | ❌ W0 | ⬜ pending |
 | 1-01-05 | 01 | 1 | SC-05 | — | N/A | smoke | `docker compose exec db mysqladmin ping -h localhost` | ❌ W0 | ⬜ pending |
 | 1-01-06 | 01 | 1 | SC-06 | — | N/A | smoke | `docker compose exec redis redis-cli ping` returns PONG | ❌ W0 | ⬜ pending |
 
@@ -63,8 +63,8 @@ created: 2026-04-27
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Vite HMR works in browser | SC-04 | Requires browser with devtools | Open /back-office/ in browser, edit a component file, verify hot reload without full page refresh |
-| Django admin accessible | SC-03 | Requires browser | Open http://localhost/api/ in browser, verify JSON response or browsable API |
+| Vite HMR works in browser | SC-04 | Requires browser with devtools | Open `http://localhost:3000/` in browser, edit a component file, verify hot reload without full page refresh |
+| Django admin accessible | SC-03 | Requires browser | Open `http://localhost:8000/api/` in browser, verify JSON response or browsable API |
 
 ---
 

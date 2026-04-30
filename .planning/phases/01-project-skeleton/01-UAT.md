@@ -23,7 +23,7 @@ verification_date: 2026-04-27
 | ID | Feature / Requirement | Test Case | Status | Observation |
 |---|---|---|---|---|
 | UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ✅ PASS | All services up and running. |
-| UAT-2.2 | Nginx Routing | Access `/api/`, `/back-office/`, `/salle/`, etc. | ✅ PASS | Routing configured and verified. |
+| UAT-2.2 | Direct Service Routing | Access backend on `:8000` and SPAs on `:3000`-`:3003`. | ✅ PASS | Nginx was removed from Compose; services expose direct ports. |
 | UAT-2.3 | Database Connectivity | Django connects to MySQL. | ✅ PASS | Migrations applied successfully. |
 | UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ✅ PASS | Redis PONG received. |
 
@@ -31,25 +31,25 @@ verification_date: 2026-04-27
 
 ## Gap Diagnosis
 
-**Finding:** Phase 1 execution stopped after Task 01-03. **Plan 04 (Docker Compose & Nginx integration)** was missing.
+**Finding:** Phase 1 execution stopped after Task 01-03. **Plan 04 (Docker Compose & Nginx integration)** was missing. This has since been amended to direct-port Docker Compose routing.
 
 **Status:**
-- [x] Task 1: Create Nginx configuration (`nginx/nginx.conf`).
+- [x] Task 1: Expose backend and frontend services directly through `docker-compose.yml`.
 - [x] Task 2: Create `docker-compose.yml`.
 - [x] Task 3: Create Smoke Test Harness (`tests/smoke/test_services.sh`).
 - [x] Task 4: Start services and verify.
 
 **Impact:**
-- Full infrastructure is wired and verified.
+- Full infrastructure is wired through direct host ports.
 - Success criteria for Phase 1 ("Services start via Docker") is MET.
 
 ---
 
 ## Recovery Plan (Fix Plan)
 
-1. **Task 1: Create Nginx configuration.**
-   - Define upstreams for backend and 4 SPAs.
-   - Configure routing rules at port 80.
+1. **Task 1: Direct service routing.**
+   - Expose backend on port 8000 and the 4 SPAs on ports 3000-3003.
+   - Configure Vite proxies for `/api` and `/media`.
 2. **Task 2: Create `docker-compose.yml`.**
    - 7 Services: `db`, `redis`, `backend`, `backoffice`, `salle`, `kds`, `portail`.
    - Wire `env_file: .env`.

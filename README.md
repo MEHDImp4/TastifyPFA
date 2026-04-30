@@ -3,7 +3,7 @@
 AI-powered ERP for Moroccan restaurants. Docker-orchestrated monorepo.
 
 ## Stack
-Django 5.0 + Daphne (ASGI) | MySQL 8 | Redis 7 | 4× React 18 + Vite 5 + Tailwind v4 SPAs | Nginx (reverse proxy)
+Django 5.0 + Daphne (ASGI) | MySQL 8 | Redis 7 | 4× React 18 + Vite 5 + Tailwind v4 SPAs | Docker Compose direct ports
 
 ## Quick start
 ```
@@ -13,11 +13,13 @@ docker compose up --build
 ```
 
 Then visit:
-- `http://localhost/`            → Portail Client SPA
-- `http://localhost/back-office/` → Back-Office (GERANT)
-- `http://localhost/salle/`       → Salle (SERVEUR)
-- `http://localhost/kds/`         → KDS (CUISINIER)
-- `http://localhost/api/`         → Django REST API
+- `http://localhost:3003/` → Portail Client SPA
+- `http://localhost:3000/` → Back-Office (GERANT)
+- `http://localhost:3001/` → Salle (SERVEUR)
+- `http://localhost:3002/` → KDS (CUISINIER)
+- `http://localhost:8000/api/` → Django REST API
+
+Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
 
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
@@ -28,6 +30,7 @@ The Salle SPA now mirrors that split with `frontend/salle/vite.config.ts` and `f
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
 Current planning artifacts now extend through `.planning/phases/12-order-taking-frontend/` with context, research, execution summaries, and verification for the Salle order-taking flow.
+Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
 - `apps.users` — custom users and RBAC.

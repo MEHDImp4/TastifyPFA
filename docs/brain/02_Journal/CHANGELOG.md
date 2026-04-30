@@ -1,4 +1,23 @@
 
+## [2026-04-30] - 12:16
+### Changed
+- Removed the Nginx service from `docker-compose.yml`.
+- Exposed backend on `8000` and frontends directly on `3000`, `3001`, `3002`, and `3003`.
+- Removed Vite base paths and Nginx HMR `clientPort: 80` settings.
+- Added Vite `/api` and `/media` proxies to `http://backend:8000`.
+- Updated portal role redirects to absolute direct-port URLs.
+- Removed the back-office router basename so it runs at the root of port `3000`.
+- Added GSD direct-port infrastructure amendment.
+
+### Validation
+- `docker compose config`: passed.
+- `npm run test -- src/App.test.tsx --run` in `frontend/back-office`: 3/3 passed.
+- `npm run build` in `frontend/back-office`: passed.
+- `npm run build` in `frontend/salle`: passed with Vite chunk-size warning only.
+- `npm run build` in `frontend/kds`: passed.
+- `npm run build` in `frontend/portail-client`: passed.
+- Commit: pending
+
 ## [2026-04-30] - 00:38
 ### Added
 - Completed Phase 12: Order Taking Frontend.

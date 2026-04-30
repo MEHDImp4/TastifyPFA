@@ -23,7 +23,6 @@ const LoginRoute = () => {
 function App() {
   return (
     <BrowserRouter 
-      basename="/back-office"
       future={{
         v7_startTransition: true,
         v7_relativeSplatPath: true

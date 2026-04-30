@@ -34,6 +34,8 @@ services:
     build:
       context: ./backend
     env_file: .env
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend:/app
       - ./media:/app/media
@@ -48,6 +50,8 @@ services:
   backoffice:
     build:
       context: ./frontend/back-office
+    ports:
+      - "3000:3000"
     volumes:
       - ./frontend/back-office:/app
       - ./frontend/_shared:/app/_shared
@@ -58,6 +62,8 @@ services:
   salle:
     build:
       context: ./frontend/salle
+    ports:
+      - "3001:3001"
     volumes:
       - ./frontend/salle:/app
       - ./frontend/_shared:/app/_shared
@@ -68,6 +74,8 @@ services:
   kds:
     build:
       context: ./frontend/kds
+    ports:
+      - "3002:3002"
     volumes:
       - ./frontend/kds:/app
       - ./frontend/_shared:/app/_shared
@@ -78,26 +86,12 @@ services:
   portail:
     build:
       context: ./frontend/portail-client
+    ports:
+      - "3003:3003"
     volumes:
       - ./frontend/portail-client:/app
       - ./frontend/_shared:/app/_shared
       - /app/node_modules
-    networks:
-      - tastify-network
-
-  nginx:
-    image: nginx:stable-alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./media:/app/media:ro
-    depends_on:
-      - backend
-      - backoffice
-      - salle
-      - kds
-      - portail
     networks:
       - tastify-network
 
