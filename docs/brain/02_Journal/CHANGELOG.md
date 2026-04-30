@@ -1,3 +1,13 @@
+## [2026-04-30] - 22:08
+### Changed
+- Reverted to a single Gérant account (`gerant_test`) to better align with real restaurant structures.
+- Kept 3 accounts for each operational role (SERVEUR, CUISINIER, CLIENT) for concurrency testing.
+- Cleaned up development database and updated documentation.
+
+### Validation
+- `Utilisateur.objects.filter(username__in=['gerant2_test', 'gerant3_test']).delete()`: Successfully removed extra manager accounts.
+- `seed_dev`: Verified state matches new configuration.
+
 ## [2026-04-30] - 22:05
 ### Added
 - Created 12 test users (3 for each role: GERANT, SERVEUR, CUISINIER, CLIENT) to support extensive multi-user and concurrency testing.

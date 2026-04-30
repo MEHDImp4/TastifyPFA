@@ -10,8 +10,6 @@ class Command(BaseCommand):
         users_data = [
             # Gérants
             {'username': 'gerant_test', 'email': 'gerant@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Test', 'last_name': 'Gerant'},
-            {'username': 'gerant2_test', 'email': 'gerant2@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Second', 'last_name': 'Gerant'},
-            {'username': 'gerant3_test', 'email': 'gerant3@tastify.local', 'role': User.Role.GERANT, 'first_name': 'Third', 'last_name': 'Gerant'},
             
             # Serveurs
             {'username': 'serveur_test', 'email': 'serveur@tastify.local', 'role': User.Role.SERVEUR, 'first_name': 'Test', 'last_name': 'Serveur'},

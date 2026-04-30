@@ -5,8 +5,6 @@ These users are automatically created by the `python manage.py seed_dev` command
 | Role | Username | Password | Email |
 |------|----------|----------|-------|
 | **Gérant** | `gerant_test` | `password123` | `gerant@tastify.local` |
-| **Gérant** | `gerant2_test` | `password123` | `gerant2@tastify.local` |
-| **Gérant** | `gerant3_test` | `password123` | `gerant3@tastify.local` |
 | **Serveur** | `serveur_test` | `password123` | `serveur@tastify.local` |
 | **Serveur** | `serveur2_test` | `password123` | `serveur2@tastify.local` |
 | **Serveur** | `serveur3_test` | `password123` | `serveur3@tastify.local` |
