@@ -1,3 +1,14 @@
+## [2026-04-30] - 23:16
+### Changed
+- Enriched database seeding with a comprehensive menu: 21 dishes across 4 categories (Entrées, Plats Principaux, Desserts, Boissons).
+- Expanded table seeding to 20 tables with varied capacities.
+- Unified seeding logic to use `update_or_create` for better idempotency across all scripts.
+
+### Validation
+- `seed_dev`: 10 test accounts created.
+- `seed_menu`: 4 categories and 21 dishes created.
+- `seed_tables`: 20 tables created.
+
 ## [2026-04-30] - 22:08
 ### Changed
 - Reverted to a single Gérant account (`gerant_test`) to better align with real restaurant structures.
