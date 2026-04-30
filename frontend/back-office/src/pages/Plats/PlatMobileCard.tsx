@@ -2,6 +2,7 @@ import React from 'react';
 import { Plat } from './types';
 import { PlatStatusControls } from './PlatStatusControls';
 import { PlatRowActions } from './PlatRowActions';
+import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 
 interface PlatMobileCardProps {
   plat: Plat;
@@ -28,7 +29,7 @@ export const PlatMobileCard: React.FC<PlatMobileCardProps> = ({
         <div className="w-16 h-16 rounded-lg bg-surface-elevated overflow-hidden border border-white/5 shrink-0">
           {plat.image ? (
             <img 
-              src={plat.image} 
+              src={normalizeMediaUrl(plat.image)} 
               alt={plat.nom} 
               className="w-full h-full object-cover"
             />

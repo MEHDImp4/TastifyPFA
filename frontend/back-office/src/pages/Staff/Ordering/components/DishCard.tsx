@@ -1,6 +1,7 @@
 import { Minus, Plus } from 'lucide-react'
 import { MenuDish } from '../types'
 import { useOrderStore } from '../store/useOrderStore'
+import { normalizeMediaUrl } from '@shared/media/mediaUrl'
 
 interface DishCardProps {
   tableId: number
@@ -20,7 +21,7 @@ export const DishCard = ({ tableId, dish }: DishCardProps) => {
     <article className="overflow-hidden rounded-lg border border-white/10 bg-[#264653] transition-[transform,border-color] duration-200 active:scale-[0.97]">
       <div className="aspect-[4/3] bg-white/5">
         {dish.image ? (
-          <img src={dish.image} alt={dish.nom} className="h-full w-full object-cover" />
+          <img src={normalizeMediaUrl(dish.image)} alt={dish.nom} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full items-center justify-center text-sm font-bold text-foreground-muted">
             Tastify

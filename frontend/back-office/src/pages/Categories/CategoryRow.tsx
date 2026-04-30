@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { Switch } from '../../components/ui/Switch';
+import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 
 interface Category {
   id: number;
@@ -59,7 +60,7 @@ export function CategoryRow({ category, onEdit, onRefresh }: CategoryRowProps) {
     <tr className={`border-b border-surface-elevated transition-opacity ${isActive ? '' : 'opacity-50'}`}>
       <td className="px-6 py-4">
         {category.image ? (
-          <img src={category.image} alt={category.nom} className="w-12 h-12 rounded object-cover" />
+          <img src={normalizeMediaUrl(category.image)} alt={category.nom} className="w-12 h-12 rounded object-cover" />
         ) : (
           <div className="w-12 h-12 rounded bg-surface-elevated flex items-center justify-center text-xs text-foreground-muted">
             No Image

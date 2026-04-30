@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { X } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
+import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 import { Drawer } from '../../components/ui/Drawer';
 
 interface Category {
@@ -33,7 +34,7 @@ export function CategoryDrawer({ isOpen, onClose, onSuccess, initialData }: Cate
       setNom(initialData.nom);
       setDescription(initialData.description || '');
       setOrdre(initialData.ordre_affichage.toString());
-      setPreviewUrl(initialData.image);
+      setPreviewUrl(normalizeMediaUrl(initialData.image) ?? null);
     } else {
       setNom('');
       setDescription('');

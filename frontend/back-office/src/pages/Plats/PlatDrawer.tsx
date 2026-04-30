@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { X } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
+import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 import { Drawer } from '../../components/ui/Drawer';
 import { Category, Plat } from './types';
 import { Switch } from '../../components/ui/Switch';
@@ -44,7 +45,7 @@ export function PlatDrawer({
       setTempsPreparation(initialData.temps_preparation.toString());
       setEstDisponible(initialData.est_disponible);
       setEstActive(initialData.est_active);
-      setPreviewUrl(initialData.image);
+      setPreviewUrl(normalizeMediaUrl(initialData.image) ?? null);
     } else {
       setNom('');
       setDescription('');

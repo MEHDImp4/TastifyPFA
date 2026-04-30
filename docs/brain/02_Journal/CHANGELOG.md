@@ -1,4 +1,14 @@
 
+## [2026-04-30] - 18:56
+### Fixed
+- Normalized backend media URLs returned as `http://backend:8000/media/...` into browser-safe `/media/...` paths.
+- Applied media URL normalization to category thumbnails, plat list/card images, plat drawer previews, and order-taking dish cards.
+
+### Validation
+- `npm run test -- src/mediaUrl.test.ts --run` in `frontend/back-office`: 2/2 passed.
+- `npm run build` in `frontend/back-office`: passed with existing Vite chunk-size warning.
+- Commit: pending.
+
 ## [2026-04-30] - 18:45
 ### Changed
 - Replaced cross-frontend login redirection with role gates.
