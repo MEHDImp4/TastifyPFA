@@ -8,7 +8,7 @@
 - `docker compose exec salle npm ls react-router-dom`: resolved `react-router-dom@7.14.2`.
 - `docker compose logs --tail=80 salle`: Vite ready on `http://localhost:3001/` with no import-analysis error.
 - `docker compose ps salle`: Salle running on host port `3001`.
-- Commit: pending
+- Commit: `8b7e979`
 
 ## [2026-04-30] - 12:16
 ### Changed
