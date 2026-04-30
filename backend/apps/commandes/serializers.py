@@ -5,11 +5,14 @@ from apps.menu.models import Plat
 
 
 class CommandeLigneSerializer(serializers.ModelSerializer):
+    plat_details = serializers.SerializerMethodField()
+
     class Meta:
         model = CommandeLigne
         fields = [
             'id',
             'plat',
+            'plat_details',
             'quantite',
             'prix_unitaire',
             'statut',
@@ -17,7 +20,14 @@ class CommandeLigneSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'prix_unitaire', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'plat_details', 'prix_unitaire', 'created_at', 'updated_at']
+
+    def get_plat_details(self, obj):
+        return {
+            "id": obj.plat.id,
+            "nom": obj.plat.nom,
+            "prix": obj.plat.prix,
+        }
 
 
 class CommandeSerializer(serializers.ModelSerializer):
@@ -37,6 +47,20 @@ class CommandeSerializer(serializers.ModelSerializer):
             'lignes',
         ]
         read_only_fields = ['id', 'serveur', 'montant_total', 'created_at', 'updated_at']
+
+    def validate_table(self, value):
+        """
+        CMD-API-04: Ensure the table is not already OCCUPEE when creating a new order.
+        """
+        # We only check for new orders (POST)
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+            from apps.tables.models import Table
+            if value.statut == Table.Statut.OCCUPEE:
+                raise serializers.ValidationError(
+                    "Cette table est déjà occupée par une autre commande."
+                )
+        return value
 
     def create(self, validated_data):
         lignes_data = validated_data.pop('lignes')

@@ -21,6 +21,7 @@ export const OrderingPage = () => {
   const [isReviewOpen, setIsReviewOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [activeOrder, setActiveOrder] = useState<any>(null)
 
   const getCart = useOrderStore((state) => state.getCart)
   const getCartTotal = useOrderStore((state) => state.getCartTotal)
@@ -44,13 +45,19 @@ export const OrderingPage = () => {
       setError(null)
 
       try {
-        const [categoriesResponse, dishesResponse] = await Promise.all([
+        const [categoriesResponse, dishesResponse, ordersResponse] = await Promise.all([
           axiosInstance.get<MenuCategory[]>('/categories/'),
           axiosInstance.get<MenuDish[]>('/plats/'),
+          axiosInstance.get<any[]>(`/commandes/?table=${tableId}&statut=EN_COURS`),
         ])
 
         setCategories(categoriesResponse.data)
         setDishes(dishesResponse.data)
+        
+        // If there's an active order, store it (taking the first one)
+        if (ordersResponse.data.length > 0) {
+          setActiveOrder(ordersResponse.data[0])
+        }
       } catch (err) {
         console.error('Failed to load ordering menu', err)
         setError('Impossible de charger le menu.')
@@ -69,21 +76,33 @@ export const OrderingPage = () => {
     setError(null)
 
     try {
-      await axiosInstance.post('/commandes/', {
-        table: tableId,
-        lignes: cartItems.map((item) => ({
-          plat: item.plat.id,
-          quantite: item.quantity,
-        })),
-      })
+      if (activeOrder) {
+        // We add items to existing order
+        await axiosInstance.post(`/commandes/${activeOrder.id}/add_items/`, 
+          cartItems.map((item) => ({
+            plat: item.plat.id,
+            quantite: item.quantity,
+          }))
+        )
+      } else {
+        // Create new order
+        await axiosInstance.post('/commandes/', {
+          table: tableId,
+          lignes: cartItems.map((item) => ({
+            plat: item.plat.id,
+            quantite: item.quantity,
+          })),
+        })
+      }
 
       clearCart(tableId)
       setIsReviewOpen(false)
       setSuccess(true)
       window.setTimeout(() => navigate('/'), 1500)
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to submit order', err)
-      setError('Commande non envoyée. Vérifiez la connexion puis réessayez.')
+      const message = err.response?.data?.table?.[0] || err.response?.data?.error || 'Commande non envoyée. Vérifiez la connexion puis réessayez.'
+      setError(message)
     } finally {
       setIsSubmitting(false)
     }
@@ -110,7 +129,14 @@ export const OrderingPage = () => {
             <ChevronLeft className="h-4 w-4" />
             Retour au plan
           </button>
-          <p className="text-xs font-bold uppercase tracking-wider text-teal">Ordering for Table {tableId}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-teal">Ordering for Table {tableId}</p>
+            {activeOrder && (
+              <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
+                Commande #{activeOrder.id} active
+              </span>
+            )}
+          </div>
           <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">Table {tableId}</h1>
         </div>
       </header>
@@ -128,6 +154,22 @@ export const OrderingPage = () => {
         </div>
       ) : (
         <div className="space-y-6">
+          {activeOrder && activeOrder.lignes.length > 0 && (
+            <div className="rounded-2xl border border-white/5 bg-white/5 p-4">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-foreground-muted">Éléments déjà commandés</p>
+              <div className="space-y-2">
+                {activeOrder.lignes.map((ligne: any) => (
+                  <div key={ligne.id} className="flex items-center justify-between rounded-lg bg-black/20 p-2 px-3 text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className="font-black text-teal">x{ligne.quantite}</span>
+                      <span className="font-medium text-white">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                    </div>
+                    <span className="font-medium text-foreground-muted">Prêt</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <CategoryTabs
             categories={categories}
             selectedCategoryId={selectedCategoryId}
