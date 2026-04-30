@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 00:16:20<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 00:19:34<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -567,6 +567,36 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Enriched database seeding with a comprehensive menu: 21 dishes across 4 categories (Entrées, Plats Principaux, Desserts, Boissons).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Expanded table seeding to 20 tables with varied capacities.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Unified seeding logic to use `update_or_create` for better idempotency across all scripts.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_dev`: 10 test accounts created.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_menu`: 4 categories and 21 dishes created.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_tables`: 20 tables created.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 22:08</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Reverted to a single Gérant account (`gerant_test`) to better align with real restaurant structures.</p>
                             </li>
@@ -609,36 +639,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 22:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py seed_dev`: All 12 users confirmed in database.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 20:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created a new server (waiter) user `serveur2_test` to support multi-user testing scenarios.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 20:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `seed_dev` management command to include the new user in the dev environment.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 20:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `user.md` and `DEV_CREDENTIALS.md` documentation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 20:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py seed_dev`: User `serveur2_test` created successfully.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 20:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Manual verification of documentation files.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed User Acceptance Testing (UAT) for Phase 12: Order Taking Frontend.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

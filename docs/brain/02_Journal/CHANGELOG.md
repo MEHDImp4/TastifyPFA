@@ -1,3 +1,12 @@
+## [2026-04-30] - 23:19
+### Changed
+- Updated `seed_dev` to use `update_or_create`, ensuring all fields (names, emails, roles) are synced for existing users.
+- Added realistic Moroccan names (Mehdi, Omar, Sara, Fatine, etc.) to all test accounts for better presentation.
+- Synchronized documentation (`user.md`, `DEV_CREDENTIALS.md`) with the new full names.
+
+### Validation
+- `seed_dev`: Successfully updated all 10 existing users with new field data.
+
 ## [2026-04-30] - 23:16
 ### Changed
 - Enriched database seeding with a comprehensive menu: 21 dishes across 4 categories (Entrées, Plats Principaux, Desserts, Boissons).
