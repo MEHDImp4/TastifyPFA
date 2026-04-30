@@ -1,7 +1,8 @@
 const ROLE_PORTS: Record<string, number> = {
   GERANT: 3000,
-  SERVEUR: 3001,
-  CUISINIER: 3002,
+  SERVEUR: 3000,
+  CUISINIER: 3000,
+  CLIENT: 3003,
 }
 
 export const getRoleAppUrl = (role: string, location: Location = window.location) => {

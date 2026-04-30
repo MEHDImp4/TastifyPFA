@@ -7,7 +7,8 @@ import {
   Users, 
   Package, 
   Table,
-  X
+  X,
+  UtensilsCrossed
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -28,6 +29,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { name: 'Catégories', icon: LayoutGrid, path: '/categories' },
     { name: 'Plats', icon: ChefHat, path: '/plats' },
     { name: 'Tables', icon: Table, path: '/tables' },
+    { name: 'Salle', icon: UtensilsCrossed, path: '/salle' },
+    { name: 'KDS', icon: ChefHat, path: '/kds' },
     { name: 'Stock', icon: Package, path: '#' },
     { name: 'RH', icon: Users, path: '#' },
   ];

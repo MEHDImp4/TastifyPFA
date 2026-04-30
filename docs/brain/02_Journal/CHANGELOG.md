@@ -1,4 +1,21 @@
 
+## [2026-04-30] - 18:35
+### Changed
+- Consolidated runtime frontends to one staff app on `3000` and one client app on `3003`.
+- Moved Salle order-taking and KDS entry routes into `frontend/back-office`.
+- Removed `salle` and `kds` services from Docker Compose and deleted the retired frontend directories.
+- Updated shared role redirects so GERANT, SERVEUR, and CUISINIER stay on staff port `3000`, while CLIENT uses port `3003`.
+- Updated README, FILE_MAP, GSD state/roadmap/UAT/direct-port amendment, and smoke test documentation for the two-frontend topology.
+
+### Validation
+- `npm run build` in `frontend/back-office`: passed with existing Vite chunk-size warning.
+- `npm run test -- src/roleRedirect.test.ts --run` in `frontend/back-office`: 3/3 passed.
+- `npm run build` in `frontend/portail-client`: passed.
+- `docker compose config`: passed.
+- `docker compose up -d --build --remove-orphans`: recreated backend, backoffice, portail, db, and redis.
+- `docker compose ps`: only backend `8000`, backoffice `3000`, portail `3003`, db, and redis are running.
+- Commit: pending.
+
 ## [2026-04-30] - 18:19
 ### Fixed
 - Added shared role-to-frontend redirect logic so GERANT, SERVEUR, and CUISINIER sessions land on their canonical direct-port apps.

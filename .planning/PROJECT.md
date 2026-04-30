@@ -8,12 +8,12 @@ Tastify is an ERP web full-stack dedicated to the management of Moroccan restaur
 - **Frontend:** React 18, Vite 5.x, Tailwind CSS (ECO-FRESH Palette).
 - **Database:** MySQL 8.0, Redis 7 (Broker & Channel Layer).
 - **AI/ML:** scikit-learn (collaborative filtering), HuggingFace Transformers (BERT sentiment analysis).
-- **Infra:** Docker Compose 3.9 with direct host ports for backend and each Vite SPA.
+- **Infra:** Docker Compose 3.9 with direct host ports for backend and two Vite SPAs.
 
 ## Architecture Rules
 - **Strict Decoupling:** The Django backend must NEVER return HTML templates in production. All communication is exclusively via JSON REST or WebSocket.
 - **JWT Auth:** Access and refresh tokens are managed by the frontend, with refresh tokens securely stored in HttpOnly cookies to prevent XSS.
-- **RBAC:** Four distinct roles (`GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT`) governing access across four independent React SPAs.
+- **RBAC:** Four distinct roles (`GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT`) governing access across a staff React SPA and a client React SPA.
 - **Event-Driven:** Orders are pushed in real-time via Django Channels and Redis to the KDS (`ws://host/ws/cuisine/`).
 
 ## Project Context
@@ -21,9 +21,9 @@ The project operates under strict adherence to `GEMINI.md` mandates, emphasizing
 
 ## Current State
 
-Phase 12 complete (2026-04-30) — Order Taking Frontend delivered in the Salle SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`. Salle frontend tests pass 20/20 and production build passes.
+Phase 12 complete (2026-04-30) — Order Taking Frontend delivered and now consolidated into the staff SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`.
 
-Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service. Backend is exposed on `localhost:8000`; frontends are exposed directly on `localhost:3000` through `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`.
+Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service and consolidated runtime frontends. Backend is exposed on `localhost:8000`; the staff frontend is exposed on `localhost:3000`; the client frontend is exposed on `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`.
 
 ## Validated Requirements
 

@@ -6,7 +6,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phases
 
-- [x] **Phase 1: Project Skeleton** - Docker, Django, React Vite, MySQL, Redis base config. Direct-port routing amendment completed 2026-04-30.
+- [x] **Phase 1: Project Skeleton** - Docker, Django, React Vite, MySQL, Redis base config. Direct-port routing amendment completed 2026-04-30; runtime simplified to staff and client frontends.
 - [x] **Phase 2: User Model & RBAC** - AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).
 - [x] **Phase 3: Auth API & Login Page** - JWT setup, Login UI across all apps.
 - [x] **Phase 4: Categories Model & API** - Database model and DRF endpoints.
@@ -14,19 +14,19 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 6: Plats Model & API** - Dishes, pricing, prep times.
 - [x] **Phase 7: Plats Frontend** - Back-Office UI for managing dishes.
 - [x] **Phase 8: Tables Model & API** - Table status, capacities. (completed 2026-04-28)
-- [x] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in Salle UI. (completed 2026-04-28)
+- [x] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in staff UI. (completed 2026-04-28)
 - [x] **Phase 10: Commandes Model** - DB constraints, lines, signals for `montant_total`. (completed 2026-04-29)
 
 - [x] **Phase 11: Commandes REST API** - Endpoints for creating orders. (completed 2026-04-30)
   - [x] 11-01-PLAN.md — Serializers & ViewSet Foundation (Nested CRUD, RBAC).
   - [x] 11-02-PLAN.md — Table State Synchronization (Signals).
   - [x] 11-03-PLAN.md — Custom Actions & Final Verification.
-- [x] **Phase 12: Order Taking Frontend** - Salle UI for selecting dishes and validating orders. (completed 2026-04-30)
+- [x] **Phase 12: Order Taking Frontend** - Staff UI for selecting dishes and validating orders. (completed 2026-04-30)
   - [x] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
   - [x] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
   - [x] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
 - [ ] **Phase 13: WebSocket Infrastructure** - Django Channels, Daphne, Redis Layer.
-- [ ] **Phase 14: KDS Base Frontend** - Cuisine SPA base, WebSocket connection.
+- [ ] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection.
 - [ ] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`.
 - [ ] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine.
 - [ ] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle.
@@ -56,7 +56,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Nothing
 **Success Criteria**: 1. Services start via Docker.
 **Plans**:
-- [x] 01-DIRECT-PORTS-AMENDMENT.md — Remove Nginx from Compose and expose backend/frontends directly.
+- [x] 01-DIRECT-PORTS-AMENDMENT.md — Remove Nginx from Compose and expose backend plus the two runtime frontends directly.
 
 ### Phase 2: User Model & RBAC
 **Goal**: Custom User model with roles.
@@ -121,7 +121,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] 08-03-PLAN.md — Seed command and integration tests.
 
 ### Phase 9: Tables Map Frontend
-**Goal**: Visual table map in Salle UI.
+**Goal**: Visual table map in staff UI.
 **Depends on**: Phase 8
 **Success Criteria**: 1. Waiters see tables map.
 **Plans**:
@@ -147,7 +147,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] 11-03-PLAN.md — Custom Actions & Final Verification.
 
 ### Phase 12: Order Taking Frontend
-**Goal**: Build the interactive interface in the Salle UI for selecting dishes and validating orders.
+**Goal**: Build the interactive interface in the staff UI for selecting dishes and validating orders.
 **Depends on**: Phase 11
 **Success Criteria**: 1. Servers can select items from the menu, review the cart, and submit orders for specific tables.
 **Plans**: 3 plans

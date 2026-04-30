@@ -59,30 +59,6 @@ services:
     networks:
       - tastify-network
 
-  salle:
-    build:
-      context: ./frontend/salle
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./frontend/salle:/app
-      - ./frontend/_shared:/app/_shared
-      - /app/node_modules
-    networks:
-      - tastify-network
-
-  kds:
-    build:
-      context: ./frontend/kds
-    ports:
-      - "3002:3002"
-    volumes:
-      - ./frontend/kds:/app
-      - ./frontend/_shared:/app/_shared
-      - /app/node_modules
-    networks:
-      - tastify-network
-
   portail:
     build:
       context: ./frontend/portail-client

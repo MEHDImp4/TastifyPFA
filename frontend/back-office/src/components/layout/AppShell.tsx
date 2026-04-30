@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
+import { redirectToRoleApp, shouldRedirectToRoleApp } from '@shared/auth/roleRedirect';
 import { Sidebar } from './Sidebar';
 
 export const AppShell = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role) {
+      redirectToRoleApp(user.role);
+    }
+  }, [isAuthenticated, user?.role]);
+
+  if (isAuthenticated && user?.role && shouldRedirectToRoleApp(user.role)) {
+    return null;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

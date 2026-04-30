@@ -14,16 +14,16 @@ verification_date: 2026-04-27
 | ID | Feature / Requirement | Test Case | Status | Observation |
 |---|---|---|---|---|
 | UAT-1.1 | Single .env file | Check if root `.env` and `.env.example` exist. | ✅ PASS | Both exist and match. |
-| UAT-1.2 | Monorepo Structure | Check `backend/` and `frontend/` (4 SPAs). | ✅ PASS | All directories exist as planned. |
+| UAT-1.2 | Monorepo Structure | Check `backend/` and `frontend/` (2 SPAs). | ✅ PASS | Staff and client frontends exist as planned. |
 | UAT-1.3 | Django Settings | Verify settings split (base/dev/prod). | ✅ PASS | Split correctly into `settings/` package. |
-| UAT-1.4 | Vite Scaffolding | Verify 4 SPAs with React 18 + Vite 5 + Tailwind v4. | ✅ PASS | Scaffolded with correct dependencies. |
+| UAT-1.4 | Vite Scaffolding | Verify 2 SPAs with React 18 + Vite 5 + Tailwind v4. | ✅ PASS | Scaffolded with correct dependencies. |
 
 ## 2. Infrastructure Smoke Tests
 
 | ID | Feature / Requirement | Test Case | Status | Observation |
 |---|---|---|---|---|
-| UAT-2.1 | Docker Services | `docker compose up --build` starts 7 services. | ✅ PASS | All services up and running. |
-| UAT-2.2 | Direct Service Routing | Access backend on `:8000` and SPAs on `:3000`-`:3003`. | ✅ PASS | Nginx was removed from Compose; services expose direct ports. |
+| UAT-2.1 | Docker Services | `docker compose up --build` starts 5 services. | ✅ PASS | All services up and running. |
+| UAT-2.2 | Direct Service Routing | Access backend on `:8000`, staff on `:3000`, and client on `:3003`. | ✅ PASS | Nginx was removed from Compose; services expose direct ports. |
 | UAT-2.3 | Database Connectivity | Django connects to MySQL. | ✅ PASS | Migrations applied successfully. |
 | UAT-2.4 | Redis Connectivity | Django Channels connects to Redis. | ✅ PASS | Redis PONG received. |
 
@@ -48,10 +48,10 @@ verification_date: 2026-04-27
 ## Recovery Plan (Fix Plan)
 
 1. **Task 1: Direct service routing.**
-   - Expose backend on port 8000 and the 4 SPAs on ports 3000-3003.
+   - Expose backend on port 8000, staff on 3000, and client on 3003.
    - Configure Vite proxies for `/api` and `/media`.
 2. **Task 2: Create `docker-compose.yml`.**
-   - 7 Services: `db`, `redis`, `backend`, `backoffice`, `salle`, `kds`, `portail`.
+   - 5 Services: `db`, `redis`, `backend`, `backoffice`, `portail`.
    - Wire `env_file: .env`.
    - Set up networks and volumes.
 3. **Task 3: Create Smoke Test Harness.**

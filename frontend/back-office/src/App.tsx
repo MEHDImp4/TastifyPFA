@@ -4,9 +4,22 @@ import { AppShell } from './components/layout/AppShell';
 import CategoriesPage from './pages/Categories';
 import PlatsPage from './pages/Plats';
 import TablesPage from './pages/Tables';
+import { MapView } from './pages/Staff/Map/MapView';
+import { OrderingPage } from './pages/Staff/Ordering/OrderingPage';
+import { KdsPage } from './pages/Staff/KdsPage';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { redirectToRoleApp } from '@shared/auth/roleRedirect';
+
+const StaffEntryRedirect = () => {
+  const { user } = useAuthStore();
+  const role = user?.role?.toUpperCase();
+
+  if (role === 'SERVEUR') return <Navigate to="/salle" replace />;
+  if (role === 'CUISINIER') return <Navigate to="/kds" replace />;
+
+  return <Navigate to="/categories" replace />;
+};
 
 const LoginRoute = () => {
   const { isAuthenticated, user } = useAuthStore();
@@ -36,14 +49,15 @@ function App() {
         <Route path="/login" element={<LoginRoute />} />
         
         <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/categories" replace />} />
+          <Route index element={<StaffEntryRedirect />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/plats" element={<PlatsPage />} />
           <Route path="/tables" element={<TablesPage />} />
-          {/* Add more authenticated routes here */}
+          <Route path="/salle" element={<MapView />} />
+          <Route path="/tables/:id/order" element={<OrderingPage />} />
+          <Route path="/kds" element={<KdsPage />} />
         </Route>
 
-        {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

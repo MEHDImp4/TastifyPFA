@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: phase_complete
 stopped_at: Phase 12 completed
-last_updated: "2026-04-30T18:19:00.000+01:00"
+last_updated: "2026-04-30T18:34:00.000+01:00"
 progress:
   total_phases: 35
   completed_phases: 12
@@ -23,9 +23,9 @@ progress:
 
 - Phase 11 Complete.
 - Phase 12 Complete.
-- Salle order-taking flow delivered: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission.
-- Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend and SPAs are exposed directly on ports 8000, 3000, 3001, 3002, and 3003.
-- Direct-port login redirect regression fixed: GERANT login from Salle now redirects to Back-Office on port 3000 through shared role redirect logic.
+- Salle order-taking flow delivered and consolidated into the staff frontend: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission.
+- Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend is exposed on 8000, staff on 3000, and client on 3003.
+- Direct-port login redirect regression fixed: GERANT, SERVEUR, and CUISINIER remain on the unified staff frontend at port 3000; CLIENT redirects to port 3003.
 - Ready to discuss or plan Phase 13 (WebSocket Infrastructure).
 
 ## Decisions
@@ -49,4 +49,4 @@ progress:
 - Salle ordering carts are isolated per `tableId` with a Zustand record registry.
 - Salle order submission uses the Phase 11 `CommandeSerializer` contract: `table` plus nested `lignes`.
 - Local development routing no longer uses Nginx path prefixes; Vite apps run at root on their own ports and proxy `/api` plus `/media` to `http://backend:8000`.
-- Cross-frontend role redirects are centralized in `frontend/_shared/auth/roleRedirect.ts` and map GERANT/SERVEUR/CUISINIER to ports 3000/3001/3002.
+- Cross-frontend role redirects are centralized in `frontend/_shared/auth/roleRedirect.ts` and map GERANT/SERVEUR/CUISINIER to port 3000 and CLIENT to port 3003.
