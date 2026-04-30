@@ -31,6 +31,7 @@ tastify-pfa/
 │   │       ├── migrations/
 │   │       └── tests/
 │   ├── requirements.txt
+│   ├── entrypoint.sh              # Applies pending migrations before Daphne starts
 │   └── Dockerfile
 ├── frontend/                      # 2 independent Vite SPAs
 │   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
@@ -92,3 +93,4 @@ tastify-pfa/
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network.
 Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.
+The backend container starts through `backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.

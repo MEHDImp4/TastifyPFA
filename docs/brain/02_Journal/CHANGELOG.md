@@ -1,3 +1,26 @@
+## [2026-04-30] - 19:55
+### Added
+- Completed User Acceptance Testing (UAT) for Phase 12: Order Taking Frontend.
+- Verified 5 core UAT scenarios: Table Navigation, Category Browsing, Cart Management, Order Review, and Order Submission.
+- Confirmed end-to-end integration between the Salle UI (Serveur role) and the Phase 11 Commandes REST API.
+- Updated `12-UAT.md` with final PASSED status and completion timestamps.
+
+### Validation
+- User verified all 5 UAT test cases in a live conversational session.
+- `dashboard.html` and `STATE.md` updated to reflect verified completion.
+
+## [2026-04-30] - 19:38
+### Fixed
+- Applied pending `commandes.0001_initial` migration to the running MySQL database after `/api/commandes/` failed with missing table `commandes_commande`.
+- Added `backend/entrypoint.sh` and wired the backend Docker image to run pending Django migrations before Daphne starts, preventing fresh/recreated volumes from serving traffic with missing app tables.
+
+### Validation
+- `docker compose exec backend python manage.py migrate --noinput`: applied `commandes.0001_initial`.
+- `docker compose exec backend python manage.py test apps.commandes.tests.test_api.CommandeAPITestCase.test_create_commande_atomic`: 1/1 passed before the startup hardening change.
+- `docker compose up -d --build backend`: rebuilt and restarted backend with migration entrypoint.
+- `docker compose logs --tail=40 backend`: confirmed startup runs migrations before Daphne (`No migrations to apply` after rebuild).
+- `docker compose exec backend python manage.py test apps.commandes`: 23/23 passed.
+
 ## [2026-04-30] - 19:30
 ### Fixed
 - Verrouillage des routes staff par role: `SERVEUR` est redirige vers `/salle`, `CUISINIER` vers `/kds`, et les routes gerant restent reservees a `GERANT`.

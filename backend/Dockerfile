@@ -20,4 +20,5 @@ COPY . /app
 
 EXPOSE 8000
 
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "--proxy-headers", "tastify_backend.asgi:application"]

@@ -19,6 +19,7 @@ Then visit:
 
 Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
 Each frontend rejects accounts outside its allowed role family: the staff app accepts GERANT, SERVEUR, and CUISINIER; the client app accepts CLIENT only.
+The backend container runs pending Django migrations before starting Daphne, keeping fresh or recreated MySQL volumes aligned with the current apps.
 
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
@@ -37,6 +38,7 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.menu` — categories and dishes.
 - `apps.tables` — restaurant tables.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
+- `backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 
 ## Salle order-taking
 - `frontend/back-office/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.

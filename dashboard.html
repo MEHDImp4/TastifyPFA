@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-30 19:29:17<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-04-30 19:41:31<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -378,11 +378,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->6<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->3<!-- DB_CATS_END --></p>
                         </div>
                     </div>
                 </div>
@@ -567,6 +567,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Applied pending `commandes.0001_initial` migration to the running MySQL database after `/api/commandes/` failed with missing table `commandes_commande`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `backend/entrypoint.sh` and wired the backend Docker image to run pending Django migrations before Daphne starts, preventing fresh/recreated volumes from serving traffic with missing app tables.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py migrate --noinput`: applied `commandes.0001_initial`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py test apps.commandes.tests.test_api.CommandeAPITestCase.test_create_commande_atomic`: 1/1 passed before the startup hardening change.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build backend`: rebuilt and restarted backend with migration entrypoint.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose logs --tail=40 backend`: confirmed startup runs migrations before Daphne (`No migrations to apply` after rebuild).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:38</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py test apps.commandes`: 23/23 passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 19:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verrouillage des routes staff par role: `SERVEUR` est redirige vers `/salle`, `CUISINIER` vers `/kds`, et les routes gerant restent reservees a `GERANT`.</p>
                             </li>
@@ -604,41 +639,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Mise à jour du style pour inclure un feedback tactile (`scale-97`) et des effets de survol conformes au système de design.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Correction des chemins `@shared` dans les fichiers `tsconfig.json` des deux frontends pour permettre la résolution des modules partagés lors des builds dans Docker.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` dans `frontend/back-office`: 100% succès.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` dans `frontend/portail-client`: 100% succès.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Vérification visuelle du bouton avec icône `LogOut` et comportement au clic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:06</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved TypeScript `baseUrl` deprecation warnings in `portail-client` by removing the deprecated option and normalizing configuration with `back-office`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:06</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verified that retired frontend directories (`salle`, `kds`) are successfully removed from the project structure to address stale IDE errors.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 19:06</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `frontend/portail-client`: 100% success.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
