@@ -55,13 +55,16 @@ class CommandeAPITestCase(APITestCase):
         self.assertTrue(CommandeLigne.objects.filter(commande=commande, plat=self.plat2, quantite=1, notes='Extra hot').exists())
 
     def test_get_queryset_filtering(self):
-        # Create an order for serveur1
+        # Create a second table to avoid OCCUPEE conflicts
+        table2 = Table.objects.create(numero=2, capacite=2)
+        
+        # Create an order for serveur1 on table1
         self.client.force_authenticate(user=self.serveur1)
         self.client.post(self.url, {'table': self.table.id, 'lignes': []}, format='json')
         
-        # Create an order for serveur2
+        # Create an order for serveur2 on table2
         self.client.force_authenticate(user=self.serveur2)
-        self.client.post(self.url, {'table': self.table.id, 'lignes': []}, format='json')
+        self.client.post(self.url, {'table': table2.id, 'lignes': []}, format='json')
         
         # Serveur1 should only see 1 order
         self.client.force_authenticate(user=self.serveur1)
@@ -73,6 +76,17 @@ class CommandeAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.gerant)
         response = self.client.get(self.url)
         self.assertEqual(len(response.data), 2)
+
+    def test_create_on_occupied_table_fails(self):
+        # 1. Occupy the table
+        self.client.force_authenticate(user=self.serveur1)
+        self.client.post(self.url, {'table': self.table.id, 'lignes': []}, format='json')
+        
+        # 2. Try to create another order on the same table
+        response = self.client.post(self.url, {'table': self.table.id, 'lignes': []}, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Cette table est déjà occupée", str(response.data['table'][0]))
 
     def test_soft_delete(self):
         self.client.force_authenticate(user=self.serveur1)
