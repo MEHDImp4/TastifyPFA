@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, ChevronLeft, Loader2 } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '@shared/auth/axiosInstance'
+import { useAuthStore } from '@shared/auth/useAuthStore'
 import { CategoryTabs } from './components/CategoryTabs'
 import { DishGrid } from './components/DishGrid'
 import { FloatingCart } from './components/FloatingCart'
@@ -13,6 +14,7 @@ export const OrderingPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const tableId = Number(id)
+  const currentUser = useAuthStore((state) => state.user)
   const [categories, setCategories] = useState<MenuCategory[]>([])
   const [dishes, setDishes] = useState<MenuDish[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -40,10 +42,14 @@ export const OrderingPage = () => {
       return
     }
 
-    const fetchMenu = async () => {
-      setIsLoading(true)
-      setError(null)
+    // Reset synchronously so stale data from a previous table never shows
+    setIsLoading(true)
+    setActiveOrder(null)
+    setError(null)
 
+    let cancelled = false
+
+    const fetchMenu = async () => {
       try {
         const [categoriesResponse, dishesResponse, ordersResponse] = await Promise.all([
           axiosInstance.get<MenuCategory[]>('/categories/'),
@@ -51,23 +57,22 @@ export const OrderingPage = () => {
           axiosInstance.get<any[]>(`/commandes/?table=${tableId}&statut=EN_COURS`),
         ])
 
+        if (cancelled) return
+
         setCategories(categoriesResponse.data)
         setDishes(dishesResponse.data)
-        
-        if (ordersResponse.data.length > 0) {
-          setActiveOrder(ordersResponse.data[0])
-        } else {
-          setActiveOrder(null)
-        }
+        setActiveOrder(ordersResponse.data.length > 0 ? ordersResponse.data[0] : null)
       } catch (err) {
+        if (cancelled) return
         console.error('Failed to load ordering menu', err)
         setError('Impossible de charger le menu.')
       } finally {
-        setIsLoading(false)
+        if (!cancelled) setIsLoading(false)
       }
     }
 
     fetchMenu()
+    return () => { cancelled = true }
   }, [tableId])
 
   const submitOrder = async () => {
@@ -109,6 +114,9 @@ export const OrderingPage = () => {
     }
   }
 
+  // True when there is no active order OR the logged-in user owns it
+  const isOwnOrder = !activeOrder || activeOrder.serveur_name === currentUser?.username
+
   if (isLoading) {
     return (
       <div className="flex min-h-[55vh] flex-col items-center justify-center gap-4">
@@ -131,7 +139,7 @@ export const OrderingPage = () => {
             Retour au plan
           </button>
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-teal">Ordering for Table {tableId}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-teal">Table {tableId}</p>
             {activeOrder && (
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
@@ -146,6 +154,12 @@ export const OrderingPage = () => {
           <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">Table {tableId}</h1>
         </div>
       </header>
+
+      {!isOwnOrder && (
+        <div className="mb-5 rounded-lg border border-amber/30 bg-amber/10 p-4 font-medium text-amber">
+          Cette table est gérée par <span className="font-black">{activeOrder.serveur_name}</span>. Consultation uniquement.
+        </div>
+      )}
 
       {error && (
         <div className="mb-5 rounded-lg border border-[#E76F51]/30 bg-[#E76F51]/10 p-4 font-medium text-[#E76F51]">
@@ -162,7 +176,7 @@ export const OrderingPage = () => {
         <div className="space-y-6">
           {activeOrder && activeOrder.lignes.length > 0 && (
             <div className="rounded-2xl border border-white/10 bg-surface p-5 shadow-xl">
-              <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments déjà commandés</p>
+              <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments commandés</p>
               <div className="space-y-3">
                 {activeOrder.lignes.map((ligne: any) => (
                   <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/5 p-3 px-4 transition-colors hover:bg-white/[0.08]">
@@ -181,24 +195,32 @@ export const OrderingPage = () => {
               </div>
             </div>
           )}
-          <CategoryTabs
-            categories={categories}
-            selectedCategoryId={selectedCategoryId}
-            onSelect={setSelectedCategoryId}
-          />
-          <DishGrid tableId={tableId} dishes={dishes} selectedCategoryId={selectedCategoryId} />
+          {isOwnOrder && (
+            <>
+              <CategoryTabs
+                categories={categories}
+                selectedCategoryId={selectedCategoryId}
+                onSelect={setSelectedCategoryId}
+              />
+              <DishGrid tableId={tableId} dishes={dishes} selectedCategoryId={selectedCategoryId} />
+            </>
+          )}
         </div>
       )}
 
-      <FloatingCart itemCount={cartItemCount} total={cartTotal} onOpen={() => setIsReviewOpen(true)} />
-      <OrderReview
-        isOpen={isReviewOpen}
-        items={cartItems}
-        total={cartTotal}
-        isSubmitting={isSubmitting}
-        onClose={() => setIsReviewOpen(false)}
-        onSubmit={submitOrder}
-      />
+      {isOwnOrder && (
+        <>
+          <FloatingCart itemCount={cartItemCount} total={cartTotal} onOpen={() => setIsReviewOpen(true)} />
+          <OrderReview
+            isOpen={isReviewOpen}
+            items={cartItems}
+            total={cartTotal}
+            isSubmitting={isSubmitting}
+            onClose={() => setIsReviewOpen(false)}
+            onSubmit={submitOrder}
+          />
+        </>
+      )}
     </div>
   )
 }

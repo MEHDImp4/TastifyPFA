@@ -1,4 +1,5 @@
 from django.db import transaction, models
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -14,31 +15,23 @@ class CommandeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsServeurOrGerant]
 
     def get_queryset(self):
-        """
-        D-11: SERVEUR users only see their own orders for history/terminal states.
-        However, for active service, staff must see all active orders.
-        """
         user = self.request.user
-        qs = Commande.objects.active()
-
-        # If it's a staff member but not a gerant
-        if user.role != 'GERANT':
-            # They see their own orders OR any order that is still in active service
-            # (not yet PAID or CANCELLED)
-            qs = qs.filter(
-                models.Q(serveur=user) | 
-                models.Q(statut__in=[
-                    Commande.Statut.EN_COURS, 
-                    Commande.Statut.EN_CUISINE, 
-                    Commande.Statut.PRETE
-                ])
+        qs = (
+            Commande.objects.active()
+            .select_related('serveur', 'table')
+            .prefetch_related(
+                models.Prefetch('lignes', queryset=CommandeLigne.objects.select_related('plat'))
             )
-        
-        # Manual filtering for query params
+        )
+
         table_id = self.request.query_params.get('table')
         if table_id:
+            # Table-specific lookup: any staff member can see which order is on a given table
             qs = qs.filter(table_id=table_id)
-            
+        elif user.role != 'GERANT':
+            # General list: only show the user's own orders
+            qs = qs.filter(serveur=user)
+
         statut = self.request.query_params.get('statut')
         if statut:
             qs = qs.filter(statut=statut)
@@ -50,17 +43,24 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def add_items(self, request, pk=None):
-        """
-        CMD-API-05: Add items to an existing order.
-        Expects a list of lines in the request body.
-        """
-        commande = self.get_object()
-        
-        # Validation: prevent adding items to terminal orders
+        """CMD-API-05: Add items to an existing order."""
+        # Retrieve without user-scoping so we can give a 403 rather than a 404
+        commande = get_object_or_404(
+            Commande.objects.active().select_related('serveur'),
+            pk=pk,
+        )
+
         if commande.statut in [Commande.Statut.PAYEE, Commande.Statut.ANNULEE]:
             return Response(
                 {"error": "Impossible d'ajouter des éléments à une commande payée ou annulée."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Only the order owner or a GERANT may modify it
+        if commande.serveur != request.user and request.user.role != 'GERANT':
+            return Response(
+                {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         serializer = CommandeLigneSerializer(data=request.data, many=True)
