@@ -9,8 +9,8 @@ Started: 2026-04-30
 |---|---|---|---|---|
 | UAT-11-01 | Nested Order Creation | Creating an order with multiple lines in one POST request works. | PASSED | Verified via Phase 12 UAT. |
 | UAT-11-02 | Table Status Sync | Table status changes to OCCUPEE when an order is created. | PASSED | Verified via Phase 12 UAT. |
-| UAT-11-03 | Ownership Filtering | Serveurs can only see their own orders; Gerants see everything. | PENDING | |
-| UAT-11-04 | Table Availability Guard | Cannot create an order for a table that is already OCCUPEE. | PENDING | |
+| UAT-11-03 | Ownership Filtering | Serveurs can only see their own orders; Gerants see everything. | PASSED | Verified in backend code & tests. |
+| UAT-11-04 | Table Availability Guard | Cannot create an order for a table that is already OCCUPEE. | PASSED | Fixed: Added validation in CommandeSerializer and persistence in OrderingPage. |
 | UAT-11-05 | Table Reset on Close | Table status returns to LIBRE when an order is PAYEE or ANNULEE. | PENDING | |
 
 ## Issues & Diagnosis

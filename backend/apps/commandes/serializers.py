@@ -32,6 +32,7 @@ class CommandeLigneSerializer(serializers.ModelSerializer):
 
 class CommandeSerializer(serializers.ModelSerializer):
     lignes = CommandeLigneSerializer(many=True)
+    serveur_name = serializers.ReadOnlyField(source='serveur.username')
 
     class Meta:
         model = Commande
@@ -39,6 +40,7 @@ class CommandeSerializer(serializers.ModelSerializer):
             'id',
             'table',
             'serveur',
+            'serveur_name',
             'statut',
             'montant_total',
             'est_active',
@@ -46,7 +48,7 @@ class CommandeSerializer(serializers.ModelSerializer):
             'updated_at',
             'lignes',
         ]
-        read_only_fields = ['id', 'serveur', 'montant_total', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'serveur', 'serveur_name', 'montant_total', 'created_at', 'updated_at']
 
     def validate_table(self, value):
         """

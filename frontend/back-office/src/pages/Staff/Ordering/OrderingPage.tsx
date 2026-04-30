@@ -129,12 +129,17 @@ export const OrderingPage = () => {
             <ChevronLeft className="h-4 w-4" />
             Retour au plan
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
             <p className="text-xs font-bold uppercase tracking-wider text-teal">Ordering for Table {tableId}</p>
             {activeOrder && (
-              <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
-                Commande #{activeOrder.id} active
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
+                  Commande #{activeOrder.id} active
+                </span>
+                <span className="text-[10px] font-bold text-foreground-muted uppercase">
+                  Par {activeOrder.serveur_name || 'Inconnu'}
+                </span>
+              </div>
             )}
           </div>
           <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">Table {tableId}</h1>
@@ -155,16 +160,21 @@ export const OrderingPage = () => {
       ) : (
         <div className="space-y-6">
           {activeOrder && activeOrder.lignes.length > 0 && (
-            <div className="rounded-2xl border border-white/5 bg-white/5 p-4">
-              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-foreground-muted">Éléments déjà commandés</p>
-              <div className="space-y-2">
+            <div className="rounded-2xl border border-white/10 bg-surface p-5 shadow-xl">
+              <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments déjà commandés</p>
+              <div className="space-y-3">
                 {activeOrder.lignes.map((ligne: any) => (
-                  <div key={ligne.id} className="flex items-center justify-between rounded-lg bg-black/20 p-2 px-3 text-sm">
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-teal">x{ligne.quantite}</span>
-                      <span className="font-medium text-white">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                  <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/5 p-3 px-4 transition-colors hover:bg-white/[0.08]">
+                    <div className="flex items-center gap-4">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal/10 text-xs font-black text-teal">
+                        {ligne.quantite}
+                      </span>
+                      <span className="font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
                     </div>
-                    <span className="font-medium text-foreground-muted">Prêt</span>
+                    <div className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-teal">En cuisine</span>
+                    </div>
                   </div>
                 ))}
               </div>
