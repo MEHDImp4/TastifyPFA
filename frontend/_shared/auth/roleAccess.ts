@@ -4,6 +4,9 @@ export const GERANT_ROLES = ['GERANT'] as const
 export const SALLE_ROLES = ['GERANT', 'SERVEUR'] as const
 export const KDS_ROLES = ['GERANT', 'CUISINIER'] as const
 
+export const STAFF_PORTAL_DENIED_MESSAGE =
+  "Ce compte est reserve au portail client. Veuillez utiliser un compte staff pour acceder a cet espace."
+
 export const STAFF_HOME_BY_ROLE: Record<string, string> = {
   GERANT: '/categories',
   SERVEUR: '/salle',

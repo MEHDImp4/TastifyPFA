@@ -7,6 +7,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
 ROADMAP_FILE = os.path.join(ROOT_DIR, ".planning", "ROADMAP.md")
 CHANGELOG_FILE = os.path.join(ROOT_DIR, "docs", "brain", "02_Journal", "CHANGELOG.md")
+AUDIT_REPORT_FILE = os.path.join(ROOT_DIR, ".planning", "audit_uat_report.md")
 
 def read_roadmap():
     phases = []
@@ -109,10 +110,79 @@ def get_backend_stats():
         print(f"Warning: Could not fetch backend stats: {e}")
     return stats
 
+def get_uat_status():
+    uat_list = []
+    uat_map = {}
+    phases_dir = os.path.join(ROOT_DIR, ".planning", "phases")
+    if os.path.exists(phases_dir):
+        for p in sorted(os.listdir(phases_dir)):
+            p_path = os.path.join(phases_dir, p)
+            if os.path.isdir(p_path):
+                m = re.match(r'^0*(\d+)-', p)
+                if not m: continue
+                phase_num = m.group(1)
+                
+                for f in os.listdir(p_path):
+                    if "UAT" in f and f.endswith(".md"):
+                        with open(os.path.join(p_path, f), 'r', encoding='utf-8') as uat_f:
+                            content = uat_f.read()
+                            sm = re.search(r'## Status:\s*([A-Z_]+)', content)
+                            if sm:
+                                status = sm.group(1)
+                                uat_map[phase_num] = status
+                                uat_list.append({
+                                    "phase": phase_num,
+                                    "file": f,
+                                    "status": status,
+                                    "name": p.split('-', 1)[1].replace('-', ' ').title()
+                                })
+                        break
+    return uat_map, uat_list
+
+def read_human_test_plan():
+    tests = []
+    if not os.path.exists(AUDIT_REPORT_FILE):
+        return tests
+        
+    with open(AUDIT_REPORT_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Extraction des lignes de tableau
+    # Format: | H-04-01 | 04/06 | **Image Upload & Cleanup** | ... |
+    test_pattern = re.compile(r'\| (H-\d+-\d+) \| ([^|]+) \| \*\*([^*]+)\*\* \| ([^|]+) \|')
+    for match in test_pattern.finditer(content):
+        test_id = match.group(1).strip()
+        phase = match.group(2).strip()
+        title = match.group(3).strip()
+        expected = match.group(4).strip()
+        
+        # Déterminer la priorité basée sur les headers précédents
+        priority = "Medium"
+        p1_pos = content.rfind("Priority 1", 0, match.start())
+        p2_pos = content.rfind("Priority 2", 0, match.start())
+        p3_pos = content.rfind("Priority 3", 0, match.start())
+        
+        max_pos = max(p1_pos, p2_pos, p3_pos)
+        if max_pos != -1:
+            if max_pos == p1_pos: priority = "High"
+            elif max_pos == p2_pos: priority = "Medium"
+            elif max_pos == p3_pos: priority = "Low"
+
+        tests.append({
+            "id": test_id,
+            "phase": phase,
+            "title": title,
+            "expected": expected,
+            "priority": priority
+        })
+    return tests
+
 def update_dashboard():
     phases = read_roadmap()
     activities = read_changelog()
     backend_stats = get_backend_stats()
+    uat_map, uat_list = get_uat_status()
+    human_tests = read_human_test_plan()
     
     total_phases = len(phases)
     completed_phases = sum(1 for p in phases if p["status"] == "done")
@@ -160,9 +230,56 @@ def update_dashboard():
                             </div>
                         </div>''')
                         
+        phase_num_str = p["num"].lstrip("0")
+        uat_badge = ""
+        if phase_num_str in uat_map:
+            u_stat = uat_map[phase_num_str]
+            if u_stat == "PASSED": u_class = "bg-green-500/20 text-green-400 border-green-500/20"
+            elif u_stat == "IN_PROGRESS": u_class = "bg-yellow-500/20 text-yellow-400 border-yellow-500/20"
+            elif u_stat == "FAILED": u_class = "bg-red-500/20 text-red-400 border-red-500/20"
+            else: u_class = "bg-gray-500/20 text-gray-400 border-gray-500/20"
+            uat_badge = f'<span class="px-2 py-1 rounded text-xs font-medium {u_class} whitespace-nowrap ml-2">UAT: {u_stat}</span>'
+            
         detailed_html.append(f'''                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase {p["num"]}: {p["title"]}</h4><p class="text-xs text-gray-400 mt-1">{p["desc"]}</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium {badge_style} whitespace-nowrap">{badge_text}</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium {badge_style} whitespace-nowrap">{badge_text}</span>
+                                {uat_badge}
+                            </div>
+                        </div>''')
+
+    # Génération du HTML pour la liste des UATs
+    uat_html = []
+    for u in uat_list:
+        u_stat = u["status"]
+        if u_stat == "PASSED": u_class, dot_class = "bg-green-500/10 text-green-400 border-green-500/20", "bg-green-500"
+        elif u_stat == "IN_PROGRESS": u_class, dot_class = "bg-yellow-500/10 text-yellow-400 border-yellow-500/20", "bg-yellow-500 animate-pulse"
+        elif u_stat == "FAILED": u_class, dot_class = "bg-red-500/10 text-red-400 border-red-500/20", "bg-red-500"
+        else: u_class, dot_class = "bg-gray-500/10 text-gray-400 border-gray-500/20", "bg-gray-500"
+        
+        uat_html.append(f'''                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full {dot_class} block"></span>
+                                <span class="text-sm font-medium text-white">Ph {u["phase"]}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">{u["name"]}</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase {u_class}">{u_stat}</span>
+                        </div>''')
+
+    # Génération du HTML pour le Human Test Plan
+    human_html = []
+    for t in human_tests:
+        p_class = "bg-blue-500/10 text-blue-400 border-blue-500/20"
+        if t["priority"] == "High": p_class = "bg-red-500/10 text-red-400 border-red-500/20"
+        elif t["priority"] == "Low": p_class = "bg-gray-500/10 text-gray-400 border-gray-500/20"
+        
+        human_html.append(f'''                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">{t["id"]}</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {p_class}">{t["priority"]}</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">{t["title"]}</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">{t["expected"]}</p>
                         </div>''')
 
     # Génération du HTML pour l'Activity Stream
@@ -230,7 +347,9 @@ def update_dashboard():
     dash_content = replace_section(dash_content, '<!-- STATUS_BADGE_START -->', '<!-- STATUS_BADGE_END -->', current_status_badge)
     dash_content = replace_section(dash_content, '<!-- PHASES_START -->', '<!-- PHASES_END -->', '\n'.join(phases_html))
     dash_content = replace_section(dash_content, '<!-- DETAILED_PHASES_START -->', '<!-- DETAILED_PHASES_END -->', '\n'.join(detailed_html))
+    dash_content = replace_section(dash_content, '<!-- UAT_START -->', '<!-- UAT_END -->', '\n'.join(uat_html))
     dash_content = replace_section(dash_content, '<!-- LOGS_START -->', '<!-- LOGS_END -->', '\n'.join(logs_html))
+    dash_content = replace_section(dash_content, '<!-- HUMAN_TESTS_START -->', '<!-- HUMAN_TESTS_END -->', '\n'.join(human_html))
     dash_content = replace_section(dash_content, '<!-- CHART_DATA_START -->', '<!-- CHART_DATA_END -->', chart_data_html)
 
     with open(DASHBOARD_FILE, 'w', encoding='utf-8') as f:

@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { AppShell } from './components/layout/AppShell';
 import CategoriesPage from './pages/Categories';
 import PlatsPage from './pages/Plats';
@@ -14,6 +14,7 @@ import {
   KDS_ROLES,
   SALLE_ROLES,
   STAFF_ROLES,
+  STAFF_PORTAL_DENIED_MESSAGE,
   getStaffHomePath,
   isRoleAllowed,
 } from '@shared/auth/roleAccess';
@@ -34,18 +35,18 @@ const RoleRoute = ({ allowedRoles, children }: { allowedRoles: readonly string[]
   return children;
 };
 
-import { useState, useEffect } from 'react';
-
 const LoginRoute = () => {
   const { isAuthenticated, user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
-  const [kickMessage, setKickMessage] = useState<string | undefined>();
+  const location = useLocation();
+  const routeState = location.state as { authError?: string } | null;
+  const [kickMessage, setKickMessage] = useState<string | undefined>(routeState?.authError);
 
   useEffect(() => {
     if (isAuthenticated) {
       if (user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
         clearAuth();
-        setKickMessage("Votre session active n'est pas autorisée sur l'espace Staff. Vous avez été déconnecté.");
+        setKickMessage(STAFF_PORTAL_DENIED_MESSAGE);
         return;
       }
       navigate('/', { replace: true });
@@ -54,11 +55,20 @@ const LoginRoute = () => {
 
   return (
     <Login
-      onSuccess={() => navigate('/')}
+      onSuccess={(role) => {
+        if (!isRoleAllowed(role, STAFF_ROLES)) {
+          clearAuth();
+          setKickMessage(STAFF_PORTAL_DENIED_MESSAGE);
+          navigate('/login', { replace: true });
+          return;
+        }
+
+        navigate('/');
+      }}
       allowedRoles={STAFF_ROLES}
       appLabel="Espace Staff"
       appDescription="Acces gerant, salle et cuisine"
-      deniedMessage="Ce compte est reserve au portail client."
+      deniedMessage={STAFF_PORTAL_DENIED_MESSAGE}
       variant="staff"
       initialError={kickMessage}
     />

@@ -2,21 +2,29 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
-import { isRoleAllowed, STAFF_ROLES } from '@shared/auth/roleAccess';
+import { isRoleAllowed, STAFF_PORTAL_DENIED_MESSAGE, STAFF_ROLES } from '@shared/auth/roleAccess';
 import { Sidebar } from './Sidebar';
+
+const UnauthorizedStaffRedirect = ({ clearAuth }: { clearAuth: () => void }) => {
+  useEffect(() => {
+    clearAuth();
+  }, [clearAuth]);
+
+  return (
+    <Navigate
+      to="/login"
+      replace
+      state={{ authError: STAFF_PORTAL_DENIED_MESSAGE }}
+    />
+  );
+};
 
 export const AppShell = () => {
   const { isAuthenticated, user, clearAuth } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated && user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
-      clearAuth();
-    }
-  }, [clearAuth, isAuthenticated, user?.role]);
-
   if (isAuthenticated && user?.role && !isRoleAllowed(user.role, STAFF_ROLES)) {
-    return null;
+    return <UnauthorizedStaffRedirect clearAuth={clearAuth} />;
   }
 
   if (!isAuthenticated) {

@@ -1,3 +1,13 @@
+## [2026-05-01] - 11:30
+### Added
+- Integrated the **Human Test Plan** into the project dashboard (`dashboard.html`).
+- Updated `scripts/update_dashboard.py` to automatically parse Section 3 of `.planning/audit_uat_report.md` and render it in the dashboard.
+- Created a new "Human Test Plan" card with priority-based badges (High, Medium, Low) for better visibility of manual verification tasks.
+
+### Validation
+- `python scripts/update_dashboard.py`: Successfully synchronized the new section.
+- Manual verification of the dashboard layout and parsing logic.
+
 ## [2026-05-01] - 10:00
 ### Added
 - Performed a project-wide UAT & Verification Audit.

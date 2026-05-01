@@ -16,7 +16,20 @@ interface LoginProps {
 }
 
 const STYLES = {
-// ... omitted ...
+  staff: {
+    glow: 'bg-primary/25',
+    label: 'text-primary',
+    focus: 'group-focus-within:text-primary',
+    input: 'focus:border-primary/40 focus:ring-primary/10',
+    button: 'bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20',
+  },
+  client: {
+    glow: 'bg-accent/25',
+    label: 'text-accent',
+    focus: 'group-focus-within:text-accent',
+    input: 'focus:border-accent/40 focus:ring-accent/10',
+    button: 'bg-accent hover:bg-accent/90 shadow-lg shadow-accent/20',
+  },
 } as const
 
 const Login: React.FC<LoginProps> = ({

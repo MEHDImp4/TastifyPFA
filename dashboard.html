@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:22:29<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:29:26<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -428,6 +428,64 @@
                             <!-- UAT_END -->
                     </div>
                 </div>
+                <div class="card p-4 shrink-0">
+                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        Human Test Plan
+                    </h2>
+                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        <!-- HUMAN_TESTS_START -->
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-04-01</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">Image Upload & Cleanup</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">Uploading a new image deletes the old one from `backend/media/`.</p>
+                        </div>
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-04-02</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">Absolute Image URLs</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">API returns `http://localhost:8000/media/...` absolute URLs.</p>
+                        </div>
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-11-01</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">E2E Order Flow (Docker)</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">Create order -> Table becomes OCCUPEE -> Close order -> Table becomes LIBRE.</p>
+                        </div>
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-06-01</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">Integration Test Suite</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker.</p>
+                        </div>
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-08-01</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">Table Map Persistence</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">Drag tables in the Map Editor -> Refresh -> Positions persist in DB.</p>
+                        </div>
+                        <div class="p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-primary tracking-tighter">H-05-01</span>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">Low</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mb-0.5">Responsive UI Checks</p>
+                            <p class="text-[10px] text-gray-400 leading-tight">Categories and Plats drawers are usable on mobile screens.</p>
+                        </div>
+                            <!-- HUMAN_TESTS_END -->
+                    </div>
+                </div>
             </div>
 
             <!-- Middle Column: Detailed Phases -->
@@ -714,6 +772,46 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Performed a project-wide UAT & Verification Audit.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `.planning/audit_uat_report.md` identifying stale documentation and pending human verification items.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Discovered that Phases 01, 04, 05, and 08 are fully implemented despite documentation indicating otherwise.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Produced a prioritized human test plan to close verification gaps caused by previous environment constraints (Docker unavailability).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Cross-referenced all phase UAT/Verification files with the actual codebase and frontend integration state.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified Categories and Plats frontend integration in `App.tsx`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified Tables API and models existence in `backend/apps/tables`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Updated project dashboard to reflect the current unified progress (34%).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed User Acceptance Testing (UAT) for Phase 11: Commandes REST API.</p>
                             </li>
@@ -746,46 +844,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> User verified all UAT test cases and bug fixes in a live conversational session.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `dashboard.html` and `STATE.md` updated to reflect verified completion.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Generated and seeded professional high-quality images for all 21 dishes and 4 categories.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `seed_menu` to correctly map image paths in the media directory.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_menu`: All categories and dishes now have valid image paths.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Manual verification of `media/plats/` and `media/categories/` contents.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `seed_dev` to use `update_or_create`, ensuring all fields (names, emails, roles) are synced for existing users.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added realistic Moroccan names (Mehdi, Omar, Sara, Fatine, etc.) to all test accounts for better presentation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Synchronized documentation (`user.md`, `DEV_CREDENTIALS.md`) with the new full names.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
