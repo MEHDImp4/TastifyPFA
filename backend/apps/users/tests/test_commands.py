@@ -5,7 +5,7 @@ from io import StringIO
 
 class SeedTests(TestCase):
     def test_seed_dev_command_creates_users(self):
-        """Test that seed_dev creates 4 distinct users with correct roles"""
+        """Test that seed_dev creates 10 distinct users with correct roles"""
         User = get_user_model()
         
         # Verify database is empty initially
@@ -15,8 +15,8 @@ class SeedTests(TestCase):
         out = StringIO()
         call_command('seed_dev', stdout=out)
         
-        # Verify 4 users created
-        self.assertEqual(User.objects.count(), 4)
+        # Verify 10 users created
+        self.assertEqual(User.objects.count(), 10)
         
         # Verify each role exists
         roles = User.objects.values_list('role', flat=True)
@@ -37,5 +37,5 @@ class SeedTests(TestCase):
         call_command('seed_dev', stdout=out)
         call_command('seed_dev', stdout=out)
         
-        # Verify still only 4 users
-        self.assertEqual(User.objects.count(), 4)
+        # Verify still only 10 users
+        self.assertEqual(User.objects.count(), 10)
