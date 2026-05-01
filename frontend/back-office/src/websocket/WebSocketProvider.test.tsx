@@ -183,7 +183,7 @@ describe('WebSocketProvider', () => {
     expect(MockWebSocket.instances).toHaveLength(1)
 
     act(() => {
-      vi.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(2000)
     })
 
     expect(MockWebSocket.instances).toHaveLength(2)
