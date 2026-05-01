@@ -5,14 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.users.permissions import IsGerant, IsServeurOrGerant
+from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
 
 
 class CommandeViewSet(viewsets.ModelViewSet):
     serializer_class = CommandeSerializer
-    permission_classes = [IsAuthenticated, IsServeurOrGerant]
+    permission_classes = [IsAuthenticated, IsServeurOrGerant | IsCuisinierOrGerant]
 
     def get_queryset(self):
         user = self.request.user
@@ -28,6 +28,9 @@ class CommandeViewSet(viewsets.ModelViewSet):
         if table_id:
             # Table-specific lookup: any staff member can see which order is on a given table
             qs = qs.filter(table_id=table_id)
+        elif user.role == 'CUISINIER':
+            # Cuisinier sees all orders currently in the kitchen
+            qs = qs.filter(statut=Commande.Statut.EN_CUISINE)
         elif user.role != 'GERANT':
             # General list: only show the user's own orders
             qs = qs.filter(serveur=user)
