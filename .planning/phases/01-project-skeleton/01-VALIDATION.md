@@ -40,14 +40,14 @@ created: 2026-04-27
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 1-01-01 | 01 | 0 | SC-01 | — | N/A | smoke | `docker compose up --build -d && docker compose ps` | ❌ W0 | ⬜ pending |
-| 1-01-02 | 01 | 1 | SC-02 | — | N/A | smoke | `curl -s -o /dev/null -w "%{http_code}" http://localhost:3003/` | ❌ W0 | ⬜ pending |
-| 1-01-03 | 01 | 1 | SC-03 | T-1-01 | Django returns JSON/404 (not 502) | smoke | `curl -s http://localhost:8000/api/` | ❌ W0 | ⬜ pending |
-| 1-01-04 | 01 | 1 | SC-04 | — | N/A | smoke | `curl -s http://localhost:3000/` returns HTML | ❌ W0 | ⬜ pending |
-| 1-01-05 | 01 | 1 | SC-05 | — | N/A | smoke | `docker compose exec db mysqladmin ping -h localhost` | ❌ W0 | ⬜ pending |
-| 1-01-06 | 01 | 1 | SC-06 | — | N/A | smoke | `docker compose exec redis redis-cli ping` returns PONG | ❌ W0 | ⬜ pending |
-
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+| 1-01-01 | 01 | 0 | SC-01 | — | N/A | smoke | `docker compose up --build -d && docker compose ps` | ✅ PASS | ✅ COMPLETED |
+| 1-01-02 | 01 | 1 | SC-02 | — | N/A | smoke | `curl -s -o /dev/null -w "%{http_code}" http://localhost:3003/` | ✅ PASS | ✅ COMPLETED |
+| 1-01-03 | 01 | 1 | SC-03 | T-1-01 | Django returns JSON/404 (not 502) | smoke | `curl -s http://localhost:8000/api/` | ✅ PASS | ✅ COMPLETED |
+| 1-01-04 | 01 | 1 | SC-04 | — | N/A | smoke | `curl -s http://localhost:3000/` returns HTML | ✅ PASS | ✅ COMPLETED |
+| 1-01-05 | 01 | 1 | SC-05 | — | N/A | smoke | `docker compose exec db mysqladmin ping -h localhost` | ✅ PASS | ✅ COMPLETED |
+| 1-01-06 | 01 | 1 | SC-06 | — | N/A | smoke | `docker compose exec redis redis-cli ping` returns PONG | ✅ PASS | ✅ COMPLETED |
+...
+**Approval:** PASSED
 
 ---
 
