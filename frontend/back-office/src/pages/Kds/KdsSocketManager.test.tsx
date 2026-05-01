@@ -17,12 +17,12 @@ describe('KdsSocketManager', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.mocked(useKdsStore).mockImplementation((selector) => selector({ handleSocketEvent: mockHandleSocketEvent }))
+    vi.mocked(useKdsStore).mockImplementation((selector: any) => selector({ handleSocketEvent: mockHandleSocketEvent }))
   })
 
   it('should call handleSocketEvent when lastEvent changes', () => {
-    const mockEvent = { type: 'order_created', order: { id: 1 } }
-    vi.mocked(useStaffWebSocket).mockReturnValue({ lastEvent: mockEvent, connectionStatus: 'open' })
+    const mockEvent = { type: 'order_created', order: { id: 1 }, payload: {} }
+    vi.mocked(useStaffWebSocket).mockReturnValue({ lastEvent: mockEvent as any, connectionStatus: 'open' })
 
     render(<KdsSocketManager />)
 

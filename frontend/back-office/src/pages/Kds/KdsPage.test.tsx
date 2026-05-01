@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, vi, beforeEach } from 'vitest';
+import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { KdsPage } from './KdsPage';
 import { useKdsStore } from './store/useKdsStore';
 
