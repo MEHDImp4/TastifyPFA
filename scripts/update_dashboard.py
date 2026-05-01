@@ -90,24 +90,54 @@ def read_changelog():
     return activities
 
 def get_backend_stats():
-    stats = {"users": 0, "categories": 0, "status": "Offline"}
+    stats = {
+        "users": 0, 
+        "categories": 0, 
+        "orders": 0, 
+        "total_sales": 0,
+        "active_tables": 0,
+        "status": "Offline"
+    }
     try:
+        # Check if docker is running first
+        check_docker = subprocess.run('docker ps --filter name=tastifypfa-backend-1 --format "{{.Names}}"', shell=True, capture_output=True, text=True)
+        if "tastifypfa-backend-1" not in check_docker.stdout:
+            stats["status"] = "Container Offline"
+            return stats
+
         # On tente de récupérer les stats via docker exec
-        cmd = 'docker exec tastifypfa-backend-1 python manage.py shell -c "from apps.menu.models import Categorie; from apps.users.models import Utilisateur; print(f\'STATS|{Utilisateur.objects.count()}|{Categorie.objects.count()}\')"'
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=5)
+        py_cmd = (
+            "from apps.menu.models import Categorie; "
+            "from apps.users.models import Utilisateur; "
+            "from apps.commandes.models import Commande; "
+            "from apps.tables.models import Table; "
+            "from django.db.models import Sum; "
+            "total_sales = Commande.objects.filter(statut='PAYEE').aggregate(Sum('montant_total'))['montant_total__sum'] or 0; "
+            "print(f'STATS|{Utilisateur.objects.count()}|{Categorie.objects.count()}|{Commande.objects.count()}|{total_sales}|{Table.objects.filter(statut=Table.Statut.OCCUPEE).count()}')"
+        )
+        cmd = f'docker exec tastifypfa-backend-1 python manage.py shell -c "{py_cmd}"'
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+        
         if result.returncode == 0:
             for line in result.stdout.split('\n'):
                 line = line.strip()
                 if line.startswith('STATS|'):
                     parts = line.split('|')
-                    if len(parts) == 3:
-                        _, users, cats = parts
+                    if len(parts) == 6:
+                        _, users, cats, orders, sales, active_tables = parts
                         stats["users"] = int(users)
                         stats["categories"] = int(cats)
+                        stats["orders"] = int(orders)
+                        stats["total_sales"] = float(sales)
+                        stats["active_tables"] = int(active_tables)
                         stats["status"] = "Online"
                         break
+        else:
+            stats["status"] = "Error"
+            print(f"Backend Stats Error: {result.stderr}")
     except Exception as e:
         print(f"Warning: Could not fetch backend stats: {e}")
+        stats["status"] = "Timeout/Exception"
     return stats
 
 def get_uat_status():
@@ -177,10 +207,23 @@ def read_human_test_plan():
         })
     return tests
 
+def get_git_status():
+    status = {"branch": "unknown", "dirty": False}
+    try:
+        branch = subprocess.run('git rev-parse --abbrev-ref HEAD', shell=True, capture_output=True, text=True).stdout.strip()
+        status["branch"] = branch
+        
+        dirty = subprocess.run('git status --porcelain', shell=True, capture_output=True, text=True).stdout.strip()
+        status["dirty"] = len(dirty) > 0
+    except:
+        pass
+    return status
+
 def update_dashboard():
     phases = read_roadmap()
     activities = read_changelog()
     backend_stats = get_backend_stats()
+    git_status = get_git_status()
     uat_map, uat_list = get_uat_status()
     human_tests = read_human_test_plan()
     
@@ -309,6 +352,14 @@ def update_dashboard():
                         Initialisation
                     </span>'''
 
+    # Git Badge
+    git_color = "green" if not git_status["dirty"] else "yellow"
+    git_status_text = "Clean" if not git_status["dirty"] else "Uncommitted changes"
+    git_badge = f'''                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{git_color}-500/10 text-{git_color}-400 border border-{git_color}-500/20">
+                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                        {git_status["branch"]} ({git_status_text})
+                    </span>'''
+
     chart_data_html = f'''                        <script>
                             const chartData = {{
                                 labels: ['Todo', 'In Progress', 'Done'],
@@ -343,8 +394,15 @@ def update_dashboard():
     # Update backend stats
     dash_content = re.sub(r'(<!-- DB_USERS_START -->).*?(<!-- DB_USERS_END -->)', rf'\g<1>{backend_stats["users"]}\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- DB_CATS_START -->).*?(<!-- DB_CATS_END -->)', rf'\g<1>{backend_stats["categories"]}\g<2>', dash_content)
+    dash_content = re.sub(r'(<!-- DB_ORDERS_START -->).*?(<!-- DB_ORDERS_END -->)', rf'\g<1>{backend_stats["orders"]}\g<2>', dash_content)
+    dash_content = re.sub(r'(<!-- DB_SALES_START -->).*?(<!-- DB_SALES_END -->)', rf'\g<1>{int(backend_stats["total_sales"])}\g<2>', dash_content)
+    dash_content = re.sub(r'(<!-- DB_TABLES_START -->).*?(<!-- DB_TABLES_END -->)', rf'\g<1>{backend_stats["active_tables"]}\g<2>', dash_content)
     
-    dash_content = replace_section(dash_content, '<!-- STATUS_BADGE_START -->', '<!-- STATUS_BADGE_END -->', current_status_badge)
+    # Update DB Status badge color
+    db_status_color = "green" if backend_stats["status"] == "Online" else "red"
+    dash_content = re.sub(r'(<!-- DB_STATUS_BADGE_START -->).*?(<!-- DB_STATUS_BADGE_END -->)', rf'\g<1><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-{db_status_color}-500/10 text-{db_status_color}-400 border border-{db_status_color}-500/20">{backend_stats["status"]}</span>\g<2>', dash_content)
+    
+    dash_content = replace_section(dash_content, '<!-- STATUS_BADGE_START -->', '<!-- STATUS_BADGE_END -->', current_status_badge + "\n" + git_badge)
     dash_content = replace_section(dash_content, '<!-- PHASES_START -->', '<!-- PHASES_END -->', '\n'.join(phases_html))
     dash_content = replace_section(dash_content, '<!-- DETAILED_PHASES_START -->', '<!-- DETAILED_PHASES_END -->', '\n'.join(detailed_html))
     dash_content = replace_section(dash_content, '<!-- UAT_START -->', '<!-- UAT_END -->', '\n'.join(uat_html))
@@ -356,7 +414,8 @@ def update_dashboard():
         f.write(dash_content)
         
     print(f"Dashboard updated successfully: Progress {progress_percent}%, Phases {completed_phases}/{total_phases}, Tasks {tasks_done}/{tasks_total}")
-    print(f"Live Stats: Users {backend_stats['users']}, Categories {backend_stats['categories']}")
+    print(f"Live Stats: Users {backend_stats['users']}, Categories {backend_stats['categories']}, Orders {backend_stats['orders']}, Sales {backend_stats['total_sales']}, Active Tables {backend_stats['active_tables']}")
+    print(f"Git: {git_status['branch']} {'(Dirty)' if git_status['dirty'] else '(Clean)'}")
 
 if __name__ == "__main__":
     update_dashboard()

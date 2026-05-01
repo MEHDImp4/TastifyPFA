@@ -62,9 +62,23 @@
         
         <!-- Header -->
         <header class="animate-fade-up flex items-center justify-between shrink-0">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:57:09<!-- UPDATED_AT_END --></p>
+            <div class="flex items-center gap-6">
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 12:04:37<!-- UPDATED_AT_END --></p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- STATUS_BADGE_START -->
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        Phase validée
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
+                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                        master (Uncommitted changes)
+                    </span>
+                            <!-- STATUS_BADGE_END -->
+                </div>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -80,22 +94,17 @@
 
         <!-- Stats Row -->
         <div class="grid grid-cols-3 gap-4 shrink-0 animate-fade-up" style="animation-delay: 0.1s;">
-            <div class="card p-4 flex flex-col justify-center">
+            <div class="card p-4 flex flex-col justify-center border-l-4 border-l-green-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Completed Phases</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_PHASES_START -->12<!-- STAT_PHASES_END --></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_PHASES_START -->12<!-- STAT_PHASES_END --><span class="text-sm font-medium text-gray-500 ml-2">/ 35</span></div>
             </div>
-            <div class="card p-4 flex flex-col justify-center">
+            <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-bold"><!-- STAT_TASKS_START -->33<!-- STAT_TASKS_END --></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->33<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sub-plans</span></div>
             </div>
-            <div class="card p-4 flex flex-col justify-center">
-                <h3 class="text-gray-400 text-xs font-medium mb-2 uppercase tracking-wider">Current Status</h3>
-                <div><!-- STATUS_BADGE_START -->
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        Phase validée
-                    </span>
-                            <!-- STATUS_BADGE_END --></div>
+            <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
+                <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Overall Completion</h3>
+                <div class="mt-1 text-2xl font-black"><!-- PERCENT_START -->34%<!-- PERCENT_END --></div>
             </div>
         </div>
 
@@ -371,10 +380,13 @@
                     </div>
                 </div>
                 <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        Live App Stats
-                    </h2>
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-base font-bold flex items-center gap-2">
+                            <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            Live App Stats
+                        </h2>
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20">Online</span><!-- DB_STATUS_BADGE_END -->
+                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
@@ -383,6 +395,18 @@
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
                             <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->2<!-- DB_ORDERS_END --></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->1<!-- DB_TABLES_END --></p>
+                        </div>
+                        <div class="col-span-2 pt-2 border-t border-white/5">
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->27<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
