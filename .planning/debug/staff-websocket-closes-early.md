@@ -15,29 +15,32 @@ updated: 2026-05-01
 - **Reproduction:** Open the frontend against `localhost:3000`, authenticate as staff, and let `WebSocketProvider.tsx` attempt to connect to `/ws/staff/`.
 
 ## Current Focus
-- **hypothesis:** The Vite dev server is not proxying `/ws/`, so the browser opens `ws://localhost:3000/ws/staff/` against the frontend dev server instead of the Django ASGI backend.
-- **test:** Compare the runtime websocket URL, Vite proxy config, and backend websocket routing/auth handling.
-- **expecting:** To find the handshake failing before backend auth or consumer code executes.
+- **hypothesis:** React StrictMode remounts the provider during development and the cleanup path closes a still-connecting socket, which triggers a false-positive browser error before the real connection settles.
+- **test:** Compare the reported line number with the provider cleanup path, confirm StrictMode is enabled in `main.tsx`, and verify a deferred connect removes the transient close.
+- **expecting:** To find the backend path already wired correctly and the browser warning originating from the frontend cleanup logic.
 - **next_action:** "completed"
 
 ## Evidence
 - timestamp: 2026-05-01 20:40:00
   finding: `frontend/_shared/websocket/staffSocket.ts` builds the websocket URL from `window.location.host`, which resolves to `localhost:3000` in back-office development.
 - timestamp: 2026-05-01 20:41:00
-  finding: `frontend/back-office/vite.config.ts` proxied `/api` and `/media` but had no `/ws` proxy entry, so websocket upgrades never reached `backend:8000`.
+  finding: `frontend/back-office/vite.config.ts` already includes a `/ws` proxy to `ws://backend:8000`, so the previously-fixed proxy path is not the cause of this report.
 - timestamp: 2026-05-01 20:42:00
   finding: `backend/tastify_backend/asgi.py`, `backend/core/routing.py`, and `backend/core/middleware.py` already matched the expected `/ws/staff/` route and JWT handshake path.
-- timestamp: 2026-05-01 20:44:20
-  finding: Added a `/ws` Vite proxy targeting `ws://backend:8000` with `ws: true`, plus a regression test covering the config entry.
-- timestamp: 2026-05-01 20:44:20
-  finding: Verification passed with `npm run test -- src/viteConfig.test.ts --run` and `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`.
+- timestamp: 2026-05-01 20:47:00
+  finding: `frontend/back-office/src/main.tsx` renders the app inside `StrictMode`, and the reported line points at `cleanupSocket()` closing a `CONNECTING` socket.
+- timestamp: 2026-05-01 20:48:00
+  finding: Deferred initial socket creation with a zero-delay timer, cancelled during cleanup, and added a StrictMode regression test to verify the provider no longer opens and immediately closes a connecting socket.
+- timestamp: 2026-05-01 20:47:03
+  finding: Verification passed with `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`.
 
 ## Eliminated
+- Missing `/ws` proxy configuration in the back-office Vite dev server.
 - Backend websocket route mismatch.
 - Backend JWT middleware rejection during the initial handshake.
 
 ## Resolution
-- **root_cause:** The back-office dev server did not proxy `/ws`, so the frontend attempted the staff websocket handshake against `localhost:3000` instead of the Django ASGI backend.
-- **fix:** Added a Vite `/ws` proxy to `ws://backend:8000` with websocket upgrades enabled and added a regression test for that proxy entry.
-- **validation:** `npm run test -- src/viteConfig.test.ts --run`; `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`
-- **fix_commit:** `0327c1a`
+- **root_cause:** In React StrictMode development mounts, `WebSocketProvider` created the socket immediately and then its cleanup path closed the still-connecting socket during the transient remount cycle, surfacing `WebSocket is closed before the connection is established` from line 43 even though the backend path was valid.
+- **fix:** Deferred initial socket creation until the next timer tick and cancelled that timer during cleanup so StrictMode's throwaway mount no longer opens and closes a connecting socket.
+- **validation:** `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`
+- **fix_commit:** `6694c01`

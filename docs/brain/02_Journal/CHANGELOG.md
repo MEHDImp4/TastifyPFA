@@ -1,3 +1,16 @@
+## [2026-05-01] - 20:49
+### Fixed
+- Suppressed the dev-only staff websocket false positive by deferring `WebSocketProvider` connection setup until after the transient React `StrictMode` remount window, so the cleanup path no longer closes a socket that is still in `CONNECTING`.
+
+### Added
+- Added a `StrictMode` regression case to `frontend/back-office/src/websocket/WebSocketProvider.test.tsx` to verify the provider does not open and immediately close a connecting socket during development remounts.
+
+### Validation
+- `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`: passed.
+
+### Commit
+- `6694c01` - `fix(websocket): avoid strict mode early close noise`
+
 ## [2026-05-01] - 20:46
 ### Fixed
 - Restored the back-office staff websocket dev path by proxying `/ws` from Vite to `ws://backend:8000`, so `ws://localhost:3000/ws/staff/` now reaches Django Channels during local development.
