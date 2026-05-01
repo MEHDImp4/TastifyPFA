@@ -25,24 +25,24 @@ The following tests **REQUIRE** a human or a live Docker environment to verify c
 
 ### Priority 1: High (Data & Lifecycle)
 
-| Test ID | Phase | Test Case | Expected Result | Why Human? |
-|---|---|---|---|---|
-| H-04-01 | 04/06 | **Image Upload & Cleanup** | Uploading a new image deletes the old one from `backend/media/`. | Requires `django-cleanup` signal check on real disk. |
-| H-04-02 | 04/06 | **Absolute Image URLs** | API returns `http://localhost:8000/media/...` absolute URLs. | Requires request context / live server. |
-| H-11-01 | 11/12 | **E2E Order Flow (Docker)** | Create order -> Table becomes OCCUPEE -> Close order -> Table becomes LIBRE. | Requires live DB + Signals + Frontend. |
+| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
+|---|---|---|---|---|---|
+| H-04-01 | 04/06 | **Image Upload & Cleanup** | Uploading a new image deletes the old one from `backend/media/`. | **PASSED** | Requires `django-cleanup` signal check on real disk. |
+| H-04-02 | 04/06 | **Absolute Image URLs** | API returns `http://localhost:8000/media/...` absolute URLs. | **PASSED** | Requires request context / live server. |
+| H-11-01 | 11/12 | **E2E Order Flow (Docker)** | Create order -> Table becomes OCCUPEE -> Close order -> Table becomes LIBRE. | **PASSED** | Requires live DB + Signals + Frontend. |
 
 ### Priority 2: Medium (Infrastructure & Integration)
 
-| Test ID | Phase | Test Case | Expected Result | Why Human? |
-|---|---|---|---|---|
-| H-06-01 | 06 | **Integration Test Suite** | Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker. | Requires live MySQL container. |
-| H-08-01 | 08/09 | **Table Map Persistence** | Drag tables in the Map Editor -> Refresh -> Positions persist in DB. | Verifies Phase 8 API vs Phase 9 Frontend. |
+| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
+|---|---|---|---|---|---|
+| H-06-01 | 06 | **Integration Test Suite** | Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker. | **PENDING** | Requires live MySQL container. |
+| H-08-01 | 08/09 | **Table Map Persistence** | Drag tables in the Map Editor -> Refresh -> Positions persist in DB. | **PASSED** | Verifies Phase 8 API vs Phase 9 Frontend. |
 
 ### Priority 3: Low (Visuals)
 
-| Test ID | Phase | Test Case | Expected Result | Why Human? |
-|---|---|---|---|---|
-| H-05-01 | 05/07 | **Responsive UI Checks** | Categories and Plats drawers are usable on mobile screens. | Visual layout verification. |
+| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
+|---|---|---|---|---|---|
+| H-05-01 | 05/07 | **Responsive UI Checks** | Categories and Plats drawers are usable on mobile screens. | **PASSED** | Visual layout verification. |
 
 ## 4. Recommendations
 
