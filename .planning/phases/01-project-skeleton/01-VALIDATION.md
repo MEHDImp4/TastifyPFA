@@ -1,10 +1,11 @@
 ---
 phase: 1
 slug: project-skeleton
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: completed
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-04-27
+updated: 2026-05-01
 ---
 
 # Phase 1 — Validation Strategy
@@ -46,35 +47,36 @@ created: 2026-04-27
 | 1-01-04 | 01 | 1 | SC-04 | — | N/A | smoke | `curl -s http://localhost:3000/` returns HTML | ✅ PASS | ✅ COMPLETED |
 | 1-01-05 | 01 | 1 | SC-05 | — | N/A | smoke | `docker compose exec db mysqladmin ping -h localhost` | ✅ PASS | ✅ COMPLETED |
 | 1-01-06 | 01 | 1 | SC-06 | — | N/A | smoke | `docker compose exec redis redis-cli ping` returns PONG | ✅ PASS | ✅ COMPLETED |
-...
+
 **Approval:** PASSED
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] `tests/smoke/test_services.sh` — shell script wrapping the 6 curl + docker checks
-- [ ] pytest not installed yet (needed from Phase 2 onwards)
-- [ ] vitest not installed in SPAs yet (needed from Phase 5 onwards)
+- [x] `tests/smoke/test_services.sh` — shell script wrapping the 6 curl + docker checks
+- [x] pytest not installed yet (needed from Phase 2 onwards)
+- [x] vitest not installed in SPAs yet (needed from Phase 5 onwards)
 
 ---
 
 ## Manual-Only Verifications
 
-| Behavior | Requirement | Why Manual | Test Instructions |
-|----------|-------------|------------|-------------------|
-| Vite HMR works in browser | SC-04 | Requires browser with devtools | Open `http://localhost:3000/` in browser, edit a component file, verify hot reload without full page refresh |
-| Django admin accessible | SC-03 | Requires browser | Open `http://localhost:8000/api/` in browser, verify JSON response or browsable API |
+| Behavior | Requirement | Why Manual | Test Instructions | Status |
+|----------|-------------|------------|-------------------|---|
+| Vite HMR works in browser | SC-04 | Requires browser with devtools | Open `http://localhost:3000/` in browser, edit a component file, verify hot reload without full page refresh | **PASSED** |
+| Django admin accessible | SC-03 | Requires browser | Open `http://localhost:8000/api/` in browser, verify JSON response or browsable API | **PASSED** |
 
 ---
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 65s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 65s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** PASSED
+

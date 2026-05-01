@@ -13,9 +13,8 @@ import { useStaffSocketStore } from './useStaffSocketStore'
 const TERMINAL_CLOSE_CODES = new Set([4401, 4403])
 
 export const WebSocketProvider = ({ children }: PropsWithChildren) => {
-  const accessToken = useAuthStore((state) => state.accessToken)
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const role = useAuthStore((state) => state.user?.role)
+  const { accessToken, isAuthenticated, user } = useAuthStore()
+  const role = typeof user?.role === 'string' ? user.role : null
   const setConnectionStatus = useStaffSocketStore((state) => state.setConnectionStatus)
   const pushEvent = useStaffSocketStore((state) => state.pushEvent)
   const resetSocketState = useStaffSocketStore((state) => state.resetSocketState)
