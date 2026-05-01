@@ -35,7 +35,7 @@ The following tests **REQUIRE** a human or a live Docker environment to verify c
 
 | Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
 |---|---|---|---|---|---|
-| H-06-01 | 06 | **Integration Test Suite** | Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker. | **PENDING** | Requires live MySQL container. |
+| H-06-01 | 06 | **Integration Test Suite** | Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker. | **PASSED** | Requires live MySQL container. |
 | H-08-01 | 08/09 | **Table Map Persistence** | Drag tables in the Map Editor -> Refresh -> Positions persist in DB. | **PASSED** | Verifies Phase 8 API vs Phase 9 Frontend. |
 
 ### Priority 3: Low (Visuals)

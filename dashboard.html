@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 12:57:43<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 15:58:46<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -795,6 +795,36 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed the final pending item on the Human Test Plan (`H-06-01`).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Successfully executed the integration test suite for `apps.menu` inside the live Docker container, achieving a 100% pass rate.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified Phase 6 Plats API and Soft Delete model integration against the live MySQL database.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `.planning/audit_uat_report.md` to reflect that all prioritized human test plan items are now PASSED.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker exec tastifypfa-backend-1 pytest apps/menu/tests/test_plats_api.py apps/menu/tests/test_plat_soft_delete.py`: 10/10 passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Human test plan is now fully resolved and closed out.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 12:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved Pytest test database creation error (1044 Access Denied) by granting explicit privileges to the `tastify` user for `test_%` databases.</p>
@@ -838,36 +868,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Manual verification of the dashboard layout and parsing logic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Fixed**: Made the left column scrollable (`overflow-y-auto`) to ensure all cards, including the new Human Test Plan, are visible.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Fixed**: Restored visibility of the "Roadmap Overview" by giving the phases list a fixed height (`h-96`), preventing it from collapsing in the new scrollable column layout.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Performed a project-wide UAT & Verification Audit.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `.planning/audit_uat_report.md` identifying stale documentation and pending human verification items.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Discovered that Phases 01, 04, 05, and 08 are fully implemented despite documentation indicating otherwise.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Produced a prioritized human test plan to close verification gaps caused by previous environment constraints (Docker unavailability).</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
