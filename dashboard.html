@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:29:26<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:57:09<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -378,11 +378,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->10<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
                         </div>
                     </div>
                 </div>
@@ -403,11 +403,11 @@
                         </div>
                         <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse block"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 block"></span>
                                 <span class="text-sm font-medium text-white">Ph 5</span>
                                 <span class="text-xs text-gray-400 truncate max-w-[120px]">Categories Frontend</span>
                             </div>
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-yellow-500/10 text-yellow-400 border-yellow-500/20">IN_PROGRESS</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">COMPLETED</span>
                         </div>
                         <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center gap-2">
@@ -528,7 +528,7 @@
                             <div><h4 class="font-semibold text-white">Phase 5: Categories Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-Office UI for managing categories.</p></div>
                             <div class="flex items-center">
                                 <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400 border-yellow-500/20 whitespace-nowrap ml-2">UAT: IN_PROGRESS</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap ml-2">UAT: COMPLETED</span>
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -772,6 +772,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Integrated the **Human Test Plan** into the project dashboard (`dashboard.html`).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `scripts/update_dashboard.py` to automatically parse Section 3 of `.planning/audit_uat_report.md` and render it in the dashboard.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created a new "Human Test Plan" card with priority-based badges (High, Medium, Low) for better visibility of manual verification tasks.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `python scripts/update_dashboard.py`: Successfully synchronized the new section.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Manual verification of the dashboard layout and parsing logic.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Fixed**: Made the left column scrollable (`overflow-y-auto`) to ensure all cards, including the new Human Test Plan, are visible.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-01 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Fixed**: Restored visibility of the "Roadmap Overview" by giving the phases list a fixed height (`h-96`), preventing it from collapsing in the new scrollable column layout.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Performed a project-wide UAT & Verification Audit.</p>
                             </li>
@@ -809,41 +844,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 10:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Updated project dashboard to reflect the current unified progress (34%).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Completed User Acceptance Testing (UAT) for Phase 11: Commandes REST API.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Verified nested order creation, table status synchronization, ownership filtering, and table availability guards.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `11-UAT.md` with final PASSED status and completion timestamps.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed `CommandeViewSet` to properly filter active orders by `table_id` and allow cross-server visibility for active service coordination.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed `CommandeSerializer` to return `serveur_name` and `plat_details` (id, nom, prix) for enriched frontend display.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed `OrderingPage.tsx` state persistence bug where active orders were not cleared when navigating between occupied and free tables.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> User verified all UAT test cases and bug fixes in a live conversational session.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

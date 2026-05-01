@@ -114,6 +114,27 @@ export const OrderingPage = () => {
     }
   }
 
+  const closeOrder = async () => {
+    if (!activeOrder) return
+
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      await axiosInstance.patch(`/commandes/${activeOrder.id}/`, {
+        statut: 'PAYEE'
+      })
+
+      setSuccess(true)
+      window.setTimeout(() => navigate('/'), 1500)
+    } catch (err: any) {
+      console.error('Failed to close order', err)
+      setError('Impossible de clôturer la commande.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // True when there is no active order OR the logged-in user owns it
   const isOwnOrder = !activeOrder || activeOrder.serveur_username === currentUser?.username
 
@@ -176,7 +197,14 @@ export const OrderingPage = () => {
         <div className="space-y-6">
           {activeOrder && (
             <div className="rounded-2xl border border-white/10 bg-surface p-5 shadow-xl">
-              <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments commandés</p>
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments commandés</p>
+                <div className="flex flex-col items-end">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal">Total à payer</span>
+                  <p className="text-2xl font-black text-white">{activeOrder.montant_total} <span className="text-sm font-medium text-foreground-muted">DH</span></p>
+                </div>
+              </div>
+              
               {activeOrder.lignes.length === 0 ? (
                 <p className="text-sm text-foreground-muted italic">Aucun plat ajouté pour l'instant.</p>
               ) : (
@@ -196,6 +224,24 @@ export const OrderingPage = () => {
                     </div>
                   ))}
                 </div>
+              )}
+
+              {isOwnOrder && (
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={closeOrder}
+                  className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <>
+                      <CheckCircle2 className="h-5 w-5" />
+                      Clôturer et Encaisser
+                    </>
+                  )}
+                </button>
               )}
             </div>
           )}
