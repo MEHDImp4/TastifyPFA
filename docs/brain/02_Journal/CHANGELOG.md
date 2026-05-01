@@ -8,6 +8,7 @@
 - `python scripts/update_dashboard.py`: Successfully synchronized the new section.
 - Manual verification of the dashboard layout and parsing logic.
 - **Fixed**: Made the left column scrollable (`overflow-y-auto`) to ensure all cards, including the new Human Test Plan, are visible.
+- **Fixed**: Restored visibility of the "Roadmap Overview" by giving the phases list a fixed height (`h-96`), preventing it from collapsing in the new scrollable column layout.
 
 ## [2026-05-01] - 10:00
 ### Added
