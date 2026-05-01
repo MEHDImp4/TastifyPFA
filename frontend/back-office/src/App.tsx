@@ -6,7 +6,7 @@ import PlatsPage from './pages/Plats';
 import TablesPage from './pages/Tables';
 import { MapView } from './pages/Staff/Map/MapView';
 import { OrderingPage } from './pages/Staff/Ordering/OrderingPage';
-import { KdsPage } from './pages/Staff/KdsPage';
+import { KdsPage } from './pages/Kds/KdsPage';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { WebSocketProvider } from '@shared/websocket/WebSocketProvider';
