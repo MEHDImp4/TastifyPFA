@@ -74,7 +74,8 @@ tastify-pfa/
 │       ├── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
 │       ├── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
 │       ├── 11-commandes-rest-api/ # Wave 11: Commandes API plans, summaries, verification
-│       └── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
+│       ├── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
+│       └── 13-websocket-infrastructure/ # Wave 13: WebSocket infrastructure context and research
 ├── docker-compose.yml             # 5 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md

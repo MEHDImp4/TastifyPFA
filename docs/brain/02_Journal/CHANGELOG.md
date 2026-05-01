@@ -1,3 +1,15 @@
+## [2026-05-01] - 17:43
+### Added
+- Completed technical research for Phase 13: WebSocket Infrastructure.
+- Added `.planning/phases/13-websocket-infrastructure/13-RESEARCH.md` covering the validated Django Channels, Redis channel layer, Simple JWT query-string authentication, staff broadcast architecture, frontend connection strategy, security constraints, and test map.
+
+### Changed
+- Updated `.planning/STATE.md` to resume from the new Phase 13 research artifact.
+- Updated `docs/brain/00_Meta/FILE_MAP.md` and `README.md` to reflect the new Phase 13 planning artifact and current roadmap depth.
+
+### Validation
+- Verified the research against the current codebase integration points in `backend/tastify_backend/asgi.py`, `backend/tastify_backend/settings/base.py`, `backend/requirements.txt`, `docker-compose.yml`, and `frontend/_shared/auth/`.
+
 ## [2026-05-01] - 12:15
 ### Added
 - Completed the final pending item on the Human Test Plan (`H-06-01`).

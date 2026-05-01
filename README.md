@@ -30,7 +30,7 @@ Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with fo
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/12-order-taking-frontend/` with context, research, execution summaries, and verification for the order-taking flow now consolidated into the staff frontend.
+Current planning artifacts now extend through `.planning/phases/13-websocket-infrastructure/`, with Phase 13 research now capturing the validated Django Channels, Redis, Simple JWT, and staff-socket integration approach for the upcoming realtime slice.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
