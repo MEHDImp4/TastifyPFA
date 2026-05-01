@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 16:00:49<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 17:14:30<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -398,11 +398,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->2<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->3<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->1<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->2<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
@@ -526,7 +526,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-04-01</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">Image Upload & Cleanup</p>
                             <p class="text-[10px] text-gray-400 leading-tight">Uploading a new image deletes the old one from `backend/media/`.</p>
@@ -534,7 +537,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-04-02</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">Absolute Image URLs</p>
                             <p class="text-[10px] text-gray-400 leading-tight">API returns `http://localhost:8000/media/...` absolute URLs.</p>
@@ -542,7 +548,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-11-01</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-red-500/10 text-red-400 border-red-500/20">High</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">E2E Order Flow (Docker)</p>
                             <p class="text-[10px] text-gray-400 leading-tight">Create order -> Table becomes OCCUPEE -> Close order -> Table becomes LIBRE.</p>
@@ -550,7 +559,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-06-01</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">Integration Test Suite</p>
                             <p class="text-[10px] text-gray-400 leading-tight">Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker.</p>
@@ -558,7 +570,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-08-01</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-400 border-blue-500/20">Medium</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">Table Map Persistence</p>
                             <p class="text-[10px] text-gray-400 leading-tight">Drag tables in the Map Editor -> Refresh -> Positions persist in DB.</p>
@@ -566,7 +581,10 @@
                         <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">H-05-01</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">Low</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">Low</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">Responsive UI Checks</p>
                             <p class="text-[10px] text-gray-400 leading-tight">Categories and Plats drawers are usable on mobile screens.</p>

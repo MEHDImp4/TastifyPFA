@@ -178,13 +178,14 @@ def read_human_test_plan():
         content = f.read()
     
     # Extraction des lignes de tableau
-    # Format: | H-04-01 | 04/06 | **Image Upload & Cleanup** | ... |
-    test_pattern = re.compile(r'\| (H-\d+-\d+) \| ([^|]+) \| \*\*([^*]+)\*\* \| ([^|]+) \|')
+    # Format: | H-04-01 | 04/06 | **Image Upload & Cleanup** | ... | **PASSED** | ... |
+    test_pattern = re.compile(r'\| (H-\d+-\d+) \| ([^|]+) \| \*\*([^*]+)\*\* \| ([^|]+) \| ([^|]+) \|')
     for match in test_pattern.finditer(content):
         test_id = match.group(1).strip()
         phase = match.group(2).strip()
         title = match.group(3).strip()
         expected = match.group(4).strip()
+        status = match.group(5).strip().replace("**", "")
         
         # Déterminer la priorité basée sur les headers précédents
         priority = "Medium"
@@ -203,7 +204,8 @@ def read_human_test_plan():
             "phase": phase,
             "title": title,
             "expected": expected,
-            "priority": priority
+            "priority": priority,
+            "status": status
         })
     return tests
 
@@ -316,10 +318,17 @@ def update_dashboard():
         if t["priority"] == "High": p_class = "bg-red-500/10 text-red-400 border-red-500/20"
         elif t["priority"] == "Low": p_class = "bg-gray-500/10 text-gray-400 border-gray-500/20"
         
+        s_class = "bg-gray-500/10 text-gray-400 border-gray-500/20"
+        if t["status"] == "PASSED": s_class = "bg-green-500/10 text-green-400 border-green-500/20"
+        elif t["status"] == "PENDING": s_class = "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+        
         human_html.append(f'''                        <div class="p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[10px] font-bold text-primary tracking-tighter">{t["id"]}</span>
-                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {p_class}">{t["priority"]}</span>
+                                <div class="flex gap-1">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {s_class}">{t["status"]}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {p_class}">{t["priority"]}</span>
+                                </div>
                             </div>
                             <p class="text-xs font-semibold text-white mb-0.5">{t["title"]}</p>
                             <p class="text-[10px] text-gray-400 leading-tight">{t["expected"]}</p>
