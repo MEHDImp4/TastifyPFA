@@ -60,6 +60,8 @@ tastify-pfa/
 ├── .planning/                     # GSD framework
 │   ├── ROADMAP.md                 # Current phase tracking
 │   ├── PROJECT.md                 # Tech stack and decisions
+│   ├── STATE.md                   # Current execution state
+│   ├── audit_uat_report.md        # UAT audit results and human test plan
 │   └── phases/                    # Phase-specific files
 │       ├── 01-project-skeleton/   # Wave 1: Infrastructure
 │       ├── 02-user-model-rbac/    # Wave 2: User Core

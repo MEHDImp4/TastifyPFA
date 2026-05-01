@@ -64,7 +64,7 @@
         <header class="animate-fade-up flex items-center justify-between shrink-0">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 00:25:34<!-- UPDATED_AT_END --></p>
+                <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 11:22:29<!-- UPDATED_AT_END --></p>
             </div>
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
@@ -378,12 +378,54 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->10<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
                         </div>
+                    </div>
+                </div>
+                <div class="card p-4 shrink-0">
+                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        UAT Readiness
+                    </h2>
+                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        <!-- UAT_START -->
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 3</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Auth Api Login</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">COMPLETED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse block"></span>
+                                <span class="text-sm font-medium text-white">Ph 5</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Categories Frontend</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-yellow-500/10 text-yellow-400 border-yellow-500/20">IN_PROGRESS</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 11</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Commandes Rest Api</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">COMPLETED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 12</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Order Taking Frontend</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">COMPLETED</span>
+                        </div>
+                            <!-- UAT_END -->
                     </div>
                 </div>
             </div>
@@ -398,143 +440,248 @@
                     <!-- DETAILED_PHASES_START -->
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4><p class="text-xs text-gray-400 mt-1">Docker, Django, React Vite, MySQL, Redis base config. Direct-port routing amendment completed 2026-04-30; runtime simplified to staff and client frontends.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 2: User Model & RBAC</h4><p class="text-xs text-gray-400 mt-1">AbstractUser, Roles (GERANT, SERVEUR, CUISINIER, CLIENT).</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 3: Auth API & Login Page</h4><p class="text-xs text-gray-400 mt-1">JWT setup, Login UI across all apps.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap ml-2">UAT: COMPLETED</span>
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 4: Categories Model & API</h4><p class="text-xs text-gray-400 mt-1">Database model and DRF endpoints.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 5: Categories Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-Office UI for managing categories.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400 border-yellow-500/20 whitespace-nowrap ml-2">UAT: IN_PROGRESS</span>
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 6: Plats Model & API</h4><p class="text-xs text-gray-400 mt-1">Dishes, pricing, prep times.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 7: Plats Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-Office UI for managing dishes.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4><p class="text-xs text-gray-400 mt-1">Table status, capacities. (completed 2026-04-28)</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 9: Tables Map Frontend</h4><p class="text-xs text-gray-400 mt-1">Interactive SVG/Canvas map in staff UI. (completed 2026-04-28)</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">DB constraints, lines, signals for `montant_total`. (completed 2026-04-29)</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 11: Commandes REST API</h4><p class="text-xs text-gray-400 mt-1">Endpoints for creating orders. (completed 2026-04-30)</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap ml-2">UAT: COMPLETED</span>
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 12: Order Taking Frontend</h4><p class="text-xs text-gray-400 mt-1">Staff UI for selecting dishes and validating orders. (completed 2026-04-30)</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap ml-2">UAT: COMPLETED</span>
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 13: WebSocket Infrastructure</h4><p class="text-xs text-gray-400 mt-1">Django Channels, Daphne, Redis Layer.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 14: KDS Base Frontend</h4><p class="text-xs text-gray-400 mt-1">Cuisine view inside the staff SPA, WebSocket connection.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 15: KDS Orchestrator Logic</h4><p class="text-xs text-gray-400 mt-1">Backend calculation of `heure_lancement`.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 16: Order Push to KDS</h4><p class="text-xs text-gray-400 mt-1">Real-time push from Salle to Cuisine.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 17: Order Status Updates</h4><p class="text-xs text-gray-400 mt-1">Cuisine marks dishes as ready -> real-time push to Salle.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 18: Ingredients & Stock Model</h4><p class="text-xs text-gray-400 mt-1">Alerts, thresholds.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 19: Stock Management Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-Office UI for entering stock.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 20: Automated Deductions</h4><p class="text-xs text-gray-400 mt-1">Django signals linking orders to stock decrementation.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 21: Employees (HR) Model & API</h4><p class="text-xs text-gray-400 mt-1">Employee profiles linked to Users.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 22: HR Frontend</h4><p class="text-xs text-gray-400 mt-1">Back-office HR UI.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4><p class="text-xs text-gray-400 mt-1">Availability logic.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 24: Reservations Client UI</h4><p class="text-xs text-gray-400 mt-1">Portail Client booking flow.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 25: Reservations Admin UI</h4><p class="text-xs text-gray-400 mt-1">Validation via Back-Office/Salle.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 26: QR Payment & Split Bill Logic</h4><p class="text-xs text-gray-400 mt-1">Backend calculation for equal/individual splits.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 27: Encaissement UI</h4><p class="text-xs text-gray-400 mt-1">Salle UI modal and Client QR landing page.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 28: Celery Infrastructure & Check-list Model</h4><p class="text-xs text-gray-400 mt-1">Async workers, beat schedules.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 29: Check-list UI & Cron Job</h4><p class="text-xs text-gray-400 mt-1">Back-Office daily check-list execution.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 30: AI Recommender System</h4><p class="text-xs text-gray-400 mt-1">scikit-learn model, API, and Portail Client integration.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 31: AI Sentiment Analysis</h4><p class="text-xs text-gray-400 mt-1">HuggingFace BERT integration for reviews.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 32: Back-Office Dashboard KPIs</h4><p class="text-xs text-gray-400 mt-1">Real-time stats and Recharts integration.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 33: Loyalty Program</h4><p class="text-xs text-gray-400 mt-1">Points logic, Bronze/Silver/Gold tiers in Client UI.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 34: PWA Offline Capabilities</h4><p class="text-xs text-gray-400 mt-1">Service Workers for Salle & KDS.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 35: Load Testing & Optimization</h4><p class="text-xs text-gray-400 mt-1">Locust scripts, Nginx proxy fine-tuning.</p></div>
-                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
                         </div>
                             <!-- DETAILED_PHASES_END -->
                 </div>
@@ -606,6 +753,26 @@
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `dashboard.html` and `STATE.md` updated to reflect verified completion.</p>
                             </li>
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Generated and seeded professional high-quality images for all 21 dishes and 4 categories.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `seed_menu` to correctly map image paths in the media directory.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_menu`: All categories and dishes now have valid image paths.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:26</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Manual verification of `media/plats/` and `media/categories/` contents.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `seed_dev` to use `update_or_create`, ensuring all fields (names, emails, roles) are synced for existing users.</p>
@@ -619,26 +786,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Synchronized documentation (`user.md`, `DEV_CREDENTIALS.md`) with the new full names.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `seed_dev`: Successfully updated all 10 existing users with new field data.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Enriched database seeding with a comprehensive menu: 21 dishes across 4 categories (Entrées, Plats Principaux, Desserts, Boissons).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Expanded table seeding to 20 tables with varied capacities.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-04-30 23:16</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Unified seeding logic to use `update_or_create` for better idempotency across all scripts.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
