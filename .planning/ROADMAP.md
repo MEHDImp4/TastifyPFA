@@ -114,6 +114,15 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Phase 12
 **Success Criteria**: 1. `JWTAuthMiddleware` authenticates staff WebSocket connections. 2. `StaffConsumer` manages `staff_group` membership. 3. Staff frontend establishes a persistent `/ws/staff/` connection.
 
+### Phase 14: KDS Base Frontend
+**Goal**: Cuisine view inside the staff SPA, WebSocket connection.
+**Depends on**: Phase 13
+**Success Criteria**: 1. Cuisinier sees real-time orders in a horizontal rail interface.
+**Plans**: 3 plans
+- [ ] 14-01-PLAN.md — Backend Permissions & API Update
+- [ ] 14-02-PLAN.md — KDS Store & WebSocket Integration
+- [ ] 14-03-PLAN.md — KDS Frontend UI
+
 ### Phase 35: KDS Advanced Operations
 **Goal**: Empower kitchen staff with control over dish availability and modifications.
 **Depends on**: Phase 17
@@ -163,7 +172,8 @@ Phases execute in numeric order: 1 → 40
 | 10. Commandes Model | 3/3 | Complete | 2026-04-29 |
 | 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
 | 12. Order Taking Frontend | 3/3 | Complete | 2026-04-30 |
-| 13. WebSocket Infrastructure | 0/3 | Planned | — |
+| 13. WebSocket Infrastructure | 3/3 | Completed | 2026-05-01 |
+| 14. KDS Base Frontend | 3/3 | Planned | — |
 | ... | 0/0 | Planned | — |
 | 35. KDS Advanced Operations | 0/2 | Planned | — |
 | 36. Click & Collect E-commerce | 0/3 | Planned | — |
