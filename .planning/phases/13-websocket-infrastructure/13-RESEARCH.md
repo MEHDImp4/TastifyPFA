@@ -502,17 +502,17 @@ export const handleStaffEvent = (event: StaffEvent) => {
 | A2 | Capped exponential backoff with jitter is sufficient for staff-scale restaurant usage. | Common Pitfalls | Very large deployments may need server-coordinated retry hints. |
 | A3 | Production will use `wss`; current direct-port local dev uses `ws`. | Security Domain | Deploying insecure `ws` over public networks would expose tokens. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should WebSocket connections be force-closed at access token expiry?**
-   - What we know: Access tokens last 15 minutes in settings. [VERIFIED: backend/tastify_backend/settings/base.py]
-   - What's unclear: Whether Phase 13 must enforce expiry mid-connection.
-   - Recommendation: Defer strict mid-connection expiry to a security hardening phase unless the planner receives a user decision.
+1. **Mid-connection access-token expiry policy**
+   - Decision: Phase 13 will authenticate only at handshake time and will not implement server-side timed disconnect when the 15-minute access token lifetime elapses. [VERIFIED: backend/tastify_backend/settings/base.py]
+   - Why: This phase is infrastructure-only and must not add refresh orchestration or periodic token revalidation complexity before Phases 14-17 consume the socket.
+   - Planning consequence: The frontend provider must close intentionally on logout/auth clear and may reconnect only while an access token still exists; strict mid-connection expiry enforcement is deferred to a later hardening phase if needed.
 
-2. **Should non-staff authenticated users receive close code `4403` rather than `4401`?**
-   - What we know: The staff portal already rejects `CLIENT` users. [VERIFIED: frontend/_shared/auth/roleAccess.ts]
-   - What's unclear: Whether the backend should distinguish unauthenticated vs forbidden in close codes.
-   - Recommendation: Use `4401` for missing/invalid token and `4403` for authenticated non-staff if tests can assert both cleanly.
+2. **Close-code distinction for unauthenticated vs forbidden staff socket access**
+   - Decision: Use `4401` for missing or invalid tokens and `4403` for authenticated users whose role is not in `GERANT`, `SERVEUR`, `CUISINIER`. [VERIFIED: frontend/_shared/auth/roleAccess.ts]
+   - Why: The distinction keeps backend authorization behavior explicit and testable without widening phase scope.
+   - Planning consequence: Backend communicator tests must assert `CLIENT` rejection behavior separately from missing/invalid token rejection.
 
 ## Environment Availability
 

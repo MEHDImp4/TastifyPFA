@@ -1,3 +1,16 @@
+## [2026-05-01] - 18:02
+### Added
+- Created `.planning/phases/13-websocket-infrastructure/13-VALIDATION.md` for Nyquist coverage of the Phase 13 WebSocket slice.
+- Added `.planning/phases/13-websocket-infrastructure/13-01-PLAN.md`, `13-02-PLAN.md`, and `13-03-PLAN.md` covering backend Channels infrastructure, shared staff WebSocket provider/store integration, and final Redis-backed verification plus project-state synchronization.
+
+### Changed
+- Resolved the remaining Phase 13 websocket policy decisions in `13-RESEARCH.md`, including handshake-only authentication scope and the `4401` vs `4403` close-code split.
+- Updated `.planning/ROADMAP.md` and `.planning/STATE.md` to mark Phase 13 as planned with 3 execution slices.
+- Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to reflect the new Phase 13 validation and planning artifacts.
+
+### Validation
+- Ran static plan verification against the revised Phase 13 artifact set and cleared requirement coverage, context compliance, Nyquist validation presence, AGENTS.md compliance, dependency ordering, and verification completeness.
+
 ## [2026-05-01] - 17:43
 ### Added
 - Completed technical research for Phase 13: WebSocket Infrastructure.

@@ -25,7 +25,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
   - [x] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
   - [x] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
   - [x] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
-- [ ] **Phase 13: WebSocket Infrastructure** - Django Channels, Daphne, Redis Layer.
+- [ ] **Phase 13: WebSocket Infrastructure** [PLAN] - Django Channels, Daphne, Redis Layer.
 - [ ] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection.
 - [ ] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`.
 - [ ] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine.
@@ -155,6 +155,15 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
 - [x] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
 
+### Phase 13: WebSocket Infrastructure
+**Goal**: Establish a reliable, real-time communication layer using Django Channels and Redis to push updates from the backend to the frontend SPAs.
+**Depends on**: Phase 12
+**Success Criteria**: 1. `JWTAuthMiddleware` authenticates staff WebSocket connections. 2. `StaffConsumer` manages `staff_group` membership. 3. Staff frontend establishes a persistent `/ws/staff/` connection. 4. Idle connection behavior and native heartbeat/ping-pong expectations are verified. 5. A Django-shell broadcast reaches the live staff session.
+**Plans**: 3 plans
+- [ ] 13-01-PLAN.md — Backend Channels routing, JWT middleware, StaffConsumer, broadcast helper, and communicator tests.
+- [ ] 13-02-PLAN.md — Shared staff WebSocket provider, Zustand websocket store dispatch, reconnect logic, and frontend tests.
+- [ ] 13-03-PLAN.md — Docker Redis smoke, live-session verification, and project state synchronization.
+
 ... [rest of file remains unchanged] ...
 
 ## Progress
@@ -176,4 +185,5 @@ Phases execute in numeric order: 1 → 35
 | 10. Commandes Model | 3/3 | Complete | 2026-04-29 |
 | 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
 | 12. Order Taking Frontend | 3/3 | Complete | 2026-04-30 |
+| 13. WebSocket Infrastructure | 0/3 | Planned | — |
 ...
