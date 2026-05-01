@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_complete
-stopped_at: Phase 12 completed
-last_updated: "2026-05-01T10:05:00.000+01:00"
+status: phase_planned
+stopped_at: Phase 13 context captured
+last_updated: "2026-05-01T12:30:00.000+01:00"
 progress:
   total_phases: 35
   completed_phases: 12
@@ -16,11 +16,12 @@ progress:
 # Planning State
 
 **Last Updated:** 2026-05-01
-**Stopped At:** Phase 12 completed (UAT Audit Performed)
-**Resume File: .planning/phases/01-project-skeleton/01-DIRECT-PORTS-AMENDMENT.md**
+**Stopped At:** Phase 13 context captured
+**Resume File: .planning/phases/13-websocket-infrastructure/13-CONTEXT.md**
 
 ## Notes
 
+- **Phase 13 Context Captured:** Architectural decisions for WebSocket infrastructure locked: Query String JWT auth, Single Staff Channel, and Global Frontend Connection.
 - **UAT Audit Complete (2026-05-01):** Performed comprehensive audit of all project phases.
 - Identified stale documentation in Phases 01, 04, 05, and 08 (all actually completed).
 - Produced `.planning/audit_uat_report.md` with a prioritized human test plan for remaining gaps (mostly image handling and Docker integration tests).
@@ -31,7 +32,8 @@ progress:
 - Salle order-taking flow delivered and consolidated into the staff frontend: table route, per-table cart store, category menu browser, review drawer, and `POST /api/commandes/` submission. Verified by user.
 - Infrastructure amendment complete: Nginx removed from `docker-compose.yml`; backend is exposed on 8000, staff on 3000, and client on 3003.
 - Login role gates fixed: GERANT, SERVEUR, and CUISINIER are accepted only on the unified staff frontend at port 3000; CLIENT is accepted only on port 3003.
-- Ready to discuss or plan Phase 13 (WebSocket Infrastructure).
+- All 12 completed phases have their UAT status set to PASSED and are properly tracked on the dashboard.
+- Human test plan H-06-01 (Plats API Integration) successfully passed on 2026-05-01.
 
 ## Decisions
 
