@@ -1,3 +1,5 @@
+## Status: PASSED
+
 # UAT: Phase 7 — Plats Frontend
 
 **Status:** COMPLETED

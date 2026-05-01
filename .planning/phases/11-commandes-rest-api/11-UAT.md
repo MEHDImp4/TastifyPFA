@@ -1,6 +1,6 @@
 # Phase 11 UAT: Commandes REST API
 
-## Status: COMPLETED
+## Status: PASSED
 Started: 2026-04-30
 Completed: 2026-04-30
 

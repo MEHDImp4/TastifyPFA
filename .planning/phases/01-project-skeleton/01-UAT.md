@@ -1,3 +1,5 @@
+## Status: PASSED
+
 ---
 phase: 1
 slug: project-skeleton

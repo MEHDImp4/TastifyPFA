@@ -1,3 +1,5 @@
+## Status: PASSED
+
 ---
 status: COMPLETED
 phase: 04-categories-model-api
