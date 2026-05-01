@@ -6,11 +6,11 @@ status: phase_planned
 stopped_at: Phase 13 plans created
 last_updated: "2026-05-01T18:02:52.184+01:00"
 progress:
-  total_phases: 35
+  total_phases: 40
   completed_phases: 12
   total_plans: 36
   completed_plans: 33
-  percent: 34
+  percent: 30
 ---
 
 # Planning State
@@ -21,6 +21,7 @@ progress:
 
 ## Notes
 
+- **Roadmap Expanded (2026-05-01):** Extended the project roadmap from 35 to 40 phases to ensure 100% alignment with the technical specifications (UC05, UC19, UC20_bis, UC24, UC29, UC38).
 - **Phase 13 Context Captured:** Architectural decisions for WebSocket infrastructure locked: Query String JWT auth, Single Staff Channel, and Global Frontend Connection.
 - **Phase 13 Research Complete (2026-05-01):** Added `.planning/phases/13-websocket-infrastructure/13-RESEARCH.md` with the validated Channels/Simple JWT/Redis approach, implementation boundaries, test map, and Phase 13-specific pitfalls.
 - **Phase 13 Planned (2026-05-01):** Added `13-VALIDATION.md` plus `13-01-PLAN.md`, `13-02-PLAN.md`, and `13-03-PLAN.md`. Static plan verification passed after resolving websocket policy decisions, Redis smoke coverage, Zustand dispatch scope, and heartbeat/live-session verification coverage.

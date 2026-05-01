@@ -1,3 +1,9 @@
+## [2026-05-01] - 18:15
+### Changed
+- **Roadmap Expansion**: Extended the project roadmap from 35 to 40 phases to ensure 100% compliance with the technical specifications.
+- **UC Integration**: Added specific phases for Click & Collect (UC24), Staff Scheduling (UC05), Weather-aware Stock Prediction (UC29), and Advanced KDS Controls (UC19/20_bis).
+- **Dashboard**: Updated `dashboard.html` and project progress stats to reflect the expanded scope (Phases 12/40).
+
 ## [2026-05-01] - 18:02
 ### Added
 - Created `.planning/phases/13-websocket-infrastructure/13-VALIDATION.md` for Nyquist coverage of the Phase 13 WebSocket slice.
@@ -280,7 +286,7 @@
 - `npm run build` in `frontend/back-office`: passed.
 - `npm run build` in `frontend/salle`: passed with Vite chunk-size warning only.
 - `npm run build` in `frontend/kds`: passed.
-- `npm run build` in `frontend/portail-client`: passed.
+- `npm run build" in `frontend/portail-client`: passed.
 - Commit: `1951ea9`
 
 ## [2026-04-30] - 00:38
@@ -475,7 +481,7 @@
 - **React Router Maintenance**:
   - Resolved console warnings by opting in to React Router v7 future flags (`v7_startTransition`, `v7_relativeSplatPath`) in `back-office`.
   - Fixed `ignoreDeprecations: "6.0"` error in all `tsconfig.json` files by reverting to `"5.0"` (compatible with current TS 5.9.3).
-  - Corrected `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.
+  - Corrected broken `@shared` alias path in `back-office/vite.config.ts` to allow successful production builds.
   - Verified 100% build success in `back-office`.
 
 ## [2026-04-28] - 23:35
@@ -523,7 +529,7 @@
   - Category filter state and UI (horizontal scrollable chips).
   - Data loading from `/api/categories/` and `/api/plats/` (with filtering).
   - Error handling and loading states.
-- Registered `/plats` route in `App.tsx` and updated `Sidebar.tsx` navigation.
+- Registered `/plats" route in `App.tsx` and updated `Sidebar.tsx` navigation.
 
 ### Fixed
 - Fixed `@shared` alias resolution in Vitest by dynamically switching between `../_shared` (local) and `./_shared` (Docker) paths in `vite.config.ts`.
@@ -691,7 +697,7 @@
 ## [2026-04-27] - 23:30
 ### Added
 - Completed Execution of Phase 2: User Model & RBAC.
-- Implemented custom `Utilisateur` model extending `AbstractUser` with a `Role` `TextChoices` ENUM (`GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT`).
+- Implemented custom `Utilisateur" model extending `AbstractUser` with a `Role` `TextChoices` ENUM (`GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT`).
 - Configured Django settings to use `users.Utilisateur` as the default auth model.
 - Created robust DRF permission classes (`IsGerant`, `IsServeurOrGerant`, `IsCuisinierOrGerant`) enforcing a hierarchical RBAC.
 - Implemented `seed_dev` management command to seamlessly create test users for all 4 roles.
@@ -779,4 +785,3 @@ and this project adheres to semantic tracking for development.
 - Ingested `cahier_de_charge_tastify.md` specifications and created `PROJECT_OVERVIEW.md`.
 - Initialized `.planning/` GSD framework with 6 architectural phases mapped from the specifications.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
-

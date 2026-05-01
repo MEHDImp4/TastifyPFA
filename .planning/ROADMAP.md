@@ -16,15 +16,8 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 8: Tables Model & API** - Table status, capacities. (completed 2026-04-28)
 - [x] **Phase 9: Tables Map Frontend** - Interactive SVG/Canvas map in staff UI. (completed 2026-04-28)
 - [x] **Phase 10: Commandes Model** - DB constraints, lines, signals for `montant_total`. (completed 2026-04-29)
-
 - [x] **Phase 11: Commandes REST API** - Endpoints for creating orders. (completed 2026-04-30)
-  - [x] 11-01-PLAN.md — Serializers & ViewSet Foundation (Nested CRUD, RBAC).
-  - [x] 11-02-PLAN.md — Table State Synchronization (Signals).
-  - [x] 11-03-PLAN.md — Custom Actions & Final Verification.
 - [x] **Phase 12: Order Taking Frontend** - Staff UI for selecting dishes and validating orders. (completed 2026-04-30)
-  - [x] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
-  - [x] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
-  - [x] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
 - [ ] **Phase 13: WebSocket Infrastructure** [PLAN] - Django Channels, Daphne, Redis Layer.
 - [ ] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection.
 - [ ] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`.
@@ -47,7 +40,12 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [ ] **Phase 32: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
 - [ ] **Phase 33: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
 - [ ] **Phase 34: PWA Offline Capabilities** - Service Workers for Salle & KDS.
-- [ ] **Phase 35: Load Testing & Optimization** - Locust scripts, Nginx proxy fine-tuning.
+- [ ] **Phase 35: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate).
+- [ ] **Phase 36: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait).
+- [ ] **Phase 37: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi).
+- [ ] **Phase 38: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique).
+- [ ] **Phase 39: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances.
+- [ ] **Phase 40: Load Testing & Optimization** - Locust scripts, Nginx proxy fine-tuning.
 
 ## Phase Details
 
@@ -55,121 +53,101 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Establish Docker, Django, React Vite, MySQL, Redis.
 **Depends on**: Nothing
 **Success Criteria**: 1. Services start via Docker.
-**Plans**:
-- [x] 01-DIRECT-PORTS-AMENDMENT.md — Remove Nginx from Compose and expose backend plus the two runtime frontends directly.
 
 ### Phase 2: User Model & RBAC
 **Goal**: Custom User model with roles.
 **Depends on**: Phase 1
 **Success Criteria**: 1. `GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT` roles exist.
-**Plans**:
-- [x] 02-01-PLAN.md — Custom User model with Role field.
-- [x] 02-02-PLAN.md — RBAC logic and DRF permissions.
-- [x] 02-03-PLAN.md — Dev seeding for all roles.
 
 ### Phase 3: Auth API & Login Page
 **Goal**: JWT endpoints and Login UI.
 **Depends on**: Phase 2
 **Success Criteria**: 1. Users can log in and receive JWT.
-**Plans**:
-- [x] 03-01-PLAN.md — Backend JWT & Secure Endpoints.
-- [x] 03-02-PLAN.md — Shared Frontend Auth Infrastructure.
-- [x] 03-03-PLAN.md — Multi-SPA Integration & Verification.
 
 ### Phase 4: Categories Model & API
 **Goal**: Category DB and REST API.
 **Depends on**: Phase 3
 **Success Criteria**: 1. API allows CRUD on categories with RBAC and soft-delete. 2. Premium images added for core categories.
-**Plans**: 2 plans
-- [x] 04-01-PLAN.md — menu app scaffold, Categorie model, soft delete, media config.
-- [x] 04-02-PLAN.md — CategorieSerializer, CategorieViewSet (RBAC + visibility), URL wiring, tests.
 
 ### Phase 5: Categories Frontend
 **Goal**: Back-office UI for categories.
 **Depends on**: Phase 4
 **Success Criteria**: 1. Manager can visually add/edit categories.
-**Plans**:
-- [x] 05-01-PLAN.md — AppShell and Routing setup.
-- [x] 05-02-PLAN.md — Categories CRUD UI implementation.
 
 ### Phase 6: Plats Model & API
 **Goal**: Dish DB and REST API.
 **Depends on**: Phase 4
 **Success Criteria**: 1. API allows CRUD on dishes with RBAC and soft-delete.
-**Requirements**: [PLAT-01, PLAT-02, PLAT-03, PLAT-04, PLAT-05]
-**Plans**: 3 plans
-- [x] 06-01-PLAN.md — Plat model definition, associations, and migrations.
-- [x] 06-02-PLAN.md — PlatSerializer, PlatViewSet (RBAC + visibility), URL registration.
-- [x] 06-03-PLAN.md — Dev seeding command and integration tests.
 
 ### Phase 7: Plats Frontend
 **Goal**: Back-office UI for dishes.
 **Depends on**: Phase 6
 **Success Criteria**: 1. Manager can visually manage dishes.
-**Plans**:
-- [x] 07-01-PLAN.md — Route wiring, typed contracts, page scaffold, category filter state.
-- [x] 07-02-PLAN.md — Desktop/mobile list renderers, inline statuses, row/card actions.
-- [x] 07-03-PLAN.md — Drawer form, strict validation, category-aware create/edit, empty-state flow.
 
 ### Phase 8: Tables Model & API
 **Goal**: Table DB and REST API.
 **Depends on**: Phase 3
 **Success Criteria**: 1. Tables state is queryable.
-**Plans**:
-- [x] 08-01-PLAN.md — Table app scaffold, model, migration, soft-delete tests.
-- [x] 08-02-PLAN.md — TableSerializer, TableViewSet (RBAC + visibility), URL registration.
-- [x] 08-03-PLAN.md — Seed command and integration tests.
 
 ### Phase 9: Tables Map Frontend
 **Goal**: Visual table map in staff UI.
 **Depends on**: Phase 8
 **Success Criteria**: 1. Waiters see tables map.
-**Plans**:
-- [x] 09-01-PLAN.md — Table map foundation with SVG visualization, status colors, fallback grid, and polling.
-- [x] 09-02-PLAN.md — GERANT-only map editor with dynamic shapes, 20px snapping, collision feedback, batch save, and Salle tests.
 
 ### Phase 10: Commandes Model
 **Goal**: Order database tables and constraints.
 **Depends on**: Phase 6, Phase 8
 **Success Criteria**: 1. Signals calculate `montant_total`.
-**Plans**: 3 plans
-- [x] 10-01-PLAN.md — App scaffold and Commande model with soft-delete.
-- [x] 10-02-PLAN.md — CommandeLigne model with price snapshotting and migrations.
-- [x] 10-03-PLAN.md — Signal implementation for automatic total calculation.
 
 ### Phase 11: Commandes REST API
 **Goal**: REST endpoints for order management.
 **Depends on**: Phase 10
 **Success Criteria**: 1. Nested creation works. 2. Table status syncs automatically.
-**Plans**: 3 plans
-- [x] 11-01-PLAN.md — Serializers & ViewSet Foundation (Nested CRUD, RBAC).
-- [x] 11-02-PLAN.md — Table State Synchronization (Signals).
-- [x] 11-03-PLAN.md — Custom Actions & Final Verification.
 
 ### Phase 12: Order Taking Frontend
 **Goal**: Build the interactive interface in the staff UI for selecting dishes and validating orders.
 **Depends on**: Phase 11
 **Success Criteria**: 1. Servers can select items from the menu, review the cart, and submit orders for specific tables.
-**Plans**: 3 plans
-- [x] 12-01-PLAN.md — Infrastructure & State (Routing, useOrderStore).
-- [x] 12-02-PLAN.md — Menu Navigation & Browser (Horizontal tabs, dish cards).
-- [x] 12-03-PLAN.md — Cart Review & Submission (Floating cart, review drawer).
 
 ### Phase 13: WebSocket Infrastructure
 **Goal**: Establish a reliable, real-time communication layer using Django Channels and Redis to push updates from the backend to the frontend SPAs.
 **Depends on**: Phase 12
-**Success Criteria**: 1. `JWTAuthMiddleware` authenticates staff WebSocket connections. 2. `StaffConsumer` manages `staff_group` membership. 3. Staff frontend establishes a persistent `/ws/staff/` connection. 4. Idle connection behavior and native heartbeat/ping-pong expectations are verified. 5. A Django-shell broadcast reaches the live staff session.
-**Plans**: 3 plans
-- [ ] 13-01-PLAN.md — Backend Channels routing, JWT middleware, StaffConsumer, broadcast helper, and communicator tests.
-- [ ] 13-02-PLAN.md — Shared staff WebSocket provider, Zustand websocket store dispatch, reconnect logic, and frontend tests.
-- [ ] 13-03-PLAN.md — Docker Redis smoke, live-session verification, and project state synchronization.
+**Success Criteria**: 1. `JWTAuthMiddleware` authenticates staff WebSocket connections. 2. `StaffConsumer` manages `staff_group` membership. 3. Staff frontend establishes a persistent `/ws/staff/` connection.
 
-... [rest of file remains unchanged] ...
+### Phase 35: KDS Advanced Operations
+**Goal**: Empower kitchen staff with control over dish availability and modifications.
+**Depends on**: Phase 17
+**Success Criteria**: 1. Cuisinier can flag a plat as "En Rupture" (UC20_bis) which instantly updates the Salle menu via WS. 2. Cuisinier can modify dish notes/accompaniments for active orders (UC19).
+
+### Phase 36: Click & Collect E-commerce
+**Goal**: Allow clients to order and pay online for pickup.
+**Depends on**: Phase 24, Phase 27
+**Success Criteria**: 1. Client can add items to a digital cart in Portail Client. 2. Payment processing integration. 3. Order appears in KDS with a "Pickup" tag.
+
+### Phase 37: Staff Scheduling & Recruitment
+**Goal**: Manage employee shifts and job openings.
+**Depends on**: Phase 22
+**Success Criteria**: 1. Calendar UI for manager to assign shifts. 2. Public "Careers" page on Portail Client with job listings.
+
+### Phase 38: AI Weather-Aware Stock Forecasting
+**Goal**: Use external data to improve inventory management.
+**Depends on**: Phase 18, Phase 30
+**Success Criteria**: 1. Background task fetches weather forecasts. 2. AI model correlates high temps with cold beverage consumption for predictive ordering (UC29).
+
+### Phase 39: Multilingual BERT Expansion
+**Goal**: Fine-tune sentiment analysis for the Moroccan context.
+**Depends on**: Phase 31
+**Success Criteria**: 1. BERT model handles Darija/French/Arabic mixed reviews accurately (UC38).
+
+### Phase 40: Load Testing & Optimization
+**Goal**: Ensure the system handles peak restaurant hours.
+**Depends on**: All previous phases
+**Success Criteria**: 1. System sustains 100 concurrent staff/client connections with < 200ms API latency.
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 35
+Phases execute in numeric order: 1 → 40
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -186,4 +164,10 @@ Phases execute in numeric order: 1 → 35
 | 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
 | 12. Order Taking Frontend | 3/3 | Complete | 2026-04-30 |
 | 13. WebSocket Infrastructure | 0/3 | Planned | — |
-...
+| ... | 0/0 | Planned | — |
+| 35. KDS Advanced Operations | 0/2 | Planned | — |
+| 36. Click & Collect E-commerce | 0/3 | Planned | — |
+| 37. Staff Scheduling & Recruitment | 0/2 | Planned | — |
+| 38. AI Weather-Aware Stock Forecasting | 0/2 | Planned | — |
+| 39. Multilingual BERT Expansion | 0/1 | Planned | — |
+| 40. Load Testing & Optimization | 0/2 | Planned | — |
