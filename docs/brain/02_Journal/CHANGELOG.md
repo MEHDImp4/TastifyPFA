@@ -7,6 +7,7 @@
 ### Validation
 - `python scripts/update_dashboard.py`: Successfully synchronized the new section.
 - Manual verification of the dashboard layout and parsing logic.
+- **Fixed**: Made the left column scrollable (`overflow-y-auto`) to ensure all cards, including the new Human Test Plan, are visible.
 
 ## [2026-05-01] - 10:00
 ### Added
