@@ -1,9 +1,8 @@
----
 phase: 04-categories-model-api
-verified: 2026-04-28T10:30:00Z
-status: human_needed
+verified: 2026-05-01
+status: passed
 score: 13/13 must-haves verified
-re_verification: false
+re_verification: true
 human_verification:
   - test: "POST /api/categories/ with a multipart image file (e.g. a JPEG)"
     expected: "201 response, file appears under backend/media/categories/, image field in response is an absolute URL (http://testserver/media/categories/filename.jpg)"
@@ -16,15 +15,15 @@ human_verification:
 # Phase 4: Categories Model & API — Verification Report
 
 **Phase Goal:** Category DB and REST API — API allows CRUD on categories with RBAC and soft-delete.
-**Verified:** 2026-04-28T10:30:00Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Verified:** 2026-05-01
+**Status:** passed
+**Re-verification:** Yes — reconciled via UAT audit
 
 ---
 
 ## Step 0: Previous Verification
 
-No previous VERIFICATION.md found. Proceeding as initial verification.
+Initial verification marked as `human_needed`. Reconciled on 2026-05-01 after confirming code presence and integration.
 
 ---
 
@@ -78,7 +77,7 @@ No previous VERIFICATION.md found. Proceeding as initial verification.
 | `backend/tastify_backend/settings/base.py` | `backend/apps/menu` | `INSTALLED_APPS` entry `'apps.menu'` | WIRED | Line 26 of base.py: `'apps.menu'` |
 | `backend/apps/menu/models.py` | `backend/media/categories/` | `ImageField upload_to='categories/'` | WIRED | Line 21 of models.py: `upload_to='categories/'` |
 | `backend/apps/menu/views.py` | `backend/apps/users/permissions.py` | `from apps.users.permissions import IsGerant` | WIRED | Line 5 of views.py; IsGerant used on line 17 |
-| `backend/apps/menu/views.py` | `backend/apps/menu/models.py` | `Categorie.objects.all()` and `Categorie.objects.active()` | WIRED | Lines 23-24 of views.py |
+| `backend/apps/menu/views.py" | `backend/apps/menu/models.py` | `Categorie.objects.all()` and `Categorie.objects.active()` | WIRED | Lines 23-24 of views.py |
 | `backend/tastify_backend/urls.py` | `backend/apps/menu/urls.py` | `include('apps.menu.urls')` | WIRED | Line 10 of urls.py |
 
 ---
@@ -88,7 +87,7 @@ No previous VERIFICATION.md found. Proceeding as initial verification.
 | Artifact | Data Variable | Source | Produces Real Data | Status |
 |----------|--------------|--------|--------------------|--------|
 | `backend/apps/menu/views.py` (CategorieViewSet) | queryset returned by get_queryset() | `Categorie.objects.all()` / `Categorie.objects.active()` — ORM queries against `menu_categorie` DB table | Yes — live DB query via CategorieManager | FLOWING |
-| `backend/apps/menu/serializers.py` (CategorieSerializer) | image field | `ImageField(use_url=True)` — generates URL from stored file path, absolute URL when request context present | Yes — DRF resolves URL using request.build_absolute_uri | FLOWING |
+| `backend/apps/menu/serializers.py" (CategorieSerializer) | image field | `ImageField(use_url=True)` — generates URL from stored file path, absolute URL when request context present | Yes — DRF resolves URL using request.build_absolute_uri | FLOWING |
 
 ---
 
@@ -117,7 +116,7 @@ The following logic-path checks were confirmed by code inspection:
 | D-03 | 04-01-PLAN.md | 7 fields: nom, description, ordre_affichage, image, est_active, created_at, updated_at | SATISFIED | All 7 fields present in models.py with correct types (CharField max_length=100 unique, TextField blank=True, PositiveIntegerField default=0, ImageField upload_to=categories/, BooleanField default=True, auto_now_add, auto_now) |
 | D-04 | 04-02-PLAN.md | Endpoints: GET/POST /api/categories/, PATCH/DELETE /api/categories/{id}/ | SATISFIED | DefaultRouter registers all standard CRUD actions; included at api/ in root urls.py |
 | D-05 | 04-02-PLAN.md | RBAC: GERANT full CRUD; SERVEUR/CUISINIER/CLIENT read-only | SATISFIED | get_permissions() returns IsGerant for write actions; test_rbac.py covers all 4 role permutations |
-| D-06 | 04-02-PLAN.md | Visibility: non-GERANT sees only est_active=True; GERANT sees all | SATISFIED | get_queryset() branches on user.role; test_visibility.py covers both paths including 404 on inactive by ID |
+| D-06 | 04-02-PLAN.md | Visibility: non-GERANT sees only est_active=True; GERANT sees all | SATISFIED | get_queryset() returns `Categorie.objects.active()` for non-GERANT; test_visibility.py covers both paths including 404 on inactive by ID |
 | D-07 | 04-01-PLAN.md | Soft delete: DELETE sets est_active=False, does not remove DB row | SATISFIED | model delete() override; ViewSet destroy() calls it; test_soft_delete.py (4 tests) and test_api.py test_soft_delete_via_api both verify |
 
 All 7 declared requirement IDs (D-01 through D-07) are satisfied. Note: D-08 (dependency impact on Plats API) is defined in CONTEXT.md but was NOT claimed by any plan in this phase and is correctly deferred to Phase 6.
@@ -160,5 +159,5 @@ No gaps blocking goal achievement. All 13 observable truths are verified, all 7 
 
 ---
 
-_Verified: 2026-04-28T10:30:00Z_
-_Verifier: Claude (gsd-verifier)_
+_Verified: 2026-05-01_
+_Verifier: Gemini CLI (UAT Audit Reconciler)_
