@@ -30,7 +30,7 @@ Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with fo
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/13-websocket-infrastructure/`, where Phase 13 now includes context, research, validation, and a 3-plan execution set covering backend Channels wiring, the shared staff WebSocket provider/store, and final Redis-backed verification.
+Current planning artifacts now extend through `.planning/phases/13-websocket-infrastructure/`, where Phase 13 now includes context, research, validation, execution plans, and execution summaries covering backend Channels wiring, the shared staff WebSocket provider/store, and final Redis-backed verification.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
@@ -39,6 +39,11 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.tables` — restaurant tables.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
 - `backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
+
+## Realtime staff channel
+- `backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
+- `backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
+- `frontend/_shared/websocket/` owns the shared staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
 
 ## Salle order-taking
 - `frontend/back-office/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.

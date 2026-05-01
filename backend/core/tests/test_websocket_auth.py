@@ -1,6 +1,8 @@
 from asgiref.sync import async_to_sync
 from channels.testing import WebsocketCommunicator
 import pytest
+import subprocess
+import sys
 from rest_framework_simplejwt.tokens import AccessToken
 
 from apps.users.models import Utilisateur
@@ -86,3 +88,19 @@ def test_client_role_is_rejected_with_forbidden_code():
         await communicator.disconnect()
 
     async_to_sync(scenario)()
+
+
+def test_asgi_module_imports_in_fresh_process():
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import tastify_backend.asgi as asgi; print(type(asgi.application).__name__)",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "ProtocolTypeRouter" in result.stdout

@@ -12,7 +12,7 @@ tastify-pfa/
 │   │   ├── urls.py
 │   │   ├── asgi.py                # Daphne entry — ProtocolTypeRouter
 │   │   └── wsgi.py
-│   ├── core/                      # Root config app
+│   ├── core/                      # Root config app, Channels middleware/consumers/helpers/tests
 │   ├── apps/                      # Domain apps
 │   │   ├── users/                 # Custom User model, Auth (Phase 2 & 3)
 │   │   │   ├── views/auth.py      # Cookie-based JWT views
@@ -36,6 +36,7 @@ tastify-pfa/
 ├── frontend/                      # 2 independent Vite SPAs
 │   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
 │   │   ├── auth/                  # Zustand Store, Login UI, Axios instance, role access gates
+│   │   ├── websocket/             # Shared staff socket provider, store, and parsing helpers
 │   │   ├── components/map/        # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │   │   ├── assets/                # Shared logo, icons
 │   │   └── types/                 # Shared TypeScript interfaces
@@ -75,7 +76,7 @@ tastify-pfa/
 │       ├── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
 │       ├── 11-commandes-rest-api/ # Wave 11: Commandes API plans, summaries, verification
 │       ├── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
-│       └── 13-websocket-infrastructure/ # Wave 13: WebSocket infrastructure context, research, validation, and execution plans
+│       └── 13-websocket-infrastructure/ # Wave 13: WebSocket infrastructure context, research, validation, execution plans, and summaries
 ├── docker-compose.yml             # 5 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md

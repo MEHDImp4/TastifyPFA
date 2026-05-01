@@ -1,3 +1,21 @@
+## [2026-05-01] - 18:51
+### Added
+- Added `.planning/phases/13-websocket-infrastructure/13-03-SUMMARY.md` to capture the final verification wave for the websocket infrastructure phase.
+- Added a fresh-process ASGI regression test in `backend/core/tests/test_websocket_auth.py` so Phase 13 covers live Daphne import behavior rather than only in-process communicator paths.
+
+### Fixed
+- Corrected `backend/tastify_backend/asgi.py` import order so Django app initialization happens before websocket middleware imports touch auth models.
+
+### Changed
+- Marked Phase 13 complete in `.planning/ROADMAP.md` and `.planning/STATE.md`, with execution progress advanced to 13/40 phases and 36/36 planned slices completed.
+- Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to reflect completed Phase 13 execution summaries and the shared websocket surface.
+
+### Validation
+- `docker compose exec backend pytest -q`: 92 passed.
+- `npm run test -- --run`: 76 passed.
+- `npm run build`: passed.
+- Live smoke passed after rebuilding the backend container and connecting to `ws://localhost:8000/ws/staff/` with a valid staff JWT plus `Origin: http://localhost`, then receiving `{"type":"infrastructure_test","payload":{"source":"phase_13"}}`.
+
 ## [2026-05-01] - 18:27
 ### Changed
 - **Synchronization**: Finalized project state synchronization and dashboard health check.

@@ -2,22 +2,22 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_planned
-stopped_at: Phase 13 plans created
-last_updated: "2026-05-01T18:02:52.184+01:00"
+status: phase_completed
+stopped_at: Phase 13 executed
+last_updated: "2026-05-01T18:51:00.000+01:00"
 progress:
   total_phases: 40
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 36
-  completed_plans: 33
-  percent: 30
+  completed_plans: 36
+  percent: 32
 ---
 
 # Planning State
 
 **Last Updated:** 2026-05-01
-**Stopped At:** Phase 13 plans created
-**Resume File: .planning/phases/13-websocket-infrastructure/13-01-PLAN.md**
+**Stopped At:** Phase 13 executed
+**Resume File: .planning/phases/13-websocket-infrastructure/13-03-SUMMARY.md**
 
 ## Notes
 
@@ -25,6 +25,8 @@ progress:
 - **Phase 13 Context Captured:** Architectural decisions for WebSocket infrastructure locked: Query String JWT auth, Single Staff Channel, and Global Frontend Connection.
 - **Phase 13 Research Complete (2026-05-01):** Added `.planning/phases/13-websocket-infrastructure/13-RESEARCH.md` with the validated Channels/Simple JWT/Redis approach, implementation boundaries, test map, and Phase 13-specific pitfalls.
 - **Phase 13 Planned (2026-05-01):** Added `13-VALIDATION.md` plus `13-01-PLAN.md`, `13-02-PLAN.md`, and `13-03-PLAN.md`. Static plan verification passed after resolving websocket policy decisions, Redis smoke coverage, Zustand dispatch scope, and heartbeat/live-session verification coverage.
+- **Phase 13 Executed (2026-05-01):** Added `13-01-SUMMARY.md`, `13-02-SUMMARY.md`, and `13-03-SUMMARY.md`. Backend Channels routing, JWT websocket auth, staff provider/store wiring, full backend/frontend regression runs, and live Redis-backed socket verification all passed.
+- **Phase 13 Runtime Fix (2026-05-01):** Live Daphne verification exposed an ASGI import-order bug that in-process communicator tests missed. `tastify_backend.asgi` now initializes Django before importing websocket middleware and routing, and a fresh-process regression test locks that behavior.
 - **UAT Audit Complete (2026-05-01):** Performed comprehensive audit of all project phases.
 - Identified stale documentation in Phases 01, 04, 05, and 08 (all actually completed).
 - Produced `.planning/audit_uat_report.md` with a prioritized human test plan for remaining gaps (mostly image handling and Docker integration tests).
