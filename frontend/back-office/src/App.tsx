@@ -9,6 +9,7 @@ import { OrderingPage } from './pages/Staff/Ordering/OrderingPage';
 import { KdsPage } from './pages/Staff/KdsPage';
 import Login from '@shared/auth/Login';
 import { useAuthStore } from '@shared/auth/useAuthStore';
+import { WebSocketProvider } from '@shared/websocket/WebSocketProvider';
 import {
   GERANT_ROLES,
   KDS_ROLES,
@@ -86,7 +87,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
         
-        <Route element={<AppShell />}>
+        <Route element={<WebSocketProvider><AppShell /></WebSocketProvider>}>
           <Route index element={<StaffEntryRedirect />} />
           <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
           <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />
