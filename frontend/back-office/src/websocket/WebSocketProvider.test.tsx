@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { act, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -139,6 +140,10 @@ describe('WebSocketProvider', () => {
       </WebSocketProvider>,
     )
 
+    act(() => {
+      vi.runAllTimers()
+    })
+
     expect(MockWebSocket.instances).toHaveLength(1)
     expect(MockWebSocket.instances[0].url).toContain('/ws/staff/?token=access-token')
     expect(screen.getByTestId('status')).toHaveTextContent('connecting')
@@ -175,6 +180,7 @@ describe('WebSocketProvider', () => {
     )
 
     act(() => {
+      vi.runAllTimers()
       MockWebSocket.instances[0].triggerOpen()
       MockWebSocket.instances[0].triggerClose(1006)
     })
@@ -205,6 +211,7 @@ describe('WebSocketProvider', () => {
     )
 
     act(() => {
+      vi.runAllTimers()
       MockWebSocket.instances[0].triggerOpen()
       MockWebSocket.instances[0].triggerClose(1006)
       useAuthStore.getState().clearAuth()
@@ -214,5 +221,31 @@ describe('WebSocketProvider', () => {
     expect(MockWebSocket.instances).toHaveLength(1)
     expect(screen.getByTestId('status')).toHaveTextContent('idle')
     expect(screen.getByTestId('event-type')).toHaveTextContent('none')
+  })
+
+  it('avoids opening and immediately closing a connecting socket during StrictMode remounts', () => {
+    act(() => {
+      useAuthStore.getState().setAuth(
+        { username: 'gerant_test', role: 'GERANT' },
+        'access-token',
+      )
+    })
+
+    render(
+      <StrictMode>
+        <WebSocketProvider>
+          <Probe />
+        </WebSocketProvider>
+      </StrictMode>,
+    )
+
+    expect(MockWebSocket.instances).toHaveLength(0)
+
+    act(() => {
+      vi.runAllTimers()
+    })
+
+    expect(MockWebSocket.instances).toHaveLength(1)
+    expect(MockWebSocket.instances[0].readyState).toBe(MockWebSocket.CONNECTING)
   })
 })

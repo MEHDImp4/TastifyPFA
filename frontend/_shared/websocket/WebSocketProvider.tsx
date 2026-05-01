@@ -20,11 +20,19 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
   const resetSocketState = useStaffSocketStore((state) => state.resetSocketState)
 
   const socketRef = useRef<WebSocket | null>(null)
+  const connectTimerRef = useRef<number | null>(null)
   const reconnectTimerRef = useRef<number | null>(null)
   const reconnectAttemptRef = useRef(0)
   const intentionalCloseRef = useRef(false)
 
   useEffect(() => {
+    const clearConnectTimer = () => {
+      if (connectTimerRef.current !== null) {
+        window.clearTimeout(connectTimerRef.current)
+        connectTimerRef.current = null
+      }
+    }
+
     const clearReconnectTimer = () => {
       if (reconnectTimerRef.current !== null) {
         window.clearTimeout(reconnectTimerRef.current)
@@ -49,11 +57,13 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
 
     if (!canConnect) {
       intentionalCloseRef.current = true
+      clearConnectTimer()
       clearReconnectTimer()
       cleanupSocket()
       reconnectAttemptRef.current = 0
       resetSocketState()
       return () => {
+        clearConnectTimer()
         clearReconnectTimer()
       }
     }
@@ -68,6 +78,7 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
 
       const socket = new WebSocket(buildStaffWebSocketUrl(window.location, accessToken!))
       socketRef.current = socket
+      connectTimerRef.current = null
 
       socket.onopen = () => {
         reconnectAttemptRef.current = 0
@@ -110,10 +121,13 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
       }
     }
 
-    connect()
+    connectTimerRef.current = window.setTimeout(() => {
+      connect()
+    }, 0)
 
     return () => {
       intentionalCloseRef.current = true
+      clearConnectTimer()
       clearReconnectTimer()
       cleanupSocket()
       reconnectAttemptRef.current = 0
