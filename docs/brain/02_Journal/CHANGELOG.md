@@ -1,3 +1,17 @@
+## [2026-05-01] - 20:46
+### Fixed
+- Restored the back-office staff websocket dev path by proxying `/ws` from Vite to `ws://backend:8000`, so `ws://localhost:3000/ws/staff/` now reaches Django Channels during local development.
+
+### Added
+- Added `frontend/back-office/src/viteConfig.test.ts` to guard the `/ws` proxy regression in the back-office Vite config.
+
+### Validation
+- `npm run test -- src/viteConfig.test.ts --run`: passed.
+- `npm run test -- src/websocket/WebSocketProvider.test.tsx --run`: passed.
+
+### Commit
+- `0327c1a` - `fix(back-office): proxy staff websocket in dev`
+
 ## [2026-05-01] - 18:51
 ### Added
 - Added `.planning/phases/13-websocket-infrastructure/13-03-SUMMARY.md` to capture the final verification wave for the websocket infrastructure phase.
@@ -20,6 +34,15 @@
 ### Changed
 - **Synchronization**: Finalized project state synchronization and dashboard health check.
 - **Dashboard**: Updated `dashboard.html` timestamp and verified progress (30%).
+
+## [2026-05-01] - 18:45
+### Verified
+- **Manual UAT Success**: The user has manually verified and passed all 5 key testing areas from the Human Test Plan:
+    1. **Real-time WebSockets**: Connection, reconnection, and multi-tab sync verified.
+    2. **E2E Order Flow**: Full lifecycle from table selection to order closure verified.
+    3. **Media Management**: Image uploads, previews, and cleanup verified.
+    4. **Interactive Floor Plan**: Grid snapping and collision detection in editor verified.
+    5. **Mobile & Responsive**: Sidebar accessibility and drawer layouts verified on mobile.
 
 ## [2026-05-01] - 18:15
 ### Changed
