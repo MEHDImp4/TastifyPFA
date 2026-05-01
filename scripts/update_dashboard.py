@@ -394,6 +394,7 @@ def update_dashboard():
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<span[^>]*>.*?</span>(<!-- PERCENT_END -->)', rf'\g<1><span class="text-primary font-bold">{progress_percent}%</span>\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<div[^>]*style="width:.*?(<!-- PERCENT_END -->)', rf'\g<1><div class="h-full bg-primary rounded-full" style="width: {progress_percent}%"></div>\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- STAT_PHASES_START -->).*?(<!-- STAT_PHASES_END -->)', rf'\g<1>{completed_phases}\g<2>', dash_content)
+    dash_content = re.sub(r'(<!-- STAT_TOTAL_PHASES_START -->).*?(<!-- STAT_TOTAL_PHASES_END -->)', rf'\g<1>{total_phases}\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- STAT_TASKS_START -->).*?(<!-- STAT_TASKS_END -->)', rf'\g<1>{tasks_done}\g<2>', dash_content)
     
     # Update timestamp
