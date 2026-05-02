@@ -27,12 +27,11 @@ tastify-pfa/
 │   │   ├── tables/                # Table model, API, and seed data
 │   │   └── commandes/             # Orders, order lines, total signals, and KDS orchestration
 │   │       ├── models.py          # Commande and CommandeLigne + Phase 15 scheduling fields
-│   │       ├── signals.py         # montant_total recalculation + orchestrator triggers
+│   │       ├── signals.py         # montant_total recalculation + commit-safe orchestrator/broadcast triggers
 │   │       ├── services/          # KDS orchestration services
 │   │       ├── tasks.py           # Celery ETA launch tasks + staff broadcasts
 │   │       ├── migrations/
-│   │       └── tests/
-│   │           └── test_kds_permissions.py
+│   │       └── tests/             # API, signal, permission, and orchestration regression coverage
 │   ├── requirements.txt
 │   ├── entrypoint.sh              # Applies pending migrations before Daphne starts
 │   └── Dockerfile

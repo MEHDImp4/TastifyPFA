@@ -132,8 +132,15 @@ def test_signal_triggers_orchestrator_on_line_create(table_obj, plat_short, mock
     spy = mocker.patch(
         'apps.commandes.signals.KdsOrchestrator.reorchestrate_order'
     )
+    on_commit_mock = mocker.patch(
+        'apps.commandes.signals.transaction.on_commit'
+    )
     CommandeLigne.objects.create(commande=commande, plat=plat_short, quantite=1)
-    spy.assert_called_with(commande)
+    spy.assert_not_called()
+    assert on_commit_mock.call_count >= 1
+    for call in on_commit_mock.call_args_list:
+        call.args[0]()
+    spy.assert_called_once()
 
 
 @pytest.mark.django_db
@@ -146,3 +153,24 @@ def test_signal_no_recursion_on_orchestrator_update(commande_with_lines, mocker)
         celery_task_id='test-id-no-recursion'
     )
     spy.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_signal_delete_defers_revocation_until_commit(commande_with_lines, mocker):
+    _, line_short, _ = commande_with_lines
+    CommandeLigne.objects.filter(pk=line_short.pk).update(celery_task_id='stale-task-id')
+    revoke_mock = mocker.patch('celery.current_app.control.revoke')
+    spy = mocker.patch('apps.commandes.signals.KdsOrchestrator.reorchestrate_order')
+    on_commit_mock = mocker.patch('apps.commandes.signals.transaction.on_commit')
+
+    line_short.refresh_from_db()
+    commande_id = line_short.commande_id
+    line_short.delete()
+
+    assert on_commit_mock.call_count >= 1
+    revoke_mock.assert_not_called()
+    for call in on_commit_mock.call_args_list:
+        call.args[0]()
+    revoke_mock.assert_called_once_with('stale-task-id')
+    spy.assert_called_once()
+    assert spy.call_args.args[0].pk == commande_id

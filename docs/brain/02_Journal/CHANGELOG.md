@@ -1,3 +1,19 @@
+## [2026-05-02] - 23:36
+### Fixed
+- Deferred Phase 15 KDS re-orchestration and order snapshot broadcasting in `backend/apps/commandes/signals.py` so ETA scheduling and websocket emissions only happen after the surrounding transaction commits.
+- Removed the premature order websocket path that could publish `order_created` with empty `lignes` and race immediate ETA launches against uncommitted line state.
+
+### Added
+- Added deferred-orchestration regression coverage in `backend/apps/commandes/tests/test_orchestrator.py`.
+- Added post-commit broadcast coverage in `backend/apps/commandes/tests/test_signals.py`.
+- Added API coverage that order creation defers broadcast scheduling until commit in `backend/apps/commandes/tests/test_api.py`.
+
+### Validation
+- `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v`: 40 passed.
+
+### Commit
+- `[PENDING]`
+
 ## [2026-05-02] - 23:30
 ### Changed
 - Completed Phase 15 manual UAT session in `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` with two recorded issues and inline diagnosis.

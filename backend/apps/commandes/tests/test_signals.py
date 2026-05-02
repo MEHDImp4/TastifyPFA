@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.test import TestCase
+from unittest.mock import patch
 
 from apps.commandes.models import Commande, CommandeLigne
 from apps.menu.models import Categorie, Plat
@@ -74,3 +75,22 @@ class CommandeSignalsTest(TestCase):
 
     def test_total_is_zero_when_no_lines_exist(self):
         self.assertEqual(self.refresh_total(), Decimal('0.00'))
+
+    def test_commande_created_broadcast_runs_after_commit_with_lines(self):
+        with patch('apps.commandes.signals.broadcast_staff_event') as broadcast_mock:
+            with self.captureOnCommitCallbacks(execute=True):
+                commande = Commande.objects.create(table=self.table)
+                CommandeLigne.objects.create(
+                    commande=commande,
+                    plat=self.plat,
+                    quantite=2,
+                )
+
+        created_events = [
+            call.args for call in broadcast_mock.call_args_list
+            if call.args and call.args[0] == 'order_created'
+        ]
+        self.assertEqual(len(created_events), 1)
+        payload = created_events[0][1]["order"]
+        self.assertEqual(len(payload["lignes"]), 1)
+        self.assertEqual(payload["lignes"][0]["quantite"], 2)

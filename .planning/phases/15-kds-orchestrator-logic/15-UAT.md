@@ -1,5 +1,5 @@
 ---
-status: diagnosed
+status: remediated-awaiting-reretest
 phase: 15-kds-orchestrator-logic
 source:
   - 15-01-SUMMARY.md
@@ -7,7 +7,7 @@ source:
   - .planning/.continue-here.md
   - 15-VALIDATION.md
 started: 2026-05-02T22:58:00+01:00
-updated: 2026-05-02T23:30:00+01:00
+updated: 2026-05-02T23:36:52+01:00
 ---
 
 ## Current Test
@@ -36,6 +36,15 @@ issues: 2
 pending: 0
 skipped: 0
 blocked: 0
+
+## Remediation
+
+- Implemented commit-safe orchestration in `backend/apps/commandes/signals.py` by deferring both KDS re-orchestration and staff order snapshot broadcasts through `transaction.on_commit(...)`.
+- Added regression coverage for deferred create/delete orchestration in `backend/apps/commandes/tests/test_orchestrator.py`.
+- Added signal coverage proving `order_created` broadcasts run after commit with committed `lignes` in `backend/apps/commandes/tests/test_signals.py`.
+- Added API coverage proving order creation defers broadcast scheduling until commit in `backend/apps/commandes/tests/test_api.py`.
+- Validation: `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v` -> `40 passed`.
+- Manual CUISINIER websocket rerun is still required to close the original UAT gaps.
 
 ## Gaps
 

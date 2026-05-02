@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
+from unittest.mock import patch
 from apps.tables.models import Table
 from apps.menu.models import Categorie, Plat
 from apps.commandes.models import Commande, CommandeLigne
@@ -100,3 +101,16 @@ class CommandeAPITestCase(APITestCase):
         self.assertEqual(Commande.objects.active().count(), 0)
         self.assertEqual(Commande.objects.count(), 1)
         self.assertFalse(Commande.objects.get(id=commande_id).est_active)
+
+    def test_create_commande_defers_broadcast_until_commit(self):
+        self.client.force_authenticate(user=self.serveur1)
+        data = {
+            'table': self.table.id,
+            'lignes': [{'plat': self.plat1.id, 'quantite': 2}],
+        }
+
+        with patch('apps.commandes.signals.transaction.on_commit') as on_commit_mock:
+                response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertGreaterEqual(on_commit_mock.call_count, 1)
