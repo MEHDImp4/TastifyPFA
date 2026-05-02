@@ -3,25 +3,29 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: phase_completed
-stopped_at: Phase 13 executed
-last_updated: "2026-05-01T18:51:00.000+01:00"
+stopped_at: Phase 14 executed
+last_updated: "2026-05-01T21:25:00.000+01:00"
 progress:
   total_phases: 40
-  completed_phases: 13
-  total_plans: 36
-  completed_plans: 36
-  percent: 32
+  completed_phases: 14
+  total_plans: 39
+  completed_plans: 39
+  percent: 35
 ---
 
 # Planning State
 
 **Last Updated:** 2026-05-01
-**Stopped At:** Phase 13 executed
-**Resume File: .planning/phases/13-websocket-infrastructure/13-03-SUMMARY.md**
+**Stopped At:** Phase 14 executed
+**Resume File: .planning/phases/14-kds-base-frontend/14-03-SUMMARY.md**
 
 ## Notes
 
-- **Roadmap Expanded (2026-05-01):** Extended the project roadmap from 35 to 40 phases to ensure 100% alignment with the technical specifications (UC05, UC19, UC20_bis, UC24, UC29, UC38).
+- **Phase 14 Executed (2026-05-01):** KDS Base Frontend delivered.
+- Backend permissions updated to allow `CUISINIER` role access to kitchen orders.
+- Zustand `useKdsStore` implemented with WebSocket sync and LIFO sorting.
+- Horizontal rail KDS UI built with `TicketCard` and performance-optimized `KdsTimer`.
+- Verified via backend pytest and frontend vitest suites.
 - **Phase 13 Context Captured:** Architectural decisions for WebSocket infrastructure locked: Query String JWT auth, Single Staff Channel, and Global Frontend Connection.
 - **Phase 13 Research Complete (2026-05-01):** Added `.planning/phases/13-websocket-infrastructure/13-RESEARCH.md` with the validated Channels/Simple JWT/Redis approach, implementation boundaries, test map, and Phase 13-specific pitfalls.
 - **Phase 13 Planned (2026-05-01):** Added `13-VALIDATION.md` plus `13-01-PLAN.md`, `13-02-PLAN.md`, and `13-03-PLAN.md`. Static plan verification passed after resolving websocket policy decisions, Redis smoke coverage, Zustand dispatch scope, and heartbeat/live-session verification coverage.

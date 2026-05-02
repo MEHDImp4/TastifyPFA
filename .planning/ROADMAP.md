@@ -19,7 +19,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 11: Commandes REST API** - Endpoints for creating orders. (completed 2026-04-30)
 - [x] **Phase 12: Order Taking Frontend** - Staff UI for selecting dishes and validating orders. (completed 2026-04-30)
 - [x] **Phase 13: WebSocket Infrastructure** - Django Channels, Daphne, Redis Layer. (completed 2026-05-01)
-- [ ] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection.
+- [x] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection. (completed 2026-05-01)
 - [ ] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`.
 - [ ] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine.
 - [ ] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle.
@@ -173,7 +173,7 @@ Phases execute in numeric order: 1 → 40
 | 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
 | 12. Order Taking Frontend | 3/3 | Complete | 2026-04-30 |
 | 13. WebSocket Infrastructure | 3/3 | Completed | 2026-05-01 |
-| 14. KDS Base Frontend | 3/3 | Planned | — |
+| 14. KDS Base Frontend | 3/3 | Complete | 2026-05-01 |
 | ... | 0/0 | Planned | — |
 | 35. KDS Advanced Operations | 0/2 | Planned | — |
 | 36. Click & Collect E-commerce | 0/3 | Planned | — |

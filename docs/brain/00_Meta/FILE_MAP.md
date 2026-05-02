@@ -30,6 +30,7 @@ tastify-pfa/
 │   │       ├── signals.py         # montant_total recalculation
 │   │       ├── migrations/
 │   │       └── tests/
+│   │           └── test_kds_permissions.py
 │   ├── requirements.txt
 │   ├── entrypoint.sh              # Applies pending migrations before Daphne starts
 │   └── Dockerfile
@@ -47,7 +48,11 @@ tastify-pfa/
 │   │       ├── Categories/        # Categories management (Phase 5)
 │   │       ├── Plats/             # Plats management (Phase 7)
 │   │       ├── Tables/            # Centralized Table map management (Added Phase 9)
-│   │       └── Staff/             # Salle map, order-taking flow, and KDS entry screen
+│   │       └── Kds/               # Kitchen Display System (Phase 14)
+│   │           ├── components/    # TicketCard, KdsTimer
+│   │           ├── store/         # useKdsStore
+│   │           ├── KdsPage.tsx
+│   │           └── KdsSocketManager.tsx
 │   └── portail-client/            # CLIENT  — Vite :3003 — /
 ├── nginx/                         # Legacy reverse-proxy config, not used by docker-compose.yml
 │   └── nginx.conf
@@ -64,19 +69,20 @@ tastify-pfa/
 │   ├── STATE.md                   # Current execution state
 │   ├── audit_uat_report.md        # UAT audit results and human test plan
 │   └── phases/                    # Phase-specific files
-│       ├── 01-project-skeleton/   # Wave 1: Infrastructure
-│       ├── 02-user-model-rbac/    # Wave 2: User Core
-│       ├── 03-auth-api-login/     # Wave 3: JWT & Login
-│       ├── 04-categories-model-api/ # Wave 4: Menu Core (Finalized)
-│       ├── 05-categories-frontend/ # Wave 5: Back-office Categories UI
-│       ├── 06-plats-model-api/    # Wave 6: Dish API and backend rules
-│       ├── 07-plats-frontend/     # Wave 7: Back-office Dishes UI context, research, and plans
-│       ├── 08-tables-model-api/   # Wave 8: Table model, API, seed data, and tests
-│       ├── 09-tables-map-frontend/ # Wave 9: Salle table map context, research, summaries, verification
-│       ├── 10-commandes-model/    # Wave 10: Order model, signals, summaries, verification
-│       ├── 11-commandes-rest-api/ # Wave 11: Commandes API plans, summaries, verification
-│       ├── 12-order-taking-frontend/ # Wave 12: Salle ordering context, plans, summaries, verification
-│       └── 13-websocket-infrastructure/ # Wave 13: WebSocket infrastructure context, research, validation, execution plans, and summaries
+│       ├── 01-project-skeleton/
+│       ├── 02-user-model-rbac/
+│       ├── 03-auth-api-login/
+│       ├── 04-categories-model-api/
+│       ├── 05-categories-frontend/
+│       ├── 06-plats-model-api/
+│       ├── 07-plats-frontend/
+│       ├── 08-tables-model-api/
+│       ├── 09-tables-map-frontend/
+│       ├── 10-commandes-model/
+│       ├── 11-commandes-rest-api/
+│       ├── 12-order-taking-frontend/
+│       ├── 13-websocket-infrastructure/
+│       └── 14-kds-base-frontend/
 ├── docker-compose.yml             # 5 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md
