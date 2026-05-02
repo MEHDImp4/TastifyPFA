@@ -114,3 +114,64 @@ class CommandeAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertGreaterEqual(on_commit_mock.call_count, 1)
+
+    def test_create_commande_broadcasts_single_committed_order_snapshot(self):
+        self.client.force_authenticate(user=self.serveur1)
+        data = {
+            'table': self.table.id,
+            'lignes': [{'plat': self.plat1.id, 'quantite': 2}],
+        }
+
+        with patch('apps.commandes.signals.broadcast_staff_event') as broadcast_mock:
+            with self.captureOnCommitCallbacks(execute=True):
+                response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        created_events = [
+            call.args[1]['order']
+            for call in broadcast_mock.call_args_list
+            if call.args and call.args[0] == 'order_created'
+        ]
+        updated_events = [
+            call.args[1]['order']
+            for call in broadcast_mock.call_args_list
+            if call.args and call.args[0] == 'order_updated'
+        ]
+
+        self.assertEqual(len(created_events), 1)
+        self.assertEqual(len(created_events[0]['lignes']), 1)
+        self.assertEqual(created_events[0]['lignes'][0]['quantite'], 2)
+        self.assertEqual(len(updated_events), 1)
+
+    def test_create_commande_schedules_reorchestration_on_commit(self):
+        self.client.force_authenticate(user=self.serveur1)
+        data = {
+            'table': self.table.id,
+            'lignes': [{'plat': self.plat1.id, 'quantite': 2}],
+        }
+
+        with patch(
+            'apps.commandes.serializers.KdsOrchestrator.schedule_reorchestration_after_commit'
+        ) as schedule_mock:
+            response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        schedule_mock.assert_called_once()
+        commande = Commande.objects.get(pk=response.data['id'])
+        self.assertEqual(schedule_mock.call_args.args[0], commande.pk)
+
+    def test_add_items_schedules_reorchestration_on_commit(self):
+        self.client.force_authenticate(user=self.serveur1)
+        create_response = self.client.post(self.url, {'table': self.table.id, 'lignes': []}, format='json')
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        add_items_url = reverse('commande-add-items', kwargs={'pk': create_response.data['id']})
+        data = [{'plat': self.plat1.id, 'quantite': 1}]
+
+        with patch(
+            'apps.commandes.views.KdsOrchestrator.schedule_reorchestration_after_commit'
+        ) as schedule_mock:
+            response = self.client.post(add_items_url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        schedule_mock.assert_called_once_with(create_response.data['id'])

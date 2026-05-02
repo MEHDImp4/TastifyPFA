@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from celery import current_app
+from django.db import transaction
 from django.utils import timezone
 
 from apps.commandes.models import CommandeLigne
@@ -18,6 +19,15 @@ class KdsOrchestrator:
 
     IDLE_STATUSES = {CommandeLigne.Statut.EN_ATTENTE}
     RUNNING_STATUSES = {CommandeLigne.Statut.EN_PREPARATION}
+
+    @classmethod
+    def schedule_reorchestration_after_commit(cls, commande_id):
+        def run():
+            from apps.commandes.models import Commande
+
+            cls.reorchestrate_order(Commande.objects.get(pk=commande_id))
+
+        transaction.on_commit(run)
 
     @classmethod
     def reorchestrate_order(cls, commande):

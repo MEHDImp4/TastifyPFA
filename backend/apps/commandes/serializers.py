@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 from .models import Commande, CommandeLigne
+from .services.orchestrator import KdsOrchestrator
 from apps.menu.models import Plat
 
 
@@ -81,5 +82,7 @@ class CommandeSerializer(serializers.ModelSerializer):
             commande = Commande.objects.create(serveur=serveur, **validated_data)
             for ligne_data in lignes_data:
                 CommandeLigne.objects.create(commande=commande, **ligne_data)
-        
+            if lignes_data:
+                KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
+
         return commande

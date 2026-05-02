@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
+from .services.orchestrator import KdsOrchestrator
 
 
 class CommandeViewSet(viewsets.ModelViewSet):
@@ -72,6 +73,8 @@ class CommandeViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             with transaction.atomic():
                 serializer.save(commande=commande)
+                if serializer.validated_data:
+                    KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
             
             # Re-serialize commande to return updated state
             full_serializer = self.get_serializer(commande)
