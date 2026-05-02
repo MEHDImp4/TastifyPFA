@@ -1,3 +1,21 @@
+## [2026-05-02] - 01:57
+### Fixed
+- Returned `username` and `role` from `POST /api/users/refresh/` so the shared auth layer can no longer keep a stale staff identity after a cross-portal session refresh.
+- Updated `frontend/_shared/auth/axiosInstance.ts` and `frontend/_shared/auth/useAuthStore.ts` so refreshes synchronize the persisted user alongside the new access token, preventing KDS `403 Forbidden` failures caused by auth-state drift.
+
+### Added
+- Added `frontend/back-office/src/authRefreshSync.test.ts` to lock the regression where a refreshed token changes role identity across the shared client/staff auth store.
+
+### Changed
+- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the shared auth refresh synchronization coverage.
+
+### Validation
+- `npm run test -- src/authRefreshSync.test.ts --run`: passed.
+- `docker compose exec backend pytest -q apps/users/tests/test_auth.py apps/commandes/tests/test_kds_permissions.py`: passed.
+
+### Commit
+- `44f067d` - `fix(auth): sync refreshed role identity`
+
 ## [2026-05-01] - 20:49
 ### Fixed
 - Suppressed the dev-only staff websocket false positive by deferring `WebSocketProvider` connection setup until after the transient React `StrictMode` remount window, so the cleanup path no longer closes a socket that is still in `CONNECTING`.

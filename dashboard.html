@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-01 21:57:43<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 02:00:25<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,11 +433,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->3<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->4<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->2<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->3<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
@@ -948,6 +948,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Returned `username` and `role` from `POST /api/users/refresh/` so the shared auth layer can no longer keep a stale staff identity after a cross-portal session refresh.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/_shared/auth/axiosInstance.ts` and `frontend/_shared/auth/useAuthStore.ts` so refreshes synchronize the persisted user alongside the new access token, preventing KDS `403 Forbidden` failures caused by auth-state drift.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `frontend/back-office/src/authRefreshSync.test.ts` to lock the regression where a refreshed token changes role identity across the shared client/staff auth store.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the shared auth refresh synchronization coverage.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/authRefreshSync.test.ts --run`: passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest -q apps/users/tests/test_auth.py apps/commandes/tests/test_kds_permissions.py`: passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `44f067d` `fix(auth): sync refreshed role identity`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 20:49</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Suppressed the dev-only staff websocket false positive by deferring `WebSocketProvider` connection setup until after the transient React `StrictMode` remount window, so the cleanup path no longer closes a socket that is still in `CONNECTING`.</p>
                             </li>
@@ -985,41 +1020,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/websocket/WebSocketProvider.test.tsx --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `0327c1a` `fix(back-office): proxy staff websocket in dev`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `.planning/phases/13-websocket-infrastructure/13-03-SUMMARY.md` to capture the final verification wave for the websocket infrastructure phase.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a fresh-process ASGI regression test in `backend/core/tests/test_websocket_auth.py` so Phase 13 covers live Daphne import behavior rather than only in-process communicator paths.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Corrected `backend/tastify_backend/asgi.py` import order so Django app initialization happens before websocket middleware imports touch auth models.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Marked Phase 13 complete in `.planning/ROADMAP.md` and `.planning/STATE.md`, with execution progress advanced to 13/40 phases and 36/36 planned slices completed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to reflect completed Phase 13 execution summaries and the shared websocket surface.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 18:51</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest -q`: 92 passed.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

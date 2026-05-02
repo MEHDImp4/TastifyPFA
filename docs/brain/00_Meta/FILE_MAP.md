@@ -44,6 +44,7 @@ tastify-pfa/
 │   ├── back-office/               # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
 │   │   ├── vitest.config.ts       # Vitest-only config for test environment setup
+│   │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
 │   │   └── src/pages/
 │   │       ├── Categories/        # Categories management (Phase 5)
 │   │       ├── Plats/             # Plats management (Phase 7)

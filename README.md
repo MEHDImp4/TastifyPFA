@@ -27,6 +27,7 @@ See `docs/brain/00_Meta/FILE_MAP.md`.
 The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.config.ts` and test-only settings in `frontend/back-office/vitest.config.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
 Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with focused coverage in `frontend/back-office/src/roleAccess.test.ts`.
+Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
