@@ -47,6 +47,22 @@ services:
     networks:
       - tastify-network
 
+  celery-worker:
+    build:
+      context: ./backend
+    env_file: .env
+    command: celery -A tastify_backend worker --loglevel=info --concurrency=2
+    volumes:
+      - ./backend:/app
+      - ./media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tastify-network
+
   backoffice:
     build:
       context: ./frontend/back-office
