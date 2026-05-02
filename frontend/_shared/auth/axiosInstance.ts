@@ -58,9 +58,11 @@ axiosInstance.interceptors.response.use(
 
       try {
         const response = await axiosInstance.post('/users/refresh/')
-        const { access } = response.data
+        const { access, role, username } = response.data
         
-        useAuthStore.getState().setAccessToken(access)
+        useAuthStore
+          .getState()
+          .setAccessToken(access, role && username ? { role, username } : undefined)
         
         processQueue(null, access)
         

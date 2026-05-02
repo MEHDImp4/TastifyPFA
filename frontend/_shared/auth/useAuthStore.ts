@@ -12,7 +12,7 @@ interface AuthState {
   isAuthenticated: boolean
   setAuth: (user: User, accessToken: string) => void
   clearAuth: () => void
-  setAccessToken: (token: string) => void
+  setAccessToken: (token: string, user?: User) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -31,10 +31,11 @@ export const useAuthStore = create<AuthState>()(
         accessToken: null, 
         isAuthenticated: false 
       }),
-      setAccessToken: (accessToken) => set({ 
-        accessToken, 
-        isAuthenticated: !!accessToken 
-      }),
+      setAccessToken: (accessToken, user) => set((state: AuthState) => ({
+        user: user ?? state.user,
+        accessToken,
+        isAuthenticated: !!accessToken,
+      })),
     }),
     {
       name: 'tastify-auth-storage',

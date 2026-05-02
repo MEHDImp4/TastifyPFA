@@ -46,6 +46,8 @@ class AuthTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)
         self.assertNotIn('refresh', response.data)
+        self.assertEqual(response.data['role'], Utilisateur.Role.GERANT)
+        self.assertEqual(response.data['username'], self.username)
         
         # Check new cookie is set (since rotation is ON)
         cookie_name = settings.SIMPLE_JWT['AUTH_COOKIE']
