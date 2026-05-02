@@ -34,8 +34,8 @@ describe('TicketCard', () => {
     expect(screen.getByText('5')).toBeDefined(); // Table number
     expect(screen.getByText('#123')).toBeDefined(); // Order ID
     expect(screen.getByText('mehdi')).toBeDefined(); // Waiter name
-    expect(screen.getByText('2 plats')).toBeDefined();
-    expect(screen.getByText('3 portions')).toBeDefined();
+    expect(screen.getByText(/2 PLATS/)).toBeDefined();
+    expect(screen.getByText(/3 PORTIONS/)).toBeDefined();
   });
 
   it('renders items and quantities', () => {

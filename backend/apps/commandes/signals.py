@@ -1,25 +1,10 @@
 from django.db.models import DecimalField, ExpressionWrapper, F, Sum
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 
 from apps.commandes.models import Commande, CommandeLigne
 from apps.tables.models import Table
-from core.realtime import STAFF_GROUP
-
-
-def broadcast_staff_event(event_type, payload):
-    channel_layer = get_channel_layer()
-    if channel_layer:
-        async_to_sync(channel_layer.group_send)(
-            STAFF_GROUP,
-            {
-                "type": "staff.event",
-                "event_type": event_type,
-                "payload": payload,
-            }
-        )
+from core.realtime import broadcast_staff_event
 
 
 def recalcul_montant_total(commande):

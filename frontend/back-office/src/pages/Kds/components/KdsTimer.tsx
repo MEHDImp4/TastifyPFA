@@ -26,7 +26,7 @@ export const KdsTimer: React.FC<KdsTimerProps> = ({ startTime }) => {
   let pulseClass = '';
 
   if (minutes >= 20) {
-    colorClass = 'text-red';
+    colorClass = 'text-error';
     pulseClass = 'animate-pulse';
   } else if (minutes >= 10) {
     colorClass = 'text-amber';
@@ -35,9 +35,9 @@ export const KdsTimer: React.FC<KdsTimerProps> = ({ startTime }) => {
   return (
     <div
       data-testid="kds-timer"
-      className={`font-mono text-lg font-semibold tabular-nums ${colorClass} ${pulseClass}`}
+      className={`font-mono text-xl font-bold tabular-nums tracking-tighter ${colorClass} ${pulseClass}`}
     >
-      {minutes}:{seconds.toString().padStart(2, '0')}
+      {minutes}<span className="opacity-70">:</span>{seconds.toString().padStart(2, '0')}
     </div>
   );
 };

@@ -15,7 +15,7 @@ describe('KdsTimer', () => {
     const startTime = new Date(Date.now() - 65000).toISOString(); // 1m 5s ago
     render(<KdsTimer startTime={startTime} />);
     
-    expect(screen.getByText('1:05')).toBeDefined();
+    expect(screen.getByTestId('kds-timer').textContent).toBe('1:05');
     expect(screen.getByTestId('kds-timer').className).toContain('text-teal');
   });
 
@@ -23,17 +23,17 @@ describe('KdsTimer', () => {
     const startTime = new Date().toISOString();
     render(<KdsTimer startTime={startTime} />);
     
-    expect(screen.getByText('0:00')).toBeDefined();
+    expect(screen.getByTestId('kds-timer').textContent).toBe('0:00');
 
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    expect(screen.getByText('0:01')).toBeDefined();
+    expect(screen.getByTestId('kds-timer').textContent).toBe('0:01');
 
     act(() => {
       vi.advanceTimersByTime(59000);
     });
-    expect(screen.getByText('1:00')).toBeDefined();
+    expect(screen.getByTestId('kds-timer').textContent).toBe('1:00');
   });
 
   it('changes color to amber after 10 minutes', () => {
@@ -46,7 +46,7 @@ describe('KdsTimer', () => {
       vi.advanceTimersByTime(1000);
     });
     
-    expect(screen.getByText('10:00')).toBeDefined();
+    expect(screen.getByTestId('kds-timer').textContent).toBe('10:00');
     expect(screen.getByTestId('kds-timer').className).toContain('text-amber');
   });
 
@@ -58,8 +58,8 @@ describe('KdsTimer', () => {
       vi.advanceTimersByTime(1000);
     });
     
-    expect(screen.getByText('20:00')).toBeDefined();
-    expect(screen.getByTestId('kds-timer').className).toContain('text-red');
+    expect(screen.getByTestId('kds-timer').textContent).toBe('20:00');
+    expect(screen.getByTestId('kds-timer').className).toContain('text-error');
     expect(screen.getByTestId('kds-timer').className).toContain('animate-pulse');
   });
 });

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.testing import WebsocketCommunicator
 import pytest
@@ -61,6 +63,68 @@ def test_group_send_reaches_staff_socket():
         assert message == {
             "type": "infrastructure_test",
             "payload": {"source": "phase_13"},
+        }
+
+        await communicator.disconnect()
+
+    async_to_sync(scenario)()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_broadcast_staff_event_normalizes_decimal_payloads():
+    user = Utilisateur.objects.create_user(
+        username="cuisinier_decimal_broadcast",
+        password="password123",
+        role=Utilisateur.Role.CUISINIER,
+    )
+    token = str(AccessToken.for_user(user))
+
+    async def scenario():
+        communicator = WebsocketCommunicator(
+            application,
+            build_socket_path(token),
+            headers=[(b"origin", b"http://localhost")],
+        )
+        connected, _ = await communicator.connect()
+        assert connected is True
+
+        await sync_to_async(broadcast_staff_event, thread_sensitive=False)(
+            "order_created",
+            {
+                "order": {
+                    "id": 42,
+                    "montant_total": Decimal("95.50"),
+                    "lignes": [
+                        {
+                            "plat_details": {
+                                "id": 7,
+                                "nom": "Tajine",
+                                "prix": Decimal("45.25"),
+                            }
+                        }
+                    ],
+                }
+            },
+        )
+
+        message = await communicator.receive_json_from()
+        assert message == {
+            "type": "order_created",
+            "payload": {
+                "order": {
+                    "id": 42,
+                    "montant_total": 95.5,
+                    "lignes": [
+                        {
+                            "plat_details": {
+                                "id": 7,
+                                "nom": "Tajine",
+                                "prix": 45.25,
+                            }
+                        }
+                    ],
+                }
+            },
         }
 
         await communicator.disconnect()

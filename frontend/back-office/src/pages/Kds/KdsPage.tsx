@@ -31,54 +31,59 @@ export const KdsPage: React.FC = () => {
 
   if (isLoading && orders.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-4rem)] bg-[#1a323b]">
+      <div className="flex items-center justify-center h-[calc(100vh-4rem)] bg-background">
         <Loader2 data-testid="loader" className="w-8 h-8 text-teal animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(42,157,143,0.18),_transparent_24%),linear-gradient(180deg,_#1d3740_0%,_#162930_100%)]">
+    <div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden bg-background">
       <KdsSocketManager />
 
       {error && (
-        <div className="bg-red/10 border-b border-red/20 p-4 text-red text-center text-sm">
+        <div className="bg-error/10 border-b border-error/20 p-4 text-error text-center text-sm">
           {error}
         </div>
       )}
 
-      <div className="border-b border-white/10 px-4 py-3 sm:px-5">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+      <div className="border-b border-white/5 bg-surface/50 px-4 py-3 backdrop-blur-md sm:px-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-teal/80">Kitchen display</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-teal/70">Terminal Cuisine</p>
             <div className="mt-1 flex items-center gap-3">
-              <h1 className="text-2xl font-semibold tracking-[-0.02em] text-white">Flux cuisine</h1>
-              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200">
-                {orders.length} tickets
+              <h1 className="text-2xl font-semibold tracking-tight text-white">Flux Commandes</h1>
+              <span className="flex h-6 items-center rounded-full bg-teal/10 px-2.5 text-[11px] font-bold text-teal ring-1 ring-inset ring-teal/20">
+                {orders.length} TICKETS
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 xl:w-[28rem]">
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-400">
-                <ChefHat size={12} />
-                Actifs
+          
+          <div className="grid grid-cols-3 gap-3 sm:w-full lg:w-[32rem]">
+            <div className="flex flex-col rounded-xl border border-white/5 bg-white/[0.03] p-3 transition-colors hover:bg-white/[0.05]">
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <ChefHat size={14} className="text-teal" />
+                <span>Actifs</span>
               </div>
-              <div className="mt-1 text-xl font-semibold text-white">{orders.length}</div>
+              <div className="mt-1 text-2xl font-semibold text-white">{orders.length}</div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-400">
-                <ReceiptText size={12} />
-                Lignes
+            
+            <div className="flex flex-col rounded-xl border border-white/5 bg-white/[0.03] p-3 transition-colors hover:bg-white/[0.05]">
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <ReceiptText size={14} className="text-teal" />
+                <span>Lignes</span>
               </div>
-              <div className="mt-1 text-xl font-semibold text-white">{totalItems}</div>
+              <div className="mt-1 text-2xl font-semibold text-white">{totalItems}</div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-400">
-                <Clock3 size={12} />
-                Urgent
+            
+            <div className={`flex flex-col rounded-xl border border-white/5 p-3 transition-all ${urgentOrders > 0 ? 'bg-amber/10 ring-1 ring-amber/20' : 'bg-white/[0.03]'}`}>
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <Clock3 size={14} className={urgentOrders > 0 ? 'text-amber' : 'text-teal'} />
+                <span>Urgent</span>
               </div>
-              <div className="mt-1 text-xl font-semibold text-amber">{urgentOrders}</div>
+              <div className={`mt-1 text-2xl font-semibold ${urgentOrders > 0 ? 'text-amber animate-pulse' : 'text-white'}`}>
+                {urgentOrders}
+              </div>
             </div>
           </div>
         </div>
@@ -88,18 +93,21 @@ export const KdsPage: React.FC = () => {
         ref={scrollRef}
         onWheel={handleWheel}
         data-testid="kds-scroll-rail"
-        className="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden overscroll-x-contain overscroll-y-none px-4 py-4 select-none [scrollbar-gutter:stable] sm:gap-4 sm:px-5 touch-pan-x"
+        className="flex flex-1 gap-4 overflow-x-auto overflow-y-hidden px-4 py-6 select-none sm:gap-6 sm:px-6"
       >
         {orders.map((order) => (
-          <div key={order.id} className="h-full w-[min(18rem,calc(100vw-2.5rem))] flex-shrink-0 xl:w-[17.5rem] 2xl:w-[18.5rem]">
+          <div key={order.id} className="h-full w-[19rem] flex-shrink-0 animate-enter">
             <TicketCard order={order} />
           </div>
         ))}
 
         {orders.length === 0 && !isLoading && (
-          <div className="flex flex-1 flex-col items-center justify-center rounded-[28px] border border-dashed border-white/10 bg-black/10 text-foreground-muted opacity-80">
-            <p className="text-xl font-medium text-white">Cuisine Vide</p>
-            <p className="mt-1 text-sm text-slate-400">En attente de nouvelles commandes...</p>
+          <div className="flex flex-1 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-white/5 bg-surface/30 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal/10 text-teal mb-4">
+              <ChefHat size={32} />
+            </div>
+            <p className="text-xl font-semibold text-white">Cuisine Vide</p>
+            <p className="mt-1 text-sm text-slate-400 max-w-xs">Toutes les commandes ont été traitées. Reposez-vous en attendant les suivantes !</p>
           </div>
         )}
       </div>
