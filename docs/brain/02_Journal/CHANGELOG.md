@@ -1,3 +1,13 @@
+## [2026-05-02] - 17:50
+### Redesigned (KDS UI - ECO-FRESH Alignment)
+- **Frontend**: 
+  - Redesigned `KdsPage` with standard `ECO-FRESH` colors and `Organic Efficiency` layout.
+  - Redesigned `TicketCard` component with improved typography, borders, and interactive feedback.
+  - Standardized `KdsTimer` colors (`teal`, `amber`, `error`) and refined display.
+- **Testing**:
+  - Updated `KdsTimer.test.tsx` and `TicketCard.test.tsx` to match the new UI structure and labels.
+- **Commit**: `824deca8ce9aa02225d84c0a446033c5be5d3934`
+
 ## [2026-05-02] - 17:42
 ### Fixed
 - Reworked `frontend/back-office/src/pages/Kds/KdsPage.tsx` to stop the jittery horizontal rail behavior by intercepting dominant vertical wheel input, removing the old smooth-snap feel, and tightening the KDS viewport density.
