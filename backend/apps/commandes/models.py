@@ -90,6 +90,10 @@ class CommandeLigne(models.Model):
         default=Statut.EN_ATTENTE,
     )
     notes = models.TextField(blank=True)
+    heure_lancement = models.DateTimeField(null=True, blank=True)
+    heure_fin_estimee = models.DateTimeField(null=True, blank=True)
+    temps_preparation_snapshot = models.PositiveIntegerField(null=True, blank=True)
+    celery_task_id = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
