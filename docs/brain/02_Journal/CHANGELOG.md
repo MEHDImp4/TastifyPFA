@@ -12,7 +12,7 @@
 - `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v`: 40 passed.
 
 ### Commit
-- `[PENDING]`
+- `1841535` - `fix(15): defer kds orchestration until commit`
 
 ## [2026-05-02] - 23:30
 ### Changed
