@@ -1,3 +1,17 @@
+## [2026-05-02] - 20:55
+### Verified (Phase 14: KDS Base Frontend)
+- **Manual UAT Success**:
+    - **Order Flow to KDS**: Confirmed that new orders from the staff API appear instantly in the KDS board via WebSocket.
+    - **UX/UI**: Verified horizontal scrolling, densed kitchen ticket layout, and ECO-FRESH color compliance (Ardoise/Teal/Amber).
+    - **KDS Timer**: Verified logic for 10m (Amber) and 20m (Red Pulse) thresholds.
+- **Automated Tests**:
+    - Backend KDS permissions tests (5/5 PASSED).
+    - Frontend KDS components and store tests (27/27 PASSED).
+- **Documentation**:
+    - Updated `14-UAT.md` to PASSED.
+    - Updated project dashboard with new metrics and status.
+- **Commit**: `[PENDING]`
+
 ## [2026-05-02] - 20:45
 ### Verified (Phase 13: WebSocket Infrastructure)
 - **Manual UAT Success**:
@@ -9,7 +23,7 @@
 - **Documentation**:
     - Updated `13-UAT.md` to PASSED.
     - Updated project dashboard to reflect verified status.
-- **Commit**: `[PENDING]`
+- **Commit**: `e94b8bd6eb8428f6ff5b62ce7d6051f108c78ea0`
 
 ## [2026-05-02] - 17:50
 ### Redesigned (KDS UI - ECO-FRESH Alignment)

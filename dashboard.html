@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 20:30:54<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 20:35:15<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,7 +433,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->9<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->10<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
@@ -553,6 +553,14 @@
                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
                                 <span class="text-sm font-medium text-white">Ph 13</span>
                                 <span class="text-xs text-gray-400 truncate max-w-[120px]">Websocket Infrastructure</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 14</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Kds Base Frontend</span>
                             </div>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
                         </div>
@@ -740,7 +748,7 @@
                             <div><h4 class="font-semibold text-white">Phase 14: KDS Base Frontend</h4><p class="text-xs text-gray-400 mt-1">Cuisine view inside the staff SPA, WebSocket connection. (completed 2026-05-01)</p></div>
                             <div class="flex items-center">
                                 <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -956,6 +964,56 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Manual UAT Success**:</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Live Event Reception**: Successfully broadcasted an `infrastructure_test` event from the backend and confirmed reception in the staff browser (Network tab).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Automatic Reconnection**: Verified that the frontend automatically reconnects to the WebSocket after a backend restart, with exponential backoff and jitter.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Automated Tests**:</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> Re-ran the full suite of backend WebSocket auth and consumer tests (10/10 PASSED).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> Re-ran the frontend `WebSocketProvider` unit tests (9/9 PASSED).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Documentation**:</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> Updated `13-UAT.md` to PASSED.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> Updated project dashboard to reflect verified status.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified (Phase 13: WebSocket Infrastructure):</strong> **Commit**: `e94b8bd6eb8428f6ff5b62ce7d6051f108c78ea0`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-02 17:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Redesigned (KDS UI - ECO-FRESH Alignment):</strong> **Frontend**:</p>
                             </li>
@@ -978,56 +1036,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-02 17:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Redesigned (KDS UI - ECO-FRESH Alignment):</strong> **Testing**:</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Redesigned (KDS UI - ECO-FRESH Alignment):</strong> Updated `KdsTimer.test.tsx` and `TicketCard.test.tsx` to match the new UI structure and labels.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Redesigned (KDS UI - ECO-FRESH Alignment):</strong> **Commit**: `824deca8ce9aa02225d84c0a446033c5be5d3934`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Reworked `frontend/back-office/src/pages/Kds/KdsPage.tsx` to stop the jittery horizontal rail behavior by intercepting dominant vertical wheel input, removing the old smooth-snap feel, and tightening the KDS viewport density.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Redesigned `frontend/back-office/src/pages/Kds/components/TicketCard.tsx` into a denser kitchen ticket layout so more active orders fit on screen without the oversized card feel.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Reduced the visual bulk of `frontend/back-office/src/pages/Kds/components/KdsTimer.tsx` so timing remains readable without wasting ticket header space.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a focused scroll-rail regression test in `frontend/back-office/src/pages/Kds/KdsPage.test.tsx`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Extended `frontend/back-office/src/pages/Kds/components/TicketCard.test.tsx` with coverage for the new compact ticket metadata.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/pages/Kds/KdsPage.test.tsx src/pages/Kds/components/TicketCard.test.tsx src/pages/Kds/components/KdsTimer.test.tsx --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`: passed for `frontend/back-office`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Normalized staff websocket payloads in `backend/core/realtime.py` before `group_send`, preventing order events with nested `Decimal` values from failing JSON websocket delivery to the KDS.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
