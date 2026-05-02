@@ -31,7 +31,7 @@ Shared auth refreshes now also resynchronize `username` and `role` from the back
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/13-websocket-infrastructure/`, where Phase 13 now includes context, research, validation, execution plans, and execution summaries covering backend Channels wiring, the shared staff WebSocket provider/store, and final Redis-backed verification.
+Current planning artifacts now extend through `.planning/phases/15-kds-orchestrator-logic/`, where Phase 15 now includes context, research, validation, execution plans, execution summaries, and a persisted `15-UAT.md` manual verification session for websocket launch behavior.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains

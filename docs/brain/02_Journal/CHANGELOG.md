@@ -1,3 +1,14 @@
+## [2026-05-02] - 23:10
+### Added
+- Created `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` to persist the Phase 15 manual websocket verification session reconstructed from `.planning/.continue-here.md` and `STATE.md`.
+
+### Changed
+- Updated `dashboard.html` to show that the Phase 15 UAT session file now exists and that the active checkpoint is the live `line_launched` websocket verification.
+- Updated `docs/brain/00_Meta/FILE_MAP.md` and `README.md` to reflect the persisted Phase 15 UAT artifact in the planning layout.
+
+### Commit
+- `[PENDING]`
+
 ## [2026-05-02] - 22:58
 ### Checkpointed
 - Completed the automated portion of Phase 15 Plan 03 by validating `line_launched` websocket broadcasting and fixing the stale-fixture assertion in `backend/apps/commandes/tests/test_orchestrator.py`.

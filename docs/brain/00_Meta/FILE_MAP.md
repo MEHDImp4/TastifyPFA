@@ -25,9 +25,11 @@ tastify-pfa/
 │   │   │   ├── views.py
 │   │   │   └── urls.py
 │   │   ├── tables/                # Table model, API, and seed data
-│   │   └── commandes/             # Orders, order lines, price snapshots, total signals
-│   │       ├── models.py          # Commande and CommandeLigne
-│   │       ├── signals.py         # montant_total recalculation
+│   │   └── commandes/             # Orders, order lines, total signals, and KDS orchestration
+│   │       ├── models.py          # Commande and CommandeLigne + Phase 15 scheduling fields
+│   │       ├── signals.py         # montant_total recalculation + orchestrator triggers
+│   │       ├── services/          # KDS orchestration services
+│   │       ├── tasks.py           # Celery ETA launch tasks + staff broadcasts
 │   │       ├── migrations/
 │   │       └── tests/
 │   │           └── test_kds_permissions.py
