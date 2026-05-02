@@ -1,3 +1,12 @@
+## [2026-05-02] - 23:30
+### Changed
+- Completed Phase 15 manual UAT session in `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` with two recorded issues and inline diagnosis.
+- Documented a likely live transaction/ETA race: orchestration is triggered from `post_save` and can enqueue immediate Celery launches before the surrounding write path is safely committed.
+- Updated `dashboard.html` to reflect that Phase 15 UAT is diagnosed rather than merely in progress.
+
+### Commit
+- `[PENDING]`
+
 ## [2026-05-02] - 23:20
 ### Changed
 - Updated `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` after manual Test 1 failed: the CUISINIER socket received `order_created` with an empty `lignes` array instead of the expected `line_launched` payload.
