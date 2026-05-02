@@ -1,3 +1,11 @@
+## [2026-05-02] - 23:20
+### Changed
+- Updated `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` after manual Test 1 failed: the CUISINIER socket received `order_created` with an empty `lignes` array instead of the expected `line_launched` payload.
+- Updated `dashboard.html` to reflect that Phase 15 UAT is still in progress with one manual issue recorded and Test 2 now active.
+
+### Commit
+- `[PENDING]`
+
 ## [2026-05-02] - 23:10
 ### Added
 - Created `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` to persist the Phase 15 manual websocket verification session reconstructed from `.planning/.continue-here.md` and `STATE.md`.
