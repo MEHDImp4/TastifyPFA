@@ -20,7 +20,7 @@ export const useKdsStore = create<KdsState>((set, get) => ({
   fetchOrders: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await axios.get<Commande[]>('/api/commandes/?statut=EN_CUISINE')
+      const response = await axios.get<Commande[]>('/commandes/?statut=EN_CUISINE')
       // Ensure they are sorted by created_at DESC (newest first)
       const orders = response.data.sort((a, b) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
