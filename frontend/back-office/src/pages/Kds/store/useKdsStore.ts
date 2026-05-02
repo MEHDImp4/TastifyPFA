@@ -20,7 +20,8 @@ export const useKdsStore = create<KdsState>((set, get) => ({
   fetchOrders: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await axios.get<Commande[]>('/commandes/?statut=EN_CUISINE')
+      const response = await axios.get<Commande[]>('/commandes/')
+      // The backend now filters for (EN_COURS | EN_CUISINE) for CUISINIER role
       // Ensure they are sorted by created_at DESC (newest first)
       const orders = response.data.sort((a, b) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -60,17 +61,22 @@ export const useKdsStore = create<KdsState>((set, get) => ({
   },
 
   handleSocketEvent: (event: any) => {
-    const { type, order } = event
+    const { type, payload } = event
+    const order = payload?.order
+
+    if (!order) return
+
+    const isKitchenStatus = order.statut === 'EN_CUISINE' || order.statut === 'EN_COURS'
 
     if (type === 'order_created') {
-      if (order.statut === 'EN_CUISINE') {
+      if (isKitchenStatus) {
         get().addOrUpdateOrder(order)
       }
     } else if (type === 'order_updated') {
-      if (order.statut === 'EN_CUISINE') {
+      if (isKitchenStatus) {
         get().addOrUpdateOrder(order)
       } else {
-        // If it moved out of EN_CUISINE (e.g. PRETE, ANNULEE), remove it from KDS
+        // If it moved out of kitchen statuses (e.g. PRETE, ANNULEE), remove it from KDS
         get().removeOrder(order.id)
       }
     }

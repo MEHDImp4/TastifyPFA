@@ -30,7 +30,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
             qs = qs.filter(table_id=table_id)
         elif user.role == 'CUISINIER':
             # Cuisinier sees all orders currently in the kitchen
-            qs = qs.filter(statut=Commande.Statut.EN_CUISINE)
+            qs = qs.filter(statut__in=[Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE])
         elif user.role != 'GERANT':
             # General list: only show the user's own orders
             qs = qs.filter(serveur=user)

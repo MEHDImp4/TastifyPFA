@@ -80,36 +80,45 @@ describe('useKdsStore', () => {
   })
 
   describe('handleSocketEvent', () => {
-    it('should add order on order_created if EN_CUISINE', () => {
+    it('should add order on order_created if isKitchenStatus', () => {
       useKdsStore.getState().handleSocketEvent({
         type: 'order_created',
-        order: mockOrder
+        payload: { order: mockOrder }
       })
       expect(useKdsStore.getState().orders).toHaveLength(1)
     })
 
-    it('should update order on order_updated if EN_CUISINE', () => {
+    it('should update order on order_updated if isKitchenStatus', () => {
       useKdsStore.getState().addOrUpdateOrder(mockOrder)
       const updatedOrder = { ...mockOrder, montant_total: '60.00' }
       
       useKdsStore.getState().handleSocketEvent({
         type: 'order_updated',
-        order: updatedOrder
+        payload: { order: updatedOrder }
       })
       
       expect(useKdsStore.getState().orders[0].montant_total).toBe('60.00')
     })
 
-    it('should remove order on order_updated if NOT EN_CUISINE anymore', () => {
+    it('should remove order on order_updated if NOT isKitchenStatus anymore', () => {
       useKdsStore.getState().addOrUpdateOrder(mockOrder)
       const updatedOrder = { ...mockOrder, statut: 'PRETE' as const }
       
       useKdsStore.getState().handleSocketEvent({
         type: 'order_updated',
-        order: updatedOrder
+        payload: { order: updatedOrder }
       })
       
       expect(useKdsStore.getState().orders).toHaveLength(0)
+    })
+
+    it('should add order on order_created if EN_COURS', () => {
+      const orderEnCours = { ...mockOrder, statut: 'EN_COURS' as const }
+      useKdsStore.getState().handleSocketEvent({
+        type: 'order_created',
+        payload: { order: orderEnCours }
+      })
+      expect(useKdsStore.getState().orders).toHaveLength(1)
     })
 
     it('should ignore other event types', () => {

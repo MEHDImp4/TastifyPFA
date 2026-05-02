@@ -45,10 +45,9 @@ class KDSPermissionsTestCase(APITestCase):
     def test_cuisinier_queryset_filtering(self):
         self.client.force_authenticate(user=self.cuisinier)
         response = self.client.get(self.url)
-        
-        # Cuisinier should only see orders with statut=EN_CUISINE
-        # (Assuming they see all such orders)
-        self.assertEqual(len(response.data), 1)
+
+        # Cuisinier should see both EN_COURS and EN_CUISINE
+        self.assertEqual(len(response.data), 2)
         self.assertEqual(response.data[0]['id'], self.cmd_kitchen.id)
         self.assertEqual(response.data[0]['statut'], Commande.Statut.EN_CUISINE)
 
