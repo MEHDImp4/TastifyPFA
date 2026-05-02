@@ -1,3 +1,16 @@
+## [2026-05-02] - 22:58
+### Checkpointed
+- Completed the automated portion of Phase 15 Plan 03 by validating `line_launched` websocket broadcasting and fixing the stale-fixture assertion in `backend/apps/commandes/tests/test_orchestrator.py`.
+- Verified `backend/apps/commandes/tests/test_orchestrator.py -v` with `8 passed`.
+- Started `celery-worker`, confirmed `celery -A tastify_backend inspect ping` returned `OK pong`, and confirmed live ETA smoke task `cffb63d4-0391-4334-9b37-cefccd0b3979` succeeded with `{'skipped': 'line_deleted', 'ligne_id': 999999}`.
+- Added `.planning/.continue-here.md` and updated dashboard/state tracking so the repo now stops on the remaining manual Phase 15 websocket UAT.
+
+### Pending
+- Browser verification is still required for the CUISINIER websocket flow and revocation observation before `15-03` can be marked complete.
+
+### Commit
+- `[PENDING]`
+
 ## [2026-05-02] - 20:55
 ### Verified (Phase 14: KDS Base Frontend)
 - **Manual UAT Success**:

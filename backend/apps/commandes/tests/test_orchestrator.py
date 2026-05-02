@@ -53,6 +53,8 @@ def test_task_revocation(commande_with_lines, mocker):
 @pytest.mark.django_db
 def test_idempotency_skips_running_lines(commande_with_lines, mocker):
     commande, line_short, line_long = commande_with_lines
+    line_long.refresh_from_db()
+    original_launch = line_long.heure_lancement
     future = timezone.now() + timedelta(minutes=25)
     CommandeLigne.objects.filter(pk=line_long.pk).update(
         statut=CommandeLigne.Statut.EN_PREPARATION,
@@ -69,14 +71,58 @@ def test_idempotency_skips_running_lines(commande_with_lines, mocker):
 
     line_long.refresh_from_db()
     line_short.refresh_from_db()
-    assert line_long.heure_lancement is None
+    assert line_long.heure_lancement == original_launch
     assert line_short.heure_fin_estimee >= future - timedelta(seconds=1)
 
 
 @pytest.mark.django_db
 def test_ws_broadcast(commande_with_lines, mocker):
-    """REQ-15.3: pending — wired in Plan 03."""
-    pytest.skip("Plan 03 will implement WS broadcast on launch")
+    commande, line_short, _ = commande_with_lines
+    future = timezone.now() + timedelta(minutes=5)
+    CommandeLigne.objects.filter(pk=line_short.pk).update(
+        heure_lancement=future,
+        heure_fin_estimee=future + timedelta(minutes=10),
+    )
+    broadcast_mock = mocker.patch('apps.commandes.tasks.broadcast_staff_event')
+
+    from apps.commandes.tasks import launch_item_task
+    result = launch_item_task(line_short.id)
+
+    assert result == {'launched': True, 'ligne_id': line_short.id}
+    broadcast_mock.assert_called_once()
+    args, _ = broadcast_mock.call_args
+    assert args[0] == 'line_launched'
+    payload = args[1]
+    assert payload['ligne_id'] == line_short.id
+    assert payload['commande_id'] == commande.id
+    assert payload['plat_nom'] == 'Salade'
+    assert payload['heure_lancement'] is not None
+
+
+@pytest.mark.django_db
+def test_ws_broadcast_skipped_when_line_already_launched(commande_with_lines, mocker):
+    commande, line_short, _ = commande_with_lines
+    CommandeLigne.objects.filter(pk=line_short.pk).update(
+        statut=CommandeLigne.Statut.EN_PREPARATION,
+    )
+    broadcast_mock = mocker.patch('apps.commandes.tasks.broadcast_staff_event')
+
+    from apps.commandes.tasks import launch_item_task
+    result = launch_item_task(line_short.id)
+
+    assert result['skipped'] == 'line_not_pending'
+    broadcast_mock.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ws_broadcast_skipped_when_line_deleted(mocker):
+    broadcast_mock = mocker.patch('apps.commandes.tasks.broadcast_staff_event')
+
+    from apps.commandes.tasks import launch_item_task
+    result = launch_item_task(999_999)
+
+    assert result == {'skipped': 'line_deleted', 'ligne_id': 999_999}
+    broadcast_mock.assert_not_called()
 
 
 @pytest.mark.django_db

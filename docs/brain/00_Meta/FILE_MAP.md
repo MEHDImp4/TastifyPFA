@@ -68,6 +68,7 @@ tastify-pfa/
 │   ├── ROADMAP.md                 # Current phase tracking
 │   ├── PROJECT.md                 # Tech stack and decisions
 │   ├── STATE.md                   # Current execution state
+│   ├── .continue-here.md          # Active manual checkpoint / resume instructions
 │   ├── audit_uat_report.md        # UAT audit results and human test plan
 │   └── phases/                    # Phase-specific files
 │       ├── 01-project-skeleton/
@@ -83,7 +84,8 @@ tastify-pfa/
 │       ├── 11-commandes-rest-api/
 │       ├── 12-order-taking-frontend/
 │       ├── 13-websocket-infrastructure/
-│       └── 14-kds-base-frontend/
+│       ├── 14-kds-base-frontend/
+│       └── 15-kds-orchestrator-logic/
 ├── docker-compose.yml             # 5 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md
