@@ -77,3 +77,26 @@ def test_idempotency_skips_running_lines(commande_with_lines, mocker):
 def test_ws_broadcast(commande_with_lines, mocker):
     """REQ-15.3: pending — wired in Plan 03."""
     pytest.skip("Plan 03 will implement WS broadcast on launch")
+
+
+@pytest.mark.django_db
+def test_signal_triggers_orchestrator_on_line_create(table_obj, plat_short, mocker):
+    from apps.commandes.models import Commande, CommandeLigne
+    commande = Commande.objects.create(table=table_obj)
+    spy = mocker.patch(
+        'apps.commandes.signals.KdsOrchestrator.reorchestrate_order'
+    )
+    CommandeLigne.objects.create(commande=commande, plat=plat_short, quantite=1)
+    spy.assert_called_with(commande)
+
+
+@pytest.mark.django_db
+def test_signal_no_recursion_on_orchestrator_update(commande_with_lines, mocker):
+    commande, line_short, _ = commande_with_lines
+    spy = mocker.patch(
+        'apps.commandes.signals.KdsOrchestrator.reorchestrate_order'
+    )
+    CommandeLigne.objects.filter(pk=line_short.pk).update(
+        celery_task_id='test-id-no-recursion'
+    )
+    spy.assert_not_called()

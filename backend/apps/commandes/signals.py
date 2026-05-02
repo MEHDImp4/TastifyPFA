@@ -3,6 +3,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from apps.commandes.models import Commande, CommandeLigne
+from apps.commandes.services.orchestrator import KdsOrchestrator
 from apps.tables.models import Table
 from core.realtime import broadcast_staff_event
 
@@ -23,31 +24,40 @@ def recalcul_montant_total(commande):
 @receiver(post_save, sender=CommandeLigne)
 def update_total_on_ligne_save(sender, instance, created, **kwargs):
     recalcul_montant_total(instance.commande)
-    
-    # Broadcast update to KDS
+
     from .serializers import CommandeSerializer
     serializer = CommandeSerializer(instance.commande)
     broadcast_staff_event("order_updated", {"order": serializer.data})
+
+    update_fields = kwargs.get('update_fields') or set()
+    orchestrator_managed_fields = {
+        'heure_lancement', 'heure_fin_estimee',
+        'temps_preparation_snapshot', 'celery_task_id',
+    }
+    if not update_fields or not set(update_fields).issubset(orchestrator_managed_fields):
+        KdsOrchestrator.reorchestrate_order(instance.commande)
 
 
 @receiver(post_delete, sender=CommandeLigne)
 def update_total_on_ligne_delete(sender, instance, **kwargs):
     recalcul_montant_total(instance.commande)
-    
-    # Broadcast update to KDS
+
     from .serializers import CommandeSerializer
     serializer = CommandeSerializer(instance.commande)
     broadcast_staff_event("order_updated", {"order": serializer.data})
 
+    if instance.celery_task_id:
+        from celery import current_app
+        current_app.control.revoke(instance.celery_task_id)
+
+    KdsOrchestrator.reorchestrate_order(instance.commande)
+
 
 @receiver(post_save, sender=Commande)
 def sync_table_status_and_broadcast(sender, instance, created, **kwargs):
-    """
-    Automate table status transitions and broadcast to staff.
-    """
+    """Automate table status transitions and broadcast to staff."""
     table = instance.table
-    
-    # Handle Table Sync
+
     if created:
         if instance.statut in [Commande.Statut.PAYEE, Commande.Statut.ANNULEE]:
             if table.statut != Table.Statut.LIBRE:
@@ -67,7 +77,6 @@ def sync_table_status_and_broadcast(sender, instance, created, **kwargs):
                 table.statut = Table.Statut.OCCUPEE
                 table.save(update_fields=['statut', 'updated_at'])
 
-    # Handle WebSocket Broadcast
     from .serializers import CommandeSerializer
     serializer = CommandeSerializer(instance)
     event_type = "order_created" if created else "order_updated"
