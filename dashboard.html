@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 02:00:25<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 16:46:30<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -946,6 +946,21 @@
                     <div class="flex-1 overflow-y-auto pr-2">
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `backend/apps/commandes/views.py` so CUISINIER requests using `statut=EN_CUISINE` still include fresh `EN_COURS` orders, restoring the expected KDS behavior for `H-14-01`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a regression case in `backend/apps/commandes/tests/test_kds_permissions.py` that locks the cook-facing `?statut=EN_CUISINE` compatibility path.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest -q apps/commandes/tests/test_kds_permissions.py`: passed.</p>
+                            </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>

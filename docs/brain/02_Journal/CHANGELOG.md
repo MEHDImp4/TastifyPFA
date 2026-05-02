@@ -1,3 +1,13 @@
+## [2026-05-02] - 16:46
+### Fixed
+- Updated `backend/apps/commandes/views.py` so CUISINIER requests using `statut=EN_CUISINE` still include freshly created `EN_COURS` orders, preventing the KDS board from missing new tickets during `H-14-01`.
+
+### Added
+- Added a focused regression test in `backend/apps/commandes/tests/test_kds_permissions.py` covering the KDS compatibility case where `?statut=EN_CUISINE` must still surface new kitchen work.
+
+### Validation
+- `docker compose exec backend pytest -q apps/commandes/tests/test_kds_permissions.py`: passed.
+
 ## [2026-05-02] - 01:57
 ### Fixed
 - Returned `username` and `role` from `POST /api/users/refresh/` so the shared auth layer can no longer keep a stale staff identity after a cross-portal session refresh.

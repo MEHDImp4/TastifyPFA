@@ -16,6 +16,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        statut = self.request.query_params.get('statut')
         qs = (
             Commande.objects.active()
             .select_related('serveur', 'table')
@@ -29,14 +30,15 @@ class CommandeViewSet(viewsets.ModelViewSet):
             # Table-specific lookup: any staff member can see which order is on a given table
             qs = qs.filter(table_id=table_id)
         elif user.role == 'CUISINIER':
-            # Cuisinier sees all orders currently in the kitchen
-            qs = qs.filter(statut__in=[Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE])
+            kitchen_statuses = [Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE]
+            # KDS clients may still request statut=EN_CUISINE, but newly created orders start as EN_COURS.
+            # Treat both as active kitchen work for CUISINIER so fresh tickets are not missed.
+            qs = qs.filter(statut__in=kitchen_statuses)
         elif user.role != 'GERANT':
             # General list: only show the user's own orders
             qs = qs.filter(serveur=user)
 
-        statut = self.request.query_params.get('statut')
-        if statut:
+        if statut and not (user.role == 'CUISINIER' and statut == Commande.Statut.EN_CUISINE):
             qs = qs.filter(statut=statut)
 
         return qs

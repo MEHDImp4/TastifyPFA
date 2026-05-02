@@ -51,6 +51,15 @@ class KDSPermissionsTestCase(APITestCase):
         self.assertEqual(response.data[0]['id'], self.cmd_kitchen.id)
         self.assertEqual(response.data[0]['statut'], Commande.Statut.EN_CUISINE)
 
+    def test_cuisinier_en_cuisine_filter_includes_new_en_cours_orders(self):
+        self.client.force_authenticate(user=self.cuisinier)
+        response = self.client.get(self.url, {'statut': Commande.Statut.EN_CUISINE})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [item['id'] for item in response.data]
+        self.assertIn(self.cmd_serveur.id, ids)
+        self.assertIn(self.cmd_kitchen.id, ids)
+
     def test_serveur_queryset_filtering_regression(self):
         # Serveur should only see their own orders
         serveur2 = User.objects.create_user(
