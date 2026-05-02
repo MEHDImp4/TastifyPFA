@@ -123,6 +123,15 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [ ] 14-02-PLAN.md — KDS Store & WebSocket Integration
 - [ ] 14-03-PLAN.md — KDS Frontend UI
 
+### Phase 15: KDS Orchestrator Logic
+**Goal**: Implement backend JIT orchestration — calculate `heure_lancement` per dish line so all items in an order finish simultaneously. Celery ETA tasks schedule launches; WebSocket broadcasts notify the KDS frontend.
+**Depends on**: Phase 14
+**Success Criteria**: 1. Celery worker service defined in `docker-compose.yml`. 2. `CommandeLigne` gains `heure_lancement`, `heure_fin_estimee`, `temps_preparation_snapshot`, `celery_task_id` fields with migration. 3. `KdsOrchestrator` correctly calculates JIT timing for all lines. 4. Existing pending Celery tasks are revoked and rescheduled on order update. 5. `line_launched` WebSocket event is broadcast to the `cuisine` group at the correct ETA.
+**Plans**: 3 plans
+- [ ] 15-01-PLAN.md — Celery Infrastructure & Wave 0 Test Scaffolds
+- [ ] 15-02-PLAN.md — JIT Orchestrator, Migration & Signal Wiring
+- [ ] 15-03-PLAN.md — WebSocket Broadcast & Live Verification
+
 ### Phase 35: KDS Advanced Operations
 **Goal**: Empower kitchen staff with control over dish availability and modifications.
 **Depends on**: Phase 17
