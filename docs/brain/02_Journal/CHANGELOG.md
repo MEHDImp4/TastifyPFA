@@ -1,3 +1,30 @@
+## [2026-05-02] - 17:42
+### Fixed
+- Reworked `frontend/back-office/src/pages/Kds/KdsPage.tsx` to stop the jittery horizontal rail behavior by intercepting dominant vertical wheel input, removing the old smooth-snap feel, and tightening the KDS viewport density.
+- Redesigned `frontend/back-office/src/pages/Kds/components/TicketCard.tsx` into a denser kitchen ticket layout so more active orders fit on screen without the oversized card feel.
+- Reduced the visual bulk of `frontend/back-office/src/pages/Kds/components/KdsTimer.tsx` so timing remains readable without wasting ticket header space.
+
+### Added
+- Added a focused scroll-rail regression test in `frontend/back-office/src/pages/Kds/KdsPage.test.tsx`.
+- Extended `frontend/back-office/src/pages/Kds/components/TicketCard.test.tsx` with coverage for the new compact ticket metadata.
+
+### Validation
+- `npm run test -- src/pages/Kds/KdsPage.test.tsx src/pages/Kds/components/TicketCard.test.tsx src/pages/Kds/components/KdsTimer.test.tsx --run`: passed.
+- `npm run build`: passed for `frontend/back-office`.
+
+## [2026-05-02] - 17:03
+### Fixed
+- Normalized staff websocket payloads in `backend/core/realtime.py` before `group_send`, preventing order events with nested `Decimal` values from failing JSON websocket delivery to the KDS.
+- Routed commande signals through the shared realtime helper so future staff broadcasts use the same JSON-safe path.
+
+### Added
+- Added websocket coverage for Decimal-bearing staff payloads in `backend/core/tests/test_staff_consumer.py`.
+
+### Validation
+- Passed lightweight serialization check with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` and `make_json_safe(...)`.
+- Full Django test run blocked locally because `db` is only resolvable inside Compose; Docker API access is denied from this shell; Vitest startup is blocked by Tailwind oxide `spawn EPERM`.
+- Auto-commit blocked by sandbox ACL: `git add` cannot create `.git/index.lock` and exits with `Permission denied`.
+
 ## [2026-05-02] - 17:01
 ### Fixed
 - Updated `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` so the KDS re-syncs its order list whenever the staff websocket opens and after `order_created` / `order_updated`, preventing missed mobile-created orders from leaving the kitchen board empty after websocket reconnects.

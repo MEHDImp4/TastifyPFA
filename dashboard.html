@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 17:01:10<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-02 17:42:50<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -420,28 +420,28 @@
                             <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             Live App Stats
                         </h2>
-                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20">Online</span><!-- DB_STATUS_BADGE_END -->
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">Container Offline</span><!-- DB_STATUS_BADGE_END -->
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->10<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->4<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->3<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->0<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->27<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->0<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -948,108 +948,78 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Reworked `frontend/back-office/src/pages/Kds/KdsPage.tsx` to stop the jittery horizontal rail behavior by intercepting dominant vertical wheel input, removing the old smooth-snap feel, and tightening the KDS viewport density.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Redesigned `frontend/back-office/src/pages/Kds/components/TicketCard.tsx` into a denser kitchen ticket layout so more active orders fit on screen without the oversized card feel.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Reduced the visual bulk of `frontend/back-office/src/pages/Kds/components/KdsTimer.tsx` so timing remains readable without wasting ticket header space.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a focused scroll-rail regression test in `frontend/back-office/src/pages/Kds/KdsPage.test.tsx`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Extended `frontend/back-office/src/pages/Kds/components/TicketCard.test.tsx` with coverage for the new compact ticket metadata.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/pages/Kds/KdsPage.test.tsx src/pages/Kds/components/TicketCard.test.tsx src/pages/Kds/components/KdsTimer.test.tsx --run`: passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:42</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`: passed for `frontend/back-office`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Normalized staff websocket payloads in `backend/core/realtime.py` before `group_send`, preventing order events with nested `Decimal` values from failing JSON websocket delivery to the KDS.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Routed commande signals through the shared realtime helper so future staff broadcasts use the same JSON-safe path.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added websocket coverage for Decimal-bearing staff payloads in `backend/core/tests/test_staff_consumer.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Passed lightweight serialization check with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` and `make_json_safe(...)`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Full Django test run blocked locally because `db` is only resolvable inside Compose; Docker API access is denied from this shell; Vitest startup is blocked by Tailwind oxide `spawn EPERM`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Auto-commit blocked by sandbox ACL: `git add` cannot create `.git/index.lock` and exits with `Permission denied`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-02 17:01</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` so the KDS now re-syncs after websocket reconnects and after command events, covering the case where mobile-created orders were missed during unstable staff socket sessions.</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` so the KDS re-syncs its order list whenever the staff websocket opens and after `order_created` / `order_updated`, preventing missed mobile-created orders from leaving the kitchen board empty after websocket reconnects.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-02 17:01</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Extended `frontend/back-office/src/pages/Kds/KdsSocketManager.test.tsx` with reconnect and command-event refetch coverage for the KDS realtime fallback path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 17:01</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -- src/pages/Kds/KdsSocketManager.test.tsx --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `backend/apps/commandes/views.py` so CUISINIER requests using `statut=EN_CUISINE` still include fresh `EN_COURS` orders, restoring the expected KDS behavior for `H-14-01`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a regression case in `backend/apps/commandes/tests/test_kds_permissions.py` that locks the cook-facing `?statut=EN_CUISINE` compatibility path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 16:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest -q apps/commandes/tests/test_kds_permissions.py`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Returned `username` and `role` from `POST /api/users/refresh/` so the shared auth layer can no longer keep a stale staff identity after a cross-portal session refresh.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/_shared/auth/axiosInstance.ts` and `frontend/_shared/auth/useAuthStore.ts` so refreshes synchronize the persisted user alongside the new access token, preventing KDS `403 Forbidden` failures caused by auth-state drift.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `frontend/back-office/src/authRefreshSync.test.ts` to lock the regression where a refreshed token changes role identity across the shared client/staff auth store.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the shared auth refresh synchronization coverage.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/authRefreshSync.test.ts --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest -q apps/users/tests/test_auth.py apps/commandes/tests/test_kds_permissions.py`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-02 01:57</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `44f067d` `fix(auth): sync refreshed role identity`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:49</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Suppressed the dev-only staff websocket false positive by deferring `WebSocketProvider` connection setup until after the transient React `StrictMode` remount window, so the cleanup path no longer closes a socket that is still in `CONNECTING`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:49</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a `StrictMode` regression case to `frontend/back-office/src/websocket/WebSocketProvider.test.tsx` to verify the provider does not open and immediately close a connecting socket during development remounts.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:49</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/websocket/WebSocketProvider.test.tsx --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:49</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `6694c01` `fix(websocket): avoid strict mode early close noise`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the back-office staff websocket dev path by proxying `/ws` from Vite to `ws://backend:8000`, so `ws://localhost:3000/ws/staff/` now reaches Django Channels during local development.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `frontend/back-office/src/viteConfig.test.ts` to guard the `/ws` proxy regression in the back-office Vite config.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/viteConfig.test.ts --run`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-01 20:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/websocket/WebSocketProvider.test.tsx --run`: passed.</p>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Extended `frontend/back-office/src/pages/Kds/KdsSocketManager.test.tsx` with coverage for websocket-open resyncs and command-event refetch behavior.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

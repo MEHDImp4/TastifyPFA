@@ -33,9 +33,9 @@ export const KdsTimer: React.FC<KdsTimerProps> = ({ startTime }) => {
   }
 
   return (
-    <div 
+    <div
       data-testid="kds-timer"
-      className={`font-mono text-xl font-black tabular-nums ${colorClass} ${pulseClass}`}
+      className={`font-mono text-lg font-semibold tabular-nums ${colorClass} ${pulseClass}`}
     >
       {minutes}:{seconds.toString().padStart(2, '0')}
     </div>

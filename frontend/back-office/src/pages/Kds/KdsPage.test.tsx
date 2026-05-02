@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { KdsPage } from './KdsPage';
 import { useKdsStore } from './store/useKdsStore';
@@ -49,8 +49,8 @@ describe('KdsPage', () => {
 
   it('renders tickets for active orders', () => {
     const mockOrders = [
-      { id: 1, table: 5, lignes: [] },
-      { id: 2, table: 10, lignes: [] },
+      { id: 1, table: 5, created_at: new Date().toISOString(), lignes: [] },
+      { id: 2, table: 10, created_at: new Date().toISOString(), lignes: [] },
     ];
 
     (useKdsStore as any).mockReturnValue({
@@ -63,6 +63,27 @@ describe('KdsPage', () => {
     render(<KdsPage />);
     expect(screen.getByTestId('ticket-1')).toBeDefined();
     expect(screen.getByTestId('ticket-2')).toBeDefined();
+  });
+
+  it('converts dominant vertical wheel movement into horizontal rail scrolling', () => {
+    const mockOrders = [
+      { id: 1, table: 5, created_at: new Date().toISOString(), lignes: [] },
+    ];
+
+    (useKdsStore as any).mockReturnValue({
+      orders: mockOrders,
+      isLoading: false,
+      error: null,
+      fetchOrders: mockFetchOrders,
+    });
+
+    render(<KdsPage />);
+    const rail = screen.getByTestId('kds-scroll-rail');
+    Object.defineProperty(rail, 'scrollLeft', { value: 0, writable: true });
+
+    fireEvent.wheel(rail, { deltaY: 80, deltaX: 0 });
+
+    expect((rail as HTMLDivElement).scrollLeft).toBe(80);
   });
 
   it('renders error message when present', () => {
