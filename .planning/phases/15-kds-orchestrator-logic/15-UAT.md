@@ -7,7 +7,7 @@ source:
   - .planning/.continue-here.md
   - 15-VALIDATION.md
 started: 2026-05-02T22:58:00+01:00
-updated: 2026-05-02T23:36:52+01:00
+updated: 2026-05-02T23:52:00+01:00
 ---
 
 ## Current Test
@@ -40,10 +40,13 @@ blocked: 0
 ## Remediation
 
 - Implemented commit-safe orchestration in `backend/apps/commandes/signals.py` by deferring both KDS re-orchestration and staff order snapshot broadcasts through `transaction.on_commit(...)`.
+- Added explicit committed-path orchestration in `backend/apps/commandes/serializers.py` and `backend/apps/commandes/views.py` so both order creation and `add_items` schedule KDS re-orchestration from the API transaction that owns the write.
+- Added `KdsOrchestrator.schedule_reorchestration_after_commit(...)` in `backend/apps/commandes/services/orchestrator.py` to centralize the post-commit scheduling path.
 - Added regression coverage for deferred create/delete orchestration in `backend/apps/commandes/tests/test_orchestrator.py`.
 - Added signal coverage proving `order_created` broadcasts run after commit with committed `lignes` in `backend/apps/commandes/tests/test_signals.py`.
-- Added API coverage proving order creation defers broadcast scheduling until commit in `backend/apps/commandes/tests/test_api.py`.
-- Validation: `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v` -> `40 passed`.
+- Added API coverage proving order creation and `add_items` both schedule KDS re-orchestration after commit in `backend/apps/commandes/tests/test_api.py`.
+- Validation: `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v` -> `43 passed`.
+- Commit: `7895ebf` - `fix(15): schedule kds orchestration from api writes`
 - Manual CUISINIER websocket rerun is still required to close the original UAT gaps.
 
 ## Gaps

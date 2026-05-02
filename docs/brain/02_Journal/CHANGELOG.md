@@ -1,3 +1,19 @@
+## [2026-05-02] - 23:52
+### Fixed
+- Added an explicit post-commit KDS orchestration path in `backend/apps/commandes/serializers.py` and `backend/apps/commandes/views.py` so live order creation and `add_items` rescheduling no longer depend solely on `CommandeLigne` signal timing.
+- Centralized the committed scheduling callback in `backend/apps/commandes/services/orchestrator.py` with `KdsOrchestrator.schedule_reorchestration_after_commit(...)`.
+
+### Added
+- Added API regressions in `backend/apps/commandes/tests/test_api.py` covering committed create-path scheduling and committed `add_items` rescheduling.
+- Updated `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` with the second remediation step and current rerun requirement.
+- Updated `dashboard.html` to reflect the new Phase 15 fix commit and the remaining manual websocket rerun.
+
+### Validation
+- `docker exec tastifypfa-backend-1 pytest apps/commandes/tests/ -v`: 43 passed.
+
+### Commit
+- `7895ebf` - `fix(15): schedule kds orchestration from api writes`
+
 ## [2026-05-02] - 23:36
 ### Fixed
 - Deferred Phase 15 KDS re-orchestration and order snapshot broadcasting in `backend/apps/commandes/signals.py` so ETA scheduling and websocket emissions only happen after the surrounding transaction commits.
