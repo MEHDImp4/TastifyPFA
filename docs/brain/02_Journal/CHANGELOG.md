@@ -1,3 +1,13 @@
+## [2026-05-02] - 17:01
+### Fixed
+- Updated `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` so the KDS re-syncs its order list whenever the staff websocket opens and after `order_created` / `order_updated`, preventing missed mobile-created orders from leaving the kitchen board empty after websocket reconnects.
+
+### Added
+- Extended `frontend/back-office/src/pages/Kds/KdsSocketManager.test.tsx` with coverage for websocket-open resyncs and command-event refetch behavior.
+
+### Validation
+- `npm run test -- src/pages/Kds/KdsSocketManager.test.tsx --run`: passed.
+
 ## [2026-05-02] - 16:46
 ### Fixed
 - Updated `backend/apps/commandes/views.py` so CUISINIER requests using `statut=EN_CUISINE` still include freshly created `EN_COURS` orders, preventing the KDS board from missing new tickets during `H-14-01`.
