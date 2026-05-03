@@ -63,26 +63,59 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order }) => {
       </div>
 
       <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.1)_transparent]">
-        {order.lignes.map((ligne) => (
-          <div key={ligne.id} className="group rounded-xl border border-white/5 bg-white/[0.03] p-2.5 transition-colors hover:bg-white/[0.06]">
-            <div className="flex gap-3">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-teal/10 font-bold text-teal ring-1 ring-inset ring-teal/20">
-                {ligne.quantite}
-              </div>
-              <div className="min-w-0 flex-1 py-0.5">
-                <div className="text-sm font-semibold leading-tight text-white group-hover:text-teal transition-colors">
-                  {ligne.plat_details.nom}
+        {order.lignes.map((ligne) => {
+          const isPending = ligne.statut === 'EN_ATTENTE';
+          const isPrep = ligne.statut === 'EN_PREPARATION';
+          
+          return (
+            <div 
+              key={ligne.id} 
+              className={`group rounded-xl border p-2.5 transition-all ${
+                isPrep 
+                  ? 'border-teal/30 bg-teal/5 ring-1 ring-inset ring-teal/10 shadow-sm' 
+                  : 'border-white/5 bg-white/[0.03] grayscale-[0.5] opacity-80'
+              }`}
+            >
+              <div className="flex gap-3">
+                <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg font-bold transition-colors ${
+                  isPrep 
+                    ? 'bg-teal text-white' 
+                    : 'bg-white/10 text-slate-400'
+                }`}>
+                  {ligne.quantite}
                 </div>
-                {ligne.notes && (
-                  <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber/10 bg-amber/5 px-2.5 py-2 text-[11px] leading-relaxed text-amber/90">
-                    <NotebookPen size={12} className="mt-0.5 flex-shrink-0 opacity-70" />
-                    <span>{ligne.notes}</span>
+                <div className="min-w-0 flex-1 py-0.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className={`text-sm font-semibold leading-tight transition-colors ${
+                      isPrep ? 'text-white' : 'text-slate-400'
+                    }`}>
+                      {ligne.plat_details.nom}
+                    </div>
+                    {ligne.heure_lancement && (
+                      <div className="flex-shrink-0 scale-75 origin-right translate-y-[-2px]">
+                        <KdsTimer startTime={ligne.heure_lancement} />
+                      </div>
+                    )}
                   </div>
-                )}
+                  
+                  {isPending && (
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <span className="h-1 w-1 rounded-full bg-slate-500 animate-pulse" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Programmé</span>
+                    </div>
+                  )}
+
+                  {ligne.notes && (
+                    <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber/10 bg-amber/5 px-2.5 py-2 text-[11px] leading-relaxed text-amber/90">
+                      <NotebookPen size={12} className="mt-0.5 flex-shrink-0 opacity-70" />
+                      <span>{ligne.notes}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mt-auto border-t border-white/10 bg-surface-elevated/50 p-3">

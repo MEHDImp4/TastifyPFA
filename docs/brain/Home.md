@@ -40,3 +40,9 @@ This repository of markdown files serves as the ultimate source of truth for the
 ### External Resources
 - **05_Resources/** - External links, assets, and reference material.
   - [[05_Resources/LINKS|External Links & Docs]]
+
+### PFA Preparation (PDF/PPTX)
+- **06_PFA_Reporting/** - Éléments pour le rapport et la soutenance.
+  - [[06_PFA_Reporting/REPORT_STRUCTURE|Structure du Rapport]]
+  - [[06_PFA_Reporting/TECHNICAL_CHALLENGES|Défis Techniques]]
+  - [[06_PFA_Reporting/INNOVATIONS|Innovations & Valeur Ajoutée]]

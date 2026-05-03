@@ -15,6 +15,8 @@ export interface CommandeLigne {
   prix_unitaire: string | number
   statut: CommandeLigneStatut
   notes: string
+  heure_lancement: string | null
+  heure_fin_estimee: string | null
   created_at: string
   updated_at: string
 }

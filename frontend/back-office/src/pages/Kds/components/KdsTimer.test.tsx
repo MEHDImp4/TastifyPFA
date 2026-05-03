@@ -62,4 +62,12 @@ describe('KdsTimer', () => {
     expect(screen.getByTestId('kds-timer').className).toContain('text-error');
     expect(screen.getByTestId('kds-timer').className).toContain('animate-pulse');
   });
+
+  it('handles future start times (countdown)', () => {
+    const startTime = new Date(Date.now() + 65000).toISOString(); // 1m 5s in future
+    render(<KdsTimer startTime={startTime} />);
+    
+    expect(screen.getByTestId('kds-timer').textContent).toContain('In 1:05');
+    expect(screen.getByTestId('kds-timer').className).toContain('text-slate-500');
+  });
 });

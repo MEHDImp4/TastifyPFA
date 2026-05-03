@@ -62,8 +62,35 @@ export const useKdsStore = create<KdsState>((set, get) => ({
 
   handleSocketEvent: (event: any) => {
     const { type, payload } = event
-    const order = payload?.order
 
+    if (type === 'line_launched') {
+      const { ligne_id, commande_id, heure_lancement, heure_fin_estimee } = payload
+      set((state) => {
+        const orderIndex = state.orders.findIndex((o) => o.id === commande_id)
+        if (orderIndex === -1) return state
+
+        const newOrders = [...state.orders]
+        const order = { ...newOrders[orderIndex] }
+        const ligneIndex = order.lignes.findIndex((l) => l.id === ligne_id)
+
+        if (ligneIndex !== -1) {
+          const newLignes = [...order.lignes]
+          newLignes[ligneIndex] = {
+            ...newLignes[ligneIndex],
+            statut: 'EN_PREPARATION',
+            heure_lancement,
+            heure_fin_estimee,
+            updated_at: new Date().toISOString()
+          }
+          order.lignes = newLignes
+          newOrders[orderIndex] = order
+        }
+        return { orders: newOrders }
+      })
+      return
+    }
+
+    const order = payload?.order
     if (!order) return
 
     const isKitchenStatus = order.statut === 'EN_CUISINE' || order.statut === 'EN_COURS'

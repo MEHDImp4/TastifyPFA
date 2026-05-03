@@ -1,27 +1,26 @@
 # Module: Interface Serveur (Salle)
 
-This SPA is used by waiters on tablets or mobile devices to manage floor operations, take orders, and process payments.
+Ce module est utilisé par les serveurs sur tablette ou mobile pour gérer le service en salle. Accessible via le portail Staff (Port 3000).
 
-## 1. Interactive Floor Plan
-- **Visualization**: SVG or Canvas based representation of the restaurant layout.
-- **Real-time Status**: Color-coded tables based on WebSocket updates.
-  - Green: `libre`
-  - Red: `occupée`
-  - Blue: `réservée`
-  - Amber: `encaissement`
-- Clicking a free table opens a "New Order" modal.
-- Clicking an occupied table opens the "Current Order Status" modal.
+## 1. Plan de Table Temps Réel (Implémenté)
+- **Visualisation SVG** : Représentation graphique de la salle.
+- **Statuts Dynamiques** : 
+  - **Vert** : Libre.
+  - **Rouge** : Occupée (Commande en cours).
+  - **Bleu** : Réservée (Planifié).
+- **Navigation** : Sélection d'une table pour ouvrir l'interface de prise de commande.
 
-## 2. Order Taking
-- Browsing menu by categories.
-- Adding items with quantities and custom free-text notes.
-- **Workflow**: 
-  1. `POST /api/commandes/` creates the draft.
-  2. `PATCH /api/commandes/{id}/envoyer/` sends it to the KDS.
+## 2. Prise de Commande (Implémenté)
+- **Menu Tactile** : Navigation par catégories (onglets).
+- **Panier Isolé** : Chaque table a son propre panier persistant localement.
+- **Notes** : Possibilité d'ajouter des notes spécifiques par plat (ex: "Sans oignon").
+- **Soumission** : Création atomique de la commande et des lignes via l'API.
 
-## 3. Payments & Split Bill
-- **QR Code Payments**: Waiter transitions table to `encaissement` which displays a static QR code tied to the table URL (e.g. `/client/table/{id}/paiement/`).
-- **Split Bill Types**:
-  - `split-egal`: Divides the total by N guests.
-  - `split-individuel`: Guests pay for specific `ligne_id`.
-- **Validation**: `PATCH /api/paiement/{commande_id}/valider/` marks order as `payee` and table as `libre`.
+## 3. Orchestration & KDS (Implémenté)
+- Une fois validée, la commande est envoyée au backend pour orchestration.
+- Le serveur peut voir l'état d'avancement des plats (En attente, En préparation, Prêt).
+
+## 4. Paiements & Encaissement (Planifié)
+- **Split Bill** : Division de la note (égale ou par article).
+- **QR Code** : Génération d'un code de paiement pour le client.
+- **Clôture** : Libération automatique de la table après paiement.

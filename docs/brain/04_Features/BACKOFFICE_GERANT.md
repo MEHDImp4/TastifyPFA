@@ -1,32 +1,25 @@
 # Module: Back-Office Gérant
 
-This SPA is the central command center for the restaurant owner/manager.
+Ce module centralise la gestion administrative du restaurant. Il est accessible uniquement au rôle `GERANT` via le portail Staff (Port 3000).
 
-## 1. Dashboard (`/api/dashboard/`)
-- **KPIs**: Daily orders, Revenue (CA), Average ticket size, Table occupancy rate.
-- **Stock Alerts**: Real-time component showing ingredients below their threshold.
-- **Charts**: 7-day rolling revenue chart (Recharts LineChart).
-- **Reservations**: Today's reservations list.
+## 1. Gestion du Menu (Implémenté)
+- **Catégories** : Création, modification, suppression logique (`est_active`), et gestion des images.
+- **Plats** : Gestion complète des plats avec prix, temps de préparation, et liaison aux catégories.
+- **Soft Delete** : Les catégories et plats supprimés sont conservés en base avec `est_active=False` pour préserver l'historique des commandes.
 
-*Performance criteria*: Initial load < 1.5s.
+## 2. Gestion de la Salle (Implémenté)
+- **Plan de Table Interactif** : Éditeur de plan de table intégré.
+- **Positionnement** : Drag & drop des tables avec magnétisme (grille de 20px) et détection de collision.
+- **Capacité** : Gestion du nombre de places par table.
 
-## 2. Menu Management
-- **Categories**: Name, image, active status, display order.
-- **Plats**: Name, category, description, price, image, `temps_preparation`, `badge_chef` (anti-waste flag).
-- **Ingredients Linking**: Define recipes (`plat ↔ ingredients` + `quantite_utilisee`).
-- **Real-time Availability**: Toggling availability triggers a WS push to the Serveur SPA immediately.
+## 3. Dashboard & Analytics (En cours / Planifié)
+- **KPIs** : Commandes du jour, Chiffre d'Affaires (CA), Panier moyen.
+- **Graphiques** : Visualisation des ventes sur 7 jours via Recharts.
 
-## 3. Inventory (Stocks)
-- Visual colored gauges (Green/Orange/Red) based on `quantite / seuil` ratio.
-- Automatic decrement via Django signal when a `LigneCommande` status changes to `servi`.
-- Celery email alerts sent to the manager when stock drops below `seuil_alerte`.
+## 4. Stocks & Inventaire (Planifié)
+- **Alertes** : Seuils de stock critique.
+- **Déduction Automatique** : Les stocks diminuent automatiquement lors de la validation des plats en cuisine.
 
-## 4. HR Management (Employés)
-- Creates a combined `Employe` profile and `Utilisateur` (AbstractUser) account.
-- **Soft deletes**: Archiving an employee (`is_active=False`) revokes login access but preserves order history.
-- Asynchronous PDF export of employee roster via Celery.
-
-## 5. Daily Check-list
-- Generated daily at 07:00 via Celery Beat.
-- Immutable append-only log when items are checked.
-- Alerts if critical items are not checked by closing time (e.g., 23:00).
+## 5. RH & Check-lists (Planifié)
+- **Employés** : Gestion des profils et des accès.
+- **Check-lists** : Listes de tâches quotidiennes (ouverture/fermeture).

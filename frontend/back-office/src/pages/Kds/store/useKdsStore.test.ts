@@ -27,7 +27,8 @@ const mockOrder: Commande = {
 
 describe('useKdsStore', () => {
   beforeEach(() => {
-    useKdsStore.setState({ orders: [], isLoading: false, error: null })
+    // @ts-ignore - newOrderIds doesn't exist yet
+    useKdsStore.setState({ orders: [], isLoading: false, error: null, newOrderIds: new Set() })
     vi.clearAllMocks()
   })
 
@@ -112,13 +113,53 @@ describe('useKdsStore', () => {
       expect(useKdsStore.getState().orders).toHaveLength(0)
     })
 
-    it('should add order on order_created if EN_COURS', () => {
+    it('rejects EN_COURS orders on order_created (P16-FE-06)', () => {
       const orderEnCours = { ...mockOrder, statut: 'EN_COURS' as const }
       useKdsStore.getState().handleSocketEvent({
         type: 'order_created',
-        payload: { order: orderEnCours }
+        payload: { order: orderEnCours },
       })
-      expect(useKdsStore.getState().orders).toHaveLength(1)
+      expect(useKdsStore.getState().orders).toHaveLength(0)
+      // @ts-ignore - newOrderIds doesn't exist yet
+      expect(useKdsStore.getState().newOrderIds.size).toBe(0)
+    })
+
+    it('rejects EN_COURS orders on order_updated (P16-FE-06)', () => {
+      // @ts-ignore - newOrderIds doesn't exist yet
+      useKdsStore.setState({ orders: [], newOrderIds: new Set() })
+      const orderEnCours = { ...mockOrder, statut: 'EN_COURS' as const }
+      useKdsStore.getState().handleSocketEvent({
+        type: 'order_updated',
+        payload: { order: orderEnCours },
+      })
+      expect(useKdsStore.getState().orders).toHaveLength(0)
+    })
+
+    it('adds the order id to newOrderIds when EN_CUISINE arrives via order_updated (P16-FE-05)', () => {
+      // @ts-ignore - newOrderIds doesn't exist yet
+      useKdsStore.setState({ orders: [], newOrderIds: new Set() })
+      useKdsStore.getState().handleSocketEvent({
+        type: 'order_updated',
+        payload: { order: mockOrder }, // statut already 'EN_CUISINE'
+      })
+      // @ts-ignore - newOrderIds doesn't exist yet
+      expect(useKdsStore.getState().newOrderIds.has(mockOrder.id)).toBe(true)
+    })
+
+    it('clearNewOrder removes the id from newOrderIds (P16-FE-05)', () => {
+      // @ts-ignore - newOrderIds/clearNewOrder doesn't exist yet
+      useKdsStore.setState({ newOrderIds: new Set([42]) })
+      // @ts-ignore - clearNewOrder doesn't exist yet
+      useKdsStore.getState().clearNewOrder(42)
+      // @ts-ignore - newOrderIds doesn't exist yet
+      expect(useKdsStore.getState().newOrderIds.has(42)).toBe(false)
+    })
+
+    it('fetchOrders does NOT populate newOrderIds (P16-FE-05 / Pitfall 5)', async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: [mockOrder] })
+      await useKdsStore.getState().fetchOrders()
+      // @ts-ignore - newOrderIds doesn't exist yet
+      expect(useKdsStore.getState().newOrderIds.size).toBe(0)
     })
 
     it('should ignore other event types', () => {

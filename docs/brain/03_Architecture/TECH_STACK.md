@@ -29,5 +29,7 @@
 | Component | Technology | Version | Purpose |
 |---|---|---|---|
 | Orchestration | Docker Compose | 3.9 | Local & prod deployment |
-| Reverse Proxy | Nginx | alpine | Serve React static files & proxy API/WS |
-| Testing | pytest + pytest-django | latest | Unit & Integration testing |
+| Routing (Prod)| Nginx | alpine | Final reverse proxy for unified port 80/443 |
+| Routing (Dev) | Direct Ports | — | Staff (3000), Client (3003), API (8000) |
+| Testing (Back)| pytest + pytest-django | latest | Unit & Integration testing in Docker |
+| Testing (Front)| Vitest + React Testing Library | latest | Component & Store testing |

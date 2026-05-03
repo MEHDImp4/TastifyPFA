@@ -58,4 +58,39 @@ describe('TicketCard', () => {
     
     expect(screen.getByTestId('mock-timer')).toBeDefined();
   });
+
+  describe('Phase 16 — New ticket glow', () => {
+    it('applies animate-new-ticket class when isNew=true (P16-FE-03)', () => {
+      // @ts-ignore - isNew doesn't exist yet
+      render(<TicketCard order={mockOrder} isNew={true} />);
+      const article = screen.getByTestId(`ticket-card-${mockOrder.id}`);
+      expect(article.className).toContain('animate-new-ticket');
+    });
+
+    it('does NOT apply animate-new-ticket when isNew=false (P16-FE-03)', () => {
+      // @ts-ignore - isNew doesn't exist yet
+      render(<TicketCard order={mockOrder} isNew={false} />);
+      const article = screen.getByTestId(`ticket-card-${mockOrder.id}`);
+      expect(article.className).not.toContain('animate-new-ticket');
+    });
+
+    it('removes animate-new-ticket class after 10 seconds (P16-FE-04)', () => {
+      vi.useFakeTimers();
+      try {
+        // @ts-ignore - isNew doesn't exist yet
+        const { rerender } = render(<TicketCard order={mockOrder} isNew={true} />);
+        const article = screen.getByTestId(`ticket-card-${mockOrder.id}`);
+        expect(article.className).toContain('animate-new-ticket');
+
+        vi.advanceTimersByTime(10_000);
+        // @ts-ignore - isNew doesn't exist yet
+        rerender(<TicketCard order={mockOrder} isNew={true} />);
+
+        const articleAfter = screen.getByTestId(`ticket-card-${mockOrder.id}`);
+        expect(articleAfter.className).not.toContain('animate-new-ticket');
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
 });

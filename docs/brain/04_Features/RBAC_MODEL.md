@@ -4,12 +4,12 @@ The Tastify system relies on a strict 4-tier RBAC system implemented via a custo
 
 ## 1. Roles
 
-| Role | Enums | React SPA | Permissions Scope |
+| Role | Enums | Front-end Portal | Permissions Scope |
 |---|---|---|---|
-| **Gérant** | `GERANT` | Back-Office | Full CRUD access, Dashboards, HR, Global settings, Reports. |
-| **Serveur** | `SERVEUR` | Salle | Read access to menu/tables. Create orders, manage their own tables, QR payments. |
-| **Cuisinier**| `CUISINIER`| KDS | Read access to orders/ingredients. Update `statut` of plats in `ligne_commande`. |
-| **Client** | `CLIENT` | Portail | Read menu, create reservations, place orders for themselves. |
+| **Gérant** | `GERANT` | Staff (Port 3000) | Full CRUD access, Dashboards, HR, Global settings, Reports. |
+| **Serveur** | `SERVEUR` | Staff (Port 3000) | Read menu/tables. Create orders, manage tables, process payments. |
+| **Cuisinier**| `CUISINIER`| Staff (Port 3000) | Read orders. Update `statut` of plats (KDS view). |
+| **Client** | `CLIENT` | Client (Port 3003) | Read menu, create reservations, place orders. |
 
 ## 2. Django Implementation
 
@@ -38,6 +38,12 @@ class PlatViewSet(ModelViewSet):
         return [IsGerant()]             # Only GERANT can write
 ```
 
-## 3. Frontend Routing
-The user's role is embedded in the JWT payload (via custom `TOKEN_OBTAIN_SERIALIZER`). The frontend decodes the token and redirects the user to the correct SPA.
-If a SERVEUR tries to access the Back-Office URL, the Nginx/React router will block it and/or the backend API will return `403 Forbidden` on dashboard endpoints.
+## 3. Frontend Routing & Gating
+Le système utilise deux portails distincts :
+- **Staff (Port 3000)** : Accepte uniquement `GERANT`, `SERVEUR`, `CUISINIER`.
+- **Client (Port 3003)** : Accepte uniquement `CLIENT`.
+
+### Logique de Gating
+La protection est faite à deux niveaux :
+1. **Frontend** : Le `roleAccess.ts` centralise la logique de rejet. Si un utilisateur essaie de se connecter au mauvais portail, l'accès est bloqué au niveau du composant `Login`.
+2. **Backend** : Chaque endpoint API est protégé par des classes de permission (ex: `IsGerant`) qui renvoient `403 Forbidden` si le rôle ne correspond pas.
