@@ -1,3 +1,14 @@
+## [2026-05-03] - 17:58
+### Fixed
+- **Backend Infrastructure**: Resolved broken static files serving (404 errors) for the Django admin and other assets by integrating `WhiteNoise`.
+- Added `whitenoise==6.9.0` to `backend/requirements.txt`.
+- Added `WhiteNoiseMiddleware` to `MIDDLEWARE` in `backend/tastify_backend/settings/base.py`.
+- Updated `backend/entrypoint.sh` to run `python manage.py collectstatic --noinput` on startup.
+- Verified fix via browser subagent and confirmed 162 static files collected in `backend-1` logs.
+
+### Changed
+- Updated `dashboard.html` to reflect the current state and progress.
+
 ## [2026-05-03] - 17:50
 ### Added
 - **Phase 16 (Order Push to KDS)**: Tightened KDS queryset to strictly exclude `EN_COURS` orders and gated `Commande` PATCH operations on ownership.

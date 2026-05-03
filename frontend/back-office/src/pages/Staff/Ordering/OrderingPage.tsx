@@ -22,6 +22,7 @@ export const OrderingPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [isReviewOpen, setIsReviewOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isFiring, setIsFiring] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
 
@@ -135,6 +136,20 @@ export const OrderingPage = () => {
     }
   }
 
+  const fireOrderToKitchen = async () => {
+    if (!activeOrder) return
+    setIsFiring(true)
+    setError(null)
+    try {
+      await axiosInstance.patch(`/commandes/${activeOrder.id}/`, { statut: 'EN_CUISINE' })
+      setActiveOrder((prev: any) => (prev ? { ...prev, statut: 'EN_CUISINE' } : prev))
+    } catch (err: any) {
+      setError("Impossible d'envoyer en cuisine.")
+    } finally {
+      setIsFiring(false)
+    }
+  }
+
   // True when there is no active order OR the logged-in user owns it
   const isOwnOrder = !activeOrder || activeOrder.serveur_username === currentUser?.username
 
@@ -227,21 +242,37 @@ export const OrderingPage = () => {
               )}
 
               {isOwnOrder && (
-                <button
-                  type="button"
-                  disabled={isSubmitting}
-                  onClick={closeOrder}
-                  className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <>
-                      <CheckCircle2 className="h-5 w-5" />
-                      Clôturer et Encaisser
-                    </>
+                <>
+                  {activeOrder?.statut === 'EN_COURS' && (
+                    <button
+                      type="button"
+                      disabled={isFiring}
+                      onClick={fireOrderToKitchen}
+                      className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                    >
+                      {isFiring ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                      ) : (
+                        'Tout Envoyer en Cuisine'
+                      )}
+                    </button>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    disabled={isSubmitting}
+                    onClick={closeOrder}
+                    className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        <CheckCircle2 className="h-5 w-5" />
+                        Clôturer et Encaisser
+                      </>
+                    )}
+                  </button>
+                </>
               )}
             </div>
           )}
