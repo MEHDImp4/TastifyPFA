@@ -1,3 +1,17 @@
+## [2026-05-03] - 22:14
+### Fixed
+- Stopped the back-office bootstrap from calling `/api/users/refresh/` on every hard reload when the persisted staff access token is still valid, which was incorrectly forcing `CUISINIER` sessions into a failing refresh path.
+- Limited bootstrap refresh to expired or near-expiry JWT access tokens so a missing refresh cookie no longer breaks a fresh reload immediately after login.
+
+### Added
+- Added regression coverage for valid, expired, and malformed persisted JWT access tokens in the auth bootstrap flow.
+
+### Validation
+- `frontend/back-office`: `npm test -- --run src/authBootstrap.test.tsx src/authPersistence.test.ts src/authRefreshSync.test.ts src/components/layout/AppShell.test.tsx`
+
+### Commit
+- Fix commit: `daeefbb`
+
 ## [2026-05-03] - 22:03
 ### Fixed
 - Hardened the KDS order store against malformed API and websocket payloads so a stale or incomplete `commande` can no longer crash the `CUISINIER` screen after a hard reload.
