@@ -1,14 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider'
 import { useKdsStore } from './store/useKdsStore'
 
 /**
- * Invisible component that bridges WebSocket events to the KDS store.
+ * Bridges WebSocket events to the KDS store and plays the kitchen bell on
+ * EN_CUISINE arrivals (Phase 16 — manual fire UX feedback).
  */
 export const KdsSocketManager = () => {
   const { connectionStatus, lastEvent } = useStaffWebSocket()
   const handleSocketEvent = useKdsStore((state) => state.handleSocketEvent)
   const fetchOrders = useKdsStore((state) => state.fetchOrders)
+
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/kitchen-bell.mp3')
+    audioRef.current.preload = 'auto'
+    return () => {
+      audioRef.current = null
+    }
+  }, [])
 
   useEffect(() => {
     if (connectionStatus === 'open') {
@@ -18,11 +29,25 @@ export const KdsSocketManager = () => {
   }, [connectionStatus, fetchOrders])
 
   useEffect(() => {
-    if (lastEvent) {
-      handleSocketEvent(lastEvent)
-      if (lastEvent.type === 'order_created' || lastEvent.type === 'order_updated') {
-        void fetchOrders()
-      }
+    if (!lastEvent) return
+
+    handleSocketEvent(lastEvent)
+
+    const isOrderEvent = lastEvent.type === 'order_created' || lastEvent.type === 'order_updated'
+    if (isOrderEvent) {
+      void fetchOrders()
+    }
+
+    const wasJustFired =
+      lastEvent.type === 'order_updated' &&
+      lastEvent.payload?.order?.statut === 'EN_CUISINE'
+
+    if (wasJustFired && audioRef.current) {
+      audioRef.current.currentTime = 0
+      audioRef.current.play().catch(() => {
+        // Autoplay policy: browser blocks .play() until first user gesture.
+        // Silent swallow is intentional — this is not an error condition.
+      })
     }
   }, [fetchOrders, handleSocketEvent, lastEvent])
 
