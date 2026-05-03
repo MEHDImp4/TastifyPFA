@@ -151,8 +151,10 @@ export const OrderingPage = () => {
     }
   }
 
-  // True when there is no active order OR the logged-in user owns it
-  const isOwnOrder = !activeOrder || activeOrder.serveur_username === currentUser?.username
+  // GERANT can always act on any order; SERVEUR is restricted to their own orders
+  const isOwnOrder = !activeOrder ||
+    activeOrder.serveur_username === currentUser?.username ||
+    currentUser?.role === 'GERANT'
 
   if (isLoading) {
     return (
