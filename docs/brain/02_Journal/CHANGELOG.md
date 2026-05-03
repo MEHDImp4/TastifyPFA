@@ -1,3 +1,17 @@
+## [2026-05-03] - 22:20
+### Fixed
+- Hardened auth bootstrap JWT parsing so corrupted or non-string persisted access tokens no longer throw during back-office startup.
+- Added a back-office render error boundary so runtime crashes now surface as a visible fallback instead of a blank green screen.
+
+### Added
+- Added regression coverage for the new render error boundary and isolated app routing tests from auth bootstrap timing.
+
+### Validation
+- `frontend/back-office`: `npm test -- --run src/App.test.tsx src/components/ui/AppErrorBoundary.test.tsx src/components/layout/AppShell.test.tsx src/pages/Kds/KdsPage.test.tsx src/pages/Kds/KdsSocketManager.test.tsx src/authBootstrap.test.tsx`
+
+### Commit
+- Fix commit: `16b39c3`
+
 ## [2026-05-03] - 22:14
 ### Fixed
 - Stopped the back-office bootstrap from calling `/api/users/refresh/` on every hard reload when the persisted staff access token is still valid, which was incorrectly forcing `CUISINIER` sessions into a failing refresh path.
