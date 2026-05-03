@@ -59,6 +59,12 @@ describe('TicketCard', () => {
     expect(screen.getByTestId('mock-timer')).toBeDefined();
   });
 
+  it('falls back safely when created_at is invalid', () => {
+    render(<TicketCard order={{ ...mockOrder, created_at: 'invalid-date' }} />);
+
+    expect(screen.getByText('--:--')).toBeDefined();
+  });
+
   describe('Phase 16 — New ticket glow', () => {
     it('applies animate-new-ticket class when isNew=true (P16-FE-03)', () => {
       // @ts-ignore - isNew doesn't exist yet

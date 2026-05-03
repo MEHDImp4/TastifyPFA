@@ -4,6 +4,11 @@ import { useKdsStore } from './store/useKdsStore';
 import { KdsSocketManager } from './KdsSocketManager';
 import { TicketCard } from './components/TicketCard';
 
+const getFiniteTimestamp = (value: string) => {
+  const timestamp = new Date(value).getTime();
+  return Number.isFinite(timestamp) ? timestamp : null;
+};
+
 export const KdsPage: React.FC = () => {
   const orders = useKdsStore((state) => state.orders);
   const isLoading = useKdsStore((state) => state.isLoading);
@@ -42,7 +47,11 @@ export const KdsPage: React.FC = () => {
 
   const totalItems = orders.reduce((sum, order) => sum + order.lignes.length, 0);
   const urgentOrders = orders.filter((order) => {
-    const minutes = (Date.now() - new Date(order.created_at).getTime()) / 60000;
+    const createdAt = getFiniteTimestamp(order.created_at);
+    if (createdAt === null) {
+      return false;
+    }
+    const minutes = (Date.now() - createdAt) / 60000;
     return minutes >= 10;
   }).length;
 

@@ -47,6 +47,19 @@ describe('useKdsStore', () => {
     expect(useKdsStore.getState().isLoading).toBe(false)
   })
 
+  it('drops malformed orders returned by fetchOrders', async () => {
+    vi.mocked(axios.get).mockResolvedValue({
+      data: [
+        mockOrder,
+        { id: 2, statut: 'EN_CUISINE' },
+      ],
+    })
+
+    await useKdsStore.getState().fetchOrders()
+
+    expect(useKdsStore.getState().orders).toEqual([mockOrder])
+  })
+
   it('should add a new order to the front (LIFO)', () => {
     const order1 = { ...mockOrder, id: 1, created_at: '2026-05-01T20:00:00Z' }
     const order2 = { ...mockOrder, id: 2, created_at: '2026-05-01T20:05:00Z' }
@@ -167,6 +180,15 @@ describe('useKdsStore', () => {
         type: 'other_event',
         data: {}
       })
+      expect(useKdsStore.getState().orders).toHaveLength(0)
+    })
+
+    it('ignores malformed websocket orders instead of crashing', () => {
+      useKdsStore.getState().handleSocketEvent({
+        type: 'order_updated',
+        payload: { order: { id: 99, statut: 'EN_CUISINE' } },
+      })
+
       expect(useKdsStore.getState().orders).toHaveLength(0)
     })
   })

@@ -70,4 +70,10 @@ describe('KdsTimer', () => {
     expect(screen.getByTestId('kds-timer').textContent).toContain('In 1:05');
     expect(screen.getByTestId('kds-timer').className).toContain('text-slate-500');
   });
+
+  it('falls back to 0:00 for invalid dates', () => {
+    render(<KdsTimer startTime="invalid-date" />);
+
+    expect(screen.getByTestId('kds-timer').textContent).toBe('0:00');
+  });
 });

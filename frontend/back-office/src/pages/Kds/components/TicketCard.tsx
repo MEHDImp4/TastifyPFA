@@ -8,8 +8,16 @@ interface TicketCardProps {
   isNew?: boolean;
 }
 
+const formatServiceTime = (value: string) => {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime())
+    ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : '--:--';
+};
+
 export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) => {
-  const totalQuantity = order.lignes.reduce((sum, ligne) => sum + ligne.quantite, 0);
+  const lignes = Array.isArray(order.lignes) ? order.lignes : [];
+  const totalQuantity = lignes.reduce((sum, ligne) => sum + ligne.quantite, 0);
   const [showGlow, setShowGlow] = useState<boolean>(isNew);
 
   useEffect(() => {
@@ -51,7 +59,7 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
               <span>Service</span>
             </div>
             <div className="font-semibold text-white">
-              {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {formatServiceTime(order.created_at)}
             </div>
           </div>
           <div className="flex flex-col gap-1 rounded-lg border border-white/5 bg-black/10 px-2.5 py-2">
@@ -69,13 +77,13 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
       <div className="flex items-center justify-between border-b border-white/5 bg-black/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
         <div className="flex items-center gap-1.5">
           <CookingPot size={13} className="text-teal" />
-          <span>{order.lignes.length} PLATS</span>
+          <span>{lignes.length} PLATS</span>
         </div>
         <span className="text-teal/80">{totalQuantity} PORTIONS</span>
       </div>
 
       <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.1)_transparent]">
-        {order.lignes.map((ligne) => {
+        {lignes.map((ligne) => {
           const isPending = ligne.statut === 'EN_ATTENTE';
           const isPrep = ligne.statut === 'EN_PREPARATION';
           

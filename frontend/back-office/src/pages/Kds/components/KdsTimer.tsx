@@ -10,6 +10,10 @@ export const KdsTimer: React.FC<KdsTimerProps> = ({ startTime }) => {
   useEffect(() => {
     const calculate = () => {
       const start = new Date(startTime).getTime();
+      if (!Number.isFinite(start)) {
+        setDiff(0);
+        return;
+      }
       const now = new Date().getTime();
       setDiff(Math.floor((now - start) / 1000));
     };
