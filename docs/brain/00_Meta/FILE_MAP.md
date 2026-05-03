@@ -45,7 +45,10 @@ tastify-pfa/
 │   ├── back-office/               # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
 │   │   ├── vitest.config.ts       # Vitest-only config for test environment setup
+│   │   ├── src/authBootstrap.test.tsx # Covers non-blocking persisted-session bootstrap deadlines
+│   │   ├── src/authPersistence.test.ts # Guards persisted auth-state sanitization on hydrate
 │   │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
+│   │   ├── src/axiosInstance.test.ts # Verifies transient proxy startup retry classification
 │   │   └── src/pages/
 │   │       ├── Categories/        # Categories management (Phase 5)
 │   │       ├── Plats/             # Plats management (Phase 7)
@@ -105,6 +108,6 @@ tastify-pfa/
 | `localhost:3000/`       | backoffice:3000    | GERANT / SERVEUR / CUISINIER |
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
-Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network.
+Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network, and both dev servers now allow all hosts so Docker bridge access, `localhost`, and direct LAN-IP testing follow the same proxy path.
 Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.
 The backend container starts through `backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.

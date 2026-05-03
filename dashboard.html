@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 19:19:22<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 19:43:52<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,11 +433,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->17<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->18<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->7<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->8<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
@@ -964,98 +964,78 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened `/api/users/refresh/` so invalid or stale refresh cookies now return `401 token_not_valid` instead of crashing the backend with a `500`.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Back-Office Bootstrap Resilience**: Hardened `frontend/_shared/auth/AuthBootstrap.tsx` so persisted-session bootstrap now times out safely, never blocks the initial render indefinitely, and preserves the session when the Vite proxy/backend startup path is only temporarily unavailable.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/_shared/auth/axiosInstance.ts` with a 5s request timeout plus bounded retries for transient proxy startup failures (`502/503/504`, transport timeouts, and network errors) before surfacing the error to the UI.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Sanitized persisted auth hydration in `frontend/_shared/auth/useAuthStore.ts` so invalid or incompatible local storage payloads are discarded instead of leaving Zustand hydration in an inconsistent startup state.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Relaxed both Vite dev-server configs (`frontend/back-office/vite.config.ts`, `frontend/portail-client/vite.config.ts`) to allow all hosts during Docker/local-network access, removing host filtering as a proxy-side startup variable.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added focused regression coverage in `frontend/back-office/src/authBootstrap.test.tsx`, `frontend/back-office/src/authPersistence.test.ts`, and `frontend/back-office/src/axiosInstance.test.ts` for bootstrap deadlines, persisted-auth sanitization, and transient proxy retry classification.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the auth-bootstrap resilience hardening and the expanded shared-auth test surface.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 19:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added backend auth regression coverage for malformed refresh-cookie input on the staff JWT refresh flow.</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Refresh Endpoint Hardening**: Updated `backend/apps/users/views/auth.py` so `/api/users/refresh/` no longer mutates parser-owned `request.data` and now converts invalid refresh-cookie `TokenError` cases into a proper `401 token_not_valid` response instead of a server-side `500`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:19</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added backend coverage in `backend/apps/users/tests/test_auth.py` for the invalid refresh-cookie regression path.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added a staff auth bootstrap so persisted KDS sessions refresh their access token before `/api/commandes/` and `/ws/staff/` start, preventing reload-time 401 and WebSocket failures.</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Auth Bootstrap**: Added a startup refresh gate in the staff SPA so persisted staff sessions renew their access token from the refresh cookie before the KDS page and WebSocket layer mount, preventing reload-time `401 Unauthorized` API failures and rejected `/ws/staff/` handshakes with stale JWTs.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `AuthBootstrap` regression coverage and tightened KDS websocket payload typing so the back-office build passes cleanly again.</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added a reusable `refreshPersistedSession()` path in `frontend/_shared/auth/AuthBootstrap.tsx` and wired `frontend/back-office/src/App.tsx` through `AuthBootstrap`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Extended auth-store hydration state in `frontend/_shared/auth/useAuthStore.ts` so the bootstrap only runs after persisted auth state is available.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` with a typed payload guard for `order.statut`, eliminating the latent TypeScript build error in KDS websocket handling.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added focused frontend coverage in `frontend/back-office/src/authBootstrap.test.tsx` for the bootstrap refresh success/failure paths.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Frontend**: Restored the initial `fetchOrders()` call in `KdsPage` so the kitchen board hydrates immediately on first load.</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Frontend**: Restored the initial `fetchOrders()` call in `KdsPage` so the kitchen board hydrates on first load instead of waiting for a later websocket state change.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the defensive KDS resync on `order_created` and `order_updated` websocket frames to prevent stale or empty boards.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated KDS regression tests to cover the restored initial hydration and order-event resync behavior.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Backend Infrastructure**: Resolved broken static files serving (404 errors) for the Django admin and other assets by integrating `WhiteNoise`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `whitenoise==6.9.0` to `backend/requirements.txt`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `WhiteNoiseMiddleware` to `MIDDLEWARE` in `backend/tastify_backend/settings/base.py`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `backend/entrypoint.sh` to run `python manage.py collectstatic --noinput` on startup.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verified fix via browser subagent and confirmed 162 static files collected in `backend-1` logs.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `dashboard.html` to reflect the current state and progress.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS)**: Tightened KDS queryset to strictly exclude `EN_COURS` orders and gated `Commande` PATCH operations on ownership.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Manual Fire Logic)**: Gated JIT orchestration to only trigger on the `EN_COURS` -> `EN_CUISINE` transition.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `16-03-SUMMARY.md` and `16-04-SUMMARY.md` to document implementation waves.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `backend/apps/commandes/views.py` to enforce KDS visibility and ownership-based PATCH gates.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `backend/apps/commandes/signals.py` and `orchestrator.py` to support the "Manual Fire" transition logic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS) Wave 0**: Scaffolded backend regression tests (RED state).</p>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the defensive `fetchOrders()` resync in `KdsSocketManager` for `order_created` and `order_updated` frames so missed or partial realtime updates do not leave the board stale.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

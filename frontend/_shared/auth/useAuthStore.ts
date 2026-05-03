@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface User {
   username: string
@@ -15,6 +15,47 @@ interface AuthState {
   clearAuth: () => void
   setAccessToken: (token: string, user?: User) => void
   setHasHydrated: (hasHydrated: boolean) => void
+}
+
+interface PersistedAuthState {
+  user: User | null
+  accessToken: string | null
+  isAuthenticated: boolean
+}
+
+const AUTH_STORAGE_NAME = 'tastify-auth-storage'
+const AUTH_STORAGE_VERSION = 1
+
+const isUser = (value: unknown): value is User => {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const candidate = value as Record<string, unknown>
+  return typeof candidate.username === 'string' && typeof candidate.role === 'string'
+}
+
+export const sanitizePersistedAuthState = (value: unknown): PersistedAuthState => {
+  if (!value || typeof value !== 'object') {
+    return {
+      user: null,
+      accessToken: null,
+      isAuthenticated: false,
+    }
+  }
+
+  const candidate = value as Record<string, unknown>
+  const accessToken =
+    typeof candidate.accessToken === 'string' && candidate.accessToken.trim().length > 0
+      ? candidate.accessToken
+      : null
+  const user = isUser(candidate.user) ? candidate.user : null
+
+  return {
+    user,
+    accessToken,
+    isAuthenticated: Boolean(accessToken),
+  }
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -42,13 +83,25 @@ export const useAuthStore = create<AuthState>()(
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
-      name: 'tastify-auth-storage',
+      name: AUTH_STORAGE_NAME,
+      version: AUTH_STORAGE_VERSION,
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
         isAuthenticated: state.isAuthenticated,
       }),
-      onRehydrateStorage: () => (state) => {
+      merge: (persistedState, currentState) => ({
+        ...currentState,
+        ...sanitizePersistedAuthState(persistedState),
+      }),
+      migrate: (persistedState) => sanitizePersistedAuthState(persistedState),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          localStorage.removeItem(AUTH_STORAGE_NAME)
+          state?.clearAuth()
+        }
+
         state?.setHasHydrated(true)
       },
     }

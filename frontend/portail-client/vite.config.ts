@@ -23,7 +23,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3003,
     strictPort: true,
-    allowedHosts: ['localhost', 'portail'],
+    allowedHosts: true,
     proxy: {
       '/api': {
         target: 'http://backend:8000',

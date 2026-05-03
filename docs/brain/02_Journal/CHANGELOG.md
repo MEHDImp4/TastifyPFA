@@ -1,3 +1,16 @@
+## [2026-05-03] - 19:43
+### Fixed
+- **Back-Office Bootstrap Resilience**: Hardened `frontend/_shared/auth/AuthBootstrap.tsx` so persisted-session bootstrap now times out safely, never blocks the initial render indefinitely, and preserves the session when the Vite proxy/backend startup path is only temporarily unavailable.
+- Updated `frontend/_shared/auth/axiosInstance.ts` with a 5s request timeout plus bounded retries for transient proxy startup failures (`502/503/504`, transport timeouts, and network errors) before surfacing the error to the UI.
+- Sanitized persisted auth hydration in `frontend/_shared/auth/useAuthStore.ts` so invalid or incompatible local storage payloads are discarded instead of leaving Zustand hydration in an inconsistent startup state.
+- Relaxed both Vite dev-server configs (`frontend/back-office/vite.config.ts`, `frontend/portail-client/vite.config.ts`) to allow all hosts during Docker/local-network access, removing host filtering as a proxy-side startup variable.
+
+### Added
+- Added focused regression coverage in `frontend/back-office/src/authBootstrap.test.tsx`, `frontend/back-office/src/authPersistence.test.ts`, and `frontend/back-office/src/axiosInstance.test.ts` for bootstrap deadlines, persisted-auth sanitization, and transient proxy retry classification.
+
+### Changed
+- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the auth-bootstrap resilience hardening and the expanded shared-auth test surface.
+
 ## [2026-05-03] - 19:19
 ### Fixed
 - **Refresh Endpoint Hardening**: Updated `backend/apps/users/views/auth.py` so `/api/users/refresh/` no longer mutates parser-owned `request.data` and now converts invalid refresh-cookie `TokenError` cases into a proper `401 token_not_valid` response instead of a server-side `500`.

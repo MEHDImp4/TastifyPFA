@@ -18,6 +18,7 @@ Then visit:
 - `http://localhost:8000/api/` → Django REST API
 
 Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
+Both Vite dev servers now accept all hosts during development so `localhost`, `127.0.0.1`, Docker bridge names, and direct LAN-IP access reuse the same proxy path.
 Each frontend rejects accounts outside its allowed role family: the staff app accepts GERANT, SERVEUR, and CUISINIER; the client app accepts CLIENT only.
 The backend container runs pending Django migrations before starting Daphne, keeping fresh or recreated MySQL volumes aligned with the current apps.
 
@@ -28,6 +29,7 @@ The back-office SPA keeps Vite runtime config in `frontend/back-office/vite.conf
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
 Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with focused coverage in `frontend/back-office/src/roleAccess.test.ts`.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
+Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
