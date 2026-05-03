@@ -30,4 +30,21 @@ describe('shared auth persistence', () => {
       isAuthenticated: true,
     })
   })
+
+  it('restores persisted auth payloads from the zustand storage envelope', () => {
+    expect(
+      sanitizePersistedAuthState({
+        state: {
+          user: { username: 'chef', role: 'CUISINIER' },
+          accessToken: 'fresh-access-token',
+          isAuthenticated: true,
+        },
+        version: 1,
+      }),
+    ).toEqual({
+      user: { username: 'chef', role: 'CUISINIER' },
+      accessToken: 'fresh-access-token',
+      isAuthenticated: true,
+    })
+  })
 })

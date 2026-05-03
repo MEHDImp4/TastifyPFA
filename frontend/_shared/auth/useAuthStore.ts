@@ -45,11 +45,15 @@ export const sanitizePersistedAuthState = (value: unknown): PersistedAuthState =
   }
 
   const candidate = value as Record<string, unknown>
+  const persistedState =
+    candidate.state && typeof candidate.state === 'object'
+      ? (candidate.state as Record<string, unknown>)
+      : candidate
   const accessToken =
-    typeof candidate.accessToken === 'string' && candidate.accessToken.trim().length > 0
-      ? candidate.accessToken
+    typeof persistedState.accessToken === 'string' && persistedState.accessToken.trim().length > 0
+      ? persistedState.accessToken
       : null
-  const user = isUser(candidate.user) ? candidate.user : null
+  const user = isUser(persistedState.user) ? persistedState.user : null
 
   return {
     user,

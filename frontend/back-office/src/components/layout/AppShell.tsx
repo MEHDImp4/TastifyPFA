@@ -27,7 +27,7 @@ export const AppShell = () => {
     return <UnauthorizedStaffRedirect clearAuth={clearAuth} />;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user?.role) {
     return <Navigate to="/login" replace />;
   }
 
