@@ -101,7 +101,7 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
                     <div className={`text-sm font-semibold leading-tight transition-colors ${
                       isPrep ? 'text-white' : 'text-slate-400'
                     }`}>
-                      {ligne.plat_details.nom}
+                      {ligne.plat_details?.nom ?? `Plat #${ligne.plat}`}
                     </div>
                     {ligne.heure_lancement && (
                       <div className="flex-shrink-0 scale-75 origin-right translate-y-[-2px]">
