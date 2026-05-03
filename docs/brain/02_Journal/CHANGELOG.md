@@ -1,3 +1,17 @@
+## [2026-05-03] - 22:03
+### Fixed
+- Hardened the KDS order store against malformed API and websocket payloads so a stale or incomplete `commande` can no longer crash the `CUISINIER` screen after a hard reload.
+- Sanitized invalid `created_at` values and non-array `lignes` payloads inside the KDS UI, preventing timer and ticket rendering from producing the blank green shell.
+
+### Added
+- Added regression coverage for malformed KDS fetch payloads, malformed websocket orders, and invalid ticket/timer dates so the reload crash path remains covered.
+
+### Validation
+- `frontend/back-office`: `npm test -- --run src/pages/Kds/store/useKdsStore.test.ts src/pages/Kds/components/TicketCard.test.tsx src/pages/Kds/components/KdsTimer.test.tsx src/pages/Kds/KdsPage.test.tsx src/pages/Kds/KdsSocketManager.test.tsx`
+
+### Commit
+- Fix commit: `7e23154`
+
 ## [2026-05-03] - 21:54
 ### Fixed
 - Restored the staff auth store correctly after a hard reload by unwrapping Zustand's persisted `state` envelope before validating the cached session.
