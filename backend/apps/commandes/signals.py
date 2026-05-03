@@ -1,12 +1,40 @@
 from django.db import transaction
 from django.db.models import DecimalField, ExpressionWrapper, F, Sum
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
 from apps.commandes.models import Commande, CommandeLigne
 from apps.commandes.services.orchestrator import KdsOrchestrator
 from apps.tables.models import Table
 from core.realtime import broadcast_staff_event
+
+# Phase 16: Detect EN_COURS -> EN_CUISINE transition to trigger JIT orchestration
+# exactly once at the moment of dispatch. Stored per-pk in module dict because
+# post_save fires AFTER the DB write, so the previous value must be captured in
+# pre_save. Django handles each request synchronously per worker, making this
+# pattern safe; the dict is bounded by concurrent in-flight saves.
+_PREVIOUS_COMMANDE_STATUT: dict[int, str] = {}
+
+
+@receiver(pre_save, sender=Commande)
+def capture_commande_statut_before_save(sender, instance, **kwargs):
+    if instance.pk:
+        try:
+            _PREVIOUS_COMMANDE_STATUT[instance.pk] = (
+                Commande.objects.values_list('statut', flat=True).get(pk=instance.pk)
+            )
+        except Commande.DoesNotExist:
+            pass
+
+
+@receiver(post_save, sender=Commande)
+def trigger_orchestration_on_en_cuisine(sender, instance, created, **kwargs):
+    if created:
+        _PREVIOUS_COMMANDE_STATUT.pop(instance.pk, None)
+        return
+    prev = _PREVIOUS_COMMANDE_STATUT.pop(instance.pk, None)
+    if prev == Commande.Statut.EN_COURS and instance.statut == Commande.Statut.EN_CUISINE:
+        KdsOrchestrator.schedule_reorchestration_after_commit(instance.pk)
 
 
 def _broadcast_order_snapshot(commande_id, event_type):

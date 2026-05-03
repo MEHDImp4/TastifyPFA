@@ -39,7 +39,7 @@ def table_obj(db):
 
 @pytest.fixture
 def commande_with_lines(db, table_obj, plat_short, plat_long):
-    commande = Commande.objects.create(table=table_obj)
+    commande = Commande.objects.create(table=table_obj, statut=Commande.Statut.EN_CUISINE)
     line_short = CommandeLigne.objects.create(
         commande=commande, plat=plat_short, quantite=1
     )

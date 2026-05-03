@@ -32,6 +32,14 @@ class KdsOrchestrator:
     @classmethod
     def reorchestrate_order(cls, commande):
         from apps.commandes.tasks import launch_item_task
+        from apps.commandes.models import Commande as _Commande
+
+        # Phase 16 gate: only fired orders get orchestrated. Prevents draft EN_COURS
+        # orders (or already-completed PRETE/PAYEE/ANNULEE orders) from scheduling
+        # Celery tasks. This complements the EN_COURS->EN_CUISINE Commande post_save
+        # in signals.py — together they ensure timers anchor to dispatch moment.
+        if commande.statut != _Commande.Statut.EN_CUISINE:
+            return
 
         now = timezone.now()
         lines = list(
