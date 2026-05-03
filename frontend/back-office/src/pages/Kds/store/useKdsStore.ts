@@ -4,16 +4,19 @@ import { Commande } from '../types'
 
 interface KdsState {
   orders: Commande[]
+  newOrderIds: Set<number>
   isLoading: boolean
   error: string | null
   fetchOrders: () => Promise<void>
   addOrUpdateOrder: (order: Commande) => void
   removeOrder: (orderId: number) => void
+  clearNewOrder: (orderId: number) => void
   handleSocketEvent: (event: any) => void
 }
 
 export const useKdsStore = create<KdsState>((set, get) => ({
   orders: [],
+  newOrderIds: new Set<number>(),
   isLoading: false,
   error: null,
 
@@ -21,7 +24,7 @@ export const useKdsStore = create<KdsState>((set, get) => ({
     set({ isLoading: true, error: null })
     try {
       const response = await axios.get<Commande[]>('/commandes/')
-      // The backend now filters for (EN_COURS | EN_CUISINE) for CUISINIER role
+      // The backend now filters for (EN_CUISINE | PRETE) for CUISINIER role
       // Ensure they are sorted by created_at DESC (newest first)
       const orders = response.data.sort((a, b) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -60,6 +63,15 @@ export const useKdsStore = create<KdsState>((set, get) => ({
     }))
   },
 
+  clearNewOrder: (orderId: number) => {
+    set((state) => {
+      if (!state.newOrderIds.has(orderId)) return state
+      const next = new Set(state.newOrderIds)
+      next.delete(orderId)
+      return { newOrderIds: next }
+    })
+  },
+
   handleSocketEvent: (event: any) => {
     const { type, payload } = event
 
@@ -93,7 +105,8 @@ export const useKdsStore = create<KdsState>((set, get) => ({
     const order = payload?.order
     if (!order) return
 
-    const isKitchenStatus = order.statut === 'EN_CUISINE' || order.statut === 'EN_COURS'
+    const isKitchenStatus = order.statut === 'EN_CUISINE' || order.statut === 'PRETE'
+    const wasJustFired = order.statut === 'EN_CUISINE' && type === 'order_updated'
 
     if (type === 'order_created') {
       if (isKitchenStatus) {
@@ -102,9 +115,21 @@ export const useKdsStore = create<KdsState>((set, get) => ({
     } else if (type === 'order_updated') {
       if (isKitchenStatus) {
         get().addOrUpdateOrder(order)
+        if (wasJustFired) {
+          set((state) => ({
+            newOrderIds: new Set([...state.newOrderIds, order.id]),
+          }))
+        }
       } else {
-        // If it moved out of kitchen statuses (e.g. PRETE, ANNULEE), remove it from KDS
+        // Statut moved out of kitchen scope (PAYEE, ANNULEE, EN_COURS regression)
         get().removeOrder(order.id)
+        // Also clean up any stale newOrderIds entry
+        set((state) => {
+          if (!state.newOrderIds.has(order.id)) return state
+          const next = new Set(state.newOrderIds)
+          next.delete(order.id)
+          return { newOrderIds: next }
+        })
       }
     }
   }

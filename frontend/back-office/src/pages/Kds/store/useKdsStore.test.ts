@@ -103,7 +103,7 @@ describe('useKdsStore', () => {
 
     it('should remove order on order_updated if NOT isKitchenStatus anymore', () => {
       useKdsStore.getState().addOrUpdateOrder(mockOrder)
-      const updatedOrder = { ...mockOrder, statut: 'PRETE' as const }
+      const updatedOrder = { ...mockOrder, statut: 'PAYEE' as const }
       
       useKdsStore.getState().handleSocketEvent({
         type: 'order_updated',

@@ -51,3 +51,16 @@
 .animate-enter {
   animation: enter 250ms var(--ease-out) forwards;
 }
+
+@keyframes new-ticket-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(42, 157, 143, 0);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(42, 157, 143, 0.45);
+  }
+}
+
+.animate-new-ticket {
+  animation: new-ticket-glow 1.2s var(--ease-in-out) infinite;
+}
