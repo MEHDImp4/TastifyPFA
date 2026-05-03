@@ -55,7 +55,7 @@ export const OrderingPage = () => {
         const [categoriesResponse, dishesResponse, ordersResponse] = await Promise.all([
           axiosInstance.get<MenuCategory[]>('/categories/'),
           axiosInstance.get<MenuDish[]>('/plats/'),
-          axiosInstance.get<any[]>(`/commandes/?table=${tableId}&statut=EN_COURS`),
+          axiosInstance.get<any[]>(`/commandes/?table=${tableId}`),
         ])
 
         if (cancelled) return
@@ -92,14 +92,15 @@ export const OrderingPage = () => {
           }))
         )
       } else {
-        // Create new order
-        await axiosInstance.post('/commandes/', {
+        // Create new order and immediately fire it to the kitchen
+        const createResponse = await axiosInstance.post('/commandes/', {
           table: tableId,
           lignes: cartItems.map((item) => ({
             plat: item.plat.id,
             quantite: item.quantity,
           })),
         })
+        await axiosInstance.patch(`/commandes/${createResponse.data.id}/`, { statut: 'EN_CUISINE' })
       }
 
       clearCart(tableId)

@@ -57,7 +57,7 @@ describe('OrderingPage', () => {
     await waitFor(() => {
       expect(axiosInstance.get).toHaveBeenCalledWith('/categories/')
       expect(axiosInstance.get).toHaveBeenCalledWith('/plats/')
-      expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=2&statut=EN_COURS')
+      expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=2')
     })
     expect(screen.getByText('Couscous')).toBeInTheDocument()
   })
@@ -110,7 +110,7 @@ describe('OrderingPage', () => {
         </MemoryRouter>,
       )
       await waitFor(() => {
-        expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=9&statut=EN_COURS')
+        expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=9')
       })
       expect(screen.queryByRole('button', { name: /tout envoyer en cuisine/i })).toBeNull()
     })
@@ -125,7 +125,7 @@ describe('OrderingPage', () => {
         </MemoryRouter>,
       )
       await waitFor(() => {
-        expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=9&statut=EN_COURS')
+        expect(axiosInstance.get).toHaveBeenCalledWith('/commandes/?table=9')
       })
       expect(screen.queryByRole('button', { name: /tout envoyer en cuisine/i })).toBeNull()
     })
