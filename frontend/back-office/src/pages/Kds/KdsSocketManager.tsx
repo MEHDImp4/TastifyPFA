@@ -2,10 +2,8 @@ import { useEffect, useRef } from 'react'
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider'
 import { useKdsStore } from './store/useKdsStore'
 
-/**
- * Bridges WebSocket events to the KDS store and plays the kitchen bell on
- * EN_CUISINE arrivals (Phase 16 — manual fire UX feedback).
- */
+const POLL_INTERVAL_MS = 15_000
+
 export const KdsSocketManager = () => {
   const { connectionStatus, lastEvent } = useStaffWebSocket()
   const handleSocketEvent = useKdsStore((state) => state.handleSocketEvent)
@@ -31,9 +29,16 @@ export const KdsSocketManager = () => {
     }
   }, [])
 
+  // Polling fallback — keeps KDS current when WebSocket is disconnected or events are missed.
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      void fetchOrders()
+    }, POLL_INTERVAL_MS)
+    return () => window.clearInterval(interval)
+  }, [fetchOrders])
+
   useEffect(() => {
     if (connectionStatus === 'open') {
-      // Re-sync after reconnect so missed realtime events do not leave the KDS stale.
       void fetchOrders()
     }
   }, [connectionStatus, fetchOrders])
@@ -43,8 +48,10 @@ export const KdsSocketManager = () => {
 
     handleSocketEvent(lastEvent)
 
-    const isOrderEvent = lastEvent.type === 'order_created' || lastEvent.type === 'order_updated'
-    if (isOrderEvent) {
+    // Only re-fetch on order_updated — order_created events are EN_COURS and
+    // won't appear on the KDS, and triggering fetchOrders for them races with the
+    // subsequent order_updated fetch, potentially overwriting a valid list with [].
+    if (lastEvent.type === 'order_updated') {
       void fetchOrders()
     }
 
@@ -56,7 +63,6 @@ export const KdsSocketManager = () => {
       audioRef.current.currentTime = 0
       audioRef.current.play().catch(() => {
         // Autoplay policy: browser blocks .play() until first user gesture.
-        // Silent swallow is intentional — this is not an error condition.
       })
     }
   }, [fetchOrders, handleSocketEvent, lastEvent])

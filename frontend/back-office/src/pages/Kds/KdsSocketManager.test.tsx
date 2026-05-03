@@ -26,8 +26,20 @@ describe('KdsSocketManager', () => {
     )
   })
 
-  it('should call handleSocketEvent when lastEvent changes', () => {
+  it('should call handleSocketEvent on order_created but not fetchOrders', () => {
     const mockEvent = { type: 'order_created', order: { id: 1 }, payload: {} }
+    vi.mocked(useStaffWebSocket).mockReturnValue({ lastEvent: mockEvent as any, connectionStatus: 'closed' })
+
+    render(<KdsSocketManager />)
+
+    expect(mockHandleSocketEvent).toHaveBeenCalledWith(mockEvent)
+    // order_created events are EN_COURS and won't appear on the KDS; skipping
+    // fetchOrders here avoids a race that would overwrite the order_updated result.
+    expect(mockFetchOrders).not.toHaveBeenCalled()
+  })
+
+  it('should call handleSocketEvent and fetchOrders on order_updated', () => {
+    const mockEvent = { type: 'order_updated', payload: { order: { id: 1, statut: 'PRETE' } } }
     vi.mocked(useStaffWebSocket).mockReturnValue({ lastEvent: mockEvent as any, connectionStatus: 'closed' })
 
     render(<KdsSocketManager />)
