@@ -23,24 +23,30 @@ describe('KdsPage', () => {
   });
 
   it('renders loading state when orders are being fetched', () => {
-    (useKdsStore as any).mockReturnValue({
+    const mockState = {
       orders: [],
       isLoading: true,
       error: null,
       fetchOrders: mockFetchOrders,
-    });
+      newOrderIds: new Set(),
+      clearNewOrder: vi.fn(),
+    };
+    ;(useKdsStore as any).mockImplementation((sel: any) => (sel ? sel(mockState) : mockState))
 
     render(<KdsPage />);
     expect(screen.getByTestId('loader')).toBeDefined();
   });
 
   it('renders empty state when no orders', () => {
-    (useKdsStore as any).mockReturnValue({
+    const mockState = {
       orders: [],
       isLoading: false,
       error: null,
       fetchOrders: mockFetchOrders,
-    });
+      newOrderIds: new Set(),
+      clearNewOrder: vi.fn(),
+    };
+    ;(useKdsStore as any).mockImplementation((sel: any) => (sel ? sel(mockState) : mockState))
 
     render(<KdsPage />);
     expect(screen.getByText('Cuisine Vide')).toBeDefined();
@@ -53,12 +59,15 @@ describe('KdsPage', () => {
       { id: 2, table: 10, created_at: new Date().toISOString(), lignes: [] },
     ];
 
-    (useKdsStore as any).mockReturnValue({
+    const mockState = {
       orders: mockOrders,
       isLoading: false,
       error: null,
       fetchOrders: mockFetchOrders,
-    });
+      newOrderIds: new Set(),
+      clearNewOrder: vi.fn(),
+    };
+    ;(useKdsStore as any).mockImplementation((sel: any) => (sel ? sel(mockState) : mockState))
 
     render(<KdsPage />);
     expect(screen.getByTestId('ticket-1')).toBeDefined();
@@ -70,12 +79,15 @@ describe('KdsPage', () => {
       { id: 1, table: 5, created_at: new Date().toISOString(), lignes: [] },
     ];
 
-    (useKdsStore as any).mockReturnValue({
+    const mockState = {
       orders: mockOrders,
       isLoading: false,
       error: null,
       fetchOrders: mockFetchOrders,
-    });
+      newOrderIds: new Set(),
+      clearNewOrder: vi.fn(),
+    };
+    ;(useKdsStore as any).mockImplementation((sel: any) => (sel ? sel(mockState) : mockState))
 
     render(<KdsPage />);
     const rail = screen.getByTestId('kds-scroll-rail');
@@ -87,12 +99,15 @@ describe('KdsPage', () => {
   });
 
   it('renders error message when present', () => {
-    (useKdsStore as any).mockReturnValue({
+    const mockState = {
       orders: [],
       isLoading: false,
       error: 'Failed to fetch',
       fetchOrders: mockFetchOrders,
-    });
+      newOrderIds: new Set(),
+      clearNewOrder: vi.fn(),
+    };
+    ;(useKdsStore as any).mockImplementation((sel: any) => (sel ? sel(mockState) : mockState))
 
     render(<KdsPage />);
     expect(screen.getByText('Failed to fetch')).toBeDefined();
