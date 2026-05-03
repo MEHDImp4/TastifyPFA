@@ -1,3 +1,8 @@
+## [2026-05-03] - 19:19
+### Fixed
+- **Refresh Endpoint Hardening**: Updated `backend/apps/users/views/auth.py` so `/api/users/refresh/` no longer mutates parser-owned `request.data` and now converts invalid refresh-cookie `TokenError` cases into a proper `401 token_not_valid` response instead of a server-side `500`.
+- Added backend coverage in `backend/apps/users/tests/test_auth.py` for the invalid refresh-cookie regression path.
+
 ## [2026-05-03] - 19:05
 ### Fixed
 - **KDS Auth Bootstrap**: Added a startup refresh gate in the staff SPA so persisted staff sessions renew their access token from the refresh cookie before the KDS page and WebSocket layer mount, preventing reload-time `401 Unauthorized` API failures and rejected `/ws/staff/` handshakes with stale JWTs.

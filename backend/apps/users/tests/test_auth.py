@@ -53,6 +53,14 @@ class AuthTests(APITestCase):
         cookie_name = settings.SIMPLE_JWT['AUTH_COOKIE']
         self.assertIn(cookie_name, response.cookies)
 
+    def test_refresh_with_invalid_cookie_returns_auth_error_not_server_error(self):
+        cookie_name = settings.SIMPLE_JWT['AUTH_COOKIE']
+        self.client.cookies[cookie_name] = 'invalid-refresh-token'
+
+        response = self.client.post(self.refresh_url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_logout_clears_cookie(self):
         # Login
         login_data = {"username": self.username, "password": self.password}
