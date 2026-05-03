@@ -1,3 +1,17 @@
+## [2026-05-03] - 22:30
+### Fixed
+- Unified frontend reload protection by moving the render crash boundary into `frontend/_shared/ui/AppErrorBoundary.tsx`, wiring `frontend/portail-client/src/App.tsx` through `AuthBootstrap`, and reusing the same fallback in `frontend/back-office/src/App.tsx`.
+
+### Added
+- Added shared-boundary regression coverage from the back-office test suite while keeping the client portal on the same auth bootstrap path.
+
+### Validation
+- `frontend/back-office`: `npm test -- --run src/App.test.tsx src/components/ui/AppErrorBoundary.test.tsx src/components/layout/AppShell.test.tsx src/authBootstrap.test.tsx`
+- `frontend/portail-client`: `npm run build`
+
+### Commit
+- Fix commit: `d453cd8`
+
 ## [2026-05-03] - 22:20
 ### Fixed
 - Hardened auth bootstrap JWT parsing so corrupted or non-string persisted access tokens no longer throw during back-office startup.
