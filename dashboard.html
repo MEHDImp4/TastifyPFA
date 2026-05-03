@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 22:04:20<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 22:14:40<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -972,6 +972,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped the back-office bootstrap from calling `/api/users/refresh/` on every hard reload when the persisted staff access token is still valid, which was incorrectly forcing `CUISINIER` sessions into a failing refresh path.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Limited bootstrap refresh to expired or near-expiry JWT access tokens so a missing refresh cookie no longer breaks a fresh reload immediately after login.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added regression coverage for valid, expired, and malformed persisted JWT access tokens in the auth bootstrap flow.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/back-office`: `npm test ---run src/authBootstrap.test.tsx src/authPersistence.test.ts src/authRefreshSync.test.ts src/components/layout/AppShell.test.tsx`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `daeefbb`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened the KDS order store against malformed API and websocket payloads so a stale or incomplete `commande` can no longer crash the `CUISINIER` screen after a hard reload.</p>
                             </li>
@@ -1019,31 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
                                 <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `b5fbb66`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS)**: Added "Tout Envoyer en Cuisine" button to `OrderingPage`. The button is gated by ownership and `EN_COURS` status, and triggers the `EN_CUISINE` PATCH transition.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `dashboard.html` with Phase 15 UAT status and Phase 16 progress.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Synchronized `FILE_MAP.md` with Phase 16 planning artifacts.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:52</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Back-Office Hydration Watchdog**: Completed the `AuthBootstrap` hardening by allowing the staff SPA to render after a hydration deadline even if Zustand persistence never finishes, eliminating the last `hasHydrated` gate that could still hold the app on a blank green shell.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:52</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Kept the persisted-session refresh timeout and transient proxy retry behavior from the earlier hardening so a slow backend still resolves into a rendered app rather than an indefinite splash screen.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
