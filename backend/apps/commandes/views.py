@@ -31,21 +31,43 @@ class CommandeViewSet(viewsets.ModelViewSet):
             # Table-specific lookup: any staff member can see which order is on a given table
             qs = qs.filter(table_id=table_id)
         elif user.role == 'CUISINIER':
-            kitchen_statuses = [Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE]
-            # KDS clients may still request statut=EN_CUISINE, but newly created orders start as EN_COURS.
-            # Treat both as active kitchen work for CUISINIER so fresh tickets are not missed.
+            # Phase 16: KDS shows only fired tickets. Manual-fire workflow flips
+            # EN_COURS -> EN_CUISINE via PATCH; only EN_CUISINE and PRETE are
+            # actionable for the kitchen. Drafts (EN_COURS) stay invisible until
+            # a server explicitly fires them.
+            kitchen_statuses = [Commande.Statut.EN_CUISINE, Commande.Statut.PRETE]
             qs = qs.filter(statut__in=kitchen_statuses)
         elif user.role != 'GERANT':
             # General list: only show the user's own orders
             qs = qs.filter(serveur=user)
 
-        if statut and not (user.role == 'CUISINIER' and statut == Commande.Statut.EN_CUISINE):
+        if statut:
             qs = qs.filter(statut=statut)
 
         return qs
 
     def perform_create(self, serializer):
         serializer.save()
+
+    def update(self, request, *args, **kwargs):
+        """Phase 16 (T-16-01): SERVEUR may only mutate orders they own; GERANT bypasses."""
+        instance = get_object_or_404(Commande.objects.active(), pk=kwargs.get('pk'))
+        if instance.serveur != request.user and request.user.role != 'GERANT':
+            return Response(
+                {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Phase 16 (T-16-01): same ownership rule as update() applies to PATCH."""
+        instance = get_object_or_404(Commande.objects.active(), pk=kwargs.get('pk'))
+        if instance.serveur != request.user and request.user.role != 'GERANT':
+            return Response(
+                {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return super().partial_update(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'])
     def add_items(self, request, pk=None):
