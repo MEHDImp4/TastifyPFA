@@ -30,6 +30,7 @@ The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/c
 Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with focused coverage in `frontend/back-office/src/roleAccess.test.ts`.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
+If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.

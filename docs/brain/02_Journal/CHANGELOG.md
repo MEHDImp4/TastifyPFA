@@ -1,3 +1,11 @@
+## [2026-05-03] - 19:52
+### Fixed
+- **Back-Office Hydration Watchdog**: Completed the `AuthBootstrap` hardening by allowing the staff SPA to render after a hydration deadline even if Zustand persistence never finishes, eliminating the last `hasHydrated` gate that could still hold the app on a blank green shell.
+- Kept the persisted-session refresh timeout and transient proxy retry behavior from the earlier hardening so a slow backend still resolves into a rendered app rather than an indefinite splash screen.
+
+### Changed
+- Updated `README.md` and `dashboard.html` to describe the hydration watchdog fallback now in place for the back-office SPA.
+
 ## [2026-05-03] - 19:43
 ### Fixed
 - **Back-Office Bootstrap Resilience**: Hardened `frontend/_shared/auth/AuthBootstrap.tsx` so persisted-session bootstrap now times out safely, never blocks the initial render indefinitely, and preserves the session when the Vite proxy/backend startup path is only temporarily unavailable.

@@ -32,6 +32,31 @@ describe('AuthBootstrap', () => {
     expect(screen.getByText('ready')).toBeInTheDocument()
   })
 
+  it('falls back to rendering when hydration never completes', async () => {
+    vi.useFakeTimers()
+    useAuthStore.setState({
+      user: null,
+      accessToken: null,
+      isAuthenticated: false,
+      hasHydrated: false,
+    })
+
+    render(
+      <AuthBootstrap>
+        <div>ready</div>
+      </AuthBootstrap>,
+    )
+
+    expect(screen.queryByText('ready')).not.toBeInTheDocument()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2500)
+      await Promise.resolve()
+    })
+
+    expect(screen.getByText('ready')).toBeInTheDocument()
+  })
+
   it('unblocks rendering when the bootstrap refresh never settles', async () => {
     vi.useFakeTimers()
     vi.mocked(axios.post).mockImplementation(() => new Promise(() => undefined))

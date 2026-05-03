@@ -25,6 +25,7 @@ export type RefreshPersistedSessionResult =
 
 const BOOTSTRAP_REQUEST_TIMEOUT_MS = 5000
 const BOOTSTRAP_RENDER_DEADLINE_MS = 6000
+const BOOTSTRAP_HYDRATION_DEADLINE_MS = 2500
 const TRANSIENT_BOOTSTRAP_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504])
 const TRANSIENT_BOOTSTRAP_CODES = new Set(['ECONNABORTED', 'ERR_NETWORK'])
 
@@ -109,10 +110,23 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
   const clearAuth = useAuthStore((state) => state.clearAuth)
 
   const hasBootstrappedRef = useRef(false)
+  const [hasHydrationTimedOut, setHasHydrationTimedOut] = useState(false)
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    if (!hasHydrated || hasBootstrappedRef.current) {
+    if (hasHydrated) {
+      return
+    }
+
+    const timeoutId = setTimeout(() => {
+      setHasHydrationTimedOut(true)
+    }, BOOTSTRAP_HYDRATION_DEADLINE_MS)
+
+    return () => clearTimeout(timeoutId)
+  }, [hasHydrated])
+
+  useEffect(() => {
+    if ((!hasHydrated && !hasHydrationTimedOut) || hasBootstrappedRef.current) {
       return
     }
 
@@ -152,9 +166,9 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
     return () => {
       isActive = false
     }
-  }, [accessToken, clearAuth, hasHydrated, isAuthenticated, setAccessToken])
+  }, [accessToken, clearAuth, hasHydrated, hasHydrationTimedOut, isAuthenticated, setAccessToken])
 
-  if (!hasHydrated || !isReady) {
+  if ((!hasHydrated && !hasHydrationTimedOut) || !isReady) {
     return null
   }
 
