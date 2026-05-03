@@ -3,24 +3,26 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
-stopped_at: Phase 16 Wave 0 COMPLETED
-last_updated: "2026-05-03T17:50:00.000Z"
+stopped_at: Phase 16 Plan 07 COMPLETED
+last_updated: "2026-05-03T18:15:00.000Z"
 progress:
   total_phases: 40
   completed_phases: 15
   total_plans: 45
-  completed_plans: 44
+  completed_plans: 51
   percent: 37
 ---
 
 # Planning State
 
 **Last Updated:** 2026-05-03
-**Stopped At:** Phase 16 Wave 0 COMPLETED
+**Stopped At:** Phase 16 Plan 07 COMPLETED
 **Resume File: .planning/.continue-here.md**
 
 ## Notes
 
+- **KDS Infinite Loop Fixed (2026-05-03):** Resolved a critical bug where the KDS was stuck in a loading loop (`ERR_INSUFFICIENT_RESOURCES`). The issue was caused by an infinite unmount/re-mount cycle of `KdsSocketManager` during the `fetchOrders` loading state. Stabilized the component tree by lifting the manager out of conditional returns and consolidated data fetching to be purely socket-driven.
+- **Phase 16 Implementation Complete (2026-05-03):** All 7 implementation plans for Phase 16 are complete. Manual fire button added, backend signals gated, KDS visual/audio feedback wired.
 - **Phase 15 COMPLETED (2026-05-03):** Manual UAT passed. WebSocket `line_launched` frames verified. Commit-safe orchestration fix confirmed in production-like environment.
 - **Phase 15 Plan 03 Automated Verification Complete (2026-05-02):** `launch_item_task` now broadcasts `line_launched`, the orchestrator test suite passed (`8 passed`), `celery-worker` was started successfully, `celery -A tastify_backend inspect ping` returned `OK pong`, and smoke ETA task `cffb63d4-0391-4334-9b37-cefccd0b3979` executed successfully through the live worker with `{'skipped': 'line_deleted', 'ligne_id': 999999}`.
 - **Phase 14 Executed (2026-05-01):** KDS Base Frontend delivered.

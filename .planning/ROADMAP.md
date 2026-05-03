@@ -189,7 +189,7 @@ Phases execute in numeric order: 1 → 40
 | 13. WebSocket Infrastructure | 3/3 | Completed | 2026-05-01 |
 | 14. KDS Base Frontend | 3/3 | Complete | 2026-05-01 |
 | 15. KDS Orchestrator Logic | 3/3 | Completed | 2026-05-03 |
-| 16. Order Push to KDS | 1/3 | In Progress | — |
+| 16. Order Push to KDS | 7/8 | In Progress | — |
 | ... | 0/0 | Planned | — |
 | 35. KDS Advanced Operations | 0/2 | Planned | — |
 | 36. Click & Collect E-commerce | 0/3 | Planned | — |

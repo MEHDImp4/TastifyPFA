@@ -89,7 +89,8 @@ tastify-pfa/
 │       ├── 12-order-taking-frontend/
 │       ├── 13-websocket-infrastructure/
 │       ├── 14-kds-base-frontend/
-│       └── 15-kds-orchestrator-logic/
+│       ├── 15-kds-orchestrator-logic/
+│       └── 16-order-push-to-kds/
 ├── docker-compose.yml             # 5 services exposed directly on host ports
 ├── .env / .env.example            # Single root env
 ├── README.md

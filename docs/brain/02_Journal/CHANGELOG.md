@@ -1,3 +1,9 @@
+## [2026-05-03] - 20:05
+### Added
+- **Phase 16 (Order Push to KDS)**: Added "Tout Envoyer en Cuisine" button to `OrderingPage`. The button is gated by ownership and `EN_COURS` status, and triggers the `EN_CUISINE` PATCH transition.
+- Updated `dashboard.html` with Phase 15 UAT status and Phase 16 progress.
+- Synchronized `FILE_MAP.md` with Phase 16 planning artifacts.
+
 ## [2026-05-03] - 19:52
 ### Fixed
 - **Back-Office Hydration Watchdog**: Completed the `AuthBootstrap` hardening by allowing the staff SPA to render after a hydration deadline even if Zustand persistence never finishes, eliminating the last `hasHydrated` gate that could still hold the app on a blank green shell.
