@@ -42,23 +42,33 @@ class KDSPermissionsTestCase(APITestCase):
         # Should be allowed after update
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_cuisinier_queryset_filtering(self):
+    def test_cuisinier_queryset_excludes_en_cours(self):
+        """P16-BE-04: CUISINIER must NOT see EN_COURS orders after Phase 16."""
         self.client.force_authenticate(user=self.cuisinier)
         response = self.client.get(self.url)
 
-        # Cuisinier should see both EN_COURS and EN_CUISINE
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['id'], self.cmd_kitchen.id)
-        self.assertEqual(response.data[0]['statut'], Commande.Statut.EN_CUISINE)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [item['id'] for item in response.data]
+        self.assertNotIn(self.cmd_serveur.id, ids)
+        statuses = {item['statut'] for item in response.data}
+        self.assertNotIn(Commande.Statut.EN_COURS, statuses)
 
-    def test_cuisinier_en_cuisine_filter_includes_new_en_cours_orders(self):
+    def test_cuisinier_queryset_includes_en_cuisine_and_prete(self):
+        """P16-BE-04: CUISINIER queryset must include EN_CUISINE and PRETE."""
+        table_p = Table.objects.create(numero=99, capacite=2)
+        cmd_prete = Commande.objects.create(
+            serveur=self.serveur,
+            table=table_p,
+            statut=Commande.Statut.PRETE,
+        )
+
         self.client.force_authenticate(user=self.cuisinier)
-        response = self.client.get(self.url, {'statut': Commande.Statut.EN_CUISINE})
+        response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         ids = [item['id'] for item in response.data]
-        self.assertIn(self.cmd_serveur.id, ids)
-        self.assertIn(self.cmd_kitchen.id, ids)
+        self.assertIn(self.cmd_kitchen.id, ids)   # EN_CUISINE
+        self.assertIn(cmd_prete.id, ids)          # PRETE
 
     def test_serveur_queryset_filtering_regression(self):
         # Serveur should only see their own orders

@@ -175,3 +175,63 @@ class CommandeAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         schedule_mock.assert_called_once_with(create_response.data['id'])
+
+
+class FireOrderPatchTestCase(APITestCase):
+    """Phase 16: PATCH /commandes/{id}/ {"statut": "EN_CUISINE"} — fire-to-kitchen flow."""
+
+    def setUp(self):
+        self.gerant = User.objects.create_user(
+            username='p16_gerant', password='password123', role=User.Role.GERANT
+        )
+        self.serveur_owner = User.objects.create_user(
+            username='p16_owner', password='password123', role=User.Role.SERVEUR
+        )
+        self.serveur_other = User.objects.create_user(
+            username='p16_other', password='password123', role=User.Role.SERVEUR
+        )
+        self.table = Table.objects.create(numero=77, capacite=4)
+        self.commande = Commande.objects.create(
+            serveur=self.serveur_owner,
+            table=self.table,
+            statut=Commande.Statut.EN_COURS,
+        )
+
+    def _detail_url(self, pk):
+        return reverse('commande-detail', kwargs={'pk': pk})
+
+    def test_fire_order_owner_succeeds(self):
+        """P16-BE-05: Order owner can PATCH statut=EN_CUISINE and receive 200."""
+        self.client.force_authenticate(user=self.serveur_owner)
+        response = self.client.patch(
+            self._detail_url(self.commande.pk),
+            {'statut': Commande.Statut.EN_CUISINE},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.commande.refresh_from_db()
+        self.assertEqual(self.commande.statut, Commande.Statut.EN_CUISINE)
+
+    def test_fire_order_non_owner_serveur_forbidden(self):
+        """T-16-01: A different SERVEUR cannot fire someone else's order — must 403."""
+        self.client.force_authenticate(user=self.serveur_other)
+        response = self.client.patch(
+            self._detail_url(self.commande.pk),
+            {'statut': Commande.Statut.EN_CUISINE},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.commande.refresh_from_db()
+        self.assertEqual(self.commande.statut, Commande.Statut.EN_COURS)
+
+    def test_fire_order_gerant_can_override_ownership(self):
+        """T-16-01: GERANT bypasses ownership check by design."""
+        self.client.force_authenticate(user=self.gerant)
+        response = self.client.patch(
+            self._detail_url(self.commande.pk),
+            {'statut': Commande.Statut.EN_CUISINE},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.commande.refresh_from_db()
+        self.assertEqual(self.commande.statut, Commande.Statut.EN_CUISINE)

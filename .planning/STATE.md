@@ -2,27 +2,27 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Awaiting manual verification
-stopped_at: Phase 15 manual UAT checkpoint
-last_updated: "2026-05-02T21:58:00.000Z"
+status: IN_PROGRESS
+stopped_at: Phase 16 Wave 0 COMPLETED
+last_updated: "2026-05-03T16:40:00.000Z"
 progress:
-  total_phases: 21
-  completed_phases: 14
+  total_phases: 40
+  completed_phases: 15
   total_plans: 42
-  completed_plans: 39
-  percent: 93
+  completed_plans: 42
+  percent: 100
 ---
 
 # Planning State
 
-**Last Updated:** 2026-05-02
-**Stopped At:** Phase 15 manual UAT checkpoint
+**Last Updated:** 2026-05-03
+**Stopped At:** Phase 15 COMPLETED
 **Resume File: .planning/.continue-here.md**
 
 ## Notes
 
+- **Phase 15 COMPLETED (2026-05-03):** Manual UAT passed. WebSocket `line_launched` frames verified. Commit-safe orchestration fix confirmed in production-like environment.
 - **Phase 15 Plan 03 Automated Verification Complete (2026-05-02):** `launch_item_task` now broadcasts `line_launched`, the orchestrator test suite passed (`8 passed`), `celery-worker` was started successfully, `celery -A tastify_backend inspect ping` returned `OK pong`, and smoke ETA task `cffb63d4-0391-4334-9b37-cefccd0b3979` executed successfully through the live worker with `{'skipped': 'line_deleted', 'ligne_id': 999999}`.
-- **Phase 15 Manual UAT Pending (2026-05-02):** Browser verification is still required for the CUISINIER websocket flow and task revocation observation. See `.planning/.continue-here.md`.
 - **Phase 14 Executed (2026-05-01):** KDS Base Frontend delivered.
 - Backend permissions updated to allow `CUISINIER` role access to kitchen orders.
 - Zustand `useKdsStore` implemented with WebSocket sync and LIFO sorting.

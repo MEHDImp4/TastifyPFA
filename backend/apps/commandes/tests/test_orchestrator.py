@@ -174,3 +174,37 @@ def test_signal_delete_defers_revocation_until_commit(commande_with_lines, mocke
     revoke_mock.assert_called_once_with('stale-task-id')
     spy.assert_called_once()
     assert spy.call_args.args[0].pk == commande_id
+
+
+@pytest.mark.django_db
+def test_reorchestrate_skips_when_not_en_cuisine(commande_with_lines, mocker):
+    """P16-BE-03: Orchestrator must early-return for orders not in EN_CUISINE."""
+    from apps.commandes.models import Commande
+    commande, line_short, line_long = commande_with_lines
+    commande.statut = Commande.Statut.EN_COURS
+    commande.save(update_fields=['statut', 'updated_at'])
+
+    apply_async_mock = mocker.patch(
+        'apps.commandes.tasks.launch_item_task.apply_async'
+    )
+
+    KdsOrchestrator.reorchestrate_order(commande)
+
+    apply_async_mock.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_reorchestrate_skips_when_prete(commande_with_lines, mocker):
+    """P16-BE-03: Once an order is PRETE, re-running orchestration must be a no-op."""
+    from apps.commandes.models import Commande
+    commande, line_short, line_long = commande_with_lines
+    commande.statut = Commande.Statut.PRETE
+    commande.save(update_fields=['statut', 'updated_at'])
+
+    apply_async_mock = mocker.patch(
+        'apps.commandes.tasks.launch_item_task.apply_async'
+    )
+
+    KdsOrchestrator.reorchestrate_order(commande)
+
+    apply_async_mock.assert_not_called()

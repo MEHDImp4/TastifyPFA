@@ -94,3 +94,44 @@ class CommandeSignalsTest(TestCase):
         payload = created_events[0][1]["order"]
         self.assertEqual(len(payload["lignes"]), 1)
         self.assertEqual(payload["lignes"][0]["quantite"], 2)
+
+
+class TestCommandeFireTransitionSignal(TestCase):
+    """Phase 16: Signal must trigger orchestration ONLY on EN_COURS -> EN_CUISINE transition."""
+
+    def setUp(self):
+        self.table = Table.objects.create(numero=42, capacite=4)
+        self.commande = Commande.objects.create(
+            table=self.table,
+            statut=Commande.Statut.EN_COURS,
+        )
+
+    @patch('apps.commandes.signals.KdsOrchestrator.schedule_reorchestration_after_commit')
+    def test_fire_transition_triggers_orchestrator(self, mock_schedule):
+        """P16-BE-01: EN_COURS -> EN_CUISINE must call schedule_reorchestration_after_commit."""
+        self.commande.statut = Commande.Statut.EN_CUISINE
+        self.commande.save()
+        mock_schedule.assert_called_once_with(self.commande.pk)
+
+    @patch('apps.commandes.signals.KdsOrchestrator.schedule_reorchestration_after_commit')
+    def test_en_cuisine_to_prete_does_not_trigger_orchestrator(self, mock_schedule):
+        """P16-BE-02: Subsequent transitions must NOT re-trigger orchestration."""
+        self.commande.statut = Commande.Statut.EN_CUISINE
+        self.commande.save()
+        mock_schedule.reset_mock()
+        self.commande.statut = Commande.Statut.PRETE
+        self.commande.save()
+        mock_schedule.assert_not_called()
+
+    @patch('apps.commandes.signals.KdsOrchestrator.schedule_reorchestration_after_commit')
+    def test_no_op_save_does_not_trigger_orchestrator(self, mock_schedule):
+        """P16-BE-02: Saving without statut change must NOT trigger orchestration."""
+        self.commande.save()
+        mock_schedule.assert_not_called()
+
+    @patch('apps.commandes.signals.KdsOrchestrator.schedule_reorchestration_after_commit')
+    def test_create_with_en_cuisine_does_not_trigger_orchestrator(self, mock_schedule):
+        """P16-BE-02: Initial creation with statut=EN_CUISINE is not a transition — must not fire."""
+        table = Table.objects.create(numero=99, capacite=2)
+        Commande.objects.create(table=table, statut=Commande.Statut.EN_CUISINE)
+        mock_schedule.assert_not_called()

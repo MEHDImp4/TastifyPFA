@@ -1,3 +1,35 @@
+## [2026-05-03] - 16:30
+### Added
+- **Phase 16 (Order Push to KDS) Wave 0**: Scaffolded backend regression tests (RED state).
+- Added `TestCommandeFireTransitionSignal` in `test_signals.py` to verify fire-to-kitchen signal logic.
+- Added orchestrator guard tests in `test_orchestrator.py` to ensure only `EN_CUISINE` orders are processed.
+- Updated `KDSPermissionsTestCase` in `test_kds_permissions.py` to exclude `EN_COURS` orders from the kitchen view.
+- Added `FireOrderPatchTestCase` in `test_api.py` to verify PATCH ownership and fire flow.
+- Added Rule 11 to `GEMINI.md` to mandate planning with Gemini 3.1 PRO.
+
+### Changed
+- Updated `backend/tastify_backend/settings/test.py` to use in-memory Celery broker (`memory://`) and channel layer to allow faster, isolated backend testing on host.
+- Updated `.planning/ROADMAP.md` to reflect Phase 15 completion and Phase 16 initiation.
+
+## [2026-05-03] - 15:10
+### Added
+- **KDS Frontend Timing Logic**: Integrated `heure_lancement` into the KDS UI.
+- Updated `KdsTimer` to support countdowns for future launches (e.g., "In 2:30").
+- Updated `TicketCard` to distinguish between "EN_ATTENTE" (grayscale, countdown) and "EN_PREPARATION" (highlighted, active timer).
+- Updated `useKdsStore` to handle `line_launched` WebSocket events for real-time status updates without full order refreshes.
+
+## [2026-05-03] - 14:40
+### Verified
+- **Phase 15 (KDS Orchestrator Logic) COMPLETED**: Manual UAT passed.
+- Confirmed `line_launched` WebSocket frames arrive as expected after `order_created`/`order_updated`.
+- Verified commit-safe orchestration stability in a live session (240ms delay from creation to launch frame).
+- Mark UAT-15-01 and UAT-15-02 as PASSED.
+
+### Changed
+- Updated `.planning/STATE.md` to reflect Phase 15 completion and incremented progress to 15/21 phases.
+- Updated `.planning/phases/15-kds-orchestrator-logic/15-UAT.md` to reflect full verification.
+- Updated `dashboard.html` with final Phase 15 status, updated stats (38% completion), and activity logs.
+
 ## [2026-05-02] - 23:52
 ### Fixed
 - Added an explicit post-commit KDS orchestration path in `backend/apps/commandes/serializers.py` and `backend/apps/commandes/views.py` so live order creation and `add_items` rescheduling no longer depend solely on `CommandeLigne` signal timing.
