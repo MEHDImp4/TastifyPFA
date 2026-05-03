@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 17:58:08<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 18:33:00<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -100,7 +100,7 @@
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->47<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sub-plans</span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->48<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sub-plans</span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Overall Completion</h3>
@@ -963,6 +963,51 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Frontend**: Restored the initial `fetchOrders()` call in `KdsPage` so the kitchen board hydrates immediately on first load.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the defensive KDS resync on `order_created` and `order_updated` websocket frames to prevent stale or empty boards.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 18:33</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated KDS regression tests to cover the restored initial hydration and order-event resync behavior.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Backend Infrastructure**: Resolved broken static files serving (404 errors) for the Django admin and other assets by integrating `WhiteNoise`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `whitenoise==6.9.0` to `backend/requirements.txt`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `WhiteNoiseMiddleware` to `MIDDLEWARE` in `backend/tastify_backend/settings/base.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `backend/entrypoint.sh` to run `python manage.py collectstatic --noinput` on startup.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Verified fix via browser subagent and confirmed 162 static files collected in `backend-1` logs.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:58</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `dashboard.html` to reflect the current state and progress.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS)**: Tightened KDS queryset to strictly exclude `EN_COURS` orders and gated `Commande` PATCH operations on ownership.</p>
@@ -991,51 +1036,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS) Wave 0**: Scaffolded backend regression tests (RED state).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `TestCommandeFireTransitionSignal` in `test_signals.py` to verify fire-to-kitchen signal logic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added orchestrator guard tests in `test_orchestrator.py` to ensure only `EN_CUISINE` orders are processed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `KDSPermissionsTestCase` in `test_kds_permissions.py` to exclude `EN_COURS` orders from the kitchen view.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `FireOrderPatchTestCase` in `test_api.py` to verify PATCH ownership and fire flow.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added Rule 11 to `GEMINI.md` to mandate planning with Gemini 3.1 PRO.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `backend/tastify_backend/settings/test.py` to use in-memory Celery broker (`memory://`) and channel layer to allow faster, isolated backend testing on host.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `.planning/ROADMAP.md` to reflect Phase 15 completion and Phase 16 initiation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 15:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **KDS Frontend Timing Logic**: Integrated `heure_lancement` into the KDS UI.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 15:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `KdsTimer` to support countdowns for future launches (e.g., "In 2:30").</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

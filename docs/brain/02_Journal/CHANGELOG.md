@@ -1,3 +1,9 @@
+## [2026-05-03] - 18:33
+### Fixed
+- **KDS Frontend**: Restored the initial `fetchOrders()` call in `KdsPage` so the kitchen board hydrates on first load instead of waiting for a later websocket state change.
+- Restored the defensive `fetchOrders()` resync in `KdsSocketManager` for `order_created` and `order_updated` frames so missed or partial realtime updates do not leave the board stale.
+- Updated the KDS frontend regression tests to lock the restored hydration and order-event resync behavior.
+
 ## [2026-05-03] - 17:58
 ### Fixed
 - **Backend Infrastructure**: Resolved broken static files serving (404 errors) for the Django admin and other assets by integrating `WhiteNoise`.
