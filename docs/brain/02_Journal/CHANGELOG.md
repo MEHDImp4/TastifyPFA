@@ -1,3 +1,17 @@
+## [2026-05-03] - 21:54
+### Fixed
+- Restored the staff auth store correctly after a hard reload by unwrapping Zustand's persisted `state` envelope before validating the cached session.
+- Prevented the back-office shell from mounting with an authenticated session missing a valid role, avoiding the blank green screen seen by `CUISINIER` users after refresh.
+
+### Added
+- Added a regression test that covers the real persisted storage shape produced by Zustand so the reload bug cannot silently return.
+
+### Validation
+- `frontend/back-office`: `npm test -- --run authPersistence.test.ts authBootstrap.test.tsx authRefreshSync.test.ts AppShell.test.tsx`
+
+### Commit
+- Fix commit: `b5fbb66`
+
 ## [2026-05-03] - 20:05
 ### Added
 - **Phase 16 (Order Push to KDS)**: Added "Tout Envoyer en Cuisine" button to `OrderingPage`. The button is gated by ownership and `EN_COURS` status, and triggers the `EN_CUISINE` PATCH transition.

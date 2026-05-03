@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 20:05:42<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 21:55:08<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -971,6 +971,31 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the staff auth store correctly after a hard reload by unwrapping Zustand's persisted `state` envelope before validating the cached session.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Prevented the back-office shell from mounting with an authenticated session missing a valid role, avoiding the blank green screen seen by `CUISINIER` users after refresh.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a regression test that covers the real persisted storage shape produced by Zustand so the reload bug cannot silently return.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/back-office`: `npm test ---run authPersistence.test.ts authBootstrap.test.tsx authRefreshSync.test.ts AppShell.test.tsx`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `b5fbb66`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 20:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS)**: Added "Tout Envoyer en Cuisine" button to `OrderingPage`. The button is gated by ownership and `EN_COURS` status, and triggers the `EN_CUISINE` PATCH transition.</p>
@@ -1019,31 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Relaxed both Vite dev-server configs (`frontend/back-office/vite.config.ts`, `frontend/portail-client/vite.config.ts`) to allow all hosts during Docker/local-network access, removing host filtering as a proxy-side startup variable.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added focused regression coverage in `frontend/back-office/src/authBootstrap.test.tsx`, `frontend/back-office/src/authPersistence.test.ts`, and `frontend/back-office/src/axiosInstance.test.ts` for bootstrap deadlines, persisted-auth sanitization, and transient proxy retry classification.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the auth-bootstrap resilience hardening and the expanded shared-auth test surface.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Refresh Endpoint Hardening**: Updated `backend/apps/users/views/auth.py` so `/api/users/refresh/` no longer mutates parser-owned `request.data` and now converts invalid refresh-cookie `TokenError` cases into a proper `401 token_not_valid` response instead of a server-side `500`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:19</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added backend coverage in `backend/apps/users/tests/test_auth.py` for the invalid refresh-cookie regression path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Auth Bootstrap**: Added a startup refresh gate in the staff SPA so persisted staff sessions renew their access token from the refresh cookie before the KDS page and WebSocket layer mount, preventing reload-time `401 Unauthorized` API failures and rejected `/ws/staff/` handshakes with stale JWTs.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
