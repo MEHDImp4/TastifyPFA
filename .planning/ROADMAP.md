@@ -128,9 +128,14 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Phase 14
 **Success Criteria**: 1. Celery worker service defined in `docker-compose.yml`. 2. `CommandeLigne` gains `heure_lancement`, `heure_fin_estimee`, `temps_preparation_snapshot`, `celery_task_id` fields with migration. 3. `KdsOrchestrator` correctly calculates JIT timing for all lines. 4. Existing pending Celery tasks are revoked and rescheduled on order update. 5. `line_launched` WebSocket event is broadcast to the `cuisine` group at the correct ETA.
 **Plans**: 3 plans
-- [ ] 15-01-PLAN.md — Celery Infrastructure & Wave 0 Test Scaffolds
-- [ ] 15-02-PLAN.md — JIT Orchestrator, Migration & Signal Wiring
+- [x] 15-01-PLAN.md — Celery Infrastructure & Wave 0 Test Scaffolds
+- [x] 15-02-PLAN.md — JIT Orchestrator, Migration & Signal Wiring
 - [ ] 15-03-PLAN.md — WebSocket Broadcast & Live Verification
+
+### Phase 16: Order Push to KDS
+**Goal**: Implement the "Manual Fire" workflow — a server explicitly sends an order to the kitchen via PATCH (`EN_COURS → EN_CUISINE`), triggering JIT orchestration only on that transition, filtering the KDS to show only fired orders, and delivering audio+visual feedback on ticket arrival.
+**Depends on**: Phase 15
+**Success Criteria**: 1. PATCH `/commandes/{id}/` with `{"statut":"EN_CUISINE"}` succeeds for order owner and triggers `KdsOrchestrator`. 2. CUISINIER queryset strictly excludes `EN_COURS` (only `EN_CUISINE | PRETE` visible). 3. "Envoyer en Cuisine" button renders on `OrderingPage` when order is `EN_COURS`. 4. KDS plays audio bell on new ticket arrival via WebSocket. 5. `TicketCard` shows green glow pulse for 10 seconds on new ticket arrival, then stops.
 
 ### Phase 35: KDS Advanced Operations
 **Goal**: Empower kitchen staff with control over dish availability and modifications.
