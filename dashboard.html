@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 21:55:08<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 22:04:20<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -972,6 +972,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened the KDS order store against malformed API and websocket payloads so a stale or incomplete `commande` can no longer crash the `CUISINIER` screen after a hard reload.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Sanitized invalid `created_at` values and non-array `lignes` payloads inside the KDS UI, preventing timer and ticket rendering from producing the blank green shell.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added regression coverage for malformed KDS fetch payloads, malformed websocket orders, and invalid ticket/timer dates so the reload crash path remains covered.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/back-office`: `npm test ---run src/pages/Kds/store/useKdsStore.test.ts src/pages/Kds/components/TicketCard.test.tsx src/pages/Kds/components/KdsTimer.test.tsx src/pages/Kds/KdsPage.test.tsx src/pages/Kds/KdsSocketManager.test.tsx`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `7e23154`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 21:54</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the staff auth store correctly after a hard reload by unwrapping Zustand's persisted `state` envelope before validating the cached session.</p>
                             </li>
@@ -1019,31 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 19:52</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Kept the persisted-session refresh timeout and transient proxy retry behavior from the earlier hardening so a slow backend still resolves into a rendered app rather than an indefinite splash screen.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:52</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md` and `dashboard.html` to describe the hydration watchdog fallback now in place for the back-office SPA.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Back-Office Bootstrap Resilience**: Hardened `frontend/_shared/auth/AuthBootstrap.tsx` so persisted-session bootstrap now times out safely, never blocks the initial render indefinitely, and preserves the session when the Vite proxy/backend startup path is only temporarily unavailable.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `frontend/_shared/auth/axiosInstance.ts` with a 5s request timeout plus bounded retries for transient proxy startup failures (`502/503/504`, transport timeouts, and network errors) before surfacing the error to the UI.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Sanitized persisted auth hydration in `frontend/_shared/auth/useAuthStore.ts` so invalid or incompatible local storage payloads are discarded instead of leaving Zustand hydration in an inconsistent startup state.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 19:43</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Relaxed both Vite dev-server configs (`frontend/back-office/vite.config.ts`, `frontend/portail-client/vite.config.ts`) to allow all hosts during Docker/local-network access, removing host filtering as a proxy-side startup variable.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
