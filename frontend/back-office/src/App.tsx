@@ -11,7 +11,7 @@ import Login from '@shared/auth/Login';
 import { AuthBootstrap } from '@shared/auth/AuthBootstrap';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { WebSocketProvider } from '@shared/websocket/WebSocketProvider';
-import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
+import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary';
 import {
   GERANT_ROLES,
   KDS_ROLES,
@@ -80,7 +80,7 @@ const LoginRoute = () => {
 
 function App() {
   return (
-    <AppErrorBoundary>
+    <AppErrorBoundary appLabel="Le back-office">
       <AuthBootstrap>
         <BrowserRouter 
           future={{

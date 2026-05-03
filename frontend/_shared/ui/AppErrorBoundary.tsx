@@ -1,12 +1,13 @@
-import React from 'react';
+import React from 'react'
 
 type AppErrorBoundaryProps = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+  appLabel?: string
+}
 
 type AppErrorBoundaryState = {
-  error: Error | null;
-};
+  error: Error | null
+}
 
 export class AppErrorBoundary extends React.Component<
   AppErrorBoundaryProps,
@@ -14,23 +15,24 @@ export class AppErrorBoundary extends React.Component<
 > {
   state: AppErrorBoundaryState = {
     error: null,
-  };
+  }
 
   static getDerivedStateFromError(error: Error): AppErrorBoundaryState {
-    return { error };
+    return { error }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Back-office render crash', error, errorInfo);
+    console.error(`${this.props.appLabel ?? 'Frontend'} render crash`, error, errorInfo)
   }
 
   private handleReload = () => {
-    window.location.reload();
-  };
+    window.location.reload()
+  }
 
   render() {
     if (this.state.error) {
-      const isDev = import.meta.env.DEV;
+      const isDev = import.meta.env.DEV
+      const appLabel = this.props.appLabel ?? 'Cette interface'
 
       return (
         <div className="flex min-h-screen items-center justify-center bg-background px-6 py-10 text-foreground">
@@ -39,10 +41,10 @@ export class AppErrorBoundary extends React.Component<
               Incident Frontend
             </p>
             <h1 className="mt-3 text-2xl font-semibold text-white">
-              Le back-office a rencontré une erreur de rendu.
+              {appLabel} a rencontre une erreur de rendu.
             </h1>
             <p className="mt-3 text-sm text-slate-300">
-              L&apos;écran a été protégé pour éviter le blocage silencieux. Recharge la page ou reconnecte-toi.
+              L&apos;ecran a ete protege pour eviter le blocage silencieux. Recharge la page ou reconnecte-toi.
             </p>
 
             {isDev && (
@@ -60,9 +62,9 @@ export class AppErrorBoundary extends React.Component<
             </button>
           </div>
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }

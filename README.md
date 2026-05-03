@@ -31,6 +31,7 @@ Cross-frontend role gates live in `frontend/_shared/auth/roleAccess.ts`, with fo
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
+Both frontend entrypoints now bootstrap persisted auth through `frontend/_shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
@@ -48,6 +49,7 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
 - `backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
 - `frontend/_shared/websocket/` owns the shared staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
+- `frontend/_shared/ui/` owns the shared render crash boundary used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
 
 ## Salle order-taking
 - `frontend/back-office/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.

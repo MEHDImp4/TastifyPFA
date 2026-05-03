@@ -38,6 +38,7 @@ tastify-pfa/
 ├── frontend/                      # 2 independent Vite SPAs
 │   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
 │   │   ├── auth/                  # Zustand Store, Login UI, Axios instance, role access gates
+│   │   ├── ui/                    # Shared crash boundary for both SPAs
 │   │   ├── websocket/             # Shared staff socket provider, store, and parsing helpers
 │   │   ├── components/map/        # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │   │   ├── assets/                # Shared logo, icons
@@ -110,5 +111,5 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network, and both dev servers now allow all hosts so Docker bridge access, `localhost`, and direct LAN-IP testing follow the same proxy path.
-Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Ports `3001` and `3002` are retired.
+Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `frontend/_shared/auth/AuthBootstrap.tsx` and surface render failures through `frontend/_shared/ui/AppErrorBoundary.tsx`. Ports `3001` and `3002` are retired.
 The backend container starts through `backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
