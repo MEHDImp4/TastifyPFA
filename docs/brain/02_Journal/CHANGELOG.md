@@ -1,3 +1,11 @@
+## [2026-05-03] - 19:05
+### Fixed
+- **KDS Auth Bootstrap**: Added a startup refresh gate in the staff SPA so persisted staff sessions renew their access token from the refresh cookie before the KDS page and WebSocket layer mount, preventing reload-time `401 Unauthorized` API failures and rejected `/ws/staff/` handshakes with stale JWTs.
+- Added a reusable `refreshPersistedSession()` path in `frontend/_shared/auth/AuthBootstrap.tsx` and wired `frontend/back-office/src/App.tsx` through `AuthBootstrap`.
+- Extended auth-store hydration state in `frontend/_shared/auth/useAuthStore.ts` so the bootstrap only runs after persisted auth state is available.
+- Hardened `frontend/back-office/src/pages/Kds/KdsSocketManager.tsx` with a typed payload guard for `order.statut`, eliminating the latent TypeScript build error in KDS websocket handling.
+- Added focused frontend coverage in `frontend/back-office/src/authBootstrap.test.tsx` for the bootstrap refresh success/failure paths.
+
 ## [2026-05-03] - 18:33
 ### Fixed
 - **KDS Frontend**: Restored the initial `fetchOrders()` call in `KdsPage` so the kitchen board hydrates on first load instead of waiting for a later websocket state change.

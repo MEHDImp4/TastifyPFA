@@ -10,9 +10,11 @@ interface AuthState {
   user: User | null
   accessToken: string | null
   isAuthenticated: boolean
+  hasHydrated: boolean
   setAuth: (user: User, accessToken: string) => void
   clearAuth: () => void
   setAccessToken: (token: string, user?: User) => void
+  setHasHydrated: (hasHydrated: boolean) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -21,6 +23,7 @@ export const useAuthStore = create<AuthState>()(
       user: null as User | null,
       accessToken: null as string | null,
       isAuthenticated: false as boolean,
+      hasHydrated: false as boolean,
       setAuth: (user, accessToken) => set({ 
         user, 
         accessToken, 
@@ -36,9 +39,18 @@ export const useAuthStore = create<AuthState>()(
         accessToken,
         isAuthenticated: !!accessToken,
       })),
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
       name: 'tastify-auth-storage',
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
     }
   )
 )

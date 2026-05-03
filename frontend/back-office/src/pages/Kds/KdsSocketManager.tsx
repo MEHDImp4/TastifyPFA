@@ -13,6 +13,16 @@ export const KdsSocketManager = () => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
+  const getOrderStatus = (payload: Record<string, unknown>) => {
+    const order = payload.order
+    if (!order || typeof order !== 'object' || Array.isArray(order)) {
+      return undefined
+    }
+
+    const status = (order as Record<string, unknown>).statut
+    return typeof status === 'string' ? status : undefined
+  }
+
   useEffect(() => {
     audioRef.current = new Audio('/sounds/kitchen-bell.mp3')
     audioRef.current.preload = 'auto'
@@ -40,7 +50,7 @@ export const KdsSocketManager = () => {
 
     const wasJustFired =
       lastEvent.type === 'order_updated' &&
-      lastEvent.payload?.order?.statut === 'EN_CUISINE'
+      getOrderStatus(lastEvent.payload) === 'EN_CUISINE'
 
     if (wasJustFired && audioRef.current) {
       audioRef.current.currentTime = 0
