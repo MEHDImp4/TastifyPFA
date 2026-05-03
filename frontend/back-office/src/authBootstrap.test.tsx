@@ -4,11 +4,23 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
   AuthBootstrap,
+  accessTokenNeedsBootstrapRefresh,
   refreshPersistedSession,
 } from '@shared/auth/AuthBootstrap'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 
 vi.mock('axios')
+
+const createJwt = (expiresAtSecondsFromNow: number) => {
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+  const payload = btoa(
+    JSON.stringify({
+      exp: Math.floor(Date.now() / 1000) + expiresAtSecondsFromNow,
+    }),
+  )
+
+  return `${header}.${payload}.signature`
+}
 
 describe('AuthBootstrap', () => {
   beforeEach(() => {
@@ -90,6 +102,26 @@ describe('refreshPersistedSession', () => {
     vi.clearAllMocks()
   })
 
+  it('skips bootstrap refresh when the persisted access token is still valid', async () => {
+    const setAccessToken = vi.fn()
+    const clearAuth = vi.fn()
+    const post = vi.fn()
+
+    await expect(
+      refreshPersistedSession({
+        accessToken: createJwt(300),
+        isAuthenticated: true,
+        setAccessToken,
+        clearAuth,
+        client: { post },
+      }),
+    ).resolves.toBe('skipped')
+
+    expect(post).not.toHaveBeenCalled()
+    expect(setAccessToken).not.toHaveBeenCalled()
+    expect(clearAuth).not.toHaveBeenCalled()
+  })
+
   it('skips refresh when there is no persisted authenticated session', async () => {
     const setAccessToken = vi.fn()
     const clearAuth = vi.fn()
@@ -123,7 +155,7 @@ describe('refreshPersistedSession', () => {
 
     await expect(
       refreshPersistedSession({
-        accessToken: 'expired-access-token',
+        accessToken: createJwt(-60),
         isAuthenticated: true,
         setAccessToken,
         clearAuth,
@@ -155,7 +187,7 @@ describe('refreshPersistedSession', () => {
 
     await expect(
       refreshPersistedSession({
-        accessToken: 'expired-access-token',
+        accessToken: createJwt(-60),
         isAuthenticated: true,
         setAccessToken,
         clearAuth,
@@ -177,7 +209,7 @@ describe('refreshPersistedSession', () => {
 
     await expect(
       refreshPersistedSession({
-        accessToken: 'expired-access-token',
+        accessToken: createJwt(-60),
         isAuthenticated: true,
         setAccessToken,
         clearAuth,
@@ -188,5 +220,19 @@ describe('refreshPersistedSession', () => {
     expect(post).toHaveBeenCalledTimes(1)
     expect(setAccessToken).not.toHaveBeenCalled()
     expect(clearAuth).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('accessTokenNeedsBootstrapRefresh', () => {
+  it('returns false for tokens that remain valid beyond the refresh threshold', () => {
+    expect(accessTokenNeedsBootstrapRefresh(createJwt(120))).toBe(false)
+  })
+
+  it('returns true for expired tokens', () => {
+    expect(accessTokenNeedsBootstrapRefresh(createJwt(-1))).toBe(true)
+  })
+
+  it('returns true for malformed tokens', () => {
+    expect(accessTokenNeedsBootstrapRefresh('not-a-jwt')).toBe(true)
   })
 })

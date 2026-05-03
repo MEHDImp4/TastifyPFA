@@ -26,6 +26,7 @@ export type RefreshPersistedSessionResult =
 const BOOTSTRAP_REQUEST_TIMEOUT_MS = 5000
 const BOOTSTRAP_RENDER_DEADLINE_MS = 6000
 const BOOTSTRAP_HYDRATION_DEADLINE_MS = 2500
+const ACCESS_TOKEN_REFRESH_THRESHOLD_MS = 30_000
 const TRANSIENT_BOOTSTRAP_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504])
 const TRANSIENT_BOOTSTRAP_CODES = new Set(['ECONNABORTED', 'ERR_NETWORK'])
 
@@ -61,6 +62,37 @@ const withRenderDeadline = async <T,>(promise: Promise<T>, timeoutMs: number, fa
   }
 }
 
+const decodeJwtPayload = (token: string) => {
+  const segments = token.split('.')
+
+  if (segments.length < 2) {
+    return null
+  }
+
+  try {
+    const normalized = segments[1].replace(/-/g, '+').replace(/_/g, '/')
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=')
+    return JSON.parse(atob(padded)) as Record<string, unknown>
+  } catch {
+    return null
+  }
+}
+
+export const accessTokenNeedsBootstrapRefresh = (
+  accessToken: string,
+  now = Date.now(),
+  thresholdMs = ACCESS_TOKEN_REFRESH_THRESHOLD_MS,
+) => {
+  const payload = decodeJwtPayload(accessToken)
+  const exp = payload?.exp
+
+  if (typeof exp !== 'number') {
+    return true
+  }
+
+  return exp * 1000 <= now + thresholdMs
+}
+
 export const refreshPersistedSession = async ({
   accessToken,
   isAuthenticated,
@@ -69,6 +101,10 @@ export const refreshPersistedSession = async ({
   client = axios,
 }: BootstrapSessionOptions) => {
   if (!isAuthenticated || !accessToken) {
+    return 'skipped' as const
+  }
+
+  if (!accessTokenNeedsBootstrapRefresh(accessToken)) {
     return 'skipped' as const
   }
 
