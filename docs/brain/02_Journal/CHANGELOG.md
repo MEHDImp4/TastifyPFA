@@ -1,3 +1,13 @@
+## [2026-05-03] - 17:50
+### Added
+- **Phase 16 (Order Push to KDS)**: Tightened KDS queryset to strictly exclude `EN_COURS` orders and gated `Commande` PATCH operations on ownership.
+- **Phase 16 (Manual Fire Logic)**: Gated JIT orchestration to only trigger on the `EN_COURS` -> `EN_CUISINE` transition.
+- Added `16-03-SUMMARY.md` and `16-04-SUMMARY.md` to document implementation waves.
+
+### Changed
+- Updated `backend/apps/commandes/views.py` to enforce KDS visibility and ownership-based PATCH gates.
+- Updated `backend/apps/commandes/signals.py` and `orchestrator.py` to support the "Manual Fire" transition logic.
+
 ## [2026-05-03] - 16:30
 ### Added
 - **Phase 16 (Order Push to KDS) Wave 0**: Scaffolded backend regression tests (RED state).

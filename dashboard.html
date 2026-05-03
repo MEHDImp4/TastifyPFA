@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 17:49:47<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-03 17:50:42<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -100,7 +100,7 @@
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->45<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sub-plans</span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->46<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sub-plans</span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Overall Completion</h3>
@@ -964,6 +964,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS)**: Tightened KDS queryset to strictly exclude `EN_COURS` orders and gated `Commande` PATCH operations on ownership.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Manual Fire Logic)**: Gated JIT orchestration to only trigger on the `EN_COURS` -> `EN_CUISINE` transition.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `16-03-SUMMARY.md` and `16-04-SUMMARY.md` to document implementation waves.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `backend/apps/commandes/views.py` to enforce KDS visibility and ownership-based PATCH gates.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-03 17:50</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `backend/apps/commandes/signals.py` and `orchestrator.py` to support the "Manual Fire" transition logic.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 16:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 16 (Order Push to KDS) Wave 0**: Scaffolded backend regression tests (RED state).</p>
                             </li>
@@ -1011,31 +1036,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 15:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `KdsTimer` to support countdowns for future launches (e.g., "In 2:30").</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 15:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `TicketCard` to distinguish between "EN_ATTENTE" (grayscale, countdown) and "EN_PREPARATION" (highlighted, active timer).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 15:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Updated `useKdsStore` to handle `line_launched` WebSocket events for real-time status updates without full order refreshes.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 14:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> **Phase 15 (KDS Orchestrator Logic) COMPLETED**: Manual UAT passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 14:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> Confirmed `line_launched` WebSocket frames arrive as expected after `order_created`/`order_updated`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 14:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> Verified commit-safe orchestration stability in a live session (240ms delay from creation to launch frame).</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

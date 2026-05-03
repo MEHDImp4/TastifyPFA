@@ -5,12 +5,29 @@ import { KdsSocketManager } from './KdsSocketManager';
 import { TicketCard } from './components/TicketCard';
 
 export const KdsPage: React.FC = () => {
-  const { orders, isLoading, error, fetchOrders } = useKdsStore();
+  const orders = useKdsStore((state) => state.orders);
+  const isLoading = useKdsStore((state) => state.isLoading);
+  const error = useKdsStore((state) => state.error);
+  const fetchOrders = useKdsStore((state) => state.fetchOrders);
+  const newOrderIds = useKdsStore((state) => state.newOrderIds);
+  const clearNewOrder = useKdsStore((state) => state.clearNewOrder);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
+
+  useEffect(() => {
+    if (newOrderIds.size === 0) return;
+    const timers: number[] = [];
+    newOrderIds.forEach((id) => {
+      const t = window.setTimeout(() => clearNewOrder(id), 10_000);
+      timers.push(t);
+    });
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [newOrderIds, clearNewOrder]);
 
   const handleWheel = (e: React.WheelEvent) => {
     if (!scrollRef.current) {
@@ -97,7 +114,7 @@ export const KdsPage: React.FC = () => {
       >
         {orders.map((order) => (
           <div key={order.id} className="h-full w-[19rem] flex-shrink-0 animate-enter">
-            <TicketCard order={order} />
+            <TicketCard order={order} isNew={newOrderIds.has(order.id)} />
           </div>
         ))}
 

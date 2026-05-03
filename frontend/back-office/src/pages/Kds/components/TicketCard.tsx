@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Commande } from '../types';
 import { KdsTimer } from './KdsTimer';
 import { Clock3, CookingPot, NotebookPen, User } from 'lucide-react';
 
 interface TicketCardProps {
   order: Commande;
+  isNew?: boolean;
 }
 
-export const TicketCard: React.FC<TicketCardProps> = ({ order }) => {
+export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) => {
   const totalQuantity = order.lignes.reduce((sum, ligne) => sum + ligne.quantite, 0);
+  const [showGlow, setShowGlow] = useState<boolean>(isNew);
+
+  useEffect(() => {
+    if (!isNew) {
+      setShowGlow(false);
+      return;
+    }
+    setShowGlow(true);
+    const timer = window.setTimeout(() => setShowGlow(false), 10_000);
+    return () => window.clearTimeout(timer);
+  }, [isNew]);
 
   return (
     <article
       data-testid={`ticket-card-${order.id}`}
-      className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-2xl transition-all"
+      className={`flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-2xl transition-all ${showGlow ? 'animate-new-ticket' : ''}`}
     >
       <div className="border-b border-white/5 bg-white/[0.02] px-4 py-3.5">
         <div className="flex items-start justify-between gap-4">
