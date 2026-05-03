@@ -11,6 +11,7 @@ import Login from '@shared/auth/Login';
 import { AuthBootstrap } from '@shared/auth/AuthBootstrap';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { WebSocketProvider } from '@shared/websocket/WebSocketProvider';
+import { AppErrorBoundary } from './components/ui/AppErrorBoundary';
 import {
   GERANT_ROLES,
   KDS_ROLES,
@@ -79,30 +80,32 @@ const LoginRoute = () => {
 
 function App() {
   return (
-    <AuthBootstrap>
-      <BrowserRouter 
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true
-        }}
-      >
-        <Routes>
-          <Route path="/login" element={<LoginRoute />} />
-          
-          <Route element={<WebSocketProvider><AppShell /></WebSocketProvider>}>
-            <Route index element={<StaffEntryRedirect />} />
-            <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
-            <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />
-            <Route path="/tables" element={<RoleRoute allowedRoles={GERANT_ROLES}><TablesPage /></RoleRoute>} />
-            <Route path="/salle" element={<RoleRoute allowedRoles={SALLE_ROLES}><MapView /></RoleRoute>} />
-            <Route path="/tables/:id/order" element={<RoleRoute allowedRoles={SALLE_ROLES}><OrderingPage /></RoleRoute>} />
-            <Route path="/kds" element={<RoleRoute allowedRoles={KDS_ROLES}><KdsPage /></RoleRoute>} />
-          </Route>
+    <AppErrorBoundary>
+      <AuthBootstrap>
+        <BrowserRouter 
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true
+          }}
+        >
+          <Routes>
+            <Route path="/login" element={<LoginRoute />} />
+            
+            <Route element={<WebSocketProvider><AppShell /></WebSocketProvider>}>
+              <Route index element={<StaffEntryRedirect />} />
+              <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
+              <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />
+              <Route path="/tables" element={<RoleRoute allowedRoles={GERANT_ROLES}><TablesPage /></RoleRoute>} />
+              <Route path="/salle" element={<RoleRoute allowedRoles={SALLE_ROLES}><MapView /></RoleRoute>} />
+              <Route path="/tables/:id/order" element={<RoleRoute allowedRoles={SALLE_ROLES}><OrderingPage /></RoleRoute>} />
+              <Route path="/kds" element={<RoleRoute allowedRoles={KDS_ROLES}><KdsPage /></RoleRoute>} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthBootstrap>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthBootstrap>
+    </AppErrorBoundary>
   );
 }
 

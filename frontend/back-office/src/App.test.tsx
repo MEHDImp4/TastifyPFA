@@ -7,6 +7,10 @@ vi.mock('@shared/auth/useAuthStore', () => ({
   useAuthStore: vi.fn(),
 }));
 
+vi.mock('@shared/auth/AuthBootstrap', () => ({
+  AuthBootstrap: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 // Mock CategoriesPage
 vi.mock('./pages/Categories', () => ({
   default: () => <div>Categories Page Content</div>,

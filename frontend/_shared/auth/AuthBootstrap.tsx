@@ -62,7 +62,11 @@ const withRenderDeadline = async <T,>(promise: Promise<T>, timeoutMs: number, fa
   }
 }
 
-const decodeJwtPayload = (token: string) => {
+const decodeJwtPayload = (token: unknown) => {
+  if (typeof token !== 'string' || token.trim().length === 0) {
+    return null
+  }
+
   const segments = token.split('.')
 
   if (segments.length < 2) {
@@ -79,7 +83,7 @@ const decodeJwtPayload = (token: string) => {
 }
 
 export const accessTokenNeedsBootstrapRefresh = (
-  accessToken: string,
+  accessToken: unknown,
   now = Date.now(),
   thresholdMs = ACCESS_TOKEN_REFRESH_THRESHOLD_MS,
 ) => {
