@@ -6,62 +6,61 @@
 
 ```
 tastify-pfa/
-├── backend/                       # Django + Daphne + Channels
-│   ├── tastify_backend/
-│   │   ├── settings/{base,dev,prod}.py
-│   │   ├── urls.py
-│   │   ├── asgi.py                # Daphne entry — ProtocolTypeRouter
-│   │   └── wsgi.py
-│   ├── core/                      # Root config app, Channels middleware/consumers/helpers/tests
-│   ├── apps/                      # Domain apps
-│   │   ├── users/                 # Custom User model, Auth (Phase 2 & 3)
-│   │   │   ├── views/auth.py      # Cookie-based JWT views
-│   │   │   ├── serializers.py     # Custom JWT claims
+├── app/
+│   ├── backend/                    # Django + Daphne + Channels
+│   │   ├── tastify_backend/
+│   │   │   ├── settings/{base,dev,prod}.py
 │   │   │   ├── urls.py
-│   │   │   └── tests/test_auth.py
-│   │   ├── menu/                  # Categories & Dishes (Phase 4+)
-│   │   │   ├── models.py          # Soft-delete Categorie and Plat models
-│   │   │   ├── serializers.py
-│   │   │   ├── views.py
-│   │   │   └── urls.py
-│   │   ├── tables/                # Table model, API, and seed data
-│   │   └── commandes/             # Orders, order lines, total signals, and KDS orchestration
-│   │       ├── models.py          # Commande and CommandeLigne + Phase 15 scheduling fields
-│   │       ├── signals.py         # montant_total recalculation + commit-safe orchestrator/broadcast triggers
-│   │       ├── services/          # KDS orchestration services
-│   │       ├── tasks.py           # Celery ETA launch tasks + staff broadcasts
-│   │       ├── migrations/
-│   │       └── tests/             # API, signal, permission, and orchestration regression coverage
-│   ├── requirements.txt
-│   ├── entrypoint.sh              # Applies pending migrations before Daphne starts
-│   └── Dockerfile
-├── frontend/                      # 2 independent Vite SPAs
-│   ├── _shared/                   # Shared UI & Logic (Added Phase 3)
-│   │   ├── auth/                  # Zustand Store, Login UI, Axios instance, role access gates
-│   │   ├── ui/                    # Shared crash boundary for both SPAs
-│   │   ├── websocket/             # Shared staff socket provider, store, and parsing helpers
-│   │   ├── components/map/        # Shared TableMap/TableItem SVG components (Shared Phase 9)
-│   │   ├── assets/                # Shared logo, icons
-│   │   └── types/                 # Shared TypeScript interfaces
-│   ├── back-office/               # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
-│   │   ├── vite.config.ts         # Dev server config without Vitest runtime dependency
-│   │   ├── vitest.config.ts       # Vitest-only config for test environment setup
-│   │   ├── src/authBootstrap.test.tsx # Covers non-blocking persisted-session bootstrap deadlines
-│   │   ├── src/authPersistence.test.ts # Guards persisted auth-state sanitization on hydrate
-│   │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
-│   │   ├── src/axiosInstance.test.ts # Verifies transient proxy startup retry classification
-│   │   └── src/pages/
-│   │       ├── Categories/        # Categories management (Phase 5)
-│   │       ├── Plats/             # Plats management (Phase 7)
-│   │       ├── Tables/            # Centralized Table map management (Added Phase 9)
-│   │       └── Kds/               # Kitchen Display System (Phase 14)
-│   │           ├── components/    # TicketCard, KdsTimer
-│   │           ├── store/         # useKdsStore
-│   │           ├── KdsPage.tsx
-│   │           └── KdsSocketManager.tsx
-│   └── portail-client/            # CLIENT  — Vite :3003 — /
-├── nginx/                         # Legacy reverse-proxy config, not used by docker-compose.yml
-│   └── nginx.conf
+│   │   │   ├── asgi.py            # Daphne entry — ProtocolTypeRouter
+│   │   │   └── wsgi.py
+│   │   ├── core/                  # Root config app, Channels middleware/consumers/helpers/tests
+│   │   ├── apps/                  # Domain apps
+│   │   │   ├── users/             # Custom User model, Auth (Phase 2 & 3)
+│   │   │   │   ├── views/auth.py  # Cookie-based JWT views
+│   │   │   │   ├── serializers.py # Custom JWT claims
+│   │   │   │   ├── urls.py
+│   │   │   │   └── tests/test_auth.py
+│   │   │   ├── menu/              # Categories & Dishes (Phase 4+)
+│   │   │   │   ├── models.py      # Soft-delete Categorie and Plat models
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── views.py
+│   │   │   │   └── urls.py
+│   │   │   ├── tables/            # Table model, API, and seed data
+│   │   │   └── commandes/         # Orders, order lines, total signals, and KDS orchestration
+│   │   │       ├── models.py      # Commande and CommandeLigne + Phase 15 scheduling fields
+│   │   │       ├── signals.py     # montant_total recalculation + commit-safe orchestrator/broadcast triggers
+│   │   │       ├── services/      # KDS orchestration services
+│   │   │       ├── tasks.py       # Celery ETA launch tasks + staff broadcasts
+│   │   │       ├── migrations/
+│   │   │       └── tests/         # API, signal, permission, and orchestration regression coverage
+│   │   ├── requirements.txt
+│   │   ├── entrypoint.sh          # Applies pending migrations before Daphne starts
+│   │   └── Dockerfile
+│   └── frontend/                  # 2 independent Vite SPAs
+│       ├── shared/                # Shared UI & Logic (Added Phase 3)
+│       │   ├── auth/              # Zustand Store, Login UI, Axios instance, role access gates
+│       │   ├── ui/                # Shared crash boundary for both SPAs
+│       │   ├── websocket/         # Shared staff socket provider, store, and parsing helpers
+│       │   ├── components/map/    # Shared TableMap/TableItem SVG components (Shared Phase 9)
+│       │   ├── assets/            # Shared logo, icons
+│       │   └── types/             # Shared TypeScript interfaces
+│       ├── backoffice/            # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
+│       │   ├── vite.config.ts     # Dev server config without Vitest runtime dependency
+│       │   ├── vitest.config.ts   # Vitest-only config for test environment setup
+│       │   ├── src/authBootstrap.test.tsx # Covers non-blocking persisted-session bootstrap deadlines
+│       │   ├── src/authPersistence.test.ts # Guards persisted auth-state sanitization on hydrate
+│       │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
+│       │   ├── src/axiosInstance.test.ts # Verifies transient proxy startup retry classification
+│       │   └── src/pages/
+│       │       ├── Categories/    # Categories management (Phase 5)
+│       │       ├── Plats/         # Plats management (Phase 7)
+│       │       ├── Tables/        # Centralized Table map management (Added Phase 9)
+│       │       └── Kds/           # Kitchen Display System (Phase 14)
+│       │           ├── components/ # TicketCard, KdsTimer
+│       │           ├── store/     # useKdsStore
+│       │           ├── KdsPage.tsx
+│       │           └── KdsSocketManager.tsx
+│       └── portail/               # CLIENT — Vite :3003 — /
 ├── media/                         # User-uploaded content (images)
 ├── tests/
 │   └── smoke/test_services.sh     # Wave 0 smoke harness
@@ -92,7 +91,7 @@ tastify-pfa/
 │       ├── 14-kds-base-frontend/
 │       ├── 15-kds-orchestrator-logic/
 │       └── 16-order-push-to-kds/
-├── docker-compose.yml             # 5 services exposed directly on host ports
+├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md
 ├── DESIGN.md
@@ -111,5 +110,5 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network, and both dev servers now allow all hosts so Docker bridge access, `localhost`, and direct LAN-IP testing follow the same proxy path.
-Shared login and staff route access use `frontend/_shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `frontend/_shared/auth/AuthBootstrap.tsx` and surface render failures through `frontend/_shared/ui/AppErrorBoundary.tsx`. Ports `3001` and `3002` are retired.
-The backend container starts through `backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
+Shared login and staff route access use `frontend/shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `frontend/shared/auth/AuthBootstrap.tsx` and surface render failures through `frontend/shared/ui/AppErrorBoundary.tsx`. Ports `3001` and `3002` are retired.
+The backend container starts through `services/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.

@@ -32,12 +32,12 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./app/backend
     env_file: .env
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./app/backend:/app
       - ./media:/app/media
     depends_on:
       db:
@@ -49,11 +49,11 @@ services:
 
   celery-worker:
     build:
-      context: ./backend
+      context: ./app/backend
     env_file: .env
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
     volumes:
-      - ./backend:/app
+      - ./app/backend:/app
       - ./media:/app/media
     depends_on:
       db:
@@ -65,24 +65,24 @@ services:
 
   backoffice:
     build:
-      context: ./frontend/backoffice
+      context: ./app/frontend/backoffice
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend/backoffice:/app
-      - ./frontend/shared:/app/shared
+      - ./app/frontend/backoffice:/app
+      - ./app/frontend/shared:/app/shared
       - /app/node_modules
     networks:
       - tastify-network
 
   portail:
     build:
-      context: ./frontend/portail
+      context: ./app/frontend/portail
     ports:
       - "3003:3003"
     volumes:
-      - ./frontend/portail:/app
-      - ./frontend/shared:/app/shared
+      - ./app/frontend/portail:/app
+      - ./app/frontend/shared:/app/shared
       - /app/node_modules
     networks:
       - tastify-network
