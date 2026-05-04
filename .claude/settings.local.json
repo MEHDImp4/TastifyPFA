@@ -13,7 +13,12 @@
       "Bash(python -m pytest apps/commandes/tests/test_api_advanced.py::AdvancedCommandeAPITestCase::test_add_items_success -v --ds=tastify_backend.settings.test -s)",
       "Bash(ls docker-compose*.yml)",
       "Bash(ls docker-compose*.yaml)",
-      "Bash(docker compose exec *)"
+      "Bash(docker compose exec *)",
+      "Bash(npx tsc *)",
+      "Bash(npm test *)",
+      "Bash(docker compose *)",
+      "Bash(git stash *)",
+      "Bash(npx vitest *)"
     ]
   }
 }

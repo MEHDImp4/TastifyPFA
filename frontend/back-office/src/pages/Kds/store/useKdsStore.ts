@@ -17,15 +17,6 @@ interface KdsState {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
 
-const toFiniteTimestamp = (value: unknown) => {
-  if (typeof value !== 'string' || value.trim().length === 0) {
-    return null
-  }
-
-  const timestamp = new Date(value).getTime()
-  return Number.isFinite(timestamp) ? timestamp : null
-}
-
 const normalizeCommande = (value: unknown): Commande | null => {
   if (!isRecord(value)) {
     return null

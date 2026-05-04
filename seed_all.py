@@ -162,6 +162,8 @@ def seed_menu():
                 {'nom': 'Briouates au Fromage', 'description': "Feuilletés croustillants au fromage (4 pièces)", 'prix': '9.00', 'temps_preparation': 12, 'image': 'plats/briouates_fromage.png'},
                 {'nom': 'Soupe Harira', 'description': 'Soupe traditionnelle marocaine riche et parfumée', 'prix': '6.50', 'temps_preparation': 15, 'image': 'plats/soupe_harira.png'},
                 {'nom': 'Salade César', 'description': 'Salade fraîche avec croûtons et sauce maison', 'prix': '8.50', 'temps_preparation': 10, 'image': 'plats/salade_cesar.png'},
+                {'nom': 'Salade de Carottes à l’Orange', 'description': 'Carottes râpées à l’orange et cumin', 'prix': '6.00', 'temps_preparation': 10, 'image': 'plats/salade_carottes_orange.png'},
+                {'nom': 'Salade de Poivrons Grillés', 'description': 'Poivrons rouges et verts grillés à l’huile d’olive', 'prix': '7.00', 'temps_preparation': 15, 'image': 'plats/salade_poivrons.png'},
             ],
         },
         {
@@ -179,6 +181,8 @@ def seed_menu():
                 {'nom': 'Tanjia Marrakchia', 'description': "Viande de boeuf fondante cuite à l'étouffée", 'prix': '28.00', 'temps_preparation': 45, 'image': 'plats/tanjia_marrakchia.png'},
                 {'nom': 'Pastilla au Poulet', 'description': 'Feuilleté sucré-salé traditionnel à la cannelle', 'prix': '18.00', 'temps_preparation': 30, 'image': 'plats/pastilla_poulet.png'},
                 {'nom': 'Pastilla aux Poissons', 'description': 'Feuilleté épicé aux fruits de mer et vermicelles', 'prix': '20.00', 'temps_preparation': 35, 'image': 'plats/pastilla_poissons.png'},
+                {'nom': 'Tajine de Poisson', 'description': "Filets de poisson cuits avec légumes et épices", 'prix': '24.00', 'temps_preparation': 30, 'image': 'plats/tajine_poisson.png'},
+                {'nom': 'Tajine de Légumes', 'description': "Légumes de saison mijotés aux épices", 'prix': '18.00', 'temps_preparation': 25, 'image': 'plats/tajine_legumes.png'},
             ],
         },
         {
@@ -192,6 +196,9 @@ def seed_menu():
                 {'nom': 'Chebakia', 'description': 'Gâteaux au miel, sésame et anis (assiette)', 'prix': '5.00', 'temps_preparation': 5, 'image': 'plats/chebakia.png'},
                 {'nom': 'Briouates au Miel', 'description': 'Feuilletés aux amandes et miel (3 pièces)', 'prix': '7.00', 'temps_preparation': 8, 'image': 'plats/briouates_miel.png'},
                 {'nom': "Salade d'Oranges", 'description': "Oranges à la cannelle et eau de fleur d'oranger", 'prix': '6.00', 'temps_preparation': 10, 'image': 'plats/salade_oranges.png'},
+                {'nom': 'Msemen au Miel', 'description': 'Crêpes feuilletées servies avec du miel', 'prix': '5.00', 'temps_preparation': 10, 'image': 'plats/msemen_miel.png'},
+                {'nom': 'Ghriba aux Amandes', 'description': "Biscuits fondants à la poudre d'amandes et sucre glace", 'prix': '6.00', 'temps_preparation': 5, 'image': 'plats/ghriba_amandes.png'},
+                {'nom': 'Ghriba aux Noix', 'description': "Biscuits croquants à la poudre de noix et sucre glace", 'prix': '6.00', 'temps_preparation': 5, 'image': 'plats/ghriba_noix.png'},
             ],
         },
         {
@@ -205,6 +212,9 @@ def seed_menu():
                 {'nom': "Jus d'Orange Frais", 'description': 'Oranges pressées à la demande', 'prix': '4.00', 'temps_preparation': 5, 'image': 'plats/jus_orange.png'},
                 {'nom': 'Lben', 'description': 'Lait fermenté traditionnel frais', 'prix': '2.50', 'temps_preparation': 2, 'image': 'plats/lben.png'},
                 {'nom': 'Café Noir/Cassé', 'description': 'Café fraîchement moulu', 'prix': '3.50', 'temps_preparation': 5, 'image': 'plats/cafe.png'},
+                {'nom': 'Café au Lait', 'description': 'Café mélangé avec du lait chaud', 'prix': '4.00', 'temps_preparation': 5, 'image': 'plats/cafe_lait.png'},
+                {'nom': 'Café à la Menthe', 'description': 'Café infusé avec de la menthe fraîche', 'prix': '4.50', 'temps_preparation': 5, 'image': 'plats/cafe_menthe.png'},
+                {'nom': 'Café aux Épices', 'description': 'Café aromatisé avec de la cannelle et du gingembre', 'prix': '4.50', 'temps_preparation': 5, 'image': 'plats/cafe_epices.png'},
             ],
         },
     ]

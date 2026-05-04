@@ -47,7 +47,6 @@ const Login: React.FC<LoginProps> = ({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(initialError || null)
 
-  // Sync initialError if it changes
   React.useEffect(() => {
     if (initialError) {
       setError(initialError)
@@ -174,8 +173,8 @@ const Login: React.FC<LoginProps> = ({
           </form>
 
           <div className="mt-10 pt-8 border-t border-white/5 text-center">
-            <p className="text-[10px] text-foreground-muted uppercase tracking-[0.2em] font-bold opacity-50">
-              Tastify Ecosystem &bull; 2026
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted opacity-50">
+              Tastify Ecosystem • 2026
             </p>
           </div>
         </div>

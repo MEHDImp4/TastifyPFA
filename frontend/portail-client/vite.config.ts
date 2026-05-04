@@ -4,9 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { existsSync } from 'node:fs'
 
-const sharedAlias = existsSync(fileURLToPath(new URL('./_shared/auth/Login.tsx', import.meta.url)))
-  ? './_shared'
-  : '../_shared'
+const sharedAlias = existsSync(fileURLToPath(new URL('./shared/auth/Login.tsx', import.meta.url)))
+  ? './shared'
+  : '../shared'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],

@@ -34,6 +34,13 @@ class CookieTokenRefreshView(TokenRefreshView):
         # instead of mutating request.data directly.
         request_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
+
+        if not refresh_token and not request_data.get('refresh'):
+            return Response(
+                {"detail": "Refresh token not provided.", "code": "token_not_provided"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
         if refresh_token and not request_data.get('refresh'):
             request_data['refresh'] = refresh_token
 

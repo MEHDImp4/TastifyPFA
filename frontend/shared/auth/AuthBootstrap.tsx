@@ -198,9 +198,7 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
       'deferred',
     )
       .finally(() => {
-        if (isActive) {
-          setIsReady(true)
-        }
+        setIsReady(true)
       })
 
     return () => {
