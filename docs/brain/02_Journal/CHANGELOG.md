@@ -1,3 +1,7 @@
+## [2026-05-04] - 17:25
+### Changed
+- **Chore**: Improved `.gitignore` with comprehensive patterns for Django, React, Docker, Windows, and Agent-specific artifacts (`.claude/`, `.codex-tmp/`, etc.). Fixed paths for `app/backend/media/` and `app/backend/staticfiles/` to ensure correct ignoring.
+
 ## [2026-05-04] - 14:35
 ### Fixed
 - **KDS Audio Feedback**: Replaced the silent 427-byte placeholder `kitchen-bell.mp3` with a real 18.5KB "ding" sound from a public domain repository. This restores the audio notification when an order is fired to the kitchen.
