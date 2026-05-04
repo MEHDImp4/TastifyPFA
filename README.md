@@ -9,7 +9,7 @@ Django 5.0 + Daphne (ASGI) | MySQL 8 | Redis 7 | 2× React 18 + Vite 5 + Tailwin
 ```
 cp .env.example .env
 # edit .env: replace SECRET_KEY, MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD with real values
-docker compose -f services/docker-compose.yml up --build
+docker compose up --build
 ```
 
 Then visit:
@@ -25,13 +25,13 @@ The backend container runs pending Django migrations before starting Daphne, kee
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
-The back-office SPA keeps Vite runtime config in `frontend/backoffice/vite.config.ts` and test-only settings in `frontend/backoffice/vitest.config.ts`.
+The back-office SPA keeps Vite runtime config in `app/frontend/backoffice/vite.config.ts` and test-only settings in `app/frontend/backoffice/vitest.config.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
-Cross-frontend role gates live in `frontend/shared/auth/roleAccess.ts`, with focused coverage in `frontend/backoffice/src/roleAccess.test.ts`.
+Cross-frontend role gates live in `app/frontend/shared/auth/roleAccess.ts`, with focused coverage in `app/frontend/backoffice/src/roleAccess.test.ts`.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
-Both frontend entrypoints now bootstrap persisted auth through `frontend/shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
+Both frontend entrypoints now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
@@ -43,13 +43,13 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.menu` — categories and dishes.
 - `apps.tables` — restaurant tables.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
-- `services/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
+- `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 
 ## Realtime staff channel
-- `services/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
-- `services/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
-- `frontend/shared/websocket/` owns the shared staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
-- `frontend/shared/ui/` owns the shared render crash boundary used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
+- `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
+- `app/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
+- `app/frontend/shared/websocket/` owns the shared staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
+- `app/frontend/shared/ui/` owns the shared render crash boundary used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
 
 ## Salle order-taking
-- `frontend/backoffice/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.
+- `app/frontend/backoffice/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.
