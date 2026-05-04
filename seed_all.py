@@ -8,6 +8,9 @@ Run from repository root:
 import os
 import sys
 
+# Add the backend directory to sys.path
+sys.path.append(os.path.join(os.getcwd(), 'app', 'backend'))
+
 # Use the same settings module as the project
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tastify_backend.settings.dev')
 
