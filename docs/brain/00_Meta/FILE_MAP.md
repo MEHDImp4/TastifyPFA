@@ -8,6 +8,7 @@
 tastify-pfa/
 ├── app/
 │   ├── backend/                    # Django + Daphne + Channels
+│   │   ├── media/                  # User-uploaded content (images)
 │   │   ├── tastify_backend/
 │   │   │   ├── settings/{base,dev,prod}.py
 │   │   │   ├── urls.py
@@ -61,9 +62,6 @@ tastify-pfa/
 │       │           ├── KdsPage.tsx
 │       │           └── KdsSocketManager.tsx
 │       └── portail/               # CLIENT — Vite :3003 — /
-├── media/                         # User-uploaded content (images)
-├── tests/
-│   └── smoke/test_services.sh     # Wave 0 smoke harness
 ├── docs/                          # Obsidian Brain
 │   ├── brain/                     # Knowledge base
 │   │   └── 05_Resources/DEV_CREDENTIALS.md # Test logins

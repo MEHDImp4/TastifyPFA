@@ -1,3 +1,9 @@
+## [2026-05-04] - 18:05
+### Changed
+- **Reorganization**: Moved `media/` to `app/backend/media/` to align with the backend container structure. Removed the root `tests/` directory (deprecated smoke harness).
+- **Docs**: Updated `FILE_MAP.md` to reflect the new repository structure.
+- **Cleanup**: Removed `assets/tastify_logo_simple.svg` (unused asset).
+
 ## [2026-05-04] - 17:25
 ### Changed
 - **Chore**: Improved `.gitignore` with comprehensive patterns for Django, React, Docker, Windows, and Agent-specific artifacts (`.claude/`, `.codex-tmp/`, etc.). Fixed paths for `app/backend/media/` and `app/backend/staticfiles/` to ensure correct ignoring.
