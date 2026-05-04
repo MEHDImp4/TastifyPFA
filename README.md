@@ -12,6 +12,12 @@ cp .env.example .env
 docker compose up --build
 ```
 
+### Seeding
+To populate the database with initial users, tables, and a full menu:
+```bash
+docker-compose exec backend python manage.py seed_all
+```
+
 Then visit:
 - `http://localhost:3003/` → Portail Client SPA
 - `http://localhost:3000/` → Staff SPA (GERANT, SERVEUR, CUISINIER)
