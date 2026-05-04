@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronLeft, ChevronUp, Loader2, Receipt } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '@shared/auth/axiosInstance'
 import { useAuthStore } from '@shared/auth/useAuthStore'
+import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider'
 import { CategoryTabs } from './components/CategoryTabs'
 import { DishGrid } from './components/DishGrid'
 import { FloatingCart } from './components/FloatingCart'
@@ -15,6 +16,7 @@ export const OrderingPage = () => {
   const navigate = useNavigate()
   const tableId = Number(id)
   const currentUser = useAuthStore((state: any) => state.user)
+  const { lastEvent } = useStaffWebSocket()
   const [categories, setCategories] = useState<MenuCategory[]>([])
   const [dishes, setDishes] = useState<MenuDish[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -26,6 +28,7 @@ export const OrderingPage = () => {
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
   const [isOrderExpanded, setIsOrderExpanded] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const getCart = useOrderStore((state) => state.getCart)
   const getCartTotal = useOrderStore((state) => state.getCartTotal)
@@ -36,6 +39,29 @@ export const OrderingPage = () => {
   const cartItems = useMemo(() => getCart(tableId), [carts, getCart, tableId])
   const cartTotal = useMemo(() => getCartTotal(tableId), [carts, getCartTotal, tableId])
   const cartItemCount = useMemo(() => getCartItemCount(tableId), [carts, getCartItemCount, tableId])
+
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/kitchen-bell.mp3') // Reusing bell for now
+    audioRef.current.preload = 'auto'
+    return () => {
+      audioRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!lastEvent || !activeOrder) return
+
+    if (lastEvent.type === 'order_updated' && lastEvent.payload.order.id === activeOrder.id) {
+      const updatedOrder = lastEvent.payload.order
+      
+      // Play sound if order becomes PRETE
+      if (updatedOrder.statut === 'PRETE' && activeOrder.statut !== 'PRETE') {
+        audioRef.current?.play().catch(() => {})
+      }
+      
+      setActiveOrder(updatedOrder)
+    }
+  }, [lastEvent, activeOrder])
 
   useEffect(() => {
     if (!Number.isInteger(tableId) || tableId <= 0) {
@@ -240,20 +266,32 @@ export const OrderingPage = () => {
                     {activeOrder.lignes.length === 0 ? (
                       <p className="text-xs text-foreground-muted italic py-2">Aucun plat.</p>
                     ) : (
-                      activeOrder.lignes.map((ligne: any) => (
-                        <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/[0.03] p-3 border border-white/5">
-                          <div className="flex items-center gap-3">
-                            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-teal/20 text-[10px] font-black text-teal">
-                              {ligne.quantite}
-                            </span>
-                            <span className="text-xs font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                      activeOrder.lignes.map((ligne: any) => {
+                        const isPret = ligne.statut === 'PRET' || ligne.statut === 'SERVI'
+                        return (
+                          <div key={ligne.id} className={`flex items-center justify-between rounded-xl p-3 border transition-all ${isPret ? 'bg-green-500/10 border-green-500/20' : 'bg-white/[0.03] border-white/5'}`}>
+                            <div className="flex items-center gap-3">
+                              <span className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-black ${isPret ? 'bg-green-500 text-white' : 'bg-teal/20 text-teal'}`}>
+                                {ligne.quantite}
+                              </span>
+                              <span className={`text-xs font-bold tracking-tight ${isPret ? 'text-green-400' : 'text-white'}`}>{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              {isPret ? (
+                                <>
+                                  <CheckCircle2 size={12} className="text-green-500" />
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-green-500">Prêt</span>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="h-1 w-1 rounded-full bg-teal animate-pulse" />
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-teal">Cuisine</span>
+                                </>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <div className="h-1 w-1 rounded-full bg-teal animate-pulse" />
-                            <span className="text-[9px] font-black uppercase tracking-widest text-teal">Cuisine</span>
-                          </div>
-                        </div>
-                      ))
+                        )
+                      })
                     )}
                   </div>
 

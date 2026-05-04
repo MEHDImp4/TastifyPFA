@@ -1,3 +1,7 @@
+## [2026-05-05] - 14:00
+### Fixed
+- **OrderingPage.tsx**: Fixed "Missing initializer in destructuring declaration" syntax error caused by a missing `useEffect(() => {` opening line before the menu fetching logic.
+
 ## [2026-05-04] - 23:15
 ### Fixed
 - **backend/entrypoint.sh**: Corrigé les fins de ligne CRLF (Windows) → LF (Unix) qui causaient `set: Illegal option -` sous `sh` Linux au démarrage du container.
