@@ -1,3 +1,10 @@
+## [2026-05-04] - 23:15
+### Fixed
+- **backend/entrypoint.sh**: Corrigé les fins de ligne CRLF (Windows) → LF (Unix) qui causaient `set: Illegal option -` sous `sh` Linux au démarrage du container.
+- **backend/entrypoint.sh**: Ajout d'un retry loop (3 tentatives, délai 3s) pour `manage.py migrate` — résout la race condition où `backend` et `celery-worker` démarraient simultanément et l'un échouait avec `Table 'django_migrations' already exists`.
+- **OrderingPage.tsx**: `closeOrder` n'appelait pas `clearCart(tableId)` après une clôture réussie. Le store Zustand conservait les articles du panier, affichant un `FloatingCart` non-vide au retour sur la table et donnant l'impression que la commande était toujours active.
+- **commandes/signals.py**: `_broadcast_order_snapshot` utilisait `Commande.objects.active()` (filtré `est_active=True`) ce qui pouvait lever `DoesNotExist` si la commande était soft-deletée entre-temps. Remplacé par `Commande.objects.get()` protégé par un `try/except Commande.DoesNotExist`.
+
 ## [2026-05-04] - 20:05
 ### Fixed
 - **backoffice**: Resolved critical module resolution failure for `@shared` alias by making `vite.config.ts` more robust with absolute path resolution and explicit `fs.allow`.

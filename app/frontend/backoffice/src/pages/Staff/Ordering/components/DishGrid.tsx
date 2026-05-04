@@ -22,7 +22,7 @@ export const DishGrid = ({ tableId, dishes, selectedCategoryId }: DishGridProps)
   }
 
   return (
-    <motion.div layout className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <motion.div layout className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {filteredDishes.map((dish) => (
         <motion.div key={dish.id} layout>
           <DishCard tableId={tableId} dish={dish} />

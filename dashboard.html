@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-04 21:02:12<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-04 23:25:38<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -441,7 +441,7 @@
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->106<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->75<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -971,6 +971,61 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 23:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backend/entrypoint.sh**: Corrigé les fins de ligne CRLF (Windows) → LF (Unix) qui causaient `set: Illegal option -` sous `sh` Linux au démarrage du container.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 23:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backend/entrypoint.sh**: Ajout d'un retry loop (3 tentatives, délai 3s) pour `manage.py migrate` — résout la race condition où `backend` et `celery-worker` démarraient simultanément et l'un échouait avec `Table 'django_migrations' already exists`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 23:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **OrderingPage.tsx**: `closeOrder` n'appelait pas `clearCart(tableId)` après une clôture réussie. Le store Zustand conservait les articles du panier, affichant un `FloatingCart` non-vide au retour sur la table et donnant l'impression que la commande était toujours active.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 23:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **commandes/signals.py**: `_broadcast_order_snapshot` utilisait `Commande.objects.active()` (filtré `est_active=True`) ce qui pouvait lever `DoesNotExist` si la commande était soft-deletée entre-temps. Remplacé par `Commande.objects.get()` protégé par un `try/except Commande.DoesNotExist`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice**: Resolved critical module resolution failure for `@shared` alias by making `vite.config.ts` more robust with absolute path resolution and explicit `fs.allow`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **portail**: Applied same robust alias fix to `portail/vite.config.ts`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backend**: Fixed multiple 404 errors for media files by creating placeholder images in `app/backend/media/plats/` to match database references (e.g., `salade_carottes_orange.png`, `salade_poivrons.png`).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Cleanup**: Removed stale `vite.config.js` files in frontend services to prevent configuration ambiguity between `.js` and `.ts` config files.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> `backoffice` service now starts without resolution errors and correctly logs the `@shared` path as `/app/shared`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> Media files now return `200 OK` (verified via `curl` inside container).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> Overall system stability improved with no critical errors in logs.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Reorganization**: Moved `media/` to `app/backend/media/` to align with the backend container structure. Removed the root `tests/` directory (deprecated smoke harness).</p>
@@ -989,61 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Seeding**: Replaced the broken standalone `seed_all.py` script with a proper Django management command `python manage.py seed_all` inside the backend container. Fixed database connectivity issues by moving the logic into the Dockerized environment.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Fix**: Resolved a bug in the staff interface where closed (paid/canceled) orders would still appear on tables. Updated the `CommandeViewSet` to exclude terminal statuses when filtering by table ID.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 17:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Chore**: Improved `.gitignore` with comprehensive patterns for Django, React, Docker, Windows, and Agent-specific artifacts (`.claude/`, `.codex-tmp/`, etc.). Fixed paths for `app/backend/media/` and `app/backend/staticfiles/` to ensure correct ignoring.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 14:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KDS Audio Feedback**: Replaced the silent 427-byte placeholder `kitchen-bell.mp3` with a real 18.5KB "ding" sound from a public domain repository. This restores the audio notification when an order is fired to the kitchen.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Unified frontend reload protection by moving the render crash boundary into `frontend/_shared/ui/AppErrorBoundary.tsx`, wiring `frontend/portail-client/src/App.tsx` through `AuthBootstrap`, and reusing the same fallback in `frontend/back-office/src/App.tsx`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added shared-boundary regression coverage from the back-office test suite while keeping the client portal on the same auth bootstrap path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/back-office`: `npm test ---run src/App.test.tsx src/components/ui/AppErrorBoundary.test.tsx src/components/layout/AppShell.test.tsx src/authBootstrap.test.tsx`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/portail-client`: `npm run build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `d453cd8`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened auth bootstrap JWT parsing so corrupted or non-string persisted access tokens no longer throw during back-office startup.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added a back-office render error boundary so runtime crashes now surface as a visible fallback instead of a blank green screen.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added regression coverage for the new render error boundary and isolated app routing tests from auth bootstrap timing.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

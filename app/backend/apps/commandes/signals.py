@@ -40,12 +40,14 @@ def trigger_orchestration_on_en_cuisine(sender, instance, created, **kwargs):
 def _broadcast_order_snapshot(commande_id, event_type):
     from .serializers import CommandeSerializer
 
-    commande = (
-        Commande.objects.active()
-        .select_related('serveur', 'table')
-        .prefetch_related('lignes__plat')
-        .get(pk=commande_id)
-    )
+    try:
+        commande = (
+            Commande.objects.select_related('serveur', 'table')
+            .prefetch_related('lignes__plat')
+            .get(pk=commande_id)
+        )
+    except Commande.DoesNotExist:
+        return
     serializer = CommandeSerializer(commande)
     broadcast_staff_event(event_type, {"order": serializer.data})
 

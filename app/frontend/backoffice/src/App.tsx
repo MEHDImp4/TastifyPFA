@@ -58,7 +58,7 @@ const LoginRoute = () => {
 
   return (
     <Login
-      onSuccess={(role) => {
+      onSuccess={(role: any) => {
         if (!isRoleAllowed(role, STAFF_ROLES)) {
           clearAuth();
           setKickMessage(STAFF_PORTAL_DENIED_MESSAGE);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CheckCircle2, ChevronLeft, Loader2 } from 'lucide-react'
+import { CheckCircle2, ChevronDown, ChevronLeft, ChevronUp, Loader2, Receipt } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '@shared/auth/axiosInstance'
 import { useAuthStore } from '@shared/auth/useAuthStore'
@@ -14,7 +14,7 @@ export const OrderingPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const tableId = Number(id)
-  const currentUser = useAuthStore((state) => state.user)
+  const currentUser = useAuthStore((state: any) => state.user)
   const [categories, setCategories] = useState<MenuCategory[]>([])
   const [dishes, setDishes] = useState<MenuDish[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -25,6 +25,7 @@ export const OrderingPage = () => {
   const [isFiring, setIsFiring] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
+  const [isOrderExpanded, setIsOrderExpanded] = useState(false)
 
   const getCart = useOrderStore((state) => state.getCart)
   const getCartTotal = useOrderStore((state) => state.getCartTotal)
@@ -43,7 +44,6 @@ export const OrderingPage = () => {
       return
     }
 
-    // Reset synchronously so stale data from a previous table never shows
     setIsLoading(true)
     setActiveOrder(null)
     setError(null)
@@ -62,7 +62,10 @@ export const OrderingPage = () => {
 
         setCategories(categoriesResponse.data)
         setDishes(dishesResponse.data)
-        setActiveOrder(ordersResponse.data.length > 0 ? ordersResponse.data[0] : null)
+        const order = ordersResponse.data.length > 0 ? ordersResponse.data[0] : null
+        setActiveOrder(order)
+        // If there's an active order, start collapsed on mobile to save space
+        setIsOrderExpanded(false)
       } catch (err) {
         if (cancelled) return
         console.error('Failed to load ordering menu', err)
@@ -84,7 +87,6 @@ export const OrderingPage = () => {
 
     try {
       if (activeOrder) {
-        // We add items to existing order
         await axiosInstance.post(`/commandes/${activeOrder.id}/add_items/`, 
           cartItems.map((item) => ({
             plat: item.plat.id,
@@ -92,7 +94,6 @@ export const OrderingPage = () => {
           }))
         )
       } else {
-        // Create new order and immediately fire it to the kitchen
         const createResponse = await axiosInstance.post('/commandes/', {
           table: tableId,
           lignes: cartItems.map((item) => ({
@@ -127,6 +128,7 @@ export const OrderingPage = () => {
         statut: 'PAYEE'
       })
 
+      clearCart(tableId)
       setSuccess(true)
       window.setTimeout(() => navigate('/'), 1500)
     } catch (err: any) {
@@ -151,7 +153,6 @@ export const OrderingPage = () => {
     }
   }
 
-  // GERANT can always act on any order; SERVEUR is restricted to their own orders
   const isOwnOrder = !activeOrder ||
     activeOrder.serveur_username === currentUser?.username ||
     currentUser?.role === 'GERANT'
@@ -166,128 +167,136 @@ export const OrderingPage = () => {
   }
 
   return (
-    <div className="pb-24">
-      <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
+    <div className="pb-32 px-4 sm:px-0">
+      <header className="py-4 flex items-center justify-between sticky top-0 z-40 bg-background/80 backdrop-blur-md -mx-4 px-4 sm:mx-0 sm:px-0 border-b border-white/5">
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-surface px-4 font-bold text-foreground-muted transition-[color,transform] duration-200 hover:text-white active:scale-[0.97]"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface text-foreground-muted transition-all active:scale-90"
           >
-            <ChevronLeft className="h-4 w-4" />
-            Retour au plan
+            <ChevronLeft className="h-5 w-5" />
           </button>
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-teal">Table {tableId}</p>
-            {activeOrder && (
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-amber/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-amber border border-amber/30">
-                  Commande #{activeOrder.id} active
-                </span>
-                <span className="text-xs font-semibold text-foreground-muted">
-                  Par <span className="font-black text-white">{activeOrder.serveur_name || 'Inconnu'}</span>
-                </span>
-              </div>
-            )}
+          <div>
+            <h1 className="text-xl font-black text-white leading-none">Table {tableId}</h1>
+            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-teal mt-1">Zone Salle</p>
           </div>
-          <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">Table {tableId}</h1>
         </div>
+        
+        {activeOrder && (
+          <div className="flex flex-col items-end">
+             <span className="text-[10px] font-black uppercase tracking-tighter text-amber flex items-center gap-1">
+               <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
+               #{activeOrder.id}
+             </span>
+             <p className="text-sm font-black text-white tabular-nums">{activeOrder.montant_total} DH</p>
+          </div>
+        )}
       </header>
 
       {!isOwnOrder && (
-        <div className="mb-5 rounded-lg border border-amber/30 bg-amber/10 p-4 font-medium text-amber">
-          Cette table est gérée par <span className="font-black">{activeOrder.serveur_name}</span>. Consultation uniquement.
+        <div className="my-4 rounded-xl border border-amber/20 bg-amber/5 p-3 text-xs font-medium text-amber">
+          Gérée par <span className="font-black underline">{activeOrder.serveur_name}</span>. Lecture seule.
         </div>
       )}
 
       {error && (
-        <div className="mb-5 rounded-lg border border-[#E76F51]/30 bg-[#E76F51]/10 p-4 font-medium text-[#E76F51]">
+        <div className="my-4 rounded-xl border border-error/20 bg-error/5 p-3 text-xs font-medium text-error">
           {error}
         </div>
       )}
 
       {success ? (
-        <div className="flex min-h-[45vh] flex-col items-center justify-center gap-4 rounded-lg border border-white/10 bg-surface">
-          <CheckCircle2 className="h-16 w-16 text-teal" />
-          <p className="text-xl font-bold text-white">Commande envoyée</p>
+        <div className="flex min-h-[45vh] flex-col items-center justify-center gap-4 rounded-3xl border border-white/5 bg-surface mt-6">
+          <div className="w-20 h-20 bg-teal/10 rounded-full flex items-center justify-center border border-teal/20">
+            <CheckCircle2 className="h-10 w-10 text-teal" />
+          </div>
+          <p className="text-lg font-black text-white">Opération réussie</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="mt-4 space-y-4">
           {activeOrder && (
-            <div className="rounded-2xl border border-white/10 bg-surface p-5 shadow-xl">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted">Éléments commandés</p>
-                <div className="flex flex-col items-end">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal">Total à payer</span>
-                  <p className="text-2xl font-black text-white">{activeOrder.montant_total} <span className="text-sm font-medium text-foreground-muted">DH</span></p>
+            <div className="rounded-2xl border border-white/5 bg-surface overflow-hidden transition-all duration-300">
+              <button 
+                onClick={() => setIsOrderExpanded(!isOrderExpanded)}
+                className="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-teal/10 flex items-center justify-center border border-teal/20">
+                    <Receipt className="h-4 w-4 text-teal" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-black uppercase tracking-widest text-white">Commande Active</p>
+                    <p className="text-[10px] text-foreground-muted">{activeOrder.lignes.length} article(s)</p>
+                  </div>
                 </div>
-              </div>
+                {isOrderExpanded ? <ChevronUp className="h-4 w-4 text-foreground-muted" /> : <ChevronDown className="h-4 w-4 text-foreground-muted" />}
+              </button>
               
-              {activeOrder.lignes.length === 0 ? (
-                <p className="text-sm text-foreground-muted italic">Aucun plat ajouté pour l'instant.</p>
-              ) : (
-                <div className="space-y-3">
-                  {activeOrder.lignes.map((ligne: any) => (
-                    <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/5 p-3 px-4 transition-colors hover:bg-white/[0.08]">
-                      <div className="flex items-center gap-4">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal/10 text-xs font-black text-teal">
-                          {ligne.quantite}
-                        </span>
-                        <span className="font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-teal">En cuisine</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {isOwnOrder && (
-                <>
-                  {activeOrder?.statut === 'EN_COURS' && (
-                    <button
-                      type="button"
-                      disabled={isFiring}
-                      onClick={fireOrderToKitchen}
-                      className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                    >
-                      {isFiring ? (
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                      ) : (
-                        'Tout Envoyer en Cuisine'
-                      )}
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    disabled={isSubmitting}
-                    onClick={closeOrder}
-                    className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-teal py-4 font-black uppercase tracking-widest text-white shadow-lg shadow-teal/10 transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
+              {isOrderExpanded && (
+                <div className="p-4 pt-0 space-y-4 animate-enter">
+                  <div className="h-px bg-white/5 -mx-4" />
+                  <div className="space-y-2">
+                    {activeOrder.lignes.length === 0 ? (
+                      <p className="text-xs text-foreground-muted italic py-2">Aucun plat.</p>
                     ) : (
-                      <>
-                        <CheckCircle2 className="h-5 w-5" />
-                        Clôturer et Encaisser
-                      </>
+                      activeOrder.lignes.map((ligne: any) => (
+                        <div key={ligne.id} className="flex items-center justify-between rounded-xl bg-white/[0.03] p-3 border border-white/5">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-teal/20 text-[10px] font-black text-teal">
+                              {ligne.quantite}
+                            </span>
+                            <span className="text-xs font-bold text-white tracking-tight">{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="h-1 w-1 rounded-full bg-teal animate-pulse" />
+                            <span className="text-[9px] font-black uppercase tracking-widest text-teal">Cuisine</span>
+                          </div>
+                        </div>
+                      ))
                     )}
-                  </button>
-                </>
+                  </div>
+
+                  {isOwnOrder && (
+                    <div className="grid grid-cols-1 gap-2 pt-2">
+                      {activeOrder?.statut === 'EN_COURS' && (
+                        <button
+                          type="button"
+                          disabled={isFiring}
+                          onClick={fireOrderToKitchen}
+                          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-teal font-black text-[11px] uppercase tracking-widest text-white shadow-lg shadow-teal/20 transition-all active:scale-[0.98] disabled:opacity-50"
+                        >
+                          {isFiring ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Envoyer en Cuisine'}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        disabled={isSubmitting}
+                        onClick={closeOrder}
+                        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface-elevated border border-white/10 font-black text-[11px] uppercase tracking-widest text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                      >
+                        {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Clôturer et Encaisser'}
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}
+
           {isOwnOrder && (
-            <>
-              <CategoryTabs
-                categories={categories}
-                selectedCategoryId={selectedCategoryId}
-                onSelect={setSelectedCategoryId}
-              />
-              <DishGrid tableId={tableId} dishes={dishes} selectedCategoryId={selectedCategoryId} />
-            </>
+            <div className="space-y-4">
+              <div className="sticky top-[72px] z-30 bg-background/80 backdrop-blur-md -mx-4 px-4 py-2 border-b border-white/5">
+                <CategoryTabs
+                  categories={categories}
+                  selectedCategoryId={selectedCategoryId}
+                  onSelect={setSelectedCategoryId}
+                />
+              </div>
+              <div className="px-0 sm:px-0">
+                <DishGrid tableId={tableId} dishes={dishes} selectedCategoryId={selectedCategoryId} />
+              </div>
+            </div>
           )}
         </div>
       )}
@@ -308,3 +317,4 @@ export const OrderingPage = () => {
     </div>
   )
 }
+
