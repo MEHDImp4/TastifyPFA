@@ -93,11 +93,17 @@ const normalizeCommande = (value: unknown): Commande | null => {
   }
 }
 
-const sortOrdersByCreatedAtDesc = (orders: Commande[]) =>
+const sortOrdersByPriorityDesc = (orders: Commande[]) =>
   [...orders].sort((a, b) => {
-    const aTimestamp = toFiniteTimestamp(a.created_at) ?? 0
-    const bTimestamp = toFiniteTimestamp(b.created_at) ?? 0
-    return bTimestamp - aTimestamp
+    const aPriority = a.lignes.length > 0 ? Math.max(...a.lignes.map((l) => l.id)) : 0
+    const bPriority = b.lignes.length > 0 ? Math.max(...b.lignes.map((l) => l.id)) : 0
+
+    if (aPriority !== bPriority) {
+      return bPriority - aPriority
+    }
+
+    // Fallback to ID if priorities are equal (shouldn't happen with unique line IDs)
+    return b.id - a.id
   })
 
 export const useKdsStore = create<KdsState>((set, get) => ({
@@ -111,7 +117,11 @@ export const useKdsStore = create<KdsState>((set, get) => ({
     try {
       const response = await axios.get<Commande[]>('/commandes/')
       const orders = Array.isArray(response.data)
-        ? sortOrdersByCreatedAtDesc(response.data.map(normalizeCommande).filter((order): order is Commande => order !== null))
+        ? sortOrdersByPriorityDesc(
+            response.data
+              .map(normalizeCommande)
+              .filter((order): order is Commande => order !== null)
+          )
         : []
       set({ orders, isLoading: false })
     } catch (err: any) {
@@ -127,7 +137,7 @@ export const useKdsStore = create<KdsState>((set, get) => ({
 
     set((state) => {
       const index = state.orders.findIndex((o) => o.id === order.id)
-      let newOrders = [...state.orders]
+      const newOrders = [...state.orders]
 
       if (index !== -1) {
         newOrders[index] = normalizedOrder
@@ -135,7 +145,7 @@ export const useKdsStore = create<KdsState>((set, get) => ({
         newOrders.unshift(normalizedOrder)
       }
 
-      return { orders: sortOrdersByCreatedAtDesc(newOrders) }
+      return { orders: sortOrdersByPriorityDesc(newOrders) }
     })
   },
 

@@ -73,6 +73,41 @@ describe('useKdsStore', () => {
     expect(state.orders[1].id).toBe(1)
   })
 
+  it('should move an existing order to the front when a new line is added (P16-REORDER-FIX)', () => {
+    const order1 = { 
+      ...mockOrder, 
+      id: 1, 
+      lignes: [{ id: 10, plat: 1, quantite: 1, statut: 'EN_ATTENTE', prix_unitaire: 10 }] as any
+    }
+    const order2 = { 
+      ...mockOrder, 
+      id: 2, 
+      lignes: [{ id: 11, plat: 2, quantite: 1, statut: 'EN_ATTENTE', prix_unitaire: 15 }] as any
+    }
+
+    useKdsStore.getState().addOrUpdateOrder(order1)
+    useKdsStore.getState().addOrUpdateOrder(order2)
+
+    let state = useKdsStore.getState()
+    expect(state.orders[0].id).toBe(2) // Order 2 has max(id)=11
+    expect(state.orders[1].id).toBe(1) // Order 1 has max(id)=10
+
+    // Add a new line to Order 1 with a higher ID
+    const updatedOrder1 = {
+      ...order1,
+      lignes: [
+        ...order1.lignes,
+        { id: 12, plat: 3, quantite: 1, statut: 'EN_ATTENTE', prix_unitaire: 20 }
+      ] as any
+    }
+
+    useKdsStore.getState().addOrUpdateOrder(updatedOrder1)
+
+    state = useKdsStore.getState()
+    expect(state.orders[0].id).toBe(1) // Order 1 now has max(id)=12
+    expect(state.orders[1].id).toBe(2) // Order 2 has max(id)=11
+  })
+
   it('should update an existing order', () => {
     const order1 = { ...mockOrder, id: 1, statut: 'EN_CUISINE' as const }
     useKdsStore.getState().addOrUpdateOrder(order1)
