@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-04 18:35:00<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-04 21:02:12<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -73,9 +73,9 @@
                         <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
                         En développement
                     </span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
                         <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
-                        reorg/frontend-spa-dirs (Clean)
+                        master (Uncommitted changes)
                     </span>
                             <!-- STATUS_BADGE_END -->
                 </div>
@@ -420,20 +420,20 @@
                             <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             Live App Stats
                         </h2>
-                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">Container Offline</span><!-- DB_STATUS_BADGE_END -->
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20">Online</span><!-- DB_STATUS_BADGE_END -->
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->10<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Categories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->3<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Active Tables</p>
@@ -441,7 +441,7 @@
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Total Sales (Paid)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->0<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->106<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -971,24 +971,29 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Order Persistence**: Resolved a bug where closed orders would still appear on tables in the staff interface. Updated `CommandeViewSet` to filter out terminal statuses.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Seeding**: Replaced the broken standalone `seed_all.py` with a proper Django management command `python manage.py seed_all` inside the Docker container.</p>
-                            </li>
-                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Cleanup:</strong> Removed unused git branches and worktrees. Stopped tracking `.claude/` directory in the repository index.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Reorganization**: Moved `media/` to `app/backend/media/` to align with the backend container structure. Removed the root `tests/` directory (deprecated smoke harness).</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Reorganization**: Moved `media/` to `app/backend/media/` and removed root `tests/`. Updated `FILE_MAP.md` and cleaned up unused assets.</p>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Docs**: Updated `FILE_MAP.md` to reflect the new repository structure.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Cleanup**: Removed `assets/tastify_logo_simple.svg` (unused asset).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Seeding**: Replaced the broken standalone `seed_all.py` script with a proper Django management command `python manage.py seed_all` inside the backend container. Fixed database connectivity issues by moving the logic into the Dockerized environment.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Fix**: Resolved a bug in the staff interface where closed (paid/canceled) orders would still appear on tables. Updated the `CommandeViewSet` to exclude terminal statuses when filtering by table ID.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
@@ -1039,31 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Added regression coverage for the new render error boundary and isolated app routing tests from auth bootstrap timing.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `frontend/back-office`: `npm test ---run src/App.test.tsx src/components/ui/AppErrorBoundary.test.tsx src/components/layout/AppShell.test.tsx src/pages/Kds/KdsPage.test.tsx src/pages/Kds/KdsSocketManager.test.tsx src/authBootstrap.test.tsx`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Fix commit: `16b39c3`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped the back-office bootstrap from calling `/api/users/refresh/` on every hard reload when the persisted staff access token is still valid, which was incorrectly forcing `CUISINIER` sessions into a failing refresh path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Limited bootstrap refresh to expired or near-expiry JWT access tokens so a missing refresh cookie no longer breaks a fresh reload immediately after login.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-03 22:14</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added regression coverage for valid, expired, and malformed persisted JWT access tokens in the auth bootstrap flow.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

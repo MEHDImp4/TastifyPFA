@@ -1,18 +1,31 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath } from 'node:url'
 import { existsSync } from 'node:fs'
+import path from 'node:path'
 
-const sharedAlias = existsSync(fileURLToPath(new URL('./shared/auth/Login.tsx', import.meta.url)))
-  ? './shared'
-  : '../shared'
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// Robust alias resolution for both local dev and docker
+const getSharedPath = () => {
+  const localShared = path.resolve(__dirname, 'shared')
+  const parentShared = path.resolve(__dirname, '../shared')
+  
+  if (existsSync(path.join(localShared, 'auth/Login.tsx'))) {
+    return localShared
+  }
+  return parentShared
+}
+
+const sharedPath = getSharedPath()
+console.log('Using @shared path:', sharedPath)
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL(sharedAlias, import.meta.url)),
+      '@shared': sharedPath,
     },
     preserveSymlinks: true,
   },
@@ -38,7 +51,10 @@ export default defineConfig({
       usePolling: true,
     },
     fs: {
-      allow: ['.'],
+      allow: [
+        '.',
+        sharedPath
+      ],
     },
   },
 })

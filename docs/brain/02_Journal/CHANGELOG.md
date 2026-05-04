@@ -1,3 +1,15 @@
+## [2026-05-04] - 20:05
+### Fixed
+- **backoffice**: Resolved critical module resolution failure for `@shared` alias by making `vite.config.ts` more robust with absolute path resolution and explicit `fs.allow`.
+- **portail**: Applied same robust alias fix to `portail/vite.config.ts`.
+- **backend**: Fixed multiple 404 errors for media files by creating placeholder images in `app/backend/media/plats/` to match database references (e.g., `salade_carottes_orange.png`, `salade_poivrons.png`).
+- **Cleanup**: Removed stale `vite.config.js` files in frontend services to prevent configuration ambiguity between `.js` and `.ts` config files.
+
+### Verification
+- `backoffice` service now starts without resolution errors and correctly logs the `@shared` path as `/app/shared`.
+- Media files now return `200 OK` (verified via `curl` inside container).
+- Overall system stability improved with no critical errors in logs.
+
 ## [2026-05-04] - 18:05
 ### Changed
 - **Reorganization**: Moved `media/` to `app/backend/media/` to align with the backend container structure. Removed the root `tests/` directory (deprecated smoke harness).
