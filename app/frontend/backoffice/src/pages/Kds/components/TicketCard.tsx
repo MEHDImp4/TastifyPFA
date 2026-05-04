@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Commande } from '../types';
 import { KdsTimer } from './KdsTimer';
-import { Clock3, CookingPot, NotebookPen, User } from 'lucide-react';
+import { Check, Clock3, CookingPot, Loader2, NotebookPen, User } from 'lucide-react';
+import { useKdsStore } from '../store/useKdsStore';
 
 interface TicketCardProps {
   order: Commande;
@@ -16,9 +17,13 @@ const formatServiceTime = (value: string) => {
 };
 
 export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) => {
+  const updateLineStatus = useKdsStore((state) => state.updateLineStatus);
+  const completeOrder = useKdsStore((state) => state.completeOrder);
   const lignes = Array.isArray(order.lignes) ? order.lignes : [];
   const totalQuantity = lignes.reduce((sum, ligne) => sum + ligne.quantite, 0);
   const [showGlow, setShowGlow] = useState<boolean>(isNew);
+  const [isCompleting, setIsCompleting] = useState(false);
+  const [updatingLineId, setUpdatingLineId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isNew) {
@@ -29,6 +34,18 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
     const timer = window.setTimeout(() => setShowGlow(false), 10_000);
     return () => window.clearTimeout(timer);
   }, [isNew]);
+
+  const handleLineReady = async (lineId: number) => {
+    setUpdatingLineId(lineId);
+    await updateLineStatus(lineId, 'PRET');
+    setUpdatingLineId(null);
+  };
+
+  const handleCompleteOrder = async () => {
+    setIsCompleting(true);
+    await completeOrder(order.id);
+    setIsCompleting(false);
+  };
 
   return (
     <article
@@ -86,32 +103,38 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
         {lignes.map((ligne) => {
           const isPending = ligne.statut === 'EN_ATTENTE';
           const isPrep = ligne.statut === 'EN_PREPARATION';
+          const isPret = ligne.statut === 'PRET';
+          const isUpdating = updatingLineId === ligne.id;
           
           return (
             <div 
               key={ligne.id} 
-              className={`group rounded-xl border p-2.5 transition-all ${
-                isPrep 
-                  ? 'border-teal/30 bg-teal/5 ring-1 ring-inset ring-teal/10 shadow-sm' 
-                  : 'border-white/5 bg-white/[0.03] grayscale-[0.5] opacity-80'
+              className={`group relative rounded-xl border p-2.5 transition-all ${
+                isPret
+                  ? 'border-green-500/20 bg-green-500/5 grayscale opacity-60'
+                  : isPrep 
+                    ? 'border-teal/30 bg-teal/5 ring-1 ring-inset ring-teal/10 shadow-sm' 
+                    : 'border-white/5 bg-white/[0.03] grayscale-[0.5] opacity-80'
               }`}
             >
               <div className="flex gap-3">
                 <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg font-bold transition-colors ${
-                  isPrep 
-                    ? 'bg-teal text-white' 
-                    : 'bg-white/10 text-slate-400'
+                  isPret
+                    ? 'bg-green-500 text-white'
+                    : isPrep 
+                      ? 'bg-teal text-white' 
+                      : 'bg-white/10 text-slate-400'
                 }`}>
                   {ligne.quantite}
                 </div>
                 <div className="min-w-0 flex-1 py-0.5">
                   <div className="flex items-start justify-between gap-2">
                     <div className={`text-sm font-semibold leading-tight transition-colors ${
-                      isPrep ? 'text-white' : 'text-slate-400'
+                      isPret ? 'text-slate-400 line-through' : isPrep ? 'text-white' : 'text-slate-400'
                     }`}>
                       {ligne.plat_details?.nom ?? `Plat #${ligne.plat}`}
                     </div>
-                    {ligne.heure_lancement && (
+                    {ligne.heure_lancement && !isPret && (
                       <div className="flex-shrink-0 scale-75 origin-right translate-y-[-2px]">
                         <KdsTimer startTime={ligne.heure_lancement} />
                       </div>
@@ -125,6 +148,13 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
                     </div>
                   )}
 
+                  {isPret && (
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <Check size={10} className="text-green-500" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-green-500">Prêt</span>
+                    </div>
+                  )}
+
                   {ligne.notes && (
                     <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber/10 bg-amber/5 px-2.5 py-2 text-[11px] leading-relaxed text-amber/90">
                       <NotebookPen size={12} className="mt-0.5 flex-shrink-0 opacity-70" />
@@ -132,6 +162,16 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
                     </div>
                   )}
                 </div>
+
+                {!isPret && (
+                  <button
+                    disabled={isUpdating}
+                    onClick={() => handleLineReady(ligne.id)}
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:bg-green-500 hover:text-white hover:border-green-500 active:scale-90 disabled:opacity-50"
+                  >
+                    {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Check size={18} />}
+                  </button>
+                )}
               </div>
             </div>
           );
@@ -140,12 +180,13 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
 
       <div className="mt-auto border-t border-white/10 bg-surface-elevated/50 p-3">
         <button
-          className="group relative w-full overflow-hidden rounded-xl bg-teal px-4 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-teal/20 transition-all active:scale-[0.98] hover:brightness-110"
-          onClick={() => {
-            console.log('Complete order', order.id);
-          }}
+          disabled={isCompleting || order.statut === 'PRETE'}
+          className="group relative w-full overflow-hidden rounded-xl bg-teal px-4 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-teal/20 transition-all active:scale-[0.98] hover:brightness-110 disabled:opacity-50 disabled:grayscale"
+          onClick={handleCompleteOrder}
         >
-          <span className="relative z-10">Terminer le Ticket</span>
+          <span className="relative z-10">
+            {isCompleting ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : order.statut === 'PRETE' ? 'Ticket Prêt' : 'Terminer le Ticket'}
+          </span>
           <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
         </button>
       </div>

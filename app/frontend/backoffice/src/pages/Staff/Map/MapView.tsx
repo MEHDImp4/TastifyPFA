@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { Table } from '@shared/types/tables';
 import { useAuthStore } from '@shared/auth/useAuthStore';
+import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 import { TableMap, TablePosition } from '@shared/components/map/TableMap';
 import { Check, LayoutDashboard, LayoutList, Loader2, RefreshCw, RotateCcw, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const MapView: React.FC = () => {
   const user = useAuthStore((state: any) => state.user);
+  const { lastEvent } = useStaffWebSocket();
   const navigate = useNavigate();
   const [tables, setTables] = useState<Table[]>([]);
   const [lastFetchedTables, setLastFetchedTables] = useState<Table[]>([]);
@@ -45,11 +47,19 @@ export const MapView: React.FC = () => {
   }, [fetchTables]);
 
   useEffect(() => {
+    if (!lastEvent || isEditMode) return;
+
+    if (lastEvent.type === 'order_updated' || lastEvent.type === 'order_created') {
+      void fetchTables(true);
+    }
+  }, [lastEvent, fetchTables, isEditMode]);
+
+  useEffect(() => {
     if (isEditMode) return;
 
     const interval = setInterval(() => {
       fetchTables(true);
-    }, 10000);
+    }, 15000); // Increased interval since we have WS
 
     return () => clearInterval(interval);
   }, [fetchTables, isEditMode]);

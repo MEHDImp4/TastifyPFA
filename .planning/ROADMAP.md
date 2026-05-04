@@ -21,8 +21,8 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 13: WebSocket Infrastructure** - Django Channels, Daphne, Redis Layer. (completed 2026-05-01)
 - [x] **Phase 14: KDS Base Frontend** - Cuisine view inside the staff SPA, WebSocket connection. (completed 2026-05-01)
 - [x] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`. Manual UAT passed; websocket frames and orchestration stability confirmed (completed 2026-05-03).
-- [/] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine.
-- [ ] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle.
+- [x] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine. (completed 2026-05-04)
+- [x] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle. (completed 2026-05-04)
 - [ ] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds.
 - [ ] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock.
 - [ ] **Phase 20: Automated Deductions** - Django signals linking orders to stock decrementation.
@@ -118,54 +118,21 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Goal**: Cuisine view inside the staff SPA, WebSocket connection.
 **Depends on**: Phase 13
 **Success Criteria**: 1. Cuisinier sees real-time orders in a horizontal rail interface.
-**Plans**: 3 plans
-- [ ] 14-01-PLAN.md — Backend Permissions & API Update
-- [ ] 14-02-PLAN.md — KDS Store & WebSocket Integration
-- [ ] 14-03-PLAN.md — KDS Frontend UI
 
 ### Phase 15: KDS Orchestrator Logic
 **Goal**: Implement backend JIT orchestration — calculate `heure_lancement` per dish line so all items in an order finish simultaneously. Celery ETA tasks schedule launches; WebSocket broadcasts notify the KDS frontend.
 **Depends on**: Phase 14
 **Success Criteria**: 1. Celery worker service defined in `docker-compose.yml`. 2. `CommandeLigne` gains `heure_lancement`, `heure_fin_estimee`, `temps_preparation_snapshot`, `celery_task_id` fields with migration. 3. `KdsOrchestrator` correctly calculates JIT timing for all lines. 4. Existing pending Celery tasks are revoked and rescheduled on order update. 5. `line_launched` WebSocket event is broadcast to the `cuisine` group at the correct ETA.
-**Plans**: 3 plans
-- [x] 15-01-PLAN.md — Celery Infrastructure & Wave 0 Test Scaffolds
-- [x] 15-02-PLAN.md — JIT Orchestrator, Migration & Signal Wiring
-- [ ] 15-03-PLAN.md — WebSocket Broadcast & Live Verification
 
 ### Phase 16: Order Push to KDS
 **Goal**: Implement the "Manual Fire" workflow — a server explicitly sends an order to the kitchen via PATCH (`EN_COURS → EN_CUISINE`), triggering JIT orchestration only on that transition, filtering the KDS to show only fired orders, and delivering audio+visual feedback on ticket arrival.
 **Depends on**: Phase 15
 **Success Criteria**: 1. PATCH `/commandes/{id}/` with `{"statut":"EN_CUISINE"}` succeeds for order owner and triggers `KdsOrchestrator`. 2. CUISINIER queryset strictly excludes `EN_COURS` (only `EN_CUISINE | PRETE` visible). 3. "Envoyer en Cuisine" button renders on `OrderingPage` when order is `EN_COURS`. 4. KDS plays audio bell on new ticket arrival via WebSocket. 5. `TicketCard` shows green glow pulse for 10 seconds on new ticket arrival, then stops.
 
-### Phase 35: KDS Advanced Operations
-**Goal**: Empower kitchen staff with control over dish availability and modifications.
-**Depends on**: Phase 17
-**Success Criteria**: 1. Cuisinier can flag a plat as "En Rupture" (UC20_bis) which instantly updates the Salle menu via WS. 2. Cuisinier can modify dish notes/accompaniments for active orders (UC19).
-
-### Phase 36: Click & Collect E-commerce
-**Goal**: Allow clients to order and pay online for pickup.
-**Depends on**: Phase 24, Phase 27
-**Success Criteria**: 1. Client can add items to a digital cart in Portail Client. 2. Payment processing integration. 3. Order appears in KDS with a "Pickup" tag.
-
-### Phase 37: Staff Scheduling & Recruitment
-**Goal**: Manage employee shifts and job openings.
-**Depends on**: Phase 22
-**Success Criteria**: 1. Calendar UI for manager to assign shifts. 2. Public "Careers" page on Portail Client with job listings.
-
-### Phase 38: AI Weather-Aware Stock Forecasting
-**Goal**: Use external data to improve inventory management.
-**Depends on**: Phase 18, Phase 30
-**Success Criteria**: 1. Background task fetches weather forecasts. 2. AI model correlates high temps with cold beverage consumption for predictive ordering (UC29).
-
-### Phase 39: Multilingual BERT Expansion
-**Goal**: Fine-tune sentiment analysis for the Moroccan context.
-**Depends on**: Phase 31
-**Success Criteria**: 1. BERT model handles Darija/French/Arabic mixed reviews accurately (UC38).
-
-### Phase 40: Load Testing & Optimization
-**Goal**: Ensure the system handles peak restaurant hours.
-**Depends on**: All previous phases
-**Success Criteria**: 1. System sustains 100 concurrent staff/client connections with < 200ms API latency.
+### Phase 17: Order Status Updates
+**Goal**: Enable the Kitchen to signal when dishes or entire orders are ready, and push these updates in real-time to the Salle staff.
+**Depends on**: Phase 16
+**Success Criteria**: 1. KDS includes "Ready" buttons for individual items and orders. 2. Real-time WebSocket sync between KDS and Salle. 3. Audio/Visual feedback in Salle when items become ready.
 
 ## Progress
 
@@ -189,11 +156,10 @@ Phases execute in numeric order: 1 → 40
 | 13. WebSocket Infrastructure | 3/3 | Completed | 2026-05-01 |
 | 14. KDS Base Frontend | 3/3 | Complete | 2026-05-01 |
 | 15. KDS Orchestrator Logic | 3/3 | Completed | 2026-05-03 |
-| 16. Order Push to KDS | 7/8 | In Progress | — |
-| ... | 0/0 | Planned | — |
-| 35. KDS Advanced Operations | 0/2 | Planned | — |
-| 36. Click & Collect E-commerce | 0/3 | Planned | — |
-| 37. Staff Scheduling & Recruitment | 0/2 | Planned | — |
-| 38. AI Weather-Aware Stock Forecasting | 0/2 | Planned | — |
-| 39. Multilingual BERT Expansion | 0/1 | Planned | — |
+| 16. Order Push to KDS | 8/8 | Completed | 2026-05-04 |
+| 17. Order Status Updates | 1/1 | Completed | 2026-05-04 |
+| 18. Ingredients & Stock Model | 0/1 | Planned | — |
+| 19. Stock Management Frontend | 0/1 | Planned | — |
+| 20. Automated Deductions | 0/1 | Planned | — |
+| ... | ... | ... | ... |
 | 40. Load Testing & Optimization | 0/2 | Planned | — |

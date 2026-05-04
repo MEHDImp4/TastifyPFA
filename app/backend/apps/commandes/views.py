@@ -1,6 +1,6 @@
 from django.db import transaction, models
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +9,47 @@ from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGer
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
 from .services.orchestrator import KdsOrchestrator
+
+
+class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = CommandeLigne.objects.all()
+    serializer_class = CommandeLigneSerializer
+    permission_classes = [IsAuthenticated, IsCuisinierOrGerant | IsServeurOrGerant]
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        new_statut = request.data.get('statut')
+        user = request.user
+
+        if not new_statut:
+            return super().partial_update(request, *args, **kwargs)
+
+        # Role-based status transition logic
+        if user.role == 'CUISINIER':
+            allowed = [CommandeLigne.Statut.EN_PREPARATION, CommandeLigne.Statut.PRET]
+            if new_statut not in allowed:
+                return Response(
+                    {"error": "Le cuisinier ne peut que marquer un plat en préparation ou prêt."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        elif user.role == 'SERVEUR':
+            if instance.commande.serveur != user:
+                return Response(
+                    {"error": "Vous n'êtes pas le serveur assigné à cette commande."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            if new_statut != CommandeLigne.Statut.SERVI:
+                return Response(
+                    {"error": "Le serveur ne peut que marquer un plat comme servi."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            if instance.statut != CommandeLigne.Statut.PRET:
+                return Response(
+                    {"error": "Un plat doit être prêt avant d'être marqué comme servi."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        return super().partial_update(request, *args, **kwargs)
 
 
 class CommandeViewSet(viewsets.ModelViewSet):
@@ -53,10 +94,22 @@ class CommandeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
+    def _check_ownership_or_cuisinier_ready(self, request, instance):
+        """Helper to enforce Phase 16/17 ownership & role rules."""
+        # Phase 17: Allow Cuisinier to mark as PRETE
+        is_cuisinier_ready = (
+            request.user.role == 'CUISINIER' and 
+            request.data.get('statut') == Commande.Statut.PRETE
+        )
+        
+        if not is_cuisinier_ready and instance.serveur != request.user and request.user.role != 'GERANT':
+            return False
+        return True
+
     def update(self, request, *args, **kwargs):
-        """Phase 16 (T-16-01): SERVEUR may only mutate orders they own; GERANT bypasses."""
+        """Phase 16 & 17: ownership rules for PUT."""
         instance = get_object_or_404(Commande.objects.active(), pk=kwargs.get('pk'))
-        if instance.serveur != request.user and request.user.role != 'GERANT':
+        if not self._check_ownership_or_cuisinier_ready(request, instance):
             return Response(
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,
@@ -64,9 +117,9 @@ class CommandeViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        """Phase 16 (T-16-01): same ownership rule as update() applies to PATCH."""
+        """Phase 16 & 17: ownership rules for PATCH."""
         instance = get_object_or_404(Commande.objects.active(), pk=kwargs.get('pk'))
-        if instance.serveur != request.user and request.user.role != 'GERANT':
+        if not self._check_ownership_or_cuisinier_ready(request, instance):
             return Response(
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,

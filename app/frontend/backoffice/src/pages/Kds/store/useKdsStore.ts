@@ -11,6 +11,8 @@ interface KdsState {
   addOrUpdateOrder: (order: Commande) => void
   removeOrder: (orderId: number) => void
   clearNewOrder: (orderId: number) => void
+  updateLineStatus: (lineId: number, status: string) => Promise<void>
+  completeOrder: (orderId: number) => Promise<void>
   handleSocketEvent: (event: any) => void
 }
 
@@ -153,6 +155,22 @@ export const useKdsStore = create<KdsState>((set, get) => ({
       next.delete(orderId)
       return { newOrderIds: next }
     })
+  },
+
+  updateLineStatus: async (lineId: number, status: string) => {
+    try {
+      await axios.patch(`/commandelignes/${lineId}/`, { statut: status })
+    } catch (err: any) {
+      set({ error: err.message || 'Failed to update item status' })
+    }
+  },
+
+  completeOrder: async (orderId: number) => {
+    try {
+      await axios.patch(`/commandes/${orderId}/`, { statut: 'PRETE' })
+    } catch (err: any) {
+      set({ error: err.message || 'Failed to complete order' })
+    }
   },
 
   handleSocketEvent: (event: any) => {
