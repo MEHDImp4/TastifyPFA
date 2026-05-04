@@ -1,0 +1,76 @@
+import { useEffect, useState } from 'react'
+import { AuthBootstrap } from '@shared/auth/AuthBootstrap'
+import { useAuthStore } from '@shared/auth/useAuthStore'
+import Login from '@shared/auth/Login'
+import axiosInstance from '@shared/auth/axiosInstance'
+import { CLIENT_ROLES, isRoleAllowed } from '@shared/auth/roleAccess'
+import logo from '@shared/assets/logo.svg'
+import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary'
+
+function App() {
+  const { isAuthenticated, clearAuth, user } = useAuthStore()
+  const [kickMessage, setKickMessage] = useState<string | undefined>()
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role && !isRoleAllowed(user.role, CLIENT_ROLES)) {
+      clearAuth()
+      setKickMessage("Votre session active n'est pas autorisée sur le portail Client. Vous avez été déconnecté.")
+    }
+  }, [clearAuth, isAuthenticated, user?.role])
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/users/logout/')
+    } catch (err) {
+      console.error("Logout failed", err)
+    } finally {
+      clearAuth()
+    }
+  }
+
+  return (
+    <AppErrorBoundary appLabel="Le portail client">
+      <AuthBootstrap>
+        {!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES)) ? (
+          <Login
+            onSuccess={() => undefined}
+            allowedRoles={CLIENT_ROLES}
+            appLabel="Portail Client"
+            appDescription="Acces reserve aux clients du restaurant"
+            deniedMessage="Ce compte est reserve a l'espace staff."
+            variant="client"
+            initialError={kickMessage}
+          />
+        ) : (
+          <main className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center gap-8 p-6">
+            <div className="w-full max-w-[440px] animate-enter">
+              <div className="bg-surface rounded-3xl border border-white/5 p-10 shadow-2xl text-center">
+                <div className="w-60 h-60 bg-amber/10 rounded-2xl flex items-center justify-center mb-8 border border-amber/20 mx-auto relative">
+                  <div className="absolute inset-0 bg-amber/10 blur-xl rounded-full" />
+                  <img src={logo} alt="Tastify" className="w-48 relative z-10" />
+                </div>
+
+                <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Portail Client</h1>
+                <p className="text-foreground-muted mb-6">Heureux de vous revoir, <span className="text-amber font-semibold">{user?.username}</span></p>
+
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber/10 border border-amber/20 text-[11px] font-bold text-amber uppercase tracking-[0.15em]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
+                  {user?.role}
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="text-[11px] text-foreground-muted hover:text-error uppercase tracking-[0.2em] font-bold transition-all active:scale-95 flex items-center gap-2 opacity-60 hover:opacity-100"
+            >
+              Se déconnecter
+            </button>
+          </main>
+        )}
+      </AuthBootstrap>
+    </AppErrorBoundary>
+  )
+}
+
+export default App

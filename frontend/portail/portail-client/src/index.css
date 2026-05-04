@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "../shared/theme.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+}

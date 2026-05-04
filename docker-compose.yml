@@ -65,11 +65,11 @@ services:
 
   backoffice:
     build:
-      context: ./frontend/back-office
+      context: ./frontend/backoffice
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend/back-office:/app
+      - ./frontend/backoffice:/app
       - ./frontend/shared:/app/shared
       - /app/node_modules
     networks:
@@ -77,11 +77,11 @@ services:
 
   portail:
     build:
-      context: ./frontend/portail-client
+      context: ./frontend/portail
     ports:
       - "3003:3003"
     volumes:
-      - ./frontend/portail-client:/app
+      - ./frontend/portail:/app
       - ./frontend/shared:/app/shared
       - /app/node_modules
     networks:
