@@ -4,6 +4,7 @@
 - **Docs**: Updated `FILE_MAP.md` to reflect the new repository structure.
 - **Cleanup**: Removed `assets/tastify_logo_simple.svg` (unused asset).
 - **Seeding**: Replaced the broken standalone `seed_all.py` script with a proper Django management command `python manage.py seed_all` inside the backend container. Fixed database connectivity issues by moving the logic into the Dockerized environment.
+- **Fix**: Resolved a bug in the staff interface where closed (paid/canceled) orders would still appear on tables. Updated the `CommandeViewSet` to exclude terminal statuses when filtering by table ID.
 
 ## [2026-05-04] - 17:25
 ### Changed

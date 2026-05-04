@@ -28,8 +28,12 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
         table_id = self.request.query_params.get('table')
         if table_id:
-            # Table-specific lookup: any staff member can see which order is on a given table
-            qs = qs.filter(table_id=table_id)
+            # Table-specific lookup: any staff member can see which order is on a given table.
+            # We exclude terminal statuses (PAYEE, ANNULEE) so that a newly 'freed' table 
+            # doesn't show the previous order.
+            qs = qs.filter(table_id=table_id).exclude(
+                statut__in=[Commande.Statut.PAYEE, Commande.Statut.ANNULEE]
+            )
         elif user.role == 'CUISINIER':
             # Phase 16: KDS shows only fired tickets. Manual-fire workflow flips
             # EN_COURS -> EN_CUISINE via PATCH; only EN_CUISINE and PRETE are
