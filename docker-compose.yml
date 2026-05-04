@@ -38,7 +38,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app/backend:/app
-      - ./media:/app/media
+      - ./app/backend/media:/app/media
     depends_on:
       db:
         condition: service_healthy
@@ -54,7 +54,7 @@ services:
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
     volumes:
       - ./app/backend:/app
-      - ./media:/app/media
+      - ./app/backend/media:/app/media
     depends_on:
       db:
         condition: service_healthy
