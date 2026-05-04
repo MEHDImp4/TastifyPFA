@@ -1,3 +1,7 @@
+## [2026-05-04] - 14:35
+### Fixed
+- **KDS Audio Feedback**: Replaced the silent 427-byte placeholder `kitchen-bell.mp3` with a real 18.5KB "ding" sound from a public domain repository. This restores the audio notification when an order is fired to the kitchen.
+
 ## [2026-05-03] - 22:30
 ### Fixed
 - Unified frontend reload protection by moving the render crash boundary into `frontend/_shared/ui/AppErrorBoundary.tsx`, wiring `frontend/portail-client/src/App.tsx` through `AuthBootstrap`, and reusing the same fallback in `frontend/back-office/src/App.tsx`.
