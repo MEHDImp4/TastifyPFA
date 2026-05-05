@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Minus, Plus, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, Minus, Plus, ArrowRight, AlertCircle, CheckCircle2, ClipboardList } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { Ingredient } from './types';
+import { Select } from '../../components/ui/Select';
 
 interface StockAdjustmentModalProps {
   isOpen: boolean;
@@ -232,17 +233,18 @@ export function StockAdjustmentModal({ isOpen, onClose, onSuccess, ingredient }:
                 {/* Reason Selection */}
                 <div className="space-y-2">
                   <label className="text-[10px] uppercase font-bold text-foreground-muted tracking-widest ml-1">Motif de l'ajustement</label>
-                  <select
+                  <Select
                     value={reason}
-                    onChange={(e) => setReason(e.target.value)}
-                    className="w-full bg-surface-elevated border-none focus:ring-1 focus:ring-teal/30 rounded-xl px-4 py-3 text-sm text-white appearance-none"
-                  >
-                    <option value="manual">Inventaire manuel</option>
-                    <option value="delivery">Réception de commande (Livraison)</option>
-                    <option value="waste">Perte / Gaspillage / Casse</option>
-                    <option value="correction">Correction d'erreur</option>
-                    <option value="gift">Offert / Dégustation</option>
-                  </select>
+                    onChange={setReason}
+                    options={[
+                      { value: 'manual', label: 'Inventaire manuel' },
+                      { value: 'delivery', label: 'Réception de commande (Livraison)' },
+                      { value: 'waste', label: 'Perte / Gaspillage / Casse' },
+                      { value: 'correction', label: 'Correction d'erreur' },
+                      { value: 'gift', label: 'Offert / Dégustation' },
+                    ]}
+                    icon={<ClipboardList size={14} />}
+                  />
                 </div>
 
                 {/* Feedback */}

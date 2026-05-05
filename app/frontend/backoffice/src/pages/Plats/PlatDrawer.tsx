@@ -1,11 +1,12 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { X, Utensils, Info } from 'lucide-react';
+import { X, Utensils, Info, LayoutGrid } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 import { Drawer } from '../../components/ui/Drawer';
 import { Category, Plat } from './types';
 import { Switch } from '../../components/ui/Switch';
 import { PlatRecetteTab } from './PlatRecetteTab';
+import { Select } from '../../components/ui/Select';
 
 interface PlatDrawerProps {
   isOpen: boolean;
@@ -185,17 +186,16 @@ export function PlatDrawer({
 
               <div>
                 <label htmlFor="categorie" className="block text-sm font-medium mb-1 text-foreground-muted">Catégorie</label>
-                <select
-                  id="categorie"
+                <Select
                   value={categorieId}
-                  onChange={(e) => setCategorieId(e.target.value)}
-                  className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
-                >
-                  <option value="">Sélectionner une catégorie</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.nom}</option>
-                  ))}
-                </select>
+                  onChange={setCategorieId}
+                  options={[
+                    { value: '', label: 'Sélectionner une catégorie' },
+                    ...categories.map(cat => ({ value: cat.id.toString(), label: cat.nom }))
+                  ]}
+                  placeholder="Sélectionner une catégorie"
+                  icon={<LayoutGrid size={14} />}
+                />
                 {errors.categorie && <p className="text-red-400 text-xs mt-1">{errors.categorie}</p>}
               </div>
 

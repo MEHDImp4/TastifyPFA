@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Loader2, Package } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { Ingredient, PlatIngredient } from '../Stock/types';
+import { Select } from '../../components/ui/Select';
 
 interface PlatRecetteTabProps {
   platId: number;
@@ -150,19 +151,19 @@ export function PlatRecetteTab({ platId }: PlatRecetteTabProps) {
         <div className="pt-4 border-t border-white/5 space-y-4">
           <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Ajouter un ingrédient</h3>
           
-          <div className="flex gap-2">
-            <select
+          <div className="flex gap-2 items-start">
+            <Select
+              className="flex-1"
               value={selectedIngredientId}
-              onChange={(e) => setSelectedIngredientId(e.target.value)}
-              className="flex-1 bg-surface-elevated border border-white/5 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
-            >
-              <option value="">Sélectionner...</option>
-              {ingredients
-                .filter(ing => !links.some(l => l.ingredient === ing.id))
-                .map(ing => (
-                  <option key={ing.id} value={ing.id}>{ing.nom} ({ing.unite_mesure})</option>
-                ))}
-            </select>
+              onChange={setSelectedIngredientId}
+              options={[
+                { value: '', label: 'Sélectionner un ingrédient...' },
+                ...ingredients
+                  .filter(ing => !links.some(l => l.ingredient === ing.id))
+                  .map(ing => ({ value: ing.id.toString(), label: `${ing.nom} (${ing.unite_mesure})` }))
+              ]}
+              icon={<Package size={14} />}
+            />
 
             <input
               type="number"

@@ -1,8 +1,9 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { X, Scale } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { Drawer } from '../../components/ui/Drawer';
 import { Ingredient } from './types';
+import { Select } from '../../components/ui/Select';
 
 interface IngredientDrawerProps {
   isOpen: boolean;
@@ -88,16 +89,16 @@ export function IngredientDrawer({ isOpen, onClose, onSuccess, initialData }: In
 
         <div>
           <label htmlFor="unite" className="block text-sm font-medium mb-1">Unité de mesure</label>
-          <select
-            id="unite"
+          <Select
             value={unite}
-            onChange={(e) => setUnite(e.target.value as any)}
-            className="w-full bg-surface-elevated border border-surface-elevated rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          >
-            <option value="g">Grammes (g)</option>
-            <option value="ml">Millilitres (ml)</option>
-            <option value="pcs">Pièces (pcs)</option>
-          </select>
+            onChange={(val) => setUnite(val as any)}
+            options={[
+              { value: 'g', label: 'Grammes (g)' },
+              { value: 'ml', label: 'Millilitres (ml)' },
+              { value: 'pcs', label: 'Pièces (pcs)' },
+            ]}
+            icon={<Scale size={14} />}
+          />
         </div>
 
         <div>
