@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 23:47:43<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 23:49:04<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -946,6 +946,11 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:48</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and adjusted the header height for better vertical balance.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 23:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Select (Premium)**: New custom Select component in `backoffice/src/components/ui/` using `framer-motion` for origin-aware animations and consistent dark-mode styling.</p>
@@ -1014,11 +1019,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ALLOWED_HOSTS**: Updated `backend/settings/dev.py` to allow all hosts (`*`) in development, preventing `Invalid HTTP_HOST` errors when accessing the API from different network interfaces.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **OrderingPage.tsx**: Fixed "Missing initializer in destructuring declaration" syntax error caused by a missing `useEffect(() => {` opening line before the menu fetching logic.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

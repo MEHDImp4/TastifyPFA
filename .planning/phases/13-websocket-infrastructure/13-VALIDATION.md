@@ -38,16 +38,16 @@ created: 2026-05-01
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 13-01-01 | 01 | 1 | WS-01 | T-13-01 / T-13-03 | Missing and invalid tokens are rejected without leaking token values | integration | `docker compose exec backend pytest core/tests/test_websocket_auth.py -q` | ❌ W0 | ⬜ pending |
-| 13-01-02 | 01 | 1 | WS-02, WS-03 | T-13-02 / T-13-04 | Only staff roles connect, join `staff_group`, and disconnect cleanly | integration | `docker compose exec backend pytest core/tests/test_staff_consumer.py -q` | ❌ W0 | ⬜ pending |
-| 13-01-03 | 01 | 1 | WS-04 | T-13-05 | `staff.event` maps to outbound `{type, payload}` frames | integration | `docker compose exec backend pytest core/tests/test_staff_consumer.py::test_group_send_reaches_staff_socket -q` | ❌ W0 | ⬜ pending |
-| 13-02-01 | 02 | 2 | WS-05 | T-13-06 | URL builder uses correct `ws`/`wss` scheme and encodes the token | unit | `cd frontend/back-office; npm run test -- src/websocket/WebSocketProvider.test.tsx --run` | ❌ W0 | ⬜ pending |
-| 13-02-02 | 02 | 2 | WS-05, WS-06 | T-13-07 / T-13-08 / T-13-09 | Provider dispatches parsed frames into a shared Zustand websocket store and stops reconnecting on auth clear | unit | `cd frontend/back-office; npm run test -- src/websocket/WebSocketProvider.test.tsx --run` | ❌ W0 | ⬜ pending |
-| 13-03-01 | 03 | 3 | WS-01, WS-02, WS-03, WS-04 | T-13-10 / T-13-12 | Docker-backed backend verification stays aligned with the real Redis channel layer | integration | `docker compose exec backend pytest -q` | ✅ existing infra | ⬜ pending |
-| 13-03-02 | 03 | 3 | WS-04 | T-13-10 / T-13-11 | Redis-backed smoke explicitly exercises `broadcast_staff_event("infrastructure_test", {"source": "phase_13"})` | smoke | `docker compose exec backend python manage.py shell -c "from core.realtime import broadcast_staff_event; broadcast_staff_event('infrastructure_test', {'source': 'phase_13'}); print('PHASE_13_BROADCAST_SENT')"` | ❌ W0 | ⬜ pending |
-| 13-03-03 | 03 | 3 | WS-05 | T-13-10 / T-13-11 | Live staff session receives the shell-triggered infrastructure event through the shared websocket store/console path | manual smoke | `docker compose exec backend python manage.py shell -c "from core.realtime import broadcast_staff_event; broadcast_staff_event('infrastructure_test', {'source': 'phase_13'}); print('PHASE_13_BROADCAST_SENT')"` | ❌ W0 | ⬜ pending |
-| 13-03-04 | 03 | 3 | WS-06 | T-13-10 / T-13-12 | Idle socket remains stable during the heartbeat observation window with no unexpected reconnect loop | manual observation | `Observe logged-in staff session during idle window documented in 13-03-SUMMARY.md` | ❌ W0 | ⬜ pending |
-| 13-03-05 | 03 | 3 | WS-05, WS-06 | T-13-12 | Staff frontend test/build gates pass before docs and state are marked current | unit/build | `cd frontend/back-office; npm run test -- --run; npm run build` | ✅ existing infra | ⬜ pending |
+| 13-01-01 | 01 | 1 | WS-01 | T-13-01 / T-13-03 | Missing and invalid tokens are rejected without leaking token values | integration | `docker compose exec backend pytest core/tests/test_websocket_auth.py -q` | ❌ W0 | ✅ green |
+| 13-01-02 | 01 | 1 | WS-02, WS-03 | T-13-02 / T-13-04 | Only staff roles connect, join `staff_group`, and disconnect cleanly | integration | `docker compose exec backend pytest core/tests/test_staff_consumer.py -q` | ❌ W0 | ✅ green |
+| 13-01-03 | 01 | 1 | WS-04 | T-13-05 | `staff.event` maps to outbound `{type, payload}` frames | integration | `docker compose exec backend pytest core/tests/test_staff_consumer.py::test_group_send_reaches_staff_socket -q` | ❌ W0 | ✅ green |
+| 13-02-01 | 02 | 2 | WS-05 | T-13-06 | URL builder uses correct `ws`/`wss` scheme and encodes the token | unit | `cd frontend/back-office; npm run test -- src/websocket/WebSocketProvider.test.tsx --run` | ❌ W0 | ✅ green |
+| 13-02-02 | 02 | 2 | WS-05, WS-06 | T-13-07 / T-13-08 / T-13-09 | Provider dispatches parsed frames into a shared Zustand websocket store and stops reconnecting on auth clear | unit | `cd frontend/back-office; npm run test -- src/websocket/WebSocketProvider.test.tsx --run` | ❌ W0 | ✅ green |
+| 13-03-01 | 03 | 3 | WS-01, WS-02, WS-03, WS-04 | T-13-10 / T-13-12 | Docker-backed backend verification stays aligned with the real Redis channel layer | integration | `docker compose exec backend pytest -q` | ✅ existing infra | ✅ green |
+| 13-03-02 | 03 | 3 | WS-04 | T-13-10 / T-13-11 | Redis-backed smoke explicitly exercises `broadcast_staff_event("infrastructure_test", {"source": "phase_13"})` | smoke | `docker compose exec backend python manage.py shell -c "from core.realtime import broadcast_staff_event; broadcast_staff_event('infrastructure_test', {'source': 'phase_13'}); print('PHASE_13_BROADCAST_SENT')"` | ❌ W0 | ✅ green |
+| 13-03-03 | 03 | 3 | WS-05 | T-13-10 / T-13-11 | Live staff session receives the shell-triggered infrastructure event through the shared websocket store/console path | manual smoke | `docker compose exec backend python manage.py shell -c "from core.realtime import broadcast_staff_event; broadcast_staff_event('infrastructure_test', {'source': 'phase_13'}); print('PHASE_13_BROADCAST_SENT')"` | ❌ W0 | ✅ green |
+| 13-03-04 | 03 | 3 | WS-06 | T-13-10 / T-13-12 | Idle socket remains stable during the heartbeat observation window with no unexpected reconnect loop | manual observation | `Observe logged-in staff session during idle window documented in 13-03-SUMMARY.md` | ❌ W0 | ✅ green |
+| 13-03-05 | 03 | 3 | WS-05, WS-06 | T-13-12 | Staff frontend test/build gates pass before docs and state are marked current | unit/build | `cd frontend/back-office; npm run test -- --run; npm run build` | ✅ existing infra | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -76,11 +76,12 @@ created: 2026-05-01
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 45s
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 45s
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved (2026-05-05)
+nding

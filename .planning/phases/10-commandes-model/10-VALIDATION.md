@@ -39,15 +39,15 @@ updated: 2026-05-05
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 10-01-01 | 01 | 1 | D-01 | — | App registered in INSTALLED_APPS | unit | `python manage.py check` | ✅ W0 | ⬜ pending |
-| 10-01-02 | 01 | 1 | D-02/D-03 | T-10-01 | Commande model fields and TextChoices created | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ⬜ pending |
-| 10-01-03 | 01 | 1 | D-04 | — | soft-delete sets est_active=False, row not removed | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ⬜ pending |
-| 10-01-04 | 01 | 1 | D-06/D-07 | T-10-02 | CommandeLigne fields and TextChoices created | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ⬜ pending |
-| 10-01-05 | 01 | 1 | D-08 | T-10-03 | prix_unitaire snapshotted from plat.prix at save | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ⬜ pending |
-| 10-02-01 | 02 | 2 | D-09 | — | signal updates montant_total on line create | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ⬜ pending |
-| 10-02-02 | 02 | 2 | D-09 | — | signal excludes ANNULE lines from montant_total | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ⬜ pending |
-| 10-02-03 | 02 | 2 | D-09 | — | signal updates montant_total on line delete | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ⬜ pending |
-| 10-02-04 | 02 | 2 | D-09 | — | montant_total = 0 when all lines ANNULE | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ⬜ pending |
+| 10-01-01 | 01 | 1 | D-01 | — | App registered in INSTALLED_APPS | unit | `python manage.py check` | ✅ W0 | ✅ green |
+| 10-01-02 | 01 | 1 | D-02/D-03 | T-10-01 | Commande model fields and TextChoices created | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ✅ green |
+| 10-01-03 | 01 | 1 | D-04 | — | soft-delete sets est_active=False, row not removed | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ✅ green |
+| 10-01-04 | 01 | 1 | D-06/D-07 | T-10-02 | CommandeLigne fields and TextChoices created | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ✅ green |
+| 10-01-05 | 01 | 1 | D-08 | T-10-03 | prix_unitaire snapshotted from plat.prix at save | unit | `python manage.py test apps.commandes.tests.test_models` | ✅ W0 | ✅ green |
+| 10-02-01 | 02 | 2 | D-09 | — | signal updates montant_total on line create | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ✅ green |
+| 10-02-02 | 02 | 2 | D-09 | — | signal excludes ANNULE lines from montant_total | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ✅ green |
+| 10-02-03 | 02 | 2 | D-09 | — | signal updates montant_total on line delete | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ✅ green |
+| 10-02-04 | 02 | 2 | D-09 | — | montant_total = 0 when all lines ANNULE | unit | `python manage.py test apps.commandes.tests.test_signals` | ✅ W0 | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -55,9 +55,9 @@ updated: 2026-05-05
 
 ## Wave 0 Requirements
 
-- [ ] `backend/apps/commandes/tests/__init__.py` — test package init
-- [ ] `backend/apps/commandes/tests/test_models.py` — stubs for model/soft-delete/FK/snapshot tests
-- [ ] `backend/apps/commandes/tests/test_signals.py` — stubs for signal behavior tests
+- [x] `backend/apps/commandes/tests/__init__.py` — test package init
+- [x] `backend/apps/commandes/tests/test_models.py` — stubs for model/soft-delete/FK/snapshot tests
+- [x] `backend/apps/commandes/tests/test_signals.py` — stubs for signal behavior tests
 
 *Test infrastructure is the existing Django TestCase framework — no new install needed.*
 
@@ -74,11 +74,11 @@ updated: 2026-05-05
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 15s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 15s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved (2026-05-05)

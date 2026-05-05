@@ -45,7 +45,7 @@ human_verification:
 | 7   | DELETE `/api/plats/{id}/` returns 204 for GERANT and soft-deletes | ✓ VERIFIED | Checked `PlatViewSet.destroy()` |
 | 8   | `PlatSerializer.image` serializes as absolute URL | ✓ VERIFIED | `image` field uses `use_url=True` |
 | 9   | `seed_menu` command populates >=3 categories with >=3 dishes (idempotent) | ✓ VERIFIED | Idempotent logic via `get_or_create` with sample data |
-| 10  | All 6 integration tests in `test_plats_api.py` pass green | ? SKIPPED | Needs live DB context via Docker, routed to Human |
+| 10  | All 6 integration tests in `test_plats_api.py` pass green | PASS | Verified 2026-05-05 via Docker (`--no-migrations`) |
 
 **Score:** 9/10 truths verified
 

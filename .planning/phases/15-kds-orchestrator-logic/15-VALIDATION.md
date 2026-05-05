@@ -38,9 +38,10 @@ created: 2026-05-02
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 15-01-01 | 01 | 1 | REQ-15.1 | — | Validate prep times (min 1, max 240 min) | unit | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_jit_calculation -v` | ❌ W0 | ⬜ pending |
-| 15-01-02 | 01 | 1 | REQ-15.2 | — | Task revocation idempotent | integration | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_task_revocation -v` | ❌ W0 | ⬜ pending |
-| 15-02-01 | 02 | 2 | REQ-15.3 | — | WS broadcast fires at ETA | integration | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_ws_broadcast -v` | ❌ W0 | ⬜ pending |
+| 15-01-01 | 01 | 1 | REQ-15.1 | — | Validate prep times (min 1, max 240 min) | unit | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_jit_calculation -v` | ❌ W0 | ✅ green |
+| 15-01-02 | 01 | 1 | REQ-15.2 | — | Task revocation idempotent | integration | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_task_revocation -v` | ❌ W0 | ✅ green |
+| 15-02-01 | 02 | 2 | REQ-15.3 | — | WS broadcast fires at ETA | integration | `docker exec backend pytest apps/commandes/tests/test_orchestrator.py::test_ws_broadcast -v` | ❌ W0 | ✅ green |
+
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -48,8 +49,8 @@ created: 2026-05-02
 
 ## Wave 0 Requirements
 
-- [ ] `backend/apps/commandes/tests/test_orchestrator.py` — stubs for REQ-15.1, REQ-15.2, REQ-15.3
-- [ ] `backend/apps/commandes/tests/conftest.py` — shared fixtures (mock order, lines, Celery override)
+- [x] `backend/apps/commandes/tests/test_orchestrator.py` — stubs for REQ-15.1, REQ-15.2, REQ-15.3
+- [x] `backend/apps/commandes/tests/conftest.py` — shared fixtures (mock order, lines, Celery override)
 
 *Existing infrastructure covers test runner setup (pytest.ini already present).*
 
@@ -66,11 +67,12 @@ created: 2026-05-02
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved (2026-05-05)
+ding

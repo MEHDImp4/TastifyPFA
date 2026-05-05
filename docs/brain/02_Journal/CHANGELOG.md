@@ -1,3 +1,7 @@
+## [2026-05-05] - 23:48
+### Changed
+- **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and adjusted the header height for better vertical balance.
+
 ## [2026-05-05] - 23:30
 ### Added
 - **Select (Premium)**: New custom Select component in `backoffice/src/components/ui/` using `framer-motion` for origin-aware animations and consistent dark-mode styling.
