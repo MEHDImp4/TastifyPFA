@@ -13,7 +13,7 @@ interface Toast {
  * Global notification manager for staff.
  */
 export const StaffNotificationManager = () => {
-  const user = useAuthStore((state: any) => state.user)
+  const user = useAuthStore((state) => state.user)
   const { lastEvent } = useStaffWebSocket()
   const notifiedOrders = useRef<Set<string>>(new Set())
   const kitchenAudioRef = useRef<HTMLAudioElement | null>(null)

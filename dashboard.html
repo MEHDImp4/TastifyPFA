@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 01:30:39<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 01:39:20<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -971,6 +971,46 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **StaffNotificationManager**: Centralized component in `@shared/websocket/` that handles global audio alerts (kitchen bell) and system-wide notifications for order updates.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Sidebar (Collapsible)**: Implemented a collapsible state for the backoffice sidebar with smooth transitions, improving screen real-estate for tablet and mobile users.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Connection Status Icons**: Added real-time WebSocket connection status indicators (WiFi icon) to both Sidebar and Mobile Header in `AppShell`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **AppShell Refactor**: Integrated `StaffNotificationManager` at the top level and improved responsive layout behavior when sidebar is collapsed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **WebSocket URL Handling**: Updated `staffSocket.ts` to use `location.host` instead of `location.hostname`, ensuring port numbers are preserved in the WebSocket URL (fixing connection failures in Docker/custom port environments).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Vite Proxy Fix**: Corrected `vite.config.ts` proxy configuration for `/ws` to use `http` target with `ws: true`, improving compatibility with internal Docker routing.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Duplicate Logic**: Removed redundant audio playback and order-polling logic from `KdsSocketManager` and `OrderingPage`, consolidating it into the shared notification layer.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ALLOWED_HOSTS**: Updated `backend/settings/dev.py` to allow all hosts (`*`) in development, preventing `Invalid HTTP_HOST` errors when accessing the API from different network interfaces.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 14:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **OrderingPage.tsx**: Fixed "Missing initializer in destructuring declaration" syntax error caused by a missing `useEffect(() => {` opening line before the menu fetching logic.</p>
@@ -1004,46 +1044,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **portail**: Applied same robust alias fix to `portail/vite.config.ts`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backend**: Fixed multiple 404 errors for media files by creating placeholder images in `app/backend/media/plats/` to match database references (e.g., `salade_carottes_orange.png`, `salade_poivrons.png`).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Cleanup**: Removed stale `vite.config.js` files in frontend services to prevent configuration ambiguity between `.js` and `.ts` config files.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> `backoffice` service now starts without resolution errors and correctly logs the `@shared` path as `/app/shared`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> Media files now return `200 OK` (verified via `curl` inside container).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Verification:</strong> Overall system stability improved with no critical errors in logs.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Reorganization**: Moved `media/` to `app/backend/media/` to align with the backend container structure. Removed the root `tests/` directory (deprecated smoke harness).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Docs**: Updated `FILE_MAP.md` to reflect the new repository structure.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-04 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Cleanup**: Removed `assets/tastify_logo_simple.svg` (unused asset).</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

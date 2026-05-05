@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider'
 import { useKdsStore } from './store/useKdsStore'
 

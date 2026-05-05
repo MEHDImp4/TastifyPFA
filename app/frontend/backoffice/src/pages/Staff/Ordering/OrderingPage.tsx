@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronLeft, ChevronUp, Loader2, Receipt } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '@shared/auth/axiosInstance'
@@ -42,8 +42,9 @@ export const OrderingPage = () => {
   useEffect(() => {
     if (!lastEvent || !activeOrder) return
 
-    if (lastEvent.type === 'order_updated' && lastEvent.payload.order.id === activeOrder.id) {
-      setActiveOrder(lastEvent.payload.order)
+    const payload = lastEvent.payload as any
+    if (lastEvent.type === 'order_updated' && payload.order?.id === activeOrder.id) {
+      setActiveOrder(payload.order)
     }
   }, [lastEvent, activeOrder])
 

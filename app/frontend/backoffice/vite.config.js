@@ -38,9 +38,10 @@ export default defineConfig({
                 changeOrigin: true,
             },
             '/ws': {
-                target: 'ws://backend:8000',
-                changeOrigin: true,
+                target: 'http://backend:8000',
                 ws: true,
+                changeOrigin: true,
+                rewrite: function (path) { return path; },
             },
             '/media': {
                 target: 'http://backend:8000',
