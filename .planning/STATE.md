@@ -3,15 +3,16 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: READY_TO_PLAN
-stopped_at: Phase 19 COMPLETE — all 4 plans executed, UAT 10/10 PASSED
-last_updated: "2026-05-05T18:30:00.000Z"
+stopped_at: Phase 20 COMPLETE — service-based stock deduction implemented and integrated with JIT tasks.
+last_updated: "2026-05-05T19:00:00.000Z"
 progress:
   total_phases: 40
-  completed_phases: 19
-  total_plans: 66
-  percent: 47
+  completed_phases: 20
+  total_plans: 67
+  percent: 50
 notes: |
-  - Phase 19 COMPLETED (2026-05-05): Stock Management Frontend delivered. Ingredient CRUD, Stock Adjustment Modal, visual alerts (Amber/Terracotta), and Recipe Management integration in PlatDrawer. 10/10 UAT passed.
+  - Phase 20 COMPLETED (2026-05-05): Automated Stock Deduction. Implemented `StockService` with atomic row locking and deterministic ingredient ordering to prevent deadlocks. Integrated with `launch_item_task` in the `commandes` app.
+  - Phase 19 COMPLETED (2026-05-05): Stock Management Frontend delivered.
   - Phase 18 COMPLETED (2026-05-05): Ingredients & Stock Model.
   - Phase 17 COMPLETED (2026-05-04): Order Status Updates implemented and verified (Kitchen -> Salle flow).
   - UI & Reliability Refactor (2026-05-05): 

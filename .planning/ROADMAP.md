@@ -25,7 +25,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle. (completed 2026-05-04)
 - [x] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds. (completed 2026-05-05)
 - [x] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock. (completed 2026-05-05)
-- [ ] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task.
+- [x] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task. (completed 2026-05-05)
 - [ ] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users.
 - [ ] **Phase 22: HR Frontend** - Back-office HR UI.
 - [ ] **Phase 23: Reservations Model & API** - Availability logic.
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 → 40
 | 17. Order Status Updates | 1/1 | Completed | 2026-05-04 |
 | 18. Ingredients & Stock Model | 4/4 | Complete | 2026-05-05 |
 | 19. Stock Management Frontend | 4/4 | Complete | 2026-05-05 |
-| 20. Automated Deductions | 0/1 | Planned | — |
+| 20. Automated Deductions | 1/1 | Complete | 2026-05-05 |
 | ... | ... | ... | ... |
 | 40. Load Testing & Optimization | 0/2 | Planned | — |
 
@@ -172,4 +172,4 @@ Phases execute in numeric order: 1 → 40
 **Success Criteria**: 1. Stock decreases correctly per plat recipe on line launch. 2. Race conditions prevented via atomic row locking. 3. Low-stock alerts broadcast via WebSockets.
 
 Plans:
-- [ ] 20-01-PLAN.md — Atomic stock deduction service and task integration.
+- [x] 20-01-PLAN.md — Atomic stock deduction service and task integration. (completed 2026-05-05)
