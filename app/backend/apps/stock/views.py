@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -5,6 +6,8 @@ from rest_framework.response import Response
 from apps.users.permissions import IsGerant
 from .models import Ingredient, PlatIngredient
 from .serializers import IngredientSerializer, PlatIngredientSerializer
+
+User = get_user_model()
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -19,7 +22,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """GERANT sees all including inactive; others only see active ingredients."""
         user = self.request.user
-        if user.is_authenticated and user.role == 'GERANT':
+        if user.is_authenticated and user.role == User.Role.GERANT:
             return Ingredient.objects.all().order_by('nom')
         return Ingredient.objects.filter(est_active=True).order_by('nom')
 
