@@ -19,6 +19,9 @@ def alert_low_stock(sender, instance, created, **kwargs):
     """Broadcast a stock.alert WebSocket event only when the threshold is newly crossed (D-05, D-06)."""
     from core.realtime import broadcast_staff_event
 
+    if instance.seuil_alerte <= 0:
+        return
+
     old_stock = getattr(instance, '_old_stock', None)
     is_now_low = instance.stock_actuel <= instance.seuil_alerte
     was_low = old_stock is not None and old_stock <= instance.seuil_alerte
