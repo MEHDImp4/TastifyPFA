@@ -4,6 +4,7 @@ from .models import Ingredient, PlatIngredient
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
+    actions = None
     list_display = ['nom', 'unite_mesure', 'stock_actuel', 'seuil_alerte', 'est_active', 'created_at']
     list_filter = ['unite_mesure', 'est_active']
     search_fields = ['nom']
