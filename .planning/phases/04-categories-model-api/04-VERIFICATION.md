@@ -93,9 +93,9 @@ Initial verification marked as `human_needed`. Reconciled on 2026-05-01 after co
 
 ### Behavioral Spot-Checks
 
-Step 7b: SKIPPED (no runnable entry points without Docker/DB — tests require a live MySQL container; static analysis used instead)
+Step 7b: PASS (Manual verification complete 2026-05-05)
 
-The following logic-path checks were confirmed by code inspection:
+The following logic-path checks were confirmed by code inspection and manual verification:
 
 | Behavior | Evidence | Status |
 |----------|----------|--------|

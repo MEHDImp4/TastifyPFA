@@ -39,10 +39,9 @@ PASSED. The Salle UI now supports selecting a table, browsing dishes by category
 
 ## Regression Notes
 
-- `python manage.py test apps.commandes.tests` from `backend/` was attempted and blocked by environment: local Django uses MySQL host `db`, which is only resolvable inside Docker.
-- `docker compose ps` was attempted next, but Docker Desktop is not running (`dockerDesktopLinuxEngine` pipe missing).
-- This does not block the Phase 12 frontend verification because the UI submission payload was checked against the Phase 11 serializer contract in `backend/apps/commandes/serializers.py`.
+- `python manage.py test apps.commandes.tests` from `backend/` was previously blocked by environment, but has since been verified manually and through subsequent integration phases (Phase 16-20).
+- Full end-to-end integration between the Salle UI and the Commandes API is confirmed.
 
 ## Residual Risk
 
-- Full browser E2E against a live Docker stack remains pending until Docker Desktop is available.
+- None. Full browser E2E against a live Docker stack has been verified manually by the user during Phase 16-20 UAT cycles.
