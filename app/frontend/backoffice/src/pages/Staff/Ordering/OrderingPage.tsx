@@ -252,22 +252,46 @@ export const OrderingPage = () => {
                       <p className="text-xs text-foreground-muted italic py-2">Aucun plat.</p>
                     ) : (
                       activeOrder.lignes.map((ligne: any) => {
-                        const isPret = ligne.statut === 'PRET' || ligne.statut === 'SERVI'
+                        const isPret = ligne.statut === 'PRET'
+                        const isServi = ligne.statut === 'SERVI'
+                        const isReadyOrServed = isPret || isServi
+
+                        let lineClasses = 'bg-white/[0.03] border-white/5'
+                        let qtyClasses = 'bg-teal/20 text-teal'
+                        let textClasses = 'text-white'
+                        
+                        if (isPret) {
+                          lineClasses = 'bg-blue-500/10 border-blue-500/20'
+                          qtyClasses = 'bg-blue-500 text-white'
+                          textClasses = 'text-blue-400'
+                        } else if (isServi) {
+                          lineClasses = 'bg-green-500/10 border-green-500/20'
+                          qtyClasses = 'bg-green-500 text-white'
+                          textClasses = 'text-green-400'
+                        }
+
                         return (
-                          <div key={ligne.id} className={`flex items-center justify-between rounded-xl p-3 border transition-all ${isPret ? 'bg-green-500/10 border-green-500/20' : 'bg-white/[0.03] border-white/5'}`}>
+                          <div key={ligne.id} className={`flex items-center justify-between rounded-xl p-3 border transition-all ${lineClasses}`}>
                             <div className="flex items-center gap-3">
-                              <span className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-black ${isPret ? 'bg-green-500 text-white' : 'bg-teal/20 text-teal'}`}>
+                              <span className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-black ${qtyClasses}`}>
                                 {ligne.quantite}
                               </span>
-                              <span className={`text-xs font-bold tracking-tight ${isPret ? 'text-green-400' : 'text-white'}`}>{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                              <span className={`text-xs font-bold tracking-tight ${textClasses}`}>{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              {isPret ? (
+                              {isServi && (
                                 <>
                                   <CheckCircle2 size={12} className="text-green-500" />
-                                  <span className="text-[9px] font-black uppercase tracking-widest text-green-500">Prêt</span>
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-green-500">Servi</span>
                                 </>
-                              ) : (
+                              )}
+                              {isPret && (
+                                <>
+                                  <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-blue-500">Prêt</span>
+                                </>
+                              )}
+                              {!isReadyOrServed && (
                                 <>
                                   <div className="h-1 w-1 rounded-full bg-teal animate-pulse" />
                                   <span className="text-[9px] font-black uppercase tracking-widest text-teal">Cuisine</span>

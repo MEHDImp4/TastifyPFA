@@ -10,6 +10,6 @@
 | P17-FE-02 | Salle OrderingPage updates on line ready event | unit/e2e | `OrderingPage.test.tsx` |
 
 ## 2. Manual UAT
-- [ ] Mark a burger as Ready in KDS -> Verify pulse in Salle Ordering UI.
-- [ ] Mark entire order as Ready in KDS -> Verify audio ding and status change in Salle.
-- [ ] Verify Table Map reflects order status change instantly.
+- [x] Mark a burger as Ready in KDS -> Verify pulse in Salle Ordering UI. (PASSED 2026-05-05)
+- [x] Mark entire order as Ready in KDS -> Verify audio ding and status change in Salle. (PASSED 2026-05-05)
+- [x] Verify Table Map reflects order status change instantly. (PASSED 2026-05-05)
