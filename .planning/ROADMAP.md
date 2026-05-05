@@ -27,7 +27,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock. (completed 2026-05-05)
 - [x] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task. (completed 2026-05-05)
 - [x] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users. (completed 2026-05-05)
-- [ ] **Phase 22: HR Frontend** - Back-office HR UI.
+- [x] **Phase 22: HR Frontend** - Back-office HR UI. (completed 2026-05-05)
 - [ ] **Phase 23: Reservations Model & API** - Availability logic.
 - [ ] **Phase 24: Reservations Client UI** - Portail Client booking flow.
 - [ ] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.

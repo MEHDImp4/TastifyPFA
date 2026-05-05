@@ -1,3 +1,10 @@
+## [2026-05-05] - 23:30
+### Added
+- **Select (Premium)**: New custom Select component in `backoffice/src/components/ui/` using `framer-motion` for origin-aware animations and consistent dark-mode styling.
+
+### Fixed
+- **EmployeeModal UI**: Replaced native browser select for "Rôle Système" with the new premium `Select` component, fixing the visual artifact where the native dropdown rendered with a white background on Windows (reported bug).
+
 ## [2026-05-05] - 14:35
 ### Changed
 - **Agent Rules**: Updated `GEMINI.md`, `CLAUDE.md`, and `AGENTS.md` to mandate the use of specialized sub-agents (e.g., `gsd-executor`, `gsd-debugger`) for all code modifications and bug fixes, ensuring peak efficiency and focus.

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, User, Briefcase, DollarSign, Calendar, CreditCard, Phone, Mail, Shield } from 'lucide-react';
 import { Employe, EmployeFormData } from '../types';
+import { Select } from '../../../components/ui/Select';
 
 interface EmployeeModalProps {
   isOpen: boolean;
@@ -166,18 +167,16 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, onClose, onSave, 
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted ml-1">Rôle Système</label>
-                <div className="relative">
-                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={14} />
-                  <select
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full appearance-none rounded-xl border border-white/5 bg-white/5 pl-11 pr-4 py-3 text-sm text-white outline-none transition-all focus:border-teal/50 focus:bg-white/10"
-                  >
-                    <option value="SERVEUR">Serveur</option>
-                    <option value="CUISINIER">Cuisinier</option>
-                    <option value="GERANT">Gérant</option>
-                  </select>
-                </div>
+                <Select
+                  value={formData.role}
+                  onChange={(val) => setFormData({ ...formData, role: val })}
+                  options={[
+                    { value: 'SERVEUR', label: 'Serveur' },
+                    { value: 'CUISINIER', label: 'Cuisinier' },
+                    { value: 'GERANT', label: 'Gérant' },
+                  ]}
+                  icon={<Shield size={14} />}
+                />
               </div>
             </div>
           </div>
