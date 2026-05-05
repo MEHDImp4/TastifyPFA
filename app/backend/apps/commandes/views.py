@@ -49,7 +49,22 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        return super().partial_update(request, *args, **kwargs)
+        response = super().partial_update(request, *args, **kwargs)
+
+        if new_statut == CommandeLigne.Statut.PRET and response.status_code == 200:
+            from core.realtime import broadcast_staff_event
+            instance.refresh_from_db()
+            broadcast_staff_event(
+                event_type='line_ready',
+                payload={
+                    'ligne_id': instance.id,
+                    'plat_nom': instance.plat.nom,
+                    'commande_id': instance.commande_id,
+                    'table_numero': instance.commande.table.numero,
+                },
+            )
+
+        return response
 
 
 class CommandeViewSet(viewsets.ModelViewSet):

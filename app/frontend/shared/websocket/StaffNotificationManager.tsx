@@ -70,13 +70,40 @@ export const StaffNotificationManager = () => {
   useEffect(() => {
     if (!lastEvent || !user) return
 
+    // line_ready: CUISINIER marked a dish as Prêt → notify SERVEUR/GERANT
+    if (lastEvent.type === 'line_ready') {
+      const { ligne_id, plat_nom, table_numero } = lastEvent.payload as any
+      if (!ligne_id) return
+
+      const notificationKey = `line-${ligne_id}-pret`
+      if (notifiedOrders.current.has(notificationKey)) return
+
+      if (user.role === 'SERVEUR' || user.role === 'GERANT') {
+        notifiedOrders.current.add(notificationKey)
+
+        if (readyAudioRef.current) {
+          readyAudioRef.current.currentTime = 0
+          readyAudioRef.current.play().catch(() => console.warn('Audio blocked'))
+        }
+
+        const id = Math.random().toString(36).substring(2, 9)
+        setToasts((prev) => [...prev, {
+          id,
+          message: `${plat_nom} prêt — Table ${table_numero}`,
+          type: 'success',
+        }])
+        setTimeout(() => removeToast(id), 6000)
+      }
+      return
+    }
+
     const order = lastEvent.payload?.order as any
     if (!order || lastEvent.type !== 'order_updated') return
 
     const orderId = order.id
     const status = order.statut
     const tableName = order.table_numero || order.table || '?'
-    
+
     if (status !== 'EN_CUISINE' && status !== 'PRETE') return
 
     const notificationKey = `${orderId}-${status}`
