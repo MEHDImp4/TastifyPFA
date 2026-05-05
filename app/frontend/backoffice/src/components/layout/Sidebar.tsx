@@ -84,10 +84,10 @@ export const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
         ${isCollapsed ? 'w-20' : 'w-64'}
       `}>
         {/* Header with Logo and Collapse Toggle */}
-        <div className="h-20 flex items-center px-4 shrink-0 relative overflow-hidden">
+        <div className="h-20 flex items-center justify-center px-4 shrink-0 relative overflow-hidden">
           <div className={`flex flex-col items-center transition-all duration-300 ${isCollapsed ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'}`}>
             <h1 className="text-xl font-black text-white whitespace-nowrap leading-none">Tastify</h1>
-            <span className="text-[10px] font-black text-teal tracking-[0.3em] mt-1.5 uppercase ml-1">Staff</span>
+            <span className="text-[10px] font-black text-teal tracking-[0.3em] mt-1.5 uppercase">Staff</span>
           </div>
           
           <div className={`absolute right-4 top-1/2 -translate-y-1/2 flex items-center transition-all duration-300 ${isCollapsed ? 'left-1/2 -translate-x-1/2 right-auto' : ''}`}>
