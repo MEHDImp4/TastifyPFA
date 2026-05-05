@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
+from apps.stock.services import StockService, InsufficientStockError
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
 from .services.orchestrator import KdsOrchestrator
@@ -48,6 +49,14 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     {"error": "Un plat doit être prêt avant d'être marqué comme servi."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+
+        # Deduct ingredients if manually starting preparation (Phase 20 parity)
+        if new_statut == CommandeLigne.Statut.EN_PREPARATION and instance.statut == CommandeLigne.Statut.EN_ATTENTE:
+            try:
+                with transaction.atomic():
+                    StockService.deduct_ingredients_for_plat(instance.plat, instance.quantite)
+            except InsufficientStockError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         response = super().partial_update(request, *args, **kwargs)
 
