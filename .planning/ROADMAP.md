@@ -25,7 +25,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle. (completed 2026-05-04)
 - [x] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds. (completed 2026-05-05)
 - [x] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock. (completed 2026-05-05)
-- [ ] **Phase 20: Automated Deductions** - Django signals linking orders to stock decrementation.
+- [ ] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task.
 - [ ] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users.
 - [ ] **Phase 22: HR Frontend** - Back-office HR UI.
 - [ ] **Phase 23: Reservations Model & API** - Availability logic.
@@ -163,3 +163,13 @@ Phases execute in numeric order: 1 → 40
 | 20. Automated Deductions | 0/1 | Planned | — |
 | ... | ... | ... | ... |
 | 40. Load Testing & Optimization | 0/2 | Planned | — |
+
+
+
+### Phase 20: Automated Deductions
+**Goal**: Implement service-based stock deduction triggered by the JIT orchestration task (launch_item_task). Ensures ingredients are subtracted from inventory only when production begins.
+**Depends on**: Phase 15, Phase 18
+**Success Criteria**: 1. Stock decreases correctly per plat recipe on line launch. 2. Race conditions prevented via atomic row locking. 3. Low-stock alerts broadcast via WebSockets.
+
+Plans:
+- [ ] 20-01-PLAN.md � Atomic stock deduction service and task integration.
