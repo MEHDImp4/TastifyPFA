@@ -1214,7 +1214,7 @@
 
 ### Validation
 - `gsd-plan-checker` passed after two revision iterations and confirmed both Phase 23 plans are executable against the current repo layout.
-- Pending commit hash: this entry was written in the same atomic change set as the Phase 23 plan regeneration.
+- Planning commit: `58b5585` (`docs(23): regenerate reservations phase plans`).
 
 - Created `02-01-PLAN.md`, `02-02-PLAN.md`, and `02-03-PLAN.md` covering model creation, RBAC logic, and dev seeding.
 
