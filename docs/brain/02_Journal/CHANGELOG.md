@@ -1206,6 +1206,16 @@
 ## [2026-04-27] - 23:15
 ### Added
 - Generated execution plans for Phase 2: User Model & RBAC.
+## [2026-05-06] - 00:40
+### Changed
+- Regenerated `.planning/phases/23-reservations-model-api/23-01-PLAN.md` and `23-02-PLAN.md` to the current GSD executor contract for Phase 23: Reservations Model & API.
+- Added explicit plan coverage for the locked 15-minute cleanup buffer, PATCH-only client cancellation, dynamic reservation-aware table status, and the simultaneous-booking race-condition path.
+- Updated `dashboard.html` to reflect the verified Phase 23 planning state and current dirty worktree during the planning pass.
+
+### Validation
+- `gsd-plan-checker` passed after two revision iterations and confirmed both Phase 23 plans are executable against the current repo layout.
+- Pending commit hash: this entry was written in the same atomic change set as the Phase 23 plan regeneration.
+
 - Created `02-01-PLAN.md`, `02-02-PLAN.md`, and `02-03-PLAN.md` covering model creation, RBAC logic, and dev seeding.
 
 ## [2026-04-27] - 23:00
