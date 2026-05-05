@@ -24,7 +24,7 @@ export const StaffNotificationManager = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const kitchenAudio = new Audio('/sounds/kitchen-bell.mp3')
-      const readyAudio = new Audio('/sounds/order-ready.mp3')
+      const readyAudio = new Audio('/sounds/order-ready.wav')
       
       kitchenAudioRef.current = kitchenAudio
       readyAudioRef.current = readyAudio
