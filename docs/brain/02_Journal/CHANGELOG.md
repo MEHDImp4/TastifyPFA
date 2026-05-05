@@ -1,3 +1,10 @@
+## [2026-05-06] - 10:00
+### Changed
+- **Project Logo**: Replaced the SVG-based logo with a high-fidelity PNG asset provided by the user. 
+- **Universal Branding**: Updated `Login.tsx`, `App.tsx` (Portail), and `Sidebar.tsx` to use the new PNG logo.
+- **Sidebar UI**: Swapped the text-based "Tastify STAFF" branding in the backoffice sidebar for the new logo image, ensuring visual consistency across all touchpoints.
+- **Cleanup**: Removed the unused `logo.svg` from shared assets.
+
 ## [2026-05-05] - 23:57
 ### Added
 - **Backoffice Pagination**: Added a shared `Pagination` UI component and wired it into the dense list screens where pagination is materially needed: dishes, stock ingredients, and HR employees.

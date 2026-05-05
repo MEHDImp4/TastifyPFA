@@ -2,6 +2,8 @@
 
 AI-powered ERP for Moroccan restaurants. Docker-orchestrated monorepo.
 
+The project features a high-fidelity unified branding across all touchpoints, including a custom logo asset and a consistent dark-mode design system.
+
 ## Stack
 Django 5.0 + Daphne (ASGI) | MySQL 8 | Redis 7 | 2× React 18 + Vite 5 + Tailwind v4 SPAs | Docker Compose direct ports
 

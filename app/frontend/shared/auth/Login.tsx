@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
 import { useAuthStore } from './useAuthStore'
-import logo from '@shared/assets/logo.svg'
+import logo from '@shared/assets/logo.png'
 import { isRoleAllowed } from './roleAccess'
 
 interface LoginProps {
