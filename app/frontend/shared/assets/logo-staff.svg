@@ -1,32 +1,61 @@
-<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="240" height="80" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;display=swap');
+      
       .tastify {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 800;
-        font-size: 32px;
-        fill: white;
-        stroke: black;
-        stroke-width: 1.5px;
-        stroke-linejoin: round;
-        paint-order: stroke fill;
-        letter-spacing: -0.02em;
+        font-size: 36px;
+        fill: url(#textGradient);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        letter-spacing: -0.03em;
       }
-      .staff {
+      
+      .staff-pill {
+        fill: rgba(45, 212, 191, 0.1);
+        stroke: rgba(45, 212, 191, 0.3);
+        stroke-width: 1px;
+      }
+      
+      .staff-text {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 800;
         font-size: 10px;
         fill: #2DD4BF;
-        stroke: black;
-        stroke-width: 0.5px;
-        stroke-linejoin: round;
-        paint-order: stroke fill;
-        letter-spacing: 0.5em;
+        letter-spacing: 0.4em;
         text-transform: uppercase;
       }
+
+      .leaf-icon {
+        fill: #2DD4BF;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+      }
+
+      @keyframes shimmer {
+        0% { stop-color: #ffffff; }
+        50% { stop-color: #F0FDFA; }
+        100% { stop-color: #ffffff; }
+      }
     </style>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
   </defs>
-  <text x="50%" y="30" text-anchor="middle" class="tastify">Tastify</text>
-  <text x="50%" y="50" text-anchor="middle" class="staff">Staff</text>
+
+  <!-- Abstract Eco-Leaf Icon -->
+  <path class="leaf-icon" d="M120 15C120 15 115 22 115 28C115 34 120 38 120 38C120 38 125 34 125 28C125 22 120 15 120 15ZM119 28C119 28 118 27 118 25C118 23 119 22 119 22V28Z" />
+
+  <!-- Main Branding -->
+  <text x="120" y="52" text-anchor="middle" class="tastify">Tastify</text>
+
+  <!-- Staff Badge -->
+  <rect x="85" y="60" width="70" height="16" rx="8" class="staff-pill" />
+  <text x="120" y="71" text-anchor="middle" class="staff-text">Staff</text>
 </svg>
