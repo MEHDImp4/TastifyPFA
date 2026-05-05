@@ -31,6 +31,7 @@ class Ingredient(models.Model):
         """Soft delete: marks inactive instead of removing the DB row."""
         self.est_active = False
         self.save(update_fields=['est_active', 'updated_at'])
+        return 1, {self._meta.label: 1}
 
 
 class PlatIngredient(models.Model):
