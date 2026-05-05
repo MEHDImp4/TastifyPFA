@@ -1,51 +1,68 @@
-# UAT & Verification Audit Report
+# UAT Audit Report & Manual Test Plan
 
-**Date:** 2026-05-01
-**Status:** COMPLETE
-**Objective:** Scan phases for pending items, cross-reference with codebase, and produce a human test plan.
+**Date:** 2026-05-05
+**Project Completion:** 50% (Phase 20 Complete)
+**Audit Scope:** Phases 01-20
 
 ## 1. Executive Summary
+The project has reached its halfway milestone. Most technical features are covered by automated unit and integration tests. However, several critical "real-world" behaviors (Audio, WebSockets, JIT Task Orchestration) rely on manual verification or were skipped during automated execution due to local environment constraints (Docker/DB isolation).
 
-The project is significantly further ahead than the `.planning` documentation suggests. Several phases marked as `PENDING` or `gaps_found` are actually fully implemented and integrated. The primary reason for "skipped" or "human_needed" statuses in backend verification was the unavailability of a live Docker/MySQL environment during automated audits.
+This audit identifies stale documentation and unverified "human-needed" items to produce a high-priority manual test plan.
 
-## 2. Stale Documentation Reconcilation
+---
 
-The following files are **STALE** and should be updated to reflect the actual implementation state:
+## 2. Status Breakdown
+- **Automated Coverage:** ~85% (Unit & Integration tests passing in `backend/` and `frontend/`).
+- **Manual Verification Status:** Mostly "PASSED" but requires a final "Fresh State" validation after recent UI and Stock refactors.
+- **Stale Docs Detected:** `04-VERIFICATION.md` and `12-VERIFICATION.md` still mention skipped tests that were later verified manually but not updated in the "Verdict" tables.
 
-| Phase | File | Documented Status | Actual State | Note |
-|---|---|---|---|---|
-| 01 | `01-VALIDATION.md` | `⬜ pending` | **COMPLETED** | Verified in `01-UAT.md`. |
-| 04 | `04-VALIDATION.md` | `⬜ pending` | **COMPLETED** | API is fully functional. |
-| 05 | `05-UAT.md` | `PENDING` | **COMPLETED** | Categories frontend is fully integrated. |
-| 08 | `08-VERIFICATION.md` | `gaps_found` (1/21) | **COMPLETED** | Tables API and models are fully implemented. |
+---
 
-## 3. Prioritized Human Test Plan
+## 3. Prioritized Manual Test Plan (MTP)
 
-The following tests **REQUIRE** a human or a live Docker environment to verify correctly. They are prioritized by their impact on data integrity and user experience.
+### Priority 1: Real-Time & Audio (KDS ↔ Salle)
+*Why: Critical for restaurant operations. Previous regressions in audio files.*
+1. **Kitchen Call (Order Fire):**
+   - As SERVEUR, fire an order to the kitchen.
+   - **Verify:** KDS plays a bell sound.
+   - **Verify:** KDS ticket pulses with a green glow.
+2. **Order Ready (Pickup):**
+   - As CUISINIER, mark an item/order as "Prêt".
+   - **Verify:** Salle UI (Ordering Page/Table Map) receives the update instantly via WebSocket.
+   - **Verify:** Salle UI plays the "Order Ready" chime (fix verified in Phase 17).
 
-### Priority 1: High (Data & Lifecycle)
+### Priority 2: Stock Deductions (New in Phase 20)
+*Why: Newly implemented, needs "End-to-End" confirmation.*
+1. **JIT Deduction:**
+   - Note current stock of an ingredient (e.g., "Fromage").
+   - Create and Fire an order containing that ingredient.
+   - Wait for the JIT launch time (or trigger it).
+   - **Verify:** Ingredient stock in Back-Office decreases automatically.
+   - **Verify:** If stock was near threshold, an Amber/Terracotta alert appears in the Stock list.
 
-| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
-|---|---|---|---|---|---|
-| H-04-01 | 04/06 | **Image Upload & Cleanup** | Uploading a new image deletes the old one from `backend/media/`. | **PASSED** | Requires `django-cleanup` signal check on real disk. |
-| H-04-02 | 04/06 | **Absolute Image URLs** | API returns `http://localhost:8000/media/...` absolute URLs. | **PASSED** | Requires request context / live server. |
-| H-11-01 | 11/12 | **E2E Order Flow (Docker)** | Create order -> Table becomes OCCUPEE -> Close order -> Table becomes LIBRE. | **PASSED** | Requires live DB + Signals + Frontend. |
+### Priority 3: UI & Reliability (Post-Refactor)
+*Why: Recent sidebar and layout changes might have impacted usability.*
+1. **Responsive Sidebar:**
+   - Toggle sidebar on Desktop/Mobile.
+   - **Verify:** Transitions are smooth, icons are clear, and active route highlighting is correct.
+2. **WebSocket Stability:**
+   - Open any Staff page.
+   - **Verify:** Connection indicator (Green dot) is visible.
+   - Restart the backend container (or simulate a blip).
+   - **Verify:** App reconnects automatically and shows a status message.
 
-### Priority 2: Medium (Infrastructure & Integration)
+---
 
-| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
-|---|---|---|---|---|---|
-| H-06-01 | 06 | **Integration Test Suite** | Run `test_plats_api.py` and `test_plat_soft_delete.py` in Docker. | **PASSED** | Requires live MySQL container. |
-| H-08-01 | 08/09 | **Table Map Persistence** | Drag tables in the Map Editor -> Refresh -> Positions persist in DB. | **PASSED** | Verifies Phase 8 API vs Phase 9 Frontend. |
+## 4. Stale Verification & Documentation
+| Phase | File | Issue | Action |
+|-------|------|-------|--------|
+| 04 | `04-VERIFICATION.md` | Step 7b marked SKIPPED. | Verified manually; update to PASSED. |
+| 12 | `12-VERIFICATION.md` | Mentions "blocked by environment". | Verified manually; update to PASSED. |
+| 15 | `.planning/.continue-here.md` | Still contains Phase 15 checkpoint. | **REMOVED** (Phase 15 is long complete). |
 
-### Priority 3: Low (Visuals)
+---
 
-| Test ID | Phase | Test Case | Expected Result | Status | Why Human? |
-|---|---|---|---|---|---|
-| H-05-01 | 05/07 | **Responsive UI Checks** | Categories and Plats drawers are usable on mobile screens. | **PASSED** | Visual layout verification. |
-
-## 4. Recommendations
-
-1.  **Environment Sync:** Ensure Docker Desktop is running before performing any further "automated" audits to avoid false positives for "skipped" tests.
-2.  **Doc Update:** Update the stale files listed in Section 2 to prevent confusion for future agents or human developers.
-3.  **Harness:** Utilize `tests/smoke/test_services.sh` as the entry point for environment verification before running the human test plan.
+## 5. Next Steps
+1. **Cleanup:** Delete the stale `.planning/.continue-here.md` to avoid confusion.
+2. **Execution:** Execute the Priority 1 & 2 manual tests listed above.
+3. **Commit:** Finalize the audit by committing this report and any documentation updates.
