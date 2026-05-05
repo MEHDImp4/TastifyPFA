@@ -23,7 +23,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 15: KDS Orchestrator Logic** - Backend calculation of `heure_lancement`. Manual UAT passed; websocket frames and orchestration stability confirmed (completed 2026-05-03).
 - [x] **Phase 16: Order Push to KDS** - Real-time push from Salle to Cuisine. (completed 2026-05-04)
 - [x] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle. (completed 2026-05-04)
-- [ ] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds.
+- [x] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds. (completed 2026-05-05)
 - [ ] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock.
 - [ ] **Phase 20: Automated Deductions** - Django signals linking orders to stock decrementation.
 - [ ] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users.
@@ -158,7 +158,7 @@ Phases execute in numeric order: 1 → 40
 | 15. KDS Orchestrator Logic | 3/3 | Completed | 2026-05-03 |
 | 16. Order Push to KDS | 8/8 | Completed | 2026-05-04 |
 | 17. Order Status Updates | 1/1 | Completed | 2026-05-04 |
-| 18. Ingredients & Stock Model | 3/4 | In Progress | — |
+| 18. Ingredients & Stock Model | 4/4 | Complete | 2026-05-05 |
 | 19. Stock Management Frontend | 0/1 | Planned | — |
 | 20. Automated Deductions | 0/1 | Planned | — |
 | ... | ... | ... | ... |
