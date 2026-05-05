@@ -49,7 +49,7 @@ export const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
     { name: 'Tables', icon: Table, path: '/tables', allowedRoles: ['GERANT'] },
     { name: 'Salle', icon: UtensilsCrossed, path: '/salle', allowedRoles: ['GERANT', 'SERVEUR'] },
     { name: 'KDS', icon: ChefHat, path: '/kds', allowedRoles: ['GERANT', 'CUISINIER'] },
-    { name: 'Stock', icon: Package, path: '#', allowedRoles: ['GERANT'] },
+    { name: 'Stock', icon: Package, path: '/stock', allowedRoles: ['GERANT', 'CUISINIER'] },
     { name: 'RH', icon: Users, path: '#', allowedRoles: ['GERANT'] },
   ].filter((item) => isRoleAllowed(user?.role, item.allowedRoles));
 
