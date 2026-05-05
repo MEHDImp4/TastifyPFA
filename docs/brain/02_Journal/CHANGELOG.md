@@ -1,3 +1,7 @@
+## [2026-05-05] - 14:35
+### Changed
+- **Agent Rules**: Updated `GEMINI.md`, `CLAUDE.md`, and `AGENTS.md` to mandate the use of specialized sub-agents (e.g., `gsd-executor`, `gsd-debugger`) for all code modifications and bug fixes, ensuring peak efficiency and focus.
+
 ## [2026-05-05] - 14:20
 ### Added
 - **StaffNotificationManager**: Centralized component in `@shared/websocket/` that handles global audio alerts (kitchen bell) and system-wide notifications for order updates.
