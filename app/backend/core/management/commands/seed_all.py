@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from apps.tables.models import Table
 from apps.menu.models import Categorie, Plat
+from apps.hr.models import Employe
 from django.db import transaction
 
 class Command(BaseCommand):
-    help = 'Seed the database with users, tables and menu.'
+    help = 'Seed the database with users, tables, menu, and HR data.'
 
     def handle(self, *args, **options):
         try:
@@ -13,6 +15,7 @@ class Command(BaseCommand):
                 self.seed_users()
                 self.seed_tables()
                 self.seed_menu()
+                self.seed_hr()
             self.stdout.write(self.style.SUCCESS('\nAll seeding tasks completed.'))
         except Exception as exc:
             self.stdout.write(self.style.ERROR(f'Error during seeding: {exc}'))
@@ -249,3 +252,39 @@ class Command(BaseCommand):
                     self.stdout.write(f'    Updated dish: {plat.nom}')
 
         self.stdout.write(self.style.SUCCESS(f'\nSeeding complete: {total_categories} new categories, {total_plats} new dishes.'))
+
+    def seed_hr(self):
+        User = get_user_model()
+        staff_users = User.objects.exclude(role=User.Role.CLIENT)
+        
+        positions = {
+            User.Role.GERANT: ('Directeur de Restaurant', 12000.00),
+            User.Role.SERVEUR: ('Chef de Rang', 4500.00),
+            User.Role.CUISINIER: ('Chef de Partie', 5500.00),
+        }
+
+        created = updated = 0
+        for user in staff_users:
+            pos_name, base_salary = positions.get(user.role, ('Employé', 4000.00))
+            
+            # Simple unique CIN and phone generation based on ID
+            cin = f"AB{100000 + user.id}"
+            phone = f"06{str(user.id).zfill(8)}"
+            
+            _, was_created = Employe.objects.update_or_create(
+                user=user,
+                defaults={
+                    'poste': pos_name,
+                    'salaire': base_salary,
+                    'date_embauche': timezone.now().date(),
+                    'telephone': phone,
+                    'adresse': 'Adresse de test, Casablanca',
+                    'cin': cin,
+                }
+            )
+            if was_created:
+                created += 1
+            else:
+                updated += 1
+        
+        self.stdout.write(self.style.SUCCESS(f'HR seeding complete: {created} created, {updated} updated.'))
