@@ -68,6 +68,13 @@ class Plat(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    ingredients = models.ManyToManyField(
+        'stock.Ingredient',
+        through='stock.PlatIngredient',
+        related_name='plats',
+        blank=True,
+    )
+
     objects = PlatManager()
 
     class Meta:
