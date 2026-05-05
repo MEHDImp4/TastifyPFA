@@ -15,7 +15,7 @@ class IngredientSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'est_active', 'created_at', 'updated_at']
 
 
 class PlatIngredientSerializer(serializers.ModelSerializer):
