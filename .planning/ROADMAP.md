@@ -158,7 +158,7 @@ Phases execute in numeric order: 1 → 40
 | 15. KDS Orchestrator Logic | 3/3 | Completed | 2026-05-03 |
 | 16. Order Push to KDS | 8/8 | Completed | 2026-05-04 |
 | 17. Order Status Updates | 1/1 | Completed | 2026-05-04 |
-| 18. Ingredients & Stock Model | 0/1 | Planned | — |
+| 18. Ingredients & Stock Model | 0/3 | Ready | — |
 | 19. Stock Management Frontend | 0/1 | Planned | — |
 | 20. Automated Deductions | 0/1 | Planned | — |
 | ... | ... | ... | ... |
