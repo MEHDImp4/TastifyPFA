@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 23:58:06<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 23:58:49<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -962,6 +962,46 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Backoffice Pagination**: Added a shared `Pagination` UI component and wired it into the dense list screens where pagination is materially needed: dishes, stock ingredients, and HR employees.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Regression Coverage**: Added dedicated pagination tests for the shared component plus integration coverage for `Plats`, `Stock`, and `RH` reset behavior after filters and searches.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Plats**: Paginated both desktop and mobile list surfaces, with automatic reset to page 1 when the selected category changes.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Stock**: Paginated the ingredient list and reset pagination when the search term or alert-only filter changes.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **RH**: Paginated the employee table and reset pagination when the search term changes.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the new shared pagination surface and test coverage.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `app/frontend/backoffice`: `npm test ---run src/components/ui/Pagination.test.tsx src/pages/Plats/index.test.tsx src/pages/Stock/index.test.tsx src/pages/Hr/HrPage.test.tsx`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 23:57</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Feature commit: `87a4ada`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 23:48</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and centered the entire logo horizontally within the sidebar for better visual balance.</p>
@@ -995,46 +1035,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 14:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Agent Rules**: Updated `GEMINI.md`, `CLAUDE.md`, and `AGENTS.md` to mandate the use of specialized sub-agents (e.g., `gsd-executor`, `gsd-debugger`) for all code modifications and bug fixes, ensuring peak efficiency and focus.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **StaffNotificationManager**: Centralized component in `@shared/websocket/` that handles global audio alerts (kitchen bell) and system-wide notifications for order updates.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Sidebar (Collapsible)**: Implemented a collapsible state for the backoffice sidebar with smooth transitions, improving screen real-estate for tablet and mobile users.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Connection Status Icons**: Added real-time WebSocket connection status indicators (WiFi icon) to both Sidebar and Mobile Header in `AppShell`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **AppShell Refactor**: Integrated `StaffNotificationManager` at the top level and improved responsive layout behavior when sidebar is collapsed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **WebSocket URL Handling**: Updated `staffSocket.ts` to use `location.host` instead of `location.hostname`, ensuring port numbers are preserved in the WebSocket URL (fixing connection failures in Docker/custom port environments).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Vite Proxy Fix**: Corrected `vite.config.ts` proxy configuration for `/ws` to use `http` target with `ws: true`, improving compatibility with internal Docker routing.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Duplicate Logic**: Removed redundant audio playback and order-polling logic from `KdsSocketManager` and `OrderingPage`, consolidating it into the shared notification layer.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-05 14:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ALLOWED_HOSTS**: Updated `backend/settings/dev.py` to allow all hosts (`*`) in development, preventing `Invalid HTTP_HOST` errors when accessing the API from different network interfaces.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

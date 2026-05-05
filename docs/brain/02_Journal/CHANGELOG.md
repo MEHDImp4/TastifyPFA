@@ -1,3 +1,20 @@
+## [2026-05-05] - 23:57
+### Added
+- **Backoffice Pagination**: Added a shared `Pagination` UI component and wired it into the dense list screens where pagination is materially needed: dishes, stock ingredients, and HR employees.
+- **Regression Coverage**: Added dedicated pagination tests for the shared component plus integration coverage for `Plats`, `Stock`, and `RH` reset behavior after filters and searches.
+
+### Changed
+- **Plats**: Paginated both desktop and mobile list surfaces, with automatic reset to page 1 when the selected category changes.
+- **Stock**: Paginated the ingredient list and reset pagination when the search term or alert-only filter changes.
+- **RH**: Paginated the employee table and reset pagination when the search term changes.
+- **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the new shared pagination surface and test coverage.
+
+### Validation
+- `app/frontend/backoffice`: `npm test -- --run src/components/ui/Pagination.test.tsx src/pages/Plats/index.test.tsx src/pages/Stock/index.test.tsx src/pages/Hr/HrPage.test.tsx`
+
+### Commit
+- Feature commit: `87a4ada`
+
 ## [2026-05-05] - 23:48
 ### Changed
 - **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and centered the entire logo horizontally within the sidebar for better visual balance.
