@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -10,8 +13,8 @@ class Ingredient(models.Model):
 
     nom = models.CharField(max_length=100, unique=True)
     unite_mesure = models.CharField(max_length=5, choices=UNITE_CHOICES)
-    stock_actuel = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    seuil_alerte = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    stock_actuel = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    seuil_alerte = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     est_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -41,7 +44,7 @@ class PlatIngredient(models.Model):
         on_delete=models.CASCADE,
         related_name='ingredient_plats',
     )
-    quantite_requise = models.DecimalField(max_digits=10, decimal_places=2)
+    quantite_requise = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 
     class Meta:
         unique_together = ('plat', 'ingredient')
