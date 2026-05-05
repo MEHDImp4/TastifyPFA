@@ -32,13 +32,12 @@ This audit identifies stale documentation and unverified "human-needed" items to
    - **Verify:** Salle UI plays the "Order Ready" chime (fix verified in Phase 17).
 
 ### Priority 2: Stock Deductions (New in Phase 20)
-*Why: Newly implemented, needs "End-to-End" confirmation.*
-1. **JIT Deduction:**
-   - Note current stock of an ingredient (e.g., "Fromage").
-   - Create and Fire an order containing that ingredient.
-   - Wait for the JIT launch time (or trigger it).
-   - **Verify:** Ingredient stock in Back-Office decreases automatically.
-   - **Verify:** If stock was near threshold, an Amber/Terracotta alert appears in the Stock list.
+*Status: ✅ PASSED (Verified by user 2026-05-05)*
+1. **JIT & Manual Deduction:**
+   - Note current stock of an ingredient (e.g., "Tomate").
+   - Create and Fire an order containing that ingredient (e.g., "Salade César").
+   - **Verify:** Stock decreases automatically on JIT launch OR manual "Commencer" action in KDS.
+   - **Verify:** Alerts appear correctly if thresholds are crossed.
 
 ### Priority 3: UI & Reliability (Post-Refactor)
 *Why: Recent sidebar and layout changes might have impacted usability.*
