@@ -279,7 +279,7 @@ export function StockAdjustmentModal({ isOpen, onClose, onSuccess, ingredient }:
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </AnimatePresence>
