@@ -6,6 +6,7 @@ import { IngredientMobileCard } from './IngredientMobileCard';
 import { IngredientDrawer } from './IngredientDrawer';
 import { StockAdjustmentModal } from './StockAdjustmentModal';
 import { Switch } from '../../components/ui/Switch';
+import { Pagination } from '../../components/ui/Pagination';
 import { Ingredient } from './types';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 
@@ -18,6 +19,8 @@ export default function StockPage() {
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showOnlyAlerts, setShowOnlyAlerts] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 12;
 
   const isGerant = user?.role === 'GERANT';
 
@@ -62,6 +65,18 @@ export default function StockPage() {
     const matchesAlert = showOnlyAlerts ? ing.stock_actuel <= ing.seuil_alerte * 1.2 : true;
     return matchesSearch && matchesAlert;
   });
+  const totalPages = Math.max(1, Math.ceil(filteredIngredients.length / pageSize));
+  const paginatedIngredients = filteredIngredients.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, showOnlyAlerts]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <div className="space-y-6">
@@ -108,12 +123,20 @@ export default function StockPage() {
           {/* Desktop View */}
           <div className="hidden md:block">
             <IngredientList
-              ingredients={filteredIngredients}
+              ingredients={paginatedIngredients}
               onEdit={handleEdit}
               onAdjust={handleAdjust}
               onRefresh={fetchIngredients}
               onToggleActive={handleToggleActive}
               isGerant={isGerant}
+            />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={filteredIngredients.length}
+              itemLabel="ingredients"
+              onPageChange={setCurrentPage}
             />
           </div>
 
@@ -124,16 +147,26 @@ export default function StockPage() {
                 {searchTerm || showOnlyAlerts ? 'Aucun résultat correspondant.' : 'Aucun ingrédient trouvé.'}
               </div>
             ) : (
-              filteredIngredients.map((ingredient) => (
-                <IngredientMobileCard
-                  key={ingredient.id}
-                  ingredient={ingredient}
-                  onEdit={handleEdit}
-                  onAdjust={handleAdjust}
-                  onRefresh={fetchIngredients}
-                  onToggleActive={handleToggleActive}
+              <>
+                {paginatedIngredients.map((ingredient) => (
+                  <IngredientMobileCard
+                    key={ingredient.id}
+                    ingredient={ingredient}
+                    onEdit={handleEdit}
+                    onAdjust={handleAdjust}
+                    onRefresh={fetchIngredients}
+                    onToggleActive={handleToggleActive}
+                  />
+                ))}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  pageSize={pageSize}
+                  totalItems={filteredIngredients.length}
+                  itemLabel="ingredients"
+                  onPageChange={setCurrentPage}
                 />
-              ))
+              </>
             )}
           </div>
         </>

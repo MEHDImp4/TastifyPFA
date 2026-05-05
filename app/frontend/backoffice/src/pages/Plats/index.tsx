@@ -6,6 +6,7 @@ import { useResponsiveListView } from './useResponsiveListView';
 import { PlatListTable } from './PlatListTable';
 import { PlatMobileCard } from './PlatMobileCard';
 import { PlatDrawer } from './PlatDrawer';
+import { Pagination } from '../../components/ui/Pagination';
 
 const PlatsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -20,6 +21,8 @@ const PlatsPage: React.FC = () => {
   const [editingPlat, setEditingPlat] = useState<Plat | null>(null);
 
   const listMode = useResponsiveListView();
+  const pageSize = listMode === 'desktop' ? 10 : 6;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -57,6 +60,10 @@ const PlatsPage: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategoryId, listMode]);
+
   const handleToggleStatus = async (plat: Plat, field: 'est_active' | 'est_disponible') => {
     setIsProcessing(plat.id);
     const nextStatus = !plat[field];
@@ -93,6 +100,14 @@ const PlatsPage: React.FC = () => {
   };
 
   const selectedCategory = categories.find(c => c.id === selectedCategoryId);
+  const totalPages = Math.max(1, Math.ceil(plats.length / pageSize));
+  const paginatedPlats = plats.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <div className="space-y-6">
@@ -173,26 +188,46 @@ const PlatsPage: React.FC = () => {
               </button>
             </div>
           ) : listMode === 'desktop' ? (
-            <PlatListTable
-              plats={plats}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onToggleStatus={handleToggleStatus}
-              isProcessing={isProcessing}
-            />
+            <>
+              <PlatListTable
+                plats={paginatedPlats}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onToggleStatus={handleToggleStatus}
+                isProcessing={isProcessing}
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={plats.length}
+                itemLabel="plats"
+                onPageChange={setCurrentPage}
+              />
+            </>
           ) : (
-            <div className="p-4 grid grid-cols-1 gap-4">
-              {plats.map(plat => (
-                <PlatMobileCard
-                  key={plat.id}
-                  plat={plat}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onToggleStatus={handleToggleStatus}
-                  isProcessing={isProcessing === plat.id}
-                />
-              ))}
-            </div>
+            <>
+              <div className="p-4 grid grid-cols-1 gap-4">
+                {paginatedPlats.map(plat => (
+                  <PlatMobileCard
+                    key={plat.id}
+                    plat={plat}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onToggleStatus={handleToggleStatus}
+                    isProcessing={isProcessing === plat.id}
+                  />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={plats.length}
+                itemLabel="plats"
+                onPageChange={setCurrentPage}
+              />
+            </>
           )}
         </div>
       )}

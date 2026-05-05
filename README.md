@@ -33,6 +33,7 @@ See `docs/brain/00_Meta/FILE_MAP.md`.
 
 The back-office SPA keeps Vite runtime config in `app/frontend/backoffice/vite.config.ts` and test-only settings in `app/frontend/backoffice/vitest.config.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
+Dense back-office list views now use a shared client-side pagination surface in `app/frontend/backoffice/src/components/ui/Pagination.tsx`, currently wired into dishes, stock, and HR screens.
 Cross-frontend role gates live in `app/frontend/shared/auth/roleAccess.ts`, with focused coverage in `app/frontend/backoffice/src/roleAccess.test.ts`.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.

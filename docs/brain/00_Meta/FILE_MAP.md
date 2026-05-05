@@ -51,6 +51,8 @@ tastify-pfa/
 │       ├── backoffice/            # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── vite.config.ts     # Dev server config without Vitest runtime dependency
 │       │   ├── vitest.config.ts   # Vitest-only config for test environment setup
+│       │   ├── src/components/ui/Pagination.tsx # Shared client-side pagination controls for dense backoffice lists
+│       │   ├── src/components/ui/Pagination.test.tsx
 │       │   ├── src/authBootstrap.test.tsx # Covers non-blocking persisted-session bootstrap deadlines
 │       │   ├── src/authPersistence.test.ts # Guards persisted auth-state sanitization on hydrate
 │       │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
@@ -58,6 +60,11 @@ tastify-pfa/
 │       │   └── src/pages/
 │       │       ├── Categories/    # Categories management (Phase 5)
 │       │       ├── Plats/         # Plats management (Phase 7)
+│       │       │   └── index.test.tsx # Includes pagination reset coverage by category
+│       │       ├── Stock/         # Ingredients and stock management with paginated list views
+│       │       │   └── index.test.tsx
+│       │       ├── Hr/            # HR management with paginated employee table
+│       │       │   └── HrPage.test.tsx
 │       │       ├── Tables/        # Centralized Table map management (Added Phase 9)
 │       │       └── Kds/           # Kitchen Display System (Phase 14)
 │       │           ├── components/ # TicketCard, KdsTimer

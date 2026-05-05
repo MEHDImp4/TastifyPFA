@@ -4,6 +4,7 @@ import hrService from './hrService';
 import { Employe, EmployeFormData } from './types';
 import EmployeeTable from './components/EmployeeTable';
 import EmployeeModal from './components/EmployeeModal';
+import { Pagination } from '../../components/ui/Pagination';
 
 const HrPage: React.FC = () => {
   const [employees, setEmployees] = useState<Employe[]>([]);
@@ -11,6 +12,8 @@ const HrPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employe | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 8;
 
   const fetchEmployees = async () => {
     setLoading(true);
@@ -58,6 +61,18 @@ const HrPage: React.FC = () => {
       emp.user_details.username.toLowerCase().includes(search)
     );
   });
+  const totalPages = Math.max(1, Math.ceil(filteredEmployees.length / pageSize));
+  const paginatedEmployees = filteredEmployees.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -129,14 +144,24 @@ const HrPage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <EmployeeTable 
-          employees={filteredEmployees} 
-          onEdit={(emp) => {
-            setEditingEmployee(emp);
-            setIsModalOpen(true);
-          }}
-          onDelete={handleDelete}
-        />
+        <>
+          <EmployeeTable 
+            employees={paginatedEmployees} 
+            onEdit={(emp) => {
+              setEditingEmployee(emp);
+              setIsModalOpen(true);
+            }}
+            onDelete={handleDelete}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={filteredEmployees.length}
+            itemLabel="employes"
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
 
       {/* Modal Form */}
