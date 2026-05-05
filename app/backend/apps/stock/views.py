@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.users.permissions import IsGerant
-from .models import Ingredient
-from .serializers import IngredientSerializer
+from .models import Ingredient, PlatIngredient
+from .serializers import IngredientSerializer, PlatIngredientSerializer
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -28,3 +28,9 @@ class IngredientViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PlatIngredientViewSet(viewsets.ModelViewSet):
+    serializer_class = PlatIngredientSerializer
+    permission_classes = [IsAuthenticated, IsGerant]
+    queryset = PlatIngredient.objects.select_related('plat', 'ingredient').all()
