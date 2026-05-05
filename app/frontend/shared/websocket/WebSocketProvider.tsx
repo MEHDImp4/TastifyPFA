@@ -22,6 +22,7 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
   const socketRef = useRef<WebSocket | null>(null)
   const connectTimerRef = useRef<number | null>(null)
   const reconnectTimerRef = useRef<number | null>(null)
+  const heartbeatTimerRef = useRef<number | null>(null)
   const reconnectAttemptRef = useRef(0)
   const intentionalCloseRef = useRef(false)
 
@@ -40,7 +41,15 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
       }
     }
 
+    const clearHeartbeatTimer = () => {
+      if (heartbeatTimerRef.current !== null) {
+        window.clearInterval(heartbeatTimerRef.current)
+        heartbeatTimerRef.current = null
+      }
+    }
+
     const cleanupSocket = () => {
+      clearHeartbeatTimer()
       if (socketRef.current) {
         const currentSocket = socketRef.current
         socketRef.current = null
@@ -83,6 +92,14 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
       socket.onopen = () => {
         reconnectAttemptRef.current = 0
         setConnectionStatus('open')
+        
+        // Start heartbeat to prevent timeout (Daphne/Proxy defaults)
+        clearHeartbeatTimer()
+        heartbeatTimerRef.current = window.setInterval(() => {
+          if (socketRef.current?.readyState === WebSocket.OPEN) {
+            socketRef.current.send(JSON.stringify({ type: 'ping', payload: {} }))
+          }
+        }, 30000)
       }
 
       socket.onmessage = (event) => {
@@ -99,6 +116,7 @@ export const WebSocketProvider = ({ children }: PropsWithChildren) => {
       socket.onclose = (event) => {
         socketRef.current = null
         setConnectionStatus('closed')
+        clearHeartbeatTimer()
 
         if (intentionalCloseRef.current || TERMINAL_CLOSE_CODES.has(event.code)) {
           return
