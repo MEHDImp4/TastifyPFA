@@ -162,6 +162,8 @@ Phases execute in numeric order: 1 → 40
 | 19. Stock Management Frontend | 4/4 | Complete | 2026-05-05 |
 | 20. Automated Deductions | 1/1 | Complete | 2026-05-05 |
 | 21. Employees (HR) Model & API | 1/1 | Completed | 2026-05-05 |
+| 22. HR Frontend | 1/1 | Completed | 2026-05-05 |
+| 23. Reservations Model & API | 2/2 | Planned | — |
 | ... | ... | ... | ... |
 | 40. Load Testing & Optimization | 0/2 | Planned | — |
 

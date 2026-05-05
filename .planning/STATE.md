@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: READY_TO_PLAN
-stopped_at: Phase 20 COMPLETE & VERIFIED — stock deduction now supports both automated JIT and manual triggers.
-last_updated: "2026-05-05T21:30:00.000Z"
+stopped_at: Phase 22 COMPLETE & VERIFIED — HR frontend is functional and verified.
+last_updated: "2026-05-05T23:59:00.000Z"
 progress:
   total_phases: 40
-  completed_phases: 20
-  total_plans: 67
-  percent: 50
+  completed_phases: 22
+  total_plans: 69
+  percent: 55
 notes: |
   - Phase 20 VERIFIED (2026-05-05): Stock deduction confirmed working for "Salade César" via both Celery JIT tasks and manual KDS "Commencer" actions.
   - Milestone 1 (Phases 01-20) Fully Verified: Manual UAT audit complete. Audio, WebSockets (with heartbeat fix), Sidebar, and Stock logic all green.

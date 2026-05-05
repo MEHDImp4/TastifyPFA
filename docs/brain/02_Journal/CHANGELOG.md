@@ -4,6 +4,11 @@
 
 ### Fixed
 - **EmployeeModal UI**: Replaced native browser select for "Rôle Système" with the new premium `Select` component, fixing the visual artifact where the native dropdown rendered with a white background on Windows (reported bug).
+- **Global UI Consistency**: Refactored `PlatDrawer`, `PlatRecetteTab`, `IngredientDrawer`, and `StockAdjustmentModal` to use the premium `Select` component, ensuring a unified design language and fixing native dropdown issues project-wide.
+- **StockAdjustmentModal Syntax**: Fixed a Vite compilation error caused by an unescaped single quote in a dropdown label.
+
+### Verified
+- **Phase 22 (HR Frontend)**: 100% of UAT tests passed. Employee management, role sync, and salary stats verified.
 
 ## [2026-05-05] - 14:35
 ### Changed
