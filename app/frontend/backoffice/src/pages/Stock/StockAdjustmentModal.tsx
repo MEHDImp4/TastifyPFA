@@ -237,11 +237,11 @@ export function StockAdjustmentModal({ isOpen, onClose, onSuccess, ingredient }:
                     value={reason}
                     onChange={setReason}
                     options={[
-                      { value: 'manual', label: 'Inventaire manuel' },
-                      { value: 'delivery', label: 'Réception de commande (Livraison)' },
-                      { value: 'waste', label: 'Perte / Gaspillage / Casse' },
-                      { value: 'correction', label: 'Correction d'erreur' },
-                      { value: 'gift', label: 'Offert / Dégustation' },
+                      { value: "manual", label: "Inventaire manuel" },
+                      { value: "delivery", label: "Réception de commande (Livraison)" },
+                      { value: "waste", label: "Perte / Gaspillage / Casse" },
+                      { value: "correction", label: "Correction d'erreur" },
+                      { value: "gift", label: "Offert / Dégustation" },
                     ]}
                     icon={<ClipboardList size={14} />}
                   />
