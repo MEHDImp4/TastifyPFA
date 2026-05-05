@@ -35,5 +35,9 @@ class IngredientViewSet(viewsets.ModelViewSet):
 
 class PlatIngredientViewSet(viewsets.ModelViewSet):
     serializer_class = PlatIngredientSerializer
-    permission_classes = [IsAuthenticated, IsGerant]
     queryset = PlatIngredient.objects.select_related('plat', 'ingredient').all()
+
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsGerant()]
