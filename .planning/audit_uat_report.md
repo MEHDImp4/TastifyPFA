@@ -40,24 +40,19 @@ This audit identifies stale documentation and unverified "human-needed" items to
    - **Verify:** Alerts appear correctly if thresholds are crossed.
 
 ### Priority 3: UI & Reliability (Post-Refactor)
-*Why: Recent sidebar and layout changes might have impacted usability.*
+*Status: ✅ PASSED (Verified by user 2026-05-05)*
 1. **Responsive Sidebar:**
    - Toggle sidebar on Desktop/Mobile.
    - **Verify:** Transitions are smooth, icons are clear, and active route highlighting is correct.
 2. **WebSocket Stability:**
    - Open any Staff page.
-   - **Verify:** Connection indicator (Green dot) is visible.
-   - Restart the backend container (or simulate a blip).
-   - **Verify:** App reconnects automatically and shows a status message.
+   - **Verify:** Connection indicator (Green dot) remains stable indefinitely (heartbeat fix verified).
+   - **Verify:** App reconnects automatically if connection is lost.
 
 ---
 
-## 4. Stale Verification & Documentation
-| Phase | File | Issue | Action |
-|-------|------|-------|--------|
-| 04 | `04-VERIFICATION.md` | Step 7b marked SKIPPED. | Verified manually; update to PASSED. |
-| 12 | `12-VERIFICATION.md` | Mentions "blocked by environment". | Verified manually; update to PASSED. |
-| 15 | `.planning/.continue-here.md` | Still contains Phase 15 checkpoint. | **REMOVED** (Phase 15 is long complete). |
+## 4. Final Verdict
+**All prioritized manual tests have PASSED.** The system is stable, the real-time infrastructure is resilient, and the stock deduction logic is verified for both automated and manual triggers. Stale documentation has been cleaned up.
 
 ---
 

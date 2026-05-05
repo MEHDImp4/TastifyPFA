@@ -12,6 +12,7 @@ progress:
   percent: 50
 notes: |
   - Phase 20 VERIFIED (2026-05-05): Stock deduction confirmed working for "Salade César" via both Celery JIT tasks and manual KDS "Commencer" actions.
+  - Milestone 1 (Phases 01-20) Fully Verified: Manual UAT audit complete. Audio, WebSockets (with heartbeat fix), Sidebar, and Stock logic all green.
   - UI & Reliability Refactor (2026-05-05): 
     - Implemented collapsible sidebar with smooth transitions.
     - Centralized audio/visual notifications in `StaffNotificationManager`.
