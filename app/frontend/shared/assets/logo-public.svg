@@ -7,6 +7,10 @@
         font-weight: 800;
         font-size: 32px;
         fill: white;
+        stroke: black;
+        stroke-width: 1.5px;
+        stroke-linejoin: round;
+        paint-order: stroke fill;
         letter-spacing: -0.02em;
       }
     </style>
