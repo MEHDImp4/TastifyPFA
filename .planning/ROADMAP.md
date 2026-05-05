@@ -26,7 +26,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds. (completed 2026-05-05)
 - [x] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock. (completed 2026-05-05)
 - [x] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task. (completed 2026-05-05)
-- [ ] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users.
+- [x] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users. (completed 2026-05-05)
 - [ ] **Phase 22: HR Frontend** - Back-office HR UI.
 - [ ] **Phase 23: Reservations Model & API** - Availability logic.
 - [ ] **Phase 24: Reservations Client UI** - Portail Client booking flow.
@@ -129,10 +129,10 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Phase 15
 **Success Criteria**: 1. PATCH `/commandes/{id}/` with `{"statut":"EN_CUISINE"}` succeeds for order owner and triggers `KdsOrchestrator`. 2. CUISINIER queryset strictly excludes `EN_COURS` (only `EN_CUISINE | PRETE` visible). 3. "Envoyer en Cuisine" button renders on `OrderingPage` when order is `EN_COURS`. 4. KDS plays audio bell on new ticket arrival via WebSocket. 5. `TicketCard` shows green glow pulse for 10 seconds on new ticket arrival, then stops.
 
-### Phase 17: Order Status Updates
-**Goal**: Enable the Kitchen to signal when dishes or entire orders are ready, and push these updates in real-time to the Salle staff.
-**Depends on**: Phase 16
-**Success Criteria**: 1. KDS includes "Ready" buttons for individual items and orders. 2. Real-time WebSocket sync between KDS and Salle. 3. Audio/Visual feedback in Salle when items become ready.
+### Phase 21: Employees (HR) Model & API
+**Goal**: Employee profiles linked to Users.
+**Depends on**: Phase 2
+**Success Criteria**: 1. Employee CRUD with Gerant-only access. 2. Automated user creation. 3. Soft delete.
 
 ## Progress
 
@@ -161,6 +161,7 @@ Phases execute in numeric order: 1 → 40
 | 18. Ingredients & Stock Model | 4/4 | Complete | 2026-05-05 |
 | 19. Stock Management Frontend | 4/4 | Complete | 2026-05-05 |
 | 20. Automated Deductions | 1/1 | Complete | 2026-05-05 |
+| 21. Employees (HR) Model & API | 1/1 | Completed | 2026-05-05 |
 | ... | ... | ... | ... |
 | 40. Load Testing & Optimization | 0/2 | Planned | — |
 
