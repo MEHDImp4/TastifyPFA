@@ -173,3 +173,4 @@ Phases execute in numeric order: 1 → 40
 
 Plans:
 - [x] 20-01-PLAN.md — Atomic stock deduction service and task integration. (completed 2026-05-05)
+- [x] 20-UAT.md — Automated and integration test verification. (passed 2026-05-05)
