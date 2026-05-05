@@ -27,6 +27,7 @@ tastify-pfa/
 │   │   │   │   ├── views.py
 │   │   │   │   └── urls.py
 │   │   │   ├── tables/            # Table model, API, and seed data
+│   │   │   ├── reservations/      # Reservation domain, migration, buffered availability services, and tests
 │   │   │   └── commandes/         # Orders, order lines, total signals, and KDS orchestration
 │   │   │       ├── models.py      # Commande and CommandeLigne + Phase 15 scheduling fields
 │   │   │       ├── signals.py     # montant_total recalculation + commit-safe orchestrator/broadcast triggers
@@ -98,7 +99,8 @@ tastify-pfa/
 │       ├── 13-websocket-infrastructure/
 │       ├── 14-kds-base-frontend/
 │       ├── 15-kds-orchestrator-logic/
-│       └── 16-order-push-to-kds/
+│       ├── 16-order-push-to-kds/
+│       └── 23-reservations-model-api/
 ├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md

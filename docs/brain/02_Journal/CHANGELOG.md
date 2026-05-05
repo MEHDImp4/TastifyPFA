@@ -1,3 +1,22 @@
+## [2026-05-06] - 00:56
+### Added
+- **Reservations Domain**: Added `apps.reservations` with the `Reservation` model, initial migration, admin registration, shared cleanup-buffer constant, and transactional service helpers for buffered availability checks plus race-safe create/update flows.
+- **Wave Summary**: Added `.planning/phases/23-reservations-model-api/23-01-SUMMARY.md` to capture the completed execution scope and verification evidence for Wave 1.
+
+### Changed
+- **Phase 23 State**: Marked Phase 23 as in progress with `23-01` complete and `23-02` next for the API/RBAC/table-status surface.
+- **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `.planning/STATE.md`, `.planning/ROADMAP.md`, and `dashboard.html` to reflect the live reservations execution state.
+
+### Validation
+- `app/backend`: `python manage.py check`
+- `app/backend`: `python -m pytest apps/reservations/tests/test_models.py apps/reservations/tests/test_services.py -q`
+- `app/backend`: `python manage.py makemigrations reservations --check --dry-run`
+
+### Commit
+- Test commit: `5b3bc64`
+- Implementation commit: `1bbce95`
+- Summary commit: `097731b`
+
 ## [2026-05-06] - 10:00
 ### Changed
 - **Project Logo**: Replaced the SVG-based logo with a high-fidelity PNG asset provided by the user. 

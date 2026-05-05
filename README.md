@@ -44,13 +44,14 @@ Both frontend entrypoints now bootstrap persisted auth through `app/frontend/sha
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/15-kds-orchestrator-logic/`, where Phase 15 now includes context, research, validation, execution plans, execution summaries, and a persisted `15-UAT.md` manual verification session for websocket launch behavior.
+Current planning artifacts now extend through `.planning/phases/23-reservations-model-api/`, where Phase 23 is in execution with `23-01` completed and `23-02` next on deck for the API/RBAC/table-status surface.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
 - `apps.users` — custom users and RBAC.
 - `apps.menu` — categories and dishes.
 - `apps.tables` — restaurant tables.
+- `apps.reservations` — reservation domain, buffered availability checks, and transactional booking services.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 

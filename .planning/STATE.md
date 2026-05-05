@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: READY_TO_PLAN
-stopped_at: Phase 22 COMPLETE & VERIFIED — HR frontend is functional and verified.
-last_updated: "2026-05-05T23:59:00.000Z"
+status: EXECUTING_PHASE_23
+stopped_at: Phase 23 IN PROGRESS — 23-01 reservations domain foundation is complete and verified; next is 23-02 API/RBAC/table-status execution.
+last_updated: "2026-05-06T00:56:00.000Z"
 progress:
   total_phases: 40
   completed_phases: 22
   total_plans: 69
   percent: 55
 notes: |
+  - Phase 23-01 COMPLETE & VERIFIED (2026-05-06): reservations app, migration, buffered overlap enforcement, and transactional booking services landed with passing reservation tests.
   - Phase 20 VERIFIED (2026-05-05): Stock deduction confirmed working for "Salade César" via both Celery JIT tasks and manual KDS "Commencer" actions.
   - Milestone 1 (Phases 01-20) Fully Verified: Manual UAT audit complete. Audio, WebSockets (with heartbeat fix), Sidebar, and Stock logic all green.
   - UI & Reliability Refactor (2026-05-05): 
