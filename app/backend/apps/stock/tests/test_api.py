@@ -2,7 +2,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
-from apps.stock.models import Ingredient
+from apps.stock.models import Ingredient, PlatIngredient
+from apps.menu.models import Categorie, Plat
 
 User = get_user_model()
 
@@ -161,3 +162,75 @@ class TestIngredientActiveFiltering:
         data = response.data['results'] if 'results' in response.data else response.data
         names = [i['nom'] for i in data]
         assert 'Farine' not in names
+
+
+PLAT_INGREDIENT_URL = '/api/stock/plat-ingredients/'
+
+
+class TestPlatIngredientAPITest:
+    @pytest.fixture(autouse=True)
+    def setup(self, db):
+        User = get_user_model()
+        self.gerant = User.objects.create_user(
+            username='gerant_pi', password='pass', role=User.Role.GERANT
+        )
+        self.serveur = User.objects.create_user(
+            username='serveur_pi', password='pass', role=User.Role.SERVEUR
+        )
+        self.categorie = Categorie.objects.create(nom='Entrées', ordre_affichage=1)
+        self.plat = Plat.objects.create(
+            nom='Pizza Margherita',
+            categorie=self.categorie,
+            prix='12.50',
+        )
+        self.ingredient = Ingredient.objects.create(
+            nom='Tomate', unite_mesure='g', stock_actuel=1000, seuil_alerte=100
+        )
+
+    def test_gerant_can_create_link(self):
+        client = APIClient()
+        client.force_authenticate(user=self.gerant)
+        data = {
+            'plat': self.plat.pk,
+            'ingredient': self.ingredient.pk,
+            'quantite_requise': '150.00',
+        }
+        response = client.post(PLAT_INGREDIENT_URL, data, format='json')
+        assert response.status_code == status.HTTP_201_CREATED
+        assert PlatIngredient.objects.filter(plat=self.plat, ingredient=self.ingredient).exists()
+
+    def test_non_gerant_cannot_create(self):
+        client = APIClient()
+        client.force_authenticate(user=self.serveur)
+        data = {
+            'plat': self.plat.pk,
+            'ingredient': self.ingredient.pk,
+            'quantite_requise': '150.00',
+        }
+        response = client.post(PLAT_INGREDIENT_URL, data, format='json')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_gerant_can_delete(self):
+        link = PlatIngredient.objects.create(
+            plat=self.plat, ingredient=self.ingredient, quantite_requise='100.00'
+        )
+        client = APIClient()
+        client.force_authenticate(user=self.gerant)
+        response = client.delete(f'{PLAT_INGREDIENT_URL}{link.pk}/')
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not PlatIngredient.objects.filter(pk=link.pk).exists()
+
+    def test_unique_together_violation(self):
+        """Creating the same plat+ingredient link twice returns HTTP 400."""
+        PlatIngredient.objects.create(
+            plat=self.plat, ingredient=self.ingredient, quantite_requise='100.00'
+        )
+        client = APIClient()
+        client.force_authenticate(user=self.gerant)
+        data = {
+            'plat': self.plat.pk,
+            'ingredient': self.ingredient.pk,
+            'quantite_requise': '200.00',
+        }
+        response = client.post(PLAT_INGREDIENT_URL, data, format='json')
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
