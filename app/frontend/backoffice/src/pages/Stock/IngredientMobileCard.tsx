@@ -10,12 +10,14 @@ interface IngredientMobileCardProps {
   onEdit: (ingredient: Ingredient) => void;
   onAdjust: (ingredient: Ingredient) => void;
   onRefresh: () => void;
+  onToggleActive: (id: number, isActive: boolean) => void;
 }
 
-export function IngredientMobileCard({ ingredient, onEdit, onAdjust, onRefresh }: IngredientMobileCardProps) {
+export function IngredientMobileCard({ ingredient, onEdit, onAdjust, onRefresh, onToggleActive }: IngredientMobileCardProps) {
   const { user } = useAuthStore();
   const [isConfirming, setIsConfirming] = React.useState(false);
   const [isActive, setIsActive] = React.useState(ingredient.est_active);
+  const [isToggling, setIsToggling] = React.useState(false);
 
   const isGerant = user?.role === 'GERANT';
   const stockValue = Number(ingredient.stock_actuel);
@@ -35,14 +37,18 @@ export function IngredientMobileCard({ ingredient, onEdit, onAdjust, onRefresh }
   }, [ingredient.est_active]);
 
   const handleToggle = async () => {
+    if (isToggling) return;
     const nextStatus = !isActive;
+    setIsToggling(true);
     setIsActive(nextStatus);
     try {
       await axiosInstance.patch(`/stock/ingredients/${ingredient.id}/`, { est_active: nextStatus });
-      onRefresh();
+      onToggleActive(ingredient.id, nextStatus);
     } catch (err) {
       setIsActive(!nextStatus);
       console.error('Toggle failed', err);
+    } finally {
+      setIsToggling(false);
     }
   };
 
@@ -63,7 +69,7 @@ export function IngredientMobileCard({ ingredient, onEdit, onAdjust, onRefresh }
           <h3 className="font-bold text-lg text-white">{ingredient.nom}</h3>
           <p className="text-sm text-foreground-muted">Unité: {ingredient.unite_mesure}</p>
         </div>
-        <Switch checked={isActive} onToggle={handleToggle} disabled={!isGerant} />
+        <Switch checked={isActive} onToggle={handleToggle} disabled={!isGerant || isToggling} />
       </div>
 
       <div className="grid grid-cols-2 gap-4 bg-surface-elevated/30 p-3 rounded-lg border border-white/5">

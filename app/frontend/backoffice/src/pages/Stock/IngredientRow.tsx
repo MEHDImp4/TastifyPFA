@@ -9,12 +9,14 @@ interface IngredientRowProps {
   onEdit: (ingredient: Ingredient) => void;
   onAdjust: (ingredient: Ingredient) => void;
   onRefresh: () => void;
+  onToggleActive: (id: number, isActive: boolean) => void;
   isGerant: boolean;
 }
 
-export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, isGerant }: IngredientRowProps) {
+export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, onToggleActive, isGerant }: IngredientRowProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isActive, setIsActive] = useState(ingredient.est_active);
+  const [isToggling, setIsToggling] = useState(false);
 
   const stockValue = Number(ingredient.stock_actuel);
   const threshold = Number(ingredient.seuil_alerte);
@@ -40,14 +42,18 @@ export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, isGeran
   }, [isConfirming]);
 
   const handleToggle = async () => {
+    if (isToggling) return;
     const nextStatus = !isActive;
+    setIsToggling(true);
     setIsActive(nextStatus);
     try {
       await axiosInstance.patch(`/stock/ingredients/${ingredient.id}/`, { est_active: nextStatus });
-      onRefresh();
+      onToggleActive(ingredient.id, nextStatus);
     } catch (err) {
       setIsActive(!nextStatus);
       console.error('Toggle failed', err);
+    } finally {
+      setIsToggling(false);
     }
   };
 
@@ -76,7 +82,7 @@ export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, isGeran
       </td>
       <td className="px-6 py-4 text-foreground-muted">{ingredient.seuil_alerte}</td>
       <td className="px-6 py-4">
-        <Switch checked={isActive} onToggle={handleToggle} disabled={!isGerant} />
+        <Switch checked={isActive} onToggle={handleToggle} disabled={!isGerant || isToggling} />
       </td>
       <td className="px-6 py-4">
         {isConfirming ? (

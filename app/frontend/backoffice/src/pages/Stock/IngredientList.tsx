@@ -6,10 +6,11 @@ interface IngredientListProps {
   onEdit: (ingredient: Ingredient) => void;
   onAdjust: (ingredient: Ingredient) => void;
   onRefresh: () => void;
+  onToggleActive: (id: number, isActive: boolean) => void;
   isGerant: boolean;
 }
 
-export function IngredientList({ ingredients, onEdit, onAdjust, onRefresh, isGerant }: IngredientListProps) {
+export function IngredientList({ ingredients, onEdit, onAdjust, onRefresh, onToggleActive, isGerant }: IngredientListProps) {
   return (
     <div className="overflow-x-auto bg-surface rounded-xl shadow-lg border border-surface-elevated">
       <table className="w-full text-left border-collapse">
@@ -38,6 +39,7 @@ export function IngredientList({ ingredients, onEdit, onAdjust, onRefresh, isGer
                 onEdit={onEdit}
                 onAdjust={onAdjust}
                 onRefresh={onRefresh}
+                onToggleActive={onToggleActive}
                 isGerant={isGerant}
               />
             ))

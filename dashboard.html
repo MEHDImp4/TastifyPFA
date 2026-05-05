@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 18:44:34<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-05 21:30:00<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -921,6 +921,26 @@
                     <div class="flex-1 overflow-y-auto pr-2">
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 21:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Stock Toggle Snap-back**: `onRefresh()` après un toggle déclenchait un rechargement complet qui démontait/remontait `IngredientRow` avec les données serveur. Remplacé par `onToggleActive(id, isActive)` qui met à jour directement le tableau `ingredients` dans le store parent — aucun rechargement, aucun snap-back.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 21:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Stock Toggle Double Request**: `handleToggle` n'avait pas de garde contre les appels concurrents. Ajout d'un état `isToggling` qui bloque les clics multiples pendant la requête en vol et désactive visuellement le switch.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 21:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **`est_active` ignoré au PATCH**: `IngredientSerializer` avait `est_active` dans `read_only_fields` — le PATCH renvoyait 200 mais le champ n'était jamais sauvegardé en base. Retiré des `read_only_fields`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-05 20:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Stock Adjustment 400**: `stock_actuel` retourné par l'API est une string (`"100.00"` — format DRF `DecimalField`). `ingredient.stock_actuel + value` produisait une concaténation de strings (`"100.005"`) rejetée par la contrainte `decimal_places=2`. Corrigé avec `parseFloat(String(...))` + arrondi à 2 décimales.</p>
+                            </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-05 14:35</div>

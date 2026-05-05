@@ -43,6 +43,10 @@ export default function StockPage() {
     setIsDrawerOpen(true);
   };
 
+  const handleToggleActive = (id: number, isActive: boolean) => {
+    setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, est_active: isActive } : ing));
+  };
+
   const handleAdjust = (ingredient: Ingredient) => {
     setSelectedIngredient(ingredient);
     setIsAdjustmentModalOpen(true);
@@ -108,6 +112,7 @@ export default function StockPage() {
               onEdit={handleEdit}
               onAdjust={handleAdjust}
               onRefresh={fetchIngredients}
+              onToggleActive={handleToggleActive}
               isGerant={isGerant}
             />
           </div>
@@ -126,6 +131,7 @@ export default function StockPage() {
                   onEdit={handleEdit}
                   onAdjust={handleAdjust}
                   onRefresh={fetchIngredients}
+                  onToggleActive={handleToggleActive}
                 />
               ))
             )}
