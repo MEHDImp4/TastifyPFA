@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
 import { useAuthStore } from './useAuthStore'
-import logo from '@shared/assets/logo.svg'
+import logoStaff from '@shared/assets/logo-staff.svg'
+import logoPublic from '@shared/assets/logo-public.svg'
 import { isRoleAllowed } from './roleAccess'
 
 interface LoginProps {
@@ -17,6 +18,7 @@ interface LoginProps {
 
 const STYLES = {
   staff: {
+    logo: logoStaff,
     glow: 'bg-primary/25',
     label: 'text-primary',
     focus: 'group-focus-within:text-primary',
@@ -24,6 +26,7 @@ const STYLES = {
     button: 'bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20',
   },
   client: {
+    logo: logoPublic,
     glow: 'bg-accent/25',
     label: 'text-accent',
     focus: 'group-focus-within:text-accent',
@@ -100,7 +103,7 @@ const Login: React.FC<LoginProps> = ({
           <div className="flex flex-col items-center mb-12 mt-2">
             <div className="relative">
               <div className={`absolute inset-0 ${styles.glow} blur-3xl rounded-full scale-125`} />
-              <img src={logo} alt="Tastify" className="w-[320px] max-w-full relative z-10" />
+              <img src={styles.logo} alt="Tastify" className="w-[320px] max-w-full relative z-10" />
             </div>
             <div className="text-center mt-6">
               <h1 className="text-2xl font-bold text-white tracking-tight">{appLabel}</h1>
