@@ -50,11 +50,14 @@ blocked: 0
 ## Gaps
 
 - truth: "Salle UI plays an audio notification when an order becomes PRETE"
-  status: failed
+  status: fixed
   reason: "User reported: no audio"
   severity: major
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "order-ready.mp3 missing from public/sounds/ — StaffNotificationManager loads this file for PRETE events, Audio.play() fails silently"
+  artifacts:
+    - path: "app/frontend/backoffice/src/components/layout/../../../shared/websocket/StaffNotificationManager.tsx"
+      issue: "readyAudioRef loaded from /sounds/order-ready.mp3 which did not exist"
+  missing:
+    - "app/frontend/backoffice/public/sounds/order-ready.mp3"
+  fix: "Copied kitchen-bell.mp3 as order-ready.mp3 in public/sounds/"
