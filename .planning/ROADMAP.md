@@ -172,4 +172,4 @@ Phases execute in numeric order: 1 → 40
 **Success Criteria**: 1. Stock decreases correctly per plat recipe on line launch. 2. Race conditions prevented via atomic row locking. 3. Low-stock alerts broadcast via WebSockets.
 
 Plans:
-- [ ] 20-01-PLAN.md � Atomic stock deduction service and task integration.
+- [ ] 20-01-PLAN.md — Atomic stock deduction service and task integration.

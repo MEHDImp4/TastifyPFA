@@ -1,8 +1,13 @@
+import logging
 from celery import shared_task
 from django.utils import timezone
+from django.db import transaction
 
 from apps.commandes.models import CommandeLigne
+from apps.stock.services import StockService, InsufficientStockError
 from core.realtime import broadcast_staff_event
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task(name='commandes.launch_item')
@@ -29,11 +34,29 @@ def launch_item_task(ligne_id):
             'statut': line.statut,
         }
 
-    now = timezone.now()
-    CommandeLigne.objects.filter(pk=ligne_id).update(
-        statut=CommandeLigne.Statut.EN_PREPARATION,
-        updated_at=now,
-    )
+    try:
+        with transaction.atomic():
+            now = timezone.now()
+            # We use .filter().update() for efficiency, but it's inside atomic()
+            # so it will rollback if StockService fails.
+            CommandeLigne.objects.filter(pk=ligne_id).update(
+                statut=CommandeLigne.Statut.EN_PREPARATION,
+                updated_at=now,
+            )
+
+            # Deduct ingredients automatically
+            StockService.deduct_ingredients_for_plat(line.plat, line.quantite)
+
+    except InsufficientStockError as e:
+        logger.error(f"Failed to launch item {ligne_id}: {str(e)}")
+        # We let the exception propagate so Celery can retry if configured,
+        # or it will mark the task as failed. 
+        # However, the plan doesn't specify retry logic.
+        # If we want it to rollback and fail, we should re-raise.
+        raise
+    except Exception as e:
+        logger.exception(f"Unexpected error in launch_item_task for line {ligne_id}")
+        raise
 
     broadcast_staff_event(
         'line_launched',
