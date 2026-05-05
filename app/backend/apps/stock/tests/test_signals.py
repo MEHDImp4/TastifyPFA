@@ -30,14 +30,14 @@ class TestStockAlertSignal:
 
     def test_broadcast_not_fired_when_stock_already_low(self, ingredient_above_threshold):
         """No alert when stock is already below threshold — prevents WebSocket spam (Pitfall 2)."""
-        ingredient_above_threshold.stock_actuel = Decimal('50.00')
-        ingredient_above_threshold.save()
-
         with patch(BROADCAST_PATH) as mock_broadcast:
+            ingredient_above_threshold.stock_actuel = Decimal('50.00')
+            ingredient_above_threshold.save()
+            assert mock_broadcast.call_count == 1
+
             ingredient_above_threshold.stock_actuel = Decimal('30.00')
             ingredient_above_threshold.save()
-
-        mock_broadcast.assert_not_called()
+            assert mock_broadcast.call_count == 1
 
     def test_broadcast_fires_on_create_below_threshold(self, db):
         """New ingredient created already below threshold must trigger the alert."""
@@ -89,11 +89,17 @@ class TestStockAlertSignal:
 
     def test_broadcast_not_fired_when_stock_rises_above_threshold(self, ingredient_above_threshold):
         """Saving stock above threshold after a previous low state must not fire an alert."""
-        ingredient_above_threshold.stock_actuel = Decimal('50.00')
-        ingredient_above_threshold.save()
-
         with patch(BROADCAST_PATH) as mock_broadcast:
+            ingredient_above_threshold.stock_actuel = Decimal('50.00')
+            ingredient_above_threshold.save()
+            mock_broadcast.reset_mock()
+
             ingredient_above_threshold.stock_actuel = Decimal('1000.00')
             ingredient_above_threshold.save()
+            mock_broadcast.assert_not_called()
 
+    def test_no_alert_when_seuil_alerte_is_zero(self, db):
+        """Default creation with seuil_alerte=0 must never trigger an alert."""
+        with patch(BROADCAST_PATH) as mock_broadcast:
+            Ingredient.objects.create(nom='Sel', unite_mesure='g')
         mock_broadcast.assert_not_called()
