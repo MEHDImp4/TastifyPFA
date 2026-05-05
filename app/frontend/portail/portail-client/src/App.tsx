@@ -4,7 +4,7 @@ import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
 import axiosInstance from '@shared/auth/axiosInstance'
 import { CLIENT_ROLES, isRoleAllowed } from '@shared/auth/roleAccess'
-import logo from '@shared/assets/logo.png'
+import logo from '@shared/assets/logo.svg'
 import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary'
 
 function App() {

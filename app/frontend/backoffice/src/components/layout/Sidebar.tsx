@@ -19,7 +19,7 @@ import { useAuthStore } from '@shared/auth/useAuthStore';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { isRoleAllowed } from '@shared/auth/roleAccess';
-import logo from '@shared/assets/logo.png';
+import logo from '@shared/assets/logo.svg';
 
 interface SidebarProps {
   isOpen: boolean;
