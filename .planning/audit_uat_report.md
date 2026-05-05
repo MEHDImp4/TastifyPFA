@@ -21,7 +21,7 @@ This audit identifies stale documentation and unverified "human-needed" items to
 ## 3. Prioritized Manual Test Plan (MTP)
 
 ### Priority 1: Real-Time & Audio (KDS ↔ Salle)
-*Why: Critical for restaurant operations. Previous regressions in audio files.*
+*Status: ✅ PASSED (Verified by user 2026-05-05)*
 1. **Kitchen Call (Order Fire):**
    - As SERVEUR, fire an order to the kitchen.
    - **Verify:** KDS plays a bell sound.
