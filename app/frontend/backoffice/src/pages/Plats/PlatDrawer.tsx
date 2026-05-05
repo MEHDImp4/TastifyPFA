@@ -1,10 +1,11 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { X, Utensils, Info } from 'lucide-react';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { normalizeMediaUrl } from '@shared/media/mediaUrl';
 import { Drawer } from '../../components/ui/Drawer';
 import { Category, Plat } from './types';
 import { Switch } from '../../components/ui/Switch';
+import { PlatRecetteTab } from './PlatRecetteTab';
 
 interface PlatDrawerProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export function PlatDrawer({
   categories,
   defaultCategoryId
 }: PlatDrawerProps) {
+  const [activeTab, setActiveTab] = useState<'general' | 'recette'>('general');
+  
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
   const [categorieId, setCategorieId] = useState<string>('');
@@ -37,6 +40,7 @@ export function PlatDrawer({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    setActiveTab('general');
     if (initialData) {
       setNom(initialData.nom);
       setDescription(initialData.description || '');
@@ -132,138 +136,171 @@ export function PlatDrawer({
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 pb-20">
-        {/* Section: Infos de base */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Informations de base</h3>
-          
-          <div>
-            <label htmlFor="nom" className="block text-sm font-medium mb-1 text-foreground-muted">Nom</label>
-            <input
-              id="nom"
-              type="text"
-              value={nom}
-              onChange={(e) => setNom(e.target.value)}
-              className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Ex: Burger Gourmet"
-            />
-            {errors.nom && <p className="text-red-400 text-xs mt-1">{errors.nom}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="categorie" className="block text-sm font-medium mb-1 text-foreground-muted">Catégorie</label>
-            <select
-              id="categorie"
-              value={categorieId}
-              onChange={(e) => setCategorieId(e.target.value)}
-              className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
-            >
-              <option value="">Sélectionner une catégorie</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.nom}</option>
-              ))}
-            </select>
-            {errors.categorie && <p className="text-red-400 text-xs mt-1">{errors.categorie}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium mb-1 text-foreground-muted">Description</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[80px] resize-none"
-              placeholder="Description du plat..."
-            />
-          </div>
-        </div>
-
-        {/* Section: Prix & Opérations */}
-        <div className="space-y-4 pt-4 border-t border-white/5">
-          <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Prix & Opérations</h3>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="prix" className="block text-sm font-medium mb-1 text-foreground-muted">Prix (€)</label>
-              <input
-                id="prix"
-                type="number"
-                step="0.01"
-                value={prix}
-                onChange={(e) => setPrix(e.target.value)}
-                className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              {errors.prix && <p className="text-red-400 text-xs mt-1">{errors.prix}</p>}
-            </div>
-            <div>
-              <label htmlFor="temps" className="block text-sm font-medium mb-1 text-foreground-muted">Préparation (min)</label>
-              <input
-                id="temps"
-                type="number"
-                value={tempsPreparation}
-                onChange={(e) => setTempsPreparation(e.target.value)}
-                className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              {errors.temps_preparation && <p className="text-red-400 text-xs mt-1">{errors.temps_preparation}</p>}
-            </div>
-          </div>
-        </div>
-
-        {/* Section: Média & Statut */}
-        <div className="space-y-4 pt-4 border-t border-white/5">
-          <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Média & Statut</h3>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2 text-foreground-muted">Image</label>
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-xl bg-surface-elevated border border-white/5 overflow-hidden shrink-0 flex items-center justify-center">
-                {previewUrl ? (
-                  <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-[10px] text-foreground-muted uppercase">No image</span>
-                )}
-              </div>
-              <input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="text-xs text-foreground-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-teal-500/10 file:text-teal-500 hover:file:bg-teal-500/20"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-3 pt-2">
-            <Switch 
-              label="Disponible immédiatement" 
-              checked={estDisponible} 
-              onToggle={() => setEstDisponible(!estDisponible)} 
-              disabled={!estActive}
-            />
-            <Switch 
-              label="Activé (Visible par les clients)" 
-              checked={estActive} 
-              onToggle={() => setEstActive(!estActive)} 
-            />
-          </div>
-        </div>
-
-        {errors.server && (
-          <p className="text-red-400 text-sm text-center bg-red-400/10 py-2 rounded-lg border border-red-400/20">
-            {errors.server}
-          </p>
-        )}
-
-        <div className="pt-4">
+      <div className="flex border-b border-white/10 mb-6 -mx-6 px-6">
+        <button
+          onClick={() => setActiveTab('general')}
+          className={`pb-3 px-4 text-sm font-bold transition-all border-b-2 flex items-center gap-2 ${
+            activeTab === 'general' 
+              ? 'text-teal-500 border-teal-500' 
+              : 'text-foreground-muted border-transparent hover:text-white'
+          }`}
+        >
+          <Info size={16} />
+          Général
+        </button>
+        {initialData && (
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-teal-500/20 active:scale-[0.98]"
+            onClick={() => setActiveTab('recette')}
+            className={`pb-3 px-4 text-sm font-bold transition-all border-b-2 flex items-center gap-2 ${
+              activeTab === 'recette' 
+                ? 'text-teal-500 border-teal-500' 
+                : 'text-foreground-muted border-transparent hover:text-white'
+            }`}
           >
-            {isSubmitting ? 'Traitement...' : initialData ? 'Enregistrer les modifications' : 'Créer le plat'}
+            <Utensils size={16} />
+            Recette
           </button>
-        </div>
-      </form>
+        )}
+      </div>
+
+      <div className="pb-20">
+        {activeTab === 'general' ? (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Section: Infos de base */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Informations de base</h3>
+              
+              <div>
+                <label htmlFor="nom" className="block text-sm font-medium mb-1 text-foreground-muted">Nom</label>
+                <input
+                  id="nom"
+                  type="text"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  placeholder="Ex: Burger Gourmet"
+                />
+                {errors.nom && <p className="text-red-400 text-xs mt-1">{errors.nom}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="categorie" className="block text-sm font-medium mb-1 text-foreground-muted">Catégorie</label>
+                <select
+                  id="categorie"
+                  value={categorieId}
+                  onChange={(e) => setCategorieId(e.target.value)}
+                  className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
+                >
+                  <option value="">Sélectionner une catégorie</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.nom}</option>
+                  ))}
+                </select>
+                {errors.categorie && <p className="text-red-400 text-xs mt-1">{errors.categorie}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium mb-1 text-foreground-muted">Description</label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[80px] resize-none"
+                  placeholder="Description du plat..."
+                />
+              </div>
+            </div>
+
+            {/* Section: Prix & Opérations */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Prix & Opérations</h3>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="prix" className="block text-sm font-medium mb-1 text-foreground-muted">Prix (€)</label>
+                  <input
+                    id="prix"
+                    type="number"
+                    step="0.01"
+                    value={prix}
+                    onChange={(e) => setPrix(e.target.value)}
+                    className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  {errors.prix && <p className="text-red-400 text-xs mt-1">{errors.prix}</p>}
+                </div>
+                <div>
+                  <label htmlFor="temps" className="block text-sm font-medium mb-1 text-foreground-muted">Préparation (min)</label>
+                  <input
+                    id="temps"
+                    type="number"
+                    value={tempsPreparation}
+                    onChange={(e) => setTempsPreparation(e.target.value)}
+                    className="w-full bg-surface-elevated border border-white/5 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  {errors.temps_preparation && <p className="text-red-400 text-xs mt-1">{errors.temps_preparation}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Média & Statut */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <h3 className="text-xs font-bold text-teal-500 uppercase tracking-widest">Média & Statut</h3>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-foreground-muted">Image</label>
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 rounded-xl bg-surface-elevated border border-white/5 overflow-hidden shrink-0 flex items-center justify-center">
+                    {previewUrl ? (
+                      <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[10px] text-foreground-muted uppercase">No image</span>
+                    )}
+                  </div>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="text-xs text-foreground-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-teal-500/10 file:text-teal-500 hover:file:bg-teal-500/20"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <Switch 
+                  label="Disponible immédiatement" 
+                  checked={estDisponible} 
+                  onToggle={() => setEstDisponible(!estDisponible)} 
+                  disabled={!estActive}
+                />
+                <Switch 
+                  label="Activé (Visible par les clients)" 
+                  checked={estActive} 
+                  onToggle={() => setEstActive(!estActive)} 
+                />
+              </div>
+            </div>
+
+            {errors.server && (
+              <p className="text-red-400 text-sm text-center bg-red-400/10 py-2 rounded-lg border border-red-400/20">
+                {errors.server}
+              </p>
+            )}
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-teal-500/20 active:scale-[0.98]"
+              >
+                {isSubmitting ? 'Traitement...' : initialData ? 'Enregistrer les modifications' : 'Créer le plat'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          initialData && <PlatRecetteTab platId={initialData.id} />
+        )}
+      </div>
     </Drawer>
   );
 }

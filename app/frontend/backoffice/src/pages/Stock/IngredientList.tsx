@@ -4,11 +4,12 @@ import { Ingredient } from './types';
 interface IngredientListProps {
   ingredients: Ingredient[];
   onEdit: (ingredient: Ingredient) => void;
+  onAdjust: (ingredient: Ingredient) => void;
   onRefresh: () => void;
   isGerant: boolean;
 }
 
-export function IngredientList({ ingredients, onEdit, onRefresh, isGerant }: IngredientListProps) {
+export function IngredientList({ ingredients, onEdit, onAdjust, onRefresh, isGerant }: IngredientListProps) {
   return (
     <div className="overflow-x-auto bg-surface rounded-xl shadow-lg border border-surface-elevated">
       <table className="w-full text-left border-collapse">
@@ -35,6 +36,7 @@ export function IngredientList({ ingredients, onEdit, onRefresh, isGerant }: Ing
                 key={ingredient.id}
                 ingredient={ingredient}
                 onEdit={onEdit}
+                onAdjust={onAdjust}
                 onRefresh={onRefresh}
                 isGerant={isGerant}
               />
