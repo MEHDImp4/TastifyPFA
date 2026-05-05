@@ -4,15 +4,20 @@ milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
 stopped_at: Phase 17 COMPLETED
-last_updated: "2026-05-04T16:00:00.000Z"
+last_updated: "2026-05-05T01:45:00.000Z"
 progress:
   total_phases: 40
   completed_phases: 17
   total_plans: 58
   percent: 42
 notes: |
-  - Phase 16 COMPLETED (2026-05-04): Order Push to KDS successfully verified via manual UAT.
   - Phase 17 COMPLETED (2026-05-04): Order Status Updates implemented and verified (Kitchen -> Salle flow).
+  - UI & Reliability Refactor (2026-05-05): 
+    - Implemented collapsible sidebar with smooth transitions.
+    - Centralized audio/visual notifications in `StaffNotificationManager`.
+    - Added real-time WebSocket connection status indicators.
+    - Fixed production build regressions and TypeScript type-safety issues in shared frontend modules.
+    - Verified full repository build (`tsc -b && vite build`) passes.
 architecture:
   - Vertical slice architecture (Django + DRF + React + Vite).
   - WebSockets (Django Channels) for real-time Staff updates.
