@@ -1,6 +1,6 @@
 ## [2026-05-05] - 23:48
 ### Changed
-- **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and adjusted the header height for better vertical balance.
+- **Sidebar Logo**: Updated the sidebar logo to match the "Tastify STAFF" branding. Changed "Tastify" color to white, added a "STAFF" subtitle in teal with wide letter spacing, and centered the entire logo horizontally within the sidebar for better visual balance.
 
 ## [2026-05-05] - 23:30
 ### Added
