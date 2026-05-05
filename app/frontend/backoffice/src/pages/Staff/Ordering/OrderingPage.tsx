@@ -28,7 +28,6 @@ export const OrderingPage = () => {
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
   const [isOrderExpanded, setIsOrderExpanded] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const getCart = useOrderStore((state) => state.getCart)
   const getCartTotal = useOrderStore((state) => state.getCartTotal)
@@ -41,25 +40,10 @@ export const OrderingPage = () => {
   const cartItemCount = useMemo(() => getCartItemCount(tableId), [carts, getCartItemCount, tableId])
 
   useEffect(() => {
-    audioRef.current = new Audio('/sounds/kitchen-bell.mp3') // Reusing bell for now
-    audioRef.current.preload = 'auto'
-    return () => {
-      audioRef.current = null
-    }
-  }, [])
-
-  useEffect(() => {
     if (!lastEvent || !activeOrder) return
 
     if (lastEvent.type === 'order_updated' && lastEvent.payload.order.id === activeOrder.id) {
-      const updatedOrder = lastEvent.payload.order
-      
-      // Play sound if order becomes PRETE
-      if (updatedOrder.statut === 'PRETE' && activeOrder.statut !== 'PRETE') {
-        audioRef.current?.play().catch(() => {})
-      }
-      
-      setActiveOrder(updatedOrder)
+      setActiveOrder(lastEvent.payload.order)
     }
   }, [lastEvent, activeOrder])
 

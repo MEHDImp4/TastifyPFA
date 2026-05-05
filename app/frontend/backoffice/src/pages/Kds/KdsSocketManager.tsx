@@ -9,26 +9,6 @@ export const KdsSocketManager = () => {
   const handleSocketEvent = useKdsStore((state) => state.handleSocketEvent)
   const fetchOrders = useKdsStore((state) => state.fetchOrders)
 
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-
-  const getOrderStatus = (payload: Record<string, unknown>) => {
-    const order = payload.order
-    if (!order || typeof order !== 'object' || Array.isArray(order)) {
-      return undefined
-    }
-
-    const status = (order as Record<string, unknown>).statut
-    return typeof status === 'string' ? status : undefined
-  }
-
-  useEffect(() => {
-    audioRef.current = new Audio('/sounds/kitchen-bell.mp3')
-    audioRef.current.preload = 'auto'
-    return () => {
-      audioRef.current = null
-    }
-  }, [])
-
   // Polling fallback — keeps KDS current when WebSocket is disconnected or events are missed.
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -53,17 +33,6 @@ export const KdsSocketManager = () => {
     // subsequent order_updated fetch, potentially overwriting a valid list with [].
     if (lastEvent.type === 'order_updated') {
       void fetchOrders()
-    }
-
-    const wasJustFired =
-      lastEvent.type === 'order_updated' &&
-      getOrderStatus(lastEvent.payload) === 'EN_CUISINE'
-
-    if (wasJustFired && audioRef.current) {
-      audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {
-        // Autoplay policy: browser blocks .play() until first user gesture.
-      })
     }
   }, [fetchOrders, handleSocketEvent, lastEvent])
 

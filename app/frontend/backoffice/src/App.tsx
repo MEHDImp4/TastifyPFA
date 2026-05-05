@@ -11,6 +11,7 @@ import Login from '@shared/auth/Login';
 import { AuthBootstrap } from '@shared/auth/AuthBootstrap';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { WebSocketProvider } from '@shared/websocket/WebSocketProvider';
+import { StaffNotificationManager } from '@shared/websocket/StaffNotificationManager';
 import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary';
 import {
   GERANT_ROLES,
@@ -91,7 +92,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginRoute />} />
             
-            <Route element={<WebSocketProvider><AppShell /></WebSocketProvider>}>
+            <Route element={<WebSocketProvider><StaffNotificationManager /><AppShell /></WebSocketProvider>}>
               <Route index element={<StaffEntryRedirect />} />
               <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
               <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />

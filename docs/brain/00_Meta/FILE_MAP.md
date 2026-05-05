@@ -42,6 +42,9 @@ tastify-pfa/
 │       │   ├── auth/              # Zustand Store, Login UI, Axios instance, role access gates
 │       │   ├── ui/                # Shared crash boundary for both SPAs
 │       │   ├── websocket/         # Shared staff socket provider, store, and parsing helpers
+│       │   │   ├── StaffNotificationManager.tsx # Centralized audio/toast alerts
+│       │   │   ├── staffSocket.ts
+│       │   │   └── WebSocketProvider.tsx
 │       │   ├── components/map/    # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │       │   ├── assets/            # Shared logo, icons
 │       │   └── types/             # Shared TypeScript interfaces

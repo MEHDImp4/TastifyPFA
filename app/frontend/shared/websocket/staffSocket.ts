@@ -7,6 +7,7 @@ type LocationLike = Pick<Location, 'protocol' | 'host'>
 
 export const buildStaffWebSocketUrl = (location: LocationLike, token: string) => {
   const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
+  // Use location.host which includes both hostname and port
   const url = new URL(`${protocol}//${location.host}/ws/staff/`)
   url.searchParams.set('token', token)
   return url.toString()

@@ -1,3 +1,18 @@
+## [2026-05-05] - 14:20
+### Added
+- **StaffNotificationManager**: Centralized component in `@shared/websocket/` that handles global audio alerts (kitchen bell) and system-wide notifications for order updates.
+- **Sidebar (Collapsible)**: Implemented a collapsible state for the backoffice sidebar with smooth transitions, improving screen real-estate for tablet and mobile users.
+- **Connection Status Icons**: Added real-time WebSocket connection status indicators (WiFi icon) to both Sidebar and Mobile Header in `AppShell`.
+
+### Changed
+- **AppShell Refactor**: Integrated `StaffNotificationManager` at the top level and improved responsive layout behavior when sidebar is collapsed.
+- **WebSocket URL Handling**: Updated `staffSocket.ts` to use `location.host` instead of `location.hostname`, ensuring port numbers are preserved in the WebSocket URL (fixing connection failures in Docker/custom port environments).
+- **Vite Proxy Fix**: Corrected `vite.config.ts` proxy configuration for `/ws` to use `http` target with `ws: true`, improving compatibility with internal Docker routing.
+
+### Fixed
+- **Duplicate Logic**: Removed redundant audio playback and order-polling logic from `KdsSocketManager` and `OrderingPage`, consolidating it into the shared notification layer.
+- **ALLOWED_HOSTS**: Updated `backend/settings/dev.py` to allow all hosts (`*`) in development, preventing `Invalid HTTP_HOST` errors when accessing the API from different network interfaces.
+
 ## [2026-05-05] - 14:00
 ### Fixed
 - **OrderingPage.tsx**: Fixed "Missing initializer in destructuring declaration" syntax error caused by a missing `useEffect(() => {` opening line before the menu fetching logic.
