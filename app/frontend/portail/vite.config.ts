@@ -27,10 +27,9 @@ export default defineConfig({
     alias: {
       '@shared': sharedPath,
     },
-    preserveSymlinks: true,
   },
   optimizeDeps: {
-    include: ['zustand', 'axios', 'lucide-react'],
+    include: ['zustand', 'axios', 'lucide-react', 'react-router-dom'],
   },
   server: {
     host: '0.0.0.0',

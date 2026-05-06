@@ -1,3 +1,14 @@
+## [2026-05-06] - 15:45
+### Fixed
+- **Build Error: react-router-dom resolution**: Fixed a critical frontend build failure where `react-router-dom` could not be resolved by Vite.
+  - **Optimization**: Added `react-router-dom` to `optimizeDeps.include` in `vite.config.ts` for both `portail` and `backoffice` to force pre-bundling.
+  - **Cleanup**: Removed outdated `@types/react-router-dom` from `package.json` since version 6 includes its own types, preventing version mismatches.
+  - **Standardization**: Removed `preserveSymlinks: true` from Vite configs to allow standard dependency resolution.
+
+### Verified
+- **Dependency Integrity**: Verified `react-router-dom` version `^6.30.3` is present in `package.json` and `package-lock.json` for both projects.
+- **Local Install**: Successfully ran `npm install` in both `app/frontend/portail` and `app/frontend/backoffice` to confirm valid dependency state.
+
 ## [2026-05-06] - 13:46
 ### Added
 - **Phase 24 Client Wizard**: Added a routed 3-step reservation wizard in the portail client SPA with shared wizard state, guarded navigation, a date/time capture step, a table-selection step backed by the shared `TableMap`, and a confirmation step that posts client-safe reservation payloads.
