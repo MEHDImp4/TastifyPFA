@@ -1,22 +1,16 @@
 ---
-status: testing
+status: complete
 phase: 24-reservations-client-ui
 source:
   - 24-03-SUMMARY.md
   - 24-VALIDATION.md
 started: 2026-05-06T13:54:56.2934454+01:00
-updated: 2026-05-06T15:18:00.0000000+01:00
+updated: 2026-05-06T15:22:00.0000000+01:00
 ---
 
 ## Current Test
 
-number: 4
-name: Reservation Confirmation Submission
-expected: |
-  On `/reservations/confirm`, confirming the reservation should complete successfully
-  and create the booking with the chosen slot and table,
-  without requiring any manual status selection by the client.
-awaiting: user response
+[testing complete]
 
 ## Tests
 
@@ -36,14 +30,14 @@ severity: major
 
 ### 4. Reservation Confirmation Submission
 expected: On `/reservations/confirm`, confirming the reservation should complete successfully and create the booking with the chosen slot and table, without requiring any manual status selection by the client.
-result: pending
+result: pass
 
 ## Summary
 
 total: 4
-passed: 2
+passed: 3
 issues: 1
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 
