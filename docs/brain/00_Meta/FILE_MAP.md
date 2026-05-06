@@ -50,6 +50,9 @@ tastify-pfa/
 │       │   ├── components/map/    # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │       │   ├── assets/            # Shared logo, icons
 │       │   └── types/             # Shared TypeScript interfaces
+│       │       ├── paiements.ts   # Payment-related types (Phase 27)
+│       │       ├── reservations.ts
+│       │       └── tables.ts
 │       ├── backoffice/            # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── vite.config.ts     # Dev server config without Vitest runtime dependency
 │       │   ├── vitest.config.ts   # Vitest-only config for test environment setup

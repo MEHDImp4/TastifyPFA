@@ -1,3 +1,35 @@
+## [2026-05-07] - 00:10
+### Added
+- **Phase 27 Plan 01 (Staff Payment UI)**: Initialized types and directory structure.
+  - **Shared Types**: Created `app/frontend/shared/types/paiements.ts` with `PaiementStatus`, `PaiementMethod`, `PaymentSession`, and `ManualPaymentRequest`.
+  - **Directory Structure**: Created `app/frontend/backoffice/src/components/salle/` for staff-facing components.
+
+## [2026-05-06] - 23:55
+### Added
+- **Phase 26 Plan 02 (QR Payment APIs)**: Implemented signed token authorization and public payment API contracts.
+  - **Signed Tokens**: Added `tokens.py` with `TimestampSigner` to generate secure, time-limited QR payment tokens.
+  - **Staff QR Issuance**: Added `/api/tables/{id}/qr/` endpoint for servers to generate customer payment links.
+  - **Payment APIs**: Implemented session resolution, equal-split preview, item-split validation, and token-backed payment confirmation.
+  - **Staff Manual Payments**: Updated existing payment creation to support staff-logged cash/card payments while restricting QR methods to self-service.
+  - **Regression Coverage**: Added 11 tests verifying token lifecycle, split logic, and API security.
+
+### Changed
+- **Progress Tracking**: Marked Phase 26 as COMPLETED and advanced project state to Phase 27 initiation.
+- **Project Memory**: Generated final execution summary for Phase 26 and synchronized the dashboard.
+
+## [2026-05-06] - 23:45
+### Added
+- **Phase 26 Plan 01 (Payment Domain)**: Established the backend payment domain and its non-UI invariants.
+  - **Models**: Introduced `Paiement` and `PaiementItem` with integrity constraints (positive amounts, unique contributions) and fractional split support.
+  - **Payable Session Resolver**: Implemented authoritative table-to-order resolution with strict safety rules (rejects ambiguous or missing orders).
+  - **Split Services**: Added atomic services for equal split (with rounding absorption) and item/fraction splits (with over-coverage validation) using row-level locking.
+  - **Lifecycle Integration**: Wired signals to automatically transition orders to `PAYEE` once fully covered, triggering existing table-release logic.
+  - **Regression Coverage**: Added 16 tests covering models, services, and signals, ensuring 100% domain-layer verification.
+
+### Changed
+- **Progress Tracking**: Advanced project state to `PHASE_26_PLAN_01_COMPLETE` and updated roadmap progress.
+- **Project Memory**: Generated execution summary and synchronized the dashboard.
+
 ## [2026-05-06] - 22:47
 ### Added
 - **Phase 26 Payment Domain**: Added `app/backend/apps/paiements/` with the first backend wave of QR-payment split-bill support.
