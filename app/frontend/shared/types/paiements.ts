@@ -8,6 +8,15 @@ export interface PaymentSession {
   montant_total: number;
   montant_paye: number;
   montant_restant: number;
+  items: Array<{
+    id: number;
+    plat_nom: string;
+    quantite: number;
+    prix_unitaire: number;
+    total: number;
+    deja_paye: number;
+    reste_a_payer: number;
+  }>;
 }
 
 export interface QRTokenResponse {

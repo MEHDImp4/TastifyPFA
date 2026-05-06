@@ -2,15 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_27_PLANNED
-stopped_at: Phase 27 PLANNED. Ready to implement Staff Payment UI.
-last_updated: "2026-05-06T23:00:00.000Z"
+status: PHASE_27_PLAN_02_COMPLETE
+stopped_at: Phase 27 Plan 02 COMPLETE. Ready for Plan 03 (Final Integration).
+last_updated: "2026-05-07T00:50:00.000Z"
 progress:
   total_phases: 40
   completed_phases: 26
   total_plans: 81
-  percent: 65
+  percent: 67
 notes: |
+  - Phase 27 Plan 02 COMPLETE (2026-05-07): Client QR Landing Page & Split Bill UI implemented. Added 'SplitSelector' with 3 modes (Full, Equal, Item) to Portail app.
+  - Phase 27 Plan 01 COMPLETE (2026-05-06): Staff payment workflow implemented. Added 'PaymentModal' to Salle UI, integrated with table map, and added staff-resolve backend support.
   - Phase 27 PLANNED (2026-05-06): Encaissement UI decomposed into 3 plans: Staff UI Modal, Client QR Landing Page, and WebSocket integration/E2E verification.
   - Phase 26 COMPLETE (2026-05-06): QR Payment & Split Bill logic fully implemented. Backend payment domain, signed token authorization, and public payment API contracts (equal/item splits) are verified with 27 tests.
   - Phase 25 FULLY IMPLEMENTED (2026-05-06): Added Back-Office `/reservations` page with real-time WebSocket sync. Integrated reservation details into the Staff Map View, including upcoming booking info and quick "Arrivé" check-in action.

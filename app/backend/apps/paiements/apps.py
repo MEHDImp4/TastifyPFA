@@ -4,8 +4,6 @@ from django.apps import AppConfig
 class PaiementsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.paiements'
-    verbose_name = 'Paiements'
 
     def ready(self):
-        import apps.paiements.signals  # noqa: F401
-
+        import apps.paiements.signals

@@ -1,12 +1,14 @@
 import os
 import re
+import json
 import subprocess
 from datetime import datetime
 
+# Chemins des fichiers
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
 ROADMAP_FILE = os.path.join(ROOT_DIR, ".planning", "ROADMAP.md")
 CHANGELOG_FILE = os.path.join(ROOT_DIR, "docs", "brain", "02_Journal", "CHANGELOG.md")
+DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
 AUDIT_REPORT_FILE = os.path.join(ROOT_DIR, ".planning", "audit_uat_report.md")
 
 def read_roadmap():
@@ -17,30 +19,33 @@ def read_roadmap():
     with open(ROADMAP_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Extraction de la liste des phases via regex
-    phase_pattern = re.compile(r'- \[(x| |/)\] \*\*Phase (\d+(?:\.\d+)?): ([^*]+)\*\*(?: (\[[A-Z]+\]))? - (.*)')
+    # Extraction des lignes de tableau
+    # Format: | 1. Project Skeleton | 3/3 | Completed | 2026-04-26 |
+    phase_pattern = re.compile(r'\| (\d+)\. ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \|')
     for match in phase_pattern.finditer(content):
-        status_char = match.group(1)
-        phase_num = match.group(2)
-        title = match.group(3).strip()
-        tag = match.group(4)
-        desc = match.group(5).strip()
+        num = match.group(1).strip()
+        title = match.group(2).strip()
+        plans = match.group(3).strip()
+        status = match.group(4).strip().lower()
+        completed_date = match.group(5).strip()
         
-        status = "todo"
-        if status_char == "x":
-            status = "done"
-        elif status_char == "/":
-            status = "in_progress"
-        elif tag == "[PLAN]":
-            status = "planned"
-        elif tag == "[CONTEXT]":
-            status = "discussed"
-            
+        # Mapping des statuts
+        status_map = {
+            "completed": "terminé",
+            "complete": "terminé",
+            "terminé": "terminé",
+            "in progress": "en_cours",
+            "en cours": "en_cours",
+            "planifié": "planifié",
+            "discuté": "discuté",
+            "à faire": "à_faire"
+        }
+        
         phases.append({
-            "num": phase_num,
+            "num": num,
             "title": title,
-            "desc": desc,
-            "status": status
+            "desc": f"Plans: {plans}",
+            "status": status_map.get(status, "à_faire")
         })
     return phases
 
@@ -63,19 +68,21 @@ def read_changelog():
         
         # Extraction des entrées dans le bloc
         lines = raw_content.split('\n')
-        current_type = ""
+        current_type = "Update"
         for line in lines:
             line = line.strip()
+            if not line: continue
+            
             if line.startswith('### '):
-                current_type = line.replace('### ', '')
+                current_type = line.replace('### ', '').strip()
             elif line.startswith('- '):
-                desc = line.replace('- ', '')
+                desc = line.replace('- ', '').strip()
                 # On détermine une couleur basée sur le type
                 color = "green"
-                if "Fixed" in current_type: color = "red"
-                elif "Changed" in current_type: color = "teal"
+                if "Fixed" in current_type or "Fix" in current_type: color = "red"
+                elif "Changed" in current_type or "Modifié" in current_type: color = "teal"
                 elif "Removed" in current_type: color = "orange"
-                elif "Added" in current_type: color = "blue"
+                elif "Added" in current_type or "Ajouté" in current_type or "Feat" in current_type: color = "blue"
                 
                 activities.append({
                     "date": date,
@@ -96,13 +103,13 @@ def get_backend_stats():
         "orders": 0, 
         "total_sales": 0,
         "active_tables": 0,
-        "status": "Offline"
+        "status": "Hors Ligne"
     }
     try:
-        # Check if docker is running first
+        # Statut du conteneur Docker
         check_docker = subprocess.run('docker ps --filter name=tastifypfa-backend-1 --format "{{.Names}}"', shell=True, capture_output=True, text=True)
         if "tastifypfa-backend-1" not in check_docker.stdout:
-            stats["status"] = "Container Offline"
+            stats["status"] = "Conteneur Hors ligne"
             return stats
 
         # On tente de récupérer les stats via docker exec
@@ -130,14 +137,14 @@ def get_backend_stats():
                         stats["orders"] = int(orders)
                         stats["total_sales"] = float(sales)
                         stats["active_tables"] = int(active_tables)
-                        stats["status"] = "Online"
+                        stats["status"] = "En Ligne"
                         break
         else:
-            stats["status"] = "Error"
-            print(f"Backend Stats Error: {result.stderr}")
+            stats["status"] = "Erreur"
+            print(f"Erreur Statistiques Backend : {result.stderr}")
     except Exception as e:
-        print(f"Warning: Could not fetch backend stats: {e}")
-        stats["status"] = "Timeout/Exception"
+        print(f"Avertissement : Impossible de récupérer les statistiques du backend : {e}")
+        stats["status"] = "Délai/Exception"
     return stats
 
 def get_uat_status():
@@ -230,8 +237,8 @@ def update_dashboard():
     human_tests = read_human_test_plan()
     
     total_phases = len(phases)
-    completed_phases = sum(1 for p in phases if p["status"] == "done")
-    in_progress_phases = sum(1 for p in phases if p["status"] == "in_progress")
+    completed_phases = sum(1 for p in phases if p["status"] == "terminé")
+    in_progress_phases = sum(1 for p in phases if p["status"] == "en_cours")
     todo_phases = total_phases - completed_phases - in_progress_phases
     
     # Calcul précis de l'avancement via les fichiers de planification dans .planning/phases/
@@ -259,13 +266,13 @@ def update_dashboard():
     detailed_html = []
     for p in phases:
         status_styles = {
-            "done": ("bg-green-500", "", "text-white", "text-gray-400", "Terminé", "bg-green-500/20 text-green-400 border-green-500/20"),
-            "in_progress": ("bg-blue-500 animate-pulse", "", "text-white", "text-gray-400", "En cours", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
-            "planned": ("bg-yellow-500", "", "text-white", "text-gray-400", "Planifié", "bg-yellow-500/20 text-yellow-400 border-yellow-500/20"),
-            "discussed": ("bg-blue-500", "", "text-white", "text-gray-400", "Contexte Capturé", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
-            "todo": ("bg-gray-500", "opacity-50", "text-gray-300", "text-gray-500", "Non planifiée", "bg-gray-500/20 text-gray-400 border-gray-500/20")
+            "terminé": ("bg-green-500", "", "text-white", "text-gray-400", "Terminé", "bg-green-500/20 text-green-400 border-green-500/20"),
+            "en_cours": ("bg-blue-500 animate-pulse", "", "text-white", "text-gray-400", "En cours", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
+            "planifié": ("bg-yellow-500", "", "text-white", "text-gray-400", "Planifié", "bg-yellow-500/20 text-yellow-400 border-yellow-500/20"),
+            "discuté": ("bg-blue-500", "", "text-white", "text-gray-400", "Contexte Capturé", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
+            "à_faire": ("bg-gray-500", "opacity-50", "text-gray-300", "text-gray-500", "Non planifiée", "bg-gray-500/20 text-gray-400 border-gray-500/20")
         }
-        dot, opacity, text, desc_c, badge_text, badge_style = status_styles.get(p["status"], status_styles["todo"])
+        dot, opacity, text, desc_c, badge_text, badge_style = status_styles.get(p["status"], status_styles["à_faire"])
             
         phases_html.append(f'''                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 {opacity}">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full {dot} block"></span></div>
@@ -363,7 +370,7 @@ def update_dashboard():
 
     # Git Badge
     git_color = "green" if not git_status["dirty"] else "yellow"
-    git_status_text = "Clean" if not git_status["dirty"] else "Uncommitted changes"
+    git_status_text = "Propre" if not git_status["dirty"] else "Modifications non validées"
     git_badge = f'''                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{git_color}-500/10 text-{git_color}-400 border border-{git_color}-500/20">
                         <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
                         {git_status["branch"]} ({git_status_text})
@@ -371,7 +378,7 @@ def update_dashboard():
 
     chart_data_html = f'''                        <script>
                             const chartData = {{
-                                labels: ['Todo', 'In Progress', 'Done'],
+                                labels: ['À faire', 'En cours', 'Terminé'],
                                 data: [{todo_phases}, {in_progress_phases}, {completed_phases}]
                             }};
                         </script>'''
@@ -423,9 +430,9 @@ def update_dashboard():
     with open(DASHBOARD_FILE, 'w', encoding='utf-8') as f:
         f.write(dash_content)
         
-    print(f"Dashboard updated successfully: Progress {progress_percent}%, Phases {completed_phases}/{total_phases}, Tasks {tasks_done}/{tasks_total}")
-    print(f"Live Stats: Users {backend_stats['users']}, Categories {backend_stats['categories']}, Orders {backend_stats['orders']}, Sales {backend_stats['total_sales']}, Active Tables {backend_stats['active_tables']}")
-    print(f"Git: {git_status['branch']} {'(Dirty)' if git_status['dirty'] else '(Clean)'}")
+    print(f"Tableau de bord mis à jour avec succès : Progression {progress_percent}%, Phases {completed_phases}/{total_phases}, Tâches {tasks_done}/{tasks_total}")
+    print(f"Statistiques en direct : Utilisateurs {backend_stats['users']}, Catégories {backend_stats['categories']}, Commandes {backend_stats['orders']}, Ventes {backend_stats['total_sales']}, Tables Actives {backend_stats['active_tables']}")
+    print(f"Git : {git_status['branch']} {'(Modifié)' if git_status['dirty'] else '(Propre)'}")
 
 if __name__ == "__main__":
     update_dashboard()

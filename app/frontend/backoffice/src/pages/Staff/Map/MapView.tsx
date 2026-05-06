@@ -4,8 +4,9 @@ import { Table } from '@shared/types/tables';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 import { TableMap, TablePosition } from '@shared/components/map/TableMap';
-import { Check, LayoutDashboard, LayoutList, Loader2, RefreshCw, RotateCcw, Users, Calendar, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { Check, LayoutDashboard, LayoutList, Loader2, RefreshCw, RotateCcw, Users, Calendar, ArrowRight, CheckCircle2, Clock, Wallet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PaymentModal } from '../../../components/salle/PaymentModal';
 
 export const MapView: React.FC = () => {
   const user = useAuthStore((state: any) => state.user);
@@ -21,6 +22,7 @@ export const MapView: React.FC = () => {
   const [dirtyTables, setDirtyTables] = useState<Record<number, TablePosition>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const isGerant = user?.role === 'GERANT';
   const dirtyCount = Object.keys(dirtyTables).length;
@@ -50,7 +52,7 @@ export const MapView: React.FC = () => {
   useEffect(() => {
     if (!lastEvent || isEditMode) return;
 
-    if (lastEvent.type === 'order_updated' || lastEvent.type === 'order_created' || lastEvent.type === 'reservation_updated' || lastEvent.type === 'reservation_created' || lastEvent.type === 'reservation_deleted') {
+    if (lastEvent.type === 'order_updated' || lastEvent.type === 'order_created' || lastEvent.type === 'reservation_updated' || lastEvent.type === 'reservation_created' || lastEvent.type === 'reservation_deleted' || lastEvent.type === 'payment_completed') {
       void fetchTables(true);
     }
   }, [lastEvent, fetchTables, isEditMode]);
@@ -313,7 +315,7 @@ export const MapView: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-white/5">
+                  <div className="pt-6 mt-6 border-t border-white/5 space-y-3">
                     <button
                       onClick={() => navigate(`/tables/${selectedTable.id}/order`)}
                       className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-surface py-3.5 text-sm font-black uppercase tracking-widest hover:bg-white/90 transition-all active:scale-[0.98]"
@@ -321,6 +323,15 @@ export const MapView: React.FC = () => {
                       Ouvrir Commande
                       <ArrowRight className="w-4 h-4" />
                     </button>
+                    {selectedTable.statut_effectif === 'OCCUPEE' && (
+                      <button
+                        onClick={() => setIsPaymentModalOpen(true)}
+                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal/10 border border-teal/20 text-teal py-3.5 text-sm font-black uppercase tracking-widest hover:bg-teal hover:text-white transition-all active:scale-[0.98]"
+                      >
+                        <Wallet className="w-4 h-4" />
+                        Régler l'addition
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -366,20 +377,31 @@ export const MapView: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="flex gap-3 mt-2">
-                      <button
-                        onClick={() => setSelectedTableId(null)}
-                        className="flex-1 py-3.5 rounded-xl bg-white/5 text-sm font-bold text-white hover:bg-white/10 transition-colors"
-                      >
-                        Annuler
-                      </button>
-                      <button
-                        onClick={() => navigate(`/tables/${selectedTable.id}/order`)}
-                        className="flex-[2] py-3.5 rounded-xl bg-teal text-sm font-black text-white shadow-lg shadow-teal/20 hover:bg-teal-light transition-all flex items-center justify-center gap-2"
-                      >
-                        Ouvrir
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                    <div className="flex flex-col gap-3 mt-2">
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setSelectedTableId(null)}
+                          className="flex-1 py-3.5 rounded-xl bg-white/5 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          onClick={() => navigate(`/tables/${selectedTable.id}/order`)}
+                          className="flex-[2] py-3.5 rounded-xl bg-white text-sm font-black text-surface shadow-lg hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+                        >
+                          Ouvrir Commande
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                      {selectedTable.statut_effectif === 'OCCUPEE' && (
+                        <button
+                          onClick={() => setIsPaymentModalOpen(true)}
+                          className="w-full py-3.5 rounded-xl bg-teal text-sm font-black text-white shadow-lg shadow-teal/20 hover:bg-teal-light transition-all flex items-center justify-center gap-2"
+                        >
+                          <Wallet className="w-4 h-4" />
+                          Régler l'addition
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -423,6 +445,16 @@ export const MapView: React.FC = () => {
         <LegendItem color="bg-[#E9C46A]" label="Paiement" />
         <LegendItem color="bg-surface-elevated border border-white/10" label="Réservée" />
       </div>
+
+      {selectedTable && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={() => setIsPaymentModalOpen(false)}
+          tableId={selectedTable.id}
+          tableNumero={selectedTable.numero}
+          onPaymentSuccess={() => fetchTables(true)}
+        />
+      )}
     </div>
   );
 };

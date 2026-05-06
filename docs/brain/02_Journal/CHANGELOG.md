@@ -1,8 +1,31 @@
+## [2026-05-07] - 00:50
+### Added
+- **Phase 27 Plan 02 (Client Payment UI)**: Implemented the client-facing payment landing page and split selection.
+  - **Split Selector**: Created `SplitSelector.tsx` with support for Full, Equal (guest counter), and Item-based (checklist) splits.
+  - **Payment Landing Page**: Developed `PaymentLandingPage.tsx` with tokenized session resolution, amount preview, and simulated payment confirmation.
+  - **API Integration**: Integrated with backend endpoints for session resolution, split calculation, and final payment.
+
+### Changed
+- **Progress Tracking**: Advanced project state to `PHASE_27_PLAN_02_COMPLETE` and updated roadmap progress.
+- **Project Memory**: Generated execution summary and updated the project dashboard.
+
 ## [2026-05-07] - 00:10
 ### Added
 - **Phase 27 Plan 01 (Staff Payment UI)**: Initialized types and directory structure.
   - **Shared Types**: Created `app/frontend/shared/types/paiements.ts` with `PaiementStatus`, `PaiementMethod`, `PaymentSession`, and `ManualPaymentRequest`.
   - **Directory Structure**: Created `app/frontend/backoffice/src/components/salle/` for staff-facing components.
+
+## [2026-05-06] - 23:59
+### Added
+- **Phase 27 Plan 01 (Staff Payment UI)**: Implemented the payment management interface for staff.
+  - **Shared UI**: Created a high-end, animated `Modal` component in `@shared/ui`.
+  - **Payment Modal**: Developed `PaymentModal.tsx` with real-time order balancing, manual payment (Espèces/Carte) triggers, and QR code generation for self-service.
+  - **Map Integration**: Integrated the payment workflow into `MapView.tsx` (Table Info Panel & Mobile Bottom Sheet) for tables with active orders.
+  - **Backend Support**: Added `staff-resolve` endpoint to the `paiements` app to support staff-initiated payment lookups.
+
+### Changed
+- **Progress Tracking**: Advanced project state to `PHASE_27_PLAN_01_COMPLETE` and updated roadmap progress.
+- **Project Memory**: Generated execution summary and synchronized the dashboard.
 
 ## [2026-05-06] - 23:55
 ### Added

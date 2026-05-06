@@ -64,8 +64,8 @@ Plans:
 **Success Criteria**: 1. Staff can generate QR codes and record manual payments via a modal on the table map. 2. Clients can resolve their session via QR and choose a split strategy (Total, Equal, Item). 3. Staff UI updates in real-time when clients pay.
 
 Plans:
-- [ ] 27-01-PLAN.md — Staff Payment Modal & QR Issuance UI.
-- [ ] 27-02-PLAN.md — Client QR Landing Page & Split Bill UI.
+- [x] 27-01-PLAN.md — Staff Payment Modal & QR Issuance UI. (completed 2026-05-06)
+- [x] 27-02-PLAN.md — Client QR Landing Page & Split Bill UI. (completed 2026-05-07)
 - [ ] 27-03-PLAN.md — Final Integration & End-to-End Verification.
 
 ## Progress
@@ -101,4 +101,4 @@ Phases execute in numeric order: 1 → 40
 | 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
-| 27. Encaissement UI | 0/3 | Planned | — |
+| 27. Encaissement UI | 2/3 | In Progress | — |

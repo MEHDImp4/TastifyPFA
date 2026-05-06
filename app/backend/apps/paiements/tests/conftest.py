@@ -1,62 +1,54 @@
-from decimal import Decimal
-
 import pytest
-
-from apps.commandes.models import Commande, CommandeLigne
-from apps.menu.models import Categorie, Plat
+from decimal import Decimal
 from apps.tables.models import Table
+from apps.menu.models import Categorie, Plat
+from apps.commandes.models import Commande, CommandeLigne
 
 
 @pytest.fixture
-def paiement_categorie(db):
-    return Categorie.objects.create(nom='Paiements', ordre_affichage=1)
+def table(db):
+    return Table.objects.create(numero=1, capacite=4)
 
 
 @pytest.fixture
-def paiement_plat_short(db, paiement_categorie):
+def categorie(db):
+    return Categorie.objects.create(nom="Test Category")
+
+
+@pytest.fixture
+def plat(db, categorie):
     return Plat.objects.create(
-        categorie=paiement_categorie,
-        nom='Jus',
-        prix=Decimal('10.00'),
-        temps_preparation=5,
-    )
-
-
-@pytest.fixture
-def paiement_plat_long(db, paiement_categorie):
-    return Plat.objects.create(
-        categorie=paiement_categorie,
-        nom='Plat du jour',
-        prix=Decimal('15.00'),
-        temps_preparation=20,
+        nom="Test Plat",
+        prix=Decimal("10.00"),
+        categorie=categorie
     )
 
 
 @pytest.fixture
 def paiement_table(db):
-    return Table.objects.create(numero=260, capacite=4)
+    return Table.objects.create(numero=101, capacite=4)
 
 
 @pytest.fixture
-def payable_commande(db, paiement_table):
-    return Commande.objects.create(
+def payable_commande_with_lines(db, paiement_table, plat):
+    commande = Commande.objects.create(
         table=paiement_table,
         statut=Commande.Statut.EN_COURS,
         montant_total=Decimal('25.00'),
+        est_active=True,
     )
-
-
-@pytest.fixture
-def payable_commande_with_lines(db, payable_commande, paiement_plat_short, paiement_plat_long):
-    line_short = CommandeLigne.objects.create(
-        commande=payable_commande,
-        plat=paiement_plat_short,
+    # line 1: 10.00
+    line1 = CommandeLigne.objects.create(
+        commande=commande,
+        plat=plat,
         quantite=1,
+        prix_unitaire=Decimal('10.00'),
     )
-    line_long = CommandeLigne.objects.create(
-        commande=payable_commande,
-        plat=paiement_plat_long,
+    # line 2: 15.00
+    line2 = CommandeLigne.objects.create(
+        commande=commande,
+        plat=plat,
         quantite=1,
+        prix_unitaire=Decimal('15.00'),
     )
-    payable_commande.refresh_from_db()
-    return payable_commande, line_short, line_long
+    return commande, line1, line2

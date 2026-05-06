@@ -33,6 +33,7 @@ class PayableSession:
     montant_total: Decimal
     montant_paye: Decimal
     montant_restant: Decimal
+    items: list[dict]
 
 
 @dataclass(frozen=True)
@@ -82,7 +83,42 @@ def resolve_payable_session(*, table_id: int) -> PayableSession:
         for commande in candidate_commandes:
             montant_paye = _aggregate_completed_payment_total(commande_id=commande.id)
             montant_restant = quantize_amount(commande.montant_total - montant_paye)
+            
             if montant_restant > ZERO_AMOUNT:
+                # Fetch items with their payment coverage
+                lines = (
+                    CommandeLigne.objects.filter(commande=commande)
+                    .select_related('plat')
+                    .order_by('id')
+                )
+                
+                # Get existing contributions for these lines
+                existing_contributions = {
+                    row['commande_ligne']: row['total']
+                    for row in (
+                        PaiementItem.objects.filter(
+                            commande_ligne__commande=commande,
+                            paiement__statut=Paiement.Statut.COMPLETE,
+                        )
+                        .values('commande_ligne')
+                        .annotate(total=Sum('montant_contribue'))
+                    )
+                }
+                
+                items_data = []
+                for line in lines:
+                    total_line = quantize_amount(line.quantite * line.prix_unitaire)
+                    covered = quantize_amount(existing_contributions.get(line.id, ZERO_AMOUNT))
+                    items_data.append({
+                        'id': line.id,
+                        'plat_nom': line.plat.nom,
+                        'quantite': line.quantite,
+                        'prix_unitaire': quantize_amount(line.prix_unitaire),
+                        'total': total_line,
+                        'deja_paye': covered,
+                        'reste_a_payer': quantize_amount(total_line - covered),
+                    })
+
                 payable_sessions.append(
                     PayableSession(
                         table_id=table_id,
@@ -90,6 +126,7 @@ def resolve_payable_session(*, table_id: int) -> PayableSession:
                         montant_total=quantize_amount(commande.montant_total),
                         montant_paye=montant_paye,
                         montant_restant=montant_restant,
+                        items=items_data
                     )
                 )
 
