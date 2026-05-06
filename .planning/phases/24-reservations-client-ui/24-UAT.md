@@ -5,17 +5,17 @@ source:
   - 24-03-SUMMARY.md
   - 24-VALIDATION.md
 started: 2026-05-06T13:54:56.2934454+01:00
-updated: 2026-05-06T15:15:00.0000000+01:00
+updated: 2026-05-06T15:18:00.0000000+01:00
 ---
 
 ## Current Test
 
-number: 3
-name: Available Table Selection
+number: 4
+name: Reservation Confirmation Submission
 expected: |
-  On `/reservations/table`, the page should load the shared table map
-  and allow choosing an available table for the selected slot.
-  If a table is unavailable for that slot, it should not be presented as selectable.
+  On `/reservations/confirm`, confirming the reservation should complete successfully
+  and create the booking with the chosen slot and table,
+  without requiring any manual status selection by the client.
 awaiting: user response
 
 ## Tests
@@ -30,7 +30,9 @@ result: pass
 
 ### 3. Available Table Selection
 expected: On `/reservations/table`, the page should load the shared table map and allow choosing an available table for the selected slot. If a table is unavailable for that slot, it should not be presented as selectable.
-result: pending
+result: issue
+reported: "all the table shown as free but i did a reservation on a table"
+severity: major
 
 ### 4. Reservation Confirmation Submission
 expected: On `/reservations/confirm`, confirming the reservation should complete successfully and create the booking with the chosen slot and table, without requiring any manual status selection by the client.
@@ -40,9 +42,19 @@ result: pending
 
 total: 4
 passed: 2
-issues: 0
-pending: 2
+issues: 1
+pending: 1
 skipped: 0
 blocked: 0
 
 ## Gaps
+
+- truth: "Unavailable tables for the selected slot are not presented as selectable in the client table-selection step."
+  status: failed
+  reason: "User reported: all the table shown as free but i did a reservation on a table"
+  severity: major
+  test: 3
+  root_cause: ""
+  artifacts: []
+  missing: []
+  debug_session: ""
