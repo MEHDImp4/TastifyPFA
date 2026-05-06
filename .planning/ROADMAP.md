@@ -142,7 +142,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 Plans:
 - [x] 25-01-PLAN.md — Backend Enriched API & Real-time Signals. (completed)
 - [x] 25-02-PLAN.md — Back-Office Reservations Management. (completed)
-- [ ] 25-03-PLAN.md — Salle/Map Integration & Status Lifecycle.
+- [x] 25-03-PLAN.md — Salle/Map Integration & Status Lifecycle. (completed)
 
 ## Progress
 
