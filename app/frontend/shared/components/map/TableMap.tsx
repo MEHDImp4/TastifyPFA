@@ -7,6 +7,7 @@ interface TableMapProps {
   onTableClick: (table: Table) => void;
   isEditMode?: boolean;
   onTablePositionChange?: (tableId: number, position: TablePosition) => void;
+  allowAllSelectable?: boolean;
 }
 
 export interface TablePosition {
@@ -93,6 +94,7 @@ export const TableMap: React.FC<TableMapProps> = ({
   onTableClick,
   isEditMode = false,
   onTablePositionChange,
+  allowAllSelectable = false,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
@@ -222,6 +224,7 @@ export const TableMap: React.FC<TableMapProps> = ({
             isOverlapping={overlappingTableIds.has(table.id)}
             onClick={onTableClick}
             onDragStart={handleDragStart}
+            allowAllSelectable={allowAllSelectable}
           />
         ))}
       </svg>

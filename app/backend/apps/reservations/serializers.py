@@ -11,13 +11,17 @@ CLIENT_ALLOWED_STATUTS = {Reservation.Statut.ANNULEE}
 
 class ReservationSerializer(serializers.ModelSerializer):
     client = serializers.PrimaryKeyRelatedField(read_only=True)
+    client_details = serializers.SerializerMethodField(read_only=True)
+    table_details = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Reservation
         fields = [
             'id',
             'client',
+            'client_details',
             'table',
+            'table_details',
             'date_reservation',
             'heure_debut',
             'heure_fin',
@@ -27,7 +31,26 @@ class ReservationSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'client', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'client', 'client_details', 'table_details', 'created_at', 'updated_at']
+
+    def get_client_details(self, obj):
+        if not obj.client:
+            return None
+        return {
+            'id': obj.client.id,
+            'username': obj.client.username,
+            'first_name': obj.client.first_name,
+            'last_name': obj.client.last_name,
+        }
+
+    def get_table_details(self, obj):
+        if not obj.table:
+            return None
+        return {
+            'id': obj.table.id,
+            'numero': obj.table.numero,
+            'capacite': obj.table.capacite,
+        }
 
     def _is_staff(self):
         request = self.context.get('request')

@@ -128,14 +128,15 @@ export function PlatDrawer({
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-white">
-          {initialData ? 'Modifier le Plat' : 'Nouveau Plat'}
-        </h2>
-        <button onClick={onClose} className="text-foreground-muted hover:text-white transition-colors">
-          <X size={24} />
-        </button>
-      </div>
+      <div className="p-6 h-full overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-white">
+            {initialData ? 'Modifier le Plat' : 'Nouveau Plat'}
+          </h2>
+          <button onClick={onClose} className="text-foreground-muted hover:text-white transition-colors">
+            <X size={24} />
+          </button>
+        </div>
 
       <div className="flex border-b border-white/10 mb-6 -mx-6 px-6">
         <button
@@ -300,6 +301,7 @@ export function PlatDrawer({
         ) : (
           initialData && <PlatRecetteTab platId={initialData.id} />
         )}
+      </div>
       </div>
     </Drawer>
   );

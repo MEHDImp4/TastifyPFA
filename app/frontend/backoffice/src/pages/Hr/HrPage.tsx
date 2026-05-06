@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Plus, Search, Filter, Download } from 'lucide-react';
+import { Plus, Search, Filter, Download } from 'lucide-react';
 import hrService from './hrService';
 import { Employe, EmployeFormData } from './types';
 import EmployeeTable from './components/EmployeeTable';

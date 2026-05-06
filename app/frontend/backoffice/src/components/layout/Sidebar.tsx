@@ -13,7 +13,8 @@ import {
   Wifi,
   WifiOff,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Calendar
 } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
@@ -45,6 +46,7 @@ export const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
 
   const navItems: NavItem[] = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '#', allowedRoles: ['GERANT'] },
+    { name: 'Réservations', icon: Calendar, path: '/reservations', allowedRoles: ['GERANT', 'SERVEUR'] },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories', allowedRoles: ['GERANT'] },
     { name: 'Plats', icon: ChefHat, path: '/plats', allowedRoles: ['GERANT'] },
     { name: 'Tables', icon: Table, path: '/tables', allowedRoles: ['GERANT'] },

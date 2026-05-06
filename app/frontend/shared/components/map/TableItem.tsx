@@ -10,6 +10,7 @@ interface TableItemProps {
   y: number;
   isEditMode?: boolean;
   isOverlapping?: boolean;
+  allowAllSelectable?: boolean;
 }
 
 export const statusColors: Record<TableStatus, string> = {
@@ -41,12 +42,17 @@ export const TableItem: React.FC<TableItemProps> = ({
   y,
   isEditMode = false,
   isOverlapping = false,
+  allowAllSelectable = false,
 }) => {
   const dimensions = getTableDimensions(table);
   const isRound = isRoundTable(table);
   const centerX = dimensions.width / 2;
   const centerY = dimensions.height / 2;
-  const isSelectable = isEditMode || (table.est_disponible !== false && table.statut === 'LIBRE');
+  
+  // Use statut_effectif if available, else statut
+  const displayStatus = table.statut_effectif || table.statut;
+  const isSelectable = allowAllSelectable || isEditMode || (table.est_disponible !== false && displayStatus === 'LIBRE');
+
 
   const handleClick = () => {
     if (!isEditMode && isSelectable) {
@@ -100,7 +106,7 @@ export const TableItem: React.FC<TableItemProps> = ({
           cx={centerX}
           cy={centerY}
           r={TABLE_CIRCLE_SIZE / 2}
-          animate={{ fill: statusColors[table.statut] }}
+          animate={{ fill: statusColors[displayStatus] }}
           transition={{ duration: 0.2 }}
           stroke={isOverlapping ? '#E76F51' : 'rgba(255,255,255,0.16)'}
           strokeWidth={isOverlapping ? 5 : 2}
@@ -112,7 +118,7 @@ export const TableItem: React.FC<TableItemProps> = ({
           width={dimensions.width}
           height={dimensions.height}
           rx={14}
-          animate={{ fill: statusColors[table.statut] }}
+          animate={{ fill: statusColors[displayStatus] }}
           transition={{ duration: 0.2 }}
           stroke={isOverlapping ? '#E76F51' : 'rgba(255,255,255,0.16)'}
           strokeWidth={isOverlapping ? 5 : 2}

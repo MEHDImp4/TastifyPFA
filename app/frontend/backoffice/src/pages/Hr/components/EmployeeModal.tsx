@@ -168,7 +168,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, onClose, onSave, 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted ml-1">Rôle Système</label>
                 <Select
-                  value={formData.role}
+                  value={formData.role || ''}
                   onChange={(val) => setFormData({ ...formData, role: val })}
                   options={[
                     { value: 'SERVEUR', label: 'Serveur' },

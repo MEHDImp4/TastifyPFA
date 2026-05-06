@@ -1,5 +1,6 @@
 import datetime
 
+from django.db import models
 from rest_framework import status as drf_status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -19,8 +20,25 @@ class ReservationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         base_qs = Reservation.objects.select_related('client', 'table')
+
+        date_reservation = self.request.query_params.get('date_reservation')
+        if date_reservation:
+            base_qs = base_qs.filter(date_reservation=date_reservation)
+            
+        statut = self.request.query_params.get('statut')
+        if statut:
+            base_qs = base_qs.filter(statut=statut)
+            
+        search = self.request.query_params.get('search')
+        if search:
+            base_qs = base_qs.filter(
+                models.Q(client__username__icontains=search) |
+                models.Q(client__first_name__icontains=search) |
+                models.Q(client__last_name__icontains=search)
+            )
+
         if user.role in STAFF_ROLES:
-            return base_qs.all()
+            return base_qs
         return base_qs.filter(client=user)
 
     @action(detail=False, methods=['get'], url_path='available_tables')

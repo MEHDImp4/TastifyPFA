@@ -24,9 +24,7 @@ result: pass
 
 ### 3. Available Table Selection
 expected: On `/reservations/table`, the page should load the shared table map and allow choosing an available table for the selected slot. If a table is unavailable for that slot, it should not be presented as selectable.
-result: issue
-reported: "all the table shown as free but i did a reservation on a table"
-severity: major
+result: pass
 
 ### 4. Reservation Confirmation Submission
 expected: On `/reservations/confirm`, confirming the reservation should complete successfully and create the booking with the chosen slot and table, without requiring any manual status selection by the client.
@@ -35,17 +33,17 @@ result: pass
 ## Summary
 
 total: 4
-passed: 3
-issues: 1
+passed: 4
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
 
-## Gaps
+## Gaps (Resolved)
 
 - truth: "Unavailable tables for the selected slot are not presented as selectable in the client table-selection step."
-  status: failed
-  reason: "User reported: all the table shown as free but i did a reservation on a table"
+  status: pass
+  reason: "Fixed by carrying slot availability state to TableMap. User confirmed fix and passed manual retest."
   severity: major
   test: 3
   root_cause: "The reservation wizard did not carry an explicit per-slot availability state through to the shared table map, so blocked tables could not stay visible while also being made non-selectable."
@@ -54,6 +52,5 @@ blocked: 0
     - "app/frontend/shared/components/map/TableItem.tsx"
     - "app/frontend/portail/src/pages/Reservations/StepTableSelect.tsx"
     - "app/frontend/portail/src/pages/Reservations/StepTableSelect.test.tsx"
-  missing:
-    - "Manual retest of the live /reservations/table step."
+  missing: []
   debug_session: ""

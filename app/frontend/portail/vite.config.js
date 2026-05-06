@@ -18,7 +18,7 @@ var sharedPath = getSharedPath();
 console.log('Using @shared path:', sharedPath);
 export default defineConfig({
     define: {
-        'import.meta.env.VITE_AUTH_PORTAL': JSON.stringify('staff'),
+        'import.meta.env.VITE_AUTH_PORTAL': JSON.stringify('client'),
     },
     plugins: [react(), tailwindcss()],
     resolve: {
@@ -31,19 +31,13 @@ export default defineConfig({
     },
     server: {
         host: '0.0.0.0',
-        port: 3000,
+        port: 3003,
         strictPort: true,
         allowedHosts: true,
         proxy: {
             '/api': {
                 target: 'http://backend:8000',
                 changeOrigin: true,
-            },
-            '/ws': {
-                target: 'http://backend:8000',
-                ws: true,
-                changeOrigin: true,
-                rewrite: function (path) { return path; },
             },
             '/media': {
                 target: 'http://backend:8000',

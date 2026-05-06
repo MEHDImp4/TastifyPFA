@@ -1407,7 +1407,7 @@
 - `docker compose exec backend pytest -q apps/users/tests/test_auth.py`: passed.
 - `docker compose exec backoffice npm run build`: passed.
 - `docker compose exec portail npm run build`: passed.
-- Commit: `COMMIT_HASH_PENDING`
+- Commit: `333bb06`
 
 ## [2026-04-28] - 16:58
 ### Added

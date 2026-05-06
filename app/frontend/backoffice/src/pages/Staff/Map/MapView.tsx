@@ -4,7 +4,7 @@ import { Table } from '@shared/types/tables';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 import { TableMap, TablePosition } from '@shared/components/map/TableMap';
-import { Check, LayoutDashboard, LayoutList, Loader2, RefreshCw, RotateCcw, Users } from 'lucide-react';
+import { Check, LayoutDashboard, LayoutList, Loader2, RefreshCw, RotateCcw, Users, Calendar, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const MapView: React.FC = () => {
@@ -20,6 +20,7 @@ export const MapView: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
   const [dirtyTables, setDirtyTables] = useState<Record<number, TablePosition>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
 
   const isGerant = user?.role === 'GERANT';
   const dirtyCount = Object.keys(dirtyTables).length;
@@ -49,7 +50,7 @@ export const MapView: React.FC = () => {
   useEffect(() => {
     if (!lastEvent || isEditMode) return;
 
-    if (lastEvent.type === 'order_updated' || lastEvent.type === 'order_created') {
+    if (lastEvent.type === 'order_updated' || lastEvent.type === 'order_created' || lastEvent.type === 'reservation_updated' || lastEvent.type === 'reservation_created' || lastEvent.type === 'reservation_deleted') {
       void fetchTables(true);
     }
   }, [lastEvent, fetchTables, isEditMode]);
@@ -59,7 +60,7 @@ export const MapView: React.FC = () => {
 
     const interval = setInterval(() => {
       fetchTables(true);
-    }, 15000); // Increased interval since we have WS
+    }, 15000);
 
     return () => clearInterval(interval);
   }, [fetchTables, isEditMode]);
@@ -69,6 +70,7 @@ export const MapView: React.FC = () => {
     setError(null);
     setIsEditMode((current) => !current);
     if (viewMode === 'list') setViewMode('map');
+    setSelectedTableId(null);
   };
 
   const handlePositionChange = (tableId: number, position: TablePosition) => {
@@ -125,7 +127,21 @@ export const MapView: React.FC = () => {
   };
 
   const handleTableClick = (table: Table) => {
-    navigate(`/tables/${table.id}/order`);
+    if (isEditMode) return;
+    if (selectedTableId === table.id) {
+      navigate(`/tables/${table.id}/order`);
+    } else {
+      setSelectedTableId(table.id);
+    }
+  };
+
+  const handleMarkArrived = async (reservationId: number) => {
+    try {
+      await axiosInstance.patch(`/reservations/${reservationId}/`, { statut: 'PRESENTE' });
+      await fetchTables(true);
+    } catch (err) {
+      console.error('Failed to mark arrived', err);
+    }
   };
 
   if (loading) {
@@ -136,6 +152,8 @@ export const MapView: React.FC = () => {
       </div>
     );
   }
+
+  const selectedTable = tables.find(t => t.id === selectedTableId);
 
   return (
     <div className="space-y-6 pb-20 sm:pb-0">
@@ -212,25 +230,162 @@ export const MapView: React.FC = () => {
 
       <div className="animate-enter">
         {viewMode === 'map' ? (
-          <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
+          <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
             <TableMap
               tables={tables}
               isEditMode={isEditMode}
               onTableClick={handleTableClick}
               onTablePositionChange={handlePositionChange}
+              allowAllSelectable={true}
             />
 
-            <aside className="hidden xl:block rounded-3xl border border-white/5 bg-surface p-6 shadow-xl">
-              <div className="flex min-h-48 flex-col justify-center text-center">
-                <div className="mx-auto w-12 h-12 rounded-2xl bg-teal/10 flex items-center justify-center border border-teal/20 mb-4">
-                  <LayoutDashboard className="h-6 w-6 text-teal" />
+            <aside className="hidden xl:block rounded-3xl border border-white/5 bg-surface p-6 shadow-xl relative overflow-hidden flex flex-col">
+              {!selectedTable ? (
+                <div className="flex flex-1 flex-col items-center justify-center text-center">
+                  <div className="mx-auto w-12 h-12 rounded-2xl bg-teal/10 flex items-center justify-center border border-teal/20 mb-4">
+                    <LayoutDashboard className="h-6 w-6 text-teal" />
+                  </div>
+                  <h2 className="text-lg font-black text-white">Aucune table sélectionnée</h2>
+                  <p className="mt-2 text-xs leading-5 text-foreground-muted">
+                    Touchez une table sur le plan interactif pour afficher ses détails ou prendre une commande.
+                  </p>
                 </div>
-                <h2 className="text-lg font-black text-white">Mode Plan</h2>
-                <p className="mt-2 text-xs leading-5 text-foreground-muted">
-                  Touchez une table sur le plan interactif pour commencer une commande.
-                </p>
-              </div>
+              ) : (
+                <div className="flex flex-1 flex-col animate-enter">
+                  <div className="mb-6 flex items-start justify-between">
+                    <div>
+                      <h2 className="text-3xl font-black text-white tabular-nums tracking-tighter">
+                        Table {selectedTable.numero}
+                      </h2>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="flex items-center gap-1.5 text-foreground-muted bg-white/5 px-2.5 py-1 rounded-lg">
+                          <Users className="h-3.5 w-3.5" />
+                          <span className="text-xs font-black uppercase tracking-widest">{selectedTable.capacite} pers.</span>
+                        </div>
+                        <div className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border ${
+                          selectedTable.statut_effectif === 'LIBRE' ? 'bg-teal/10 text-teal border-teal/20' :
+                          selectedTable.statut_effectif === 'OCCUPEE' ? 'bg-[#E76F51]/10 text-[#E76F51] border-[#E76F51]/20' :
+                          selectedTable.statut_effectif === 'RESERVEE' ? 'bg-[#264653]/50 text-[#E9C46A] border-[#E9C46A]/20' :
+                          'bg-surface border-white/5 text-foreground-muted'
+                        }`}>
+                          {selectedTable.statut_effectif}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 space-y-6">
+                    {selectedTable.prochaine_reservation ? (
+                      <div className="rounded-2xl border border-white/5 bg-white/5 p-4 space-y-4">
+                        <div className="flex items-center gap-2 text-white">
+                          <Calendar className="w-4 h-4 text-teal" />
+                          <h3 className="text-sm font-bold">
+                            {selectedTable.prochaine_reservation.is_current ? 'Réservation en cours' : 'Prochaine réservation'}
+                          </h3>
+                        </div>
+                        
+                        <div>
+                          <p className="text-lg font-black text-white">{selectedTable.prochaine_reservation.client_name}</p>
+                          <div className="flex items-center gap-2 text-xs text-foreground-muted mt-1 font-medium">
+                            <Clock className="w-3.5 h-3.5" />
+                            {selectedTable.prochaine_reservation.heure_debut} - {selectedTable.prochaine_reservation.heure_fin}
+                            <span className="mx-1">•</span>
+                            <Users className="w-3.5 h-3.5" />
+                            {selectedTable.prochaine_reservation.nombre_personnes} pers.
+                          </div>
+                        </div>
+
+                        {selectedTable.prochaine_reservation.is_current && selectedTable.prochaine_reservation.statut === 'CONFIRMEE' && (
+                          <button
+                            onClick={() => handleMarkArrived(selectedTable.prochaine_reservation!.id)}
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal/10 border border-teal/20 py-2.5 text-xs font-black uppercase tracking-widest text-teal hover:bg-teal hover:text-white transition-all"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            Marquer Arrivé
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+                        <Calendar className="w-5 h-5 text-foreground-muted/50 mx-auto mb-2" />
+                        <p className="text-xs text-foreground-muted font-medium">Aucune réservation prévue aujourd'hui</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-6 mt-6 border-t border-white/5">
+                    <button
+                      onClick={() => navigate(`/tables/${selectedTable.id}/order`)}
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-surface py-3.5 text-sm font-black uppercase tracking-widest hover:bg-white/90 transition-all active:scale-[0.98]"
+                    >
+                      Ouvrir Commande
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </aside>
+
+            {/* Mobile Bottom Sheet for Selected Table */}
+            <div className={`xl:hidden fixed inset-x-0 bottom-0 z-50 transform transition-transform duration-300 ease-in-out ${selectedTable && !isEditMode ? 'translate-y-0' : 'translate-y-full'}`}>
+              <div className="absolute inset-0 bg-black/50 -top-[100vh] -z-10" onClick={() => setSelectedTableId(null)} />
+              <div className="bg-surface border-t border-white/10 rounded-t-3xl p-6 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+                {selectedTable && (
+                  <div className="flex flex-col gap-5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-black text-white tabular-nums tracking-tighter">Table {selectedTable.numero}</h2>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span className="text-xs font-black text-foreground-muted uppercase tracking-widest">{selectedTable.capacite} places</span>
+                          <span className="text-foreground-muted/30">•</span>
+                          <span className={`text-[10px] font-black uppercase tracking-widest ${
+                            selectedTable.statut_effectif === 'LIBRE' ? 'text-teal' :
+                            selectedTable.statut_effectif === 'OCCUPEE' ? 'text-[#E76F51]' :
+                            selectedTable.statut_effectif === 'RESERVEE' ? 'text-[#E9C46A]' : 'text-foreground-muted'
+                          }`}>{selectedTable.statut_effectif}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {selectedTable.prochaine_reservation && (
+                      <div className="rounded-xl bg-white/5 p-3">
+                        <div className="text-[10px] font-bold text-teal uppercase tracking-widest mb-1">
+                          {selectedTable.prochaine_reservation.is_current ? 'Réservation en cours' : 'Prochaine réservation'}
+                        </div>
+                        <div className="text-sm font-bold text-white">{selectedTable.prochaine_reservation.client_name}</div>
+                        <div className="text-xs text-foreground-muted">{selectedTable.prochaine_reservation.heure_debut} - {selectedTable.prochaine_reservation.heure_fin}</div>
+                        
+                        {selectedTable.prochaine_reservation.is_current && selectedTable.prochaine_reservation.statut === 'CONFIRMEE' && (
+                          <button
+                            onClick={() => handleMarkArrived(selectedTable.prochaine_reservation!.id)}
+                            className="mt-3 w-full rounded-lg bg-teal/20 py-2 text-xs font-bold text-teal hover:bg-teal hover:text-white transition-colors"
+                          >
+                            Marquer Arrivé
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="flex gap-3 mt-2">
+                      <button
+                        onClick={() => setSelectedTableId(null)}
+                        className="flex-1 py-3.5 rounded-xl bg-white/5 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        onClick={() => navigate(`/tables/${selectedTable.id}/order`)}
+                        className="flex-[2] py-3.5 rounded-xl bg-teal text-sm font-black text-white shadow-lg shadow-teal/20 hover:bg-teal-light transition-all flex items-center justify-center gap-2"
+                      >
+                        Ouvrir
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -251,6 +406,11 @@ export const MapView: React.FC = () => {
                    <span className="text-[10px] font-black uppercase tracking-widest">{table.capacite}</span>
                 </div>
                 <span className="mt-3 text-[9px] font-black uppercase tracking-[0.2em]">{table.statut}</span>
+                {table.prochaine_reservation && (
+                  <span className="mt-2 text-[10px] font-bold text-white/50 bg-white/5 px-2 py-0.5 rounded-md">
+                    {table.prochaine_reservation.heure_debut}
+                  </span>
+                )}
               </button>
             ))}
           </div>

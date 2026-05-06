@@ -1,5 +1,5 @@
 import axiosInstance from '@shared/auth/axiosInstance';
-import { Employe, EmployeFormData } from '../pages/Hr/types';
+import { Employe, EmployeFormData } from './types';
 
 const hrService = {
   getEmployees: async () => {

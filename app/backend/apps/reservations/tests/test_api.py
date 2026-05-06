@@ -115,6 +115,23 @@ class TestReservationOwnershipScoping:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    def test_response_payload_includes_enriched_details(
+        self, api_client, client_user, table
+    ):
+        reservation = make_reservation(client_user, table)
+        api_client.force_authenticate(user=client_user)
+
+        response = api_client.get(reverse("reservation-detail", args=[reservation.id]))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert "client_details" in response.data
+        assert response.data["client_details"]["id"] == client_user.id
+        assert response.data["client_details"]["username"] == client_user.username
+        assert "table_details" in response.data
+        assert response.data["table_details"]["id"] == table.id
+        assert response.data["table_details"]["numero"] == table.numero
+        assert response.data["table_details"]["capacite"] == table.capacite
+
 
 @pytest.mark.django_db
 class TestStaffVisibility:

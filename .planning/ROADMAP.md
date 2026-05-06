@@ -30,7 +30,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 22: HR Frontend** - Back-office HR UI. (completed 2026-05-05)
 - [x] **Phase 23: Reservations Model & API** - Availability logic, RBAC, client ownership, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).
 - [x] **Phase 24: Reservations Client UI** - Portail Client booking flow. Three plans complete, backend availability endpoint wired, wizard verified with 16 frontend tests plus backend availability coverage (completed 2026-05-06).
-- [ ] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
+- [x] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
 - [ ] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [ ] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [ ] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules.
@@ -134,6 +134,16 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Depends on**: Phase 2
 **Success Criteria**: 1. Employee CRUD with Gerant-only access. 2. Automated user creation. 3. Soft delete.
 
+### Phase 25: Reservations Admin UI
+**Goal**: Provide staff with tools to manage reservations, including listing, creating, confirming, and tracking upcoming bookings on the table map.
+**Depends on**: Phase 23, Phase 24
+**Success Criteria**: 1. Staff can view a paginated list of reservations filtered by date and status. 2. Staff can create a manual reservation and assign a table. 3. The Table Map info panel shows the "Next Reservation" for a selected table. 4. WebSocket notifications broadcast new client reservations to the staff dashboard.
+
+Plans:
+- [x] 25-01-PLAN.md — Backend Enriched API & Real-time Signals. (completed)
+- [x] 25-02-PLAN.md — Back-Office Reservations Management. (completed)
+- [ ] 25-03-PLAN.md — Salle/Map Integration & Status Lifecycle.
+
 ## Progress
 
 **Execution Order:**
@@ -165,8 +175,8 @@ Phases execute in numeric order: 1 → 40
 | 22. HR Frontend | 1/1 | Completed | 2026-05-05 |
 | 23. Reservations Model & API | 3/3 | Completed | 2026-05-06 |
 | 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
-| ... | ... | ... | ... |
-| 40. Load Testing & Optimization | 0/2 | Planned | — |
+| 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
+| 26. QR Payment & Split Bill Logic | 0/1 | Planned | — |
 
 
 

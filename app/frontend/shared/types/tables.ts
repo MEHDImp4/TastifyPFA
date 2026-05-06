@@ -6,6 +6,15 @@ export interface Table {
   capacite: number;
   statut: TableStatus;
   statut_effectif?: TableStatus;
+  prochaine_reservation?: {
+    id: number;
+    heure_debut: string;
+    heure_fin: string;
+    client_name: string;
+    statut: string;
+    nombre_personnes: number;
+    is_current: boolean;
+  } | null;
   pos_x: number;
   pos_y: number;
   est_active: boolean;

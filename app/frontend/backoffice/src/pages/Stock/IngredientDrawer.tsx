@@ -66,14 +66,15 @@ export function IngredientDrawer({ isOpen, onClose, onSuccess, initialData }: In
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold">{initialData ? 'Modifier l\'Ingrédient' : 'Nouvel Ingrédient'}</h2>
-        <button onClick={onClose} className="text-foreground-muted hover:text-foreground">
-          <X size={24} />
-        </button>
-      </div>
+      <div className="p-6 h-full overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold">{initialData ? 'Modifier l\'Ingrédient' : 'Nouvel Ingrédient'}</h2>
+          <button onClick={onClose} className="text-foreground-muted hover:text-foreground">
+            <X size={24} />
+          </button>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="nom" className="block text-sm font-medium mb-1">Nom</label>
           <input
@@ -126,6 +127,7 @@ export function IngredientDrawer({ isOpen, onClose, onSuccess, initialData }: In
           </button>
         </div>
       </form>
+      </div>
     </Drawer>
   );
 }
