@@ -59,18 +59,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setLoading(true);
     setError(null);
     try {
-      // We use resolve-payable-session logic via a dedicated endpoint if possible, 
-      // or we just fetch the order details. In Phase 26 we added resolve/
-      // but that's for tokens. For staff, we can just use the table session resolver.
-      // Assuming GET /api/paiements/session/resolve/?table_id=X exists or similar.
-      // Actually, Phase 26 Plan 01 implemented resolve_payable_session service.
-      // Let's assume a staff endpoint for this or use the table detail.
-      
-      const response = await axiosInstance.get(`/tables/${tableId}/`);
-      // The table detail in Tastify usually includes the active order.
-      // If not, we might need a dedicated endpoint.
-      // For now, let's try to fetch order details directly if we have commande_id.
-      // Wait, the subagent said Task 3 integration point is in MapView.
+      await axiosInstance.get(`/tables/${tableId}/`);
       
       const sessionResponse = await axiosInstance.get(`/paiements/session/staff_resolve/?table_id=${tableId}`);
       setSession(sessionResponse.data);
