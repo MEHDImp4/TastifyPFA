@@ -18,6 +18,7 @@ export const StaffNotificationManager = () => {
   const notifiedOrders = useRef<Set<string>>(new Set())
   const kitchenAudioRef = useRef<HTMLAudioElement | null>(null)
   const readyAudioRef = useRef<HTMLAudioElement | null>(null)
+  const paymentAudioRef = useRef<HTMLAudioElement | null>(null)
   const isUnlocked = useRef(false)
   const [toasts, setToasts] = useState<Toast[]>([])
 
@@ -25,9 +26,11 @@ export const StaffNotificationManager = () => {
     if (typeof window !== 'undefined') {
       const kitchenAudio = new Audio('/sounds/kitchen-bell.mp3')
       const readyAudio = new Audio('/sounds/order-ready.wav')
+      const paymentAudio = new Audio('/sounds/payment-success.mp3')
       
       kitchenAudioRef.current = kitchenAudio
       readyAudioRef.current = readyAudio
+      paymentAudioRef.current = paymentAudio
 
       const unlock = () => {
         if (isUnlocked.current) return
@@ -69,6 +72,33 @@ export const StaffNotificationManager = () => {
 
   useEffect(() => {
     if (!lastEvent || !user) return
+
+    // payment_confirmed: A payment was made (staff or client)
+    if (lastEvent.type === 'payment_confirmed') {
+      const { commande_id, paiement_id, montant, mode } = lastEvent.payload as any
+      if (!paiement_id) return
+
+      const notificationKey = `payment-${paiement_id}`
+      if (notifiedOrders.current.has(notificationKey)) return
+
+      if (user.role === 'SERVEUR' || user.role === 'GERANT') {
+        notifiedOrders.current.add(notificationKey)
+
+        if (paymentAudioRef.current) {
+          paymentAudioRef.current.currentTime = 0
+          paymentAudioRef.current.play().catch(() => console.warn('Audio blocked'))
+        }
+
+        const id = Math.random().toString(36).substring(2, 9)
+        setToasts((prev) => [...prev, {
+          id,
+          message: `Paiement reçu : ${montant} DH (${mode})`,
+          type: 'success',
+        }])
+        setTimeout(() => removeToast(id), 6000)
+      }
+      return
+    }
 
     // line_ready: CUISINIER marked a dish as Prêt → notify SERVEUR/GERANT
     if (lastEvent.type === 'line_ready') {
