@@ -21,6 +21,8 @@ The project operates under strict adherence to `GEMINI.md` mandates, emphasizing
 
 ## Current State
 
+Phase 23 fully verified (2026-05-06) — Reservation model and API complete. `Reservation` model with 15-minute cleanup buffer, transactional race-safe creation, RBAC (client ownership scoping + staff full management), dynamic `statut_effectif` on Table API. All security gaps closed (privilege escalation on create, midnight datetime edge case). 49 tests passing. 23 of 40 phases complete.
+
 Phase 12 complete (2026-04-30) — Order Taking Frontend delivered and now consolidated into the staff SPA. Servers can open a table-specific order route, browse categories and dishes, build isolated per-table carts, review totals, and submit nested orders to `/api/commandes/`.
 
 Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose service and consolidated runtime frontends. Backend is exposed on `localhost:8000`; the staff frontend is exposed on `localhost:3000`; the client frontend is exposed on `localhost:3003`. Each Vite app proxies `/api` and `/media` to `http://backend:8000`. Login gates reject accounts used from the wrong frontend.
@@ -59,4 +61,4 @@ Infrastructure amendment complete (2026-04-30) — Removed the Nginx Compose ser
 - **D-30** — Salle order submission posts nested order lines to the commandes API. Validated in Phase 12.
 - **D-31** — Local Docker routing uses direct host ports without Nginx, with Vite API/media proxies. Validated by infrastructure amendment.
 
-Last updated: 2026-04-30
+Last updated: 2026-05-06
