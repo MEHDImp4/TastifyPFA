@@ -68,16 +68,17 @@ def create_reservation(
 
 def update_reservation(reservation, **changes):
     with transaction.atomic():
-        locked_table = Table.objects.select_for_update().get(pk=reservation.table_id)
+        old_table_pk = reservation.table_id
+        new_table_pk = changes['table'].pk if 'table' in changes else old_table_pk
+
+        # Lock both table rows in ascending PK order to prevent deadlock inversion
+        # when two concurrent transactions swap tables in opposite directions (CR-03).
+        pks_to_lock = sorted({old_table_pk, new_table_pk})
+        Table.objects.select_for_update().filter(pk__in=pks_to_lock)
+
         locked_reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
-        if 'table' in changes:
-            locked_table = Table.objects.select_for_update().get(pk=changes['table'].pk)
-            locked_reservation.table = locked_table
         for field, value in changes.items():
-            if field == 'table':
-                continue
             setattr(locked_reservation, field, value)
-        locked_reservation.table = locked_table
         locked_reservation.save()
         return locked_reservation
 
