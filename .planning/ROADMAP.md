@@ -31,7 +31,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 23: Reservations Model & API** - Availability logic, RBAC, client ownership, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).
 - [x] **Phase 24: Reservations Client UI** - Portail Client booking flow. Three plans complete, backend availability endpoint wired, wizard verified with 16 frontend tests plus backend availability coverage (completed 2026-05-06).
 - [x] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
-- [ ] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
+- [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [ ] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [ ] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules.
 - [ ] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution.
@@ -49,109 +49,24 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phase Details
 
-### Phase 1: Project Skeleton
-**Goal**: Establish Docker, Django, React Vite, MySQL, Redis.
-**Depends on**: Nothing
-**Success Criteria**: 1. Services start via Docker.
-
-### Phase 2: User Model & RBAC
-**Goal**: Custom User model with roles.
-**Depends on**: Phase 1
-**Success Criteria**: 1. `GERANT`, `SERVEUR`, `CUISINIER`, `CLIENT` roles exist.
-
-### Phase 3: Auth API & Login Page
-**Goal**: JWT endpoints and Login UI.
-**Depends on**: Phase 2
-**Success Criteria**: 1. Users can log in and receive JWT.
-
-### Phase 4: Categories Model & API
-**Goal**: Category DB and REST API.
-**Depends on**: Phase 3
-**Success Criteria**: 1. API allows CRUD on categories with RBAC and soft-delete. 2. Premium images added for core categories.
-
-### Phase 5: Categories Frontend
-**Goal**: Back-office UI for categories.
-**Depends on**: Phase 4
-**Success Criteria**: 1. Manager can visually add/edit categories.
-
-### Phase 6: Plats Model & API
-**Goal**: Dish DB and REST API.
-**Depends on**: Phase 4
-**Success Criteria**: 1. API allows CRUD on dishes with RBAC and soft-delete.
-
-### Phase 7: Plats Frontend
-**Goal**: Back-office UI for dishes.
-**Depends on**: Phase 6
-**Success Criteria**: 1. Manager can visually manage dishes.
-
-### Phase 8: Tables Model & API
-**Goal**: Table DB and REST API.
-**Depends on**: Phase 3
-**Success Criteria**: 1. Tables state is queryable.
-
-### Phase 9: Tables Map Frontend
-**Goal**: Visual table map in staff UI.
-**Depends on**: Phase 8
-**Success Criteria**: 1. Waiters see tables map.
-
-### Phase 10: Commandes Model
-**Goal**: Order database tables and constraints.
-**Depends on**: Phase 6, Phase 8
-**Success Criteria**: 1. Signals calculate `montant_total`.
-
-### Phase 11: Commandes REST API
-**Goal**: REST endpoints for order management.
-**Depends on**: Phase 10
-**Success Criteria**: 1. Nested creation works. 2. Table status syncs automatically.
-
-### Phase 12: Order Taking Frontend
-**Goal**: Build the interactive interface in the staff UI for selecting dishes and validating orders.
-**Depends on**: Phase 11
-**Success Criteria**: 1. Servers can select items from the menu, review the cart, and submit orders for specific tables.
-
-### Phase 13: WebSocket Infrastructure
-**Goal**: Establish a reliable, real-time communication layer using Django Channels and Redis to push updates from the backend to the frontend SPAs.
-**Depends on**: Phase 12
-**Success Criteria**: 1. `JWTAuthMiddleware` authenticates staff WebSocket connections. 2. `StaffConsumer` manages `staff_group` membership. 3. Staff frontend establishes a persistent `/ws/staff/` connection.
-
-### Phase 14: KDS Base Frontend
-**Goal**: Cuisine view inside the staff SPA, WebSocket connection.
-**Depends on**: Phase 13
-**Success Criteria**: 1. Cuisinier sees real-time orders in a horizontal rail interface.
-
-### Phase 15: KDS Orchestrator Logic
-**Goal**: Implement backend JIT orchestration — calculate `heure_lancement` per dish line so all items in an order finish simultaneously. Celery ETA tasks schedule launches; WebSocket broadcasts notify the KDS frontend.
-**Depends on**: Phase 14
-**Success Criteria**: 1. Celery worker service defined in `docker-compose.yml`. 2. `CommandeLigne` gains `heure_lancement`, `heure_fin_estimee`, `temps_preparation_snapshot`, `celery_task_id` fields with migration. 3. `KdsOrchestrator` correctly calculates JIT timing for all lines. 4. Existing pending Celery tasks are revoked and rescheduled on order update. 5. `line_launched` WebSocket event is broadcast to the `cuisine` group at the correct ETA.
-
-### Phase 16: Order Push to KDS
-**Goal**: Implement the "Manual Fire" workflow — a server explicitly sends an order to the kitchen via PATCH (`EN_COURS → EN_CUISINE`), triggering JIT orchestration only on that transition, filtering the KDS to show only fired orders, and delivering audio+visual feedback on ticket arrival.
-**Depends on**: Phase 15
-**Success Criteria**: 1. PATCH `/commandes/{id}/` with `{"statut":"EN_CUISINE"}` succeeds for order owner and triggers `KdsOrchestrator`. 2. CUISINIER queryset strictly excludes `EN_COURS` (only `EN_CUISINE | PRETE` visible). 3. "Envoyer en Cuisine" button renders on `OrderingPage` when order is `EN_COURS`. 4. KDS plays audio bell on new ticket arrival via WebSocket. 5. `TicketCard` shows green glow pulse for 10 seconds on new ticket arrival, then stops.
-
-### Phase 21: Employees (HR) Model & API
-**Goal**: Employee profiles linked to Users.
-**Depends on**: Phase 2
-**Success Criteria**: 1. Employee CRUD with Gerant-only access. 2. Automated user creation. 3. Soft delete.
-
-### Phase 25: Reservations Admin UI
-**Goal**: Provide staff with tools to manage reservations, including listing, creating, confirming, and tracking upcoming bookings on the table map.
-**Depends on**: Phase 23, Phase 24
-**Success Criteria**: 1. Staff can view a paginated list of reservations filtered by date and status. 2. Staff can create a manual reservation and assign a table. 3. The Table Map info panel shows the "Next Reservation" for a selected table. 4. WebSocket notifications broadcast new client reservations to the staff dashboard.
-
-Plans:
-- [x] 25-01-PLAN.md — Backend Enriched API & Real-time Signals. (completed)
-- [x] 25-02-PLAN.md — Back-Office Reservations Management. (completed)
-- [x] 25-03-PLAN.md — Salle/Map Integration & Status Lifecycle. (completed)
-
 ### Phase 26: QR Payment & Split Bill Logic
 **Goal**: Provide the backend payment domain for QR-based checkout, including equal and item/fraction splits, token-authorized client payment access, and lifecycle completion that frees the table once the order is fully paid.
 **Depends on**: Phase 11, Phase 12
 **Success Criteria**: 1. `apps.paiements` models and migrations land cleanly. 2. The backend rejects ambiguous or stale payable sessions. 3. Equal and item/fraction split flows validate and persist without double-payment. 4. Fully paid orders transition to `PAYEE` and existing table sync frees the table.
 
 Plans:
-- [ ] 26-01-PLAN.md — Payment Domain, Payable Session Resolution & Lifecycle Integrity.
-- [ ] 26-02-PLAN.md — QR Token Authorization & Payment API Contracts.
+- [x] 26-01-PLAN.md — Payment Domain, Payable Session Resolution & Lifecycle Integrity. (completed 2026-05-06)
+- [x] 26-02-PLAN.md — QR Token Authorization & Payment API Contracts. (completed 2026-05-06)
+
+### Phase 27: Encaissement UI
+**Goal**: Implement the frontend interfaces for payment management, enabling staff to handle payments and generate QR codes, and providing clients with a dedicated self-service payment landing page with split-bill support.
+**Depends on**: Phase 26
+**Success Criteria**: 1. Staff can generate QR codes and record manual payments via a modal on the table map. 2. Clients can resolve their session via QR and choose a split strategy (Total, Equal, Item). 3. Staff UI updates in real-time when clients pay.
+
+Plans:
+- [ ] 27-01-PLAN.md — Staff Payment Modal & QR Issuance UI.
+- [ ] 27-02-PLAN.md — Client QR Landing Page & Split Bill UI.
+- [ ] 27-03-PLAN.md — Final Integration & End-to-End Verification.
 
 ## Progress
 
@@ -185,15 +100,5 @@ Phases execute in numeric order: 1 → 40
 | 23. Reservations Model & API | 3/3 | Completed | 2026-05-06 |
 | 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
-| 26. QR Payment & Split Bill Logic | 0/2 | Planned | — |
-
-
-
-### Phase 20: Automated Deductions
-**Goal**: Implement service-based stock deduction triggered by the JIT orchestration task (launch_item_task). Ensures ingredients are subtracted from inventory only when production begins.
-**Depends on**: Phase 15, Phase 18
-**Success Criteria**: 1. Stock decreases correctly per plat recipe on line launch. 2. Race conditions prevented via atomic row locking. 3. Low-stock alerts broadcast via WebSockets.
-
-Plans:
-- [x] 20-01-PLAN.md — Atomic stock deduction service and task integration. (completed 2026-05-05)
-- [x] 20-UAT.md — Automated and integration test verification. (passed 2026-05-05)
+| 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
+| 27. Encaissement UI | 0/3 | Planned | — |

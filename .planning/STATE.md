@@ -2,23 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_26_PLANNED
-stopped_at: Phase 26 PLANNED. Ready to execute 2 plans.
-last_updated: "2026-05-06T21:25:00.000Z"
+status: PHASE_27_PLANNED
+stopped_at: Phase 27 PLANNED. Ready to implement Staff Payment UI.
+last_updated: "2026-05-06T23:00:00.000Z"
 progress:
   total_phases: 40
-  completed_phases: 25
-  total_plans: 78
-  percent: 62
+  completed_phases: 26
+  total_plans: 81
+  percent: 65
 notes: |
-  - Phase 26 PLANNED (2026-05-06): Split the payment work into two executable plans. Plan 26-01 covers the `apps.paiements` domain, payable-session invariant, locking, and lifecycle completion. Plan 26-02 covers QR issuance, token-backed preview/payment APIs, and explicit ambiguous/no-order failure paths.
-  - Phase 26 CONTEXT DEFINED (2026-05-06): Decided on 'paiements' app, Paiement/PaiementItem models with fractional item split support, and signed dynamic QR tokens for security. Self-service split initiation for clients confirmed.
+  - Phase 27 PLANNED (2026-05-06): Encaissement UI decomposed into 3 plans: Staff UI Modal, Client QR Landing Page, and WebSocket integration/E2E verification.
+  - Phase 26 COMPLETE (2026-05-06): QR Payment & Split Bill logic fully implemented. Backend payment domain, signed token authorization, and public payment API contracts (equal/item splits) are verified with 27 tests.
   - Phase 25 FULLY IMPLEMENTED (2026-05-06): Added Back-Office `/reservations` page with real-time WebSocket sync. Integrated reservation details into the Staff Map View, including upcoming booking info and quick "Arrivé" check-in action.
-  - Phase 24 FULLY VERIFIED (2026-05-06): Portail Client booking flow complete. Fixed table availability bug where all tables appeared free; verified wizard E2E with availability state.  - Phase 23-03 GAP CLOSURE VERIFIED (2026-05-06): 6/6 must-haves verified. CR-01 (statut privilege escalation), CR-02 (midnight datetime fix), WR-03 (prefetch wire), CR-03 (deadlock ordering) all resolved. 49 tests passing.
-  - Phase 23-02 COMPLETE (2026-05-06): `/api/reservations/` with client ownership scoping, staff management, cancel/status RBAC, N+1-safe table prefetch, and `statut_effectif` derived field. 28 tests passing.
-  - Phase 23-01 COMPLETE & VERIFIED (2026-05-06): reservations app, migration, buffered overlap enforcement, and transactional booking services landed with passing reservation tests.
-  - Phase 20 VERIFIED (2026-05-05): Stock deduction confirmed working for "Salade César" via both Celery JIT tasks and manual KDS "Commencer" actions.
-  - Milestone 1 (Phases 01-20) Fully Verified: Manual UAT audit complete. Audio, WebSockets (with heartbeat fix), Sidebar, and Stock logic all green.
+  - Phase 24 FULLY VERIFIED (2026-05-06): Portail Client booking flow complete. Fixed table availability bug where all tables appeared free; verified wizard E2E with availability state.
   - UI & Reliability Refactor (2026-05-05): 
     - Implemented collapsible sidebar with smooth transitions.
     - Centralized audio/visual notifications in `StaffNotificationManager`.
