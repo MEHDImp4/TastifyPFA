@@ -32,4 +32,4 @@ result: PASSED
 evidence: Integration tests in `app/backend/apps/commandes/tests/test_stock_integration.py` passed (4/4). Verified successful end-to-end deduction, rollback on failure, and idempotency.
 
 ## Sign-off
-Phase 20 automated stock deduction is fully verified via automated tests. Manual verification in the live UI is recommended as part of the next project-wide UAT cycle.
+Phase 20 automated stock deduction is fully verified via automated tests. Manual verification in the live UI was successfully performed and confirmed by the user on 2026-05-06.

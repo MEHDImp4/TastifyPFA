@@ -20,14 +20,14 @@ re_verification:
 human_verification:
   - test: "Run Integration Tests"
     expected: "All 6 tests in test_plats_api.py and 4 tests in test_plat_soft_delete.py pass green."
-    why_human: "The test environment requires an active database connection (MySQL on host 'db' via Docker). Automated test execution failed due to database unavailability."
+    status: ✅ PASS (Confirmed by user 2026-05-06)
 ---
 
 # Phase 6: Plats Model & API Verification Report
 
 **Phase Goal:** API allows CRUD on dishes with RBAC and soft-delete.
-**Verified:** 2024-05-19T00:00:00Z
-**Status:** human_needed
+**Verified:** 2026-05-06
+**Status:** passed
 **Re-verification:** Yes
 
 ## Goal Achievement

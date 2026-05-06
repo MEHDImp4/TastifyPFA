@@ -6,10 +6,10 @@ re_verification: true
 human_verification:
   - test: "POST /api/categories/ with a multipart image file (e.g. a JPEG)"
     expected: "201 response, file appears under backend/media/categories/, image field in response is an absolute URL (http://testserver/media/categories/filename.jpg)"
-    why_human: "ImageField upload requires a running server with a real file payload; the use_url=True absolute URL behaviour depends on a request context that cannot be trivially confirmed by static grep alone"
+    status: ✅ PASS (Confirmed by user 2026-05-06)
   - test: "PATCH /api/categories/{id}/ with a new image, then verify the old file is removed from media/"
     expected: "Old image file is deleted from disk by django-cleanup; new file is present"
-    why_human: "django-cleanup side-effect is a filesystem event requiring a live container with the media volume mounted"
+    status: ✅ PASS (Confirmed by user 2026-05-06)
 ---
 
 # Phase 4: Categories Model & API — Verification Report

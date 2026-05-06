@@ -116,9 +116,9 @@ No gaps remaining. Reconciled on 2026-05-01.
 
 ## Human Verification Required
 
-| Test | Action | Expected | Why |
+| Test | Action | Expected | Status |
 |------|--------|----------|-----|
-| Visual map data contract | confirm `/api/tables/` JSON includes `pos_x`, `pos_y` and they are used by the SVG map | Coordinates visible on canvas | Final UX polish check |
+| Visual map data contract | confirm `/api/tables/` JSON includes `pos_x`, `pos_y` and they are used by the SVG map | Coordinates visible on canvas | ✅ PASS (Confirmed by user 2026-05-06) |
 
 ---
 
