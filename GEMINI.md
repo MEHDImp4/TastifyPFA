@@ -50,3 +50,8 @@ You are an elite autonomous AI software engineer. This file defines the core beh
 
 ## 11. Model Usage & Planning
 - **Gemini 3.1 PRO**: You must always use Gemini 3.1 PRO for all planning, reasoning, and complex generation tasks. This is the preferred model for maintaining architectural integrity and high-quality output.
+
+## 12. Docker-First Workflow
+- **Mandatory Containerization**: The project is entirely Docker-based. All services (backend, frontend, database, etc.) must run in Docker containers.
+- **Change Impact**: Every code change, configuration update, or new dependency must be evaluated for its impact on the Docker environment (Dockerfile, docker-compose.yml, volumes, networks).
+- **Service Management**: Use `docker-compose` for orchestration and ensuring environment parity between development and production.

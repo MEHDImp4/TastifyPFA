@@ -1,3 +1,8 @@
+## [2026-05-06] - 16:30
+### Changed
+- **Agent Rules**: Updated `GEMINI.md` to enforce a **Docker-First Workflow**. All code changes and infrastructure updates must now prioritize compatibility with the project's Docker-based environment.
+- **Dashboard Sync**: Regenerated `dashboard.html` to reflect the updated rule set and ensure the activity stream is current.
+
 ## [2026-05-06] - 15:45
 ### Fixed
 - **Build Error: react-router-dom resolution**: Fixed a critical frontend build failure where `react-router-dom` could not be resolved by Vite.
