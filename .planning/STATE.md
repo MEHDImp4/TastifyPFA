@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_26_DISCUSSED
-stopped_at: Phase 26 CONTEXT DEFINED. Ready for research and planning.
-last_updated: "2026-05-06T20:00:00.000Z"
+status: PHASE_26_PLANNED
+stopped_at: Phase 26 PLANNED. Ready to execute 2 plans.
+last_updated: "2026-05-06T21:25:00.000Z"
 progress:
   total_phases: 40
   completed_phases: 25
   total_plans: 78
   percent: 62
 notes: |
+  - Phase 26 PLANNED (2026-05-06): Split the payment work into two executable plans. Plan 26-01 covers the `apps.paiements` domain, payable-session invariant, locking, and lifecycle completion. Plan 26-02 covers QR issuance, token-backed preview/payment APIs, and explicit ambiguous/no-order failure paths.
   - Phase 26 CONTEXT DEFINED (2026-05-06): Decided on 'paiements' app, Paiement/PaiementItem models with fractional item split support, and signed dynamic QR tokens for security. Self-service split initiation for clients confirmed.
   - Phase 25 FULLY IMPLEMENTED (2026-05-06): Added Back-Office `/reservations` page with real-time WebSocket sync. Integrated reservation details into the Staff Map View, including upcoming booking info and quick "Arrivé" check-in action.
   - Phase 24 FULLY VERIFIED (2026-05-06): Portail Client booking flow complete. Fixed table availability bug where all tables appeared free; verified wizard E2E with availability state.  - Phase 23-03 GAP CLOSURE VERIFIED (2026-05-06): 6/6 must-haves verified. CR-01 (statut privilege escalation), CR-02 (midnight datetime fix), WR-03 (prefetch wire), CR-03 (deadlock ordering) all resolved. 49 tests passing.

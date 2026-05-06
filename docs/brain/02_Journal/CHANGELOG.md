@@ -1,3 +1,14 @@
+## [2026-05-06] - 21:25
+### Added
+- **Phase 26 Planning**: Created the executable planning artifacts for QR payments and split-bill backend work.
+  - `26-01-PLAN.md`: Scopes the new `apps.paiements` domain, payable-session invariant, split/lifecycle locking rules, and `Commande -> PAYEE` completion path.
+  - `26-02-PLAN.md`: Freezes the QR/token/payment API contract, including preview-only versus mutating endpoints and the explicit no-order / ambiguous-order QR failure cases.
+
+### Changed
+- **Roadmap**: Updated Phase 26 from a single-plan placeholder to a two-plan backend phase with explicit success criteria and plan entries.
+- **State Tracking**: Advanced `.planning/STATE.md` to `PHASE_26_PLANNED` and marked the phase ready to execute.
+- **Validation Gate**: Added `26-VALIDATION.md` so the phase satisfies the repo's strict Nyquist planning prerequisite before execution.
+
 ## [2026-05-06] - 19:30
 ### Added
 - **Phase 25 Reservations Admin UI**: Built complete staff-side management for reservations.

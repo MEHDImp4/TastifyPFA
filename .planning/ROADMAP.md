@@ -144,6 +144,15 @@ Plans:
 - [x] 25-02-PLAN.md — Back-Office Reservations Management. (completed)
 - [x] 25-03-PLAN.md — Salle/Map Integration & Status Lifecycle. (completed)
 
+### Phase 26: QR Payment & Split Bill Logic
+**Goal**: Provide the backend payment domain for QR-based checkout, including equal and item/fraction splits, token-authorized client payment access, and lifecycle completion that frees the table once the order is fully paid.
+**Depends on**: Phase 11, Phase 12
+**Success Criteria**: 1. `apps.paiements` models and migrations land cleanly. 2. The backend rejects ambiguous or stale payable sessions. 3. Equal and item/fraction split flows validate and persist without double-payment. 4. Fully paid orders transition to `PAYEE` and existing table sync frees the table.
+
+Plans:
+- [ ] 26-01-PLAN.md — Payment Domain, Payable Session Resolution & Lifecycle Integrity.
+- [ ] 26-02-PLAN.md — QR Token Authorization & Payment API Contracts.
+
 ## Progress
 
 **Execution Order:**
@@ -176,7 +185,7 @@ Phases execute in numeric order: 1 → 40
 | 23. Reservations Model & API | 3/3 | Completed | 2026-05-06 |
 | 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
-| 26. QR Payment & Split Bill Logic | 0/1 | Planned | — |
+| 26. QR Payment & Split Bill Logic | 0/2 | Planned | — |
 
 
 
