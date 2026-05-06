@@ -1,3 +1,23 @@
+## [2026-05-06] - 19:30
+### Added
+- **Phase 25 Reservations Admin UI**: Built complete staff-side management for reservations.
+  - **Enriched API & Real-time WebSockets**: Added `client_details` and `table_details` to serializers, and `reservation_updated` / `reservation_deleted` broadcast events for the `staff` group using Django signals.
+  - **Back-Office List & Drawer**: Implemented a paginated and filterable reservations page for `GERANT` and `SERVEUR` roles, allowing manual booking creation, edits, and status overrides.
+  - **Table Map Integration**: Added a contextual info panel (and mobile bottom sheet) to the Staff Map View. Tables now show their upcoming or active reservations with an interactive "Marquer Arrivé" quick-action.
+
+### Changed
+- **Progress Tracking**: Synced dashboard to 62% overall completion (Phase 25/40).
+### Fixed
+- **Phase 24 Verification & Gap Closure**: Successfully closed the remaining major gap in the Client Reservation UI.
+  - **Availability State**: Confirmed that the table availability bug (where all tables appeared free) is resolved and that conflicting tables are now correctly non-selectable in the `/reservations/table` wizard step.
+  - **Human Test Plan**: Verified that all high-priority manual tests (Kitchen Bell, WS Handshake, Image Persistence, etc.) are passing and stable.
+  - **Project State**: Advanced milestone progress to Phase 24 FULLY VERIFIED.
+
+### Changed
+- **Documentation**: Updated `24-UAT.md` to reflect 100% pass rate.
+- **Project State**: Updated `STATE.md` to `PHASE_24_COMPLETE`.
+- **Dashboard**: Synced dashboard with 60% completion and Phase 24 sign-off.
+
 ## [2026-05-06] - 17:11
 ### Fixed
 - **Phase 24 Table Availability Gap**: Updated the reservation availability contract so the client table picker now keeps capacity-matching tables visible while marking conflicting tables as unavailable and non-selectable.
@@ -1368,6 +1388,26 @@
 ### Changed
 - Updated `dashboard.html` to reflect Infrastructure Ready state.
 - Updated `01-UAT.md` with progress on recovery plan.
+
+## [2026-05-06] - 20:40
+### Fixed
+- Isolated shared auth persistence by portal in `app/frontend/shared/auth/portalContext.ts` and `app/frontend/shared/auth/useAuthStore.ts`, so the staff SPA and client portail no longer overwrite the same persisted Zustand session.
+- Updated `app/frontend/shared/auth/Login.tsx`, `app/frontend/shared/auth/AuthBootstrap.tsx`, and `app/frontend/shared/auth/axiosInstance.ts` to send an `X-Tastify-Portal` header across login, refresh, bootstrap, and logout flows.
+- Split the backend refresh-cookie handling in `app/backend/apps/users/views/auth.py` into portal-specific cookies (`refresh_token_staff` and `refresh_token_client`), preventing same-browser staff/client logins from disconnecting each other.
+
+### Added
+- Added backend regression coverage in `app/backend/apps/users/tests/test_auth.py` for concurrent staff and client refresh cookies.
+- Added frontend regression coverage in `app/frontend/backoffice/src/authPersistence.test.ts` and `app/frontend/backoffice/src/axiosInstance.test.ts` for portal-scoped auth storage and portal header resolution.
+
+### Changed
+- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to document the portal-scoped auth/session split.
+
+### Validation
+- `docker compose exec backoffice npm run test -- src/authPersistence.test.ts src/axiosInstance.test.ts --run`: passed.
+- `docker compose exec backend pytest -q apps/users/tests/test_auth.py`: passed.
+- `docker compose exec backoffice npm run build`: passed.
+- `docker compose exec portail npm run build`: passed.
+- Commit: `COMMIT_HASH_PENDING`
 
 ## [2026-04-28] - 16:58
 ### Added

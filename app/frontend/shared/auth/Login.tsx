@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
+import { getAuthPortalHeader } from './portalContext'
 import { useAuthStore } from './useAuthStore'
 import logoStaff from '@shared/assets/logo-staff.svg'
 import logoPublic from '@shared/assets/logo-public.svg'
@@ -69,6 +70,8 @@ const Login: React.FC<LoginProps> = ({
       const response = await axiosInstance.post('/users/login/', {
         username,
         password,
+      }, {
+        headers: getAuthPortalHeader(variant),
       })
 
       const { access, role, username: resUsername } = response.data

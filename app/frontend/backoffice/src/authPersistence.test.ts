@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { getAuthStorageName } from '@shared/auth/portalContext'
 import { sanitizePersistedAuthState } from '@shared/auth/useAuthStore'
 
 describe('shared auth persistence', () => {
@@ -46,5 +47,9 @@ describe('shared auth persistence', () => {
       accessToken: 'fresh-access-token',
       isAuthenticated: true,
     })
+  })
+
+  it('namespaces persisted auth storage by portal', () => {
+    expect(getAuthStorageName()).toBe('tastify-auth-storage:staff')
   })
 })

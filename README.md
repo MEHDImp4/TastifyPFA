@@ -28,6 +28,7 @@ Then visit:
 Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
 Both Vite dev servers now accept all hosts during development so `localhost`, `127.0.0.1`, Docker bridge names, and direct LAN-IP access reuse the same proxy path.
 Each frontend rejects accounts outside its allowed role family: the staff app accepts GERANT, SERVEUR, and CUISINIER; the client app accepts CLIENT only.
+Shared auth persistence is now portal-scoped: `app/frontend/shared/auth/portalContext.ts` namespaces the persisted Zustand key and sends an `X-Tastify-Portal` header so staff and client refresh cookies no longer overwrite each other in the same browser.
 The backend container runs pending Django migrations before starting Daphne, keeping fresh or recreated MySQL volumes aligned with the current apps.
 
 ## Layout
@@ -43,6 +44,7 @@ Shared auth refreshes now also resynchronize `username` and `role` from the back
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
 Both frontend entrypoints now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
+The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separate refresh cookies for the staff and client portals, allowing simultaneous logins on both SPAs without cross-logout.
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.

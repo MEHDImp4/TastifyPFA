@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { getAuthStorageName } from './portalContext'
 
 export interface User {
   username: string
@@ -23,7 +24,7 @@ interface PersistedAuthState {
   isAuthenticated: boolean
 }
 
-const AUTH_STORAGE_NAME = 'tastify-auth-storage'
+const AUTH_STORAGE_NAME = getAuthStorageName()
 const AUTH_STORAGE_VERSION = 1
 
 const isUser = (value: unknown): value is User => {

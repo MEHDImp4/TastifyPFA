@@ -8,6 +8,36 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from ..serializers import CustomTokenObtainPairSerializer
 
+AUTH_PORTAL_COOKIE_NAMES = {
+    'staff': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_staff",
+    'client': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_client",
+}
+
+
+def get_auth_portal(request):
+    portal = request.headers.get('X-Tastify-Portal', 'staff').lower()
+    return portal if portal in AUTH_PORTAL_COOKIE_NAMES else 'staff'
+
+
+def get_auth_cookie_name(request):
+    return AUTH_PORTAL_COOKIE_NAMES[get_auth_portal(request)]
+
+
+def set_refresh_cookie(response, request, refresh_token):
+    response.set_cookie(
+        key=get_auth_cookie_name(request),
+        value=refresh_token,
+        expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+        secure=not settings.DEBUG,
+        httponly=True,
+        samesite='Lax'
+    )
+
+
+def clear_refresh_cookie(response, request):
+    response.delete_cookie(get_auth_cookie_name(request))
+
+
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     
@@ -16,14 +46,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
         if response.status_code == 200:
             refresh_token = response.data.get('refresh')
             # Configuration du cookie HttpOnly pour le token de rafraîchissement
-            response.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=refresh_token,
-                expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
-                secure=not settings.DEBUG,
-                httponly=True,
-                samesite='Lax'
-            )
+            set_refresh_cookie(response, request, refresh_token)
             # Retrait du refresh token de la réponse JSON pour limiter l'exposition XSS
             del response.data['refresh']
         return response
@@ -33,7 +56,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         # Some parsers expose immutable request.data objects; build a mutable payload
         # instead of mutating request.data directly.
         request_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
-        refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
+        refresh_token = request.COOKIES.get(get_auth_cookie_name(request))
 
         if not refresh_token and not request_data.get('refresh'):
             return Response(
@@ -66,14 +89,7 @@ class CookieTokenRefreshView(TokenRefreshView):
             if 'refresh' in response.data:
                 new_refresh_token = response.data.get('refresh')
                 # Mise à jour du cookie sécurisé suite à la rotation du token
-                response.set_cookie(
-                    key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                    value=new_refresh_token,
-                    expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
-                    secure=not settings.DEBUG,
-                    httponly=True,
-                    samesite='Lax'
-                )
+                set_refresh_cookie(response, request, new_refresh_token)
                 del response.data['refresh']
             
         return response
@@ -83,5 +99,5 @@ class LogoutView(APIView):
     
     def post(self, request):
         response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-        response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
+        clear_refresh_cookie(response, request)
         return response

@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 17:12:20<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 20:41:39<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -84,10 +84,10 @@
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
                 <div class="flex justify-between text-xs mb-2">
                     <span class="font-medium text-gray-300">Project Progress</span>
-                    <!-- PERCENT_START --><span class="text-primary font-bold">60%</span><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><span class="text-primary font-bold">62%</span><!-- PERCENT_END -->
                 </div>
                 <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 60%"></div><!-- PERCENT_END -->
+                    <!-- PERCENT_START --><div class="h-full bg-primary rounded-full" style="width: 62%"></div><!-- PERCENT_END -->
                 </div>
             </div>
         </header>
@@ -96,7 +96,7 @@
         <div class="grid grid-cols-3 gap-4 shrink-0 animate-fade-up" style="animation-delay: 0.1s;">
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-green-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Completed Phases</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_PHASES_START -->24<!-- STAT_PHASES_END --><span class="text-sm font-medium text-gray-500 ml-2">/ <!-- STAT_TOTAL_PHASES_START -->40<!-- STAT_TOTAL_PHASES_END --></span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_PHASES_START -->25<!-- STAT_PHASES_END --><span class="text-sm font-medium text-gray-500 ml-2">/ <!-- STAT_TOTAL_PHASES_START -->40<!-- STAT_TOTAL_PHASES_END --></span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Finished Tasks</h3>
@@ -288,11 +288,11 @@
                                 <p class="text-sm text-gray-400 mt-1">Portail Client booking flow. Three plans complete, backend availability endpoint wired, wizard verified with 16 frontend tests plus backend availability coverage (completed 2026-05-06).</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
-                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 25: Reservations Admin UI</h4>
-                                <p class="text-sm text-gray-500 mt-1">Validation via Back-Office/Salle.</p>
+                                <h4 class="font-semibold text-white">Phase 25: Reservations Admin UI</h4>
+                                <p class="text-sm text-gray-400 mt-1">Validation via Back-Office/Salle.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -831,7 +831,7 @@
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase 25: Reservations Admin UI</h4><p class="text-xs text-gray-400 mt-1">Validation via Back-Office/Salle.</p></div>
                             <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
                                 
                             </div>
                         </div>
@@ -954,7 +954,7 @@
                         <script>
                             const chartData = {
                                 labels: ['Todo', 'In Progress', 'Done'],
-                                data: [16, 0, 24]
+                                data: [15, 0, 25]
                             };
                         </script>
                             <!-- CHART_DATA_END -->
@@ -970,6 +970,66 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 25 Reservations Admin UI**: Built complete staff-side management for reservations.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Enriched API & Real-time WebSockets**: Added `client_details` and `table_details` to serializers, and `reservation_updated` / `reservation_deleted` broadcast events for the `staff` group using Django signals.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Back-Office List & Drawer**: Implemented a paginated and filterable reservations page for `GERANT` and `SERVEUR` roles, allowing manual booking creation, edits, and status overrides.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Table Map Integration**: Added a contextual info panel (and mobile bottom sheet) to the Staff Map View. Tables now show their upcoming or active reservations with an interactive "Marquer Arrivé" quick-action.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Progress Tracking**: Synced dashboard to 62% overall completion (Phase 25/40).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Phase 24 Verification & Gap Closure**: Successfully closed the remaining major gap in the Client Reservation UI.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Availability State**: Confirmed that the table availability bug (where all tables appeared free) is resolved and that conflicting tables are now correctly non-selectable in the `/reservations/table` wizard step.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Human Test Plan**: Verified that all high-priority manual tests (Kitchen Bell, WS Handshake, Image Persistence, etc.) are passing and stable.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Project State**: Advanced milestone progress to Phase 24 FULLY VERIFIED.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Documentation**: Updated `24-UAT.md` to reflect 100% pass rate.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Project State**: Updated `STATE.md` to `PHASE_24_COMPLETE`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 19:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Dashboard**: Synced dashboard with 60% completion and Phase 24 sign-off.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Phase 24 Table Availability Gap**: Updated the reservation availability contract so the client table picker now keeps capacity-matching tables visible while marking conflicting tables as unavailable and non-selectable.</p>
@@ -983,66 +1043,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Frontend**: The shared table map now blocks pointer and keyboard selection for unavailable tables, lowers their visual emphasis, and keeps the wizard helper copy aligned with that behavior.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Regression Coverage**: Expanded backend and portail tests to assert that conflicting tables stay in the response as unavailable and that clicking an unavailable table does not advance the wizard.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `python -m pytest app/backend/apps/reservations/tests/test_available_tables.py -q`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx vitest run src/pages/Reservations/StepTableSelect.test.tsx --reporter=verbose`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx tsc -b`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx vite build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Technical Integrity**: Initialized `docs/brain/03_Architecture/QUIRKS.md` to track non-obvious technical behaviors and prevent regressions.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Health Check Script**: Created `scripts/check_health.py` to automate verification of `.env` sync, Django migrations, and shell script line endings.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Agent Rules**: Updated `GEMINI.md` to enforce a **Docker-First Workflow**, reinforced **Rule 3: Dashboard Sync**, and added **Rule 13: Technical Integrity & Quirk Tracking**.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Dashboard Sync**: Regenerated `dashboard.html` to reflect the updated rule set and ensure the activity stream is current.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Build Error: react-router-dom resolution**: Fixed a critical frontend build failure where `react-router-dom` could not be resolved by Vite.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Optimization**: Added `react-router-dom` to `optimizeDeps.include` in `vite.config.ts` for both `portail` and `backoffice` to force pre-bundling.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Cleanup**: Removed outdated `@types/react-router-dom` from `package.json` since version 6 includes its own types, preventing version mismatches.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

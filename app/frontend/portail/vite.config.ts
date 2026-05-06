@@ -22,6 +22,9 @@ const sharedPath = getSharedPath()
 console.log('Using @shared path:', sharedPath)
 
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_AUTH_PORTAL': JSON.stringify('client'),
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 
+import { getAuthPortalHeader, getPortalFromRole } from './portalContext'
 import { useAuthStore } from './useAuthStore'
 
 export interface RefreshResponse {
@@ -12,6 +13,7 @@ export interface RefreshResponse {
 interface BootstrapSessionOptions {
   accessToken: string | null
   isAuthenticated: boolean
+  role?: string | null
   setAccessToken: (token: string, user?: { role: string; username: string }) => void
   clearAuth: () => void
   client?: Pick<typeof axios, 'post'>
@@ -100,6 +102,7 @@ export const accessTokenNeedsBootstrapRefresh = (
 export const refreshPersistedSession = async ({
   accessToken,
   isAuthenticated,
+  role,
   setAccessToken,
   clearAuth,
   client = axios,
@@ -121,6 +124,7 @@ export const refreshPersistedSession = async ({
         timeout: BOOTSTRAP_REQUEST_TIMEOUT_MS,
         headers: {
           'Content-Type': 'application/json',
+          ...getAuthPortalHeader(getPortalFromRole(role)),
         },
       },
     )
@@ -146,6 +150,7 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
   const hasHydrated = useAuthStore((state) => state.hasHydrated)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const accessToken = useAuthStore((state) => state.accessToken)
+  const role = useAuthStore((state) => state.user?.role)
   const setAccessToken = useAuthStore((state) => state.setAccessToken)
   const clearAuth = useAuthStore((state) => state.clearAuth)
 
@@ -180,12 +185,13 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
     let isActive = true
 
     withRenderDeadline(
-      refreshPersistedSession({
-        accessToken,
-        isAuthenticated,
-        setAccessToken: (token, user) => {
-          if (isActive) {
-            setAccessToken(token, user)
+        refreshPersistedSession({
+          accessToken,
+          isAuthenticated,
+          role,
+          setAccessToken: (token, user) => {
+            if (isActive) {
+              setAccessToken(token, user)
           }
         },
         clearAuth: () => {
@@ -204,7 +210,7 @@ export const AuthBootstrap = ({ children }: PropsWithChildren) => {
     return () => {
       isActive = false
     }
-  }, [accessToken, clearAuth, hasHydrated, hasHydrationTimedOut, isAuthenticated, setAccessToken])
+  }, [accessToken, clearAuth, hasHydrated, hasHydrationTimedOut, isAuthenticated, role, setAccessToken])
 
   if ((!hasHydrated && !hasHydrationTimedOut) || !isReady) {
     return null

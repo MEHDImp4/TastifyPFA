@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { getAuthPortalHeader, getPortalFromRole } from './portalContext'
 import { useAuthStore } from './useAuthStore'
 
 type RetryableRequestConfig = InternalAxiosRequestConfig & {
@@ -22,10 +23,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().accessToken
+    const authState = useAuthStore.getState()
+    const token = authState.accessToken
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    const portal = getPortalFromRole(authState.user?.role)
+    Object.assign(config.headers, getAuthPortalHeader(portal))
     return config
   },
   (error) => Promise.reject(error)
