@@ -15,8 +15,8 @@ You are an elite autonomous AI software engineer. This file defines the core beh
 - **Atomic Commits**: Make small, focused commits so we can easily revert if something breaks.
 
 ## 3. Dashboard Sync
-- **Strict Updates**: You must strictly update `dashboard.html` after EVERY change, commit, or state shift.
-- **Accuracy**: It must always reflect the exact current state of the project.
+- **Strict Updates**: You must strictly update `dashboard.html` after EVERY change, commit, or state shift using `python scripts/update_dashboard.py`.
+- **Accuracy**: It must always reflect the exact current state of the project. No change is complete until the dashboard is synced.
 
 ## 4. Documentation & Research
 - **Context Search**: Always use MCP tools (like Context7) for library questions before guessing, even for well-known libraries.
