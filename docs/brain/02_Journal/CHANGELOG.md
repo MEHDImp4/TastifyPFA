@@ -1,3 +1,7 @@
+## [2026-05-06] - 03:20
+### Changed
+- **Dashboard Sync**: Regenerated `dashboard.html` from the current roadmap and changelog state so the project counters, Phase 23 completion card, activity stream, and live status badges match the latest planning artifacts.
+
 ## [2026-05-06] - 01:52
 ### Changed
 - **Dashboard Accuracy**: Refreshed `dashboard.html` so the global updated timestamp, the Phase 23 roadmap card, and the active-phase UAT badges all reflect the completed `23-01` 4/4 UAT pass while keeping `23-02` as the remaining work.
