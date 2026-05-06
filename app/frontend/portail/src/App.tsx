@@ -7,6 +7,7 @@ import axiosInstance from '@shared/auth/axiosInstance'
 import { CLIENT_ROLES, isRoleAllowed } from '@shared/auth/roleAccess'
 import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary'
 import { ReservationWizardShell } from './pages/Reservations/ReservationWizardShell'
+import { PaymentLandingPage } from './pages/Payment/PaymentLandingPage'
 
 const ClientLoginRoute = () => {
   const { clearAuth, isAuthenticated, user } = useAuthStore()
@@ -90,6 +91,7 @@ function App() {
         >
           <Routes>
             <Route path="/login" element={<ClientLoginRoute />} />
+            <Route path="/pay/:token" element={<PaymentLandingPage />} />
             <Route element={<ProtectedClientShell />}>
               <Route index element={<Navigate to="/reservations/new" replace />} />
               <Route path="/reservations/*" element={<ReservationWizardShell />} />
