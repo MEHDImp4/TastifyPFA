@@ -1,5 +1,9 @@
+from decimal import Decimal
+
 from django.test import TestCase
 from rest_framework.test import APIClient
+from apps.commandes.models import Commande
+from apps.menu.models import Categorie, Plat
 from apps.users.models import Utilisateur
 from apps.tables.models import Table
 
@@ -76,3 +80,56 @@ class TableAPITest(TestCase):
         self.table.refresh_from_db()
         self.assertAlmostEqual(float(self.table.pos_x), 150.5)
         self.assertAlmostEqual(float(self.table.pos_y), 200.0)
+
+    def test_qr_requires_staff_role(self):
+        client_user = Utilisateur.objects.create_user(
+            username='client_qr_table', password='pass', role='CLIENT'
+        )
+        self.client.force_authenticate(user=client_user)
+        response = self.client.get(f'/api/tables/{self.table.pk}/qr/')
+        self.assertEqual(response.status_code, 403)
+
+    def test_qr_returns_404_when_no_payable_order_exists(self):
+        response = self.client.get(f'/api/tables/{self.table.pk}/qr/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_qr_returns_token_for_unique_payable_order(self):
+        categorie = Categorie.objects.create(nom='Table QR', ordre_affichage=8)
+        plat = Plat.objects.create(
+            nom='Pastilla',
+            categorie=categorie,
+            prix=Decimal('50.00'),
+            temps_preparation=10,
+        )
+        commande = Commande.objects.create(
+            table=self.table,
+            serveur=self.gerant,
+            statut=Commande.Statut.PRETE,
+            montant_total=Decimal('50.00'),
+        )
+        commande.lignes.create(plat=plat, quantite=1, prix_unitaire=Decimal('50.00'))
+
+        response = self.client.get(f'/api/tables/{self.table.pk}/qr/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['commande_id'], commande.id)
+        self.assertIn('token', response.data)
+
+    def test_qr_returns_409_when_multiple_payable_orders_exist(self):
+        categorie = Categorie.objects.create(nom='Table QR multi', ordre_affichage=9)
+        plat = Plat.objects.create(
+            nom='Rfissa',
+            categorie=categorie,
+            prix=Decimal('35.00'),
+            temps_preparation=12,
+        )
+        for _ in range(2):
+            commande = Commande.objects.create(
+                table=self.table,
+                serveur=self.gerant,
+                statut=Commande.Statut.PRETE,
+                montant_total=Decimal('35.00'),
+            )
+            commande.lignes.create(plat=plat, quantite=1, prix_unitaire=Decimal('35.00'))
+
+        response = self.client.get(f'/api/tables/{self.table.pk}/qr/')
+        self.assertEqual(response.status_code, 409)

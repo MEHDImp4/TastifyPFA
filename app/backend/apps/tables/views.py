@@ -2,9 +2,13 @@ import datetime
 
 from django.db.models import Prefetch
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.paiements.exceptions import AmbiguousPayableOrderError, NoPayableOrderError
+from apps.paiements.services import resolve_payable_session
+from apps.paiements.tokens import issue_payment_token
 from apps.users.permissions import IsGerant
 from .models import Table
 from .serializers import TableSerializer
@@ -27,6 +31,8 @@ class TableViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ('list', 'retrieve'):
             return [IsAuthenticated()]
+        if self.action == 'qr':
+            return [IsAuthenticated()]
         return [IsAuthenticated(), IsGerant()]
 
     def get_queryset(self):
@@ -40,3 +46,29 @@ class TableViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['get'], url_path='qr')
+    def qr(self, request, *args, **kwargs):
+        if request.user.role not in ('SERVEUR', 'GERANT'):
+            return Response(
+                {'detail': "Vous n'etes pas autorise a generer ce QR."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        table = self.get_object()
+        try:
+            session = resolve_payable_session(table_id=table.id)
+        except NoPayableOrderError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        except AmbiguousPayableOrderError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_409_CONFLICT)
+
+        token = issue_payment_token(table_id=session.table_id, commande_id=session.commande_id)
+        return Response(
+            {
+                'table_id': session.table_id,
+                'commande_id': session.commande_id,
+                'token': token,
+                'payment_url': f'/paiement/qr?token={token}',
+            }
+        )
