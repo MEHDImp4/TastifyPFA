@@ -1,3 +1,16 @@
+## [2026-05-06] - 17:11
+### Fixed
+- **Phase 24 Table Availability Gap**: Updated the reservation availability contract so the client table picker now keeps capacity-matching tables visible while marking conflicting tables as unavailable and non-selectable.
+  - **Backend**: `GET /api/reservations/available_tables/` now returns `est_disponible` per candidate table and forces conflicting tables to render as `RESERVEE` for the requested slot.
+  - **Frontend**: The shared table map now blocks pointer and keyboard selection for unavailable tables, lowers their visual emphasis, and keeps the wizard helper copy aligned with that behavior.
+  - **Regression Coverage**: Expanded backend and portail tests to assert that conflicting tables stay in the response as unavailable and that clicking an unavailable table does not advance the wizard.
+
+### Validation
+- `python -m pytest app/backend/apps/reservations/tests/test_available_tables.py -q`
+- `npx vitest run src/pages/Reservations/StepTableSelect.test.tsx --reporter=verbose`
+- `npx tsc -b`
+- `npx vite build`
+
 ## [2026-05-06] - 16:30
 ### Added
 - **Technical Integrity**: Initialized `docs/brain/03_Architecture/QUIRKS.md` to track non-obvious technical behaviors and prevent regressions.

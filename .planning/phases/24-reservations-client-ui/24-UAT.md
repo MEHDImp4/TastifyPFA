@@ -5,7 +5,7 @@ source:
   - 24-03-SUMMARY.md
   - 24-VALIDATION.md
 started: 2026-05-06T13:54:56.2934454+01:00
-updated: 2026-05-06T15:22:00.0000000+01:00
+updated: 2026-05-06T17:11:00.0000000+01:00
 ---
 
 ## Current Test
@@ -48,7 +48,12 @@ blocked: 0
   reason: "User reported: all the table shown as free but i did a reservation on a table"
   severity: major
   test: 3
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "The reservation wizard did not carry an explicit per-slot availability state through to the shared table map, so blocked tables could not stay visible while also being made non-selectable."
+  artifacts:
+    - "app/backend/apps/reservations/views.py"
+    - "app/frontend/shared/components/map/TableItem.tsx"
+    - "app/frontend/portail/src/pages/Reservations/StepTableSelect.tsx"
+    - "app/frontend/portail/src/pages/Reservations/StepTableSelect.test.tsx"
+  missing:
+    - "Manual retest of the live /reservations/table step."
   debug_session: ""

@@ -51,7 +51,7 @@ class TestAvailableTablesAction:
         ids = [t['id'] for t in response.data]
         assert table.id in ids
 
-    def test_excludes_conflicting_table(self, api_client, client_user, table):
+    def test_marks_conflicting_table_as_unavailable(self, api_client, client_user, table):
         Reservation.objects.create(
             client=client_user,
             table=table,
@@ -69,8 +69,10 @@ class TestAvailableTablesAction:
             'nombre_personnes': GUESTS,
         })
         assert response.status_code == status.HTTP_200_OK
-        ids = [t['id'] for t in response.data]
-        assert table.id not in ids
+        conflicting_table = next(item for item in response.data if item['id'] == table.id)
+        assert conflicting_table['est_disponible'] is False
+        assert conflicting_table['statut'] == Table.Statut.RESERVEE
+        assert conflicting_table['statut_effectif'] == Table.Statut.RESERVEE
 
     def test_returns_400_on_missing_params(self, api_client, client_user):
         api_client.force_authenticate(user=client_user)

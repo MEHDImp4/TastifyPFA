@@ -41,15 +41,23 @@ class ReservationViewSet(viewsets.ModelViewSet):
                 status=drf_status.HTTP_400_BAD_REQUEST,
             )
 
-        tables = Table.objects.active().filter(capacite__gte=nombre_personnes)
-        available_tables = [
-            table for table in tables
-            if is_table_available(
+        tables = list(Table.objects.active().filter(capacite__gte=nombre_personnes))
+        availability_by_id = {
+            table.pk: is_table_available(
                 table_id=table.pk,
                 date_reservation=date_reservation,
                 heure_debut=heure_debut,
                 heure_fin=heure_fin,
             )
-        ]
+            for table in tables
+        }
+        serialized_tables = TableSerializer(tables, many=True).data
 
-        return Response(TableSerializer(available_tables, many=True).data)
+        for table_data in serialized_tables:
+            est_disponible = availability_by_id[table_data['id']]
+            table_data['est_disponible'] = est_disponible
+            if not est_disponible:
+                table_data['statut'] = Table.Statut.RESERVEE
+                table_data['statut_effectif'] = Table.Statut.RESERVEE
+
+        return Response(serialized_tables)

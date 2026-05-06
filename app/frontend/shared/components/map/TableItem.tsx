@@ -46,9 +46,10 @@ export const TableItem: React.FC<TableItemProps> = ({
   const isRound = isRoundTable(table);
   const centerX = dimensions.width / 2;
   const centerY = dimensions.height / 2;
+  const isSelectable = isEditMode || (table.est_disponible !== false && table.statut === 'LIBRE');
 
   const handleClick = () => {
-    if (!isEditMode) {
+    if (!isEditMode && isSelectable) {
       onClick(table);
     }
   };
@@ -60,14 +61,14 @@ export const TableItem: React.FC<TableItemProps> = ({
   };
 
   const handlePointerUp = (event: React.PointerEvent<SVGGElement>) => {
-    if (!isEditMode) {
+    if (!isEditMode && isSelectable) {
       event.preventDefault();
       handleClick();
     }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<SVGGElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isSelectable && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       handleClick();
     }
@@ -77,16 +78,21 @@ export const TableItem: React.FC<TableItemProps> = ({
     <motion.g
       data-testid={`table-${table.id}`}
       role="button"
-      tabIndex={isEditMode ? -1 : 0}
+      tabIndex={isEditMode || !isSelectable ? -1 : 0}
+      aria-disabled={!isSelectable}
       aria-label={`Table ${table.numero}, ${table.capacite} places, statut ${table.statut}`}
       initial={false}
       animate={{ x, y }}
-      whileHover={{ scale: isEditMode ? 1.02 : 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={isSelectable ? { scale: isEditMode ? 1.02 : 1.05 } : undefined}
+      whileTap={isSelectable ? { scale: 0.95 } : undefined}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onKeyDown={handleKeyDown}
-      style={{ cursor: isEditMode ? 'grab' : 'pointer', touchAction: 'none' }}
+      style={{
+        cursor: isEditMode ? 'grab' : isSelectable ? 'pointer' : 'not-allowed',
+        opacity: isSelectable ? 1 : 0.72,
+        touchAction: 'none',
+      }}
     >
       {isRound ? (
         <motion.circle

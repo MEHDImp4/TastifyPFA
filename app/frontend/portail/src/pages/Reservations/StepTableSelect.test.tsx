@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { useEffect } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -27,13 +27,19 @@ vi.mock('@shared/components/map/TableMap', () => ({
     onTableClick,
     isEditMode,
   }: {
-    tables: Array<{ id: number; numero: number }>
-    onTableClick: (table: { id: number; numero: number }) => void
+    tables: Array<{ id: number; numero: number; est_disponible?: boolean; statut: string }>
+    onTableClick: (table: { id: number; numero: number; est_disponible?: boolean; statut: string }) => void
     isEditMode?: boolean
   }) => (
     <div data-testid="table-map" data-edit-mode={String(isEditMode)}>
       {tables.map((table) => (
-        <button key={table.id} data-testid={`table-${table.id}`} onClick={() => onTableClick(table)}>
+        <button
+          key={table.id}
+          data-testid={`table-${table.id}`}
+          data-available={String(table.est_disponible !== false)}
+          data-status={table.statut}
+          onClick={() => onTableClick(table)}
+        >
           Table {table.numero}
         </button>
       ))}
@@ -57,7 +63,8 @@ const TABLE_FIXTURE = [
     id: 5,
     numero: 5,
     capacite: 6,
-    statut: 'LIBRE' as const,
+    statut: 'RESERVEE' as const,
+    est_disponible: false,
     pos_x: 300,
     pos_y: 220,
     est_active: true,
@@ -128,6 +135,18 @@ describe('StepTableSelect', () => {
     expect(await screen.findByTestId('table-3')).toBeInTheDocument()
     expect(screen.getByTestId('table-5')).toBeInTheDocument()
     expect(screen.getByTestId('table-map')).toHaveAttribute('data-edit-mode', 'false')
+    expect(screen.getByTestId('table-5')).toHaveAttribute('data-available', 'false')
+    expect(screen.getByTestId('table-5')).toHaveAttribute('data-status', 'RESERVEE')
+  })
+
+  it('does not navigate when the user clicks an unavailable table', async () => {
+    fetchAvailableTablesMock.mockResolvedValue(TABLE_FIXTURE)
+
+    renderWithDate()
+
+    fireEvent.click(await screen.findByTestId('table-5'))
+
+    expect(navigateMock).not.toHaveBeenCalledWith('/reservations/confirm')
   })
 
   it('redirects to /reservations/new when wizard date is missing', async () => {

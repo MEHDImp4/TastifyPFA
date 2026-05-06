@@ -54,6 +54,10 @@ export const StepTableSelect = () => {
   }, [navigate, state.date, state.heure_debut, state.heure_fin, state.nombre_personnes])
 
   const handleTableClick = (table: Table) => {
+    if (table.est_disponible === false || table.statut !== 'LIBRE') {
+      return
+    }
+
     setTable(table)
     navigate('/reservations/confirm')
   }
@@ -99,7 +103,7 @@ export const StepTableSelect = () => {
           <div className="space-y-4">
             <TableMap isEditMode={false} onTableClick={handleTableClick} tables={tables} />
             <p className="text-sm text-foreground-muted">
-              Touchez une table libre pour continuer vers la confirmation.
+              Touchez une table libre pour continuer. Les tables deja reservees restent visibles mais ne sont pas selectionnables.
             </p>
           </div>
         )}

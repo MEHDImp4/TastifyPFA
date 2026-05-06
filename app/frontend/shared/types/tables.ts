@@ -5,9 +5,11 @@ export interface Table {
   numero: number;
   capacite: number;
   statut: TableStatus;
+  statut_effectif?: TableStatus;
   pos_x: number;
   pos_y: number;
   est_active: boolean;
+  est_disponible?: boolean;
   created_at: string;
   updated_at: string;
 }

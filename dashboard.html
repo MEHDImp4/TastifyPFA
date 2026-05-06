@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 17:05:53<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 17:09:34<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -970,6 +970,46 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Phase 24 Table Availability Gap**: Updated the reservation availability contract so the client table picker now keeps capacity-matching tables visible while marking conflicting tables as unavailable and non-selectable.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Backend**: `GET /api/reservations/available_tables/` now returns `est_disponible` per candidate table and forces conflicting tables to render as `RESERVEE` for the requested slot.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Frontend**: The shared table map now blocks pointer and keyboard selection for unavailable tables, lowers their visual emphasis, and keeps the wizard helper copy aligned with that behavior.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Regression Coverage**: Expanded backend and portail tests to assert that conflicting tables stay in the response as unavailable and that clicking an unavailable table does not advance the wizard.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `python -m pytest app/backend/apps/reservations/tests/test_available_tables.py -q`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx vitest run src/pages/Reservations/StepTableSelect.test.tsx --reporter=verbose`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx tsc -b`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 17:11</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npx vite build`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 16:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Technical Integrity**: Initialized `docs/brain/03_Architecture/QUIRKS.md` to track non-obvious technical behaviors and prevent regressions.</p>
@@ -1003,46 +1043,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Cleanup**: Removed outdated `@types/react-router-dom` from `package.json` since version 6 includes its own types, preventing version mismatches.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Standardization**: Removed `preserveSymlinks: true` from Vite configs to allow standard dependency resolution.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> **Dependency Integrity**: Verified `react-router-dom` version `^6.30.3` is present in `package.json` and `package-lock.json` for both projects.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> **Local Install**: Successfully ran `npm install` in both `app/frontend/portail` and `app/frontend/backoffice` to confirm valid dependency state.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 13:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 24 Client Wizard**: Added a routed 3-step reservation wizard in the portail client SPA with shared wizard state, guarded navigation, a date/time capture step, a table-selection step backed by the shared `TableMap`, and a confirmation step that posts client-safe reservation payloads.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 13:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Backend Availability Endpoint**: Added `GET /api/reservations/available_tables/` to filter active tables by capacity and conflict-free availability for a requested slot.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 13:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Regression Coverage**: Added pytest coverage for the availability endpoint plus Vitest coverage for wizard state, date/time validation, table loading/selection, and reservation confirmation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 13:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Phase 24 Planning State**: Marked Phase 24 as completed in `.planning/ROADMAP.md` and persisted the execution summaries for all three Phase 24 plans.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 13:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the new portail reservation flow and completed phase state.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
