@@ -32,7 +32,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 24: Reservations Client UI** - Portail Client booking flow. Three plans complete, backend availability endpoint wired, wizard verified with 16 frontend tests plus backend availability coverage (completed 2026-05-06).
 - [x] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
-- [ ] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
+- [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [ ] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules.
 - [ ] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution.
 - [ ] **Phase 30: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
@@ -66,7 +66,7 @@ Plans:
 Plans:
 - [x] 27-01-PLAN.md — Staff Payment Modal & QR Issuance UI. (completed 2026-05-06)
 - [x] 27-02-PLAN.md — Client QR Landing Page & Split Bill UI. (completed 2026-05-07)
-- [ ] 27-03-PLAN.md — Final Integration & End-to-End Verification.
+- [x] 27-03-PLAN.md — Final Integration & End-to-End Verification. (completed 2026-05-07)
 
 ## Progress
 
@@ -101,4 +101,5 @@ Phases execute in numeric order: 1 → 40
 | 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
-| 27. Encaissement UI | 2/3 | In Progress | — |
+| 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
+| 28. Celery Infrastructure & Check-list Model | 0/1 | à faire | — |
