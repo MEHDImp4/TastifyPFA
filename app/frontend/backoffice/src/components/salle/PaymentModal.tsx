@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '@shared/ui/Modal';
 import axiosInstance from '@shared/auth/axiosInstance';
-import { PaymentSession, PaiementMethod } from '@shared/types/paiements';
-import { Loader2, QrCode, CreditCard, Banknote, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { PaymentSession } from '@shared/types/paiements';
+import { Loader2, QrCode, CreditCard, Banknote, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 
 interface PaymentModalProps {
