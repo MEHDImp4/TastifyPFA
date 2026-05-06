@@ -55,3 +55,9 @@ You are an elite autonomous AI software engineer. This file defines the core beh
 - **Mandatory Containerization**: The project is entirely Docker-based. All services (backend, frontend, database, etc.) must run in Docker containers.
 - **Change Impact**: Every code change, configuration update, or new dependency must be evaluated for its impact on the Docker environment (Dockerfile, docker-compose.yml, volumes, networks).
 - **Service Management**: Use `docker-compose` for orchestration and ensuring environment parity between development and production.
+
+## 13. Technical Integrity & Quirk Tracking
+- **Environment Sync**: If you add or change a `.env` variable, you must immediately update `.env.example`.
+- **Migration Guard**: After any change to a Django model, you must run `makemigrations --check` to ensure the migration files exist and are valid.
+- **Quirk Log**: Maintain `docs/brain/03_Architecture/QUIRKS.md` for non-obvious technical behaviors (e.g., Docker CRLF issues, specific library resolution hacks) to prevent regression.
+- **Pre-Flight Build**: Before marking a frontend task as done, you must run a production build (`npm run build`) to catch environment-specific resolution errors.

@@ -1,6 +1,10 @@
 ## [2026-05-06] - 16:30
+### Added
+- **Technical Integrity**: Initialized `docs/brain/03_Architecture/QUIRKS.md` to track non-obvious technical behaviors and prevent regressions.
+- **Health Check Script**: Created `scripts/check_health.py` to automate verification of `.env` sync, Django migrations, and shell script line endings.
+
 ### Changed
-- **Agent Rules**: Updated `GEMINI.md` to enforce a **Docker-First Workflow** and reinforced **Rule 3: Dashboard Sync** to mandate the use of `python scripts/update_dashboard.py` after every change.
+- **Agent Rules**: Updated `GEMINI.md` to enforce a **Docker-First Workflow**, reinforced **Rule 3: Dashboard Sync**, and added **Rule 13: Technical Integrity & Quirk Tracking**.
 - **Dashboard Sync**: Regenerated `dashboard.html` to reflect the updated rule set and ensure the activity stream is current.
 
 ## [2026-05-06] - 15:45
