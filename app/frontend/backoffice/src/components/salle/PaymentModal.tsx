@@ -3,6 +3,7 @@ import { Modal } from '@shared/ui/Modal';
 import axiosInstance from '@shared/auth/axiosInstance';
 import { PaymentSession, PaiementMethod } from '@shared/types/paiements';
 import { Loader2, QrCode, CreditCard, Banknote, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   tableNumero,
   onPaymentSuccess
 }) => {
+  const { lastEvent } = useStaffWebSocket();
   const [session, setSession] = useState<PaymentSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +35,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       resetState();
     }
   }, [isOpen, tableId]);
+
+  // WebSocket sync for real-time updates
+  useEffect(() => {
+    if (!isOpen || !session || !lastEvent) return;
+
+    const isOurOrder = (lastEvent.payload as any)?.commande_id === session.commande_id || 
+                      (lastEvent.payload as any)?.order?.id === session.commande_id;
+
+    if (isOurOrder && (lastEvent.type === 'payment_confirmed' || lastEvent.type === 'order_updated')) {
+      fetchPaymentSession();
+    }
+  }, [lastEvent, isOpen]);
 
   const resetState = () => {
     setSession(null);
