@@ -127,9 +127,13 @@ class Reservation(models.Model):
     def has_active_conflict(self):
         candidate_reservations = (
             Reservation.objects.active()
-            .for_table_day(
+            .filter(
                 table_id=self.table_id,
-                date_reservation=self.date_reservation,
+                date_reservation__in=[
+                    self.date_reservation - datetime.timedelta(days=1),
+                    self.date_reservation,
+                    self.date_reservation + datetime.timedelta(days=1),
+                ],
             )
             .exclude(pk=self.pk)
         )

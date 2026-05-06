@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 12:00:00<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Autonomous AI Development Dashboard | Updated: <!-- UPDATED_AT_START -->2026-05-06 12:21:57<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -278,7 +278,7 @@
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
                             <div>
                                 <h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4>
-                                <p class="text-sm text-gray-400 mt-1">Availability logic, RBAC, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).</p>
+                                <p class="text-sm text-gray-400 mt-1">Availability logic, RBAC, client ownership, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -628,6 +628,14 @@
                             </div>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
                         </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 23</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Reservations Model Api</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-gray-500/10 text-gray-400 border-gray-500/20">COMPLETE</span>
+                        </div>
                             <!-- UAT_END -->
                     </div>
                 </div>
@@ -807,10 +815,10 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4><p class="text-xs text-gray-400 mt-1">Availability logic, RBAC, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).</p></div>
+                            <div><h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4><p class="text-xs text-gray-400 mt-1">Availability logic, RBAC, client ownership, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).</p></div>
                             <div class="flex items-center">
                                 <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap ml-2">UAT: COMPLETE</span>
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -962,9 +970,49 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Phase 23 Midnight Wrap (GAP-23-01)**: Fixed a core model validation gap in `Reservation.has_active_conflict`. Previously, the overlap check was limited to the same day, allowing overbooking if a reservation's cleanup buffer (15 min) pushed its effective end into the next day (e.g., 23:55 end -> 00:10 next day).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Validation Expansion**: `has_active_conflict` now queries adjacent days (`date 1`, `date`, `date + 1`) to ensure full coverage of buffered overlaps at the midnight boundary.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> **Phase 23 UAT COMPLETE**: Conversational verification confirmed 6/6 test cases passing, including status injection protection (CR-01) and the fixed midnight wrap overlap (GAP-23-01).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Phase 23 Gap Closure (Plan 23-03)**: Applied 3 targeted fixes to close 2 blocking and 2 advisory issues from the Phase 23 verifier.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CR-01** (`reservations/serializers.py`): `validate_statut` now has `if not self._is_staff()` as the outermost guard — non-staff clients can no longer POST arbitrary `statut` values (privilege escalation eliminated).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CR-02** (`tables/serializers.py`): `_compute_statut_effectif` now uses full `datetime.datetime` objects — midnight-straddling reservation windows (e.g., 23:55 + 15min = 00:10) correctly detected.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **WR-03** (`tables/serializers.py`): `_today_reservations` prefetch attribute wired via `hasattr` guard — N+1 queries on table list endpoint eliminated.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CR-03** (`reservations/services.py`): `update_reservation` locks table rows in ascending PK order via `sorted()` — deadlock inversion risk eliminated.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 12:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Phase 23 gap closure complete (Plan 23-03). CR-01: validate_statut now blocks non-staff statut on create. CR-02: _compute_statut_effectif uses datetime.datetime throughout. WR-03: prefetch wired. CR-03: deadlock ordering fixed. Verification: 6/6 must-haves verified, 49 tests passing.</p>
+                                <p class="text-gray-300 text-sm"><strong>Verified:</strong> **Phase 23 FULLY VERIFIED (6/6)**: All must-have truths now pass. 49 tests green. Commits: e20a647, 4419f82, af16ed2, 6626f82.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
@@ -995,51 +1043,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-06 01:40</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> User-confirmed Docker/backend verification session completed 4/4 checkpoints against the reservations domain acceptance criteria.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Reservations Domain**: Added `apps.reservations` with the `Reservation` model, initial migration, admin registration, shared cleanup-buffer constant, and transactional service helpers for buffered availability checks plus race-safe create/update flows.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Wave Summary**: Added `.planning/phases/23-reservations-model-api/23-01-SUMMARY.md` to capture the completed execution scope and verification evidence for Wave 1.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Phase 23 State**: Marked Phase 23 as in progress with `23-01` complete and `23-02` next for the API/RBAC/table-status surface.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `.planning/STATE.md`, `.planning/ROADMAP.md`, and `dashboard.html` to reflect the live reservations execution state.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `app/backend`: `python manage.py check`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `app/backend`: `python -m pytest apps/reservations/tests/test_models.py apps/reservations/tests/test_services.py -q`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `app/backend`: `python manage.py makemigrations reservations --check --dry-run`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Test commit: `5b3bc64`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 00:56</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Implementation commit: `1bbce95`</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

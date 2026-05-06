@@ -1,3 +1,11 @@
+## [2026-05-06] - 12:45
+### Fixed
+- **Phase 23 Midnight Wrap (GAP-23-01)**: Fixed a core model validation gap in `Reservation.has_active_conflict`. Previously, the overlap check was limited to the same day, allowing overbooking if a reservation's cleanup buffer (15 min) pushed its effective end into the next day (e.g., 23:55 end -> 00:10 next day).
+- **Validation Expansion**: `has_active_conflict` now queries adjacent days (`date - 1`, `date`, `date + 1`) to ensure full coverage of buffered overlaps at the midnight boundary.
+
+### Verified
+- **Phase 23 UAT COMPLETE**: Conversational verification confirmed 6/6 test cases passing, including status injection protection (CR-01) and the fixed midnight wrap overlap (GAP-23-01).
+
 ## [2026-05-06] - 12:00
 ### Fixed
 - **Phase 23 Gap Closure (Plan 23-03)**: Applied 3 targeted fixes to close 2 blocking and 2 advisory issues from the Phase 23 verifier.
