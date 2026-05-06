@@ -34,6 +34,8 @@ The backend container runs pending Django migrations before starting Daphne, kee
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
 The back-office SPA keeps Vite runtime config in `app/frontend/backoffice/vite.config.ts` and test-only settings in `app/frontend/backoffice/vitest.config.ts`.
+The client portail now uses route-based navigation with a reservation wizard under `/reservations/new`, `/reservations/table`, and `/reservations/confirm`, backed by `app/frontend/portail/src/pages/Reservations/` and `app/frontend/portail/src/api/reservations.ts`.
+The portail test surface now mirrors the backoffice setup through `app/frontend/portail/vitest.config.ts` and `app/frontend/portail/src/test/setup.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
 Dense back-office list views now use a shared client-side pagination surface in `app/frontend/backoffice/src/components/ui/Pagination.tsx`, currently wired into dishes, stock, and HR screens.
 Cross-frontend role gates live in `app/frontend/shared/auth/roleAccess.ts`, with focused coverage in `app/frontend/backoffice/src/roleAccess.test.ts`.
@@ -44,14 +46,14 @@ Both frontend entrypoints now bootstrap persisted auth through `app/frontend/sha
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/23-reservations-model-api/`, where Phase 23 is in execution with `23-01` completed and `23-02` next on deck for the API/RBAC/table-status surface.
+Current planning artifacts now extend through `.planning/phases/24-reservations-client-ui/`, with Phases 23 and 24 completed and Phase 25 next for reservation validation in the staff interfaces.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
 - `apps.users` — custom users and RBAC.
 - `apps.menu` — categories and dishes.
 - `apps.tables` — restaurant tables.
-- `apps.reservations` — reservation domain, buffered availability checks, and transactional booking services.
+- `apps.reservations` — reservation domain, buffered availability checks, `available_tables` filtering, and transactional booking services.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 

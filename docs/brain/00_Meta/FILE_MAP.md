@@ -72,7 +72,12 @@ tastify-pfa/
 │       │           ├── store/     # useKdsStore
 │       │           ├── KdsPage.tsx
 │       │           └── KdsSocketManager.tsx
-│       └── portail/               # CLIENT — Vite :3003 — /
+│       └── portail/               # CLIENT — Vite :3003 — login + reservation wizard SPA
+│           ├── vitest.config.ts   # Vitest config for portail jsdom tests
+│           └── src/
+│               ├── api/reservations.ts # Client reservation API wrapper + time normalization
+│               ├── test/setup.ts  # Testing Library / jest-dom setup
+│               └── pages/Reservations/ # Wizard state, steps, and route shell for client booking
 ├── docs/                          # Obsidian Brain
 │   ├── brain/                     # Knowledge base
 │   │   └── 05_Resources/DEV_CREDENTIALS.md # Test logins
@@ -100,7 +105,8 @@ tastify-pfa/
 │       ├── 14-kds-base-frontend/
 │       ├── 15-kds-orchestrator-logic/
 │       ├── 16-order-push-to-kds/
-│       └── 23-reservations-model-api/
+│       ├── 23-reservations-model-api/
+│       └── 24-reservations-client-ui/
 ├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md

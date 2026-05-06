@@ -1,3 +1,31 @@
+## [2026-05-06] - 13:46
+### Added
+- **Phase 24 Client Wizard**: Added a routed 3-step reservation wizard in the portail client SPA with shared wizard state, guarded navigation, a date/time capture step, a table-selection step backed by the shared `TableMap`, and a confirmation step that posts client-safe reservation payloads.
+- **Backend Availability Endpoint**: Added `GET /api/reservations/available_tables/` to filter active tables by capacity and conflict-free availability for a requested slot.
+- **Regression Coverage**: Added pytest coverage for the availability endpoint plus Vitest coverage for wizard state, date/time validation, table loading/selection, and reservation confirmation.
+
+### Changed
+- **Phase 24 Planning State**: Marked Phase 24 as completed in `.planning/ROADMAP.md` and persisted the execution summaries for all three Phase 24 plans.
+- **Project Memory**: Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `dashboard.html` to reflect the new portail reservation flow and completed phase state.
+
+### Validation
+- `app/backend`: `python -m pytest apps/reservations/tests/test_available_tables.py -q`
+- `app/frontend/portail`: `npx vitest run src/pages/Reservations/ --reporter=verbose`
+- `app/frontend/portail`: `npx tsc -b`
+- `app/frontend/portail`: `npx vite build`
+- Known unrelated failure: `python -m pytest apps/reservations -q` still reports the pre-existing SQLite locking issue in `TestConcurrentCreateConflict::test_concurrent_conflicting_creates_result_in_exactly_one_success`.
+
+### Commit
+- Feature commit: `ade8969`
+
+## [2026-05-06] - 12:45
+### Initiated
+- **Phase 24 Discuss: Reservations Client UI**: Initiated planning for the Portail Client booking flow. 
+- **Architecture**: Designed a 3-step mobile-first wizard (Details -> Table Selection -> Confirmation).
+- **Table Map Reuse**: Confirmed compatibility of `@shared/components/map/TableMap` for client-side selection.
+- **Backend Delta**: Identified requirement for `available_tables` custom action in `ReservationViewSet`.
+- **Plan**: Created `24-01-PLAN.md` and `24-01-SUMMARY.md`.
+
 ## [2026-05-06] - 12:45
 ### Fixed
 - **Phase 23 Midnight Wrap (GAP-23-01)**: Fixed a core model validation gap in `Reservation.has_active_conflict`. Previously, the overlap check was limited to the same day, allowing overbooking if a reservation's cleanup buffer (15 min) pushed its effective end into the next day (e.g., 23:55 end -> 00:10 next day).
