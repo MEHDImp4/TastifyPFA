@@ -5,17 +5,17 @@ source:
   - 24-03-SUMMARY.md
   - 24-VALIDATION.md
 started: 2026-05-06T13:54:56.2934454+01:00
-updated: 2026-05-06T13:56:24.0000000+01:00
+updated: 2026-05-06T15:15:00.0000000+01:00
 ---
 
 ## Current Test
 
-number: 2
-name: Invalid Time Range Guard
+number: 3
+name: Available Table Selection
 expected: |
-  On the first step, if end time is equal to or earlier than start time,
-  the wizard should block progression and show an inline validation message
-  instead of moving forward.
+  On `/reservations/table`, the page should load the shared table map
+  and allow choosing an available table for the selected slot.
+  If a table is unavailable for that slot, it should not be presented as selectable.
 awaiting: user response
 
 ## Tests
@@ -26,7 +26,7 @@ result: pass
 
 ### 2. Invalid Time Range Guard
 expected: On the first step, if end time is equal to or earlier than start time, the wizard should block progression and show an inline validation message instead of moving forward.
-result: pending
+result: pass
 
 ### 3. Available Table Selection
 expected: On `/reservations/table`, the page should load the shared table map and allow choosing an available table for the selected slot. If a table is unavailable for that slot, it should not be presented as selectable.
@@ -39,9 +39,9 @@ result: pending
 ## Summary
 
 total: 4
-passed: 1
+passed: 2
 issues: 0
-pending: 3
+pending: 2
 skipped: 0
 blocked: 0
 
