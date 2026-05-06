@@ -1,3 +1,14 @@
+## [2026-05-06] - 01:40
+### Added
+- **Phase 23 UAT Artifact**: Added `.planning/phases/23-reservations-model-api/23-UAT.md` to persist the conversational verification session for the reservations domain wave.
+
+### Changed
+- **Phase 23 Verification**: Recorded all four Phase 23-01 UAT checkpoints as passed, covering Django app boot, invalid reservation validation, 15-minute cleanup-buffer overlap rejection, and inactive-status conflict exclusion.
+- **Project Memory**: Updated `dashboard.html` to reflect that `23-01` now has a completed UAT record while `23-02` remains the next execution target.
+
+### Validation
+- User-confirmed Docker/backend verification session completed 4/4 checkpoints against the reservations domain acceptance criteria.
+
 ## [2026-05-06] - 00:56
 ### Added
 - **Reservations Domain**: Added `apps.reservations` with the `Reservation` model, initial migration, admin registration, shared cleanup-buffer constant, and transactional service helpers for buffered availability checks plus race-safe create/update flows.
