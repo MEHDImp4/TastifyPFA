@@ -75,7 +75,7 @@ export const StaffNotificationManager = () => {
 
     // payment_confirmed: A payment was made (staff or client)
     if (lastEvent.type === 'payment_confirmed') {
-      const { commande_id, paiement_id, montant, mode } = lastEvent.payload as any
+      const { paiement_id, montant, mode } = lastEvent.payload as any
       if (!paiement_id) return
 
       const notificationKey = `payment-${paiement_id}`
