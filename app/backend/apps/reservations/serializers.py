@@ -35,10 +35,14 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     def validate_statut(self, value):
         """
-        Clients may only transition to ANNULEE — prevents privilege escalation (T-23-05).
-        On create the default CONFIRMEE is set server-side so this only matters on updates.
+        Non-staff users cannot choose statut on create or set values outside CLIENT_ALLOWED_STATUTS
+        on update — prevents privilege escalation on both paths (T-23-05, CR-01).
         """
-        if self.instance is not None and not self._is_staff():
+        if not self._is_staff():
+            if self.instance is None:
+                raise serializers.ValidationError(
+                    "Les clients ne peuvent pas choisir le statut initial."
+                )
             if value not in CLIENT_ALLOWED_STATUTS:
                 raise serializers.ValidationError(
                     "Les clients ne peuvent que annuler une reservation."
