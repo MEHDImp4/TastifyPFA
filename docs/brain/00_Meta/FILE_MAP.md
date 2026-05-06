@@ -28,13 +28,14 @@ tastify-pfa/
 │   │   │   │   └── urls.py
 │   │   │   ├── tables/            # Table model, API, and seed data
 │   │   │   ├── reservations/      # Reservation domain, migration, buffered availability services, and tests
-│   │   │   └── commandes/         # Orders, order lines, total signals, and KDS orchestration
+│   │   │   ├── commandes/         # Orders, order lines, total signals, and KDS orchestration
 │   │   │       ├── models.py      # Commande and CommandeLigne + Phase 15 scheduling fields
 │   │   │       ├── signals.py     # montant_total recalculation + commit-safe orchestrator/broadcast triggers
 │   │   │       ├── services/      # KDS orchestration services
 │   │   │       ├── tasks.py       # Celery ETA launch tasks + staff broadcasts
 │   │   │       ├── migrations/
 │   │   │       └── tests/         # API, signal, permission, and orchestration regression coverage
+│   │   │   └── paiements/         # Payment domain, payable-session services, reconciliation logic, and split-bill tests
 │   │   ├── requirements.txt
 │   │   ├── entrypoint.sh          # Applies pending migrations before Daphne starts
 │   │   └── Dockerfile
@@ -106,7 +107,8 @@ tastify-pfa/
 │       ├── 15-kds-orchestrator-logic/
 │       ├── 16-order-push-to-kds/
 │       ├── 23-reservations-model-api/
-│       └── 24-reservations-client-ui/
+│       ├── 24-reservations-client-ui/
+│       └── 26-qr-payment-split-bill/
 ├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md
@@ -128,3 +130,4 @@ tastify-pfa/
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network, and both dev servers now allow all hosts so Docker bridge access, `localhost`, and direct LAN-IP testing follow the same proxy path.
 Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, scope their persisted auth state through `app/frontend/shared/auth/portalContext.ts`, and surface render failures through `app/frontend/shared/ui/AppErrorBoundary.tsx`. The backend mirrors that split with portal-specific refresh cookies in `app/backend/apps/users/views/auth.py`. Ports `3001` and `3002` are retired.
 The backend container starts through `app/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
+`app/backend/apps/paiements/services.py` owns the payment-side invariant for `Table -> exactly one payable Commande`, while `app/backend/apps/commandes/signals.py` remains the only place that frees the table when the order reaches `PAYEE` or `ANNULEE`.

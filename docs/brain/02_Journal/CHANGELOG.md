@@ -1,3 +1,23 @@
+## [2026-05-06] - 22:47
+### Added
+- **Phase 26 Payment Domain**: Added `app/backend/apps/paiements/` with the first backend wave of QR-payment split-bill support.
+  - Introduced `Paiement` and `PaiementItem` persistence, admin registration, app wiring, and the initial migration.
+  - Added atomic payment services for payable-session resolution, equal split rounding, fractional line coverage validation, and payment completion reconciliation.
+  - Added backend regression coverage for split rounding, ambiguous or missing payable sessions, line overpayment prevention, payment-driven `Commande.statut = PAYEE`, and the existing table-release path in `apps.commandes.signals`.
+
+### Changed
+- **Backend Registration**: Registered `apps.paiements` in Django settings and documented the new payment domain in `README.md` and `docs/brain/00_Meta/FILE_MAP.md`.
+- **Lifecycle Ownership**: Kept table release centralized in `apps.commandes.signals.sync_table_status_and_broadcast`; the new payment domain only reconciles order payment state.
+- **Dashboard Sync**: Regenerated `dashboard.html` after the payment-domain change set.
+
+### Validation
+- `docker-compose exec backend python manage.py check` — passed.
+- `docker-compose exec backend python manage.py makemigrations --check --dry-run` — passed (`No changes detected`).
+- `docker-compose exec backend pytest apps/paiements/tests/test_models.py -q` — passed.
+- `docker-compose exec backend pytest apps/paiements/tests/test_services.py -q` — passed.
+- `docker-compose exec backend pytest apps/paiements/tests/test_signals.py -q` — passed.
+- `docker-compose exec backend pytest apps/commandes/tests/test_table_sync.py -q` — passed.
+
 ## [2026-05-06] - 21:25
 ### Added
 - **Phase 26 Planning**: Created the executable planning artifacts for QR payments and split-bill backend work.

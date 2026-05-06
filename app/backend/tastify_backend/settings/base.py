@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'apps.stock',
     'apps.hr',
     'apps.reservations',
+    'apps.paiements.apps.PaiementsConfig',
     'django_cleanup',
 ]
 

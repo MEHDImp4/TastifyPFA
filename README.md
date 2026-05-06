@@ -48,7 +48,7 @@ The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separa
 
 ## Planning
 See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/24-reservations-client-ui/`, with Phases 23 and 24 completed and Phase 25 next for reservation validation in the staff interfaces.
+Current planning artifacts now extend through `.planning/phases/26-qr-payment-split-bill/`, with Phase 26 split into two backend waves for the payment domain and the later QR/API contract.
 Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
@@ -57,6 +57,7 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.tables` — restaurant tables.
 - `apps.reservations` — reservation domain, buffered availability checks, `available_tables` filtering, and transactional booking services.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
+- `apps.paiements` — payment records, line-level split contributions, payable-session resolution, and payment-to-order reconciliation that leaves table release in `apps.commandes` signals.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 
 ## Realtime staff channel
