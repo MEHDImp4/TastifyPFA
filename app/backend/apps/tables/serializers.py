@@ -9,27 +9,37 @@ def _compute_statut_effectif(table):
     Derives reservation-aware table status at read time (T-23-06).
 
     A table is treated as RESERVEE when it has an active reservation whose
-    buffered window (heure_fin + 15 min cleanup) overlaps with now.
+    buffered window (heure_fin + RESERVATION_CLEANUP_BUFFER) overlaps with now.
     The stored Table.statut is never mutated; this is a pure derived field.
+
+    Reads from the prefetch attribute _today_reservations when available (WR-03)
+    to avoid N+1 queries on the list endpoint. Falls back to a DB query only
+    when the attribute is absent (e.g., retrieve endpoint without prefetch).
+
+    Compares full datetime objects to handle midnight-straddling windows
+    correctly (e.g., heure_fin=23:55 + 15 min buffer = 00:10 next day) — CR-02.
     """
     from apps.reservations.constants import RESERVATION_CLEANUP_BUFFER
     from apps.reservations.models import Reservation
 
     now = datetime.datetime.now()
     today = now.date()
-    current_time = now.time()
 
-    active_today = (
-        Reservation.objects.active()
-        .filter(table_id=table.pk, date_reservation=today)
-    )
+    if hasattr(table, '_today_reservations'):
+        active_today = table._today_reservations
+    else:
+        active_today = (
+            Reservation.objects.active()
+            .filter(table_id=table.pk, date_reservation=today)
+        )
 
     for reservation in active_today:
-        buffered_end = (
+        start_dt = datetime.datetime.combine(today, reservation.heure_debut)
+        end_dt = (
             datetime.datetime.combine(today, reservation.heure_fin)
             + RESERVATION_CLEANUP_BUFFER
-        ).time()
-        if reservation.heure_debut <= current_time < buffered_end:
+        )
+        if start_dt <= now < end_dt:
             return Table.Statut.RESERVEE
 
     return table.statut
