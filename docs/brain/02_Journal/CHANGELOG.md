@@ -1,3 +1,7 @@
+## [2026-05-06] - 01:52
+### Changed
+- **Dashboard Accuracy**: Refreshed `dashboard.html` so the global updated timestamp, the Phase 23 roadmap card, and the active-phase UAT badges all reflect the completed `23-01` 4/4 UAT pass while keeping `23-02` as the remaining work.
+
 ## [2026-05-06] - 01:40
 ### Added
 - **Phase 23 UAT Artifact**: Added `.planning/phases/23-reservations-model-api/23-UAT.md` to persist the conversational verification session for the reservations domain wave.
