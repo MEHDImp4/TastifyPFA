@@ -1,3 +1,14 @@
+## [2026-05-06] - 12:00
+### Fixed
+- **Phase 23 Gap Closure (Plan 23-03)**: Applied 3 targeted fixes to close 2 blocking and 2 advisory issues from the Phase 23 verifier.
+  - **CR-01** (`reservations/serializers.py`): `validate_statut` now has `if not self._is_staff()` as the outermost guard — non-staff clients can no longer POST arbitrary `statut` values (privilege escalation eliminated).
+  - **CR-02** (`tables/serializers.py`): `_compute_statut_effectif` now uses full `datetime.datetime` objects — midnight-straddling reservation windows (e.g., 23:55 + 15min = 00:10) correctly detected.
+  - **WR-03** (`tables/serializers.py`): `_today_reservations` prefetch attribute wired via `hasattr` guard — N+1 queries on table list endpoint eliminated.
+  - **CR-03** (`reservations/services.py`): `update_reservation` locks table rows in ascending PK order via `sorted()` — deadlock inversion risk eliminated.
+
+### Verified
+- **Phase 23 FULLY VERIFIED (6/6)**: All must-have truths now pass. 49 tests green. Commits: e20a647, 4419f82, af16ed2, 6626f82.
+
 ## [2026-05-06] - 03:20
 ### Changed
 - **Dashboard Sync**: Regenerated `dashboard.html` from the current roadmap and changelog state so the project counters, Phase 23 completion card, activity stream, and live status badges match the latest planning artifacts.
