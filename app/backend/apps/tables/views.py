@@ -1,4 +1,5 @@
 import datetime
+from urllib.parse import quote
 
 from django.db.models import Prefetch
 from rest_framework import viewsets, status
@@ -69,6 +70,6 @@ class TableViewSet(viewsets.ModelViewSet):
                 'table_id': session.table_id,
                 'commande_id': session.commande_id,
                 'token': token,
-                'payment_url': f'/pay/{token}',
+                'payment_url': f'/pay/{quote(token, safe="")}',
             }
         )

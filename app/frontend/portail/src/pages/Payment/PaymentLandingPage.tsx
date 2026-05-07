@@ -6,6 +6,7 @@ import { SplitSelector } from '../../components/payment/SplitSelector'
 
 export const PaymentLandingPage = () => {
   const { token } = useParams<{ token: string }>()
+  const decodedToken = token ? decodeURIComponent(token) : undefined
   const [session, setSession] = useState<PaymentSession | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -36,7 +37,7 @@ export const PaymentLandingPage = () => {
     const resolveSession = async () => {
       try {
         const response = await axiosInstance.get('/paiements/session/resolve/', { 
-          params: { token } 
+          params: { token: decodedToken } 
         })
         setSession(response.data)
       } catch (err: any) {
@@ -46,13 +47,13 @@ export const PaymentLandingPage = () => {
       }
     }
 
-    if (token) {
+    if (decodedToken) {
       resolveSession()
     }
-  }, [token])
+  }, [decodedToken])
 
   const handlePayment = async () => {
-    if (!token || !selection || selection.montant <= 0) return;
+    if (!decodedToken || !selection || selection.montant <= 0) return;
     
     setProcessing(true);
     try {
@@ -60,7 +61,7 @@ export const PaymentLandingPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       const payload = {
-        token,
+        token: decodedToken,
         montant: selection.montant,
         reference_transaction: `QR-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
         contributions: selection.contributions
@@ -151,9 +152,9 @@ export const PaymentLandingPage = () => {
 
           <div className="mb-6">
             <h3 className="text-sm font-bold uppercase tracking-widest text-foreground-muted mb-4 px-1">Options de partage</h3>
-            <SplitSelector 
+              <SplitSelector 
               session={session} 
-              token={token!} 
+              token={decodedToken!} 
               onSelectionChange={setSelection} 
             />
           </div>

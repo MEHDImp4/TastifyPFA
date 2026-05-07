@@ -306,14 +306,16 @@ export const OrderingPage = () => {
                           {isFiring ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Envoyer en Cuisine'}
                         </button>
                       )}
-                      <button
-                        type="button"
-                        disabled={isSubmitting}
-                        onClick={closeOrder}
-                        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface-elevated border border-white/10 font-black text-[11px] uppercase tracking-widest text-white transition-all active:scale-[0.98] disabled:opacity-50"
-                      >
-                        {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Clôturer et Encaisser'}
-                      </button>
+                      {activeOrder?.statut !== 'PAYEE' && (
+                        <button
+                          type="button"
+                          disabled={isSubmitting}
+                          onClick={closeOrder}
+                          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface-elevated border border-white/10 font-black text-[11px] uppercase tracking-widest text-white transition-all active:scale-[0.98] disabled:opacity-50"
+                        >
+                          {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Clôturer et Encaisser'}
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>

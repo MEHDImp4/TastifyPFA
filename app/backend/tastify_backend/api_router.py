@@ -1,8 +1,10 @@
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from apps.menu.views import CategorieViewSet, PlatViewSet
 from apps.tables.views import TableViewSet
 from apps.commandes.views import CommandeViewSet, CommandeLigneViewSet
 from apps.hr.views import EmployeViewSet
+from apps.paiements.urls import urlpatterns as paiements_urlpatterns
 from apps.reservations.views import ReservationViewSet
 
 router = DefaultRouter()
@@ -14,4 +16,6 @@ router.register(r'commandelignes', CommandeLigneViewSet, basename='commandeligne
 router.register(r'employes', EmployeViewSet, basename='employe')
 router.register(r'reservations', ReservationViewSet, basename='reservation')
 
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+    path('paiements/', include((paiements_urlpatterns, 'paiements'), namespace='paiements')),
+]
