@@ -1,6 +1,10 @@
 from django.db import transaction
 from apps.stock.models import Ingredient, PlatIngredient
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class InsufficientStockError(Exception):
     """Raised when an ingredient doesn't have enough stock for a deduction."""
     pass

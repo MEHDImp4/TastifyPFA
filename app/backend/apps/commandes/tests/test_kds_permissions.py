@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from apps.tables.models import Table
 from apps.commandes.models import Commande
+from apps.paiements.models import Paiement
 
 User = get_user_model()
 
@@ -94,6 +95,28 @@ class KDSPermissionsTestCase(APITestCase):
         self.assertIn(cmd_prete.id, ids)
         self.assertNotIn(self.cmd_paid.id, ids)
         self.assertEqual(statuses, {Commande.Statut.EN_CUISINE, Commande.Statut.PRETE})
+
+    def test_gerant_kitchen_scope_excludes_fully_paid_stale_prete_orders(self):
+        """Defensive guard: stale PRETE orders fully covered by payments must stay out of KDS."""
+        stale_prete = Commande.objects.create(
+            serveur=self.serveur,
+            table=self.table2,
+            statut=Commande.Statut.PRETE,
+            montant_total='42.00',
+        )
+        Paiement.objects.create(
+            commande=stale_prete,
+            montant='42.00',
+            methode=Paiement.Methode.ESPECES,
+            statut=Paiement.Statut.COMPLETE,
+        )
+
+        self.client.force_authenticate(user=self.gerant)
+        response = self.client.get(self.url, {'scope': 'kitchen'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [item['id'] for item in response.data]
+        self.assertNotIn(stale_prete.id, ids)
 
     def test_serveur_queryset_filtering_regression(self):
         # Serveur should only see their own orders

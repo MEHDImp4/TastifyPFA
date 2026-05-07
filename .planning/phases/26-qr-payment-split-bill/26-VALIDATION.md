@@ -1,10 +1,11 @@
 ---
 phase: 26
 slug: qr-payment-split-bill
-status: draft
+status: passed
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-05-06
+updated: 2026-05-07
 ---
 
 # Phase 26 — Validation Strategy
@@ -82,4 +83,4 @@ created: 2026-05-06
 - [x] Feedback latency target is defined
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved (2026-05-07)

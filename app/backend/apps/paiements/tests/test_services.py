@@ -116,3 +116,18 @@ def test_create_payment_prevents_order_overpayment(payable_commande_with_lines):
             methode=Paiement.Methode.ESPECES,
             statut=Paiement.Statut.COMPLETE,
         )
+
+
+@pytest.mark.django_db
+def test_create_payment_complete_marks_commande_paid(payable_commande_with_lines):
+    commande, _, _ = payable_commande_with_lines
+
+    create_payment(
+        commande_id=commande.id,
+        montant=Decimal('25.00'),
+        methode=Paiement.Methode.ESPECES,
+        statut=Paiement.Statut.COMPLETE,
+    )
+
+    commande.refresh_from_db()
+    assert commande.statut == Commande.Statut.PAYEE

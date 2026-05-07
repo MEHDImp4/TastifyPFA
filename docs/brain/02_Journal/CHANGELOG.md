@@ -1,14 +1,30 @@
-## [2026-05-07] - 15:25
+## [2026-05-07] - 15:45
+### Changed
+- Completed comprehensive UAT & Verification Audit for Milestone 1.
+- Reconciled stale validation documentation for Phases 13, 24, and 26.
+- Created `26-UAT.md` and `27-UAT.md` to document successful verification.
+- Updated `dashboard.html` to reflect full project state and UAT passage.
+
+### Validation
+- HT-01 (Full Payment Cycle E2E) passed manually.
+- HT-02 (Stock Exhaustion feedback) passed manually.
+- HT-03 (Reservation Awareness on Staff Map) passed manually.
+- All Phase 26 automated tests confirmed passed via audit.
+
 ### Fixed
 - Fixed the `GERANT` KDS paid-order regression by scoping KDS refetches to kitchen-visible orders only, so paid orders no longer reappear after websocket updates.
+- Fixed a deeper payment reconciliation gap where fully paid orders could remain stuck in `PRETE`, leaving them visible in KDS despite complete payment coverage.
 
 ### Changed
 - Added backend support for `scope=kitchen` on `CommandeViewSet` and aligned the backoffice KDS store to request that scope on every fetch.
 - Added backend/frontend regression coverage for the manager KDS payment-removal path.
+- Moved payment-status reconciliation into `create_payment()` and `complete_payment()` so a completed payment now promotes the order to `PAYEE` at the service layer, even if outer signal/view wiring is bypassed.
+- Added a defensive backend KDS filter to exclude fully paid kitchen orders from the kitchen scope even if a stale `PRETE` status remains in the database.
 
 ### Validation
 - `npm run test -- src/pages/Kds/store/useKdsStore.test.ts --run` passed in `app/frontend/backoffice`.
 - `npm run build` passed in `app/frontend/backoffice`.
+- Live backend verification passed via `docker compose exec backend python manage.py shell`: stuck orders `12` and `16` were reconciled to `PAYEE`, a new fully paid test order transitioned directly to `PAYEE`, and the kitchen-visible queryset now returns only unpaid/partially paid `PRETE` orders.
 - `docker compose exec backend python manage.py test apps.commandes.tests.test_kds_permissions` is blocked by MySQL permissions: user `tastify` cannot create database `test_tastify`.
 
 ## [2026-05-07] - 03:39

@@ -229,6 +229,9 @@ def create_payment(
                 ]
             )
 
+        if statut == Paiement.Statut.COMPLETE:
+            reconcile_commande_payment_status(commande_id=locked_commande.id)
+
         return paiement
 
 
@@ -249,6 +252,7 @@ def complete_payment(*, paiement_id: int, reference_transaction: str | None = No
             paiement.reference_transaction = reference_transaction
             update_fields.append('reference_transaction')
         paiement.save(update_fields=update_fields)
+        reconcile_commande_payment_status(commande_id=locked_commande.id)
         return paiement
 
 
@@ -398,4 +402,3 @@ def _get_line_payable_amount(*, line: CommandeLigne) -> Decimal:
     if line.statut == CommandeLigne.Statut.ANNULE:
         return ZERO_AMOUNT
     return quantize_amount(Decimal(line.quantite) * line.prix_unitaire)
-

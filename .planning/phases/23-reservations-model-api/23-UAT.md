@@ -1,6 +1,6 @@
 # Phase 23 UAT: Reservations Model & API
 
-## Status: COMPLETE
+## Status: PASSED
 
 ## Test Results
 

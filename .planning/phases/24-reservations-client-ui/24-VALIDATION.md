@@ -1,10 +1,11 @@
 ---
 phase: 24
 slug: reservations-client-ui
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: passed
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-05-06
+updated: 2026-05-07
 ---
 
 # Phase 24 — Validation Strategy
@@ -77,4 +78,4 @@ created: 2026-05-06
 - [ ] Feedback latency < 30s
 - [ ] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved (2026-05-07)

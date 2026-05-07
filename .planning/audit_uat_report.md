@@ -9,14 +9,8 @@ This audit performed a deep-scan of 25 UAT and 8 Verification files across 27 co
 
 **Overall Verdict:** **PASSED**. The system is technically sound, but documentation hygiene is required for Phases 13, 24, and 26.
 
-## 2. Stale Documentation (Action Required)
-The following files are marked as `pending` or `draft` but the codebase already contains the implementation and automated tests.
-
-| Phase | File | Finding | Verification Evidence |
-|-------|------|---------|-----------------------|
-| **13** | `13-VALIDATION.md` | Marked as draft/pending. | `test_websocket_auth.py` and `test_staff_consumer.py` exist and pass. |
-| **24** | `24-VALIDATION.md` | All items marked pending. | Full wizard test suite exists (`StepDateTime.test.tsx`, `StepTableSelect.test.tsx`, `StepConfirm.test.tsx`). |
-| **26** | `26-VALIDATION.md` | All items marked pending. | 5 dedicated backend test files exist in `app/backend/apps/paiements/tests/`. |
+## 2. Stale Documentation (Resolved)
+The documentation artifacts for Phases 13, 24, and 26 have been reconciled and marked as ✅ **PASSED** as of 2026-05-07. No further action is required for documentation hygiene.
 
 ---
 
@@ -25,7 +19,7 @@ While automated tests are green, the following "Golden Path" scenarios require f
 
 ### [CRITICAL] HT-01: Full Payment Cycle E2E (Multi-User)
 *   **Goal:** Verify the seamless handover between Staff UI and Client UI for payments.
-*   **Participants:** 1 Staff (Back-Office/Salle), 1 Client (Portail).
+*   **Status:** ✅ PASSED (2026-05-07) - Verified by user. Staff UI updated real-time and table cleared correctly.
 *   **Steps:**
     1.  **Staff:** Create an order for a table (e.g., Table 5).
     2.  **Staff:** Open the Payment Modal for Table 5 and click "Générer QR".
@@ -47,6 +41,7 @@ While automated tests are green, the following "Golden Path" scenarios require f
 
 ### [MEDIUM] HT-03: Reservation Awareness (Staff Map)
 *   **Goal:** Verify staff can see upcoming bookings at a glance.
+*   **Status:** ✅ PASSED (2026-05-07) - Verified by user. Detail panel correctly shows "Prochaine réservation" details.
 *   **Steps:**
     1.  Create a reservation for Table 2 for 1 hour from now.
     2.  Click Table 2 in the Salle map.

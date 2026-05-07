@@ -1,5 +1,6 @@
 from django.db import transaction, models
 from django.shortcuts import get_object_or_404
+from django.db.models.functions import Coalesce
 from rest_framework import viewsets, status, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -84,11 +85,22 @@ class CommandeViewSet(viewsets.ModelViewSet):
         user = self.request.user
         statut = self.request.query_params.get('statut')
         scope = self.request.query_params.get('scope')
+        kitchen_statuses = [Commande.Statut.EN_CUISINE, Commande.Statut.PRETE]
         qs = (
             Commande.objects.active()
             .select_related('serveur', 'table')
             .prefetch_related(
                 models.Prefetch('lignes', queryset=CommandeLigne.objects.select_related('plat'))
+            )
+            .annotate(
+                completed_paid_total=Coalesce(
+                    models.Sum(
+                        'paiements__montant',
+                        filter=models.Q(paiements__statut='COMPLETE'),
+                    ),
+                    models.Value(0),
+                    output_field=models.DecimalField(max_digits=10, decimal_places=2),
+                )
             )
         )
 
@@ -101,15 +113,17 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 statut__in=[Commande.Statut.PAYEE, Commande.Statut.ANNULEE]
             )
         elif scope == 'kitchen':
-            kitchen_statuses = [Commande.Statut.EN_CUISINE, Commande.Statut.PRETE]
-            qs = qs.filter(statut__in=kitchen_statuses)
+            qs = qs.filter(statut__in=kitchen_statuses).exclude(
+                completed_paid_total__gte=models.F('montant_total')
+            )
         elif user.role == 'CUISINIER':
             # Phase 16: KDS shows only fired tickets. Manual-fire workflow flips
             # EN_COURS -> EN_CUISINE via PATCH; only EN_CUISINE and PRETE are
             # actionable for the kitchen. Drafts (EN_COURS) stay invisible until
             # a server explicitly fires them.
-            kitchen_statuses = [Commande.Statut.EN_CUISINE, Commande.Statut.PRETE]
-            qs = qs.filter(statut__in=kitchen_statuses)
+            qs = qs.filter(statut__in=kitchen_statuses).exclude(
+                completed_paid_total__gte=models.F('montant_total')
+            )
         elif user.role != 'GERANT':
             # General list: only show the user's own orders
             qs = qs.filter(serveur=user)
@@ -158,7 +172,8 @@ class CommandeViewSet(viewsets.ModelViewSet):
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
             try:
                 with transaction.atomic():
-                    for ligne in instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE):
+                    lignes_to_deduct = instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE)
+                    for ligne in lignes_to_deduct:
                         StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
             except InsufficientStockError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
