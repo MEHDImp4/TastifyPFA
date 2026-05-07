@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_28_COMPLETE
-stopped_at: Phase 28 COMPLETE (Celery Infrastructure). Ready for Phase 29 (AI Recommender System).
-last_updated: "2026-05-07T20:12:37+01:00"
+status: IN_PROGRESS
+stopped_at: Phase 29 Plan 02 COMPLETE. Ready for Phase 29 Plan 03.
+last_updated: "2026-05-08T00:50:00+01:00"
 progress:
   total_phases: 39
   completed_phases: 28
   total_plans: 81
-  percent: 70
+  percent: 71
 notes: |
+  - Phase 29 Plan 02 COMPLETE (2026-05-08): Implemented AI recommender endpoint on PlatViewSet with fallback logic.
   - Phase 28 COMPLETE (2026-05-07): Celery infrastructure is live in Docker. Added django-celery-beat/results, isolated Celery on Redis DB 1, and fixed entrypoint startup so collectstatic runs only on the web backend.
   - Phase 27 COMPLETE (2026-05-07): Encaissement UI fully implemented and verified. Integrated real-time WebSocket updates, audio/visual feedback, and public client split-payment landing page.
   - Phase 27 Plan 02 COMPLETE (2026-05-07): Client QR Landing Page & Split Bill UI implemented. Added 'SplitSelector' with 3 modes (Full, Equal, Item) to Portail app.
