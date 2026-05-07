@@ -4,6 +4,22 @@ import publicClient from '@shared/auth/publicClient'
 import { PaymentSession } from '@shared/types/paiements'
 import { SplitSelector } from '../../components/payment/SplitSelector'
 
+const toAmount = (value: number | string) => Number.parseFloat(String(value))
+
+const normalizePaymentSession = (session: PaymentSession): PaymentSession => ({
+  ...session,
+  montant_total: toAmount(session.montant_total),
+  montant_paye: toAmount(session.montant_paye),
+  montant_restant: toAmount(session.montant_restant),
+  items: session.items.map((item) => ({
+    ...item,
+    prix_unitaire: toAmount(item.prix_unitaire),
+    total: toAmount(item.total),
+    deja_paye: toAmount(item.deja_paye),
+    reste_a_payer: toAmount(item.reste_a_payer),
+  })),
+})
+
 export const PaymentLandingPage = () => {
   const { token } = useParams<{ token: string }>()
   const decodedToken = token ? decodeURIComponent(token) : undefined
@@ -39,7 +55,7 @@ export const PaymentLandingPage = () => {
         const response = await publicClient.get('/paiements/session/resolve/', {
           params: { token: decodedToken } 
         })
-        setSession(response.data)
+        setSession(normalizePaymentSession(response.data))
       } catch (err: any) {
         setError(buildResolveErrorMessage(err.response?.data?.detail))
       } finally {

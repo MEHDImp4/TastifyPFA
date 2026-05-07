@@ -13,17 +13,20 @@ interface SplitSelectorProps {
   }) => void;
 }
 
+const toAmount = (value: number | string) => Number.parseFloat(String(value));
+
 export const SplitSelector: React.FC<SplitSelectorProps> = ({ session, token, onSelectionChange }) => {
   const [mode, setMode] = useState<SplitMode>('FULL');
   const [guestCount, setGuestCount] = useState(2);
   const [selectedItemIds, setSelectedItemIds] = useState<number[]>([]);
-  const [previewAmount, setPreviewAmount] = useState<number>(session.montant_restant);
+  const [previewAmount, setPreviewAmount] = useState<number>(toAmount(session.montant_restant));
 
   // Reset or initialize on mode change
   useEffect(() => {
     if (mode === 'FULL') {
-      setPreviewAmount(session.montant_restant);
-      onSelectionChange({ montant: session.montant_restant });
+      const remainingAmount = toAmount(session.montant_restant);
+      setPreviewAmount(remainingAmount);
+      onSelectionChange({ montant: remainingAmount });
     } else if (mode === 'EQUAL') {
       updateEqualSplit(guestCount);
     } else if (mode === 'ITEM') {
@@ -56,7 +59,7 @@ export const SplitSelector: React.FC<SplitSelectorProps> = ({ session, token, on
       const item = session.items.find(i => i.id === id);
       return {
         commande_ligne_id: id,
-        montant_contribue: item ? item.reste_a_payer : 0
+        montant_contribue: item ? toAmount(item.reste_a_payer) : 0
       };
     });
 

@@ -1,3 +1,11 @@
+## [2026-05-07] - 03:24
+### Fixed
+- Normalized public payment session amounts to numbers before rendering the client checkout page, preventing `toFixed` crashes when Django decimals arrive as JSON strings.
+- Hardened `SplitSelector` so full-bill and item-split previews always convert mixed string/number amounts before storing selection state.
+
+### Validation
+- `docker compose exec -T portail npm run build` passed.
+
 ## [2026-05-07] - 03:20
 ### Fixed
 - Detached the public client payment route `/pay/:token` from `AuthBootstrap` so QR payment pages no longer trigger staff/client session refresh on open.
