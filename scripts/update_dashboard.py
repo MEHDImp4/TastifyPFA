@@ -290,6 +290,13 @@ def update_dashboard():
         
     progress_percent = int((completed_phases / total_phases) * 100) if total_phases > 0 else 0
     
+    # Calcul des statistiques par statut
+    status_summary = {
+        "completed": completed_phases,
+        "in_progress": in_progress_phases,
+        "todo": todo_phases
+    }
+    
     # Génération du HTML pour l'aperçu du Roadmap
     phases_html = []
     detailed_html = []
@@ -433,6 +440,27 @@ def update_dashboard():
     dash_content = re.sub(r'(<!-- STAT_PHASES_START -->).*?(<!-- STAT_PHASES_END -->)', rf'\g<1>{completed_phases}\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- STAT_TOTAL_PHASES_START -->).*?(<!-- STAT_TOTAL_PHASES_END -->)', rf'\g<1>{total_phases}\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- STAT_TASKS_START -->).*?(<!-- STAT_TASKS_END -->)', rf'\g<1>{tasks_done}\g<2>', dash_content)
+    
+    # Status breakdown stats
+    status_breakdown_html = f'''                <div class="card p-4 flex flex-col border-l-4 border-l-green-500">
+                    <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-3">État des Phases</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">✓ Terminées</span>
+                            <span class="text-lg font-bold text-green-400">{completed_phases}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">→ En cours</span>
+                            <span class="text-lg font-bold text-blue-400">{in_progress_phases}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">○ À faire</span>
+                            <span class="text-lg font-bold text-gray-400">{todo_phases}</span>
+                        </div>
+                    </div>
+                </div>'''
+    dash_content = re.sub(r'(<!-- STATUS_BREAKDOWN_START -->).*?(<!-- STATUS_BREAKDOWN_END -->)', rf'\g<1>{status_breakdown_html}\g<2>', dash_content, flags=re.DOTALL)
+    
     
     # Update timestamp
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
