@@ -34,7 +34,7 @@ class Command(BaseCommand):
             },
             {
                 'username': 'serveur_test',
-                'email': 'serveur@tastify.local',
+                'email': 'omar.alami@tastify.local',
                 'role': User.Role.SERVEUR,
                 'first_name': 'Omar',
                 'last_name': 'Alami',
@@ -42,7 +42,7 @@ class Command(BaseCommand):
             },
             {
                 'username': 'serveur2_test',
-                'email': 'serveur2@tastify.local',
+                'email': 'sara.bennani@tastify.local',
                 'role': User.Role.SERVEUR,
                 'first_name': 'Sara',
                 'last_name': 'Bennani',
@@ -50,15 +50,23 @@ class Command(BaseCommand):
             },
             {
                 'username': 'serveur3_test',
-                'email': 'serveur3@tastify.local',
+                'email': 'youssef.idrissi@tastify.local',
                 'role': User.Role.SERVEUR,
                 'first_name': 'Youssef',
                 'last_name': 'Idrissi',
                 'is_staff': True
             },
             {
+                'username': 'serveur4_test',
+                'email': 'layla.moussa@tastify.local',
+                'role': User.Role.SERVEUR,
+                'first_name': 'Layla',
+                'last_name': 'Moussa',
+                'is_staff': True
+            },
+            {
                 'username': 'cuisinier_test',
-                'email': 'cuisinier@tastify.local',
+                'email': 'fatine.zahra@tastify.local',
                 'role': User.Role.CUISINIER,
                 'first_name': 'Fatine',
                 'last_name': 'Zahra',
@@ -66,7 +74,7 @@ class Command(BaseCommand):
             },
             {
                 'username': 'cuisinier2_test',
-                'email': 'cuisinier2@tastify.local',
+                'email': 'driss.mansouri@tastify.local',
                 'role': User.Role.CUISINIER,
                 'first_name': 'Driss',
                 'last_name': 'Mansouri',
@@ -74,15 +82,23 @@ class Command(BaseCommand):
             },
             {
                 'username': 'cuisinier3_test',
-                'email': 'cuisinier3@tastify.local',
+                'email': 'amina.tazi@tastify.local',
                 'role': User.Role.CUISINIER,
                 'first_name': 'Amina',
                 'last_name': 'Tazi',
                 'is_staff': True
             },
             {
+                'username': 'cuisinier4_test',
+                'email': 'hassan.khan@tastify.local',
+                'role': User.Role.CUISINIER,
+                'first_name': 'Hassan',
+                'last_name': 'Khan',
+                'is_staff': True
+            },
+            {
                 'username': 'client_test',
-                'email': 'client@tastify.local',
+                'email': 'karim.sadiki@gmail.com',
                 'role': User.Role.CLIENT,
                 'first_name': 'Karim',
                 'last_name': 'Sadiki',
@@ -90,7 +106,7 @@ class Command(BaseCommand):
             },
             {
                 'username': 'client2_test',
-                'email': 'client2@tastify.local',
+                'email': 'salma.rami@gmail.com',
                 'role': User.Role.CLIENT,
                 'first_name': 'Salma',
                 'last_name': 'Rami',
@@ -98,10 +114,34 @@ class Command(BaseCommand):
             },
             {
                 'username': 'client3_test',
-                'email': 'client3@tastify.local',
+                'email': 'amine.chraibi@gmail.com',
                 'role': User.Role.CLIENT,
                 'first_name': 'Amine',
                 'last_name': 'Chraibi',
+                'is_staff': False
+            },
+            {
+                'username': 'client4_test',
+                'email': 'fatima.alaoui@gmail.com',
+                'role': User.Role.CLIENT,
+                'first_name': 'Fatima',
+                'last_name': 'Alaoui',
+                'is_staff': False
+            },
+            {
+                'username': 'client5_test',
+                'email': 'mohammed.aziz@gmail.com',
+                'role': User.Role.CLIENT,
+                'first_name': 'Mohammed',
+                'last_name': 'Aziz',
+                'is_staff': False
+            },
+            {
+                'username': 'client6_test',
+                'email': 'noor.hassan@gmail.com',
+                'role': User.Role.CLIENT,
+                'first_name': 'Noor',
+                'last_name': 'Hassan',
                 'is_staff': False
             },
         ]
@@ -127,8 +167,12 @@ class Command(BaseCommand):
         SEED_DATA = [
             (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
             (6, 4), (7, 4), (8, 4), (9, 4), (10, 4),
-            (11, 6), (12, 6), (13, 6), (14, 6), (15, 6),
-            (16, 8), (17, 8), (18, 4), (19, 2), (20, 2),
+            (11, 4), (12, 4), (13, 4),
+            (14, 6), (15, 6), (16, 6), (17, 6), (18, 6),
+            (19, 8), (20, 8), (21, 8),
+            (22, 10), (23, 10),
+            (24, 2), (25, 2),
+            (26, 12),
         ]
         created = updated = 0
         for numero, capacite in SEED_DATA:
@@ -263,13 +307,23 @@ class Command(BaseCommand):
             User.Role.CUISINIER: ('Chef de Partie', 5500.00),
         }
 
+        addresses = [
+            '123 Avenue Mohammed V, Casablanca',
+            '45 Rue Fez, Marrakech',
+            '67 Boulevard Hassan II, Rabat',
+            '89 Avenue Lalla Yacout, Fez',
+            '12 Rue Allal Ben Abdellah, Tangier',
+            '34 Avenue Moulay Youssef, Meknès',
+            '56 Rue Ibn Battuta, Agadir',
+        ]
+
         created = updated = 0
-        for user in staff_users:
+        for idx, user in enumerate(staff_users):
             pos_name, base_salary = positions.get(user.role, ('Employé', 4000.00))
             
-            # Simple unique CIN and phone generation based on ID
             cin = f"AB{100000 + user.id}"
             phone = f"06{str(user.id).zfill(8)}"
+            address = addresses[idx % len(addresses)]
             
             _, was_created = Employe.objects.update_or_create(
                 user=user,
@@ -278,7 +332,7 @@ class Command(BaseCommand):
                     'salaire': base_salary,
                     'date_embauche': timezone.now().date(),
                     'telephone': phone,
-                    'adresse': 'Adresse de test, Casablanca',
+                    'adresse': address,
                     'cin': cin,
                 }
             )
