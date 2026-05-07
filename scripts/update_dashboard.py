@@ -297,19 +297,37 @@ def update_dashboard():
         "todo": todo_phases
     }
     
-    # Génération du HTML pour l'aperçu du Roadmap
+    # Génération du HTML pour l'aperçu du Roadmap — couvrir toutes les phases déclarées dans STATE.md
+    # Construire une map des phases connues (depuis ROADMAP.md)
+    phases_map = {}
+    for p in phases:
+        try:
+            key = int(p["num"].lstrip("0"))
+        except:
+            try:
+                key = int(p["num"])
+            except:
+                continue
+        phases_map[key] = p
+
     phases_html = []
     detailed_html = []
-    for p in phases:
-        status_styles = {
-            "terminé": ("bg-green-500", "", "text-white", "text-gray-400", "Terminé", "bg-green-500/20 text-green-400 border-green-500/20"),
-            "en_cours": ("bg-blue-500 animate-pulse", "", "text-white", "text-gray-400", "En cours", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
-            "planifié": ("bg-yellow-500", "", "text-white", "text-gray-400", "Planifié", "bg-yellow-500/20 text-yellow-400 border-yellow-500/20"),
-            "discuté": ("bg-blue-500", "", "text-white", "text-gray-400", "Contexte Capturé", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
-            "à_faire": ("bg-gray-500", "opacity-50", "text-gray-300", "text-gray-500", "Non planifiée", "bg-gray-500/20 text-gray-400 border-gray-500/20")
-        }
-        dot, opacity, text, desc_c, badge_text, badge_style = status_styles.get(p["status"], status_styles["à_faire"])
-            
+    status_styles = {
+        "terminé": ("bg-green-500", "", "text-white", "text-gray-400", "Terminé", "bg-green-500/20 text-green-400 border-green-500/20"),
+        "en_cours": ("bg-blue-500 animate-pulse", "", "text-white", "text-gray-400", "En cours", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
+        "planifié": ("bg-yellow-500", "", "text-white", "text-gray-400", "Planifié", "bg-yellow-500/20 text-yellow-400 border-yellow-500/20"),
+        "discuté": ("bg-blue-500", "", "text-white", "text-gray-400", "Contexte Capturé", "bg-blue-500/20 text-blue-400 border-blue-500/20"),
+        "à_faire": ("bg_gray-500" if False else "bg-gray-500", "opacity-50", "text-gray-300", "text-gray-500", "Non planifiée", "bg-gray-500/20 text-gray-400 border-gray-500/20")
+    }
+
+    for i in range(1, total_phases + 1):
+        if i in phases_map:
+            p = phases_map[i]
+        else:
+            p = {"num": str(i), "title": f"Phase {i}", "desc": "Plans: 0/0", "status": "à_faire"}
+
+        dot, opacity, text, desc_c, badge_text, badge_style = status_styles.get(p.get("status", "à_faire"), status_styles["à_faire"])
+
         phases_html.append(f'''                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 {opacity}">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full {dot} block"></span></div>
                             <div>
@@ -317,8 +335,8 @@ def update_dashboard():
                                 <p class="text-sm {desc_c} mt-1">{p["desc"]}</p>
                             </div>
                         </div>''')
-                        
-        phase_num_str = p["num"].lstrip("0")
+
+        phase_num_str = str(i)
         uat_badge = ""
         if phase_num_str in uat_map:
             u_stat = uat_map[phase_num_str]
@@ -327,7 +345,7 @@ def update_dashboard():
             elif u_stat == "FAILED": u_class = "bg-red-500/20 text-red-400 border-red-500/20"
             else: u_class = "bg-gray-500/20 text-gray-400 border-gray-500/20"
             uat_badge = f'<span class="px-2 py-1 rounded text-xs font-medium {u_class} whitespace-nowrap ml-2">UAT: {u_stat}</span>'
-            
+
         detailed_html.append(f'''                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
                             <div><h4 class="font-semibold text-white">Phase {p["num"]}: {p["title"]}</h4><p class="text-xs text-gray-400 mt-1">{p["desc"]}</p></div>
                             <div class="flex items-center">
