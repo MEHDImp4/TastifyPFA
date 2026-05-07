@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate, Link } from 'react-router-dom'
 import { AuthBootstrap } from '@shared/auth/AuthBootstrap'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 import Login from '@shared/auth/Login'
@@ -8,6 +8,7 @@ import { CLIENT_ROLES, isRoleAllowed } from '@shared/auth/roleAccess'
 import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary'
 import { ReservationWizardShell } from './pages/Reservations/ReservationWizardShell'
 import { PaymentLandingPage } from './pages/Payment/PaymentLandingPage'
+import { MenuPage } from './pages/Menu/MenuPage'
 
 const ClientLoginRoute = () => {
   const { clearAuth, isAuthenticated, user } = useAuthStore()
@@ -64,7 +65,13 @@ const ProtectedClientShell = () => {
   return (
     <main className="min-h-screen bg-background text-foreground font-sans">
       <header className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-        <span className="text-sm font-semibold tracking-wide text-teal">Portail Client</span>
+        <div className="flex items-center gap-6">
+          <span className="text-sm font-semibold tracking-wide text-teal">Portail Client</span>
+          <nav className="flex items-center gap-4 text-sm font-medium text-foreground-muted">
+            <Link to="/menu" className="hover:text-teal transition-colors">Menu</Link>
+            <Link to="/reservations/new" className="hover:text-teal transition-colors">Réservations</Link>
+          </nav>
+        </div>
         <button
           onClick={handleLogout}
           className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground-muted opacity-60 active:scale-95"
@@ -84,6 +91,7 @@ const AuthenticatedApp = () => (
       <Route path="/login" element={<ClientLoginRoute />} />
       <Route element={<ProtectedClientShell />}>
         <Route index element={<Navigate to="/reservations/new" replace />} />
+        <Route path="/menu" element={<MenuPage />} />
         <Route path="/reservations/*" element={<ReservationWizardShell />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
