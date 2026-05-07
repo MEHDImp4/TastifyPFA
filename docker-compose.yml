@@ -34,6 +34,8 @@ services:
     build:
       context: ./app/backend
     env_file: .env
+    environment:
+      COLLECTSTATIC_ON_STARTUP: "1"
     ports:
       - "8000:8000"
     volumes:
@@ -52,6 +54,22 @@ services:
       context: ./app/backend
     env_file: .env
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
+    volumes:
+      - ./app/backend:/app
+      - ./app/backend/media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tastify-network
+
+  celery-beat:
+    build:
+      context: ./app/backend
+    env_file: .env
+    command: celery -A tastify_backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ./app/backend:/app
       - ./app/backend/media:/app/media

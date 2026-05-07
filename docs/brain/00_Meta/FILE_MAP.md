@@ -47,8 +47,8 @@ tastify-pfa/
 │   │   │       ├── serializers.py
 │   │   │       ├── views.py
 │   │   │       └── tests/
-│   │   ├── requirements.txt
-│   │   ├── entrypoint.sh          # Applies pending migrations before Daphne starts
+│   │   ├── requirements.txt       # Backend runtime deps, including Celery Beat/Results
+│   │   ├── entrypoint.sh          # Applies pending migrations for all backend containers; collectstatic only for web backend
 │   │   └── Dockerfile
 │   └── frontend/                  # 2 independent Vite SPAs
 │       ├── shared/                # Shared UI & Logic (Added Phase 3)

@@ -5,7 +5,7 @@ AI-powered ERP for Moroccan restaurants. Docker-orchestrated monorepo.
 The project features a high-fidelity unified branding across all touchpoints, including a custom logo asset and a consistent dark-mode design system.
 
 ## Stack
-Django 5.0 + Daphne (ASGI) | MySQL 8 | Redis 7 | 2× React 18 + Vite 5 + Tailwind v4 SPAs | Docker Compose direct ports
+Django 5.0 + Daphne (ASGI) + Celery/Beat | MySQL 8 | Redis 7 | 2× React 18 + Vite 5 + Tailwind v4 SPAs | Docker Compose direct ports
 
 ## Quick start
 ```
@@ -38,7 +38,8 @@ Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:800
 Both Vite dev servers now accept all hosts during development so `localhost`, `127.0.0.1`, Docker bridge names, and direct LAN-IP access reuse the same proxy path.
 Each frontend rejects accounts outside its allowed role family: the staff app accepts GERANT, SERVEUR, and CUISINIER; the client app accepts CLIENT only.
 Shared auth persistence is now portal-scoped: `app/frontend/shared/auth/portalContext.ts` namespaces the persisted Zustand key and sends an `X-Tastify-Portal` header so staff and client refresh cookies no longer overwrite each other in the same browser.
-The backend container runs pending Django migrations before starting Daphne, keeping fresh or recreated MySQL volumes aligned with the current apps.
+The backend container runs pending Django migrations before starting Daphne, while Celery worker and Beat reuse the same migration path without re-running `collectstatic`.
+Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for task results, leaving Redis DB `0` available for Channels/WebSocket traffic.
 
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.

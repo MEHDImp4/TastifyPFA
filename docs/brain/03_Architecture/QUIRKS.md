@@ -53,3 +53,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 1. Container Boot Race Condition
 - **Issue**: `backend` and `celery-worker` starting at the same time can cause migration conflicts (e.g., `Table 'django_migrations' already exists`).
 - **Fix**: Implement a retry loop (e.g., 3 attempts, 3s delay) for `manage.py migrate` in the `entrypoint.sh`.
+
+### 2. Celery collectstatic startup trap
+- **Issue**: Reusing the backend entrypoint for `celery-worker` and `celery-beat` can make both containers fail before boot if `collectstatic` touches bind-mounted Django admin assets.
+- **Fix**: Gate `collectstatic` behind `COLLECTSTATIC_ON_STARTUP=1` and set that variable only on the web `backend` service.

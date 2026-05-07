@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-python manage.py collectstatic --noinput
+if [ "${COLLECTSTATIC_ON_STARTUP:-0}" = "1" ]; then
+    python manage.py collectstatic --noinput
+fi
 
 # Retry migrations to handle the race condition when backend and
 # celery-worker both run this entrypoint at the same time.

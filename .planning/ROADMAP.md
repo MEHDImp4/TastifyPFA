@@ -55,7 +55,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 **Success Criteria**: 1. Celery worker and Beat services start in Docker. 2. `Checklist` and `TaskChecklist` models implemented. 3. Periodic task (Beat) successfully resets daily checklists at a configurable time (e.g., 04:00 AM). 4. Staff can see and interact with the checklist via API. 5. JIT Stock Deductions migrated to async workers.
 
 Plans:
-- [ ] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
+- [x] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
 - [ ] 28-02-PLAN.md — Checklist Data Domain (Models & REST API).
 - [ ] 28-03-PLAN.md — Periodic Task: Daily Checklist Generation.
 - [ ] 28-04-PLAN.md — Async Task: Stock Deduction Migration.
@@ -94,7 +94,7 @@ Phases execute in numeric order: 1 → 40
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
-| 28. Celery Infrastructure & Check-list Model | 0/4 | à faire | — |
+| 28. Celery Infrastructure & Check-list Model | 1/4 | In progress | — |
 | 29. Check-list UI & Cron Job | 0/1 | à faire | — |
 | 30. AI Recommender System | 0/1 | à faire | — |
 | 31. AI Sentiment Analysis | 0/1 | à faire | — |

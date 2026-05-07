@@ -1607,6 +1607,27 @@
 - Confirmed the Vitest package resolution error is gone when Vite loads `frontend/back-office/vite.config.ts`.
 - `npm run build` still fails on a pre-existing TypeScript configuration issue: `tsconfig.json` uses an invalid `ignoreDeprecations` value, and sandboxed `vite` startup hits `esbuild` `spawn EPERM` after config load.
 
+# [2026-05-07 18:49] - Phase 28 Plan 01 Celery Infrastructure
+### Added
+- Added `django-celery-beat` and `django-celery-results` to the backend runtime stack.
+- Added a dedicated `celery-beat` Docker Compose service for database-backed scheduling.
+- Added `.planning/phases/28-celery-infrastructure/28-01-SUMMARY.md`.
+
+### Fixed
+- Isolated Celery broker traffic onto Redis DB `1` so task traffic no longer shares the Channels/WebSocket Redis database.
+- Fixed the shared backend entrypoint so `collectstatic` runs only on the web backend; Celery worker and Beat now boot cleanly from the same image.
+
+### Changed
+- Switched Celery result storage to `django-db` and enabled the `django_celery_beat.schedulers:DatabaseScheduler`.
+- Updated `README.md`, `FILE_MAP.md`, `QUIRKS.md`, `ROADMAP.md`, and `STATE.md` to reflect the new async infrastructure state.
+
+### Validation
+- `docker compose up -d --build backend celery-worker celery-beat` passed.
+- `docker compose ps` shows `backend`, `celery-worker`, and `celery-beat` running.
+- `docker compose exec -T backend python manage.py showmigrations django_celery_beat django_celery_results` confirmed all package migrations are applied.
+- `docker compose logs celery-worker --tail=80` shows the worker ready on `redis://redis:6379/1`.
+- `docker compose logs celery-beat --tail=80` shows `beat: Starting...` with the database scheduler.
+
 ## [2026-05-07] - 02:21
 ### Fixed
 - Restored the staff QR payment flow by aligning the backend QR target with the real client portal route `/pay/:token` instead of the obsolete `/paiement/qr?token=...` path.

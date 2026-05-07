@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_27_COMPLETE
-stopped_at: Phase 27 COMPLETE. Ready for Phase 28 (Celery Infrastructure).
-last_updated: "2026-05-07T01:15:00.000Z"
+status: PHASE_28_PLAN_01_COMPLETE
+stopped_at: Phase 28 Plan 01 COMPLETE. Ready for Phase 28 Plan 02 (Checklist Data Domain).
+last_updated: "2026-05-07T17:49:41.000Z"
 progress:
   total_phases: 40
   completed_phases: 27
-  total_plans: 81
+  total_plans: 82
   percent: 68
 notes: |
+  - Phase 28 Plan 01 COMPLETE (2026-05-07): Celery Beat infrastructure is live in Docker. Added django-celery-beat/results, isolated Celery on Redis DB 1, and fixed entrypoint startup so collectstatic runs only on the web backend.
   - Phase 27 COMPLETE (2026-05-07): Encaissement UI fully implemented and verified. Integrated real-time WebSocket updates, audio/visual feedback, and public client split-payment landing page.
   - Phase 27 Plan 02 COMPLETE (2026-05-07): Client QR Landing Page & Split Bill UI implemented. Added 'SplitSelector' with 3 modes (Full, Equal, Item) to Portail app.
   - Phase 27 Plan 01 COMPLETE (2026-05-06): Staff payment workflow implemented. Added 'PaymentModal' to Salle UI, integrated with table map, and added staff-resolve backend support.
