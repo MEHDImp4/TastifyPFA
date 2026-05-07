@@ -8,7 +8,7 @@
 - Live data check for table `1`: all linked orders are `PAYEE`, and `resolve_payable_session(table_id=1)` correctly returns `NoPayableOrderError`.
 - `npm run build` in `app/frontend/backoffice`: passed.
 - Backend pytest run is currently blocked by MySQL test database permissions: `Access denied for user 'tastify'@'%' to database 'test_tastify'`.
-- Commit: pending sync
+- Commit: `9f47093`
 
 ## [2026-05-07] - 00:50
 ### Added
