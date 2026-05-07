@@ -17,6 +17,21 @@ export const PaymentLandingPage = () => {
     contributions?: Array<{ commande_ligne_id: number; montant_contribue: number }>;
   } | null>(null)
 
+  const buildResolveErrorMessage = (detail?: string) => {
+    if (!detail) {
+      return "Lien de paiement invalide ou expiré."
+    }
+
+    if (
+      detail.includes("n'est plus valide")
+      || detail.includes('invalide ou expiré')
+    ) {
+      return "Ce lien de paiement n'est plus valide. Demandez au serveur de générer un nouveau QR code."
+    }
+
+    return detail
+  }
+
   useEffect(() => {
     const resolveSession = async () => {
       try {
@@ -25,7 +40,7 @@ export const PaymentLandingPage = () => {
         })
         setSession(response.data)
       } catch (err: any) {
-        setError(err.response?.data?.detail || "Lien de paiement invalide ou expiré.")
+        setError(buildResolveErrorMessage(err.response?.data?.detail))
       } finally {
         setLoading(false)
       }

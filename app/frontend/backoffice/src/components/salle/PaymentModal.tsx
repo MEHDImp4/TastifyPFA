@@ -90,12 +90,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     };
   }, [qrPaymentUrl, showQR]);
 
-  const resetState = () => {
-    setSession(null);
+  const clearQrState = () => {
     setQrToken(null);
     setQrPaymentUrl(null);
     setQrCodeDataUrl(null);
     setShowQR(false);
+  };
+
+  const resetState = () => {
+    setSession(null);
+    clearQrState();
     setError(null);
     setHasNoPayableOrder(false);
   };
@@ -120,7 +124,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       await axiosInstance.get(`/tables/${tableId}/`);
       
       const sessionResponse = await axiosInstance.get(`/paiements/session/staff-resolve/?table_id=${tableId}`);
-      setSession(sessionResponse.data);
+      const nextSession = sessionResponse.data;
+
+      setSession((previousSession) => {
+        if (previousSession && previousSession.commande_id !== nextSession.commande_id) {
+          clearQrState();
+        }
+
+        return nextSession;
+      });
     } catch (err: any) {
       const detail = err.response?.data?.detail;
       if (typeof detail === 'string' && detail.includes('No payable order found')) {
