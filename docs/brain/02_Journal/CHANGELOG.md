@@ -1,3 +1,16 @@
+## [2026-05-07] - 02:50
+### Fixed
+- Cleared stale staff QR state when a table's payable session switches to a different commande so back-office users do not keep sharing invalidated payment links.
+- Reworded expired client payment-link failures to explicitly ask for a freshly generated QR code instead of showing a vague invalid-link message.
+
+### Validation
+- Verified `/api/paiements/session/resolve/` succeeds for a live token on table `1` / commande `6` via both `localhost:3003` and `192.168.3.86:3003`.
+- `docker compose exec -T backoffice npm run build` passed.
+- `docker compose exec -T portail npm run build` passed.
+
+### Commit
+- `9565fad` `Guard against stale QR payment links`
+
 ## [2026-05-07] - 02:13
 ### Fixed
 - Prevented the staff payment flow from exposing payment actions for tables without any payable order.
