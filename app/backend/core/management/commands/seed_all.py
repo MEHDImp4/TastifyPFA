@@ -4,6 +4,7 @@ from django.utils import timezone
 from apps.tables.models import Table
 from apps.menu.models import Categorie, Plat
 from apps.hr.models import Employe
+from apps.stock.models import Ingredient, PlatIngredient
 from django.db import transaction
 
 class Command(BaseCommand):
@@ -15,6 +16,8 @@ class Command(BaseCommand):
                 self.seed_users()
                 self.seed_tables()
                 self.seed_menu()
+                self.seed_ingredients()
+                self.seed_plat_ingredients()
                 self.seed_hr()
             self.stdout.write(self.style.SUCCESS('\nAll seeding tasks completed.'))
         except Exception as exc:
@@ -296,6 +299,300 @@ class Command(BaseCommand):
                     self.stdout.write(f'    Updated dish: {plat.nom}')
 
         self.stdout.write(self.style.SUCCESS(f'\nSeeding complete: {total_categories} new categories, {total_plats} new dishes.'))
+
+    def seed_ingredients(self):
+        SEED_DATA = [
+            {'nom': 'Tomate', 'unite_mesure': 'g', 'stock_actuel': 5000, 'seuil_alerte': 1000},
+            {'nom': 'Concombre', 'unite_mesure': 'g', 'stock_actuel': 3000, 'seuil_alerte': 500},
+            {'nom': 'Oignon', 'unite_mesure': 'g', 'stock_actuel': 4000, 'seuil_alerte': 800},
+            {'nom': 'Ail', 'unite_mesure': 'g', 'stock_actuel': 500, 'seuil_alerte': 100},
+            {'nom': 'Persil frais', 'unite_mesure': 'g', 'stock_actuel': 500, 'seuil_alerte': 100},
+            {'nom': 'Menthe fraîche', 'unite_mesure': 'g', 'stock_actuel': 400, 'seuil_alerte': 100},
+            {'nom': 'Laitue', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 500},
+            {'nom': 'Aubergine', 'unite_mesure': 'g', 'stock_actuel': 2500, 'seuil_alerte': 500},
+            {'nom': 'Poivron rouge', 'unite_mesure': 'g', 'stock_actuel': 1500, 'seuil_alerte': 300},
+            {'nom': 'Poivron vert', 'unite_mesure': 'g', 'stock_actuel': 1500, 'seuil_alerte': 300},
+            {'nom': 'Courgette', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 400},
+            {'nom': 'Carotte', 'unite_mesure': 'g', 'stock_actuel': 3000, 'seuil_alerte': 600},
+            {'nom': 'Citron', 'unite_mesure': 'pcs', 'stock_actuel': 100, 'seuil_alerte': 20},
+            {'nom': 'Orange', 'unite_mesure': 'pcs', 'stock_actuel': 80, 'seuil_alerte': 15},
+            {'nom': 'Citron confit', 'unite_mesure': 'g', 'stock_actuel': 800, 'seuil_alerte': 200},
+            {'nom': 'Olives vertes', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 400},
+            
+            {'nom': 'Poulet fermier', 'unite_mesure': 'g', 'stock_actuel': 10000, 'seuil_alerte': 2000},
+            {'nom': 'Agneau', 'unite_mesure': 'g', 'stock_actuel': 8000, 'seuil_alerte': 1500},
+            {'nom': 'Boeuf', 'unite_mesure': 'g', 'stock_actuel': 7000, 'seuil_alerte': 1500},
+            {'nom': 'Poisson blanc', 'unite_mesure': 'g', 'stock_actuel': 5000, 'seuil_alerte': 1000},
+            {'nom': 'Crevettes', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 500},
+            
+            {'nom': 'Semoule fine', 'unite_mesure': 'g', 'stock_actuel': 10000, 'seuil_alerte': 2000},
+            {'nom': 'Lentilles vertes', 'unite_mesure': 'g', 'stock_actuel': 3000, 'seuil_alerte': 600},
+            {'nom': 'Pois chiches', 'unite_mesure': 'g', 'stock_actuel': 3000, 'seuil_alerte': 600},
+            {'nom': 'Riz', 'unite_mesure': 'g', 'stock_actuel': 5000, 'seuil_alerte': 1000},
+            
+            {'nom': 'Huile d\'olive', 'unite_mesure': 'ml', 'stock_actuel': 3000, 'seuil_alerte': 500},
+            {'nom': 'Beurre', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 400},
+            {'nom': 'Lait', 'unite_mesure': 'ml', 'stock_actuel': 2000, 'seuil_alerte': 500},
+            {'nom': 'Fromage blanc', 'unite_mesure': 'g', 'stock_actuel': 1500, 'seuil_alerte': 300},
+            
+            {'nom': 'Gingembre', 'unite_mesure': 'g', 'stock_actuel': 500, 'seuil_alerte': 100},
+            {'nom': 'Curcuma', 'unite_mesure': 'g', 'stock_actuel': 300, 'seuil_alerte': 50},
+            {'nom': 'Cumin', 'unite_mesure': 'g', 'stock_actuel': 400, 'seuil_alerte': 80},
+            {'nom': 'Cannelle', 'unite_mesure': 'g', 'stock_actuel': 200, 'seuil_alerte': 50},
+            {'nom': 'Safran', 'unite_mesure': 'g', 'stock_actuel': 50, 'seuil_alerte': 10},
+            {'nom': 'Paprika', 'unite_mesure': 'g', 'stock_actuel': 300, 'seuil_alerte': 60},
+            {'nom': 'Poivre noir', 'unite_mesure': 'g', 'stock_actuel': 200, 'seuil_alerte': 40},
+            {'nom': 'Sel fin', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 300},
+            
+            {'nom': 'Amandes', 'unite_mesure': 'g', 'stock_actuel': 1500, 'seuil_alerte': 300},
+            {'nom': 'Noix', 'unite_mesure': 'g', 'stock_actuel': 1000, 'seuil_alerte': 200},
+            {'nom': 'Pignons de pin', 'unite_mesure': 'g', 'stock_actuel': 800, 'seuil_alerte': 200},
+            {'nom': 'Pruneaux', 'unite_mesure': 'g', 'stock_actuel': 1000, 'seuil_alerte': 200},
+            {'nom': 'Miel', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 400},
+            
+            {'nom': 'Feuille de brick', 'unite_mesure': 'pcs', 'stock_actuel': 100, 'seuil_alerte': 20},
+            {'nom': 'Feuille de pâte phyllo', 'unite_mesure': 'g', 'stock_actuel': 1000, 'seuil_alerte': 200},
+            {'nom': 'Œuf', 'unite_mesure': 'pcs', 'stock_actuel': 200, 'seuil_alerte': 50},
+            {'nom': 'Farine', 'unite_mesure': 'g', 'stock_actuel': 5000, 'seuil_alerte': 1000},
+            
+            {'nom': 'Thé vert', 'unite_mesure': 'g', 'stock_actuel': 500, 'seuil_alerte': 100},
+            {'nom': 'Café moulu', 'unite_mesure': 'g', 'stock_actuel': 800, 'seuil_alerte': 150},
+            {'nom': 'Sésame', 'unite_mesure': 'g', 'stock_actuel': 500, 'seuil_alerte': 100},
+            {'nom': 'Anis', 'unite_mesure': 'g', 'stock_actuel': 200, 'seuil_alerte': 50},
+            {'nom': 'Merguez', 'unite_mesure': 'g', 'stock_actuel': 2000, 'seuil_alerte': 400},
+        ]
+
+        created = updated = 0
+        for data in SEED_DATA:
+            _, was_created = Ingredient.objects.update_or_create(
+                nom=data['nom'],
+                defaults={
+                    'unite_mesure': data['unite_mesure'],
+                    'stock_actuel': data['stock_actuel'],
+                    'seuil_alerte': data['seuil_alerte'],
+                    'est_active': True,
+                },
+            )
+            if was_created:
+                created += 1
+                self.stdout.write(f'  Created ingredient: {data["nom"]}')
+            else:
+                updated += 1
+                self.stdout.write(f'  Updated ingredient: {data["nom"]}')
+
+        self.stdout.write(self.style.SUCCESS(f'Ingredient seeding complete: {created} created, {updated} updated.'))
+
+    def seed_plat_ingredients(self):
+        SEED_DATA = {
+            'Salade Marocaine': [
+                ('Tomate', 200),
+                ('Concombre', 150),
+                ('Oignon', 100),
+                ('Persil frais', 50),
+                ('Huile d\'olive', 30),
+            ],
+            'Zaalouk': [
+                ('Aubergine', 300),
+                ('Tomate', 200),
+                ('Ail', 20),
+                ('Huile d\'olive', 30),
+                ('Persil frais', 20),
+            ],
+            'Briouates au Fromage': [
+                ('Feuille de brick', 4),
+                ('Fromage blanc', 100),
+                ('Œuf', 1),
+                ('Huile d\'olive', 50),
+            ],
+            'Soupe Harira': [
+                ('Pois chiches', 100),
+                ('Lentilles vertes', 100),
+                ('Tomate', 150),
+                ('Oignon', 100),
+                ('Gingembre', 10),
+                ('Curcuma', 3),
+                ('Huile d\'olive', 30),
+            ],
+            'Salade César': [
+                ('Laitue', 200),
+                ('Fromage blanc', 50),
+                ('Œuf', 1),
+                ('Huile d\'olive', 30),
+                ('Citron', 0.5),
+            ],
+            'Tajine Poulet': [
+                ('Poulet fermier', 400),
+                ('Oignon', 150),
+                ('Citron confit', 100),
+                ('Olives vertes', 100),
+                ('Gingembre', 10),
+                ('Curcuma', 5),
+                ('Huile d\'olive', 50),
+            ],
+            'Tajine Agneau': [
+                ('Agneau', 400),
+                ('Oignon', 150),
+                ('Pruneaux', 100),
+                ('Amandes', 50),
+                ('Gingembre', 10),
+                ('Cannelle', 5),
+                ('Huile d\'olive', 50),
+            ],
+            'Couscous Royal': [
+                ('Semoule fine', 300),
+                ('Poulet fermier', 200),
+                ('Merguez', 150),
+                ('Carotte', 100),
+                ('Oignon', 100),
+                ('Pois chiches', 50),
+                ('Huile d\'olive', 50),
+            ],
+            'Mechoui': [
+                ('Agneau', 800),
+                ('Huile d\'olive', 50),
+                ('Sel fin', 10),
+                ('Cumin', 5),
+            ],
+            'Rfissa': [
+                ('Poulet fermier', 400),
+                ('Lentilles vertes', 150),
+                ('Œuf', 2),
+                ('Oignon', 100),
+                ('Gingembre', 10),
+                ('Huile d\'olive', 50),
+            ],
+            'Tanjia Marrakchia': [
+                ('Boeuf', 500),
+                ('Oignon', 150),
+                ('Gingembre', 15),
+                ('Ail', 20),
+                ('Huile d\'olive', 50),
+            ],
+            'Pastilla au Poulet': [
+                ('Feuille de pâte phyllo', 200),
+                ('Poulet fermier', 300),
+                ('Œuf', 2),
+                ('Amandes', 50),
+                ('Cannelle', 3),
+                ('Miel', 30),
+            ],
+            'Pastilla aux Poissons': [
+                ('Feuille de pâte phyllo', 200),
+                ('Poisson blanc', 250),
+                ('Crevettes', 100),
+                ('Œuf', 2),
+                ('Gingembre', 5),
+                ('Cumin', 3),
+            ],
+            'Tajine de Poisson': [
+                ('Poisson blanc', 400),
+                ('Tomate', 150),
+                ('Oignon', 100),
+                ('Citron', 1),
+                ('Gingembre', 10),
+                ('Curcuma', 3),
+                ('Huile d\'olive', 40),
+            ],
+            'Tajine de Légumes': [
+                ('Carotte', 150),
+                ('Courgette', 150),
+                ('Pois chiches', 100),
+                ('Tomate', 100),
+                ('Oignon', 100),
+                ('Gingembre', 10),
+                ('Huile d\'olive', 40),
+            ],
+            'Thé à la Menthe': [
+                ('Thé vert', 5),
+                ('Menthe fraîche', 20),
+                ('Miel', 15),
+            ],
+            'Jus d\'Orange Frais': [
+                ('Orange', 3),
+            ],
+            'Café Noir/Cassé': [
+                ('Café moulu', 10),
+            ],
+            'Café au Lait': [
+                ('Café moulu', 10),
+                ('Lait', 150),
+            ],
+            'Café à la Menthe': [
+                ('Café moulu', 10),
+                ('Menthe fraîche', 10),
+                ('Lait', 100),
+            ],
+            'Café aux Épices': [
+                ('Café moulu', 10),
+                ('Cannelle', 2),
+                ('Gingembre', 2),
+                ('Lait', 100),
+            ],
+            'Cornes de Gazelle': [
+                ('Feuille de pâte phyllo', 100),
+                ('Amandes', 80),
+                ('Miel', 40),
+                ('Cannelle', 3),
+                ('Œuf', 1),
+            ],
+            'Chebakia': [
+                ('Farine', 200),
+                ('Miel', 100),
+                ('Sésame', 50),
+                ('Anis', 5),
+            ],
+            'Briouates au Miel': [
+                ('Feuille de brick', 3),
+                ('Amandes', 60),
+                ('Miel', 50),
+                ('Cannelle', 2),
+                ('Œuf', 1),
+            ],
+            'Salade d\'Oranges': [
+                ('Orange', 4),
+                ('Cannelle', 2),
+            ],
+            'Msemen au Miel': [
+                ('Farine', 150),
+                ('Beurre', 50),
+                ('Miel', 50),
+            ],
+            'Ghriba aux Amandes': [
+                ('Amandes', 150),
+                ('Farine', 100),
+                ('Œuf', 1),
+                ('Beurre', 50),
+            ],
+            'Ghriba aux Noix': [
+                ('Noix', 150),
+                ('Farine', 100),
+                ('Œuf', 1),
+                ('Beurre', 50),
+            ],
+        }
+
+        created = updated = 0
+        for plat_name, ingredients_data in SEED_DATA.items():
+            try:
+                plat = Plat.objects.get(nom=plat_name)
+                for ingredient_name, quantite in ingredients_data:
+                    try:
+                        ingredient = Ingredient.objects.get(nom=ingredient_name)
+                        _, was_created = PlatIngredient.objects.update_or_create(
+                            plat=plat,
+                            ingredient=ingredient,
+                            defaults={'quantite_requise': quantite},
+                        )
+                        if was_created:
+                            created += 1
+                        else:
+                            updated += 1
+                    except Ingredient.DoesNotExist:
+                        self.stdout.write(self.style.WARNING(f'    Ingredient not found: {ingredient_name} for {plat_name}'))
+            except Plat.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f'  Dish not found: {plat_name}'))
+
+        self.stdout.write(self.style.SUCCESS(f'Plat-Ingredient seeding complete: {created} created, {updated} updated.'))
 
     def seed_hr(self):
         User = get_user_model()
