@@ -114,7 +114,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 02:50:52<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 02:55:46<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -544,11 +544,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Commandes Totales</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->6<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->7<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables Actives</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->1<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->2<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes Totales (Payées)</p>
@@ -1134,6 +1134,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> URL-encoded payment tokens in generated QR links so browsers and QR scanners no longer have to interpret raw `:` characters inside the `/pay/...` route.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Decoded route tokens explicitly on the portail payment page before resolving or confirming payment.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Generated a live encoded payment path for table `1` / commande `6`: `/pay/eyJ0YWJsZV9pZCI6MSwiY29tbWFuZGVfaWQiOjZ9%3A1wKnx3%3AGN6kSHyd1txq9MI1eR4dnHE_bi-MscqZO67TJ_EcV2w`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backoffice npm run build` passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T portail npm run build` passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 02:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Cleared stale staff QR state when a table's payable session switches to a different commande so back-office users do not keep sharing invalidated payment links.</p>
                             </li>
@@ -1181,31 +1206,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Live data check for table `1`: all linked orders are `PAYEE`, and `resolve_payable_session(table_id=1)` correctly returns `NoPayableOrderError`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice`: passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Backend pytest run is currently blocked by MySQL test database permissions: `Access denied for user 'tastify'@'%' to database 'test_tastify'`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Commit: `9f47093`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 00:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 27 Plan 02 (Client Payment UI)**: Implemented the client-facing payment landing page and split selection.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 00:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Split Selector**: Created `SplitSelector.tsx` with support for Full, Equal (guest counter), and Item-based (checklist) splits.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

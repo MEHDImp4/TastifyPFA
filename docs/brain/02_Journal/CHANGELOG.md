@@ -1,3 +1,13 @@
+## [2026-05-07] - 02:55
+### Fixed
+- URL-encoded payment tokens in generated QR links so browsers and QR scanners no longer have to interpret raw `:` characters inside the `/pay/...` route.
+- Decoded route tokens explicitly on the portail payment page before resolving or confirming payment.
+
+### Validation
+- Generated a live encoded payment path for table `1` / commande `6`: `/pay/eyJ0YWJsZV9pZCI6MSwiY29tbWFuZGVfaWQiOjZ9%3A1wKnx3%3AGN6kSHyd1txq9MI1eR4dnHE_bi-MscqZO67TJ_EcV2w`.
+- `docker compose exec -T backoffice npm run build` passed.
+- `docker compose exec -T portail npm run build` passed.
+
 ## [2026-05-07] - 02:50
 ### Fixed
 - Cleared stale staff QR state when a table's payable session switches to a different commande so back-office users do not keep sharing invalidated payment links.
