@@ -10,6 +10,7 @@ import { FloatingCart } from './components/FloatingCart'
 import { OrderReview } from './components/OrderReview'
 import { useOrderStore } from './store/useOrderStore'
 import { MenuCategory, MenuDish } from './types'
+import { PaymentModal } from '../../../components/salle/PaymentModal'
 
 export const OrderingPage = () => {
   const { id } = useParams()
@@ -28,6 +29,7 @@ export const OrderingPage = () => {
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
   const [isOrderExpanded, setIsOrderExpanded] = useState(false)
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
 
   const getCart = useOrderStore((state) => state.getCart)
   const getCartTotal = useOrderStore((state) => state.getCartTotal)
@@ -129,25 +131,13 @@ export const OrderingPage = () => {
   }
 
   const closeOrder = async () => {
-    if (!activeOrder) return
+    setIsPaymentModalOpen(true)
+  }
 
-    setIsSubmitting(true)
-    setError(null)
-
-    try {
-      await axiosInstance.patch(`/commandes/${activeOrder.id}/`, {
-        statut: 'PAYEE'
-      })
-
-      clearCart(tableId)
-      setSuccess(true)
-      window.setTimeout(() => navigate('/'), 1500)
-    } catch (err: any) {
-      console.error('Failed to close order', err)
-      setError('Impossible de clôturer la commande.')
-    } finally {
-      setIsSubmitting(false)
-    }
+  const handlePaymentSuccess = () => {
+    clearCart(tableId)
+    setSuccess(true)
+    window.setTimeout(() => navigate('/'), 1500)
   }
 
   const fireOrderToKitchen = async () => {
@@ -345,6 +335,14 @@ export const OrderingPage = () => {
               </div>
             </div>
           )}
+
+          <PaymentModal
+            isOpen={isPaymentModalOpen}
+            onClose={() => setIsPaymentModalOpen(false)}
+            tableId={tableId}
+            tableNumero={activeOrder?.table_numero || 0}
+            onPaymentSuccess={handlePaymentSuccess}
+          />
         </div>
       )}
 
