@@ -7,6 +7,7 @@ from datetime import datetime
 # Chemins des fichiers
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROADMAP_FILE = os.path.join(ROOT_DIR, ".planning", "ROADMAP.md")
+STATE_FILE = os.path.join(ROOT_DIR, ".planning", "STATE.md")
 CHANGELOG_FILE = os.path.join(ROOT_DIR, "docs", "brain", "02_Journal", "CHANGELOG.md")
 DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
 AUDIT_REPORT_FILE = os.path.join(ROOT_DIR, ".planning", "audit_uat_report.md")
@@ -95,6 +96,31 @@ def read_changelog():
         if len(activities) >= 15: break
             
     return activities
+
+def read_state_file():
+    total_phases = 40
+    completed_phases = 27
+    
+    if not os.path.exists(STATE_FILE):
+        return total_phases, completed_phases
+    
+    try:
+        with open(STATE_FILE, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Extract total_phases from YAML
+        total_match = re.search(r'total_phases:\s*(\d+)', content)
+        if total_match:
+            total_phases = int(total_match.group(1))
+        
+        # Extract completed_phases from YAML
+        completed_match = re.search(r'completed_phases:\s*(\d+)', content)
+        if completed_match:
+            completed_phases = int(completed_match.group(1))
+    except Exception as e:
+        print(f"Avertissement: Impossible de lire STATE.md : {e}")
+    
+    return total_phases, completed_phases
 
 def get_backend_stats():
     stats = {
@@ -236,8 +262,11 @@ def update_dashboard():
     uat_map, uat_list = get_uat_status()
     human_tests = read_human_test_plan()
     
-    total_phases = len(phases)
-    completed_phases = sum(1 for p in phases if p["status"] == "terminé")
+    # Read accurate total/completed from STATE.md
+    state_total, state_completed = read_state_file()
+    
+    total_phases = state_total
+    completed_phases = state_completed
     in_progress_phases = sum(1 for p in phases if p["status"] == "en_cours")
     todo_phases = total_phases - completed_phases - in_progress_phases
     
