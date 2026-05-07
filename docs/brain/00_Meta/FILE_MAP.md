@@ -37,12 +37,13 @@ tastify-pfa/
 │   │   │       ├── migrations/
 │   │   │       └── tests/         # API, signal, permission, and orchestration regression coverage
 │   │   │   ├── paiements/         # Payment domain, payable-session services, reconciliation logic, and split-bill tests
-│   │   │   ├── stock/             # Ingredients inventory, JIT stock deduction, and seeding
+│   │   │   ├── stock/             # Ingredients inventory, async stock deduction task/service, and seeding
 │   │   │       ├── models.py      # Ingredient and PlatIngredient models with soft-delete
 │   │   │       ├── serializers.py
+│   │   │       ├── tasks.py       # Celery task for async ingredient deduction
 │   │   │       ├── views.py
 │   │   │       ├── tests/
-│   │   │       └── services.py    # JIT stock deduction service triggered during KDS orchestration
+│   │   │       └── services.py    # Stock checks plus queued/background deduction entrypoints
 │   │   │   ├── hr/                # Employees (HR) domain, salary, position, and personal details
 │   │   │       ├── models.py      # Employe model linked to User
 │   │   │       ├── serializers.py
@@ -148,3 +149,4 @@ Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`
 The backend container starts through `app/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
 `app/backend/apps/paiements/services.py` owns the payment-side invariant for `Table -> exactly one payable Commande`, while `app/backend/apps/commandes/signals.py` remains the only place that frees the table when the order reaches `PAYEE` or `ANNULEE`.
 `app/backend/apps/checklists/` now owns the operational checklist template/execution domain, including nested task templates, the daily Celery generation task, per-day execution uniqueness, and response completion tracking for staff roles.
+`app/backend/apps/stock/tasks.py` now owns asynchronous ingredient deduction, while `app/backend/apps/stock/services.py` keeps synchronous stock checks and the queueing boundary used by order transitions.

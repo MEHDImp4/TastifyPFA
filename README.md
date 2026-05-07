@@ -41,6 +41,7 @@ Shared auth persistence is now portal-scoped: `app/frontend/shared/auth/portalCo
 The backend container runs pending Django migrations before starting Daphne, while Celery worker and Beat reuse the same migration path without re-running `collectstatic`.
 Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for task results, leaving Redis DB `0` available for Channels/WebSocket traffic.
 The backend now includes a checklist domain so management can define opening/closing procedures, staff can execute daily checklist instances through the API, and Celery Beat can auto-generate each day's executions at `04:00` (`Africa/Casablanca`).
+Stock deduction now runs through Celery as a background task on order launch transitions, so the order API path no longer blocks on ingredient writes.
 
 ## Layout
 See `docs/brain/00_Meta/FILE_MAP.md`.
@@ -71,7 +72,7 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
 - `apps.checklists` — checklist templates, ordered tasks, daily executions, the 04:00 auto-generation task, and per-item completion responses.
 - `apps.paiements` — payment records, line-level split contributions, payable-session resolution, and payment-to-order reconciliation that leaves table release in `apps.commandes` signals.
-- `apps.stock` — ingredients inventory (51 Moroccan cooking items), dish-recipe mappings (129 plat-ingredient links), JIT deduction service, and soft-delete.
+- `apps.stock` — ingredients inventory (51 Moroccan cooking items), dish-recipe mappings (129 plat-ingredient links), async stock deduction tasks/services, and soft-delete.
 - `apps.hr` — employees linked to users, salary, position, personal details, and soft-delete.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 

@@ -1,3 +1,18 @@
+# [2026-05-07 20:08] - Phase 28 Plan 04 Async Stock Deduction
+### Added
+- Added `app/backend/apps/stock/tasks.py` with the `deduct_stock_async` Celery task for background ingredient deduction.
+- Added `app/backend/apps/stock/tests/test_tasks.py` covering successful async deduction, insufficient-stock logging, and queue dispatch.
+- Added `.planning/phases/28-celery-infrastructure/28-04-SUMMARY.md`.
+
+### Changed
+- Added `StockService.queue_deduction()` in `app/backend/apps/stock/services.py` to queue background deductions instead of running them inline.
+- Updated `app/backend/apps/commandes/views.py` so order and line status transitions queue stock deduction work without blocking the API request path.
+- Updated `app/backend/apps/commandes/tests/test_stock_integration.py`, `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `.planning/ROADMAP.md`, and `.planning/STATE.md`.
+
+### Validation
+- `docker compose exec -T backend python manage.py makemigrations --check` passed.
+- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend pytest apps/stock/tests/test_tasks.py apps/stock/tests/test_services.py apps/commandes/tests/test_stock_integration.py -q` passed.
+
 # [2026-05-07 19:16] - Phase 28 Plan 03 Daily Checklist Generation
 ### Added
 - Added `app/backend/apps/checklists/tasks.py` with the `generate_daily_checklists` Celery task for creating daily checklist executions and response rows from active templates.
