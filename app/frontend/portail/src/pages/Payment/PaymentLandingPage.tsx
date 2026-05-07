@@ -40,6 +40,13 @@ export const PaymentLandingPage = () => {
     }
 
     if (
+      detail.includes('No payable order found for table')
+      || detail.includes("Aucune commande payable")
+    ) {
+      return "Cette table n'a plus de note en attente. Le QR code n'est plus utilisable."
+    }
+
+    if (
       detail.includes("n'est plus valide")
       || detail.includes('invalide ou expiré')
     ) {

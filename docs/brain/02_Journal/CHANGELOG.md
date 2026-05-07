@@ -1,3 +1,11 @@
+## [2026-05-07] - 03:29
+### Fixed
+- Mapped backend `No payable order found for table ...` responses to a clear client-facing message so stale or already-settled QR links no longer look like a generic failure.
+
+### Validation
+- `docker compose exec -T portail npm run build` passed.
+- Direct resolve of the reported token now confirms the backend detail is `No payable order found for table 7.`
+
 ## [2026-05-07] - 03:24
 ### Fixed
 - Normalized public payment session amounts to numbers before rendering the client checkout page, preventing `toFixed` crashes when Django decimals arrive as JSON strings.
