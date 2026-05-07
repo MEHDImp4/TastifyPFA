@@ -1544,6 +1544,20 @@
 ### Commit
 - `93d87e3` `Fix Docker QR import resolution`
 
+## [2026-05-07 02:40] - QR Public Payment URL Fix
+### Fixed
+- Stopped encoding `localhost` blindly into staff-generated payment QR codes by honoring `VITE_PORTAIL_PUBLIC_URL` when present.
+- Wired `VITE_PORTAIL_PUBLIC_URL` through `docker-compose.yml` so the back-office and portail containers share the same public payment base URL.
+- Added the public portail URL to `.env` and `.env.example` for LAN-accessible QR testing on mobile devices.
+
+### Validation
+- `docker compose up -d backoffice portail` recreated both frontend containers with the new public URL environment variable.
+- `docker compose exec -T backoffice npm run build` passed.
+- `docker compose exec -T portail npm run build` passed.
+
+### Commit
+- `5708db9` `Fix public QR payment URL`
+
 ### Validation
 - `npm run build` passed in `app/frontend/backoffice`.
 - `npm run build` passed in `app/frontend/portail`.
