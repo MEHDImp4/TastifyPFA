@@ -34,19 +34,20 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [x] **Phase 28: Celery Infrastructure** - Async workers and beat schedules. (completed 2026-05-07)
-- [ ] **Phase 30: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
-- [ ] **Phase 31: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
-- [ ] **Phase 32: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
-- [ ] **Phase 33: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
-- [ ] **Phase 34: PWA Offline Capabilities** - Service Workers for Salle & KDS.
-- [ ] **Phase 35: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate).
-- [ ] **Phase 36: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait).
-- [ ] **Phase 37: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi).
-- [ ] **Phase 38: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique).
-- [ ] **Phase 39: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances.
-- [ ] **Phase 40: Load Testing & Optimization** - Locust scripts, Nginx proxy fine-tuning.
+- [ ] **Phase 29: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
+- [ ] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
+- [ ] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
+- [ ] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
+- [ ] **Phase 33: PWA Offline Capabilities** - Service Workers for Salle & KDS.
+- [ ] **Phase 34: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate).
+- [ ] **Phase 35: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait).
+- [ ] **Phase 36: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi).
+- [ ] **Phase 37: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique).       
+- [ ] **Phase 38: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances.
+- [ ] **Phase 39: Load Testing & Optimization** - Locust scripts, Nginx proxy fine-tuning.
 
 ## Phase Details
+
 
 ### Phase 28: Celery Infrastructure
 **Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis.
@@ -59,7 +60,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 40
+Phases execute in numeric order: 1 → 39
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -91,14 +92,14 @@ Phases execute in numeric order: 1 → 40
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
 | 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
-| 30. AI Recommender System | 0/1 | à faire | — |
-| 31. AI Sentiment Analysis | 0/1 | à faire | — |
-| 32. Back-Office Dashboard KPIs | 0/1 | à faire | — |
-| 33. Loyalty Program | 0/1 | à faire | — |
-| 34. PWA Offline Capabilities | 0/1 | à faire | — |
-| 35. KDS Advanced Operations | 0/1 | à faire | — |
-| 36. Click & Collect E-commerce | 0/1 | à faire | — |
-| 37. Staff Scheduling & Recruitment | 0/1 | à faire | — |
-| 38. AI Weather-Aware Stock Forecasting | 0/1 | à faire | — |
-| 39. Multilingual BERT Expansion | 0/1 | à faire | — |
-| 40. Load Testing & Optimization | 0/1 | à faire | — |
+| 29. AI Recommender System | 0/1 | à faire | — |
+| 30. AI Sentiment Analysis | 0/1 | à faire | — |
+| 31. Back-Office Dashboard KPIs | 0/1 | à faire | — |
+| 32. Loyalty Program | 0/1 | à faire | — |
+| 33. PWA Offline Capabilities | 0/1 | à faire | — |
+| 34. KDS Advanced Operations | 0/1 | à faire | — |
+| 35. Click & Collect E-commerce | 0/1 | à faire | — |
+| 36. Staff Scheduling & Recruitment | 0/1 | à faire | — |
+| 37. AI Weather-Aware Stock Forecasting | 0/1 | à faire | — |
+| 38. Multilingual BERT Expansion | 0/1 | à faire | — |
+| 39. Load Testing & Optimization | 0/1 | à faire | — |

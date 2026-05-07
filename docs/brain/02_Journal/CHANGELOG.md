@@ -1617,6 +1617,12 @@
 - Confirmed the Vitest package resolution error is gone when Vite loads `frontend/back-office/vite.config.ts`.
 - `npm run build` still fails on a pre-existing TypeScript configuration issue: `tsconfig.json` uses an invalid `ignoreDeprecations` value, and sandboxed `vite` startup hits `esbuild` `spawn EPERM` after config load.
 
+# [2026-05-07 20:30] - Phase Renumbering & Cleanup
+### Changed
+- Renumbered all project phases starting from Phase 30, shifting them up by one (e.g., Phase 30 became Phase 29) to fill the gap left by the removed Phase 29 (Check-list).
+- Updated `.planning/ROADMAP.md`, `.planning/STATE.md`, and `scripts/update_dashboard.py` to reflect the new 39-phase total.
+- Synchronized `dashboard.html`.
+
 # [2026-05-07 18:49] - Phase 28 Plan 01 Celery Infrastructure
 ### Added
 - Added `django-celery-beat` and `django-celery-results` to the backend runtime stack.

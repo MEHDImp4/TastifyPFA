@@ -98,8 +98,8 @@ def read_changelog():
     return activities
 
 def read_state_file():
-    total_phases = 40
-    completed_phases = 27
+    total_phases = 39
+    completed_phases = 28
     
     if not os.path.exists(STATE_FILE):
         return total_phases, completed_phases
@@ -397,15 +397,16 @@ def update_dashboard():
 
     # Génération du HTML pour l'Activity Stream
     
-    # Generate "Next Phases" section (phases 28-32)
+    # Generate "Next Phases" section (phases 28-33)
     next_phases_html = []
-    for i in range(28, min(33, state_total + 1)):
+    for i in range(28, min(34, state_total + 1)):
         phase_title = "TBD"
         if i == 28: phase_title = "Celery Infrastructure"
         elif i == 29: phase_title = "AI Recommender System"
         elif i == 30: phase_title = "AI Sentiment Analysis"
         elif i == 31: phase_title = "Back-Office Dashboard KPIs"
         elif i == 32: phase_title = "Loyalty Program"
+        elif i == 33: phase_title = "PWA Offline Capabilities"
         
         next_phases_html.append(f'''                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
                         <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
