@@ -69,6 +69,6 @@ class TableViewSet(viewsets.ModelViewSet):
                 'table_id': session.table_id,
                 'commande_id': session.commande_id,
                 'token': token,
-                'payment_url': f'/paiement/qr?token={token}',
+                'payment_url': f'/pay/{token}',
             }
         )

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '@shared/ui/Modal';
 import axiosInstance from '@shared/auth/axiosInstance';
-import { PaymentSession } from '@shared/types/paiements';
+import { PaymentSession, QRTokenResponse } from '@shared/types/paiements';
 import { Loader2, QrCode, CreditCard, Banknote, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
+import QRCode from 'qrcode';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -26,6 +27,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [qrToken, setQrToken] = useState<string | null>(null);
+  const [qrPaymentUrl, setQrPaymentUrl] = useState<string | null>(null);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [hasNoPayableOrder, setHasNoPayableOrder] = useState(false);
 
@@ -49,12 +52,61 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   }, [lastEvent, isOpen]);
 
+  useEffect(() => {
+    if (!showQR || !qrPaymentUrl) {
+      setQrCodeDataUrl(null);
+      return;
+    }
+
+    let isCancelled = false;
+
+    const renderQrCode = async () => {
+      try {
+        const dataUrl = await QRCode.toDataURL(qrPaymentUrl, {
+          width: 320,
+          margin: 1,
+          color: {
+            dark: '#0f172a',
+            light: '#ffffff',
+          },
+        });
+
+        if (!isCancelled) {
+          setQrCodeDataUrl(dataUrl);
+        }
+      } catch (err) {
+        console.error('QR render failed', err);
+        if (!isCancelled) {
+          setError("Impossible de generer l'image du QR Code.");
+          setShowQR(false);
+        }
+      }
+    };
+
+    void renderQrCode();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [qrPaymentUrl, showQR]);
+
   const resetState = () => {
     setSession(null);
     setQrToken(null);
+    setQrPaymentUrl(null);
+    setQrCodeDataUrl(null);
     setShowQR(false);
     setError(null);
     setHasNoPayableOrder(false);
+  };
+
+  const buildClientPaymentUrl = (paymentPath: string) => {
+    if (/^https?:\/\//i.test(paymentPath)) {
+      return paymentPath;
+    }
+
+    const clientOrigin = `${window.location.protocol}//${window.location.hostname}:3003`;
+    return new URL(paymentPath, clientOrigin).toString();
   };
 
   const fetchPaymentSession = async () => {
@@ -102,8 +154,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setProcessing(true);
     setError(null);
     try {
-      const response = await axiosInstance.get(`/tables/${tableId}/qr/`);
+      const response = await axiosInstance.get<QRTokenResponse>(`/tables/${tableId}/qr/`);
       setQrToken(response.data.token);
+      setQrPaymentUrl(buildClientPaymentUrl(response.data.payment_url));
       setShowQR(true);
     } catch (err: any) {
       setError(err.response?.data?.detail || "Erreur lors de la génération du QR Code.");
@@ -170,17 +223,25 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
             {showQR && qrToken ? (
               <div className="flex flex-col items-center p-6 bg-white rounded-2xl animate-enter">
-                <div className="w-48 h-48 bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-xl mb-4 relative">
-                  <QrCode className="w-12 h-12 text-gray-400" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-white/90">
-                    <p className="text-[10px] font-black text-surface text-center px-4 leading-tight uppercase tracking-widest">
-                      QR Code de Paiement Généré
-                    </p>
-                  </div>
+                <div className="w-56 h-56 bg-white flex items-center justify-center border border-gray-200 rounded-xl mb-4 overflow-hidden">
+                  {qrCodeDataUrl ? (
+                    <img
+                      src={qrCodeDataUrl}
+                      alt={`QR code de paiement pour la table ${tableNumero}`}
+                      className="block w-full h-full"
+                    />
+                  ) : (
+                    <Loader2 className="w-8 h-8 text-surface animate-spin" />
+                  )}
                 </div>
                 <p className="text-[10px] font-bold text-surface-elevated uppercase tracking-widest text-center opacity-60">
                   Le client peut scanner ce code <br/> pour payer en autonomie
                 </p>
+                {qrPaymentUrl ? (
+                  <p className="mt-3 max-w-[18rem] break-all text-center text-[10px] font-medium text-surface/60">
+                    {qrPaymentUrl}
+                  </p>
+                ) : null}
                 <button 
                   onClick={() => setShowQR(false)}
                   className="mt-4 text-[10px] font-black text-teal uppercase tracking-widest hover:underline"

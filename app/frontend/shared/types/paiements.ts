@@ -21,6 +21,7 @@ export interface PaymentSession {
 
 export interface QRTokenResponse {
   token: string;
+  payment_url: string;
 }
 
 export interface ManualPaymentRequest {
