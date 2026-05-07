@@ -34,7 +34,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [x] **Phase 28: Celery Infrastructure** - Async workers and beat schedules. (completed 2026-05-07)
-- [ ] **Phase 29: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
+- [x] **Phase 29: AI Recommender System** - scikit-learn model, API, and Portail Client integration. (completed 2026-05-08)
 - [ ] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
 - [ ] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
 - [ ] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
@@ -48,7 +48,6 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phase Details
 
-
 ### Phase 28: Celery Infrastructure
 **Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis.
 **Depends on**: Phase 13
@@ -56,6 +55,16 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 Plans:
 - [x] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
+
+### Phase 29: AI Recommender System
+**Goal**: Build an AI-driven Recommender System using scikit-learn, exposed via API and integrated into the Portail Client.
+**Depends on**: Phase 28, Phase 24
+**Success Criteria**: 1. ML logic correctly outputs similarity matrix. 2. API returns recommendations. 3. Portail client displays the recommendations.
+
+**Plans:** 3 plans
+- [x] 29-01-PLAN.md — AI Recommender Logic and Celery Task
+- [x] 29-02-PLAN.md — Expose Recommendation API
+- [x] 29-03-PLAN.md — Integrate Recommendations into Portail Menu
 
 ## Progress
 
@@ -92,7 +101,7 @@ Phases execute in numeric order: 1 → 39
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
 | 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
-| 29. AI Recommender System | 0/1 | à faire | — |
+| 29. AI Recommender System | 3/3 | Completed | 2026-05-08 |
 | 30. AI Sentiment Analysis | 0/1 | à faire | — |
 | 31. Back-Office Dashboard KPIs | 0/1 | à faire | — |
 | 32. Loyalty Program | 0/1 | à faire | — |

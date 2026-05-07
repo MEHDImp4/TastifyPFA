@@ -39,37 +39,6 @@
             }
         }
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            try {
-                const headerBox = document.querySelector('header .w-64');
-                if (!headerBox) return;
-                const percentSpan = headerBox.querySelector('.text-primary.font-bold');
-                const progressInner = headerBox.querySelector('.h-1.5 > div');
-                if (percentSpan && progressInner) {
-                    const target = parseInt(percentSpan.textContent) || 0;
-                    percentSpan.textContent = '0%';
-                    progressInner.style.width = '0%';
-                    progressInner.classList.add('progress-anim');
-
-                    let start = null;
-                    const duration = 900;
-                    function step(ts) {
-                        if (!start) start = ts;
-                        const t = Math.min(1, (ts - start) / duration);
-                        const val = Math.round(t * target);
-                        percentSpan.textContent = val + '%';
-                        if (t < 1) requestAnimationFrame(step);
-                        else percentSpan.textContent = target + '%';
-                    }
-                    requestAnimationFrame(step);
-
-                    // Animate width slightly after frame
-                    setTimeout(function () { progressInner.style.width = target + '%'; }, 50);
-                }
-            } catch (e) { console.warn('Dashboard animation init failed', e); }
-        });
-    </script>
     <style>
         body {
             background-color: hsl(220, 10%, 10%);
@@ -83,27 +52,12 @@
             border-radius: 1rem;
             box-shadow: 0 6px 18px rgba(2,6,23,0.6);
             transition: transform 0.18s ease, box-shadow 0.18s ease;
-            will-change: transform;
         }
         .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(2,6,23,0.65); }
-        .card p, .card h4, .card h3 { text-wrap: balance; }
-
-        .progress-anim { transition: width 900ms cubic-bezier(.2,.9,.2,1); }
-        .stat-number { transition: transform 600ms cubic-bezier(.2,.9,.2,1); display:inline-block; }
-
-        /* Slight glass effect */
-        .card--glass { background-color: rgba(17,24,39,0.6); backdrop-filter: blur(6px); }
-        .card { position: relative; z-index: 0; }
-        .card:hover { z-index: 20; }
-
-        /* Custom scrollbar for inner elements */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
-
-        /* Subtle scrollbar colour for inner scroll containers */
-        .h-96, .max-h-48, .max-h-32, .overflow-y-auto { scrollbar-color: rgba(255,255,255,0.08) transparent; }
     </style>
 </head>
 <body class="h-screen overflow-hidden p-4 md:p-6">
@@ -114,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 21:36:43<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 00:55:04<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -132,7 +86,7 @@
             
             <div class="w-64 bg-black/30 p-3 rounded-xl border border-white/5">
                 <div class="flex justify-between text-xs mb-2">
-                    <span class="font-medium text-gray-300">Progression du Projet</span>
+                    <span class="font-medium text-gray-300">Progression</span>
                     <!-- PERCENT_START --><span class="text-primary font-bold">71%</span><!-- PERCENT_END -->
                 </div>
                 <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
@@ -149,10 +103,10 @@
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Tâches Terminées</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->68<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->71<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
-                <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Réussite Globale</h3>
+                <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Avancement</h3>
                 <div class="mt-1 text-2xl font-black"><!-- PERCENT_START -->71%<!-- PERCENT_END --></div>
             </div>
             <!-- STATUS_BREAKDOWN_START -->                <div class="card p-4 flex flex-col border-l-4 border-l-green-500">
@@ -177,14 +131,14 @@
         <!-- Main Content Grid -->
         <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 animate-fade-up" style="animation-delay: 0.2s;">
             
-            <!-- Left Column: Roadmap Summary & Tech Stack -->
+            <!-- Left Column: Roadmap & Stats -->
             <div class="lg:col-span-3 flex flex-col gap-4 overflow-y-auto pr-1">
-                <div class="card p-4 flex flex-col">
+                <div class="card p-4 flex flex-col flex-1">
                     <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
                         <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-                        Aperçu de la Feuille de Route
+                        Feuille de Route
                     </h2>
-                    <div class="h-96 overflow-y-auto space-y-3 pr-2">
+                    <div class="overflow-y-auto space-y-3 pr-2 flex-1">
                         <!-- PHASES_START -->
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
                             <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
@@ -382,11 +336,11 @@
                                 <p class="text-sm text-gray-400 mt-1">Plans: 1/1</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
-                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 ">
+                            <div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
                             <div>
-                                <h4 class="font-semibold text-gray-300">Phase 29: AI Recommender System</h4>
-                                <p class="text-sm text-gray-500 mt-1">Plans: 0/1</p>
+                                <h4 class="font-semibold text-white">Phase 29: AI Recommender System</h4>
+                                <p class="text-sm text-gray-400 mt-1">Plans: 3/3</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
@@ -462,142 +416,326 @@
                             <!-- PHASES_END -->
                     </div>
                 </div>
-                <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        Phases Suivantes
-                    </h2>
-                    <div class="space-y-2">
-                        <!-- NEXT_PHASES_START -->
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 28</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Celery Infrastructure</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 29</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">AI Recommender System</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 30</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">AI Sentiment Analysis</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 31</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Back-Office Dashboard KPIs</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 32</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Loyalty Program</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
-                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-white text-sm">Phase 33</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">PWA Offline Capabilities</p>
-                        </div>
-                    </div>
-            <!-- NEXT_PHASES_END -->
-                    </div>
-                </div>
-                <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-3">Pile Technologique</h2>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Django</div>
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Vite</div>
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Tailwind CSS</div>
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">TypeScript</div>
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">Docker</div>
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-center text-xs font-medium">MySQL</div>
-                    </div>
-                </div>
+
                 <div class="card p-4 shrink-0">
                     <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-base font-bold flex items-center gap-2">
-                            <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            Statistiques de l'Application En Direct
-                        </h2>
-                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">En Ligne</span><!-- DB_STATUS_BADGE_END -->
+                        <h2 class="text-base font-bold">Stats Application</h2>
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">Conteneur Hors ligne</span><!-- DB_STATUS_BADGE_END -->
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Utilisateurs Totaux</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->15<!-- DB_USERS_END --></p>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Users</p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Commandes Totales</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->2<!-- DB_ORDERS_END --></p>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables Actives</p>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
                             <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->0<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
-                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes Totales (Payées)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->63<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes</p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->0<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
-                <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Préparation aux Tests d'Acceptation
-                                    <div class="card p-4 shrink-0">
-                                        <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                            Réalisations Récentes
-                                        </h2>
-                                        <div class="space-y-3 max-h-32 overflow-y-auto pr-1">
-                                            <!-- RECENT_ACHIEVEMENTS_START -->
-                                            <div class="text-sm">
-                                                <div class="flex items-start gap-2 mb-1">
-                                                    <span class="text-xs font-bold text-green-400">✓ Phase 27</span>
-                                                    <span class="text-xs text-gray-400">UI Paiements Client</span>
-                                                </div>
-                                                <p class="text-xs text-gray-500">Sélecteur de partage & page de paiement</p>
-                                            </div>
-                                            <div class="text-sm">
-                                                <div class="flex items-start gap-2 mb-1">
-                                                    <span class="text-xs font-bold text-green-400">✓ Phase 26</span>
-                                                    <span class="text-xs text-gray-400">Backend Paiement QR</span>
-                                                </div>
-                                                <p class="text-xs text-gray-500">Tokens signés & APIs de partage de note</p>
-                                            </div>
-                                            <div class="text-sm">
-                                                <div class="flex items-start gap-2 mb-1">
-                                                    <span class="text-xs font-bold text-green-400">✓ Phase 25</span>
-                                                    <span class="text-xs text-gray-400">UI Admin — Réservations</span>
-                                                </div>
-                                                <p class="text-xs text-gray-500">Gestion du personnel & intégration de la carte des tables</p>
-                                            </div>
-                                            <!-- RECENT_ACHIEVEMENTS_END -->
-                                        </div>
-                                    </div>
-                                    <div class="card p-4 shrink-0">
-                                        <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                            Préparation aux Tests d'Acceptation
-                                        </h2>
-                    </h2>
-                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+            </div>
+
+            <!-- Middle Column: Detailed Phases & UAT -->
+            <div class="lg:col-span-6 card p-4 flex flex-col min-h-0 overflow-hidden">
+                <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    Suivi Détaillé & UAT
+                </h2>
+                <div class="flex-1 overflow-y-auto space-y-2 pr-2 mb-4">
+                    <!-- DETAILED_PHASES_START -->
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 2: User Model & RBAC</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 3: Auth API & Login Page</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 4: Categories Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 5: Categories Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 6: Plats Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 7: Plats Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 9: Tables Map Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 11: Commandes REST API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 12: Order Taking Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 13: WebSocket Infrastructure</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 14: KDS Base Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 15: KDS Orchestrator Logic</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 16: Order Push to KDS</h4><p class="text-xs text-gray-400 mt-1">Plans: 8/8</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 17: Order Status Updates</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 18: Ingredients & Stock Model</h4><p class="text-xs text-gray-400 mt-1">Plans: 4/4</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 19: Stock Management Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 4/4</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 20: Automated Deductions</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 21: Employees (HR) Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 22: HR Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 24: Reservations Client UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 25: Reservations Admin UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 26: QR Payment & Split Bill Logic</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 27: Encaissement UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 28: Celery Infrastructure</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 29: AI Recommender System</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 30: AI Sentiment Analysis</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 31: Back-Office Dashboard KPIs</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 32: Loyalty Program</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 33: PWA Offline Capabilities</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 34: KDS Advanced Operations</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 35: Click & Collect E-commerce</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 36: Staff Scheduling & Recruitment</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 37: AI Weather-Aware Stock Forecasting</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 38: Multilingual BERT Expansion</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                            <div><h4 class="font-semibold text-white">Phase 39: Load Testing & Optimization</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
+                                
+                            </div>
+                        </div>
+                            <!-- DETAILED_PHASES_END -->
+                </div>
+                <div class="h-48 border-t border-white/5 pt-4 overflow-hidden flex flex-col">
+                    <h3 class="text-sm font-bold mb-2 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        États des UAT
+                    </h3>
+                    <div class="flex-1 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
                         <!-- UAT_START -->
                         <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center gap-2">
@@ -802,6 +940,22 @@
                         <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
                             <div class="flex items-center gap-2">
                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 26</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Qr Payment Split Bill</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 27</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Encaissement Ui</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
                                 <span class="text-sm font-medium text-white">Ph 28</span>
                                 <span class="text-xs text-gray-400 truncate max-w-[120px]">Celery Infrastructure</span>
                             </div>
@@ -810,326 +964,62 @@
                             <!-- UAT_END -->
                     </div>
                 </div>
-                <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        Plan de Tests Humains
-                    </h2>
-                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                        <!-- HUMAN_TESTS_START -->
-
-                            <!-- HUMAN_TESTS_END -->
-                    </div>
-                </div>
             </div>
 
-            <!-- Middle Column: Detailed Phases -->
-            <div class="lg:col-span-6 card p-4 flex flex-col min-h-0 overflow-hidden">
-                <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-                    Suivi Détaillé des Phases
-                </h2>
-                <div class="flex-1 overflow-y-auto space-y-2 pr-2">
-                    <!-- DETAILED_PHASES_START -->
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 1: Project Skeleton</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 2: User Model & RBAC</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 3: Auth API & Login Page</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 4: Categories Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 5: Categories Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 6: Plats Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 7: Plats Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 8: Tables Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 9: Tables Map Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 10: Commandes Model</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 11: Commandes REST API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 12: Order Taking Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 13: WebSocket Infrastructure</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 14: KDS Base Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 15: KDS Orchestrator Logic</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 16: Order Push to KDS</h4><p class="text-xs text-gray-400 mt-1">Plans: 8/8</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 17: Order Status Updates</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 18: Ingredients & Stock Model</h4><p class="text-xs text-gray-400 mt-1">Plans: 4/4</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 19: Stock Management Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 4/4</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 20: Automated Deductions</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 21: Employees (HR) Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 22: HR Frontend</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 23: Reservations Model & API</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 24: Reservations Client UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 25: Reservations Admin UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 26: QR Payment & Split Bill Logic</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 27: Encaissement UI</h4><p class="text-xs text-gray-400 mt-1">Plans: 3/3</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 28: Celery Infrastructure</h4><p class="text-xs text-gray-400 mt-1">Plans: 1/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 29: AI Recommender System</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 30: AI Sentiment Analysis</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 31: Back-Office Dashboard KPIs</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 32: Loyalty Program</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 33: PWA Offline Capabilities</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 34: KDS Advanced Operations</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 35: Click & Collect E-commerce</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 36: Staff Scheduling & Recruitment</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 37: AI Weather-Aware Stock Forecasting</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 38: Multilingual BERT Expansion</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
-                            <div><h4 class="font-semibold text-white">Phase 39: Load Testing & Optimization</h4><p class="text-xs text-gray-400 mt-1">Plans: 0/1</p></div>
-                            <div class="flex items-center">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-gray-500/20 text-gray-400 border-gray-500/20 whitespace-nowrap">Non planifiée</span>
-                                
-                            </div>
-                        </div>
-                            <!-- DETAILED_PHASES_END -->
-                </div>
-            </div>
-
-            <!-- Right Column: Chart & Activity -->
+            <!-- Right Column: Next & Activity -->
             <div class="lg:col-span-3 flex flex-col gap-4 overflow-hidden">
                 <div class="card p-4 shrink-0">
-                    <h2 class="text-base font-bold mb-2">Distribution des Tâches</h2>
-                    <div class="relative h-32 w-full flex items-center justify-center">
-                        <canvas id="taskChart"></canvas>
-                        <!-- CHART_DATA_START -->
-                        <script>
-                            const chartData = {
-                                labels: ['À faire', 'En cours', 'Terminé'],
-                                data: [11, 0, 28]
-                            };
-                        </script>
-                            <!-- CHART_DATA_END -->
+                    <h2 class="text-base font-bold mb-3 flex items-center gap-2">Prochaines Étapes</h2>
+                    <div class="space-y-2">
+                        <!-- NEXT_PHASES_START -->
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 28</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Celery Infrastructure</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 29</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">AI Recommender System</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 30</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">AI Sentiment Analysis</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 31</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Back-Office Dashboard KPIs</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 32</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Loyalty Program</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                        <div class="mt-0.5"><span class="w-2 h-2 rounded-full bg-gray-500 block"></span></div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white text-sm">Phase 33</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">PWA Offline Capabilities</p>
+                        </div>
+                    </div>
+            <!-- NEXT_PHASES_END -->
                     </div>
                 </div>
                 
                 <div class="card p-4 flex flex-col flex-1 min-h-0">
-                    <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Flux d'Activité
-                    </h2>
+                    <h2 class="text-base font-bold mb-3 flex-shrink-0 flex items-center gap-2">Flux d'Activité</h2>
                     <div class="flex-1 overflow-y-auto pr-2">
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
@@ -1212,6 +1102,21 @@
                         </ol>
                     </div>
                 </div>
+
+                <div class="card p-4 shrink-0">
+                    <h2 class="text-xs font-bold mb-2 text-gray-500 uppercase">Tâches</h2>
+                    <div class="relative h-24 w-full flex items-center justify-center">
+                        <canvas id="taskChart"></canvas>
+                        <!-- CHART_DATA_START -->
+                        <script>
+                            const chartData = {
+                                labels: ['À faire', 'En cours', 'Terminé'],
+                                data: [11, 0, 28]
+                            };
+                        </script>
+                            <!-- CHART_DATA_END -->
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -1220,48 +1125,21 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById('taskChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                        data: chartData.data,
-                        backgroundColor: [
-                            'rgba(255, 255, 255, 0.1)',
-                            'rgba(59, 130, 246, 0.8)',
-                            'rgba(16, 185, 129, 0.8)'
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            titleFont: { family: '"Plus Jakarta Sans", sans-serif' },
-                            bodyFont: { family: '"Plus Jakarta Sans", sans-serif' },
-                            padding: 10,
-                            cornerRadius: 8,
-                            displayColors: false
-                        }
-                    }
-                }
-            });
+            if (ctx && typeof chartData !== 'undefined') {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            data: chartData.data,
+                            backgroundColor: ['rgba(255, 255, 255, 0.1)', 'rgba(59, 130, 246, 0.8)', 'rgba(16, 185, 129, 0.8)'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '80%', plugins: { legend: { display: false } } }
+                });
+            }
         });
     </script>
 </body>
 </html>
-<!-- seeds merged: seed_all added; old scripts removed on 2026-05-04 -->
-<!-- seeds refactored: seed_all.py moved to core management command on 2026-05-04 -->
-
-
-
-
-
-
-
