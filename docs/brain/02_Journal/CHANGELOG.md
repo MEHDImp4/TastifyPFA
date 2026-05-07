@@ -1,3 +1,11 @@
+## [2026-05-07] - 03:39
+### Fixed
+- Corrected the payment realtime payload in `apps.paiements.signals` to read the actual `Paiement.methode` field, eliminating the `'Paiement' object has no attribute 'mode'` crash on public payment flows.
+- Preserved the existing websocket `mode` key for compatibility while also exposing `methode` explicitly in emitted payment updates.
+
+### Validation
+- `docker compose exec -T backend python manage.py shell -c "from apps.paiements.models import Paiement; p=Paiement.objects.order_by('-id').first(); p.reference_transaction = (p.reference_transaction or 'QR') + '-CHK'; p.save(); print({'id': p.id, 'methode': p.methode, 'reference_transaction': p.reference_transaction})"` passed and saved a live payment without signal errors.
+
 ## [2026-05-07] - 03:29
 ### Fixed
 - Mapped backend `No payable order found for table ...` responses to a clear client-facing message so stale or already-settled QR links no longer look like a generic failure.

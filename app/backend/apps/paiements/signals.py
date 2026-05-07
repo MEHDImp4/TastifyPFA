@@ -21,7 +21,8 @@ def handle_payment_completion(sender, instance, **kwargs):
                 "commande_id": instance.commande_id,
                 "paiement_id": instance.pk,
                 "montant": str(instance.montant),
-                "mode": instance.mode
+                "mode": instance.methode,
+                "methode": instance.methode,
             })
         
         transaction.on_commit(broadcast)

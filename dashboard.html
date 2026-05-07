@@ -114,7 +114,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 03:29:45<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 03:38:13<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -548,11 +548,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables Actives</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->3<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->0<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes Totales (Payées)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->234<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->357<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -1134,6 +1134,21 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:39</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Corrected the payment realtime payload in `apps.paiements.signals` to read the actual `Paiement.methode` field, eliminating the `'Paiement' object has no attribute 'mode'` crash on public payment flows.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:39</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Preserved the existing websocket `mode` key for compatibility while also exposing `methode` explicitly in emitted payment updates.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:39</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py shell -c "from apps.paiements.models import Paiement; p=Paiement.objects.order_by('-id').first(); p.reference_transaction = (p.reference_transaction or 'QR') + '-CHK'; p.save(); print({'id': p.id, 'methode': p.methode, 'reference_transaction': p.reference_transaction})"` passed and saved a live payment without signal errors.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 03:29</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Mapped backend `No payable order found for table ...` responses to a clear client-facing message so stale or already-settled QR links no longer look like a generic failure.</p>
                             </li>
@@ -1191,21 +1206,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Decoded route tokens explicitly on the portail payment page before resolving or confirming payment.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Generated a live encoded payment path for table `1` / commande `6`: `/pay/eyJ0YWJsZV9pZCI6MSwiY29tbWFuZGVfaWQiOjZ9%3A1wKnx3%3AGN6kSHyd1txq9MI1eR4dnHE_bi-MscqZO67TJ_EcV2w`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backoffice npm run build` passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T portail npm run build` passed.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
