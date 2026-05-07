@@ -105,7 +105,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       return paymentPath;
     }
 
-    const clientOrigin = `${window.location.protocol}//${window.location.hostname}:3003`;
+    const configuredClientOrigin = import.meta.env.VITE_PORTAIL_PUBLIC_URL?.trim();
+    const clientOrigin = configuredClientOrigin && configuredClientOrigin.length > 0
+      ? configuredClientOrigin
+      : `${window.location.protocol}//${window.location.hostname}:3003`;
     return new URL(paymentPath, clientOrigin).toString();
   };
 

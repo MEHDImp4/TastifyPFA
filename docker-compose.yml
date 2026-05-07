@@ -66,6 +66,8 @@ services:
   backoffice:
     build:
       context: ./app/frontend/backoffice
+    environment:
+      VITE_PORTAIL_PUBLIC_URL: ${VITE_PORTAIL_PUBLIC_URL}
     ports:
       - "3000:3000"
     volumes:
@@ -78,6 +80,8 @@ services:
   portail:
     build:
       context: ./app/frontend/portail
+    environment:
+      VITE_PORTAIL_PUBLIC_URL: ${VITE_PORTAIL_PUBLIC_URL}
     ports:
       - "3003:3003"
     volumes:
