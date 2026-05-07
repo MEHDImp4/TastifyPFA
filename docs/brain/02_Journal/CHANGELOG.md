@@ -1531,6 +1531,19 @@
 - Extended `QRTokenResponse` with `payment_url` and added a regression assertion in `app/backend/apps/tables/tests/test_api.py`.
 - Added `qrcode` and `@types/qrcode` to the back-office app to support typed QR image generation.
 
+## [2026-05-07 01:35] - QR Vite Import Resolution
+### Fixed
+- Switched the back-office QR renderer to `qrcode/lib/browser.js` so Vite resolves the browser build reliably in Docker dev mode.
+- Updated the back-office and portail Docker dev commands to run `npm install` at container start, preventing stale `node_modules` volumes from hiding newly added dependencies.
+
+### Validation
+- `docker compose exec -T backoffice npm run build` passed.
+- `docker compose exec -T portail npm run build` passed.
+- `docker compose exec -T backoffice npm ls qrcode --depth=0` confirmed `qrcode@1.5.4`.
+
+### Commit
+- `93d87e3` `Fix Docker QR import resolution`
+
 ### Validation
 - `npm run build` passed in `app/frontend/backoffice`.
 - `npm run build` passed in `app/frontend/portail`.
