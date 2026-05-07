@@ -1522,6 +1522,23 @@
 - Confirmed the Vitest package resolution error is gone when Vite loads `frontend/back-office/vite.config.ts`.
 - `npm run build` still fails on a pre-existing TypeScript configuration issue: `tsconfig.json` uses an invalid `ignoreDeprecations` value, and sandboxed `vite` startup hits `esbuild` `spawn EPERM` after config load.
 
+## [2026-05-07] - 02:21
+### Fixed
+- Restored the staff QR payment flow by aligning the backend QR target with the real client portal route `/pay/:token` instead of the obsolete `/paiement/qr?token=...` path.
+- Replaced the non-scannable QR placeholder in `PaymentModal` with a real generated QR image and exposed the resolved client payment URL for fallback access.
+
+### Changed
+- Extended `QRTokenResponse` with `payment_url` and added a regression assertion in `app/backend/apps/tables/tests/test_api.py`.
+- Added `qrcode` and `@types/qrcode` to the back-office app to support typed QR image generation.
+
+### Validation
+- `npm run build` passed in `app/frontend/backoffice`.
+- `npm run build` passed in `app/frontend/portail`.
+- `docker compose exec -T backend python manage.py test apps.tables.tests.test_api` is still blocked by MySQL permissions: user `tastify` cannot create database `test_tastify`.
+
+### Commit
+- `2223225` `Fix staff QR payment flow`
+
 ## [2026-04-27] - 21:00
 ### Added
 - Created `.planning/phases/01-project-skeleton/01-UAT.md` for User Acceptance Testing.
