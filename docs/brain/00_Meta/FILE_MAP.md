@@ -35,7 +35,18 @@ tastify-pfa/
 │   │   │       ├── tasks.py       # Celery ETA launch tasks + staff broadcasts
 │   │   │       ├── migrations/
 │   │   │       └── tests/         # API, signal, permission, and orchestration regression coverage
-│   │   │   └── paiements/         # Payment domain, payable-session services, reconciliation logic, and split-bill tests
+│   │   │   ├── paiements/         # Payment domain, payable-session services, reconciliation logic, and split-bill tests
+│   │   │   ├── stock/             # Ingredients inventory, JIT stock deduction, and seeding
+│   │   │       ├── models.py      # Ingredient and PlatIngredient models with soft-delete
+│   │   │       ├── serializers.py
+│   │   │       ├── views.py
+│   │   │       ├── tests/
+│   │   │       └── services.py    # JIT stock deduction service triggered during KDS orchestration
+│   │   │   ├── hr/                # Employees (HR) domain, salary, position, and personal details
+│   │   │       ├── models.py      # Employe model linked to User
+│   │   │       ├── serializers.py
+│   │   │       ├── views.py
+│   │   │       └── tests/
 │   │   ├── requirements.txt
 │   │   ├── entrypoint.sh          # Applies pending migrations before Daphne starts
 │   │   └── Dockerfile

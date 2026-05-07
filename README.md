@@ -15,10 +15,19 @@ docker compose up --build
 ```
 
 ### Seeding
-To populate the database with initial users, tables, and a full menu:
+To populate the database with initial users, tables, menu, ingredients, and recipes:
 ```bash
 docker-compose exec backend python manage.py seed_all
 ```
+
+This command seeds:
+- **Users**: 16 test accounts (1 manager, 4 servers, 4 chefs, 6 clients)
+- **Tables**: 26 tables with varied capacities (2–12 seats)
+- **Menu**: 29 Moroccan dishes across 4 categories (Entrées, Plats Principaux, Desserts, Boissons)
+- **Ingredients**: 51 cooking ingredients (vegetables, proteins, grains, spices, oils, nuts, beverages)
+- **Recipes**: 129 dish-ingredient mappings with realistic quantities
+
+See `user.md` for all test account credentials (default password: `password123`).
 
 Then visit:
 - `http://localhost:3003/` → Portail Client SPA
@@ -58,6 +67,8 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.reservations` — reservation domain, buffered availability checks, `available_tables` filtering, and transactional booking services.
 - `apps.commandes` — orders, order lines, price snapshots, and total recalculation signals.
 - `apps.paiements` — payment records, line-level split contributions, payable-session resolution, and payment-to-order reconciliation that leaves table release in `apps.commandes` signals.
+- `apps.stock` — ingredients inventory (51 Moroccan cooking items), dish-recipe mappings (129 plat-ingredient links), JIT deduction service, and soft-delete.
+- `apps.hr` — employees linked to users, salary, position, personal details, and soft-delete.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
 
 ## Realtime staff channel
