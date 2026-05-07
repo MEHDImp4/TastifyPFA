@@ -4,7 +4,7 @@ import axiosInstance from '@shared/auth/axiosInstance';
 import { PaymentSession, QRTokenResponse } from '@shared/types/paiements';
 import { Loader2, QrCode, CreditCard, Banknote, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
-import QRCode from 'qrcode';
+import QRCode from 'qrcode/lib/browser.js';
 
 interface PaymentModalProps {
   isOpen: boolean;
