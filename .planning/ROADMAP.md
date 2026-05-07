@@ -25,7 +25,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 17: Order Status Updates** - Cuisine marks dishes as ready -> real-time push to Salle. (completed 2026-05-04)
 - [x] **Phase 18: Ingredients & Stock Model** - Alerts, thresholds. (completed 2026-05-05)
 - [x] **Phase 19: Stock Management Frontend** - Back-Office UI for entering stock. (completed 2026-05-05)
-- [x] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task. (completed 2026-05-05)
+- [x_] **Phase 20: Automated Deductions** - Service-based stock deduction triggered by JIT orchestration task. (completed 2026-05-05)
 - [x] **Phase 21: Employees (HR) Model & API** - Employee profiles linked to Users. (completed 2026-05-05)
 - [x] **Phase 22: HR Frontend** - Back-office HR UI. (completed 2026-05-05)
 - [x] **Phase 23: Reservations Model & API** - Availability logic, RBAC, client ownership, dynamic table status. All 3 plans complete, fully verified 6/6 (completed 2026-05-06).
@@ -49,24 +49,16 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phase Details
 
-### Phase 26: QR Payment & Split Bill Logic
-**Goal**: Provide the backend payment domain for QR-based checkout, including equal and item/fraction splits, token-authorized client payment access, and lifecycle completion that frees the table once the order is fully paid.
-**Depends on**: Phase 11, Phase 12
-**Success Criteria**: 1. `apps.paiements` models and migrations land cleanly. 2. The backend rejects ambiguous or stale payable sessions. 3. Equal and item/fraction split flows validate and persist without double-payment. 4. Fully paid orders transition to `PAYEE` and existing table sync frees the table.
+### Phase 28: Celery Infrastructure & Check-list Model
+**Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis. Implement a periodic "Daily Checklist" system for restaurant opening/closing procedures.
+**Depends on**: Phase 13, Phase 20
+**Success Criteria**: 1. Celery worker and Beat services start in Docker. 2. `Checklist` and `TaskChecklist` models implemented. 3. Periodic task (Beat) successfully resets daily checklists at a configurable time (e.g., 04:00 AM). 4. Staff can see and interact with the checklist via API. 5. JIT Stock Deductions migrated to async workers.
 
 Plans:
-- [x] 26-01-PLAN.md — Payment Domain, Payable Session Resolution & Lifecycle Integrity. (completed 2026-05-06)
-- [x] 26-02-PLAN.md — QR Token Authorization & Payment API Contracts. (completed 2026-05-06)
-
-### Phase 27: Encaissement UI
-**Goal**: Implement the frontend interfaces for payment management, enabling staff to handle payments and generate QR codes, and providing clients with a dedicated self-service payment landing page with split-bill support.
-**Depends on**: Phase 26
-**Success Criteria**: 1. Staff can generate QR codes and record manual payments via a modal on the table map. 2. Clients can resolve their session via QR and choose a split strategy (Total, Equal, Item). 3. Staff UI updates in real-time when clients pay.
-
-Plans:
-- [x] 27-01-PLAN.md — Staff Payment Modal & QR Issuance UI. (completed 2026-05-06)
-- [x] 27-02-PLAN.md — Client QR Landing Page & Split Bill UI. (completed 2026-05-07)
-- [x] 27-03-PLAN.md — Final Integration & End-to-End Verification. (completed 2026-05-07)
+- [ ] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
+- [ ] 28-02-PLAN.md — Checklist Data Domain (Models & REST API).
+- [ ] 28-03-PLAN.md — Periodic Task: Daily Checklist Generation.
+- [ ] 28-04-PLAN.md — Async Task: Stock Deduction Migration.
 
 ## Progress
 
@@ -102,4 +94,16 @@ Phases execute in numeric order: 1 → 40
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
-| 28. Celery Infrastructure & Check-list Model | 0/1 | à faire | — |
+| 28. Celery Infrastructure & Check-list Model | 0/4 | à faire | — |
+| 29. Check-list UI & Cron Job | 0/1 | à faire | — |
+| 30. AI Recommender System | 0/1 | à faire | — |
+| 31. AI Sentiment Analysis | 0/1 | à faire | — |
+| 32. Back-Office Dashboard KPIs | 0/1 | à faire | — |
+| 33. Loyalty Program | 0/1 | à faire | — |
+| 34. PWA Offline Capabilities | 0/1 | à faire | — |
+| 35. KDS Advanced Operations | 0/1 | à faire | — |
+| 36. Click & Collect E-commerce | 0/1 | à faire | — |
+| 37. Staff Scheduling & Recruitment | 0/1 | à faire | — |
+| 38. AI Weather-Aware Stock Forecasting | 0/1 | à faire | — |
+| 39. Multilingual BERT Expansion | 0/1 | à faire | — |
+| 40. Load Testing & Optimization | 0/1 | à faire | — |
