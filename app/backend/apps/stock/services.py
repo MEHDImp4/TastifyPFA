@@ -59,9 +59,3 @@ class StockService:
                     # Update in Python to ensure signals (which check stock_actuel) work correctly
                     ingredient.stock_actuel -= total_deduction
                     ingredient.save()
-
-    @staticmethod
-    def queue_deduction(plat, quantity):
-        from apps.stock.tasks import deduct_stock_async
-
-        deduct_stock_async.delay(plat.id, quantity)

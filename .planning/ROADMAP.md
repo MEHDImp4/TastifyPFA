@@ -33,8 +33,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
-- [x] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules, checklist API domain, and async stock deduction migration. (completed 2026-05-07)
-- [x] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution. (completed 2026-05-07)
+- [x] **Phase 28: Celery Infrastructure** - Async workers and beat schedules. (completed 2026-05-07)
 - [ ] **Phase 30: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
 - [ ] **Phase 31: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
 - [ ] **Phase 32: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
@@ -49,16 +48,13 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phase Details
 
-### Phase 28: Celery Infrastructure & Check-list Model
-**Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis. Implement a periodic "Daily Checklist" system for restaurant opening/closing procedures.
-**Depends on**: Phase 13, Phase 20
-**Success Criteria**: 1. Celery worker and Beat services start in Docker. 2. `Checklist` and `TaskChecklist` models implemented. 3. Periodic task (Beat) successfully resets daily checklists at a configurable time (e.g., 04:00 AM). 4. Staff can see and interact with the checklist via API. 5. JIT Stock Deductions migrated to async workers.
+### Phase 28: Celery Infrastructure
+**Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis.
+**Depends on**: Phase 13
+**Success Criteria**: 1. Celery worker and Beat services start in Docker. 2. Redis isolation for Celery broker.
 
 Plans:
 - [x] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
-- [x] 28-02-PLAN.md — Checklist Data Domain (Models & REST API).
-- [x] 28-03-PLAN.md — Periodic Task: Daily Checklist Generation.
-- [x] 28-04-PLAN.md — Async Task: Stock Deduction Migration.
 
 ## Progress
 
@@ -94,8 +90,7 @@ Phases execute in numeric order: 1 → 40
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
-| 28. Celery Infrastructure & Check-list Model | 4/4 | Completed | 2026-05-07 |
-| 29. Check-list UI & Cron Job | 1/1 | Completed | 2026-05-07 |
+| 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
 | 30. AI Recommender System | 0/1 | à faire | — |
 | 31. AI Sentiment Analysis | 0/1 | à faire | — |
 | 32. Back-Office Dashboard KPIs | 0/1 | à faire | — |

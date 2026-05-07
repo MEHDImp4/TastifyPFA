@@ -10,7 +10,6 @@ import { KdsPage } from './pages/Kds/KdsPage';
 import StockPage from './pages/Stock';
 import HrPage from './pages/Hr/HrPage';
 import ReservationsPage from './pages/Reservations';
-import ChecklistsPage from './pages/Checklists';
 import Login from '@shared/auth/Login';
 import { AuthBootstrap } from '@shared/auth/AuthBootstrap';
 import { useAuthStore } from '@shared/auth/useAuthStore';
@@ -104,7 +103,6 @@ function App() {
               <Route path="/salle" element={<RoleRoute allowedRoles={SALLE_ROLES}><MapView /></RoleRoute>} />
               <Route path="/tables/:id/order" element={<RoleRoute allowedRoles={SALLE_ROLES}><OrderingPage /></RoleRoute>} />
               <Route path="/reservations" element={<RoleRoute allowedRoles={['GERANT', 'SERVEUR']}><ReservationsPage /></RoleRoute>} />
-              <Route path="/checklists" element={<RoleRoute allowedRoles={['GERANT', 'SERVEUR', 'CUISINIER']}><ChecklistsPage /></RoleRoute>} />
               <Route path="/kds" element={<RoleRoute allowedRoles={KDS_ROLES}><KdsPage /></RoleRoute>} />
               <Route path="/stock" element={<RoleRoute allowedRoles={['GERANT', 'CUISINIER']}><StockPage /></RoleRoute>} />
               <Route path="/hr" element={<RoleRoute allowedRoles={GERANT_ROLES}><HrPage /></RoleRoute>} />

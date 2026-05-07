@@ -20,6 +20,5 @@ Ce module centralise la gestion administrative du restaurant. Il est accessible 
 - **Alertes** : Seuils de stock critique.
 - **Déduction Automatique** : Les stocks diminuent automatiquement lors de la validation des plats en cuisine.
 
-## 5. RH & Check-lists (Planifié)
+## 5. RH (Planifié)
 - **Employés** : Gestion des profils et des accès.
-- **Check-lists** : Listes de tâches quotidiennes (ouverture/fermeture).

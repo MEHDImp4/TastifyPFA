@@ -33,7 +33,7 @@
 Tastify est un ERP web full-stack dédié à la gestion des restaurants marocains. Il cible les PME qui ne peuvent pas se permettre les solutions leaders du marché (Lightspeed, Toast POS, Revel Systems) dont les tarifs débutent à 600 MAD/mois. Ce cahier de charges définit précisément ce que chaque ingénieur doit implémenter, selon quels standards et avec quels critères d'acceptation.
 
 > **Périmètre fonctionnel — 4 modules à livrer**
-> - **Module 1 — Back-Office Gérant :** menu, stocks, RH, tableaux de bord, check-list de service
+> - **Module 1 — Back-Office Gérant :** menu, stocks, RH, tableaux de bord
 > - **Module 2 — Front-Office Cuisine :** KDS (Kitchen Display System) WebSocket temps réel
 > - **Module 3 — Front-Office Salle :** plan de salle interactif, prise de commande, QR paiement
 > - **Module 4 — Portail Client :** réservations, menu en ligne, recommandation IA, fidélité
@@ -365,13 +365,6 @@ Le tableau de bord est la première page chargée après connexion du gérant. I
 - Désactiver un employé (`is_active=False`) révoque l'accès sans supprimer l'historique des commandes.
 - Export PDF de la liste des employés via Celery (tâche async — réponse 202 + polling `/api/taches/{id}/`).
 
-#### 5.1.5 Check-list de Service
-
-- Celery Beat génère automatiquement une `checklist_execution` chaque matin à 07h00 (paramétrable).
-- Chaque validation d'item est irréversible (`checklist_item_log` en append-only — pas de DELETE ni UPDATE).
-- Une execution passe en statut `complete` uniquement si 100% des items `obligatoire=True` sont cochés.
-- E-mail d'alerte si protocole incomplet à l'heure de fermeture (paramétrable, défaut : 23h00).
-
 ---
 
 ### 5.2 Module Kitchen Display System (KDS)
@@ -531,7 +524,7 @@ CORS_ALLOW_CREDENTIALS = True  # Nécessaire pour cookies HttpOnly refresh
 | `mysql` | mysql:8.0 | 3306 (interne) | — | Base de données principale |
 | `redis` | redis:7-alpine | 6379 (interne) | — | Broker Celery + Channel Layer |
 | `celery-worker` | python:3.11-slim | — | mysql, redis | Tâches async : e-mails, PDF, IA |
-| `celery-beat` | python:3.11-slim | — | redis | Cron quotidien : check-list, prédictions |
+| `celery-beat` | python:3.11-slim | — | redis | Cron quotidien : prédictions |
 
 ---
 

@@ -1,67 +1,12 @@
-# [2026-05-07 20:12] - Phase 29 Checklist UI
+# [2026-05-07 18:49] - Phase 28 Celery Infrastructure
 ### Added
-- Added `app/frontend/backoffice/src/pages/Checklists/` with a dedicated checklist execution console, typed checklist frontend models, and a checklist API client.
-- Added `app/frontend/backoffice/src/pages/Checklists/index.test.tsx` covering role-based rendering and optimistic task completion.
-- Added `.planning/phases/29-check-list-ui-cron-job/29-CONTEXT.md`, `29-UI-SPEC.md`, `29-01-PLAN.md`, and `29-01-SUMMARY.md`.
-
-### Changed
-- Updated `app/frontend/backoffice/src/App.tsx` to register the `/checklists` route for `GERANT`, `SERVEUR`, and `CUISINIER`.
-- Updated `app/frontend/backoffice/src/components/layout/Sidebar.tsx` to expose the new checklist navigation entry.
-- Updated `.planning/ROADMAP.md`, `.planning/STATE.md`, `README.md`, and `docs/brain/00_Meta/FILE_MAP.md` for Phase 29 completion and the new backoffice checklist surface.
+- Added `django-celery-beat` and `django-celery-results` to `requirements.txt`.
+- Added Celery configuration to `settings/base.py` and `celery.py`.
+- Added Redis DB 1 for Celery broker isolation.
 
 ### Validation
-- `docker compose exec -T backoffice npm test -- --run src/pages/Checklists/index.test.tsx` passed.
-- `docker compose exec -T backoffice npm run build` passed.
-
-# [2026-05-07 20:08] - Phase 28 Plan 04 Async Stock Deduction
-### Added
-- Added `app/backend/apps/stock/tasks.py` with the `deduct_stock_async` Celery task for background ingredient deduction.
-- Added `app/backend/apps/stock/tests/test_tasks.py` covering successful async deduction, insufficient-stock logging, and queue dispatch.
-- Added `.planning/phases/28-celery-infrastructure/28-04-SUMMARY.md`.
-
-### Changed
-- Added `StockService.queue_deduction()` in `app/backend/apps/stock/services.py` to queue background deductions instead of running them inline.
-- Updated `app/backend/apps/commandes/views.py` so order and line status transitions queue stock deduction work without blocking the API request path.
-- Updated `app/backend/apps/commandes/tests/test_stock_integration.py`, `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `.planning/ROADMAP.md`, and `.planning/STATE.md`.
-
-### Validation
-- `docker compose exec -T backend python manage.py makemigrations --check` passed.
-- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend pytest apps/stock/tests/test_tasks.py apps/stock/tests/test_services.py apps/commandes/tests/test_stock_integration.py -q` passed.
-
-# [2026-05-07 19:16] - Phase 28 Plan 03 Daily Checklist Generation
-### Added
-- Added `app/backend/apps/checklists/tasks.py` with the `generate_daily_checklists` Celery task for creating daily checklist executions and response rows from active templates.
-- Added `app/backend/apps/checklists/tests/test_tasks.py` covering task generation, same-day idempotency, no-staff fallback, and Beat registration behavior.
-- Added `.planning/phases/28-celery-infrastructure/28-03-SUMMARY.md`.
-
-### Changed
-- Added `app/backend/apps/checklists/signals.py` and `app/backend/apps/checklists/apps.py` startup wiring for periodic-task registration.
-- Added `app/backend/apps/checklists/migrations/0002_register_daily_checklist_periodic_task.py` so the Beat entry is created deterministically in the live database at `04:00` `Africa/Casablanca`.
-- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `docs/brain/03_Architecture/QUIRKS.md`, `.planning/ROADMAP.md`, and `.planning/STATE.md`.
-
-### Validation
-- `docker compose exec -T backend python manage.py makemigrations checklists --check` passed.
-- `docker compose exec -T backend python manage.py migrate checklists` passed.
-- `docker compose exec -T backend python manage.py shell -c "from django_celery_beat.models import PeriodicTask; pt = PeriodicTask.objects.get(task='apps.checklists.tasks.generate_daily_checklists'); print(pt.name); print(pt.crontab.hour, pt.crontab.minute, pt.crontab.timezone)"` passed.
-- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend python manage.py test apps.checklists --verbosity 2` passed.
-
-# [2026-05-07 19:03] - Phase 28 Plan 02 Checklist Data Domain
-### Added
-- Added `app/backend/apps/checklists/` with the new checklist backend slice: templates, ordered task items, daily executions, and per-item staff responses.
-- Added nested DRF serializers and viewsets for checklist templates, daily execution retrieval/creation, and response patching.
-- Added checklist admin registration and initial migration `app/backend/apps/checklists/migrations/0001_initial.py`.
-- Added backend regression coverage in `app/backend/apps/checklists/tests/test_api.py` for RBAC, execution generation, current-day filtering, completion updates, and execution uniqueness.
-
-### Changed
-- Registered `apps.checklists` in Django settings and exposed the checklist API through `tastify_backend/api_router.py`.
-- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `docs/brain/03_Architecture/QUIRKS.md`, `.planning/ROADMAP.md`, `.planning/STATE.md`, and added `.planning/phases/28-celery-infrastructure/28-02-SUMMARY.md`.
-
-### Validation
-- `docker compose exec -T backend python manage.py makemigrations checklists` passed.
-- `docker compose exec -T backend python manage.py makemigrations checklists --check` passed.
-- `docker compose exec -T backend python manage.py migrate checklists` passed.
-- `docker compose exec -T backend python manage.py showmigrations checklists` passed.
-- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend python manage.py test apps.checklists --verbosity 2` passed.
+- Celery worker and Beat services start in Docker.
+- Redis DB 1 is isolated.
 
 ## [2026-05-07] - 15:45
 ### Changed

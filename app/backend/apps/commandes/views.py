@@ -6,8 +6,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+import logging
+logger = logging.getLogger(__name__)
+
 from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
-from apps.stock.services import StockService
+from apps.stock.services import StockService, InsufficientStockError
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
 from .services.orchestrator import KdsOrchestrator
@@ -51,9 +54,12 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        # Queue deduction if manually starting preparation (Phase 20/28 parity)
+        # Deduction if manually starting preparation (Phase 20 parity)
         if new_statut == CommandeLigne.Statut.EN_PREPARATION and instance.statut == CommandeLigne.Statut.EN_ATTENTE:
-            StockService.queue_deduction(instance.plat, instance.quantite)
+            try:
+                StockService.deduct_ingredients_for_plat(instance.plat, instance.quantite)
+            except InsufficientStockError as e:
+                logger.error(f"Stock deduction failed during manual prep: {str(e)}")
 
         response = super().partial_update(request, *args, **kwargs)
 
@@ -163,12 +169,15 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
         
-        # Phase 20/28: Queue stock deduction when firing an order
+        # Phase 20: stock deduction when firing an order
         new_statut = request.data.get('statut')
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
             lignes_to_deduct = instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE)
             for ligne in lignes_to_deduct:
-                StockService.queue_deduction(ligne.plat, ligne.quantite)
+                try:
+                    StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
+                except InsufficientStockError as e:
+                    logger.error(f"Stock deduction failed during order fire: {str(e)}")
 
         return super().partial_update(request, *args, **kwargs)
 
@@ -198,10 +207,13 @@ class CommandeViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             with transaction.atomic():
                 new_lignes = serializer.save(commande=commande)
-                # Phase 20/28: If already fired, queue stock deduction for new items
+                # Phase 20: If already fired, deduct stock for new items
                 if commande.statut == Commande.Statut.EN_CUISINE:
                     for ligne in new_lignes:
-                        StockService.queue_deduction(ligne.plat, ligne.quantite)
+                        try:
+                            StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
+                        except InsufficientStockError as e:
+                            logger.error(f"Stock deduction failed during add_items: {str(e)}")
 
                 KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
             
