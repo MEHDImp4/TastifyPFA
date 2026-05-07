@@ -70,7 +70,6 @@ export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, onToggl
   return (
     <tr className={`border-b border-surface-elevated transition-all ${isActive ? '' : 'opacity-40'}`}>
       <td className="px-6 py-4 font-bold text-white">{ingredient.nom}</td>
-      <td className="px-6 py-4 text-foreground-muted">{ingredient.unite_mesure}</td>
       <td className="px-6 py-4">
         <div className="flex items-center gap-2">
           <span className={`${stockColorClass} text-lg`}>
@@ -80,6 +79,7 @@ export function IngredientRow({ ingredient, onEdit, onAdjust, onRefresh, onToggl
           {isWarning && <div className="w-2 h-2 rounded-full bg-amber" />}
         </div>
       </td>
+      <td className="px-6 py-4 text-foreground-muted">{ingredient.unite_mesure}</td>
       <td className="px-6 py-4 text-foreground-muted">{ingredient.seuil_alerte}</td>
       <td className="px-6 py-4">
         <Switch checked={isActive} onToggle={handleToggle} disabled={!isGerant || isToggling} />

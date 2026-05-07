@@ -7,6 +7,21 @@ class InsufficientStockError(Exception):
 
 class StockService:
     @staticmethod
+    def check_stock_for_plat(plat, quantity):
+        """
+        Non-mutating check to see if enough stock exists for a given plat and quantity.
+        Returns (True, None) if stock is sufficient, or (False, error_message) if not.
+        """
+        plat_ingredients = PlatIngredient.objects.filter(plat=plat).select_related('ingredient')
+        
+        for pi in plat_ingredients:
+            total_required = pi.quantite_requise * quantity
+            if pi.ingredient.stock_actuel < total_required:
+                return False, f"Stock insuffisant pour {pi.ingredient.nom}: requis {total_required}, actuel {pi.ingredient.stock_actuel}"
+        
+        return True, None
+
+    @staticmethod
     def deduct_ingredients_for_plat(plat, quantity):
         """
         Deducts ingredients for a given plat and quantity atomically.

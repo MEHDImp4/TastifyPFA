@@ -6,6 +6,7 @@ import { Commande } from '../types'
 vi.mock('@shared/auth/axiosInstance', () => ({
   default: {
     get: vi.fn(),
+    patch: vi.fn(),
   },
 }))
 
@@ -43,6 +44,9 @@ describe('useKdsStore', () => {
 
     await useKdsStore.getState().fetchOrders()
 
+    expect(axios.get).toHaveBeenCalledWith('/commandes/', {
+      params: { scope: 'kitchen' },
+    })
     expect(useKdsStore.getState().orders).toEqual(orders)
     expect(useKdsStore.getState().isLoading).toBe(false)
   })

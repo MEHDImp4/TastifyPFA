@@ -114,7 +114,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 03:38:52<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 15:26:30<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -544,7 +544,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Commandes Totales</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->9<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->16<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables Actives</p>
@@ -552,7 +552,7 @@
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes Totales (Payées)</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->357<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->461<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -1134,6 +1134,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed the `GERANT` KDS paid-order regression by scoping KDS refetches to kitchen-visible orders only, so paid orders no longer reappear after websocket updates.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added backend support for `scope=kitchen` on `CommandeViewSet` and aligned the backoffice KDS store to request that scope on every fetch.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added backend/frontend regression coverage for the manager KDS payment-removal path.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/pages/Kds/store/useKdsStore.test.ts --run` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py test apps.commandes.tests.test_kds_permissions` is blocked by MySQL permissions: user `tastify` cannot create database `test_tastify`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:25</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> Pending local commit for the KDS scope fix; hash unavailable until commit succeeds cleanly in the current dirty worktree.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 03:39</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Corrected the payment realtime payload in `apps.paiements.signals` to read the actual `Paiement.methode` field, eliminating the `'Paiement' object has no attribute 'mode'` crash on public payment flows.</p>
                             </li>
@@ -1171,41 +1206,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 03:24</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened `SplitSelector` so full-bill and item-split previews always convert mixed string/number amounts before storing selection state.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T portail npm run build` passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Detached the public client payment route `/pay/:token` from `AuthBootstrap` so QR payment pages no longer trigger staff/client session refresh on open.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `app/frontend/shared/auth/publicClient.ts` and switched the payment landing page plus split-preview calls to a non-authenticated API client that still sends the client portal header.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T portail npm run build` passed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Direct token resolution through `http://localhost:3000/api/paiements/session/resolve/?token=...` returned the live payment session for table `7` / commande `8` without authentication.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> URL-encoded payment tokens in generated QR links so browsers and QR scanners no longer have to interpret raw `:` characters inside the `/pay/...` route.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Decoded route tokens explicitly on the portail payment page before resolving or confirming payment.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

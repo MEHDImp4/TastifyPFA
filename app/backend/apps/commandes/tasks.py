@@ -38,23 +38,16 @@ def launch_item_task(ligne_id):
         with transaction.atomic():
             now = timezone.now()
             # We use .filter().update() for efficiency, but it's inside atomic()
-            # so it will rollback if StockService fails.
             CommandeLigne.objects.filter(pk=ligne_id).update(
                 statut=CommandeLigne.Statut.EN_PREPARATION,
                 updated_at=now,
             )
 
-            # Deduct ingredients automatically
-            StockService.deduct_ingredients_for_plat(line.plat, line.quantite)
+            # Note: Stock deduction was moved to immediate execution in CommandeViewSet.partial_update
+            # to provide instant feedback and avoid JIT scheduling delays for inventory.
 
-    except InsufficientStockError as e:
-        logger.error(f"Failed to launch item {ligne_id}: {str(e)}")
-        # We let the exception propagate so Celery can retry if configured,
-        # or it will mark the task as failed. 
-        # However, the plan doesn't specify retry logic.
-        # If we want it to rollback and fail, we should re-raise.
-        raise
     except Exception as e:
+
         logger.exception(f"Unexpected error in launch_item_task for line {ligne_id}")
         raise
 

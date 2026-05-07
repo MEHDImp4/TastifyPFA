@@ -6,7 +6,7 @@ import { Bell, CheckCircle2, X } from 'lucide-react'
 interface Toast {
   id: string
   message: string
-  type: 'info' | 'success'
+  type: 'info' | 'success' | 'danger'
 }
 
 /**
@@ -19,6 +19,7 @@ export const StaffNotificationManager = () => {
   const kitchenAudioRef = useRef<HTMLAudioElement | null>(null)
   const readyAudioRef = useRef<HTMLAudioElement | null>(null)
   const paymentAudioRef = useRef<HTMLAudioElement | null>(null)
+  const errorAudioRef = useRef<HTMLAudioElement | null>(null)
   const isUnlocked = useRef(false)
   const [toasts, setToasts] = useState<Toast[]>([])
 
@@ -27,10 +28,12 @@ export const StaffNotificationManager = () => {
       const kitchenAudio = new Audio('/sounds/kitchen-bell.mp3')
       const readyAudio = new Audio('/sounds/order-ready.wav')
       const paymentAudio = new Audio('/sounds/payment-success.mp3')
+      const errorAudio = new Audio('/sounds/error.wav') // Assuming an error sound exists or falls back
       
       kitchenAudioRef.current = kitchenAudio
       readyAudioRef.current = readyAudio
       paymentAudioRef.current = paymentAudio
+      errorAudioRef.current = errorAudio
 
       const unlock = () => {
         if (isUnlocked.current) return
@@ -62,6 +65,7 @@ export const StaffNotificationManager = () => {
         window.removeEventListener('touchstart', unlock)
         kitchenAudioRef.current = null
         readyAudioRef.current = null
+        errorAudioRef.current = null
       }
     }
   }, [])
@@ -72,6 +76,33 @@ export const StaffNotificationManager = () => {
 
   useEffect(() => {
     if (!lastEvent || !user) return
+
+    // stock_error: JIT deduction failed in background
+    if (lastEvent.type === 'stock_error') {
+      const { error, plat_nom, commande_id } = lastEvent.payload as any
+      if (!error) return
+
+      const notificationKey = `stock-err-${commande_id}-${plat_nom}`
+      if (notifiedOrders.current.has(notificationKey)) return
+
+      if (user.role === 'SERVEUR' || user.role === 'GERANT') {
+        notifiedOrders.current.add(notificationKey)
+
+        if (errorAudioRef.current) {
+          errorAudioRef.current.currentTime = 0
+          errorAudioRef.current.play().catch(() => console.warn('Audio blocked'))
+        }
+
+        const id = Math.random().toString(36).substring(2, 9)
+        setToasts((prev) => [...prev, {
+          id,
+          message: `${plat_nom} : ${error}`,
+          type: 'danger',
+        }])
+        setTimeout(() => removeToast(id), 10000)
+      }
+      return
+    }
 
     // payment_confirmed: A payment was made (staff or client)
     if (lastEvent.type === 'payment_confirmed') {
@@ -186,11 +217,19 @@ export const StaffNotificationManager = () => {
           className={`pointer-events-auto flex items-center justify-between gap-3 p-4 rounded-2xl border shadow-2xl animate-enter backdrop-blur-xl ${
             toast.type === 'success' 
               ? 'bg-green-500/10 border-green-500/20 text-green-400' 
+              : toast.type === 'danger'
+              ? 'bg-red-500/10 border-red-500/20 text-red-400'
               : 'bg-teal-500/10 border-teal-500/20 text-teal-400'
           }`}
         >
           <div className="flex items-center gap-3">
-            {toast.type === 'success' ? <CheckCircle2 size={18} /> : <Bell size={18} className="animate-bounce" />}
+            {toast.type === 'success' ? (
+              <CheckCircle2 size={18} />
+            ) : toast.type === 'danger' ? (
+              <X size={18} className="animate-pulse" />
+            ) : (
+              <Bell size={18} className="animate-bounce" />
+            )}
             <p className="text-xs font-black uppercase tracking-widest">{toast.message}</p>
           </div>
           <button 

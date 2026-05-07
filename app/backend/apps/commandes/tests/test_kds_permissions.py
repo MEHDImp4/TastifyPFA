@@ -33,6 +33,11 @@ class KDSPermissionsTestCase(APITestCase):
             table=self.table2,
             statut=Commande.Statut.EN_CUISINE
         )
+        self.cmd_paid = Commande.objects.create(
+            serveur=self.serveur,
+            table=self.table1,
+            statut=Commande.Statut.PAYEE,
+        )
         
         self.url = reverse('commande-list')
 
@@ -69,6 +74,26 @@ class KDSPermissionsTestCase(APITestCase):
         ids = [item['id'] for item in response.data]
         self.assertIn(self.cmd_kitchen.id, ids)   # EN_CUISINE
         self.assertIn(cmd_prete.id, ids)          # PRETE
+
+    def test_gerant_kitchen_scope_excludes_paid_orders(self):
+        """GERANT KDS fetches must use kitchen scope so paid tickets stay hidden."""
+        table_p = Table.objects.create(numero=100, capacite=2)
+        cmd_prete = Commande.objects.create(
+            serveur=self.serveur,
+            table=table_p,
+            statut=Commande.Statut.PRETE,
+        )
+
+        self.client.force_authenticate(user=self.gerant)
+        response = self.client.get(self.url, {'scope': 'kitchen'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [item['id'] for item in response.data]
+        statuses = {item['statut'] for item in response.data}
+        self.assertIn(self.cmd_kitchen.id, ids)
+        self.assertIn(cmd_prete.id, ids)
+        self.assertNotIn(self.cmd_paid.id, ids)
+        self.assertEqual(statuses, {Commande.Statut.EN_CUISINE, Commande.Statut.PRETE})
 
     def test_serveur_queryset_filtering_regression(self):
         # Serveur should only see their own orders

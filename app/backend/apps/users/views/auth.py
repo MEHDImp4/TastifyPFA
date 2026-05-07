@@ -37,7 +37,6 @@ def set_refresh_cookie(response, request, refresh_token):
 def clear_refresh_cookie(response, request):
     response.delete_cookie(get_auth_cookie_name(request))
 
-
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     

@@ -108,7 +108,9 @@ export const useKdsStore = create<KdsState>((set, get) => ({
   fetchOrders: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await axios.get<Commande[]>('/commandes/')
+      const response = await axios.get<Commande[]>('/commandes/', {
+        params: { scope: 'kitchen' },
+      })
       const orders = Array.isArray(response.data)
         ? sortOrdersByPriorityDesc(
             response.data

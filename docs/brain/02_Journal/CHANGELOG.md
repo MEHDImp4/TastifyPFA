@@ -1,3 +1,16 @@
+## [2026-05-07] - 15:25
+### Fixed
+- Fixed the `GERANT` KDS paid-order regression by scoping KDS refetches to kitchen-visible orders only, so paid orders no longer reappear after websocket updates.
+
+### Changed
+- Added backend support for `scope=kitchen` on `CommandeViewSet` and aligned the backoffice KDS store to request that scope on every fetch.
+- Added backend/frontend regression coverage for the manager KDS payment-removal path.
+
+### Validation
+- `npm run test -- src/pages/Kds/store/useKdsStore.test.ts --run` passed in `app/frontend/backoffice`.
+- `npm run build` passed in `app/frontend/backoffice`.
+- `docker compose exec backend python manage.py test apps.commandes.tests.test_kds_permissions` is blocked by MySQL permissions: user `tastify` cannot create database `test_tastify`.
+
 ## [2026-05-07] - 03:39
 ### Fixed
 - Corrected the payment realtime payload in `apps.paiements.signals` to read the actual `Paiement.methode` field, eliminating the `'Paiement' object has no attribute 'mode'` crash on public payment flows.

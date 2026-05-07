@@ -8,8 +8,4 @@ class Utilisateur(AbstractUser):
         CUISINIER = 'CUISINIER', 'Cuisinier'
         CLIENT = 'CLIENT', 'Client'
 
-    role = models.CharField(
-        max_length=20,
-        choices=Role.choices,
-        default=Role.CLIENT,
-    )
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.CLIENT)

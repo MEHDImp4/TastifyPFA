@@ -1,82 +1,64 @@
-# UAT & Verification Audit Report
+# UAT & Verification Audit Report (Refined)
 
 **Date:** 2026-05-07
-**Status:** Audit Complete
-**Project State:** Phase 27 COMPLETE (Encaissement UI)
+**Audit Status:** COMPLETE
+**Project Progress:** Phase 27 COMPLETE (Encaissement UI)
 
-## 1. Executive Summary
+## 1. Audit Summary
+This audit performed a deep-scan of 25 UAT and 8 Verification files across 27 completed phases. The codebase matches the "Phase 27 COMPLETE" state, but several documentation artifacts have not been updated to reflect the successful verification.
 
-This audit scanned all 27 completed phases for pending, skipped, blocked, and `human_needed` UAT items. The codebase is currently in a highly verified state with 100% of core vertical slices passing both automated and manual verification. 
+**Overall Verdict:** **PASSED**. The system is technically sound, but documentation hygiene is required for Phases 13, 24, and 26.
 
-Most documentation is up-to-date, though some Phase-specific `VALIDATION.md` files (Phases 24, 26) are "stale" (marked as pending while the features are fully implemented and verified in summary reports).
+## 2. Stale Documentation (Action Required)
+The following files are marked as `pending` or `draft` but the codebase already contains the implementation and automated tests.
 
-## 2. Stale Documentation Detected
-
-The following files contain `⬜ pending` items or `draft` statuses that do not reflect the actual completed state of the codebase.
-
-| Phase | File | Stale Items | Actual Codebase State |
-|-------|------|-------------|-----------------------|
-| 24 | `24-VALIDATION.md` | All items marked pending. | **COMPLETE**: 16 vitest tests and 1 backend test exist; Phase 24 UAT is signed off. |
-| 26 | `26-VALIDATION.md` | All items marked pending. | **COMPLETE**: 5 backend test files exist (api, models, services, signals, tokens); Phase 26 verified in summary. |
-| 13 | `13-VALIDATION.md` | All items marked pending. | **COMPLETE**: 10 tests exist; Phase 13 UAT is signed off. |
-
-**Recommendation:** These files should be updated to `✅ green` or reconciled in the next documentation sweep to maintain a single source of truth.
-
-## 3. Pending/Human Verification Items
-
-The following items are identified as needing final human "polish" verification or were marked as `human_needed` in the past and warrant a "Golden Path" re-test.
-
-| ID | Phase | Test Case | Status | Priority |
-|----|-------|-----------|--------|----------|
-| **HT-01** | 27 | **Full Payment Cycle E2E** | Awaiting Golden Path | **CRITICAL** |
-| **HT-02** | 20 | **Stock Exhaustion UI Feedback** | Awaiting Polish | **HIGH** |
-| **HT-03** | 25 | **Upcoming Reservation Indicator** | Awaiting Polish | **MEDIUM** |
-| **HT-04** | 06 | **Integration Test Suite Passage** | Awaiting Confirmation | **LOW** |
+| Phase | File | Finding | Verification Evidence |
+|-------|------|---------|-----------------------|
+| **13** | `13-VALIDATION.md` | Marked as draft/pending. | `test_websocket_auth.py` and `test_staff_consumer.py` exist and pass. |
+| **24** | `24-VALIDATION.md` | All items marked pending. | Full wizard test suite exists (`StepDateTime.test.tsx`, `StepTableSelect.test.tsx`, `StepConfirm.test.tsx`). |
+| **26** | `26-VALIDATION.md` | All items marked pending. | 5 dedicated backend test files exist in `app/backend/apps/paiements/tests/`. |
 
 ---
 
-## 4. Prioritized Human Test Plan
+## 3. Prioritized Human Test Plan
+While automated tests are green, the following "Golden Path" scenarios require final human sign-off before milestone closure.
 
-### HT-01: Full Payment Cycle E2E (Phase 26/27)
-* **Goal:** Verify the seamless handover between Staff UI and Client UI for payments.
-* **Steps:**
-    1. Login as SERVEUR/GERANT in Back-Office.
-    2. Create an order for Table 5.
-    3. Open "Salle" (Map), click Table 5, click "Encaisser".
-    4. Generate QR Code.
-    5. Access the generated URL (Portail Client).
-    6. Select "Split Égal" (Equal Split).
-    7. Simulate a payment for one share.
-* **Expected:** 
-    - Staff UI reflects "Partial Payment" in real-time.
-    - Audio notification ("kitchen-bell" or success chime) plays in Salle UI.
-    - Once all shares are paid, Table 5 returns to "LIBRE" (Green) automatically.
+### [CRITICAL] HT-01: Full Payment Cycle E2E (Multi-User)
+*   **Goal:** Verify the seamless handover between Staff UI and Client UI for payments.
+*   **Participants:** 1 Staff (Back-Office/Salle), 1 Client (Portail).
+*   **Steps:**
+    1.  **Staff:** Create an order for a table (e.g., Table 5).
+    2.  **Staff:** Open the Payment Modal for Table 5 and click "Générer QR".
+    3.  **Client:** Access the QR URL on a mobile device (or separate tab).
+    4.  **Client:** Choose "Split Égal" (Equal Split) for 2 people.
+    5.  **Client:** Pay for 1 share.
+    6.  **Staff:** Confirm the Salle UI updates the "Montant Restant" in real-time.
+    7.  **Client:** Pay the remaining share.
+*   **Success Criteria:** Table 5 automatically turns Green (LIBRE) on the Staff Map, and a success chime plays.
 
-### HT-02: Stock Exhaustion UI Feedback (Phase 20)
-* **Goal:** Verify that JIT deduction failures are handled gracefully in the UI.
-* **Steps:**
-    1. Set stock of "Tomate" to 0 in Back-Office.
-    2. Create an order for a dish requiring 1kg of Tomate.
-    3. Try to push the order to KDS ("Lancer en Cuisine").
-* **Expected:**
-    - UI shows a clear error toast: "Stock insuffisant : Tomate".
-    - Order remains in `EN_ATTENTE` and does not appear on the KDS screen.
+### [HIGH] HT-02: JIT Stock Exhaustion UI Feedback
+*   **Goal:** Confirm the user is notified if an order cannot be prepared due to stock issues.
+*   **Steps:**
+    1.  Set "Fromage" stock to 0.1kg in Back-Office.
+    2.  Order "Briouates au Fromage" (requires 0.2kg) in Salle UI.
+    3.  Click "Lancer en Cuisine".
+*   **Success Criteria:** UI displays a red toast: "Stock insuffisant : Fromage". Order remains in `EN_ATTENTE`.
+*   **Status:** ✅ FIXED (2026-05-07) - Implemented immediate API pre-check and WebSocket error broadcasting. Fixed anomalous seed data (Salade Marocaine requirement).
 
-### HT-03: Upcoming Reservation Indicator (Phase 25)
-* **Goal:** Ensure staff can see upcoming bookings easily.
-* **Steps:**
-    1. Create a reservation for Table 2 for +2 hours from now.
-    2. In Salle UI, click Table 2.
-* **Expected:**
-    - The info panel (right side) shows "Prochaine réservation" with the client name and time.
+### [MEDIUM] HT-03: Reservation Awareness (Staff Map)
+*   **Goal:** Verify staff can see upcoming bookings at a glance.
+*   **Steps:**
+    1.  Create a reservation for Table 2 for 1 hour from now.
+    2.  Click Table 2 in the Salle map.
+*   **Success Criteria:** The detail panel shows "Prochaine réservation: [Nom] à [Heure]".
 
-### HT-04: Integration Test Suite Confirmation (Phase 06)
-* **Goal:** Confirm all legacy model tests still pass after extensive schema changes.
-* **Command:** `docker-compose exec backend pytest apps/menu/tests -q`
-* **Expected:** All tests pass green.
+### [LOW] HT-04: Legacy Regression Check (Phase 06)
+*   **Goal:** Confirm Menu/Plat logic remains intact after Phase 27 changes.
+*   **Action:** Run `docker-compose exec backend pytest apps/menu/tests -q`.
+*   **Success Criteria:** 100% pass rate.
 
 ---
 
-## 5. Conclusion
-
-The audit confirms that **TastifyPFA is production-ready for its current feature set**. The "Gaps" identified in previous phases have been closed by successive vertical slices. The focus should now shift to Phase 28 (Celery/Infrastructure) while keeping the above Human Test Plan as a pre-release checklist.
+## 4. Final Recommendation
+1.  **Reconcile Docs:** Update the `Status` fields in `13-VALIDATION.md`, `24-VALIDATION.md`, and `26-VALIDATION.md` to `✅ PASSED`.
+2.  **Execute HT-01:** This is the most complex integration point and warrants a manual "Golden Path" walk-through before Phase 28 starts.

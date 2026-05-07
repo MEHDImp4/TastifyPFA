@@ -17,8 +17,8 @@ export function IngredientList({ ingredients, onEdit, onAdjust, onRefresh, onTog
         <thead className="bg-surface-elevated text-foreground-muted text-sm uppercase tracking-wider">
           <tr>
             <th className="px-6 py-4 font-semibold">Nom</th>
-            <th className="px-6 py-4 font-semibold">Unité</th>
             <th className="px-6 py-4 font-semibold">Stock Actuel</th>
+            <th className="px-6 py-4 font-semibold">Unité</th>
             <th className="px-6 py-4 font-semibold">Seuil Alerte</th>
             <th className="px-6 py-4 font-semibold">Actif</th>
             <th className="px-6 py-4 font-semibold">Actions</th>

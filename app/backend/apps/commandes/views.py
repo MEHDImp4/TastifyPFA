@@ -83,6 +83,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         statut = self.request.query_params.get('statut')
+        scope = self.request.query_params.get('scope')
         qs = (
             Commande.objects.active()
             .select_related('serveur', 'table')
@@ -99,6 +100,9 @@ class CommandeViewSet(viewsets.ModelViewSet):
             qs = qs.filter(table_id=table_id).exclude(
                 statut__in=[Commande.Statut.PAYEE, Commande.Statut.ANNULEE]
             )
+        elif scope == 'kitchen':
+            kitchen_statuses = [Commande.Statut.EN_CUISINE, Commande.Statut.PRETE]
+            qs = qs.filter(statut__in=kitchen_statuses)
         elif user.role == 'CUISINIER':
             # Phase 16: KDS shows only fired tickets. Manual-fire workflow flips
             # EN_COURS -> EN_CUISINE via PATCH; only EN_CUISINE and PRETE are
@@ -148,6 +152,17 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,
             )
+        
+        # Phase 20/28: Immediate stock deduction when firing an order
+        new_statut = request.data.get('statut')
+        if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
+            try:
+                with transaction.atomic():
+                    for ligne in instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE):
+                        StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
+            except InsufficientStockError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
         return super().partial_update(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'])
@@ -174,10 +189,17 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
         serializer = CommandeLigneSerializer(data=request.data, many=True)
         if serializer.is_valid():
-            with transaction.atomic():
-                serializer.save(commande=commande)
-                if serializer.validated_data:
+            try:
+                with transaction.atomic():
+                    new_lignes = serializer.save(commande=commande)
+                    # Phase 20/28: If already fired, deduct stock for new items immediately
+                    if commande.statut == Commande.Statut.EN_CUISINE:
+                        for ligne in new_lignes:
+                            StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
+                    
                     KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
+            except InsufficientStockError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
             
             # Re-serialize commande to return updated state
             full_serializer = self.get_serializer(commande)
