@@ -33,7 +33,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 25: Reservations Admin UI** - Validation via Back-Office/Salle.
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
-- [ ] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules.
+- [ ] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules, and checklist API domain.
 - [ ] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution.
 - [ ] **Phase 30: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
 - [ ] **Phase 31: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
@@ -56,7 +56,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 Plans:
 - [x] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
-- [ ] 28-02-PLAN.md — Checklist Data Domain (Models & REST API).
+- [x] 28-02-PLAN.md — Checklist Data Domain (Models & REST API).
 - [ ] 28-03-PLAN.md — Periodic Task: Daily Checklist Generation.
 - [ ] 28-04-PLAN.md — Async Task: Stock Deduction Migration.
 
@@ -94,7 +94,7 @@ Phases execute in numeric order: 1 → 40
 | 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
-| 28. Celery Infrastructure & Check-list Model | 1/4 | In progress | — |
+| 28. Celery Infrastructure & Check-list Model | 2/4 | In progress | — |
 | 29. Check-list UI & Cron Job | 0/1 | à faire | — |
 | 30. AI Recommender System | 0/1 | à faire | — |
 | 31. AI Sentiment Analysis | 0/1 | à faire | — |

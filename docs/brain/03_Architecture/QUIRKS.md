@@ -39,6 +39,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 3. Pytest Database Creation (1044)
 - **Issue**: Pytest fails to create `test_tastify` database due to `Access denied for user 'tastify'@'%'`.
 - **Fix**: Run `GRANT ALL PRIVILEGES ON test_% TO 'tastify'@'%';` on the MySQL instance.
+- **Workaround**: Until the container grant is corrected, Docker validation can be run with `MYSQL_USER=root` and `MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD` injected into the one-off `manage.py test` command.
 
 ### 4. Static Files (WhiteNoise)
 - **Issue**: Django admin or media files return 404 in Docker because `DEBUG=False` or lack of a dedicated file server.

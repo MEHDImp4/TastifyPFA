@@ -1,3 +1,21 @@
+# [2026-05-07 19:03] - Phase 28 Plan 02 Checklist Data Domain
+### Added
+- Added `app/backend/apps/checklists/` with the new checklist backend slice: templates, ordered task items, daily executions, and per-item staff responses.
+- Added nested DRF serializers and viewsets for checklist templates, daily execution retrieval/creation, and response patching.
+- Added checklist admin registration and initial migration `app/backend/apps/checklists/migrations/0001_initial.py`.
+- Added backend regression coverage in `app/backend/apps/checklists/tests/test_api.py` for RBAC, execution generation, current-day filtering, completion updates, and execution uniqueness.
+
+### Changed
+- Registered `apps.checklists` in Django settings and exposed the checklist API through `tastify_backend/api_router.py`.
+- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `docs/brain/03_Architecture/QUIRKS.md`, `.planning/ROADMAP.md`, `.planning/STATE.md`, and added `.planning/phases/28-celery-infrastructure/28-02-SUMMARY.md`.
+
+### Validation
+- `docker compose exec -T backend python manage.py makemigrations checklists` passed.
+- `docker compose exec -T backend python manage.py makemigrations checklists --check` passed.
+- `docker compose exec -T backend python manage.py migrate checklists` passed.
+- `docker compose exec -T backend python manage.py showmigrations checklists` passed.
+- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend python manage.py test apps.checklists --verbosity 2` passed.
+
 ## [2026-05-07] - 15:45
 ### Changed
 - Completed comprehensive UAT & Verification Audit for Milestone 1.
