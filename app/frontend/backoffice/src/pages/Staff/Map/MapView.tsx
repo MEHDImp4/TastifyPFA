@@ -323,7 +323,7 @@ export const MapView: React.FC = () => {
                       Ouvrir Commande
                       <ArrowRight className="w-4 h-4" />
                     </button>
-                    {selectedTable.statut_effectif === 'OCCUPEE' && (
+                    {selectedTable.has_payable_order && (
                       <button
                         onClick={() => setIsPaymentModalOpen(true)}
                         className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal/10 border border-teal/20 text-teal py-3.5 text-sm font-black uppercase tracking-widest hover:bg-teal hover:text-white transition-all active:scale-[0.98]"
@@ -393,7 +393,7 @@ export const MapView: React.FC = () => {
                           <ArrowRight className="w-4 h-4" />
                         </button>
                       </div>
-                      {selectedTable.statut_effectif === 'OCCUPEE' && (
+                      {selectedTable.has_payable_order && (
                         <button
                           onClick={() => setIsPaymentModalOpen(true)}
                           className="w-full py-3.5 rounded-xl bg-teal text-sm font-black text-white shadow-lg shadow-teal/20 hover:bg-teal-light transition-all flex items-center justify-center gap-2"

@@ -98,6 +98,7 @@ class TableSerializer(serializers.ModelSerializer):
     est_active = serializers.BooleanField(default=True)
     statut_effectif = serializers.SerializerMethodField(read_only=True)
     prochaine_reservation = serializers.SerializerMethodField(read_only=True)
+    has_payable_order = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Table
@@ -108,6 +109,7 @@ class TableSerializer(serializers.ModelSerializer):
             'statut',
             'statut_effectif',
             'prochaine_reservation',
+            'has_payable_order',
             'pos_x',
             'pos_y',
             'est_active',
@@ -121,3 +123,11 @@ class TableSerializer(serializers.ModelSerializer):
 
     def get_prochaine_reservation(self, obj):
         return _compute_prochaine_reservation(obj)
+
+    def get_has_payable_order(self, obj):
+        from apps.paiements.constants import PAYABLE_COMMANDE_STATUSES
+
+        return obj.commandes.filter(
+            est_active=True,
+            statut__in=PAYABLE_COMMANDE_STATUSES,
+        ).exists()

@@ -1,3 +1,15 @@
+## [2026-05-07] - 02:13
+### Fixed
+- Prevented the staff payment flow from exposing payment actions for tables without any payable order.
+- Updated `PaymentModal.tsx` to handle already-settled tables gracefully instead of surfacing a generic payment-session failure.
+- Updated the table payload and `MapView.tsx` so the map only shows `Régler l'addition` when the backend reports a payable order.
+
+### Validation
+- Live data check for table `1`: all linked orders are `PAYEE`, and `resolve_payable_session(table_id=1)` correctly returns `NoPayableOrderError`.
+- `npm run build` in `app/frontend/backoffice`: passed.
+- Backend pytest run is currently blocked by MySQL test database permissions: `Access denied for user 'tastify'@'%' to database 'test_tastify'`.
+- Commit: pending sync
+
 ## [2026-05-07] - 00:50
 ### Added
 - **Phase 27 Plan 02 (Client Payment UI)**: Implemented the client-facing payment landing page and split selection.

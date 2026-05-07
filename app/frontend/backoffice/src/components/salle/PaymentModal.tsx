@@ -27,6 +27,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [processing, setProcessing] = useState(false);
   const [qrToken, setQrToken] = useState<string | null>(null);
   const [showQR, setShowQR] = useState(false);
+  const [hasNoPayableOrder, setHasNoPayableOrder] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -53,18 +54,26 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setQrToken(null);
     setShowQR(false);
     setError(null);
+    setHasNoPayableOrder(false);
   };
 
   const fetchPaymentSession = async () => {
     setLoading(true);
     setError(null);
+    setHasNoPayableOrder(false);
     try {
       await axiosInstance.get(`/tables/${tableId}/`);
       
-      const sessionResponse = await axiosInstance.get(`/paiements/session/staff_resolve/?table_id=${tableId}`);
+      const sessionResponse = await axiosInstance.get(`/paiements/session/staff-resolve/?table_id=${tableId}`);
       setSession(sessionResponse.data);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Impossible de charger la session de paiement.");
+      const detail = err.response?.data?.detail;
+      if (typeof detail === 'string' && detail.includes('No payable order found')) {
+        setHasNoPayableOrder(true);
+        onPaymentSuccess?.();
+        return;
+      }
+      setError(detail || "Impossible de charger la session de paiement.");
     } finally {
       setLoading(false);
     }
@@ -110,6 +119,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           <div className="flex flex-col items-center py-12 gap-4">
             <Loader2 className="w-8 h-8 text-teal animate-spin" />
             <p className="text-xs font-bold uppercase tracking-widest text-foreground-muted">Calcul de l'addition...</p>
+          </div>
+        ) : hasNoPayableOrder ? (
+          <div className="bg-surface-elevated border border-white/5 rounded-2xl p-6 text-center space-y-3">
+            <CheckCircle2 className="w-8 h-8 text-teal mx-auto" />
+            <p className="text-sm font-bold text-white leading-relaxed">
+              Cette table n&apos;a plus de commande a encaisser.
+            </p>
+            <button
+              onClick={onClose}
+              className="text-[10px] font-black uppercase tracking-widest text-white bg-teal px-4 py-2 rounded-lg"
+            >
+              Fermer
+            </button>
           </div>
         ) : error ? (
           <div className="bg-error/5 border border-error/10 rounded-2xl p-6 text-center space-y-3">

@@ -65,7 +65,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 02:12:54<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 02:13:56<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1084,6 +1084,41 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Prevented the staff payment flow from exposing payment actions for tables without any payable order.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `PaymentModal.tsx` to handle already-settled tables gracefully instead of surfacing a generic payment-session failure.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated the table payload and `MapView.tsx` so the map only shows `Régler l'addition` when the backend reports a payable order.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Live data check for table `1`: all linked orders are `PAYEE`, and `resolve_payable_session(table_id=1)` correctly returns `NoPayableOrderError`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice`: passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Backend pytest run is currently blocked by MySQL test database permissions: `Access denied for user 'tastify'@'%' to database 'test_tastify'`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Commit: pending sync</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 00:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 27 Plan 02 (Client Payment UI)**: Implemented the client-facing payment landing page and split selection.</p>
@@ -1122,41 +1157,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 00:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Shared Types**: Created `app/frontend/shared/types/paiements.ts` with `PaiementStatus`, `PaiementMethod`, `PaymentSession`, and `ManualPaymentRequest`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 00:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Directory Structure**: Created `app/frontend/backoffice/src/components/salle/` for staff-facing components.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 27 Plan 01 (Staff Payment UI)**: Implemented the payment management interface for staff.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Shared UI**: Created a high-end, animated `Modal` component in `@shared/ui`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Payment Modal**: Developed `PaymentModal.tsx` with real-time order balancing, manual payment (Espèces/Carte) triggers, and QR code generation for self-service.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Map Integration**: Integrated the payment workflow into `MapView.tsx` (Table Info Panel & Mobile Bottom Sheet) for tables with active orders.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Backend Support**: Added `staff-resolve` endpoint to the `paiements` app to support staff-initiated payment lookups.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-06 23:59</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Progress Tracking**: Advanced project state to `PHASE_27_PLAN_01_COMPLETE` and updated roadmap progress.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

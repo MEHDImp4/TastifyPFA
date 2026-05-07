@@ -6,6 +6,7 @@ export interface Table {
   capacite: number;
   statut: TableStatus;
   statut_effectif?: TableStatus;
+  has_payable_order?: boolean;
   prochaine_reservation?: {
     id: number;
     heure_debut: string;
