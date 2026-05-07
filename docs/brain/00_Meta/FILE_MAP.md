@@ -28,7 +28,7 @@ tastify-pfa/
 │   │   │   │   └── urls.py
 │   │   │   ├── tables/            # Table model, API, and seed data
 │   │   │   ├── reservations/      # Reservation domain, migration, buffered availability services, and tests
-│   │   │   ├── checklists/        # Checklist templates, executions, responses, permissions, and API tests
+│   │   │   ├── checklists/        # Checklist templates, daily generation task, executions, responses, and API/task tests
 │   │   │   ├── commandes/         # Orders, order lines, total signals, and KDS orchestration
 │   │   │       ├── models.py      # Commande and CommandeLigne + Phase 15 scheduling fields
 │   │   │       ├── signals.py     # montant_total recalculation + commit-safe orchestrator/broadcast triggers
@@ -123,7 +123,8 @@ tastify-pfa/
 │       ├── 16-order-push-to-kds/
 │       ├── 23-reservations-model-api/
 │       ├── 24-reservations-client-ui/
-│       └── 26-qr-payment-split-bill/
+│       ├── 26-qr-payment-split-bill/
+│       └── 28-celery-infrastructure/
 ├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md
@@ -146,4 +147,4 @@ Each Vite service proxies browser requests for `/api` and `/media` to `http://ba
 Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, scope their persisted auth state through `app/frontend/shared/auth/portalContext.ts`, and surface render failures through `app/frontend/shared/ui/AppErrorBoundary.tsx`. Public QR payment pages bypass that bootstrap and use `app/frontend/shared/auth/publicClient.ts` so `/pay/:token` can resolve payment sessions without any JWT refresh. The backend mirrors that split with portal-specific refresh cookies in `app/backend/apps/users/views/auth.py`. Ports `3001` and `3002` are retired.
 The backend container starts through `app/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
 `app/backend/apps/paiements/services.py` owns the payment-side invariant for `Table -> exactly one payable Commande`, while `app/backend/apps/commandes/signals.py` remains the only place that frees the table when the order reaches `PAYEE` or `ANNULEE`.
-`app/backend/apps/checklists/` now owns the operational checklist template/execution domain, including nested task templates, per-day execution uniqueness, and response completion tracking for staff roles.
+`app/backend/apps/checklists/` now owns the operational checklist template/execution domain, including nested task templates, the daily Celery generation task, per-day execution uniqueness, and response completion tracking for staff roles.

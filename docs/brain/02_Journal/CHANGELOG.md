@@ -1,3 +1,20 @@
+# [2026-05-07 19:16] - Phase 28 Plan 03 Daily Checklist Generation
+### Added
+- Added `app/backend/apps/checklists/tasks.py` with the `generate_daily_checklists` Celery task for creating daily checklist executions and response rows from active templates.
+- Added `app/backend/apps/checklists/tests/test_tasks.py` covering task generation, same-day idempotency, no-staff fallback, and Beat registration behavior.
+- Added `.planning/phases/28-celery-infrastructure/28-03-SUMMARY.md`.
+
+### Changed
+- Added `app/backend/apps/checklists/signals.py` and `app/backend/apps/checklists/apps.py` startup wiring for periodic-task registration.
+- Added `app/backend/apps/checklists/migrations/0002_register_daily_checklist_periodic_task.py` so the Beat entry is created deterministically in the live database at `04:00` `Africa/Casablanca`.
+- Updated `README.md`, `docs/brain/00_Meta/FILE_MAP.md`, `docs/brain/03_Architecture/QUIRKS.md`, `.planning/ROADMAP.md`, and `.planning/STATE.md`.
+
+### Validation
+- `docker compose exec -T backend python manage.py makemigrations checklists --check` passed.
+- `docker compose exec -T backend python manage.py migrate checklists` passed.
+- `docker compose exec -T backend python manage.py shell -c "from django_celery_beat.models import PeriodicTask; pt = PeriodicTask.objects.get(task='apps.checklists.tasks.generate_daily_checklists'); print(pt.name); print(pt.crontab.hour, pt.crontab.minute, pt.crontab.timezone)"` passed.
+- `docker compose exec -T -e MYSQL_USER=root -e MYSQL_PASSWORD=Tr5Hc9Vx2Bn8Lp4Wz7Mq1Ry3 backend python manage.py test apps.checklists --verbosity 2` passed.
+
 # [2026-05-07 19:03] - Phase 28 Plan 02 Checklist Data Domain
 ### Added
 - Added `app/backend/apps/checklists/` with the new checklist backend slice: templates, ordered task items, daily executions, and per-item staff responses.

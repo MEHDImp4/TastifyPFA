@@ -58,3 +58,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 2. Celery collectstatic startup trap
 - **Issue**: Reusing the backend entrypoint for `celery-worker` and `celery-beat` can make both containers fail before boot if `collectstatic` touches bind-mounted Django admin assets.
 - **Fix**: Gate `collectstatic` behind `COLLECTSTATIC_ON_STARTUP=1` and set that variable only on the web `backend` service.
+
+### 3. Beat schedule registration on no-op migrate
+- **Issue**: Relying only on a `post_migrate` hook to create `django-celery-beat` rows can miss the live database when `migrate` has nothing to apply.
+- **Fix**: Seed required `PeriodicTask` rows with a dedicated data migration, then keep signal-based registration only as a secondary safety net.
