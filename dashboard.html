@@ -114,7 +114,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 02:55:46<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Développement IA Autonome | Mis à jour : <!-- UPDATED_AT_START -->2026-05-07 03:20:47<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -544,11 +544,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Commandes Totales</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->7<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->9<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables Actives</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->2<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->4<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes Totales (Payées)</p>
@@ -1134,6 +1134,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Detached the public client payment route `/pay/:token` from `AuthBootstrap` so QR payment pages no longer trigger staff/client session refresh on open.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `app/frontend/shared/auth/publicClient.ts` and switched the payment landing page plus split-preview calls to a non-authenticated API client that still sends the client portal header.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T portail npm run build` passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-07 03:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Direct token resolution through `http://localhost:3000/api/paiements/session/resolve/?token=...` returned the live payment session for table `7` / commande `8` without authentication.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 02:55</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> URL-encoded payment tokens in generated QR links so browsers and QR scanners no longer have to interpret raw `:` characters inside the `/pay/...` route.</p>
                             </li>
@@ -1186,26 +1206,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 02:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Commit:</strong> `9565fad` `Guard against stale QR payment links`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Prevented the staff payment flow from exposing payment actions for tables without any payable order.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated `PaymentModal.tsx` to handle already-settled tables gracefully instead of surfacing a generic payment-session failure.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated the table payload and `MapView.tsx` so the map only shows `Régler l'addition` when the backend reports a payable order.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 02:13</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Live data check for table `1`: all linked orders are `PAYEE`, and `resolve_payable_session(table_id=1)` correctly returns `NoPayableOrderError`.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
