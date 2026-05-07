@@ -78,28 +78,33 @@ const ProtectedClientShell = () => {
   )
 }
 
-function App() {
+const AuthenticatedApp = () => (
+  <AuthBootstrap>
+    <Routes>
+      <Route path="/login" element={<ClientLoginRoute />} />
+      <Route element={<ProtectedClientShell />}>
+        <Route index element={<Navigate to="/reservations/new" replace />} />
+        <Route path="/reservations/*" element={<ReservationWizardShell />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </AuthBootstrap>
+)
 
+function App() {
   return (
     <AppErrorBoundary appLabel="Le portail client">
-      <AuthBootstrap>
-        <BrowserRouter
-          future={{
-            v7_relativeSplatPath: true,
-            v7_startTransition: true,
-          }}
-        >
-          <Routes>
-            <Route path="/login" element={<ClientLoginRoute />} />
-            <Route path="/pay/:token" element={<PaymentLandingPage />} />
-            <Route element={<ProtectedClientShell />}>
-              <Route index element={<Navigate to="/reservations/new" replace />} />
-              <Route path="/reservations/*" element={<ReservationWizardShell />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthBootstrap>
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath: true,
+          v7_startTransition: true,
+        }}
+      >
+        <Routes>
+          <Route path="/pay/:token" element={<PaymentLandingPage />} />
+          <Route path="*" element={<AuthenticatedApp />} />
+        </Routes>
+      </BrowserRouter>
     </AppErrorBoundary>
   )
 }

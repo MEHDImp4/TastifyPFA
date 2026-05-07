@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PaymentSession } from '@shared/types/paiements';
-import axiosInstance from '@shared/auth/axiosInstance';
+import publicClient from '@shared/auth/publicClient';
 
 export type SplitMode = 'FULL' | 'EQUAL' | 'ITEM';
 
@@ -33,7 +33,7 @@ export const SplitSelector: React.FC<SplitSelectorProps> = ({ session, token, on
 
   const updateEqualSplit = async (count: number) => {
     try {
-      const response = await axiosInstance.post('/paiements/session/equal-split/', {
+      const response = await publicClient.post('/paiements/session/equal-split/', {
         token,
         split_count: count
       });
@@ -61,7 +61,7 @@ export const SplitSelector: React.FC<SplitSelectorProps> = ({ session, token, on
     });
 
     try {
-      const response = await axiosInstance.post('/paiements/session/item-split/', {
+      const response = await publicClient.post('/paiements/session/item-split/', {
         token,
         contributions
       });

@@ -53,6 +53,7 @@ Shared auth refreshes now also resynchronize `username` and `role` from the back
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
 Both frontend entrypoints now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
+Public QR payment pages are intentionally excluded from that bootstrap and call payment endpoints through `app/frontend/shared/auth/publicClient.ts`, which keeps the client portal header without requiring a logged-in session.
 The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separate refresh cookies for the staff and client portals, allowing simultaneous logins on both SPAs without cross-logout.
 
 ## Planning

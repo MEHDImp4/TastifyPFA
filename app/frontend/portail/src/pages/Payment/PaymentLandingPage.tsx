@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axiosInstance from '@shared/auth/axiosInstance'
+import publicClient from '@shared/auth/publicClient'
 import { PaymentSession } from '@shared/types/paiements'
 import { SplitSelector } from '../../components/payment/SplitSelector'
 
@@ -36,7 +36,7 @@ export const PaymentLandingPage = () => {
   useEffect(() => {
     const resolveSession = async () => {
       try {
-        const response = await axiosInstance.get('/paiements/session/resolve/', { 
+        const response = await publicClient.get('/paiements/session/resolve/', {
           params: { token: decodedToken } 
         })
         setSession(response.data)
@@ -67,7 +67,7 @@ export const PaymentLandingPage = () => {
         contributions: selection.contributions
       };
 
-      await axiosInstance.post('/paiements/session/pay/', payload);
+      await publicClient.post('/paiements/session/pay/', payload);
       setPaymentSuccess(true);
     } catch (err: any) {
       setError(err.response?.data?.detail || "Erreur lors du traitement du paiement.")

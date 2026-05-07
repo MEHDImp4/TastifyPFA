@@ -1,3 +1,12 @@
+## [2026-05-07] - 03:20
+### Fixed
+- Detached the public client payment route `/pay/:token` from `AuthBootstrap` so QR payment pages no longer trigger staff/client session refresh on open.
+- Added `app/frontend/shared/auth/publicClient.ts` and switched the payment landing page plus split-preview calls to a non-authenticated API client that still sends the client portal header.
+
+### Validation
+- `docker compose exec -T portail npm run build` passed.
+- Direct token resolution through `http://localhost:3000/api/paiements/session/resolve/?token=...` returned the live payment session for table `7` / commande `8` without authentication.
+
 ## [2026-05-07] - 02:55
 ### Fixed
 - URL-encoded payment tokens in generated QR links so browsers and QR scanners no longer have to interpret raw `:` characters inside the `/pay/...` route.
