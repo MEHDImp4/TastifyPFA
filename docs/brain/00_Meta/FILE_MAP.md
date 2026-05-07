@@ -83,6 +83,7 @@ tastify-pfa/
 │       │       │   └── index.test.tsx
 │       │       ├── Hr/            # HR management with paginated employee table
 │       │       │   └── HrPage.test.tsx
+│       │       ├── Checklists/    # Daily checklist execution console, manager drawer workflows, and optimistic completion tests
 │       │       ├── Tables/        # Centralized Table map management (Added Phase 9)
 │       │       └── Kds/           # Kitchen Display System (Phase 14)
 │       │           ├── components/ # TicketCard, KdsTimer
@@ -125,7 +126,8 @@ tastify-pfa/
 │       ├── 23-reservations-model-api/
 │       ├── 24-reservations-client-ui/
 │       ├── 26-qr-payment-split-bill/
-│       └── 28-celery-infrastructure/
+│       ├── 28-celery-infrastructure/
+│       └── 29-check-list-ui-cron-job/
 ├── docker-compose.yml             # Single root Compose configuration (consolidated)
 ├── .env / .env.example            # Single root env
 ├── README.md
@@ -149,4 +151,5 @@ Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`
 The backend container starts through `app/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
 `app/backend/apps/paiements/services.py` owns the payment-side invariant for `Table -> exactly one payable Commande`, while `app/backend/apps/commandes/signals.py` remains the only place that frees the table when the order reaches `PAYEE` or `ANNULEE`.
 `app/backend/apps/checklists/` now owns the operational checklist template/execution domain, including nested task templates, the daily Celery generation task, per-day execution uniqueness, and response completion tracking for staff roles.
+`app/frontend/backoffice/src/pages/Checklists/` now owns the staff-facing checklist execution UI, including the dedicated `/checklists` route, optimistic response toggles, and GERANT-only template/manual-execution drawer workflows.
 `app/backend/apps/stock/tasks.py` now owns asynchronous ingredient deduction, while `app/backend/apps/stock/services.py` keeps synchronous stock checks and the queueing boundary used by order transitions.

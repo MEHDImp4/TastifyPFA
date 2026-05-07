@@ -41,6 +41,7 @@ Shared auth persistence is now portal-scoped: `app/frontend/shared/auth/portalCo
 The backend container runs pending Django migrations before starting Daphne, while Celery worker and Beat reuse the same migration path without re-running `collectstatic`.
 Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for task results, leaving Redis DB `0` available for Channels/WebSocket traffic.
 The backend now includes a checklist domain so management can define opening/closing procedures, staff can execute daily checklist instances through the API, and Celery Beat can auto-generate each day's executions at `04:00` (`Africa/Casablanca`).
+The backoffice now exposes a dedicated `/checklists` operations page where staff complete daily routines inline and GERANT users manage templates plus manual executions from the same module.
 Stock deduction now runs through Celery as a background task on order launch transitions, so the order API path no longer blocks on ingredient writes.
 
 ## Layout

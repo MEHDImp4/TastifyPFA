@@ -1,3 +1,18 @@
+# [2026-05-07 20:12] - Phase 29 Checklist UI
+### Added
+- Added `app/frontend/backoffice/src/pages/Checklists/` with a dedicated checklist execution console, typed checklist frontend models, and a checklist API client.
+- Added `app/frontend/backoffice/src/pages/Checklists/index.test.tsx` covering role-based rendering and optimistic task completion.
+- Added `.planning/phases/29-check-list-ui-cron-job/29-CONTEXT.md`, `29-UI-SPEC.md`, `29-01-PLAN.md`, and `29-01-SUMMARY.md`.
+
+### Changed
+- Updated `app/frontend/backoffice/src/App.tsx` to register the `/checklists` route for `GERANT`, `SERVEUR`, and `CUISINIER`.
+- Updated `app/frontend/backoffice/src/components/layout/Sidebar.tsx` to expose the new checklist navigation entry.
+- Updated `.planning/ROADMAP.md`, `.planning/STATE.md`, `README.md`, and `docs/brain/00_Meta/FILE_MAP.md` for Phase 29 completion and the new backoffice checklist surface.
+
+### Validation
+- `docker compose exec -T backoffice npm test -- --run src/pages/Checklists/index.test.tsx` passed.
+- `docker compose exec -T backoffice npm run build` passed.
+
 # [2026-05-07 20:08] - Phase 28 Plan 04 Async Stock Deduction
 ### Added
 - Added `app/backend/apps/stock/tasks.py` with the `deduct_stock_async` Celery task for background ingredient deduction.

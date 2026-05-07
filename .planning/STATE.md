@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: PHASE_28_COMPLETE
-stopped_at: Phase 28 COMPLETE. Ready for Phase 29 (Check-list UI & Cron Job).
-last_updated: "2026-05-07T20:08:00+01:00"
+status: PHASE_29_COMPLETE
+stopped_at: Phase 29 COMPLETE. Ready for Phase 30 (AI Recommender System).
+last_updated: "2026-05-07T20:12:37+01:00"
 progress:
   total_phases: 40
-  completed_phases: 28
-  total_plans: 84
-  percent: 70
+  completed_phases: 29
+  total_plans: 85
+  percent: 72
 notes: |
+  - Phase 29 COMPLETE (2026-05-07): Added the backoffice checklist execution console with optimistic inline completion, GERANT-only template management, and manual execution creation. Docker-validated with frontend tests and production build.
   - Phase 28 COMPLETE (2026-05-07): Celery infrastructure, checklist domain/API, daily checklist generation, and async stock deduction migration are all implemented and Docker-validated.
   - Phase 28 Plan 04 COMPLETE (2026-05-07): Migrated stock deduction to a Celery task queue boundary, updated order-flow call sites, and added task/integration regression coverage for async deduction behavior.
   - Phase 28 Plan 03 COMPLETE (2026-05-07): Added the daily checklist generation task, seeded the 04:00 Africa/Casablanca Beat schedule, and validated checklist automation plus idempotency in Docker.
@@ -37,3 +38,4 @@ architecture:
   - Port strategy: Staff (8080), Client (3000), Backend (8000), DB (3306).
   - Routing: Frontends run as root on their own ports and proxy `/api` plus `/media` to `http://backend:8000`.
   - Cross-frontend role access is centralized in `frontend/_shared/auth/roleAccess.ts` and rejects accounts used from the wrong frontend instead of redirecting them.
+  - The backoffice now exposes a dedicated `/checklists` operational route for GERANT, SERVEUR, and CUISINIER, while keeping template management drawer actions restricted to GERANT.

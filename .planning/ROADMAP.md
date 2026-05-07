@@ -34,7 +34,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 26: QR Payment & Split Bill Logic** - Backend calculation for equal/individual splits.
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [x] **Phase 28: Celery Infrastructure & Check-list Model** - Async workers, beat schedules, checklist API domain, and async stock deduction migration. (completed 2026-05-07)
-- [ ] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution.
+- [x] **Phase 29: Check-list UI & Cron Job** - Back-Office daily check-list execution. (completed 2026-05-07)
 - [ ] **Phase 30: AI Recommender System** - scikit-learn model, API, and Portail Client integration.
 - [ ] **Phase 31: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
 - [ ] **Phase 32: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
@@ -95,7 +95,7 @@ Phases execute in numeric order: 1 → 40
 | 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
 | 28. Celery Infrastructure & Check-list Model | 4/4 | Completed | 2026-05-07 |
-| 29. Check-list UI & Cron Job | 0/1 | à faire | — |
+| 29. Check-list UI & Cron Job | 1/1 | Completed | 2026-05-07 |
 | 30. AI Recommender System | 0/1 | à faire | — |
 | 31. AI Sentiment Analysis | 0/1 | à faire | — |
 | 32. Back-Office Dashboard KPIs | 0/1 | à faire | — |
