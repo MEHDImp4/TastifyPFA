@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 17:31:36<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 18:10:24<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -76,9 +76,9 @@
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
                         Phase validée
                     </span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
                         <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
-                        fix/60-bugs (Propre)
+                        fix/60-bugs (Modifications non validées)
                     </span>
                             <!-- STATUS_BADGE_END -->
                 </div>
@@ -103,7 +103,7 @@
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Tâches Terminées</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->72<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->73<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Avancement</h3>
@@ -1032,6 +1032,46 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 30, Plan 01: Models and Celery Infrastructure**.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `avis` Django app with `Avis` model for capturing customer reviews and AI sentiment scores.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented `analyze_review_sentiment` Celery task with lazy loading for HuggingFace `nlptown/bert-base-multilingual-uncased-sentiment` model.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `torch==2.2.2+cpu` and `transformers==4.39.3` to `requirements.txt`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Registered `Avis` model in Django admin.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Refactored `StaffNotificationManager.tsx` with `generateId` and improved cleanup/null checks for audio elements.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Created and ran 5 unit tests in `app/backend/apps/avis/tests.py` using mocks for the NLP pipeline. All tests passed.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Applied migrations successfully in the Docker environment.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 15:51</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `docs/brain/00_Meta/PROJECT_OVERVIEW.md` and `.planning/STATE.md` to document the public-first Portail Client model, where anonymous visitors can browse the home/menu/reservation/loyalty surfaces but authenticated `CLIENT` accounts are still required to complete reservations and loyalty actions.</p>
@@ -1065,46 +1105,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 15:46</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added portail regression coverage in `app/frontend/portail/src/AppRoutes.test.tsx` and `app/frontend/portail/src/pages/Menu/MenuPage.test.tsx` for anonymous gating and public menu search.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test ---run src/AppRoutes.test.tsx src/pages/Menu/MenuPage.test.tsx src/pages/Reservations/StepDateTime.test.tsx src/pages/Reservations/StepTableSelect.test.tsx src/pages/Reservations/StepConfirm.test.tsx` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:46</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Repaired the shared bootstrap `401` recovery path in `app/frontend/shared/auth/AuthBootstrap.tsx` by importing the portal-scoped storage key helper and reusing the shared persisted-auth sanitizer instead of ad hoc `JSON.parse` state access.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Preserved multi-tab session recovery after a failed `/api/users/refresh/` bootstrap attempt so a newer token written by another tab now rehydrates cleanly instead of throwing `ReferenceError: getAuthStorageName is not defined`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test -authBootstrap.test.tsx` passed in `app/frontend/backoffice`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/backoffice`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap fix.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

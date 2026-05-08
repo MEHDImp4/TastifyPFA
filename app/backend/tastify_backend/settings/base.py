@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'apps.hr',
     'apps.reservations',
     'apps.paiements.apps.PaiementsConfig',
+    'apps.avis',
     'django_cleanup',
 ]
 

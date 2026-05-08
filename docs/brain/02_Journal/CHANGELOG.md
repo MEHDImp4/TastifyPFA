@@ -1,3 +1,18 @@
+## [2026-05-08] - 18:10
+### Added
+- **Phase 30, Plan 01: Models and Celery Infrastructure**.
+- Created `avis` Django app with `Avis` model for capturing customer reviews and AI sentiment scores.
+- Implemented `analyze_review_sentiment` Celery task with lazy loading for HuggingFace `nlptown/bert-base-multilingual-uncased-sentiment` model.
+- Added `torch==2.2.2+cpu` and `transformers==4.39.3` to `requirements.txt`.
+- Registered `Avis` model in Django admin.
+
+### Changed
+- Refactored `StaffNotificationManager.tsx` with `generateId` and improved cleanup/null checks for audio elements.
+
+### Validation
+- Created and ran 5 unit tests in `app/backend/apps/avis/tests.py` using mocks for the NLP pipeline. All tests passed.
+- Applied migrations successfully in the Docker environment.
+
 ## [2026-05-08] - 15:51
 ### Changed
 - Updated `docs/brain/00_Meta/PROJECT_OVERVIEW.md` and `.planning/STATE.md` to document the public-first Portail Client model, where anonymous visitors can browse the home/menu/reservation/loyalty surfaces but authenticated `CLIENT` accounts are still required to complete reservations and loyalty actions.

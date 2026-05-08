@@ -65,10 +65,13 @@ export const StaffNotificationManager = () => {
         window.removeEventListener('touchstart', unlock)
         kitchenAudioRef.current = null
         readyAudioRef.current = null
+        paymentAudioRef.current = null
         errorAudioRef.current = null
       }
     }
   }, [])
+
+  const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id))
@@ -93,7 +96,7 @@ export const StaffNotificationManager = () => {
           errorAudioRef.current.play().catch(() => console.warn('Audio blocked'))
         }
 
-        const id = Math.random().toString(36).substring(2, 9)
+        const id = generateId()
         setToasts((prev) => [...prev, {
           id,
           message: `${plat_nom} : ${error}`,
@@ -120,7 +123,7 @@ export const StaffNotificationManager = () => {
           paymentAudioRef.current.play().catch(() => console.warn('Audio blocked'))
         }
 
-        const id = Math.random().toString(36).substring(2, 9)
+        const id = generateId()
         setToasts((prev) => [...prev, {
           id,
           message: `Paiement reçu : ${montant} DH (${mode})`,
@@ -147,7 +150,7 @@ export const StaffNotificationManager = () => {
           readyAudioRef.current.play().catch(() => console.warn('Audio blocked'))
         }
 
-        const id = Math.random().toString(36).substring(2, 9)
+        const id = generateId()
         setToasts((prev) => [...prev, {
           id,
           message: `${plat_nom} prêt — Table ${table_numero}`,
@@ -196,7 +199,7 @@ export const StaffNotificationManager = () => {
       }
 
       // Visual Toast
-      const id = Math.random().toString(36).substring(2, 9)
+      const id = generateId()
       setToasts((prev) => [...prev, { id, message, type: status === 'PRETE' ? 'success' : 'info' }])
       
       // Auto remove
