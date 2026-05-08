@@ -127,6 +127,28 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`
         return axiosInstance(originalRequest)
       } catch (refreshError) {
+        // Multi-tab resilience: check if another tab refreshed successfully
+        const axiosError = refreshError as AxiosError
+        if (axiosError.response?.status === 401) {
+          const { getAuthStorageName } = await import('./portalContext')
+          const storageName = getAuthStorageName()
+          const raw = localStorage.getItem(storageName)
+          if (raw) {
+            try {
+              const { state } = JSON.parse(raw)
+              const currentToken = useAuthStore.getState().accessToken
+              if (state.accessToken && state.accessToken !== currentToken) {
+                useAuthStore.getState().setAccessToken(state.accessToken, state.user)
+                processQueue(null, state.accessToken)
+                originalRequest.headers.Authorization = `Bearer ${state.accessToken}`
+                return axiosInstance(originalRequest)
+              }
+            } catch {
+              // Fall through to clearAuth
+            }
+          }
+        }
+
         processQueue(refreshError, null)
         useAuthStore.getState().clearAuth()
         return Promise.reject(refreshError)

@@ -29,7 +29,7 @@ const BOOTSTRAP_REQUEST_TIMEOUT_MS = 5000
 const BOOTSTRAP_RENDER_DEADLINE_MS = 6000
 const BOOTSTRAP_HYDRATION_DEADLINE_MS = 2500
 const ACCESS_TOKEN_REFRESH_THRESHOLD_MS = 30_000
-const REFRESH_TOKEN_LIFETIME_MS = 24 * 60 * 60 * 1000
+const REFRESH_TOKEN_LIFETIME_MS = 24 * 60 * 60 * 1000 - 5 * 60 * 1000 // 24h - 5m clock skew buffer
 const TRANSIENT_BOOTSTRAP_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504])
 const TRANSIENT_BOOTSTRAP_CODES = new Set(['ECONNABORTED', 'ERR_NETWORK'])
 
@@ -137,6 +137,7 @@ export const refreshPersistedSession = async ({
   }
 
   try {
+    const portal = role ? getPortalFromRole(role) : undefined
     const { data } = await client.post<RefreshResponse>(
       '/api/users/refresh/',
       {},
@@ -145,7 +146,7 @@ export const refreshPersistedSession = async ({
         timeout: BOOTSTRAP_REQUEST_TIMEOUT_MS,
         headers: {
           'Content-Type': 'application/json',
-          ...getAuthPortalHeader(getPortalFromRole(role)),
+          ...getAuthPortalHeader(portal),
         },
       },
     )
@@ -160,6 +161,26 @@ export const refreshPersistedSession = async ({
   } catch (error) {
     if (isTransientBootstrapError(error)) {
       return 'deferred' as const
+    }
+
+    // Multi-tab resilience: if the refresh failed with 401, check if another tab 
+    // has already updated the access token in localStorage before clearing.
+    const axiosError = error as AxiosError
+    if (axiosError.response?.status === 401) {
+      const storageName = getAuthStorageName()
+      const raw = localStorage.getItem(storageName)
+      if (raw) {
+        try {
+          const { state } = JSON.parse(raw)
+          if (state.accessToken && state.accessToken !== accessToken) {
+            // Another tab refreshed successfully. Hydrate and skip clearing.
+            setAccessToken(state.accessToken, state.user)
+            return 'refreshed' as const
+          }
+        } catch {
+          // Fall through to clearAuth if storage is corrupted
+        }
+      }
     }
 
     clearAuth()
