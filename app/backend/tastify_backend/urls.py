@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/users/', include('apps.users.urls')),
     path('api/health/', health, name='health'),
     path('api/stock/', include('apps.stock.urls')),
+    path('api/analytics/', include('apps.analytics.urls')),
     path('api/', include('tastify_backend.api_router')),
 ]
 
