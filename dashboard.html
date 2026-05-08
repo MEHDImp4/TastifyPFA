@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 19:03:28<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 20:50:39<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,7 +433,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->2<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->3<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
@@ -441,7 +441,7 @@
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->63<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->97<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -1033,6 +1033,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored Hugging Face sentiment analysis after reproducing a live `404 Cannot POST /models/...` failure from Docker: `app/backend/apps/avis/tasks.py` now targets Hugging Face's current router endpoint instead of the stale `api-inference.huggingface.co/models/...` URL.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened the sentiment task token handling so `HUGGINGFACE_API_TOKEN` still works if entered with a leading `Bearer ` prefix in `.env`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restarted the `celery-worker` container so the long-lived worker process picked up the corrected inference URL immediately.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Reworked `app/backend/apps/avis/tests.py` to mock the API-backed sentiment flow instead of the removed local Transformers pipeline, and added regression checks for the router URL helper plus token normalization.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Live Docker verification from `backend` returned a valid multilingual sentiment payload for `Ce restaurant est excellent` through `https://router.huggingface.co/hf-inference/models/nlptown/bert-base-multilingual-uncased-sentiment`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend pytest apps/avis/tests.py` passed with `12 passed`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 20:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Code commit: `f538ef0` (`Fix Hugging Face sentiment API endpoint`).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 19:01</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved the back-office reviews `404` on `/api/avis/` by switching the Docker Compose `backend` service to Django's autoreloading `runserver`, so newly added routes are picked up without a manual container restart during development.</p>
                             </li>
@@ -1070,41 +1105,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 18:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Registered the `/avis` route in Back-Office and added it to the Sidebar with a new `Star` icon.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `date-fns` dependency to `backoffice` package.json.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Refactored `StaffNotificationManager.tsx` (previous plan work finalized).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed for both `backoffice` and `portail` frontends.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified review submission flow and sentiment score display in the UI.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Phase 30, Plan 01: Models and Celery Infrastructure**.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `avis` Django app with `Avis` model for capturing customer reviews and AI sentiment scores.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 18:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Implemented `analyze_review_sentiment` Celery task with lazy loading for HuggingFace `nlptown/bert-base-multilingual-uncased-sentiment` model.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

@@ -1,3 +1,17 @@
+## [2026-05-08] - 20:49
+### Fixed
+- Restored Hugging Face sentiment analysis after reproducing a live `404 Cannot POST /models/...` failure from Docker: `app/backend/apps/avis/tasks.py` now targets Hugging Face's current router endpoint instead of the stale `api-inference.huggingface.co/models/...` URL.
+- Hardened the sentiment task token handling so `HUGGINGFACE_API_TOKEN` still works if entered with a leading `Bearer ` prefix in `.env`.
+- Restarted the `celery-worker` container so the long-lived worker process picked up the corrected inference URL immediately.
+
+### Changed
+- Reworked `app/backend/apps/avis/tests.py` to mock the API-backed sentiment flow instead of the removed local Transformers pipeline, and added regression checks for the router URL helper plus token normalization.
+
+### Validation
+- Live Docker verification from `backend` returned a valid multilingual sentiment payload for `Ce restaurant est excellent` through `https://router.huggingface.co/hf-inference/models/nlptown/bert-base-multilingual-uncased-sentiment`.
+- `docker compose exec backend pytest apps/avis/tests.py` passed with `12 passed`.
+- Code commit: `f538ef0` (`Fix Hugging Face sentiment API endpoint`).
+
 ## [2026-05-08] - 19:01
 ### Fixed
 - Resolved the back-office reviews `404` on `/api/avis/` by switching the Docker Compose `backend` service to Django's autoreloading `runserver`, so newly added routes are picked up without a manual container restart during development.
