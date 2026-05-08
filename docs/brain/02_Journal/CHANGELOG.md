@@ -1,3 +1,18 @@
+## [2026-05-08] - 21:15
+### Added
+- **Phase 31 Planning: Back-Office Dashboard KPIs**.
+- Created planning suite: `31-CONTEXT.md`, `31-RESEARCH.md`, `31-01-PLAN.md` (Backend), `31-02-PLAN.md` (Frontend), and `31-UAT.md`.
+- Objective: Implement real-time analytics with Recharts for restaurant management.
+
+### Changed
+- **UAT Audit & Reconcile**: Scanned all 30 completed phases for pending tasks.
+- Reconciled Phase 07 and Phase 30 documentation to reflect the actual direct-port Docker architecture and API-based sentiment analysis.
+- Cleaned up `.planning/phases/` by removing redundant empty directory for Phase 30.
+- Updated `FILE_MAP.md` to include Phase 31 and the new `analytics` app.
+
+### Validation
+- `python scripts/update_dashboard.py` confirmed 76% progress across 30/39 phases.
+
 ## [2026-05-08] - 20:49
 ### Fixed
 - Restored Hugging Face sentiment analysis after reproducing a live `404 Cannot POST /models/...` failure from Docker: `app/backend/apps/avis/tasks.py` now targets Hugging Face's current router endpoint instead of the stale `api-inference.huggingface.co/models/...` URL.

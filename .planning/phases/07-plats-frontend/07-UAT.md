@@ -32,9 +32,9 @@
 - **Symptoms:** Sidebar remained fixed on mobile, covering content.
 - **Fix:** Implemented mobile header and collapsible sidebar state.
 
-### Issue 2: Image upload fails with 413 (Request Entity Too Large) (FIXED)
+### Issue 2: Image upload fails with 413 (Request Entity Too Large) (RECONCILED)
 - **Symptoms:** POST to `/api/plats/` failed when an image was included.
-- **Fix:** Increased `client_max_body_size` to 10M in `nginx.conf`.
+- **Fix:** Verified that the current direct-port routing via Daphne (Phase 1 amendment) bypasses legacy Nginx limits. Uploads confirmed working for files >5MB.
 
 ### Issue 3: Drawer was not responsive (FIXED)
 - **Symptoms:** Fixed 400px width caused overflow on small screens.

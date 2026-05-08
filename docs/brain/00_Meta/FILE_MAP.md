@@ -48,6 +48,10 @@ tastify-pfa/
 │   │   │       ├── serializers.py
 │   │   │       ├── views.py
 │   │   │       └── tests/
+│   │   │   ├── analytics/         # Dashboard KPIs, aggregation logic, and WebSocket updates (Phase 31)
+│   │   │       ├── views.py       # Consolidated dashboard aggregation
+│   │   │       ├── signals.py     # Real-time update triggers
+│   │   │       └── tests/
 │   │   ├── requirements.txt       # Backend runtime deps, including Celery Beat/Results
 │   │   ├── entrypoint.sh          # Applies pending migrations for all backend containers; collectstatic only for web backend
 │   │   └── Dockerfile
@@ -62,6 +66,7 @@ tastify-pfa/
 │       │   ├── components/map/    # Shared TableMap/TableItem SVG components (Shared Phase 9)
 │       │   ├── assets/            # Shared logo, icons
 │       │   └── types/             # Shared TypeScript interfaces
+│       │       ├── analytics.ts   # Dashboard KPI types (Phase 31)
 │       │       ├── paiements.ts   # Payment-related types (Phase 27)
 │       │       ├── reservations.ts
 │       │       └── tables.ts
@@ -75,6 +80,9 @@ tastify-pfa/
 │       │   ├── src/authRefreshSync.test.ts # Guards shared auth refresh role synchronization
 │       │   ├── src/axiosInstance.test.ts # Verifies transient proxy startup retry classification + portal header resolution
 │       │   └── src/pages/
+│       │       ├── Dashboard/     # Real-time KPI dashboard with Recharts (Phase 31)
+│       │       │   ├── index.tsx
+│       │       │   └── DashboardPage.test.tsx
 │       │       ├── Categories/    # Categories management (Phase 5)
 │       │       ├── Plats/         # Plats management (Phase 7)
 │       │       │   └── index.test.tsx # Includes pagination reset coverage by category
