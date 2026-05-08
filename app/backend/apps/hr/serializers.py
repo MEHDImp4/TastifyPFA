@@ -14,12 +14,12 @@ class EmployeSerializer(serializers.ModelSerializer):
     user_details = UserMinimalSerializer(source='user', read_only=True)
     
     # Fields for user creation/update
-    username = serializers.CharField(write_only=True, required=False)
-    password = serializers.CharField(write_only=True, required=False)
-    first_name = serializers.CharField(write_only=True, required=False)
-    last_name = serializers.CharField(write_only=True, required=False)
+    username = serializers.CharField(write_only=True, required=False, max_length=150)
+    password = serializers.CharField(write_only=True, required=False, min_length=8, max_length=128)
+    first_name = serializers.CharField(write_only=True, required=False, max_length=150)
+    last_name = serializers.CharField(write_only=True, required=False, max_length=150)
     email = serializers.EmailField(write_only=True, required=False)
-    role = serializers.ChoiceField(choices=Utilisateur.Role.choices, write_only=True, required=False)
+    role = serializers.ChoiceField(choices=Utilisateur.Role.choices, write_only=True, required=False, max_length=20)
 
     class Meta:
         model = Employe
@@ -54,7 +54,6 @@ class EmployeSerializer(serializers.ModelSerializer):
         return employe
 
     def update(self, instance, validated_data):
-        # Update user fields if provided
         user = instance.user
         user_fields = ['username', 'first_name', 'last_name', 'email', 'role']
         user_updated = False
@@ -69,6 +68,8 @@ class EmployeSerializer(serializers.ModelSerializer):
             user_updated = True
             
         if user_updated:
-            user.save()
+            with transaction.atomic():
+                user.save()
+            user_updated = False
             
         return super().update(instance, validated_data)

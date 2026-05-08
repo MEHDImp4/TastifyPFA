@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 from apps.users.models import Utilisateur
 
-STAFF_ROLES = {Utilisateur.Role.GERANT, Utilisateur.Role.SERVEUR}
+STAFF_ROLES = {Utilisateur.Role.GERANT, Utilisateur.Role.SERVEUR, Utilisateur.Role.CUISINIER}
 
 
 class IsStaffOrOwnReservation(permissions.BasePermission):

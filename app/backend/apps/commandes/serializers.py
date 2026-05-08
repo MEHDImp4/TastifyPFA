@@ -7,6 +7,8 @@ from apps.menu.models import Plat
 
 class CommandeLigneSerializer(serializers.ModelSerializer):
     plat_details = serializers.SerializerMethodField()
+    quantite = serializers.IntegerField(min_value=1)
+    notes = serializers.CharField(max_length=2000, allow_blank=True, required=False)
 
     class Meta:
         model = CommandeLigne

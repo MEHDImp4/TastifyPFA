@@ -32,6 +32,9 @@ class PlatSerializer(serializers.ModelSerializer):
         allow_null=True,
         required=False,
     )
+    categorie = serializers.PrimaryKeyRelatedField(queryset=Categorie.objects.all())
+    prix = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    temps_preparation = serializers.IntegerField(min_value=1)
 
     class Meta:
         model = Plat
