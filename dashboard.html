@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 15:47:51<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 15:53:11<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1033,6 +1033,21 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:51</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `docs/brain/00_Meta/PROJECT_OVERVIEW.md` and `.planning/STATE.md` to document the public-first Portail Client model, where anonymous visitors can browse the home/menu/reservation/loyalty surfaces but authenticated `CLIENT` accounts are still required to complete reservations and loyalty actions.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:51</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Reworked `.planning/phases/24-reservations-client-ui/24-UAT.md` and `24-VALIDATION.md` so reservation verification now includes the public landing page plus the authenticated booking wizard.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:51</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Reworked `.planning/phases/29-ai-recommender-system/29-UAT.md` and `29-VERIFICATION.md` so the menu recommendation feature is explicitly verified as a public browsing capability that coexists with gated client-only actions.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 15:46</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Shifted the client portail to a public-first access model in `app/frontend/portail/src/App.tsx`: visitors can now open `/`, `/menu`, `/reservations`, and `/fidelite` without authentication, while the live reservation wizard stays reserved for authenticated client accounts.</p>
                             </li>
@@ -1090,21 +1105,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Portal Header Defaulting**: Updated `AuthBootstrap.tsx` to default to the environment-specific portal when the user role is unknown, ensuring correct cookie selection on the backend.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CORS Hardening**: Added `X-Tastify-Portal` to `CORS_ALLOW_HEADERS` in backend settings.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Clock Skew Buffer**: Added a 5-minute buffer to the refresh token lifetime check to avoid premature 401s due to server/client time drift.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

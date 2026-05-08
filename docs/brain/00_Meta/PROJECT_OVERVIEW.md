@@ -19,7 +19,7 @@ The system enforces strict Role-Based Access Control (RBAC):
 1. **Back-Office (GERANT)**: CRUD operations, KPIs, Stock alerts, HR management, AI config.
 2. **Kitchen Display System (CUISINIER)**: Real-time WebSocket KDS, order status updates, orchestration logic for synchronized serving (`heure_lancement`).
 3. **Salle (SERVEUR)**: Interactive interactive SVG/Canvas table map, order taking, split bill, QR code payments.
-4. **Portail Client (CLIENT)**: Online reservations, AI-driven dish recommendations, loyalty program (Bronze/Silver/Gold).
+4. **Portail Client (CLIENT)**: Public menu browsing and dish search, AI-driven dish recommendations, and gated client actions such as reservation creation and loyalty access that require a client account.
 
 ## 4. Key Constraints
 - **Strict Decoupling**: Django NEVER renders HTML. All communication is JSON/REST or WebSocket.

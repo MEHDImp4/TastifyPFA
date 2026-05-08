@@ -1,3 +1,9 @@
+## [2026-05-08] - 15:51
+### Changed
+- Updated `docs/brain/00_Meta/PROJECT_OVERVIEW.md` and `.planning/STATE.md` to document the public-first Portail Client model, where anonymous visitors can browse the home/menu/reservation/loyalty surfaces but authenticated `CLIENT` accounts are still required to complete reservations and loyalty actions.
+- Reworked `.planning/phases/24-reservations-client-ui/24-UAT.md` and `24-VALIDATION.md` so reservation verification now includes the public landing page plus the authenticated booking wizard.
+- Reworked `.planning/phases/29-ai-recommender-system/29-UAT.md` and `29-VERIFICATION.md` so the menu recommendation feature is explicitly verified as a public browsing capability that coexists with gated client-only actions.
+
 ## [2026-05-08] - 15:46
 ### Changed
 - Shifted the client portail to a public-first access model in `app/frontend/portail/src/App.tsx`: visitors can now open `/`, `/menu`, `/reservations`, and `/fidelite` without authentication, while the live reservation wizard stays reserved for authenticated client accounts.

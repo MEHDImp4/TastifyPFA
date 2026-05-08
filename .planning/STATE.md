@@ -4,13 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
 stopped_at: Phase 29 Plan 03 COMPLETE.
-last_updated: "2026-05-08T00:55:00+01:00"
+last_updated: "2026-05-08T15:51:35+01:00"
 progress:
   total_phases: 39
-  completed_phases: 28
+  completed_phases: 29
   total_plans: 81
-  percent: 71
+  percent: 74
 notes: |
+  - Docs Sync (2026-05-08): Updated planning and project docs to reflect the public-first Portail Client model: anonymous visitors can browse `/`, `/menu`, `/reservations`, and `/fidelite`, while reservation execution and loyalty actions remain gated behind a client account.
   - Phase 29 Plan 03 COMPLETE (2026-05-08): Integrated AI recommender system into Portail Client React app.
   - Phase 29 Plan 02 COMPLETE (2026-05-08): Implemented AI recommender endpoint on PlatViewSet with fallback logic.
   - Phase 28 COMPLETE (2026-05-07): Celery infrastructure is live in Docker. Added django-celery-beat/results, isolated Celery on Redis DB 1, and fixed entrypoint startup so collectstatic runs only on the web backend.
@@ -35,3 +36,4 @@ architecture:
   - Port strategy: Staff (8080), Client (3000), Backend (8000), DB (3306).
   - Routing: Frontends run as root on their own ports and proxy `/api` plus `/media` to `http://backend:8000`.
   - Cross-frontend role access is centralized in `frontend/_shared/auth/roleAccess.ts` and rejects accounts used from the wrong frontend instead of redirecting them.
+  - Portail Client follows a public-first access policy: browsing surfaces are anonymous, but reservation submission and loyalty operations require authenticated `CLIENT` accounts.

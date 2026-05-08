@@ -5,7 +5,7 @@ status: passed
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-05-06
-updated: 2026-05-07
+updated: 2026-05-08
 ---
 
 # Phase 24 — Validation Strategy
@@ -52,10 +52,10 @@ updated: 2026-05-07
 
 ## Wave 0 Requirements
 
-- [ ] `app/frontend/portail/vitest.config.ts` — mirrors backoffice vitest config with jsdom environment
-- [ ] `app/frontend/portail/src/test/setup.ts` — imports `@testing-library/jest-dom` matchers
-- [ ] `app/backend/apps/reservations/tests/test_available_tables.py` — stubs for REQ-24-A (action exists, returns filtered tables)
-- [ ] Framework installs: `cd app/frontend/portail && npm install react-router-dom@^6.30.3 framer-motion && npm install --save-dev vitest @testing-library/react @testing-library/jest-dom jsdom @types/react-router-dom`
+- [x] `app/frontend/portail/vitest.config.ts` — mirrors backoffice vitest config with jsdom environment
+- [x] `app/frontend/portail/src/test/setup.ts` — imports `@testing-library/jest-dom` matchers
+- [x] `app/backend/apps/reservations/tests/test_available_tables.py` — stubs for REQ-24-A (action exists, returns filtered tables)
+- [x] Framework installs: `cd app/frontend/portail && npm install react-router-dom@^6.30.3 framer-motion && npm install --save-dev vitest @testing-library/react @testing-library/jest-dom jsdom @types/react-router-dom`
 
 ---
 
@@ -63,19 +63,20 @@ updated: 2026-05-07
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
+| Public reservation landing advertises gated access correctly | REQ-24-entry | Copy and UX gating must be checked visually | Open `/reservations` while logged out and confirm the page advertises reservation capability but asks the visitor to sign in before starting the wizard |
 | Mobile-first wizard layout at 375px viewport | REQ-24-visual | CSS/responsive — no headless browser in CI | Open portail at localhost:3000 in Chrome DevTools 375×812, go through full 3-step wizard |
 | TableMap correctly grays out unavailable tables | REQ-24-D (visual) | Visual state depends on API response rendering | Create a conflicting reservation in Django admin, then verify the table is grayed in Step 2 |
-| Full booking E2E: create reservation → appears in Django admin | REQ-24-E2E | Cross-system integration | Log in as CLIENT, complete wizard, verify reservation appears at `/api/reservations/` with correct fields |
+| Full booking E2E: create reservation → appears in Django admin | REQ-24-E2E | Cross-system integration | Log in as CLIENT, complete the wizard starting from `/reservations/new`, and verify the reservation appears at `/api/reservations/` with correct fields |
 
 ---
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** approved (2026-05-07)
