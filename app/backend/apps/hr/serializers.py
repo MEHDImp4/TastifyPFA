@@ -19,7 +19,7 @@ class EmployeSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(write_only=True, required=False, max_length=150)
     last_name = serializers.CharField(write_only=True, required=False, max_length=150)
     email = serializers.EmailField(write_only=True, required=False)
-    role = serializers.ChoiceField(choices=Utilisateur.Role.choices, write_only=True, required=False, max_length=20)
+    role = serializers.ChoiceField(choices=Utilisateur.Role.choices, write_only=True, required=False)
 
     class Meta:
         model = Employe
