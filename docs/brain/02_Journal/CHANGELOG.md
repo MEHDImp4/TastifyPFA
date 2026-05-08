@@ -1,3 +1,14 @@
+## [2026-05-08] - 19:01
+### Fixed
+- Resolved the back-office reviews `404` on `/api/avis/` by switching the Docker Compose `backend` service to Django's autoreloading `runserver`, so newly added routes are picked up without a manual container restart during development.
+
+### Changed
+- Documented the backend Docker hot-reload route-registration quirk in `docs/brain/03_Architecture/QUIRKS.md`.
+
+### Validation
+- `docker compose up -d backend` recreated the backend with autoreload enabled.
+- `GET http://localhost:8000/api/avis/` returned `401` after restart, confirming the route now exists and is protected instead of missing.
+
 ## [2026-05-08] - 18:25
 ### Added
 - **Phase 30, Plan 03: Frontend Integration**.

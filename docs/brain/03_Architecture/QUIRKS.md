@@ -49,6 +49,10 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Issue**: Concurrent tests using SQLite occasionally hit "database is locked".
 - **Fix**: Not applicable for MySQL, but if running local SQLite tests, ensure `ATOMIC_REQUESTS` is handled carefully or use a retry decorator.
 
+### 6. Backend Route Hot Reload in Docker Dev
+- **Issue**: The backend container previously started with Daphne directly, so new Django routes or view imports added after container startup could stay invisible until a manual backend restart. This surfaced as route-specific `404` responses even when the source file on disk already registered the endpoint.
+- **Fix**: In Docker Compose development, run the backend through `python manage.py runserver 0.0.0.0:8000` so Django autoreload picks up route/module changes immediately while still serving the ASGI app via Channels.
+
 ## Infrastructure (Docker)
 
 ### 1. Container Boot Race Condition
