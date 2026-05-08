@@ -8,7 +8,7 @@ export const STAFF_PORTAL_DENIED_MESSAGE =
   "Ce compte est reserve au portail client. Veuillez utiliser un compte staff pour acceder a cet espace."
 
 export const STAFF_HOME_BY_ROLE: Record<string, string> = {
-  GERANT: '/categories',
+  GERANT: '/dashboard',
   SERVEUR: '/salle',
   CUISINIER: '/kds',
 }

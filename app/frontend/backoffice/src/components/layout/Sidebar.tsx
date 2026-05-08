@@ -46,7 +46,7 @@ export const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
   const isConnected = connectionStatus === 'open';
 
   const navItems: NavItem[] = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '#', allowedRoles: ['GERANT'] },
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', allowedRoles: ['GERANT'] },
     { name: 'Réservations', icon: Calendar, path: '/reservations', allowedRoles: ['GERANT', 'SERVEUR'] },
     { name: 'Avis', icon: Star, path: '/avis', allowedRoles: ['GERANT'] },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories', allowedRoles: ['GERANT'] },
