@@ -9,8 +9,10 @@ import { AppErrorBoundary } from '@shared/ui/AppErrorBoundary'
 import { ReservationWizardShell } from './pages/Reservations/ReservationWizardShell'
 import { PaymentLandingPage } from './pages/Payment/PaymentLandingPage'
 import { MenuPage } from './pages/Menu/MenuPage'
+import { PortalHomePage } from './pages/Home/PortalHomePage'
+import { ProtectedFeatureNotice } from './components/ProtectedFeatureNotice'
 
-const ClientLoginRoute = () => {
+export const ClientLoginRoute = () => {
   const { clearAuth, isAuthenticated, user } = useAuthStore()
   const navigate = useNavigate()
   const [kickMessage, setKickMessage] = useState<string | undefined>()
@@ -42,9 +44,8 @@ const ClientLoginRoute = () => {
   )
 }
 
-const ProtectedClientShell = () => {
+export const PublicClientShell = () => {
   const { clearAuth, isAuthenticated, user } = useAuthStore()
-  const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
@@ -57,31 +58,106 @@ const ProtectedClientShell = () => {
   }
 
   useEffect(() => {
-    if (!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES))) {
-      navigate('/login', { replace: true })
+    if (isAuthenticated && user?.role && !isRoleAllowed(user.role, CLIENT_ROLES)) {
+      clearAuth()
     }
-  }, [isAuthenticated, navigate, user?.role])
+  }, [clearAuth, isAuthenticated, user?.role])
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans">
-      <header className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-        <div className="flex items-center gap-6">
-          <span className="text-sm font-semibold tracking-wide text-teal">Portail Client</span>
-          <nav className="flex items-center gap-4 text-sm font-medium text-foreground-muted">
-            <Link to="/menu" className="hover:text-teal transition-colors">Menu</Link>
-            <Link to="/reservations/new" className="hover:text-teal transition-colors">Réservations</Link>
-          </nav>
+      <header className="border-b border-white/5 bg-surface/80 backdrop-blur-sm">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
+            <Link to="/" className="text-sm font-semibold tracking-[0.18em] text-teal uppercase">
+              Portail Client
+            </Link>
+            <nav className="flex flex-wrap items-center gap-4 text-sm font-medium text-foreground-muted">
+              <Link to="/" className="transition-colors hover:text-teal">Accueil</Link>
+              <Link to="/menu" className="transition-colors hover:text-teal">Menu</Link>
+              <Link to="/reservations" className="transition-colors hover:text-teal">Reservation</Link>
+              <Link to="/fidelite" className="transition-colors hover:text-teal">Fidelite</Link>
+            </nav>
+          </div>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <span className="text-xs font-medium uppercase tracking-[0.16em] text-foreground-muted">
+                {user?.username ?? 'Client connecte'}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="rounded-lg border border-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-foreground-muted active:scale-[0.97]"
+                style={{ transition: 'opacity 180ms ease-out, transform 160ms ease-out' }}
+              >
+                Deconnexion
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-teal px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white active:scale-[0.97]"
+              style={{ transition: 'opacity 180ms ease-out, transform 160ms ease-out' }}
+            >
+              Se connecter
+            </Link>
+          )}
         </div>
-        <button
-          onClick={handleLogout}
-          className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground-muted opacity-60 active:scale-95"
-          style={{ transition: 'opacity 180ms ease-out, transform 160ms ease-out' }}
-        >
-          Deconnexion
-        </button>
       </header>
       <Outlet />
     </main>
+  )
+}
+
+const RequireClientAuth = () => {
+  const { isAuthenticated, user } = useAuthStore()
+
+  if (!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES))) {
+    return <Navigate to="/login" replace />
+  }
+
+  return <Outlet />
+}
+
+export const ClientReservationRoute = () => {
+  const { isAuthenticated, user } = useAuthStore()
+
+  if (!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES))) {
+    return (
+      <ProtectedFeatureNotice
+        eyebrow="Reservation"
+        title="La reservation en ligne demande un compte client."
+        description="Vous pouvez consulter le menu librement, mais la creation, l'annulation et le suivi d'une reservation restent reserves aux comptes clients."
+        primaryAction={{ label: 'Se connecter', to: '/login' }}
+        secondaryAction={{ label: 'Voir le menu', to: '/menu' }}
+      />
+    )
+  }
+
+  return <ReservationWizardShell />
+}
+
+export const ClientLoyaltyRoute = () => {
+  const { isAuthenticated, user } = useAuthStore()
+
+  return (
+    <ProtectedFeatureNotice
+      eyebrow="Fidelite"
+      title={
+        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
+          ? 'Le programme de fidelite sera branche sur votre compte client.'
+          : 'Le programme de fidelite demande un compte client.'
+      }
+      description={
+        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
+          ? "Votre session est reconnue. L'ecran final des points, coupons et avantages n'est pas encore expose dans ce portail."
+          : "Les points, coupons et avantages sont lies a votre profil. Connectez-vous pour y acceder des que le module est disponible."
+      }
+      primaryAction={
+        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
+          ? { label: 'Voir le menu', to: '/menu' }
+          : { label: 'Se connecter', to: '/login' }
+      }
+      secondaryAction={{ label: 'Retour accueil', to: '/' }}
+    />
   )
 }
 
@@ -89,10 +165,21 @@ const AuthenticatedApp = () => (
   <AuthBootstrap>
     <Routes>
       <Route path="/login" element={<ClientLoginRoute />} />
-      <Route element={<ProtectedClientShell />}>
-        <Route index element={<Navigate to="/reservations/new" replace />} />
+      <Route element={<PublicClientShell />}>
+        <Route index element={<PortalHomePage />} />
         <Route path="/menu" element={<MenuPage />} />
-        <Route path="/reservations/*" element={<ReservationWizardShell />} />
+        <Route path="/reservations" element={<ProtectedFeatureNotice
+          eyebrow="Reservation"
+          title="Les reservations sont visibles ici, mais l'action demande un compte."
+          description="Le portail client laisse le menu en acces libre. En revanche, reserver, annuler ou suivre une reservation exige une authentification client."
+          primaryAction={{ label: 'Se connecter', to: '/login' }}
+          secondaryAction={{ label: 'Voir le menu', to: '/menu' }}
+        />} />
+        <Route path="/reservations/*" element={<ClientReservationRoute />} />
+        <Route path="/fidelite" element={<ClientLoyaltyRoute />} />
+        <Route element={<RequireClientAuth />}>
+          <Route path="/mon-compte" element={<Navigate to="/reservations/new" replace />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

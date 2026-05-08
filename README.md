@@ -45,7 +45,8 @@ Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for 
 See `docs/brain/00_Meta/FILE_MAP.md`.
 
 The back-office SPA keeps Vite runtime config in `app/frontend/backoffice/vite.config.ts` and test-only settings in `app/frontend/backoffice/vitest.config.ts`.
-The client portail now uses route-based navigation with a reservation wizard under `/reservations/new`, `/reservations/table`, and `/reservations/confirm`, backed by `app/frontend/portail/src/pages/Reservations/` and `app/frontend/portail/src/api/reservations.ts`.
+The client portail now follows a public-first access model: `/`, `/menu`, `/reservations`, and `/fidelite` are visible without authentication, while the live reservation wizard remains behind client login at `/reservations/new`, `/reservations/table`, and `/reservations/confirm`.
+The public portail shell and gated notices now live in `app/frontend/portail/src/App.tsx`, `app/frontend/portail/src/components/ProtectedFeatureNotice.tsx`, and `app/frontend/portail/src/pages/Home/PortalHomePage.tsx`, while the authenticated booking flow stays backed by `app/frontend/portail/src/pages/Reservations/` and `app/frontend/portail/src/api/reservations.ts`.
 The portail test surface now mirrors the backoffice setup through `app/frontend/portail/vitest.config.ts` and `app/frontend/portail/src/test/setup.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
 Dense back-office list views now use a shared client-side pagination surface in `app/frontend/backoffice/src/components/ui/Pagination.tsx`, currently wired into dishes, stock, and HR screens.

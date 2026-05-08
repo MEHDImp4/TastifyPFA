@@ -1,3 +1,14 @@
+## [2026-05-08] - 15:46
+### Changed
+- Shifted the client portail to a public-first access model in `app/frontend/portail/src/App.tsx`: visitors can now open `/`, `/menu`, `/reservations`, and `/fidelite` without authentication, while the live reservation wizard stays reserved for authenticated client accounts.
+- Added `app/frontend/portail/src/components/ProtectedFeatureNotice.tsx` and `app/frontend/portail/src/pages/Home/PortalHomePage.tsx` to expose reservation and loyalty categories publicly while clearly explaining when a client account is required.
+- Updated `app/frontend/portail/src/pages/Menu/MenuPage.tsx` so the menu remains fully public and now supports local search over fetched dishes.
+- Added portail regression coverage in `app/frontend/portail/src/AppRoutes.test.tsx` and `app/frontend/portail/src/pages/Menu/MenuPage.test.tsx` for anonymous gating and public menu search.
+
+### Validation
+- `npm test -- --run src/AppRoutes.test.tsx src/pages/Menu/MenuPage.test.tsx src/pages/Reservations/StepDateTime.test.tsx src/pages/Reservations/StepTableSelect.test.tsx src/pages/Reservations/StepConfirm.test.tsx` passed in `app/frontend/portail`.
+- `npm run build` passed in `app/frontend/portail`.
+
 ## [2026-05-08] - 15:21
 ### Fixed
 - Repaired the shared bootstrap `401` recovery path in `app/frontend/shared/auth/AuthBootstrap.tsx` by importing the portal-scoped storage key helper and reusing the shared persisted-auth sanitizer instead of ad hoc `JSON.parse` state access.

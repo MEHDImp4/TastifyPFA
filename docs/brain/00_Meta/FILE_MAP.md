@@ -88,10 +88,16 @@ tastify-pfa/
 │       │           ├── store/     # useKdsStore
 │       │           ├── KdsPage.tsx
 │       │           └── KdsSocketManager.tsx
-│       └── portail/               # CLIENT — Vite :3003 — login + reservation wizard SPA
+│       └── portail/               # CLIENT — Vite :3003 — public-first portail + authenticated reservation wizard
 │           ├── vitest.config.ts   # Vitest config for portail jsdom tests
 │           └── src/
+│               ├── App.tsx        # Public shell, route guards, login route, and portail access policy
+│               ├── AppRoutes.test.tsx # Public-vs-authenticated portail route coverage
+│               ├── components/ProtectedFeatureNotice.tsx # Shared gated-feature notice surface
 │               ├── api/reservations.ts # Client reservation API wrapper + time normalization
+│               ├── pages/Home/PortalHomePage.tsx # Public landing page describing open vs gated features
+│               ├── pages/Menu/MenuPage.tsx # Public menu browsing with local search
+│               ├── pages/Menu/MenuPage.test.tsx # Public menu search regression coverage
 │               ├── test/setup.ts  # Testing Library / jest-dom setup
 │               └── pages/Reservations/ # Wizard state, steps, and route shell for client booking
 ├── docs/                          # Obsidian Brain
@@ -144,6 +150,6 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 Each Vite service proxies browser requests for `/api` and `/media` to `http://backend:8000` over the Compose network, and both dev servers now allow all hosts so Docker bridge access, `localhost`, and direct LAN-IP testing follow the same proxy path.
-Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT. Both SPAs now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, scope their persisted auth state through `app/frontend/shared/auth/portalContext.ts`, and surface render failures through `app/frontend/shared/ui/AppErrorBoundary.tsx`. Public QR payment pages bypass that bootstrap and use `app/frontend/shared/auth/publicClient.ts` so `/pay/:token` can resolve payment sessions without any JWT refresh. The backend mirrors that split with portal-specific refresh cookies in `app/backend/apps/users/views/auth.py`. Ports `3001` and `3002` are retired.
+Shared login and staff route access use `app/frontend/shared/auth/roleAccess.ts`: the staff frontend accepts GERANT/SERVEUR/CUISINIER, then redirects each role to its allowed home route and blocks direct access to unauthorized staff pages. The client frontend accepts only CLIENT for protected actions, but now leaves menu browsing and gated feature notices public. Both SPAs bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, scope their persisted auth state through `app/frontend/shared/auth/portalContext.ts`, and surface render failures through `app/frontend/shared/ui/AppErrorBoundary.tsx`. Public QR payment pages bypass that bootstrap and use `app/frontend/shared/auth/publicClient.ts` so `/pay/:token` can resolve payment sessions without any JWT refresh. The backend mirrors that split with portal-specific refresh cookies in `app/backend/apps/users/views/auth.py`. Ports `3001` and `3002` are retired.
 The backend container starts through `app/backend/entrypoint.sh`, which runs `python manage.py migrate --noinput` before Daphne to prevent missing-table failures after new app migrations.
 `app/backend/apps/paiements/services.py` owns the payment-side invariant for `Table -> exactly one payable Commande`, while `app/backend/apps/commandes/signals.py` remains the only place that frees the table when the order reaches `PAYEE` or `ANNULEE`.
