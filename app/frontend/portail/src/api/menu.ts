@@ -1,4 +1,4 @@
-import axiosInstance from '../../../shared/auth/axiosInstance';
+import axiosInstance from '@shared/auth/axiosInstance';
 
 export interface Plat {
   id: number;
