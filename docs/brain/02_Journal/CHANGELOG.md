@@ -1,3 +1,18 @@
+## [2026-05-08] - 18:25
+### Added
+- **Phase 30, Plan 03: Frontend Integration**.
+- **Portail Client**: Added `ReviewForm.tsx` component with star-rating and comment submission. Integrated reviews into the Menu page and Payment success landing page.
+- **Back-Office**: Created `ReviewsPage` to display customer feedback with AI-determined sentiment scores (Positive/Neutral/Negative).
+- Registered the `/avis` route in Back-Office and added it to the Sidebar with a new `Star` icon.
+- Added `date-fns` dependency to `backoffice` package.json.
+
+### Changed
+- Refactored `StaffNotificationManager.tsx` (previous plan work finalized).
+
+### Validation
+- `npm run build` passed for both `backoffice` and `portail` frontends.
+- Verified review submission flow and sentiment score display in the UI.
+
 ## [2026-05-08] - 18:10
 ### Added
 - **Phase 30, Plan 01: Models and Celery Infrastructure**.

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import publicClient from '@shared/auth/publicClient'
 import { PaymentSession } from '@shared/types/paiements'
 import { SplitSelector } from '../../components/payment/SplitSelector'
+import { useAuthStore } from '@shared/auth/useAuthStore'
+import { ReviewForm } from '../../components/menu/ReviewForm'
+import { Star } from 'lucide-react'
 
 const toAmount = (value: number | string) => Number.parseFloat(String(value))
 
@@ -28,6 +31,8 @@ export const PaymentLandingPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [processing, setProcessing] = useState(false)
+  const [reviewSubmitted, setReviewSubmitted] = useState(false)
+  const { isAuthenticated } = useAuthStore()
   
   const [selection, setSelection] = useState<{
     montant: number;
@@ -115,6 +120,27 @@ export const PaymentLandingPage = () => {
         </div>
         <h1 className="mb-2 text-3xl font-bold">Merci !</h1>
         <p className="text-foreground-muted mb-8 max-w-xs">Votre paiement de <span className="text-foreground font-bold">{selection?.montant} MAD</span> a été accepté. Votre table a été libérée.</p>
+        
+        {isAuthenticated && !reviewSubmitted && session ? (
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-surface p-6 text-left mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Star className="text-teal" size={20} />
+              <h2 className="text-lg font-bold">Votre avis nous intéresse</h2>
+            </div>
+            <ReviewForm 
+              commandeId={session.commande_id}
+              onSuccess={() => setReviewSubmitted(true)}
+              onCancel={() => setReviewSubmitted(true)} // Hide if they cancel
+            />
+          </div>
+        ) : reviewSubmitted ? (
+          <p className="text-teal font-medium mb-8">Merci pour votre retour !</p>
+        ) : !isAuthenticated ? (
+          <p className="text-xs text-foreground-muted mb-8 max-w-xs">
+            <Link to="/login" className="text-teal hover:underline font-bold">Connectez-vous</Link> pour laisser un avis sur votre repas et gagner des points de fidélité.
+          </p>
+        ) : null}
+
         <button 
           onClick={() => window.location.href = '/'}
           className="px-8 py-3 bg-teal text-white font-bold rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-teal/20"

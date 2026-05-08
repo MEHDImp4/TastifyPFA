@@ -35,7 +35,7 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 27: Encaissement UI** - Salle UI modal and Client QR landing page.
 - [x] **Phase 28: Celery Infrastructure** - Async workers and beat schedules. (completed 2026-05-07)
 - [x] **Phase 29: AI Recommender System** - scikit-learn model, API, and Portail Client integration. (completed 2026-05-08)
-- [ ] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews.
+- [x] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews. (completed 2026-05-08)
 - [ ] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
 - [ ] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
 - [ ] **Phase 33: PWA Offline Capabilities** - Service Workers for Salle & KDS.
@@ -107,7 +107,7 @@ Phases execute in numeric order: 1 → 39
 | 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
 | 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
 | 29. AI Recommender System | 3/3 | Completed | 2026-05-08 |
-| 30. AI Sentiment Analysis | 0/1 | à faire | — |
+| 30. AI Sentiment Analysis | 3/3 | Completed | 2026-05-08 |
 | 31. Back-Office Dashboard KPIs | 0/1 | à faire | — |
 | 32. Loyalty Program | 0/1 | à faire | — |
 | 33. PWA Offline Capabilities | 0/1 | à faire | — |

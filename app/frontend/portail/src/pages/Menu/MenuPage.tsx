@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Plat, fetchPlats } from '../../api/menu'
 import RecommendationList from '../../components/menu/RecommendationList'
+import { Modal } from '@shared/ui/Modal'
+import { ReviewForm } from '../../components/menu/ReviewForm'
+import { useAuthStore } from '@shared/auth/useAuthStore'
+import { Star } from 'lucide-react'
 
 export const MenuPage: React.FC = () => {
+  const { isAuthenticated } = useAuthStore()
   const [plats, setPlats] = useState<Plat[]>([])
   const [selectedPlatId, setSelectedPlatId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
+  const [showReviewModal, setShowReviewModal] = useState(false)
 
   useEffect(() => {
     fetchPlats()
@@ -19,6 +25,8 @@ export const MenuPage: React.FC = () => {
         setLoading(false)
       })
   }, [])
+
+  const selectedPlat = plats.find(p => p.id === selectedPlatId)
 
   const normalizedQuery = query.trim().toLowerCase()
   const filteredPlats = plats.filter((plat) => {
@@ -62,12 +70,23 @@ export const MenuPage: React.FC = () => {
 
       {selectedPlatId && (
         <div className="rounded-[24px] border border-teal/15 bg-surface p-6">
-          <button
-            onClick={() => setSelectedPlatId(null)}
-            className="mb-4 text-sm font-medium text-teal hover:underline"
-          >
-            Retour au menu complet
-          </button>
+          <div className="mb-4 flex items-center justify-between">
+            <button
+              onClick={() => setSelectedPlatId(null)}
+              className="text-sm font-medium text-teal hover:underline"
+            >
+              Retour au menu complet
+            </button>
+            {isAuthenticated && (
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="inline-flex items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-teal hover:bg-white/10 transition-colors"
+              >
+                <Star size={14} />
+                Laisser un avis
+              </button>
+            )}
+          </div>
           <RecommendationList platId={selectedPlatId} />
         </div>
       )}
@@ -96,6 +115,26 @@ export const MenuPage: React.FC = () => {
           Aucun plat ne correspond a votre recherche.
         </div>
       ) : null}
+
+      {selectedPlat && (
+        <Modal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          title={`Votre avis sur ${selectedPlat.nom}`}
+          description="Votre retour nous aide à nous améliorer."
+          icon={<Star className="text-teal" />}
+          maxWidth="md"
+        >
+          <ReviewForm
+            platId={selectedPlat.id}
+            onSuccess={() => {
+              setShowReviewModal(false)
+              alert('Merci pour votre avis !')
+            }}
+            onCancel={() => setShowReviewModal(false)}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
