@@ -189,7 +189,7 @@ const ReservationsPage: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
                           <Clock className="w-3 h-3" />
-                          {reservation.heure_debut.slice(0, 5)} - {reservation.heure_fin.slice(0, 5)}
+                          {reservation.heure_debut?.slice(0, 5)} - {reservation.heure_fin?.slice(0, 5)}
                         </div>
                       </div>
                     </td>

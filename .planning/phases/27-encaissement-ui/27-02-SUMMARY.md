@@ -9,7 +9,7 @@ Implement the Client-facing Payment Landing Page in the Portail app, allowing cu
 - **Split Selection UI**: Created `SplitSelector` component supporting three modes:
     - **Tout Payer**: Full settlement of the remaining balance.
     - **Partage Égal**: Real-time share calculation with guest counter.
-    - **Par Article**: Interactive checklist of unpaid items with total calculation.
+    - **Par Article**: Interactive list of unpaid items with total calculation.
 - **Payment Simulation**: Implemented a "Confirmer le paiement" flow with simulated latency and backend confirmation.
 - **Design Alignment**: Applied `ECO-FRESH` design tokens and animations.
 

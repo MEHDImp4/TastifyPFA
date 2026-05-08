@@ -12,7 +12,7 @@ class Employe(models.Model):
     date_embauche = models.DateField()
     telephone = models.CharField(max_length=20, blank=True)
     adresse = models.TextField(blank=True)
-    cin = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    cin = models.CharField(max_length=20, unique=True, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

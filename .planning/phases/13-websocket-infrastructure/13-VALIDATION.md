@@ -56,11 +56,11 @@ updated: 2026-05-07
 
 ## Wave 0 Requirements
 
-- [ ] `backend/core/tests/test_websocket_auth.py` — auth and close-code coverage for `4401` vs `4403`
-- [ ] `backend/core/tests/test_staff_consumer.py` — route, group lifecycle, and broadcast coverage
-- [ ] `frontend/back-office/src/websocket/WebSocketProvider.test.tsx` — provider lifecycle, parser, and reconnect coverage
-- [ ] `frontend/_shared/websocket/staffSocket.ts` — utility surface required by frontend tests
-- [ ] `frontend/_shared/websocket/useStaffSocketStore.ts` — shared Zustand dispatch surface required by frontend tests and live verification
+- [x] `backend/core/tests/test_websocket_auth.py` — auth and close-code coverage for `4401` vs `4403`
+- [x] `backend/core/tests/test_staff_consumer.py` — route, group lifecycle, and broadcast coverage
+- [x] `frontend/back-office/src/websocket/WebSocketProvider.test.tsx` — provider lifecycle, parser, and reconnect coverage
+- [x] `frontend/_shared/websocket/staffSocket.ts` — utility surface required by frontend tests
+- [x] `frontend/_shared/websocket/useStaffSocketStore.ts` — shared Zustand dispatch surface required by frontend tests and live verification
 
 *Existing backend/frontend test infrastructure covers the phase once these new files are added.*
 

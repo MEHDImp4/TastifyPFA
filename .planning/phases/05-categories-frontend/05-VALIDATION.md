@@ -24,10 +24,10 @@ The phase is verified successfully when:
 9. Clicking delete reveals an inline "Confirmer / Annuler" prompt that reverts after 3 seconds or deletes the item upon confirmation.
 
 ## 3. End-to-End Checklist
-- [ ] React Router implemented and gating functional.
-- [ ] Category list displayed correctly with images and proper order.
-- [ ] Drawer slides in and out smoothly.
-- [ ] Form data handled as multipart for image uploads.
-- [ ] Image preview properly implemented (D-10).
-- [ ] Form validations properly implemented (D-12).
-- [ ] TDD practices followed with test files created alongside new features and passing successfully.
+- [x] React Router implemented and gating functional.
+- [x] Category list displayed correctly with images and proper order.
+- [x] Drawer slides in and out smoothly.
+- [x] Form data handled as multipart for image uploads.
+- [x] Image preview properly implemented (D-10).
+- [x] Form validations properly implemented (D-12).
+- [x] TDD practices followed with test files created alongside new features and passing successfully.

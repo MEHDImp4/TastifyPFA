@@ -66,6 +66,11 @@ Plans:
 - [x] 29-02-PLAN.md — Expose Recommendation API
 - [x] 29-03-PLAN.md — Integrate Recommendations into Portail Menu
 
+### Phase 30: AI Sentiment Analysis
+**Goal**: Integrate HuggingFace BERT for customer review sentiment analysis.
+**Depends on**: Phase 29
+**Success Criteria**: 1. NLP model predicts sentiment score from customer reviews. 2. Backend stores sentiment score with the review.
+
 ## Progress
 
 **Execution Order:**

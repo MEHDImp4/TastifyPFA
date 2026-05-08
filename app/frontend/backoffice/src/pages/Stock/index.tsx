@@ -60,8 +60,8 @@ export default function StockPage() {
     setIsDrawerOpen(true);
   };
 
-  const filteredIngredients = ingredients.filter(ing => {
-    const matchesSearch = ing.nom.toLowerCase().includes(searchTerm.toLowerCase());
+const filteredIngredients = ingredients.filter(ing => {
+    const matchesSearch = (ing.nom || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesAlert = showOnlyAlerts ? ing.stock_actuel <= ing.seuil_alerte * 1.2 : true;
     return matchesSearch && matchesAlert;
   });

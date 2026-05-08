@@ -34,42 +34,56 @@ class KdsOrchestrator:
         from apps.commandes.tasks import launch_item_task
         from apps.commandes.models import Commande as _Commande
 
-        # Phase 16 gate: only fired orders get orchestrated. Prevents draft EN_COURS
-        # orders (or already-completed PRETE/PAYEE/ANNULEE orders) from scheduling
-        # Celery tasks. This complements the EN_COURS->EN_CUISINE Commande post_save
-        # in signals.py — together they ensure timers anchor to dispatch moment.
         if commande.statut != _Commande.Statut.EN_CUISINE:
             return
 
         now = timezone.now()
-        lines = list(
-            commande.lignes.select_related('plat').filter(
-                statut__in=list(cls.IDLE_STATUSES | cls.RUNNING_STATUSES)
+
+        with transaction.atomic():
+            lines = list(
+                commande.lignes.select_related('plat')
+                .select_for_update()
+                .filter(statut__in=list(cls.IDLE_STATUSES | cls.RUNNING_STATUSES))
             )
-        )
-        idle_lines = [l for l in lines if l.statut in cls.IDLE_STATUSES]
-        running_lines = [l for l in lines if l.statut in cls.RUNNING_STATUSES]
 
-        if not idle_lines:
-            return
+            idle_lines = [l for l in lines if l.statut in cls.IDLE_STATUSES]
+            running_lines = [l for l in lines if l.statut in cls.RUNNING_STATUSES]
 
-        max_prep_minutes = max(l.plat.temps_preparation for l in idle_lines)
-        target_ready = now + timedelta(minutes=max_prep_minutes)
+            if not idle_lines:
+                return
 
-        for running in running_lines:
-            if running.heure_fin_estimee and running.heure_fin_estimee > target_ready:
-                target_ready = running.heure_fin_estimee
+            max_prep_minutes = max(l.plat.temps_preparation for l in idle_lines)
+            target_ready = now + timedelta(minutes=max_prep_minutes)
 
-        for line in idle_lines:
-            if line.celery_task_id:
-                current_app.control.revoke(line.celery_task_id)
+            for running in running_lines:
+                if running.heure_fin_estimee and running.heure_fin_estimee > target_ready:
+                    target_ready = running.heure_fin_estimee
 
-            launch_time = target_ready - timedelta(minutes=line.plat.temps_preparation)
-            async_result = launch_item_task.apply_async(args=[line.id], eta=launch_time)
+            updates = []
+            for line in idle_lines:
+                if line.celery_task_id:
+                    try:
+                        current_app.control.revoke(line.celery_task_id)
+                    except Exception:
+                        pass
 
-            CommandeLigne.objects.filter(pk=line.pk).update(
-                heure_lancement=launch_time,
-                heure_fin_estimee=target_ready,
-                temps_preparation_snapshot=line.plat.temps_preparation,
-                celery_task_id=async_result.id,
-            )
+                launch_time = target_ready - timedelta(minutes=line.plat.temps_preparation)
+                try:
+                    async_result = launch_item_task.apply_async(args=[line.id], eta=launch_time)
+                    updates.append({
+                        'pk': line.pk,
+                        'heure_lancement': launch_time,
+                        'heure_fin_estimee': target_ready,
+                        'temps_preparation_snapshot': line.plat.temps_preparation,
+                        'celery_task_id': async_result.id,
+                    })
+                except Exception:
+                    pass
+
+            for update in updates:
+                CommandeLigne.objects.filter(pk=update['pk']).update(
+                    heure_lancement=update['heure_lancement'],
+                    heure_fin_estimee=update['heure_fin_estimee'],
+                    temps_preparation_snapshot=update['temps_preparation_snapshot'],
+                    celery_task_id=update['celery_task_id'],
+                )

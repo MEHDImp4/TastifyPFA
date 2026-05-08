@@ -14,6 +14,9 @@ class ReservationSerializer(serializers.ModelSerializer):
     client_details = serializers.SerializerMethodField(read_only=True)
     table_details = serializers.SerializerMethodField(read_only=True)
 
+    nombre_personnes = serializers.IntegerField(min_value=1)
+    notes = serializers.CharField(max_length=2000, allow_blank=True, required=False)
+
     class Meta:
         model = Reservation
         fields = [

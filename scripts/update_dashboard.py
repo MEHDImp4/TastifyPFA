@@ -10,7 +10,6 @@ ROADMAP_FILE = os.path.join(ROOT_DIR, ".planning", "ROADMAP.md")
 STATE_FILE = os.path.join(ROOT_DIR, ".planning", "STATE.md")
 CHANGELOG_FILE = os.path.join(ROOT_DIR, "docs", "brain", "02_Journal", "CHANGELOG.md")
 DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
-AUDIT_REPORT_FILE = os.path.join(ROOT_DIR, ".planning", "audit_uat_report.md")
 
 def read_roadmap():
     phases = []
@@ -202,46 +201,6 @@ def get_uat_status():
                         break
     return uat_map, uat_list
 
-def read_human_test_plan():
-    tests = []
-    if not os.path.exists(AUDIT_REPORT_FILE):
-        return tests
-        
-    with open(AUDIT_REPORT_FILE, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    # Extraction des lignes de tableau
-    # Format: | H-04-01 | 04/06 | **Image Upload & Cleanup** | ... | **PASSED** | ... |
-    test_pattern = re.compile(r'\| (H-\d+-\d+) \| ([^|]+) \| \*\*([^*]+)\*\* \| ([^|]+) \| ([^|]+) \|')
-    for match in test_pattern.finditer(content):
-        test_id = match.group(1).strip()
-        phase = match.group(2).strip()
-        title = match.group(3).strip()
-        expected = match.group(4).strip()
-        status = match.group(5).strip().replace("**", "")
-        
-        # Déterminer la priorité basée sur les headers précédents
-        priority = "Medium"
-        p1_pos = content.rfind("Priority 1", 0, match.start())
-        p2_pos = content.rfind("Priority 2", 0, match.start())
-        p3_pos = content.rfind("Priority 3", 0, match.start())
-        
-        max_pos = max(p1_pos, p2_pos, p3_pos)
-        if max_pos != -1:
-            if max_pos == p1_pos: priority = "High"
-            elif max_pos == p2_pos: priority = "Medium"
-            elif max_pos == p3_pos: priority = "Low"
-
-        tests.append({
-            "id": test_id,
-            "phase": phase,
-            "title": title,
-            "expected": expected,
-            "priority": priority,
-            "status": status
-        })
-    return tests
-
 def get_git_status():
     status = {"branch": "unknown", "dirty": False}
     try:
@@ -260,7 +219,6 @@ def update_dashboard():
     backend_stats = get_backend_stats()
     git_status = get_git_status()
     uat_map, uat_list = get_uat_status()
-    human_tests = read_human_test_plan()
     
     # Read accurate total/completed from STATE.md
     state_total, state_completed = read_state_file()
@@ -370,29 +328,6 @@ def update_dashboard():
                                 <span class="text-xs text-gray-400 truncate max-w-[120px]">{u["name"]}</span>
                             </div>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase {u_class}">{u_stat}</span>
-                        </div>''')
-
-    # Génération du HTML pour le Human Test Plan
-    human_html = []
-    for t in human_tests:
-        p_class = "bg-blue-500/10 text-blue-400 border-blue-500/20"
-        if t["priority"] == "High": p_class = "bg-red-500/10 text-red-400 border-red-500/20"
-        elif t["priority"] == "Low": p_class = "bg-gray-500/10 text-gray-400 border-gray-500/20"
-        
-        s_class = "bg-gray-500/10 text-gray-400 border-gray-500/20"
-        if t["status"] == "PASSED": s_class = "bg-green-500/10 text-green-400 border-green-500/20"
-        elif t["status"] == "PENDING": s_class = "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-        
-        human_html.append(f'''                        <div class="p-2 rounded bg-white/5 border border-white/5">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="text-[10px] font-bold text-primary tracking-tighter">{t["id"]}</span>
-                                <div class="flex gap-1">
-                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {s_class}">{t["status"]}</span>
-                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase {p_class}">{t["priority"]}</span>
-                                </div>
-                            </div>
-                            <p class="text-xs font-semibold text-white mb-0.5">{t["title"]}</p>
-                            <p class="text-[10px] text-gray-400 leading-tight">{t["expected"]}</p>
                         </div>''')
 
     # Génération du HTML pour l'Activity Stream
@@ -524,7 +459,6 @@ def update_dashboard():
     dash_content = replace_section(dash_content, '<!-- DETAILED_PHASES_START -->', '<!-- DETAILED_PHASES_END -->', '\n'.join(detailed_html))
     dash_content = replace_section(dash_content, '<!-- UAT_START -->', '<!-- UAT_END -->', '\n'.join(uat_html))
     dash_content = replace_section(dash_content, '<!-- LOGS_START -->', '<!-- LOGS_END -->', '\n'.join(logs_html))
-    dash_content = replace_section(dash_content, '<!-- HUMAN_TESTS_START -->', '<!-- HUMAN_TESTS_END -->', '\n'.join(human_html))
     dash_content = replace_section(dash_content, '<!-- CHART_DATA_START -->', '<!-- CHART_DATA_END -->', chart_data_html)
 
     with open(DASHBOARD_FILE, 'w', encoding='utf-8') as f:

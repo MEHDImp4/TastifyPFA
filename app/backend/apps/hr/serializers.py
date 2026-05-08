@@ -31,9 +31,17 @@ class EmployeSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'user', 'created_at', 'updated_at']
 
     def create(self, validated_data):
+        username = validated_data.pop('username', None)
+        password = validated_data.pop('password', None)
+
+        if not username:
+            raise serializers.ValidationError({'username': 'This field is required.'})
+        if not password:
+            raise serializers.ValidationError({'password': 'This field is required.'})
+
         user_data = {
-            'username': validated_data.pop('username'),
-            'password': make_password(validated_data.pop('password')),
+            'username': username,
+            'password': make_password(password),
             'first_name': validated_data.pop('first_name', ''),
             'last_name': validated_data.pop('last_name', ''),
             'email': validated_data.pop('email', ''),

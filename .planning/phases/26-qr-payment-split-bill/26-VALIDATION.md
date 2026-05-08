@@ -57,12 +57,12 @@ updated: 2026-05-07
 - [x] Existing backend pytest stack is already available in Docker.
 - [x] Existing table and commandes tests provide lifecycle seams to extend.
 - [x] `docker-compose exec backend python manage.py makemigrations --check --dry-run` is defined as the migration integrity gate.
-- [ ] Add `app/backend/apps/paiements/tests/test_models.py`
-- [ ] Add `app/backend/apps/paiements/tests/test_services.py`
-- [ ] Add `app/backend/apps/paiements/tests/test_signals.py`
-- [ ] Add `app/backend/apps/paiements/tests/test_tokens.py`
-- [ ] Add `app/backend/apps/paiements/tests/test_api.py`
-- [ ] Extend `app/backend/apps/tables/tests/test_api.py` for QR issuance coverage
+- [x] Add `app/backend/apps/paiements/tests/test_models.py`
+- [x] Add `app/backend/apps/paiements/tests/test_services.py`
+- [x] Add `app/backend/apps/paiements/tests/test_signals.py`
+- [x] Add `app/backend/apps/paiements/tests/test_tokens.py`
+- [x] Add `app/backend/apps/paiements/tests/test_api.py`
+- [x] Extend `app/backend/apps/tables/tests/test_api.py` for QR issuance coverage
 
 ---
 

@@ -74,7 +74,7 @@ def update_reservation(reservation, **changes):
         # Lock both table rows in ascending PK order to prevent deadlock inversion
         # when two concurrent transactions swap tables in opposite directions (CR-03).
         pks_to_lock = sorted({old_table_pk, new_table_pk})
-        Table.objects.select_for_update().filter(pk__in=pks_to_lock)
+        list(Table.objects.select_for_update().filter(pk__in=pks_to_lock))
 
         locked_reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
         for field, value in changes.items():

@@ -18,48 +18,40 @@ def launch_item_task(ligne_id):
     Idempotent: re-runs (e.g., from Redis redelivery) are no-ops if the line
     is no longer EN_ATTENTE or has been deleted.
     """
-    try:
-        line = (
-            CommandeLigne.objects
-            .select_related('plat', 'commande')
-            .get(pk=ligne_id)
-        )
-    except CommandeLigne.DoesNotExist:
-        return {'skipped': 'line_deleted', 'ligne_id': ligne_id}
-
-    if line.statut != CommandeLigne.Statut.EN_ATTENTE:
-        return {
-            'skipped': 'line_not_pending',
-            'ligne_id': ligne_id,
-            'statut': line.statut,
-        }
-
-    try:
-        with transaction.atomic():
-            now = timezone.now()
-            # We use .filter().update() for efficiency, but it's inside atomic()
-            CommandeLigne.objects.filter(pk=ligne_id).update(
-                statut=CommandeLigne.Statut.EN_PREPARATION,
-                updated_at=now,
+    with transaction.atomic():
+        try:
+            line = (
+                CommandeLigne.objects
+                .select_related('plat', 'commande')
+                .select_for_update()
+                .get(pk=ligne_id)
             )
+        except CommandeLigne.DoesNotExist:
+            return {'skipped': 'line_deleted', 'ligne_id': ligne_id}
 
-            # Note: Stock deduction was moved to immediate execution in CommandeViewSet.partial_update
-            # to provide instant feedback and avoid JIT scheduling delays for inventory.
+        if line.statut != CommandeLigne.Statut.EN_ATTENTE:
+            return {
+                'skipped': 'line_not_pending',
+                'ligne_id': ligne_id,
+                'statut': line.statut,
+            }
 
-    except Exception as e:
+        now = timezone.now()
+        CommandeLigne.objects.filter(pk=ligne_id).update(
+            statut=CommandeLigne.Statut.EN_PREPARATION,
+            updated_at=now,
+        )
 
-        logger.exception(f"Unexpected error in launch_item_task for line {ligne_id}")
-        raise
+        line.refresh_from_db()
+        broadcast_staff_event(
+            'line_launched',
+            {
+                'ligne_id': line.id,
+                'commande_id': line.commande_id,
+                'plat_nom': line.plat.nom,
+                'heure_lancement': line.heure_lancement.isoformat() if line.heure_lancement else None,
+                'heure_fin_estimee': line.heure_fin_estimee.isoformat() if line.heure_fin_estimee else None,
+            },
+        )
 
-    broadcast_staff_event(
-        'line_launched',
-        {
-            'ligne_id': line.id,
-            'commande_id': line.commande_id,
-            'plat_nom': line.plat.nom,
-            'heure_lancement': line.heure_lancement.isoformat() if line.heure_lancement else None,
-            'heure_fin_estimee': line.heure_fin_estimee.isoformat() if line.heure_fin_estimee else None,
-        },
-    )
-
-    return {'launched': True, 'ligne_id': ligne_id}
+        return {'launched': True, 'ligne_id': ligne_id}
