@@ -1,10 +1,10 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
 from apps.avis.models import Avis
-from apps.avis.tasks import analyze_review_sentiment
+from apps.avis.tasks import analyze_review_sentiment, get_hf_api_token, get_hf_api_url
 
 User = get_user_model()
 
@@ -23,52 +23,66 @@ class TestAvisModel:
 
 @pytest.mark.django_db
 class TestAvisTasks:
-    @patch('apps.avis.tasks.get_sentiment_analyzer')
-    def test_analyze_review_sentiment_success(self, mock_get_analyzer):
-        # Setup mock analyzer
-        mock_analyzer = MagicMock()
-        mock_analyzer.return_value = [{'label': '5 stars', 'score': 0.99}]
-        mock_get_analyzer.return_value = mock_analyzer
-        
-        # Create test data
+    @patch('apps.avis.tasks.query_hf_api')
+    def test_analyze_review_sentiment_success(self, mock_query_hf_api):
+        mock_query_hf_api.return_value = [[{'label': '5 stars', 'score': 0.99}]]
+
         user = User.objects.create_user(username='testuser2', password='password')
         avis = Avis.objects.create(
             user=user,
             commentaire='I loved the food!',
             note=5
         )
-        
-        # Run task
+
         result = analyze_review_sentiment(avis.id)
-        
-        # Refresh and assert
+
         avis.refresh_from_db()
         assert result == "Sentiment analyzed: 5 stars"
         assert avis.sentiment_score == 5
-        mock_analyzer.assert_called_once_with('I loved the food!')
+        mock_query_hf_api.assert_called_once_with('I loved the food!')
 
-    @patch('apps.avis.tasks.get_sentiment_analyzer')
-    def test_analyze_review_sentiment_negative(self, mock_get_analyzer):
-        # Setup mock analyzer
-        mock_analyzer = MagicMock()
-        mock_analyzer.return_value = [{'label': '1 star', 'score': 0.95}]
-        mock_get_analyzer.return_value = mock_analyzer
-        
-        # Create test data
+    @patch('apps.avis.tasks.query_hf_api')
+    def test_analyze_review_sentiment_negative(self, mock_query_hf_api):
+        mock_query_hf_api.return_value = [{'label': '1 star', 'score': 0.95}]
+
         user = User.objects.create_user(username='testuser3', password='password')
         avis = Avis.objects.create(
             user=user,
             commentaire='The food was terrible.',
             note=1
         )
-        
-        # Run task
+
         result = analyze_review_sentiment(avis.id)
-        
-        # Refresh and assert
+
         avis.refresh_from_db()
         assert result == "Sentiment analyzed: 1 stars"
         assert avis.sentiment_score == 1
+
+    @patch('apps.avis.tasks.query_hf_api')
+    def test_analyze_review_sentiment_handles_missing_api_response(self, mock_query_hf_api):
+        mock_query_hf_api.return_value = None
+
+        user = User.objects.create_user(username='testuser5', password='password')
+        avis = Avis.objects.create(
+            user=user,
+            commentaire='Average meal.',
+            note=3
+        )
+
+        result = analyze_review_sentiment(avis.id)
+
+        avis.refresh_from_db()
+        assert result == f"Failed to get API response for Avis {avis.id}"
+        assert avis.sentiment_score is None
+
+    def test_get_hf_api_url_uses_router_endpoint(self):
+        assert get_hf_api_url().startswith('https://router.huggingface.co/hf-inference/models/')
+
+    @patch('apps.avis.tasks.config')
+    def test_get_hf_api_token_strips_bearer_prefix(self, mock_config):
+        mock_config.return_value = 'Bearer hf_test_token'
+
+        assert get_hf_api_token() == 'hf_test_token'
 
     def test_analyze_review_sentiment_not_found(self):
         result = analyze_review_sentiment(9999)
