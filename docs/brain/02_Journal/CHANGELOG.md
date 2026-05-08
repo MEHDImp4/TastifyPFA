@@ -1,3 +1,13 @@
+## [2026-05-08] - 15:21
+### Fixed
+- Repaired the shared bootstrap `401` recovery path in `app/frontend/shared/auth/AuthBootstrap.tsx` by importing the portal-scoped storage key helper and reusing the shared persisted-auth sanitizer instead of ad hoc `JSON.parse` state access.
+- Preserved multi-tab session recovery after a failed `/api/users/refresh/` bootstrap attempt so a newer token written by another tab now rehydrates cleanly instead of throwing `ReferenceError: getAuthStorageName is not defined`.
+
+### Validation
+- `npm test -- authBootstrap.test.tsx` passed in `app/frontend/backoffice`.
+- `npm run build` passed in `app/frontend/backoffice`.
+- `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap fix.
+
 ## [2026-05-08] - 03:00
 ### Fixed
 - **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.

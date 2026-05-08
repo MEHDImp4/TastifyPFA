@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios'
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 
-import { getAuthPortalHeader, getPortalFromRole } from './portalContext'
-import { useAuthStore } from './useAuthStore'
+import { getAuthPortalHeader, getAuthStorageName, getPortalFromRole } from './portalContext'
+import { sanitizePersistedAuthState, useAuthStore } from './useAuthStore'
 
 export interface RefreshResponse {
   access: string
@@ -171,10 +171,10 @@ export const refreshPersistedSession = async ({
       const raw = localStorage.getItem(storageName)
       if (raw) {
         try {
-          const { state } = JSON.parse(raw)
+          const state = sanitizePersistedAuthState(JSON.parse(raw))
           if (state.accessToken && state.accessToken !== accessToken) {
             // Another tab refreshed successfully. Hydrate and skip clearing.
-            setAccessToken(state.accessToken, state.user)
+            setAccessToken(state.accessToken, state.user ?? undefined)
             return 'refreshed' as const
           }
         } catch {

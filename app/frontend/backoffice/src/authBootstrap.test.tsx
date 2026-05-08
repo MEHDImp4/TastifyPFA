@@ -8,6 +8,7 @@ import {
   accessTokenNeedsBootstrapRefresh,
   refreshPersistedSession,
 } from '@shared/auth/AuthBootstrap'
+import { getAuthStorageName } from '@shared/auth/portalContext'
 import { useAuthStore } from '@shared/auth/useAuthStore'
 
 vi.mock('axios')
@@ -102,6 +103,7 @@ describe('AuthBootstrap', () => {
 describe('refreshPersistedSession', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    localStorage.clear()
   })
 
   it('skips bootstrap refresh when the persisted access token is still valid', async () => {
@@ -222,6 +224,46 @@ describe('refreshPersistedSession', () => {
     expect(post).toHaveBeenCalledTimes(1)
     expect(setAccessToken).not.toHaveBeenCalled()
     expect(clearAuth).toHaveBeenCalledTimes(1)
+  })
+
+  it('rehydrates from localStorage when another tab already refreshed after a 401', async () => {
+    const setAccessToken = vi.fn()
+    const clearAuth = vi.fn()
+    const post = vi.fn().mockRejectedValue({
+      response: { status: 401 },
+    })
+    const refreshedToken = createJwt(300)
+
+    localStorage.setItem(
+      getAuthStorageName(),
+      JSON.stringify({
+        state: {
+          accessToken: refreshedToken,
+          isAuthenticated: true,
+          user: {
+            username: 'chef',
+            role: 'CUISINIER',
+          },
+        },
+      }),
+    )
+
+    await expect(
+      refreshPersistedSession({
+        accessToken: createJwt(-60),
+        isAuthenticated: true,
+        setAccessToken,
+        clearAuth,
+        client: { post },
+      }),
+    ).resolves.toBe('refreshed')
+
+    expect(post).toHaveBeenCalledTimes(1)
+    expect(setAccessToken).toHaveBeenCalledWith(refreshedToken, {
+      username: 'chef',
+      role: 'CUISINIER',
+    })
+    expect(clearAuth).not.toHaveBeenCalled()
   })
 
   it('clears persisted auth without probing refresh when the session is older than the refresh lifetime', async () => {
