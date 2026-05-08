@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 15:16:21<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 15:22:07<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1025,6 +1025,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Repaired the shared bootstrap `401` recovery path in `app/frontend/shared/auth/AuthBootstrap.tsx` by importing the portal-scoped storage key helper and reusing the shared persisted-auth sanitizer instead of ad hoc `JSON.parse` state access.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Preserved multi-tab session recovery after a failed `/api/users/refresh/` bootstrap attempt so a newer token written by another tab now rehydrates cleanly instead of throwing `ReferenceError: getAuthStorageName is not defined`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test -authBootstrap.test.tsx` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 15:21</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap fix.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.</p>
                             </li>
@@ -1072,31 +1097,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap change.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `django-celery-beat` and `django-celery-results` to `requirements.txt`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added Celery configuration to `settings/base.py` and `celery.py`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added Redis DB 1 for Celery broker isolation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Celery worker and Beat services start in Docker.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>
