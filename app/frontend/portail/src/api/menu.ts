@@ -10,11 +10,11 @@ export interface Plat {
 }
 
 export const fetchPlats = async (): Promise<Plat[]> => {
-  const response = await axiosInstance.get('/menu/plats/');
+  const response = await axiosInstance.get('/plats/');
   return response.data;
 };
 
 export const fetchRecommendations = async (platId: number): Promise<Plat[]> => {
-  const response = await axiosInstance.get(`/menu/plats/${platId}/recommendations/`);
+  const response = await axiosInstance.get(`/plats/${platId}/recommendations/`);
   return response.data;
 };
