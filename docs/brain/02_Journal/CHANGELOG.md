@@ -1,3 +1,17 @@
+## [2026-05-08] - 02:27
+### Fixed
+- Stopped `app/frontend/shared/auth/AuthBootstrap.tsx` from probing `POST /api/users/refresh/` for persisted sessions whose access token `iat` already proves the one-day refresh window has expired, eliminating the predictable bootstrap `401` on reload for long-stale sessions.
+
+### Changed
+- Added an `accessTokenOutlivesRefreshWindow()` guard in the shared auth bootstrap so unrecoverable persisted auth is cleared locally before any refresh request.
+- Extended `app/frontend/backoffice/src/authBootstrap.test.tsx` with coverage for refresh-window expiry and the new no-network stale-session path.
+
+### Validation
+- `npm test -- authBootstrap.test.tsx` passed in `app/frontend/backoffice`.
+- `npm run build` passed in `app/frontend/backoffice`.
+- `npm run build` passed in `app/frontend/portail`.
+- `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap change.
+
 # [2026-05-07 18:49] - Phase 28 Celery Infrastructure
 ### Added
 - Added `django-celery-beat` and `django-celery-results` to `requirements.txt`.
@@ -108,7 +122,7 @@
 ## [2026-05-07] - 00:50
 ### Added
 - **Phase 27 Plan 02 (Client Payment UI)**: Implemented the client-facing payment landing page and split selection.
-  - **Split Selector**: Created `SplitSelector.tsx` with support for Full, Equal (guest counter), and Item-based (checklist) splits.
+  - **Split Selector**: Created `SplitSelector.tsx` with support for Full, Equal (guest counter), and Item-based lists.
   - **Payment Landing Page**: Developed `PaymentLandingPage.tsx` with tokenized session resolution, amount preview, and simulated payment confirmation.
   - **API Integration**: Integrated with backend endpoints for session resolution, split calculation, and final payment.
 

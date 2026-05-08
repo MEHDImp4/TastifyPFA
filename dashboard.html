@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 00:55:04<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 02:27:54<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -103,7 +103,7 @@
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-primary">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Tâches Terminées</h3>
-                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->71<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
+                <div class="mt-1 text-2xl font-black"><!-- STAT_TASKS_START -->72<!-- STAT_TASKS_END --><span class="text-sm font-medium text-gray-500 ml-2">Sous-plans</span></div>
             </div>
             <div class="card p-4 flex flex-col justify-center border-l-4 border-l-teal-500">
                 <h3 class="text-gray-400 text-xs font-medium uppercase tracking-wider">Avancement</h3>
@@ -420,20 +420,20 @@
                 <div class="card p-4 shrink-0">
                     <div class="flex items-center justify-between mb-3">
                         <h2 class="text-base font-bold">Stats Application</h2>
-                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">Conteneur Hors ligne</span><!-- DB_STATUS_BADGE_END -->
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">En Ligne</span><!-- DB_STATUS_BADGE_END -->
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->15<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->4<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->2<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
@@ -441,7 +441,7 @@
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->0<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->63<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -1024,6 +1024,66 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped `app/frontend/shared/auth/AuthBootstrap.tsx` from probing `POST /api/users/refresh/` for persisted sessions whose access token `iat` already proves the one-day refresh window has expired, eliminating the predictable bootstrap `401` on reload for long-stale sessions.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added an `accessTokenOutlivesRefreshWindow()` guard in the shared auth bootstrap so unrecoverable persisted auth is cleared locally before any refresh request.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Extended `app/frontend/backoffice/src/authBootstrap.test.tsx` with coverage for refresh-window expiry and the new no-network stale-session path.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test -authBootstrap.test.tsx` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/backoffice`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/portail`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/portail/portail-client` still fails on pre-existing `@shared/*` path-resolution errors unrelated to this auth bootstrap change.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `django-celery-beat` and `django-celery-results` to `requirements.txt`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added Celery configuration to `settings/base.py` and `celery.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added Redis DB 1 for Celery broker isolation.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Celery worker and Beat services start in Docker.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Redis DB 1 is isolated.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Completed comprehensive UAT & Verification Audit for Milestone 1.</p>
@@ -1037,66 +1097,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Created `26-UAT.md` and `27-UAT.md` to document successful verification.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `dashboard.html` to reflect full project state and UAT passage.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> HT-01 (Full Payment Cycle E2E) passed manually.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> HT-02 (Stock Exhaustion feedback) passed manually.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> HT-03 (Reservation Awareness on Staff Map) passed manually.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> All Phase 26 automated tests confirmed passed via audit.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed the `GERANT` KDS paid-order regression by scoping KDS refetches to kitchen-visible orders only, so paid orders no longer reappear after websocket updates.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed a deeper payment reconciliation gap where fully paid orders could remain stuck in `PRETE`, leaving them visible in KDS despite complete payment coverage.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added backend support for `scope=kitchen` on `CommandeViewSet` and aligned the backoffice KDS store to request that scope on every fetch.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added backend/frontend regression coverage for the manager KDS payment-removal path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Moved payment-status reconciliation into `create_payment()` and `complete_payment()` so a completed payment now promotes the order to `PAYEE` at the service layer, even if outer signal/view wiring is bypassed.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added a defensive backend KDS filter to exclude fully paid kitchen orders from the kitchen scope even if a stale `PRETE` status remains in the database.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test -src/pages/Kds/store/useKdsStore.test.ts --run` passed in `app/frontend/backoffice`.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

@@ -29,6 +29,7 @@ const BOOTSTRAP_REQUEST_TIMEOUT_MS = 5000
 const BOOTSTRAP_RENDER_DEADLINE_MS = 6000
 const BOOTSTRAP_HYDRATION_DEADLINE_MS = 2500
 const ACCESS_TOKEN_REFRESH_THRESHOLD_MS = 30_000
+const REFRESH_TOKEN_LIFETIME_MS = 24 * 60 * 60 * 1000
 const TRANSIENT_BOOTSTRAP_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504])
 const TRANSIENT_BOOTSTRAP_CODES = new Set(['ECONNABORTED', 'ERR_NETWORK'])
 
@@ -99,6 +100,21 @@ export const accessTokenNeedsBootstrapRefresh = (
   return exp * 1000 <= now + thresholdMs
 }
 
+export const accessTokenOutlivesRefreshWindow = (
+  accessToken: unknown,
+  now = Date.now(),
+  refreshLifetimeMs = REFRESH_TOKEN_LIFETIME_MS,
+) => {
+  const payload = decodeJwtPayload(accessToken)
+  const issuedAt = payload?.iat
+
+  if (typeof issuedAt !== 'number') {
+    return false
+  }
+
+  return issuedAt * 1000 + refreshLifetimeMs <= now
+}
+
 export const refreshPersistedSession = async ({
   accessToken,
   isAuthenticated,
@@ -113,6 +129,11 @@ export const refreshPersistedSession = async ({
 
   if (!accessTokenNeedsBootstrapRefresh(accessToken)) {
     return 'skipped' as const
+  }
+
+  if (accessTokenOutlivesRefreshWindow(accessToken)) {
+    clearAuth()
+    return 'cleared' as const
   }
 
   try {

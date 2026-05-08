@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
   AuthBootstrap,
+  accessTokenOutlivesRefreshWindow,
   accessTokenNeedsBootstrapRefresh,
   refreshPersistedSession,
 } from '@shared/auth/AuthBootstrap'
@@ -11,11 +12,12 @@ import { useAuthStore } from '@shared/auth/useAuthStore'
 
 vi.mock('axios')
 
-const createJwt = (expiresAtSecondsFromNow: number) => {
+const createJwt = (expiresAtSecondsFromNow: number, issuedAtSecondsFromNow = 0) => {
   const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
   const payload = btoa(
     JSON.stringify({
       exp: Math.floor(Date.now() / 1000) + expiresAtSecondsFromNow,
+      iat: Math.floor(Date.now() / 1000) + issuedAtSecondsFromNow,
     }),
   )
 
@@ -221,6 +223,26 @@ describe('refreshPersistedSession', () => {
     expect(setAccessToken).not.toHaveBeenCalled()
     expect(clearAuth).toHaveBeenCalledTimes(1)
   })
+
+  it('clears persisted auth without probing refresh when the session is older than the refresh lifetime', async () => {
+    const setAccessToken = vi.fn()
+    const clearAuth = vi.fn()
+    const post = vi.fn()
+
+    await expect(
+      refreshPersistedSession({
+        accessToken: createJwt(-60, -(24 * 60 * 60 + 60)),
+        isAuthenticated: true,
+        setAccessToken,
+        clearAuth,
+        client: { post },
+      }),
+    ).resolves.toBe('cleared')
+
+    expect(post).not.toHaveBeenCalled()
+    expect(setAccessToken).not.toHaveBeenCalled()
+    expect(clearAuth).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('accessTokenNeedsBootstrapRefresh', () => {
@@ -234,5 +256,15 @@ describe('accessTokenNeedsBootstrapRefresh', () => {
 
   it('returns true for malformed tokens', () => {
     expect(accessTokenNeedsBootstrapRefresh('not-a-jwt')).toBe(true)
+  })
+})
+
+describe('accessTokenOutlivesRefreshWindow', () => {
+  it('returns false when the token was issued inside the refresh lifetime window', () => {
+    expect(accessTokenOutlivesRefreshWindow(createJwt(-60, -(23 * 60 * 60)))).toBe(false)
+  })
+
+  it('returns true when the token was issued before the refresh lifetime window', () => {
+    expect(accessTokenOutlivesRefreshWindow(createJwt(-60, -(24 * 60 * 60 + 60)))).toBe(true)
   })
 })
