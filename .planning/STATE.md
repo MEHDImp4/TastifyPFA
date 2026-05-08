@@ -3,14 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
-stopped_at: Phase 30 COMPLETE.
-last_updated: "2026-05-08T18:25:00+01:00"
+stopped_at: Phase 31 COMPLETE.
+last_updated: "2026-05-08T22:00:00+01:00"
 progress:
   total_phases: 39
-  completed_phases: 30
+  completed_phases: 31
   total_plans: 84
-  percent: 77
+  percent: 79
 notes: |
+  - Phase 31 COMPLETE (2026-05-08): Back-Office Dashboard KPIs fully implemented. Real-time statistics, Recharts charts, and WebSockets wired.
+  - Phase 31 Plan 02 COMPLETE (2026-05-08): Frontend Dashboard UI implemented with recharts and live updating via useStaffWebSocket.
+  - Phase 31 Plan 01 COMPLETE (2026-05-08): Backend analytics app created with /api/analytics/dashboard/ endpoint and post_save signals broadcasted to channels.
   - Phase 30 COMPLETE (2026-05-08): AI Sentiment Analysis fully implemented. Integrated HuggingFace BERT via Celery for async review analysis. Added Portail review submission and Back-Office monitoring UI.
   - Phase 30 Plan 02 COMPLETE (2026-05-08): Implemented DRF API endpoints for the `avis` app with RBAC and async task triggering.
   - Phase 30 Plan 01 COMPLETE (2026-05-08): Created `avis` app, `Avis` model, and Celery task for HuggingFace sentiment analysis.
