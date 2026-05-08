@@ -31,6 +31,13 @@ class Paiement(models.Model):
         on_delete=models.PROTECT,
         related_name='paiements',
     )
+    client = models.ForeignKey(
+        'users.Utilisateur',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='paiements',
+    )
     montant = models.DecimalField(max_digits=10, decimal_places=2)
     methode = models.CharField(
         max_length=20,
