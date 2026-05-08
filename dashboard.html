@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 02:27:54<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-08 15:16:21<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1025,6 +1025,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Portal Header Defaulting**: Updated `AuthBootstrap.tsx` to default to the environment-specific portal when the user role is unknown, ensuring correct cookie selection on the backend.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CORS Hardening**: Added `X-Tastify-Portal` to `CORS_ALLOW_HEADERS` in backend settings.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-08 03:00</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Clock Skew Buffer**: Added a 5-minute buffer to the refresh token lifetime check to avoid premature 401s due to server/client time drift.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped `app/frontend/shared/auth/AuthBootstrap.tsx` from probing `POST /api/users/refresh/` for persisted sessions whose access token `iat` already proves the one-day refresh window has expired, eliminating the predictable bootstrap `401` on reload for long-stale sessions.</p>
                             </li>
@@ -1077,26 +1097,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Celery worker and Beat services start in Docker.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-08 02:27</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Redis DB 1 is isolated.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Completed comprehensive UAT & Verification Audit for Milestone 1.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Reconciled stale validation documentation for Phases 13, 24, and 26.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-07 15:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Created `26-UAT.md` and `27-UAT.md` to document successful verification.</p>
                             </li>
                             <!-- LOGS_END -->
                         </ol>

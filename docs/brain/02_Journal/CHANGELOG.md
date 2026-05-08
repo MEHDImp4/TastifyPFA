@@ -1,3 +1,10 @@
+## [2026-05-08] - 03:00
+### Fixed
+- **Auth Refresh 401 Resolution**: Implemented multi-tab resilience in `AuthBootstrap.tsx` and `axiosInstance.ts` to prevent race conditions during token rotation.
+- **Portal Header Defaulting**: Updated `AuthBootstrap.tsx` to default to the environment-specific portal when the user role is unknown, ensuring correct cookie selection on the backend.
+- **CORS Hardening**: Added `X-Tastify-Portal` to `CORS_ALLOW_HEADERS` in backend settings.
+- **Clock Skew Buffer**: Added a 5-minute buffer to the refresh token lifetime check to avoid premature 401s due to server/client time drift.
+
 ## [2026-05-08] - 02:27
 ### Fixed
 - Stopped `app/frontend/shared/auth/AuthBootstrap.tsx` from probing `POST /api/users/refresh/` for persisted sessions whose access token `iat` already proves the one-day refresh window has expired, eliminating the predictable bootstrap `401` on reload for long-stale sessions.
