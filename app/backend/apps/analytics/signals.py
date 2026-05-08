@@ -12,8 +12,9 @@ def trigger_dashboard_update():
     async_to_sync(channel_layer.group_send)(
         'staff_updates',
         {
-            'type': 'dashboard_update',
-            'data': {'event': 'dashboard_update'}
+            'type': 'staff_event',
+            'event_type': 'dashboard_update',
+            'payload': {}
         }
     )
 
