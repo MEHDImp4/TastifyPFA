@@ -188,6 +188,7 @@ def create_payment(
     statut: str = Paiement.Statut.EN_ATTENTE,
     reference_transaction: str = '',
     contributions: Iterable[Mapping[str, object]] | None = None,
+    client=None,
 ) -> Paiement:
     with transaction.atomic():
         locked_commande = _lock_commande_for_payment(commande_id=commande_id)
@@ -211,6 +212,7 @@ def create_payment(
 
         paiement = Paiement.objects.create(
             commande=locked_commande,
+            client=client,
             montant=normalized_amount,
             methode=methode,
             statut=statut,

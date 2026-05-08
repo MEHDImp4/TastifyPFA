@@ -131,13 +131,16 @@ class PaiementViewSet(viewsets.ModelViewSet):
             payload = validate_payment_token(token)
             commande_id = payload['commande_id']
             
+            client = request.user if request.user.is_authenticated and request.user.role == 'CLIENT' else None
+
             paiement = create_payment(
                 commande_id=commande_id,
                 montant=montant,
                 methode=Paiement.Methode.QR,
                 statut=Paiement.Statut.COMPLETE,
                 reference_transaction=reference,
-                contributions=contributions
+                contributions=contributions,
+                client=client
             )
             
             reconcile_commande_payment_status(commande_id=commande_id)
@@ -152,6 +155,7 @@ class PaiementViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         
         commande = serializer.validated_data['commande']
+        client = serializer.validated_data.get('client')
         montant = serializer.validated_data['montant']
         methode = serializer.validated_data['methode']
         reference = serializer.validated_data.get('reference_transaction', '')
@@ -164,7 +168,8 @@ class PaiementViewSet(viewsets.ModelViewSet):
                 methode=methode,
                 statut=Paiement.Statut.COMPLETE,
                 reference_transaction=reference,
-                contributions=contributions
+                contributions=contributions,
+                client=client
             )
             
             reconcile_commande_payment_status(commande_id=commande.id)

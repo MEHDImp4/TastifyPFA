@@ -63,7 +63,7 @@ class ManualPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paiement
         fields = [
-            'id', 'commande', 'montant', 'methode', 
+            'id', 'commande', 'client', 'montant', 'methode', 
             'reference_transaction', 'contributions', 
             'statut', 'created_at'
         ]
