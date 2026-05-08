@@ -1,4 +1,4 @@
-import axiosInstance from '@shared/auth/axiosInstance';
+import publicClient from '@shared/auth/publicClient';
 
 export interface Plat {
   id: number;
@@ -10,11 +10,11 @@ export interface Plat {
 }
 
 export const fetchPlats = async (): Promise<Plat[]> => {
-  const response = await axiosInstance.get('/plats/');
+  const response = await publicClient.get('/plats/');
   return response.data;
 };
 
 export const fetchRecommendations = async (platId: number): Promise<Plat[]> => {
-  const response = await axiosInstance.get(`/plats/${platId}/recommendations/`);
+  const response = await publicClient.get(`/plats/${platId}/recommendations/`);
   return response.data;
 };
