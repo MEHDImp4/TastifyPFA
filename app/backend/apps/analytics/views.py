@@ -26,10 +26,10 @@ class DashboardAPIView(APIView):
         today_revenue = today_payments.aggregate(total=Sum('montant'))['total'] or 0.0
 
         # 2. Active Tables
-        active_tables = Table.objects.filter(statut=Table.Statut.OCCUPEE).count()
+        active_tables = Table.objects.active().filter(statut=Table.Statut.OCCUPEE).count()
 
         # 3. Pending Orders
-        pending_orders = Commande.objects.filter(
+        pending_orders = Commande.objects.active().filter(
             statut__in=[Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE]
         ).count()
 
