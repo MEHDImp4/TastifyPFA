@@ -3,14 +3,16 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
-stopped_at: Phase 29 Plan 03 COMPLETE.
-last_updated: "2026-05-08T15:51:35+01:00"
+stopped_at: Phase 30 Plan 02 COMPLETE.
+last_updated: "2026-05-08T18:15:00+01:00"
 progress:
   total_phases: 39
   completed_phases: 29
-  total_plans: 81
+  total_plans: 83
   percent: 74
 notes: |
+  - Phase 30 Plan 02 COMPLETE (2026-05-08): Implemented DRF API endpoints for the `avis` app with RBAC and async task triggering.
+  - Phase 30 Plan 01 COMPLETE (2026-05-08): Created `avis` app, `Avis` model, and Celery task for HuggingFace sentiment analysis.
   - Docs Sync (2026-05-08): Updated planning and project docs to reflect the public-first Portail Client model: anonymous visitors can browse `/`, `/menu`, `/reservations`, and `/fidelite`, while reservation execution and loyalty actions remain gated behind a client account.
   - Phase 29 Plan 03 COMPLETE (2026-05-08): Integrated AI recommender system into Portail Client React app.
   - Phase 29 Plan 02 COMPLETE (2026-05-08): Implemented AI recommender endpoint on PlatViewSet with fallback logic.
