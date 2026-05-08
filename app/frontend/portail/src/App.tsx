@@ -11,6 +11,7 @@ import { PaymentLandingPage } from './pages/Payment/PaymentLandingPage'
 import { MenuPage } from './pages/Menu/MenuPage'
 import { PortalHomePage } from './pages/Home/PortalHomePage'
 import { ProtectedFeatureNotice } from './components/ProtectedFeatureNotice'
+import LoyaltyPage from './pages/Loyalty/LoyaltyPage'
 
 export const ClientLoginRoute = () => {
   const { clearAuth, isAuthenticated, user } = useAuthStore()
@@ -138,27 +139,19 @@ export const ClientReservationRoute = () => {
 export const ClientLoyaltyRoute = () => {
   const { isAuthenticated, user } = useAuthStore()
 
-  return (
-    <ProtectedFeatureNotice
-      eyebrow="Fidelite"
-      title={
-        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
-          ? 'Le programme de fidelite sera branche sur votre compte client.'
-          : 'Le programme de fidelite demande un compte client.'
-      }
-      description={
-        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
-          ? "Votre session est reconnue. L'ecran final des points, coupons et avantages n'est pas encore expose dans ce portail."
-          : "Les points, coupons et avantages sont lies a votre profil. Connectez-vous pour y acceder des que le module est disponible."
-      }
-      primaryAction={
-        isAuthenticated && isRoleAllowed(user?.role ?? '', CLIENT_ROLES)
-          ? { label: 'Voir le menu', to: '/menu' }
-          : { label: 'Se connecter', to: '/login' }
-      }
-      secondaryAction={{ label: 'Retour accueil', to: '/' }}
-    />
-  )
+  if (!isAuthenticated || (user?.role && !isRoleAllowed(user.role, CLIENT_ROLES))) {
+    return (
+      <ProtectedFeatureNotice
+        eyebrow="Fidelite"
+        title="Le programme de fidelite demande un compte client."
+        description="Les points, coupons et avantages sont lies a votre profil. Connectez-vous pour y acceder."
+        primaryAction={{ label: 'Se connecter', to: '/login' }}
+        secondaryAction={{ label: 'Retour accueil', to: '/' }}
+      />
+    )
+  }
+
+  return <LoyaltyPage />
 }
 
 const AuthenticatedApp = () => (

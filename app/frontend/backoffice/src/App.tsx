@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AppShell } from './components/layout/AppShell';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import CategoriesPage from './pages/Categories';
+import RewardManagementPage from './pages/Loyalty/RewardManagementPage';
 import PlatsPage from './pages/Plats';
 import TablesPage from './pages/Tables';
 import { MapView } from './pages/Staff/Map/MapView';
@@ -101,6 +102,7 @@ function App() {
               <Route index element={<StaffEntryRedirect />} />
               <Route path="/dashboard" element={<RoleRoute allowedRoles={GERANT_ROLES}><DashboardPage /></RoleRoute>} />
               <Route path="/categories" element={<RoleRoute allowedRoles={GERANT_ROLES}><CategoriesPage /></RoleRoute>} />
+              <Route path="/loyalty" element={<RoleRoute allowedRoles={GERANT_ROLES}><RewardManagementPage /></RoleRoute>} />
               <Route path="/plats" element={<RoleRoute allowedRoles={GERANT_ROLES}><PlatsPage /></RoleRoute>} />
               <Route path="/tables" element={<RoleRoute allowedRoles={GERANT_ROLES}><TablesPage /></RoleRoute>} />
               <Route path="/salle" element={<RoleRoute allowedRoles={SALLE_ROLES}><MapView /></RoleRoute>} />

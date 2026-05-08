@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Calendar,
   Star,
+  Award,
 } from 'lucide-react';
 import { useAuthStore } from '@shared/auth/useAuthStore';
 import { useStaffWebSocket } from '@shared/websocket/WebSocketProvider';
@@ -47,6 +48,7 @@ export const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
 
   const navItems: NavItem[] = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', allowedRoles: ['GERANT'] },
+    { name: 'Fidélité', icon: Award, path: '/loyalty', allowedRoles: ['GERANT'] },
     { name: 'Réservations', icon: Calendar, path: '/reservations', allowedRoles: ['GERANT', 'SERVEUR'] },
     { name: 'Avis', icon: Star, path: '/avis', allowedRoles: ['GERANT'] },
     { name: 'Catégories', icon: LayoutGrid, path: '/categories', allowedRoles: ['GERANT'] },
