@@ -3,17 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: IN_PROGRESS
-stopped_at: Phase 31 COMPLETE.
-last_updated: "2026-05-08T22:00:00+01:00"
+stopped_at: Phase 32 COMPLETE.
+last_updated: "2026-05-08T23:55:00+01:00"
 progress:
   total_phases: 39
-  completed_phases: 31
+  completed_phases: 32
   total_plans: 84
-  percent: 79
+  percent: 82
 notes: |
+  - Phase 32 COMPLETE (2026-05-08): Loyalty Program implemented. Automatic point awarding on payments, tiers (Bronze/Silver/Gold), and reward redemption functional.
+  - Phase 32 Plan 02 COMPLETE (2026-05-08): Frontend integration for Client (dashboard, card, history) and Manager (reward management).
+  - Phase 32 Plan 01 COMPLETE (2026-05-08): Backend loyalty app, models, signals, and API viewsets implemented and tested.
   - Phase 31 COMPLETE (2026-05-08): Back-Office Dashboard KPIs fully implemented. Real-time statistics, Recharts charts, and WebSockets wired.
-  - Phase 31 Plan 02 COMPLETE (2026-05-08): Frontend Dashboard UI implemented with recharts and live updating via useStaffWebSocket.
-  - Phase 31 Plan 01 COMPLETE (2026-05-08): Backend analytics app created with /api/analytics/dashboard/ endpoint and post_save signals broadcasted to channels.
   - Phase 30 COMPLETE (2026-05-08): AI Sentiment Analysis fully implemented. Integrated HuggingFace BERT via Celery for async review analysis. Added Portail review submission and Back-Office monitoring UI.
   - Phase 30 Plan 02 COMPLETE (2026-05-08): Implemented DRF API endpoints for the `avis` app with RBAC and async task triggering.
   - Phase 30 Plan 01 COMPLETE (2026-05-08): Created `avis` app, `Avis` model, and Celery task for HuggingFace sentiment analysis.

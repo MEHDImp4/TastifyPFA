@@ -36,8 +36,8 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 28: Celery Infrastructure** - Async workers and beat schedules. (completed 2026-05-07)
 - [x] **Phase 29: AI Recommender System** - scikit-learn model, API, and Portail Client integration. (completed 2026-05-08)
 - [x] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews. (completed 2026-05-08)
-- [ ] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration.
-- [ ] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI.
+- [x] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration. (completed 2026-05-08)
+- [x] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI. (completed 2026-05-08)
 - [ ] **Phase 33: PWA Offline Capabilities** - Service Workers for Salle & KDS.
 - [ ] **Phase 34: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate).
 - [ ] **Phase 35: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait).
@@ -49,13 +49,24 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 ## Phase Details
 
 ### Phase 31: Back-Office Dashboard KPIs
+**Requirements:** [KPI-01, KPI-02, KPI-03]
 **Goal**: Implement a real-time analytics dashboard in the Back-Office for operational insights.
 **Depends on**: Phase 13, Phase 27
 **Success Criteria**: 1. Today's Revenue, Active Tables, Pending Orders, and Avg Prep Time visible. 2. Historical revenue and top dishes visualized. 3. Real-time updates wired.
 
 **Plans:** 2 plans
-- [ ] 31-01-PLAN.md — Backend Aggregations & Signals
-- [ ] 31-02-PLAN.md — Frontend Dashboard & Recharts
+- [x] 31-01-PLAN.md - Backend Aggregations & Signals
+- [x] 31-02-PLAN.md - Frontend Dashboard & Recharts
+
+### Phase 32: Loyalty Program
+**Goal**: Implement a points-based loyalty program with tiers and reward management.
+**Depends on**: Phase 2, Phase 10, Phase 27
+**Requirements**: [LOY-01, LOY-02, LOY-03, LOY-04, LOY-05]
+**Success Criteria**: 1. Points awarded automatically on payment. 2. Client can see balance and history. 3. Manager can manage rewards.
+
+**Plans:** 2 plans
+- [x] 32-01-PLAN.md - Backend Foundation & API
+- [x] 32-02-PLAN.md - Frontend Integration
 
 ## Progress
 
@@ -95,7 +106,7 @@ Phases execute in numeric order: 1 → 39
 | 29. AI Recommender System | 3/3 | Completed | 2026-05-08 |
 | 30. AI Sentiment Analysis | 3/3 | Completed | 2026-05-08 |
 | 31. Back-Office Dashboard KPIs | 2/2 | Complete | 2026-05-08 |
-| 32. Loyalty Program | 0/1 | à faire | — |
+| 32. Loyalty Program | 2/2 | Complete | 2026-05-08 |
 | 33. PWA Offline Capabilities | 0/1 | à faire | — |
 | 34. KDS Advanced Operations | 0/1 | à faire | — |
 | 35. Click & Collect E-commerce | 0/1 | à faire | — |
@@ -103,4 +114,3 @@ Phases execute in numeric order: 1 → 39
 | 37. AI Weather-Aware Stock Forecasting | 0/1 | à faire | — |
 | 38. Multilingual BERT Expansion | 0/1 | à faire | — |
 | 39. Load Testing & Optimization | 0/1 | à faire | — |
- faire | — |
