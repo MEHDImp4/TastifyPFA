@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.core.cache import cache
 from django.db.models import Count
@@ -16,7 +16,7 @@ class CategorieViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         """GERANT: full CRUD. All authenticated users: read-only (per D-05)."""
         if self.action in ('list', 'retrieve'):
-            return [IsAuthenticated()]
+            return [AllowAny()]
         return [IsAuthenticated(), IsGerant()]
 
     def get_queryset(self):
@@ -38,7 +38,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'recommendations'):
-            return [IsAuthenticated()]
+            return [AllowAny()]
         return [IsAuthenticated(), IsGerant()]
 
     def get_queryset(self):
