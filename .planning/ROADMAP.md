@@ -48,28 +48,14 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 
 ## Phase Details
 
-### Phase 28: Celery Infrastructure
-**Goal**: Establish the asynchronous task backbone for Tastify using Celery and Redis.
-**Depends on**: Phase 13
-**Success Criteria**: 1. Celery worker and Beat services start in Docker. 2. Redis isolation for Celery broker.
+### Phase 31: Back-Office Dashboard KPIs
+**Goal**: Implement a real-time analytics dashboard in the Back-Office for operational insights.
+**Depends on**: Phase 13, Phase 27
+**Success Criteria**: 1. Today's Revenue, Active Tables, Pending Orders, and Avg Prep Time visible. 2. Historical revenue and top dishes visualized. 3. Real-time updates wired.
 
-Plans:
-- [x] 28-01-PLAN.md — Celery & Beat Infrastructure (Redis isolation).
-
-### Phase 29: AI Recommender System
-**Goal**: Build an AI-driven Recommender System using scikit-learn, exposed via API and integrated into the Portail Client.
-**Depends on**: Phase 28, Phase 24
-**Success Criteria**: 1. ML logic correctly outputs similarity matrix. 2. API returns recommendations. 3. Portail client displays the recommendations.
-
-**Plans:** 3 plans
-- [x] 29-01-PLAN.md — AI Recommender Logic and Celery Task
-- [x] 29-02-PLAN.md — Expose Recommendation API
-- [x] 29-03-PLAN.md — Integrate Recommendations into Portail Menu
-
-### Phase 30: AI Sentiment Analysis
-**Goal**: Integrate HuggingFace BERT for customer review sentiment analysis.
-**Depends on**: Phase 29
-**Success Criteria**: 1. NLP model predicts sentiment score from customer reviews. 2. Backend stores sentiment score with the review.
+**Plans:** 2 plans
+- [ ] 31-01-PLAN.md — Backend Aggregations & Signals
+- [ ] 31-02-PLAN.md — Frontend Dashboard & Recharts
 
 ## Progress
 
@@ -108,7 +94,7 @@ Phases execute in numeric order: 1 → 39
 | 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
 | 29. AI Recommender System | 3/3 | Completed | 2026-05-08 |
 | 30. AI Sentiment Analysis | 3/3 | Completed | 2026-05-08 |
-| 31. Back-Office Dashboard KPIs | 0/1 | à faire | — |
+| 31. Back-Office Dashboard KPIs | 0/2 | En cours | — |
 | 32. Loyalty Program | 0/1 | à faire | — |
 | 33. PWA Offline Capabilities | 0/1 | à faire | — |
 | 34. KDS Advanced Operations | 0/1 | à faire | — |
