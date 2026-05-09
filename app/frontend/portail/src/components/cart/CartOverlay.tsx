@@ -12,7 +12,7 @@ interface CartOverlayProps {
 
 export const CartOverlay: React.FC<CartOverlayProps> = ({ isOpen, onClose }) => {
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCartStore()
-  const { user } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [orderType, setOrderType] = useState<'SUR_PLACE' | 'EMPORTER'>('EMPORTER')
   const [clientNom, setClientNom] = useState(user?.username || '')
@@ -22,6 +22,14 @@ export const CartOverlay: React.FC<CartOverlayProps> = ({ isOpen, onClose }) => 
 
   const handleCheckout = async () => {
     if (items.length === 0) return
+
+    if (!isAuthenticated || user?.role !== 'CLIENT') {
+      alert("Connectez-vous avec un compte client pour valider une commande a emporter.")
+      onClose()
+      navigate('/login')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {

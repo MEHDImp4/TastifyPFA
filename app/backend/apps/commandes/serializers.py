@@ -68,11 +68,23 @@ class CommandeSerializer(serializers.ModelSerializer):
         Custom validation to ensure table is provided for SUR_PLACE orders
         and not required for EMPORTER orders.
         """
-        order_type = attrs.get('type', Commande.Type.SUR_PLACE)
-        table = attrs.get('table')
+        request = self.context.get('request')
+        instance = getattr(self, 'instance', None)
+        order_type = attrs.get('type', getattr(instance, 'type', Commande.Type.SUR_PLACE))
+        table = attrs.get('table', getattr(instance, 'table', None))
+        client_nom = attrs.get('client_nom', getattr(instance, 'client_nom', None))
+
+        if request and request.user.is_authenticated and request.user.role == 'CLIENT':
+            if order_type != Commande.Type.EMPORTER:
+                raise serializers.ValidationError(
+                    {"type": "Les clients ne peuvent creer que des commandes a emporter."}
+                )
 
         if order_type == Commande.Type.SUR_PLACE and not table:
             raise serializers.ValidationError({"table": "Une table est requise pour une commande sur place."})
+
+        if order_type == Commande.Type.EMPORTER and not client_nom:
+            raise serializers.ValidationError({"client_nom": "Le nom du client est requis pour le retrait."})
         
         return attrs
 

@@ -9,7 +9,7 @@ from rest_framework.response import Response
 import logging
 logger = logging.getLogger(__name__)
 
-from apps.users.permissions import IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
+from apps.users.permissions import IsClient, IsGerant, IsServeurOrGerant, IsCuisinierOrGerant
 from apps.stock.services import StockService, InsufficientStockError
 from .models import Commande, CommandeLigne
 from .serializers import CommandeSerializer, CommandeLigneSerializer
@@ -99,7 +99,7 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 class CommandeViewSet(viewsets.ModelViewSet):
     serializer_class = CommandeSerializer
-    permission_classes = [IsAuthenticated, IsServeurOrGerant | IsCuisinierOrGerant]
+    permission_classes = [IsAuthenticated, IsServeurOrGerant | IsCuisinierOrGerant | IsClient]
 
     def get_queryset(self):
         user = self.request.user
@@ -125,14 +125,14 @@ class CommandeViewSet(viewsets.ModelViewSet):
         )
 
         table_id = self.request.query_params.get('table')
-        if table_id:
+        if table_id and user.role != 'CLIENT':
             # Table-specific lookup: any staff member can see which order is on a given table.
             # We exclude terminal statuses (PAYEE, ANNULEE) so that a newly 'freed' table 
             # doesn't show the previous order.
             qs = qs.filter(table_id=table_id).exclude(
                 statut__in=[Commande.Statut.PAYEE, Commande.Statut.ANNULEE]
             )
-        elif scope == 'kitchen':
+        elif scope == 'kitchen' and user.role in ['CUISINIER', 'GERANT']:
             qs = qs.filter(statut__in=kitchen_statuses).exclude(
                 completed_paid_total__gte=models.F('montant_total')
             )
@@ -170,6 +170,12 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         """Phase 16 & 17: ownership rules for PUT."""
+        if request.user.role == 'CLIENT' and not kwargs.get('partial', False):
+            return Response(
+                {"error": "Les clients ne peuvent pas remplacer une commande existante."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         instance = get_object_or_404(Commande.objects.active(), pk=kwargs.get('pk'))
         if not self._check_ownership_or_cuisinier_ready(request, instance):
             return Response(
@@ -186,7 +192,25 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
+        if request.user.role == 'CLIENT':
+            requested_fields = set(request.data.keys())
+            if requested_fields != {'statut'}:
+                return Response(
+                    {"error": "Les clients ne peuvent que lancer leur commande a emporter."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+            if (
+                instance.type != Commande.Type.EMPORTER
+                or request.data.get('statut') != Commande.Statut.EN_CUISINE
+                or instance.statut != Commande.Statut.EN_COURS
+            ):
+                return Response(
+                    {"error": "Seule une commande a emporter en brouillon peut etre envoyee en cuisine."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
         # Phase 20: stock deduction when firing an order
         new_statut = request.data.get('statut')
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
@@ -243,6 +267,12 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         """Soft delete — sets est_active=False instead of hard-deleting."""
+        if request.user.role == 'CLIENT':
+            return Response(
+                {"error": "Les clients ne peuvent pas supprimer une commande."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

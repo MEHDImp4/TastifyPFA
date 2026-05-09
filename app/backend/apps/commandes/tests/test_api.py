@@ -20,6 +20,9 @@ class CommandeAPITestCase(APITestCase):
         self.serveur2 = User.objects.create_user(
             username='serveur2', password='password123', role=User.Role.SERVEUR
         )
+        self.client_user = User.objects.create_user(
+            username='client1', password='password123', role=User.Role.CLIENT
+        )
         
         self.table = Table.objects.create(numero=1, capacite=4)
         self.categorie = Categorie.objects.create(nom='Entrées')
@@ -235,3 +238,80 @@ class FireOrderPatchTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.commande.refresh_from_db()
         self.assertEqual(self.commande.statut, Commande.Statut.EN_CUISINE)
+
+
+class ClientTakeawayCommandeApiTestCase(APITestCase):
+    def setUp(self):
+        self.client_user = User.objects.create_user(
+            username='portal_client',
+            password='password123',
+            role=User.Role.CLIENT,
+        )
+        self.serveur = User.objects.create_user(
+            username='staff_owner',
+            password='password123',
+            role=User.Role.SERVEUR,
+        )
+        self.table = Table.objects.create(numero=12, capacite=4)
+        self.table_sur_place = Table.objects.create(numero=13, capacite=4)
+        self.categorie = Categorie.objects.create(nom='Plats')
+        self.plat = Plat.objects.create(
+            nom='Tajine',
+            prix=95,
+            categorie=self.categorie,
+        )
+        self.url = reverse('commande-list')
+
+    def test_client_can_create_and_fire_takeaway_order(self):
+        self.client.force_authenticate(user=self.client_user)
+
+        create_response = self.client.post(
+            self.url,
+            {
+                'type': Commande.Type.EMPORTER,
+                'client_nom': 'Client Retrait',
+                'lignes': [{'plat': self.plat.id, 'quantite': 2}],
+            },
+            format='json',
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+        commande = Commande.objects.get(pk=create_response.data['id'])
+        self.assertEqual(commande.serveur, self.client_user)
+        self.assertEqual(commande.type, Commande.Type.EMPORTER)
+        self.assertIsNone(commande.table)
+
+        patch_response = self.client.patch(
+            reverse('commande-detail', kwargs={'pk': commande.pk}),
+            {'statut': Commande.Statut.EN_CUISINE},
+            format='json',
+        )
+
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
+        commande.refresh_from_db()
+        self.assertEqual(commande.statut, Commande.Statut.EN_CUISINE)
+
+    def test_client_cannot_use_kitchen_scope_or_sur_place_create(self):
+        Commande.objects.create(
+            serveur=self.serveur,
+            table=self.table,
+            statut=Commande.Statut.EN_CUISINE,
+        )
+
+        self.client.force_authenticate(user=self.client_user)
+        list_response = self.client.get(self.url, {'scope': 'kitchen'})
+        self.assertEqual(list_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(list_response.data, [])
+
+        create_response = self.client.post(
+            self.url,
+            {
+                'type': Commande.Type.SUR_PLACE,
+                'table': self.table_sur_place.id,
+                'lignes': [{'plat': self.plat.id, 'quantite': 1}],
+            },
+            format='json',
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('type', create_response.data)

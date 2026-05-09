@@ -1,3 +1,19 @@
+## [2026-05-09] - 20:05
+### Fixed
+- Stopped the portail cart overlay from hitting `/api/commandes/` anonymously: `app/frontend/portail/src/components/cart/CartOverlay.tsx` now redirects unauthenticated or non-`CLIENT` users to `/login` before any checkout request is sent.
+- Restored the intended client takeaway order flow in `app/backend/apps/commandes/views.py` and `serializers.py` by allowing authenticated `CLIENT` users to create only `EMPORTER` orders, restricting their updates to the initial "fire order" transition, and keeping kitchen/table staff scopes unavailable to clients.
+- Hardened `app/backend/apps/commandes/signals.py` so takeaway orders with `table=None` still broadcast correctly without tripping table occupancy sync logic.
+
+### Added
+- Added portail checkout regression coverage in `app/frontend/portail/src/components/cart/CartOverlay.test.tsx` for the anonymous redirect path.
+- Added backend API coverage in `app/backend/apps/commandes/tests/test_api.py` for client takeaway creation, fire-order PATCH, and blocked `SUR_PLACE` / kitchen-scope access.
+
+### Validation
+- `npm test -- --run CartOverlay.test.tsx` passed in `app/frontend/portail`.
+- `npm run build` passed in `app/frontend/portail`.
+- `docker compose exec -T backend python manage.py makemigrations --check` returned `No changes detected`.
+- `docker compose exec -T backend python -m pytest apps/commandes/tests/test_api.py -k "ClientTakeawayCommandeApiTestCase or FireOrderPatchTestCase" -q` passed with `5 passed, 8 deselected`.
+
 ## [2026-05-09] - 02:10
 ### Added
 - **Project-Wide UAT Audit**: Scanned all 32 completed phases for documentation drift and pending human verification.

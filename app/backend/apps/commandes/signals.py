@@ -105,6 +105,13 @@ def sync_table_status_and_broadcast(sender, instance, created, **kwargs):
     """Automate table status transitions and broadcast to staff."""
     table = instance.table
 
+    if table is None:
+        event_type = "order_created" if created else "order_updated"
+        _schedule_after_commit(
+            lambda: _broadcast_order_snapshot(instance.pk, event_type)
+        )
+        return
+
     if created:
         if instance.statut in [Commande.Statut.PAYEE, Commande.Statut.ANNULEE]:
             if table.statut != Table.Statut.LIBRE:
