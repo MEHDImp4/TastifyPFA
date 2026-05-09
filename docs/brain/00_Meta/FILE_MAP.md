@@ -104,6 +104,8 @@ tastify-pfa/
 │               ├── components/ProtectedFeatureNotice.tsx # Shared gated-feature notice surface
 │               ├── components/cart/CartOverlay.tsx # Cart drawer and takeaway checkout gate for authenticated CLIENT users
 │               ├── components/cart/CartOverlay.test.tsx # Guards anonymous checkout redirect before any order POST
+│               ├── auth/logoutCleanup.ts # Helper that logs out with the freshly issued access token on role mismatch
+│               ├── auth/logoutCleanup.test.ts # Regression test for the denied-role logout request shape
 │               ├── api/reservations.ts # Client reservation API wrapper + time normalization
 │               ├── pages/Home/PortalHomePage.tsx # Public landing page describing open vs gated features
 │               ├── pages/Menu/MenuPage.tsx # Public menu browsing with local search

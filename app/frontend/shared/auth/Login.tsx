@@ -3,6 +3,8 @@ import { Eye, EyeOff, Lock, User, Loader2 } from 'lucide-react'
 import axiosInstance from './axiosInstance'
 import { getAuthPortalHeader } from './portalContext'
 import { useAuthStore } from './useAuthStore'
+import { logoutWithAccessToken } from './logoutCleanup'
+import { Link } from 'react-router-dom'
 import logoStaff from '@shared/assets/logo-staff.svg'
 import logoPublic from '@shared/assets/logo-public.svg'
 import { isRoleAllowed } from './roleAccess'
@@ -15,6 +17,7 @@ interface LoginProps {
   deniedMessage?: string
   variant?: 'staff' | 'client'
   initialError?: string
+  registerLink?: string
 }
 
 const STYLES = {
@@ -44,6 +47,7 @@ const Login: React.FC<LoginProps> = ({
   deniedMessage = "Ce compte n'est pas autorise sur ce portail.",
   variant = 'staff',
   initialError,
+  registerLink,
 }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -76,11 +80,12 @@ const Login: React.FC<LoginProps> = ({
 
       const { access, role, username: resUsername } = response.data
       if (allowedRoles && !isRoleAllowed(role, allowedRoles)) {
-        clearAuth()
         try {
-          await axiosInstance.post('/users/logout/')
+          await logoutWithAccessToken(access, variant)
         } catch {
           // The role gate is enforced client-side even if logout cleanup is unavailable.
+        } finally {
+          clearAuth()
         }
         setError(deniedMessage)
         return
@@ -177,6 +182,17 @@ const Login: React.FC<LoginProps> = ({
               )}
             </button>
           </form>
+
+          {registerLink && (
+            <div className="mt-6 text-center">
+              <p className="text-xs text-foreground-muted">
+                Pas encore de compte ?{" "}
+                <Link to={registerLink} className={`font-bold ${styles.label} hover:underline uppercase tracking-widest`}>
+                  S'inscrire
+                </Link>
+              </p>
+            </div>
+          )}
 
           <div className="mt-10 pt-8 border-t border-white/5 text-center">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted opacity-50">

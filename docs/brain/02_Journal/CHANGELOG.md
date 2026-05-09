@@ -1,3 +1,14 @@
+## [2026-05-09] - 20:18
+### Fixed
+- Repaired the portail login role-gate cleanup path so a denied login now calls `/api/users/logout/` with the freshly issued access token instead of relying on an empty auth store, which had been causing a 401 during logout cleanup.
+
+### Added
+- Added `app/frontend/shared/auth/logoutCleanup.ts` to centralize the logout request headers for role-gated login cleanup.
+- Added `app/frontend/portail/src/auth/logoutCleanup.test.ts` to lock the logout request contract in the portal test suite.
+
+### Validation
+- `npm test -- --run src/auth/logoutCleanup.test.ts` passed in `app/frontend/portail`.
+
 ## [2026-05-09] - 20:05
 ### Fixed
 - Stopped the portail cart overlay from hitting `/api/commandes/` anonymously: `app/frontend/portail/src/components/cart/CartOverlay.tsx` now redirects unauthenticated or non-`CLIENT` users to `/login` before any checkout request is sent.

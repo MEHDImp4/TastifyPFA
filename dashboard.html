@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-09 20:07:30<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-09 20:14:24<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,7 +433,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->6<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->7<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
@@ -697,7 +697,7 @@
                             <div><h4 class="font-semibold text-white">Phase 35: Click & Collect E-commerce</h4><p class="text-xs text-gray-400 mt-1">Plans: 2/2</p></div>
                             <div class="flex items-center">
                                 <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap">Terminé</span>
-                                
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border-green-500/20 whitespace-nowrap ml-2">UAT: PASSED</span>
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -985,6 +985,14 @@
                             </div>
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
                         </div>
+                        <div class="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 block"></span>
+                                <span class="text-sm font-medium text-white">Ph 35</span>
+                                <span class="text-xs text-gray-400 truncate max-w-[120px]">Click And Collect E Commerce</span>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-green-500/10 text-green-400 border-green-500/20">PASSED</span>
+                        </div>
                         <!-- UAT_END -->
                     </div>
                 </div>
@@ -1049,6 +1057,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Repaired the portail login role-gate cleanup path so a denied login now calls `/api/users/logout/` with the freshly issued access token instead of relying on an empty auth store, which had been causing a 401 during logout cleanup.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `app/frontend/shared/auth/logoutCleanup.ts` to centralize the logout request headers for role-gated login cleanup.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `app/frontend/portail/src/auth/logoutCleanup.test.ts` to lock the logout request contract in the portal test suite.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test ---run src/auth/logoutCleanup.test.ts` passed in `app/frontend/portail`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped the portail cart overlay from hitting `/api/commandes/` anonymously: `app/frontend/portail/src/components/cart/CartOverlay.tsx` now redirects unauthenticated or non-`CLIENT` users to `/login` before any checkout request is sent.</p>
                             </li>
@@ -1101,26 +1129,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-09 02:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Project-Wide UAT Audit**: Scanned all 32 completed phases for documentation drift and pending human verification.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 02:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Human Test Plan**: Produced a prioritized testing strategy in `.planning/audit_uat_report.md` to verify high-impact features (Loyalty, Real-time Dashboard, AI Sentiment).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 02:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Stale Documentation Reconciliation**:</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 02:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Phase 32: Synchronized individual test case checkboxes with the summary pass results in `32-UAT.md`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 02:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Phase 15: Promoted `15-VALIDATION.md` from `draft` to `final`.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
