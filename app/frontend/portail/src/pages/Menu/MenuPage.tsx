@@ -4,10 +4,12 @@ import RecommendationList from '../../components/menu/RecommendationList'
 import { Modal } from '@shared/ui/Modal'
 import { ReviewForm } from '../../components/menu/ReviewForm'
 import { useAuthStore } from '@shared/auth/useAuthStore'
-import { Star } from 'lucide-react'
+import { Star, Plus } from 'lucide-react'
+import { useCartStore } from '../../store/useCartStore'
 
 export const MenuPage: React.FC = () => {
   const { isAuthenticated } = useAuthStore()
+  const addItem = useCartStore((s) => s.addItem)
   const [plats, setPlats] = useState<Plat[]>([])
   const [selectedPlatId, setSelectedPlatId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
@@ -25,6 +27,11 @@ export const MenuPage: React.FC = () => {
         setLoading(false)
       })
   }, [])
+
+  const handleAddToCart = (e: React.MouseEvent, plat: Plat) => {
+    e.stopPropagation()
+    addItem({ id: plat.id, nom: plat.nom, prix: plat.prix })
+  }
 
   const selectedPlat = plats.find(p => p.id === selectedPlatId)
 
@@ -101,11 +108,15 @@ export const MenuPage: React.FC = () => {
           >
             <div className="mb-1 text-lg font-semibold text-white">{plat.nom}</div>
             <div className="min-h-[3rem] text-sm text-foreground-muted">{plat.description}</div>
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between gap-4">
               <span className="font-bold text-teal">{plat.prix} MAD</span>
-              <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground-muted">
-                Reco
-              </span>
+              <button
+                onClick={(e) => handleAddToCart(e, plat)}
+                className="flex h-9 items-center gap-2 rounded-lg bg-teal px-4 text-[10px] font-bold uppercase tracking-widest text-white transition-all active:scale-95 hover:brightness-110"
+              >
+                <Plus size={14} />
+                Ajouter
+              </button>
             </div>
           </div>
         ))}

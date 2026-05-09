@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CheckCircle2, ChevronDown, ChevronLeft, ChevronUp, Loader2, Receipt } from 'lucide-react'
+import { CheckCircle2, ChevronDown, ChevronLeft, ChevronUp, Loader2, Receipt, X } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '@shared/auth/axiosInstance'
 import { useAuthStore } from '@shared/auth/useAuthStore'
@@ -26,6 +26,7 @@ export const OrderingPage = () => {
   const [isReviewOpen, setIsReviewOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isFiring, setIsFiring] = useState(false)
+  const [isCancellingLine, setIsCancellingLine] = useState<number | null>(null)
   const [success, setSuccess] = useState(false)
   const [activeOrder, setActiveOrder] = useState<any>(null)
   const [isOrderExpanded, setIsOrderExpanded] = useState(false)
@@ -48,7 +49,29 @@ export const OrderingPage = () => {
     if (lastEvent.type === 'order_updated' && payload.order?.id === activeOrder.id) {
       setActiveOrder(payload.order)
     }
+    
+    if (lastEvent.type === 'line_cancelled' && payload.commande_id === activeOrder.id) {
+       // Refresh order to get updated montant_total and lines
+       fetchOrderOnly()
+    }
+
+    if (lastEvent.type === 'menu_item_unavailable') {
+       setDishes(prev => prev.map(d => d.id === payload.plat_id ? { ...d, est_disponible: false } : d))
+    }
+    if (lastEvent.type === 'menu_item_available') {
+       setDishes(prev => prev.map(d => d.id === payload.plat_id ? { ...d, est_disponible: true } : d))
+    }
   }, [lastEvent, activeOrder])
+
+  const fetchOrderOnly = async () => {
+    try {
+      const ordersResponse = await axiosInstance.get<any[]>(`/commandes/?table=${tableId}`)
+      const order = ordersResponse.data.length > 0 ? ordersResponse.data[0] : null
+      setActiveOrder(order)
+    } catch (err) {
+      console.error('Failed to refresh order', err)
+    }
+  }
 
   useEffect(() => {
     if (!Number.isInteger(tableId) || tableId <= 0) {
@@ -91,6 +114,26 @@ export const OrderingPage = () => {
     fetchMenu()
     return () => { cancelled = true }
   }, [tableId])
+
+  const cancelLine = async (lineId: number) => {
+    if (!window.confirm("Annuler ce plat de la commande ?")) return
+    setIsCancellingLine(lineId)
+    try {
+      await axiosInstance.patch(`/commandelignes/${lineId}/`, { statut: 'ANNULE' })
+      // Local state update for immediate feedback
+      setActiveOrder((prev: any) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          lignes: prev.lignes.filter((l: any) => l.id !== lineId)
+        }
+      })
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Impossible d'annuler le plat.")
+    } finally {
+      setIsCancellingLine(null)
+    }
+  }
 
   const submitOrder = async () => {
     if (cartItems.length === 0) return
@@ -266,7 +309,19 @@ export const OrderingPage = () => {
                               <span className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-black ${qtyClasses}`}>
                                 {ligne.quantite}
                               </span>
-                              <span className={`text-xs font-bold tracking-tight ${textClasses}`}>{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                              <div className="flex flex-col">
+                                <span className={`text-xs font-bold tracking-tight ${textClasses}`}>{ligne.plat_details?.nom || `Plat #${ligne.plat}`}</span>
+                                {ligne.statut === 'EN_ATTENTE' && isOwnOrder && (
+                                   <button 
+                                     onClick={() => cancelLine(ligne.id)}
+                                     disabled={isCancellingLine === ligne.id}
+                                     className="text-[9px] text-error font-bold flex items-center gap-1 mt-1 hover:underline active:scale-95"
+                                   >
+                                     {isCancellingLine === ligne.id ? <Loader2 size={8} className="animate-spin" /> : <X size={8} />}
+                                     Annuler
+                                   </button>
+                                )}
+                              </div>
                             </div>
                             <div className="flex items-center gap-1.5">
                               {isServi && (

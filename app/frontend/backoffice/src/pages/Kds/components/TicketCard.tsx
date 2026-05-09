@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Commande } from '../types';
 import { KdsTimer } from './KdsTimer';
-import { Check, Clock3, CookingPot, Loader2, NotebookPen, User } from 'lucide-react';
+import { Ban, Check, Clock3, CookingPot, Loader2, NotebookPen, User } from 'lucide-react';
 import { useKdsStore } from '../store/useKdsStore';
 
 interface TicketCardProps {
@@ -19,11 +19,13 @@ const formatServiceTime = (value: string) => {
 export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) => {
   const updateLineStatus = useKdsStore((state) => state.updateLineStatus);
   const completeOrder = useKdsStore((state) => state.completeOrder);
+  const updatePlatAvailability = useKdsStore((state) => state.updatePlatAvailability);
   const lignes = Array.isArray(order.lignes) ? order.lignes : [];
   const totalQuantity = lignes.reduce((sum, ligne) => sum + ligne.quantite, 0);
   const [showGlow, setShowGlow] = useState<boolean>(isNew);
   const [isCompleting, setIsCompleting] = useState(false);
   const [updatingLineId, setUpdatingLineId] = useState<number | null>(null);
+  const [updatingPlatId, setUpdatingPlatId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isNew) {
@@ -41,6 +43,13 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
     setUpdatingLineId(null);
   };
 
+  const handleMarkRupture = async (platId: number) => {
+    if (!window.confirm("Signaler cette plat en rupture immédiate ?")) return;
+    setUpdatingPlatId(platId);
+    await updatePlatAvailability(platId, false);
+    setUpdatingPlatId(null);
+  };
+
   const handleCompleteOrder = async () => {
     setIsCompleting(true);
     await completeOrder(order.id);
@@ -55,13 +64,22 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
       <div className="border-b border-white/5 bg-white/[0.02] px-4 py-3.5">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-amber">Table</div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-amber">
+              {order.type === 'EMPORTER' ? 'Client' : 'Table'}
+            </div>
             <div className="mt-1 flex items-baseline gap-2">
-              <div className="text-4xl font-bold leading-none tracking-tighter text-white">{order.table}</div>
+              <div className="text-4xl font-bold leading-none tracking-tighter text-white">
+                {order.type === 'EMPORTER' ? (order.client_nom || '—') : order.table}
+              </div>
               <div className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-bold text-slate-400">
                 #{order.id}
               </div>
             </div>
+            {order.type === 'EMPORTER' && (
+              <div className="mt-2 inline-flex items-center rounded-full bg-amber/10 border border-amber/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber animate-pulse">
+                A Emporter
+              </div>
+            )}
           </div>
           <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2 text-right ring-1 ring-inset ring-white/5">
             <KdsTimer startTime={order.created_at} />
@@ -164,13 +182,25 @@ export const TicketCard: React.FC<TicketCardProps> = ({ order, isNew = false }) 
                 </div>
 
                 {!isPret && (
-                  <button
-                    disabled={isUpdating}
-                    onClick={() => handleLineReady(ligne.id)}
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:bg-green-500 hover:text-white hover:border-green-500 active:scale-90 disabled:opacity-50"
-                  >
-                    {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Check size={18} />}
-                  </button>
+                  <div className="flex flex-col gap-1">
+                    <button
+                      disabled={isUpdating}
+                      onClick={() => handleLineReady(ligne.id)}
+                      title="Marquer comme prêt"
+                      className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:bg-green-500 hover:text-white hover:border-green-500 active:scale-90 disabled:opacity-50"
+                    >
+                      {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Check size={18} />}
+                    </button>
+                    
+                    <button
+                      disabled={updatingPlatId === ligne.plat}
+                      onClick={() => handleMarkRupture(ligne.plat)}
+                      title="Signaler rupture"
+                      className="flex h-7 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-red-500/20 bg-red-500/5 text-red-500/40 transition-all hover:bg-red-500 hover:text-white hover:border-red-500 active:scale-90 disabled:opacity-50"
+                    >
+                      {updatingPlatId === ligne.plat ? <Loader2 size={10} className="animate-spin" /> : <Ban size={14} />}
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

@@ -1,190 +1,185 @@
-import { useState, useEffect } from 'react';
-import { Plus, Search, AlertTriangle } from 'lucide-react';
-import axiosInstance from '@shared/auth/axiosInstance';
-import { IngredientList } from './IngredientList';
-import { IngredientMobileCard } from './IngredientMobileCard';
-import { IngredientDrawer } from './IngredientDrawer';
-import { StockAdjustmentModal } from './StockAdjustmentModal';
-import { Switch } from '../../components/ui/Switch';
-import { Pagination } from '../../components/ui/Pagination';
-import { Ingredient } from './types';
-import { useAuthStore } from '@shared/auth/useAuthStore';
+import { Plus, Search, Filter, Loader2, Brain } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import axios from '@shared/auth/axiosInstance'
+import { useAuthStore } from '@shared/auth/useAuthStore'
+import { Ingredient } from './types'
+import { IngredientList } from './IngredientList'
+import { IngredientDrawer } from './IngredientDrawer'
+import { StockAdjustmentModal } from './StockAdjustmentModal'
+import { StockForecasting } from './StockForecasting'
 
-export default function StockPage() {
-  const { user } = useAuthStore();
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isAdjustmentModalOpen, setIsAdjustmentModalOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showOnlyAlerts, setShowOnlyAlerts] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12;
+const StockPage = () => {
+  const [ingredients, setIngredients] = useState<Ingredient[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [activeTab, setActiveTab] = useState<'INVENTORY' | 'FORECAST'>('INVENTORY')
 
-  const isGerant = user?.role === 'GERANT';
+  const { user } = useAuthStore()
+  const isGerant = user?.role === 'GERANT'
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null)
+  const [isAdjustmentModalOpen, setIsAdjustmentModalOpen] = useState(false)
 
   const fetchIngredients = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const response = await axiosInstance.get('/stock/ingredients/');
-      setIngredients(response.data);
+      const response = await axios.get('/ingredients/')
+      setIngredients(response.data)
+      setError(null)
     } catch (err) {
-      console.error('Failed to fetch ingredients', err);
+      console.error('Failed to fetch ingredients', err)
+      setError('Impossible de charger le stock.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchIngredients();
-  }, []);
+    fetchIngredients()
+  }, [])
 
-  const handleEdit = (ingredient: Ingredient) => {
-    if (!isGerant) return;
-    setSelectedIngredient(ingredient);
-    setIsDrawerOpen(true);
-  };
+  const filteredIngredients = ingredients.filter((ing) =>
+    ing.nom.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
-  const handleToggleActive = (id: number, isActive: boolean) => {
-    setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, est_active: isActive } : ing));
-  };
+  const handleOpenDrawer = (ingredient?: Ingredient) => {
+    setSelectedIngredient(ingredient || null)
+    setIsDrawerOpen(true)
+  }
 
-  const handleAdjust = (ingredient: Ingredient) => {
-    setSelectedIngredient(ingredient);
-    setIsAdjustmentModalOpen(true);
-  };
+  const handleSaveIngredient = async () => {
+    await fetchIngredients()
+    setIsDrawerOpen(false)
+  }
 
-  const handleAdd = () => {
-    setSelectedIngredient(null);
-    setIsDrawerOpen(true);
-  };
+  const handleAdjustStock = (ingredient: Ingredient) => {
+    setSelectedIngredient(ingredient)
+    setIsAdjustmentModalOpen(true)
+  }
 
-const filteredIngredients = ingredients.filter(ing => {
-    const matchesSearch = (ing.nom || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesAlert = showOnlyAlerts ? ing.stock_actuel <= ing.seuil_alerte * 1.2 : true;
-    return matchesSearch && matchesAlert;
-  });
-  const totalPages = Math.max(1, Math.ceil(filteredIngredients.length / pageSize));
-  const paginatedIngredients = filteredIngredients.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const handleStockAdjusted = async () => {
+    await fetchIngredients()
+    setIsAdjustmentModalOpen(false)
+  }
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, showOnlyAlerts]);
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
+  const handleToggleActive = async (id: number, isActive: boolean) => {
+    try {
+      await axios.patch(`/ingredients/${id}/`, { est_active: isActive })
+      await fetchIngredients()
+    } catch (err) {
+      console.error('Failed to toggle ingredient state', err)
     }
-  }, [currentPage, totalPages]);
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="mx-auto max-w-[1400px] space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Gestion du Stock</h1>
-          <p className="text-foreground-muted">Gérez vos ingrédients et surveillez les niveaux de stock.</p>
+          <h1 className="text-3xl font-black tracking-tight text-white">Gestion du Stock</h1>
+          <p className="mt-1 text-sm font-medium text-foreground-muted">
+            Suivez vos ingrédients, ajustez les quantités et anticipez vos besoins.
+          </p>
         </div>
-        {isGerant && (
-          <button
-            onClick={handleAdd}
-            className="flex items-center gap-2 bg-teal hover:bg-teal/80 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-teal/20 active:scale-95"
-          >
-            <Plus size={20} />
-            Ajouter un ingrédient
-          </button>
-        )}
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-center bg-surface p-4 rounded-xl border border-surface-elevated">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" size={20} />
-          <input
-            type="text"
-            placeholder="Rechercher un ingrédient..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-surface-elevated border-none focus:ring-2 focus:ring-teal rounded-xl pl-10 pr-4 py-2 text-white"
-          />
-        </div>
-        <div className="flex items-center gap-3 px-4 py-2 bg-surface-elevated/50 rounded-xl border border-surface-elevated shrink-0">
-          <AlertTriangle size={18} className={showOnlyAlerts ? 'text-amber' : 'text-foreground-muted'} />
-          <span className="text-sm font-medium text-white">Alertes uniquement</span>
-          <Switch checked={showOnlyAlerts} onToggle={() => setShowOnlyAlerts(!showOnlyAlerts)} />
+        <div className="flex items-center gap-3">
+          {activeTab === 'INVENTORY' && isGerant && (
+            <button
+              onClick={() => handleOpenDrawer()}
+              className="flex h-11 items-center gap-2 rounded-xl bg-teal px-6 text-sm font-black text-surface shadow-lg shadow-teal/20 transition-all hover:bg-teal-light active:scale-95"
+            >
+              <Plus size={18} />
+              Nouvel Ingrédient
+            </button>
+          )}
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal"></div>
-        </div>
-      ) : (
+      {/* Tabs */}
+      <div className="flex gap-1 rounded-2xl bg-white/5 p-1 border border-white/5 w-fit">
+        <button
+          onClick={() => setActiveTab('INVENTORY')}
+          className={`flex items-center gap-2 px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
+            activeTab === 'INVENTORY'
+              ? 'bg-teal text-surface shadow-lg shadow-teal/20'
+              : 'text-foreground-muted hover:text-white hover:bg-white/5'
+          }`}
+        >
+          Inventaire
+        </button>
+        <button
+          onClick={() => setActiveTab('FORECAST')}
+          className={`flex items-center gap-2 px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
+            activeTab === 'FORECAST'
+              ? 'bg-teal text-surface shadow-lg shadow-teal/20'
+              : 'text-foreground-muted hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Brain size={14} />
+          Prévisions IA
+        </button>
+      </div>
+
+      {activeTab === 'INVENTORY' ? (
         <>
-          {/* Desktop View */}
-          <div className="hidden md:block">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+            <div className="relative flex-1">
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Rechercher un ingrédient..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-12 w-full rounded-2xl border border-white/5 bg-white/5 pl-12 pr-4 text-sm text-white placeholder-white/20 transition-all focus:border-teal/50 focus:bg-white/10 outline-none"
+              />
+            </div>
+            <button className="flex h-12 items-center gap-2 rounded-2xl border border-white/5 bg-white/5 px-6 text-sm font-bold text-foreground-muted transition-all hover:bg-white/10 hover:text-white">
+              <Filter size={16} />
+              Filtres
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="flex h-64 items-center justify-center rounded-3xl border border-white/5 bg-white/5">
+              <Loader2 className="h-8 w-8 animate-spin text-teal" />
+            </div>
+          ) : error ? (
+            <div className="rounded-3xl border border-red-500/10 bg-red-500/5 p-8 text-center">
+              <p className="text-sm font-bold text-red-400">{error}</p>
+            </div>
+          ) : (
             <IngredientList
-              ingredients={paginatedIngredients}
-              onEdit={handleEdit}
-              onAdjust={handleAdjust}
+              ingredients={filteredIngredients}
+              onEdit={handleOpenDrawer}
+              onAdjust={handleAdjustStock}
               onRefresh={fetchIngredients}
               onToggleActive={handleToggleActive}
               isGerant={isGerant}
             />
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              pageSize={pageSize}
-              totalItems={filteredIngredients.length}
-              itemLabel="ingredients"
-              onPageChange={setCurrentPage}
-            />
-          </div>
-
-          {/* Mobile View */}
-          <div className="grid grid-cols-1 gap-4 md:hidden">
-            {filteredIngredients.length === 0 ? (
-              <div className="bg-surface p-8 text-center text-foreground-muted rounded-xl border border-surface-elevated">
-                {searchTerm || showOnlyAlerts ? 'Aucun résultat correspondant.' : 'Aucun ingrédient trouvé.'}
-              </div>
-            ) : (
-              <>
-                {paginatedIngredients.map((ingredient) => (
-                  <IngredientMobileCard
-                    key={ingredient.id}
-                    ingredient={ingredient}
-                    onEdit={handleEdit}
-                    onAdjust={handleAdjust}
-                    onRefresh={fetchIngredients}
-                    onToggleActive={handleToggleActive}
-                  />
-                ))}
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  pageSize={pageSize}
-                  totalItems={filteredIngredients.length}
-                  itemLabel="ingredients"
-                  onPageChange={setCurrentPage}
-                />
-              </>
-            )}
-          </div>
+          )}
         </>
+      ) : (
+        <StockForecasting />
       )}
 
       <IngredientDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        onSuccess={fetchIngredients}
         initialData={selectedIngredient}
+        onSuccess={handleSaveIngredient}
       />
 
       <StockAdjustmentModal
         isOpen={isAdjustmentModalOpen}
         onClose={() => setIsAdjustmentModalOpen(false)}
-        onSuccess={fetchIngredients}
         ingredient={selectedIngredient}
+        onSuccess={handleStockAdjusted}
       />
     </div>
-  );
+  )
 }
+
+export default StockPage

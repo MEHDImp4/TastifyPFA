@@ -43,6 +43,8 @@ class CommandeSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'table',
+            'type',
+            'client_nom',
             'serveur',
             'serveur_name',
             'serveur_username',
@@ -61,10 +63,27 @@ class CommandeSerializer(serializers.ModelSerializer):
             return full_name or obj.serveur.username
         return None
 
+    def validate(self, attrs):
+        """
+        Custom validation to ensure table is provided for SUR_PLACE orders
+        and not required for EMPORTER orders.
+        """
+        order_type = attrs.get('type', Commande.Type.SUR_PLACE)
+        table = attrs.get('table')
+
+        if order_type == Commande.Type.SUR_PLACE and not table:
+            raise serializers.ValidationError({"table": "Une table est requise pour une commande sur place."})
+        
+        return attrs
+
     def validate_table(self, value):
         """
         CMD-API-04: Ensure the table is not already OCCUPEE when creating a new order.
         """
+        # value can be None for EMPORTER
+        if not value:
+            return value
+
         # We only check for new orders (POST)
         request = self.context.get('request')
         if request and request.method == 'POST':

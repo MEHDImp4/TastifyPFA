@@ -23,10 +23,16 @@ class Commande(models.Model):
         PAYEE = 'PAYEE', 'Payee'
         ANNULEE = 'ANNULEE', 'Annulee'
 
+    class Type(models.TextChoices):
+        SUR_PLACE = 'SUR_PLACE', 'Sur place'
+        EMPORTER = 'EMPORTER', 'A emporter'
+
     table = models.ForeignKey(
         'tables.Table',
         on_delete=models.PROTECT,
         related_name='commandes',
+        null=True,
+        blank=True,
     )
     serveur = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -35,6 +41,12 @@ class Commande(models.Model):
         null=True,
         blank=True,
     )
+    type = models.CharField(
+        max_length=20,
+        choices=Type.choices,
+        default=Type.SUR_PLACE,
+    )
+    client_nom = models.CharField(max_length=100, blank=True, null=True)
     statut = models.CharField(
         max_length=20,
         choices=Statut.choices,
@@ -57,7 +69,9 @@ class Commande(models.Model):
         ]
 
     def __str__(self):
-        return f'Commande #{self.pk} - Table {self.table_id}'
+        type_label = "Emporter" if self.type == self.Type.EMPORTER else "Table"
+        target = self.client_nom if self.type == self.Type.EMPORTER else self.table_id
+        return f'Commande #{self.pk} - {type_label} {target}'
 
     def delete(self, using=None, keep_parents=False):
         self.est_active = False

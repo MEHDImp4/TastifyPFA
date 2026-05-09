@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
 from apps.users.models import Utilisateur
-from .models import Employe
+from .models import Employe, Shift, OffreEmploi, Candidature
 
 class UserMinimalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,3 +73,54 @@ class EmployeSerializer(serializers.ModelSerializer):
             user_updated = False
             
         return super().update(instance, validated_data)
+
+
+class ShiftSerializer(serializers.ModelSerializer):
+    employe_name = serializers.ReadOnlyField(source='employe.user.get_full_name')
+
+    class Meta:
+        model = Shift
+        fields = '__all__'
+
+    def validate(self, attrs):
+        # Basic overlap validation
+        heure_debut = attrs.get('heure_debut')
+        heure_fin = attrs.get('heure_fin')
+        jour = attrs.get('jour')
+        employe = attrs.get('employe')
+
+        if heure_debut and heure_fin and heure_debut >= heure_fin:
+            raise serializers.ValidationError("L'heure de début doit être avant l'heure de fin.")
+
+        # Check for overlaps (excluding self if update)
+        qs = Shift.objects.filter(employe=employe, jour=jour)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        
+        overlapping = qs.filter(
+            heure_debut__lt=heure_fin,
+            heure_fin__gt=heure_debut
+        ).exists()
+
+        if overlapping:
+            raise serializers.ValidationError("Cet employé a déjà un shift qui chevauche ces horaires.")
+
+        return attrs
+
+
+class OffreEmploiSerializer(serializers.ModelSerializer):
+    candidatures_count = serializers.IntegerField(source='candidatures.count', read_only=True)
+
+    class Meta:
+        model = OffreEmploi
+        fields = '__all__'
+
+
+class CandidatureSerializer(serializers.ModelSerializer):
+    offre_titre = serializers.ReadOnlyField(source='offre.titre')
+
+    class Meta:
+        model = Candidature
+        fields = '__all__'
+        read_only_fields = ['statut', 'created_at']
+

@@ -13,6 +13,7 @@ interface KdsState {
   clearNewOrder: (orderId: number) => void
   updateLineStatus: (lineId: number, status: string) => Promise<void>
   completeOrder: (orderId: number) => Promise<void>
+  updatePlatAvailability: (platId: number, available: boolean) => Promise<void>
   handleSocketEvent: (event: any) => void
 }
 
@@ -36,7 +37,9 @@ const normalizeCommande = (value: unknown): Commande | null => {
 
   return {
     id,
-    table: typeof value.table === 'number' ? value.table : 0,
+    table: typeof value.table === 'number' ? value.table : null,
+    type: (value.type as any) || 'SUR_PLACE',
+    client_nom: typeof value.client_nom === 'string' ? value.client_nom : null,
     serveur: typeof value.serveur === 'number' ? value.serveur : null,
     serveur_name: typeof value.serveur_name === 'string' ? value.serveur_name : null,
     serveur_username: typeof value.serveur_username === 'string' ? value.serveur_username : null,
@@ -172,6 +175,14 @@ export const useKdsStore = create<KdsState>((set, get) => ({
       await axios.patch(`/commandes/${orderId}/`, { statut: 'PRETE' })
     } catch (err: any) {
       set({ error: err.message || 'Failed to complete order' })
+    }
+  },
+
+  updatePlatAvailability: async (platId: number, available: boolean) => {
+    try {
+      await axios.patch(`/plats/${platId}/`, { est_disponible: available })
+    } catch (err: any) {
+      set({ error: err.message || 'Failed to update plat availability' })
     }
   },
 

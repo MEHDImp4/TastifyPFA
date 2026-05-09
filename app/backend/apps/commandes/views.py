@@ -43,12 +43,20 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     {"error": "Vous n'êtes pas le serveur assigné à cette commande."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            if new_statut != CommandeLigne.Statut.SERVI:
+            
+            if new_statut == CommandeLigne.Statut.ANNULE:
+                if instance.statut not in [CommandeLigne.Statut.EN_ATTENTE]:
+                    return Response(
+                        {"error": "Impossible d'annuler un plat déjà en préparation ou servi."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            elif new_statut != CommandeLigne.Statut.SERVI:
                 return Response(
-                    {"error": "Le serveur ne peut que marquer un plat comme servi."},
+                    {"error": "Le serveur ne peut que marquer un plat comme servi ou l'annuler (si non démarré)."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            if instance.statut != CommandeLigne.Statut.PRET:
+            
+            if new_statut == CommandeLigne.Statut.SERVI and instance.statut != CommandeLigne.Statut.PRET:
                 return Response(
                     {"error": "Un plat doit être prêt avant d'être marqué comme servi."},
                     status=status.HTTP_400_BAD_REQUEST
@@ -63,18 +71,28 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
         response = super().partial_update(request, *args, **kwargs)
 
-        if new_statut == CommandeLigne.Statut.PRET and response.status_code == 200:
+        if response.status_code == 200:
             from core.realtime import broadcast_staff_event
             instance.refresh_from_db()
-            broadcast_staff_event(
-                event_type='line_ready',
-                payload={
-                    'ligne_id': instance.id,
-                    'plat_nom': instance.plat.nom,
-                    'commande_id': instance.commande_id,
-                    'table_numero': instance.commande.table.numero,
-                },
-            )
+            
+            if new_statut == CommandeLigne.Statut.PRET:
+                broadcast_staff_event(
+                    event_type='line_ready',
+                    payload={
+                        'ligne_id': instance.id,
+                        'plat_nom': instance.plat.nom,
+                        'commande_id': instance.commande_id,
+                        'table_numero': instance.commande.table.numero,
+                    },
+                )
+            elif new_statut == CommandeLigne.Statut.ANNULE:
+                broadcast_staff_event(
+                    event_type='line_cancelled',
+                    payload={
+                        'ligne_id': instance.id,
+                        'commande_id': instance.commande_id,
+                    },
+                )
 
         return response
 

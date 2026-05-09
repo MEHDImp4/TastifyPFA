@@ -15,6 +15,7 @@ import axios from '@shared/auth/axiosInstance'
 const mockOrder: Commande = {
   id: 1,
   table: 5,
+  type: 'SUR_PLACE',
   serveur: 1,
   serveur_name: 'John Doe',
   serveur_username: 'john',

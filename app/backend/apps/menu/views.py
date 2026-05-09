@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from django.db.models import Count
 
-from apps.users.permissions import IsGerant
+from apps.users.permissions import IsGerant, IsCuisinierOrGerant
 from .models import Categorie, Plat
 from .serializers import CategorieSerializer, PlatSerializer
 
@@ -39,11 +39,13 @@ class PlatViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'recommendations'):
             return [AllowAny()]
+        if self.action == 'partial_update':
+            return [IsAuthenticated(), IsCuisinierOrGerant()]
         return [IsAuthenticated(), IsGerant()]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and user.role == 'GERANT':
+        if user.is_authenticated and user.role in ['GERANT', 'CUISINIER']:
             qs = Plat.objects.all()
         else:
             qs = Plat.objects.active().filter(est_disponible=True)

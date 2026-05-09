@@ -23,7 +23,9 @@ export interface CommandeLigne {
 
 export interface Commande {
   id: number
-  table: number
+  table: number | null
+  type: 'SUR_PLACE' | 'EMPORTER'
+  client_nom?: string | null
   serveur: number | null
   serveur_name: string | null
   serveur_username: string | null

@@ -10,6 +10,38 @@ ROADMAP_FILE = os.path.join(ROOT_DIR, ".planning", "ROADMAP.md")
 STATE_FILE = os.path.join(ROOT_DIR, ".planning", "STATE.md")
 CHANGELOG_FILE = os.path.join(ROOT_DIR, "docs", "brain", "02_Journal", "CHANGELOG.md")
 DASHBOARD_FILE = os.path.join(ROOT_DIR, "dashboard.html")
+AUDIT_REPORT_FILE = os.path.join(ROOT_DIR, ".planning", "audit_uat_report.md")
+
+def read_human_test_plan():
+    items = []
+    if not os.path.exists(AUDIT_REPORT_FILE):
+        return items
+        
+    with open(AUDIT_REPORT_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Extraction de la section "Prioritized Human Test Plan"
+    # Utiliser \n## pour s'assurer qu'on ne s'arrête pas aux sous-sections ###
+    match = re.search(r'## Prioritized Human Test Plan(.*?)(?:\n## |$)', content, re.DOTALL)
+    if match:
+        section = match.group(1).strip()
+        # Parsing des priorités et tâches
+        priority = "Medium"
+        for line in section.split('\n'):
+            line_clean = line.strip()
+            if not line_clean: continue
+            
+            if "Priority 1" in line_clean: priority = "High"
+            elif "Priority 2" in line_clean: priority = "Medium"
+            elif "Priority 3" in line_clean: priority = "Low"
+            
+            if "- [ ]" in line_clean:
+                task = line_clean.split("] ", 1)[1] if "] " in line_clean else line_clean
+                items.append({
+                    "task": task,
+                    "priority": priority
+                })
+    return items
 
 def read_roadmap():
     phases = []
@@ -219,6 +251,7 @@ def update_dashboard():
     backend_stats = get_backend_stats()
     git_status = get_git_status()
     uat_map, uat_list = get_uat_status()
+    human_test_plan = read_human_test_plan()
     
     # Read accurate total/completed from STATE.md
     state_total, state_completed = read_state_file()
@@ -330,6 +363,15 @@ def update_dashboard():
                             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase {u_class}">{u_stat}</span>
                         </div>''')
 
+    # Génération du HTML pour le Human Test Plan
+    human_plan_html = []
+    for item in human_test_plan:
+        p_color = "red" if item["priority"] == "High" else "yellow" if item["priority"] == "Medium" else "blue"
+        human_plan_html.append(f'''                        <div class="flex items-start gap-3 p-2 rounded bg-white/5 border border-white/5">
+                            <span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-{p_color}-500/10 text-{p_color}-400 border border-{p_color}-500/20 whitespace-nowrap">{item["priority"]}</span>
+                            <span class="text-sm text-gray-300">{item["task"]}</span>
+                        </div>''')
+
     # Génération du HTML pour l'Activity Stream
     
     # Generate "Next Phases" section (phases 28-33)
@@ -406,7 +448,7 @@ def update_dashboard():
         
         prefix = content[:start_idx + len(start_marker)]
         suffix = content[end_idx:]
-        return f"{prefix}\n{replacement}\n{' ' * 28}{suffix}"
+        return f"{prefix}\n{replacement}\n{' ' * 24}{suffix}"
         
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<span[^>]*>.*?</span>(<!-- PERCENT_END -->)', rf'\g<1><span class="text-primary font-bold">{progress_percent}%</span>\g<2>', dash_content)
     dash_content = re.sub(r'(<!-- PERCENT_START -->)<div[^>]*style="width:.*?</div>(<!-- PERCENT_END -->)', rf'\g<1><div class="h-full bg-primary rounded-full" style="width: {progress_percent}%"></div>\g<2>', dash_content)
@@ -459,6 +501,7 @@ def update_dashboard():
     dash_content = replace_section(dash_content, '<!-- DETAILED_PHASES_START -->', '<!-- DETAILED_PHASES_END -->', '\n'.join(detailed_html))
     dash_content = replace_section(dash_content, '<!-- UAT_START -->', '<!-- UAT_END -->', '\n'.join(uat_html))
     dash_content = replace_section(dash_content, '<!-- LOGS_START -->', '<!-- LOGS_END -->', '\n'.join(logs_html))
+    dash_content = replace_section(dash_content, '<!-- HUMAN_PLAN_START -->', '<!-- HUMAN_PLAN_END -->', '\n'.join(human_plan_html))
     dash_content = replace_section(dash_content, '<!-- CHART_DATA_START -->', '<!-- CHART_DATA_END -->', chart_data_html)
 
     with open(DASHBOARD_FILE, 'w', encoding='utf-8') as f:

@@ -1,17 +1,22 @@
 import logging
 import requests
 import time
+import re
 from celery import shared_task
 from django.apps import apps
 from decouple import config
+from langdetect import detect, DetectorFactory
+
+# Set seed for deterministic language detection
+DetectorFactory.seed = 0
 
 logger = logging.getLogger(__name__)
 
-HF_MODEL_NAME = config(
-    'HF_MODEL_NAME',
-    default='nlptown/bert-base-multilingual-uncased-sentiment',
-)
-
+# Models and URLs
+MODEL_MAP = {
+    'multilingual': 'nlptown/bert-base-multilingual-uncased-sentiment',
+    'arabic': 'moussaKam/MARBERT-sentiment',
+}
 
 def get_hf_api_token():
     raw_token = config('HUGGINGFACE_API_TOKEN', default='').strip()
@@ -19,96 +24,90 @@ def get_hf_api_token():
         return raw_token[7:].strip()
     return raw_token
 
-
-def get_hf_api_url():
-    return f'https://router.huggingface.co/hf-inference/models/{HF_MODEL_NAME}'
-
-def query_hf_api(text):
+def query_hf_api(text, model_name):
     """Sends a request to the Hugging Face Inference API."""
     token = get_hf_api_token()
-
     if not token:
         logger.warning("HUGGINGFACE_API_TOKEN is not set.")
         return None
 
-    if not token.startswith('hf_'):
-        logger.warning("HUGGINGFACE_API_TOKEN does not look like a valid HF token (should start with hf_)")
-
+    url = f'https://router.huggingface.co/hf-inference/models/{model_name}'
     headers = {"Authorization": f"Bearer {token}"}
     payload = {"inputs": text}
     
     for attempt in range(3):
         try:
-            response = requests.post(
-                get_hf_api_url(),
-                headers=headers,
-                json=payload,
-                timeout=15,
-            )
-            
+            response = requests.post(url, headers=headers, json=payload, timeout=15)
             if response.status_code == 200:
                 return response.json()
-            
             if response.status_code == 503:
-                # Model is loading
                 data = response.json()
                 wait_time = data.get('estimated_time', 10)
-                logger.info(f"HF Model is loading. Waiting {wait_time}s (Attempt {attempt+1}/3)...")
                 time.sleep(min(wait_time, 15))
                 continue
-                
             logger.error(f"HF API Error {response.status_code}: {response.text}")
             break
         except requests.exceptions.RequestException as e:
             logger.error(f"HF API Request failed: {str(e)}")
             time.sleep(2)
-            
     return None
 
-@shared_task
+def detect_language(text):
+    """
+    Heuristic for language detection.
+    """
+    # 1. Simple Regex for Arabic characters
+    if re.search(r'[\u0600-\u06FF]', text):
+        return 'ar'
+    
+    # 2. Use langdetect for others
+    try:
+        return detect(text)
+    except:
+        return 'unknown'
+
+@shared_task(name="apps.avis.tasks.analyze_review_sentiment")
 def analyze_review_sentiment(avis_id):
     """
-    Analyzes the sentiment of a review using Hugging Face Inference API.
-    Updates the sentiment_score (1-5 stars).
+    Analyzes review sentiment with language-specific model routing.
     """
     Avis = apps.get_model('avis', 'Avis')
     try:
         avis = Avis.objects.get(id=avis_id)
         if not avis.commentaire:
-            return "No commentary to analyze"
+            return "No commentary"
 
-        output = query_hf_api(avis.commentaire[:512])
+        # Detect language
+        lang = detect_language(avis.commentaire)
+        avis.lang_code = lang
         
-        if not output:
-            return f"Failed to get API response for Avis {avis_id}"
-
-        # API response is usually [[{'label': 'X stars', 'score': ...}, ...]]
-        try:
-            # Flatten if nested list
-            if isinstance(output, list) and len(output) > 0 and isinstance(output[0], list):
-                results = output[0]
-            elif isinstance(output, list):
-                results = output
-            else:
-                return f"Unexpected API output format: {type(output)}"
-
-            # Pick the best result
-            best_match = max(results, key=lambda x: x['score'])
-            label = best_match['label']
-            
-            # Label format is "1 star", "2 stars", etc.
-            score = int(label.split()[0])
-            
-            avis.sentiment_score = score
-            avis.save(update_fields=['sentiment_score', 'updated_at'])
-            return f"Sentiment analyzed: {score} stars"
-            
-        except (ValueError, IndexError, KeyError, TypeError) as e:
-            logger.error(f"Error parsing HF response for Avis {avis_id}: {str(e)}")
-            return f"Parse error: {str(e)}"
+        # Route to model
+        if lang == 'ar':
+            model = MODEL_MAP['arabic']
+            output = query_hf_api(avis.commentaire[:512], model)
+            if output:
+                # MARBERT output format: [{'label': 'LABEL_X', 'score': ...}, ...]
+                # Usually LABEL_0 = Negative, LABEL_1 = Neutral, LABEL_2 = Positive
+                results = output[0] if isinstance(output[0], list) else output
+                best = max(results, key=lambda x: x['score'])
+                # Map to 1-5 scale (Positive=5, Neutral=3, Negative=1)
+                label = best['label'].upper()
+                if 'LABEL_2' in label or 'POSITIVE' in label: score = 5
+                elif 'LABEL_1' in label or 'NEUTRAL' in label: score = 3
+                else: score = 1
+                avis.sentiment_score = score
+        else:
+            model = MODEL_MAP['multilingual']
+            output = query_hf_api(avis.commentaire[:512], model)
+            if output:
+                results = output[0] if isinstance(output[0], list) else output
+                best = max(results, key=lambda x: x['score'])
+                label = best['label'] # "X stars"
+                avis.sentiment_score = int(label.split()[0])
         
-    except Avis.DoesNotExist:
-        return f"Avis {avis_id} not found"
+        avis.save(update_fields=['sentiment_score', 'lang_code', 'updated_at'])
+        return f"Sentiment analyzed ({lang}): {avis.sentiment_score} stars"
+        
     except Exception as e:
-        logger.exception(f"Unexpected error in sentiment task for Avis {avis_id}")
-        return f"Error: {str(e)}"
+        logger.exception(f"Error in sentiment task for Avis {avis_id}")
+        return str(e)
