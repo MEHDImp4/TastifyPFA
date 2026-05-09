@@ -13,6 +13,7 @@
 - `npm run build` passed in `app/frontend/portail`.
 - `docker compose exec -T backend python manage.py makemigrations --check` returned `No changes detected`.
 - `docker compose exec -T backend python -m pytest apps/commandes/tests/test_api.py -k "ClientTakeawayCommandeApiTestCase or FireOrderPatchTestCase" -q` passed with `5 passed, 8 deselected`.
+- Code commit: `6099f42` (`Fix client takeaway checkout flow`).
 
 ## [2026-05-09] - 02:10
 ### Added
