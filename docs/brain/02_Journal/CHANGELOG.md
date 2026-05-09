@@ -8,6 +8,7 @@
 
 ### Validation
 - `npm test -- --run src/auth/logoutCleanup.test.ts` passed in `app/frontend/portail`.
+- Code commit: `a6fc6cc` (`Fix login logout cleanup with issued token`).
 
 ## [2026-05-09] - 20:05
 ### Fixed
