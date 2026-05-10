@@ -1,5 +1,5 @@
 import { api } from './axios';
-import { Categorie, Plat } from '../types/menu';
+import type { Categorie, Plat } from '../types/menu';
 
 export const menuApi = {
   // Categories

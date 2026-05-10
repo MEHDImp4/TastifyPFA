@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
 import { salleApi } from '../../api/salle';
-import { Categorie, Plat } from '../../types/menu';
-import { Commande, Table } from '../../types/salle';
+import type { Categorie, Plat } from '../../types/menu';
+import type { Commande, Table } from '../../types/salle';
 import { 
   ChevronLeft, 
   Search, 

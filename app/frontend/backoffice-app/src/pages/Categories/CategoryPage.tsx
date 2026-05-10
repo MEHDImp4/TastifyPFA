@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
-import { Categorie } from '../../types/menu';
+import type { Categorie } from '../../types/menu';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 

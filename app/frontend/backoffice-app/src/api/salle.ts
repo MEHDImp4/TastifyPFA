@@ -1,5 +1,5 @@
 import { api } from './axios';
-import { Table, Commande } from '../types/salle';
+import type { Table, Commande } from '../types/salle';
 
 export const salleApi = {
   getTables: () => api.get<Table[]>('/tables/'),

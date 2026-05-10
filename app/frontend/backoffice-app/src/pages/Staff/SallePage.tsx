@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
-import { Table } from '../../types/salle';
+import type { Table } from '../../types/salle';
 import { Loader2, Users, Monitor, Map as MapIcon, Plus } from 'lucide-react';
 
 export const SallePage: React.FC = () => {

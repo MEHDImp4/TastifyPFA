@@ -1,5 +1,5 @@
 import { api } from './axios';
-import { Commande } from '../types/salle';
+import type { Commande } from '../types/salle';
 
 export const kdsApi = {
   getActiveTickets: () => api.get<Commande[]>('/commandes/?statut=EN_CUISINE,PRETE'),
