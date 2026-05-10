@@ -21,6 +21,7 @@ export default defineConfig({
       '/ws': {
         target: 'ws://backend:8000',
         ws: true,
+        changeOrigin: true,
         xfwd: true,
       }
     }
