@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
 import { PortalHomePage } from './pages/Home/PortalHomePage';
+import { MenuPage } from './pages/Menu/MenuPage';
+import { ReservationWizard } from './pages/Reservations/ReservationWizard';
 import { Login } from './pages/auth/Login';
 import { useAuthStore } from './store/authStore';
 
@@ -18,6 +20,8 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<PortalHomePage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/reservations" element={<ReservationWizard />} />
             <Route path="/login" element={
               <GuestRoute>
                 <Login />
