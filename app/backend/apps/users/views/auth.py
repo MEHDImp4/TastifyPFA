@@ -65,30 +65,46 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             del response.data['refresh']
         return response
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class CookieTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Some parsers expose immutable request.data objects; build a mutable payload
         # instead of mutating request.data directly.
         request_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
-        refresh_token = request.COOKIES.get(get_auth_cookie_name(request))
+        cookie_name = get_auth_cookie_name(request)
+        refresh_token = request.COOKIES.get(cookie_name)
+        
+        portal = get_auth_portal(request)
+        logger.debug(f"Refresh attempt for portal: {portal}, cookie_name: {cookie_name}")
 
         if not refresh_token and not request_data.get('refresh'):
+            logger.warning(f"Refresh failed: No token found in cookie '{cookie_name}' or request data")
             return Response(
                 {"detail": "Refresh token not provided.", "code": "token_not_provided"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
         if refresh_token and not request_data.get('refresh'):
+            logger.debug(f"Using refresh token from cookie '{cookie_name}'")
             request_data['refresh'] = refresh_token
 
         serializer = self.get_serializer(data=request_data)
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as exc:
+            logger.warning(f"Refresh failed: TokenError - {str(exc)}")
             raise InvalidToken(str(exc)) from exc
+        except Exception as e:
+            logger.error(f"Refresh failed: Unexpected error - {str(e)}")
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
         response = Response(serializer.validated_data, status=status.HTTP_200_OK)
 
         if response.status_code == 200:
+            logger.info(f"Refresh successful for portal: {portal}")
             active_refresh_token = response.data.get('refresh') or request_data.get('refresh')
             if active_refresh_token:
                 try:

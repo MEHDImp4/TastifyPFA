@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useKdsStore } from '../store/kdsStore';
 
@@ -6,26 +6,31 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const { accessToken, isAuthenticated } = useAuthStore();
   const { addTicket, updateTicket, updateLigneStatut } = useKdsStore();
   const socketRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
+  const connect = useCallback(() => {
     if (!isAuthenticated || !accessToken) return;
+
+    // Clear any existing timeout
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host = window.location.host;
-    // In dev with proxy, we might need direct access if proxy doesn't support WS well, 
-    // but typically /ws is proxied in vite.config.ts
     const wsUrl = `${protocol}//${host}/ws/staff/?token=${accessToken}`;
 
-    const connect = () => {
-      console.log('Connecting to staff websocket...');
-      const ws = new WebSocket(wsUrl);
-      socketRef.current = ws;
+    console.log('Connecting to staff websocket...');
+    const ws = new WebSocket(wsUrl);
+    socketRef.current = ws;
 
-      ws.onopen = () => {
-        console.log('Staff WebSocket connected');
-      };
+    ws.onopen = () => {
+      console.log('Staff WebSocket connected');
+    };
 
-      ws.onmessage = (event) => {
+    ws.onmessage = (event) => {
+      try {
         const data = JSON.parse(event.data);
         console.log('WS Message:', data);
 
@@ -40,25 +45,42 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             updateLigneStatut(data.payload.ligne_id, data.payload.statut);
             break;
         }
-      };
-
-      ws.onclose = (e) => {
-        console.log('Staff WebSocket closed. Reconnecting...', e.reason);
-        setTimeout(connect, 3000);
-      };
-
-      ws.onerror = (err) => {
-        console.error('Staff WebSocket error:', err);
-        ws.close();
-      };
+      } catch (err) {
+        console.error('Error parsing WS message:', err);
+      }
     };
 
+    ws.onclose = (e) => {
+      socketRef.current = null;
+      if (isAuthenticated && accessToken && e.code !== 1000) {
+        console.log('Staff WebSocket closed. Reconnecting in 3s...', e.reason);
+        reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      } else {
+        console.log('Staff WebSocket closed gracefully or unauthenticated');
+      }
+    };
+
+    ws.onerror = (err) => {
+      console.error('Staff WebSocket error:', err);
+      ws.close();
+    };
+  }, [accessToken, isAuthenticated, addTicket, updateTicket, updateLigneStatut]);
+
+  useEffect(() => {
     connect();
 
     return () => {
-      socketRef.current?.close();
+      if (socketRef.current) {
+        // Use 1000 to indicate normal closure
+        socketRef.current.close(1000);
+        socketRef.current = null;
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
+      }
     };
-  }, [accessToken, isAuthenticated, addTicket, updateTicket, updateLigneStatut]);
+  }, [connect]);
 
   return <>{children}</>;
 };
