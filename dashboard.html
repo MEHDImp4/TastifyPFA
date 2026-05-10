@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 18:55:58<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 19:10:17<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1081,6 +1081,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved `net::ERR_NAME_NOT_RESOLVED` errors for media images in the frontend by forcing relative URLs in `PlatSerializer` and `CategorieSerializer` within `app/backend/apps/menu/serializers.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Configured Django to respect `X-Forwarded-Host` headers by setting `USE_X_FORWARDED_HOST = True` and adding `SECURE_PROXY_SSL_HEADER` in `app/backend/tastify_backend/settings/base.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated Vite proxy configurations in `app/frontend/backoffice-app/vite.config.ts` and `app/frontend/client-app/vite.config.ts` to include `xfwd: true`, ensuring host headers are correctly forwarded to the backend.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified `PlatSerializer` and `CategorieSerializer` correctly parse absolute URLs to relative paths using `urlparse`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Synchronized project dashboard with `python scripts/update_dashboard.py`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped `AuthBootstrap` from blindly probing the `POST /api/users/refresh/` endpoint on every reload when a user has no active session, eliminating the noisy `401 Unauthorized` logs for anonymous users.</p>
                             </li>
@@ -1128,31 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test ---run src/auth/logoutCleanup.test.ts` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Code commit: `a6fc6cc` (`Fix login logout cleanup with issued token`).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped the portail cart overlay from hitting `/api/commandes/` anonymously: `app/frontend/portail/src/components/cart/CartOverlay.tsx` now redirects unauthenticated or non-`CLIENT` users to `/login` before any checkout request is sent.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored the intended client takeaway order flow in `app/backend/apps/commandes/views.py` and `serializers.py` by allowing authenticated `CLIENT` users to create only `EMPORTER` orders, restricting their updates to the initial "fire order" transition, and keeping kitchen/table staff scopes unavailable to clients.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened `app/backend/apps/commandes/signals.py` so takeaway orders with `table=None` still broadcast correctly without tripping table occupancy sync logic.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added portail checkout regression coverage in `app/frontend/portail/src/components/cart/CartOverlay.test.tsx` for the anonymous redirect path.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

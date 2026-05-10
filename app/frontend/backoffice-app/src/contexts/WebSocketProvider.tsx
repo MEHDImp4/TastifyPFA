@@ -14,7 +14,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const host = window.location.host;
     // In dev with proxy, we might need direct access if proxy doesn't support WS well, 
     // but typically /ws is proxied in vite.config.ts
-    const wsUrl = `${protocol}//${host}/ws/staff/`;
+    const wsUrl = `${protocol}//${host}/ws/staff/?token=${accessToken}`;
 
     const connect = () => {
       console.log('Connecting to staff websocket...');

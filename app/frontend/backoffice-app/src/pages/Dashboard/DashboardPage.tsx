@@ -99,7 +99,7 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <AreaChart data={data.revenue7Days}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
@@ -137,7 +137,7 @@ export const DashboardPage: React.FC = () => {
         <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl">
           <h3 className="text-xl font-bold tracking-tight mb-8">Plats Populaires</h3>
           <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
                 <XAxis type="number" hide />
