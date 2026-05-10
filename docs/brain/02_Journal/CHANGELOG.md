@@ -1,3 +1,19 @@
+## [2026-05-10] - 20:00
+### Fixed
+- **WebSocket Stability**: Optimized `WebSocketProvider` using Zustand selectors to prevent reconnection loops during re-renders. Added a connection guard to avoid multiple concurrent socket initializations.
+- **Dashboard UI**: Resolved intermittent Recharts sizing warnings in `DashboardPage.tsx` by adding data availability checks and restoring the `absolute inset-0` layout pattern for better measurement accuracy.
+- **Observability**: Enhanced WebSocket logging with detailed close codes and reasons to aid future debugging.
+
+### Validation
+- Verified stable WebSocket connection uptime (>5 minutes) in backend logs, even during periodic dashboard data polling.
+- Confirmed immediate cleanup of old sockets during component unmount or dependency changes.
+
+## [2026-05-10] - 19:40
+### Added
+- **WebSocket Status Indicator**: Added a real-time connection status indicator to the Back-Office Dashboard.
+- **Socket Store**: Created `useSocketStore` to track `connected`, `connecting`, `disconnected`, and `error` states globally.
+- **Visual Feedback**: The indicator includes a pulsing teal dot when connected, a spinning amber loader when connecting, and a red alert icon on error.
+
 ## [2026-05-10] - 19:35
 ### Fixed
 - **WebSocket Reconnection**: Refactored `WebSocketProvider` to use `useCallback` and `useRef` for timeout management, preventing infinite reconnection loops after user logout or token expiration.

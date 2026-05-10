@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 19:42:25<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 19:51:31<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1080,6 +1080,21 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **WebSocket Status Indicator**: Added a real-time connection status indicator to the Back-Office Dashboard.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Socket Store**: Created `useSocketStore` to track `connected`, `connecting`, `disconnected`, and `error` states globally.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Visual Feedback**: The indicator includes a pulsing teal dot when connected, a spinning amber loader when connecting, and a red alert icon on error.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **WebSocket Reconnection**: Refactored `WebSocketProvider` to use `useCallback` and `useRef` for timeout management, preventing infinite reconnection loops after user logout or token expiration.</p>
@@ -1138,21 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Configured Django to respect `X-Forwarded-Host` headers by setting `USE_X_FORWARDED_HOST = True` and adding `SECURE_PROXY_SSL_HEADER` in `app/backend/tastify_backend/settings/base.py`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Updated Vite proxy configurations in `app/frontend/backoffice-app/vite.config.ts` and `app/frontend/client-app/vite.config.ts` to include `xfwd: true`, ensuring host headers are correctly forwarded to the backend.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified `PlatSerializer` and `CategorieSerializer` correctly parse absolute URLs to relative paths using `urlparse`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Synchronized project dashboard with `python scripts/update_dashboard.py`.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

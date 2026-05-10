@@ -22,8 +22,6 @@ import {
   Cell
 } from 'recharts';
 
-import { SocketIndicator } from '../../components/ui/SocketIndicator';
-
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,12 +62,9 @@ export const DashboardPage: React.FC = () => {
           <h1 className="text-3xl font-bold tracking-tight">Tableau de Bord</h1>
           <p className="text-gray-400 mt-1">Vue d'ensemble de l'activité du restaurant en temps réel.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <SocketIndicator />
-          <div className="flex items-center gap-2 px-4 py-2 bg-dark-surface rounded-xl border border-white/5 text-xs font-bold text-gray-400 uppercase tracking-widest text-nowrap">
-              <Calendar className="w-4 h-4 text-teal" />
-              <span>{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
-          </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-dark-surface rounded-xl border border-white/5 text-xs font-bold text-gray-400 uppercase tracking-widest">
+            <Calendar className="w-4 h-4 text-teal" />
+            <span>{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
         </div>
       </div>
 
@@ -104,39 +99,43 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <div className="h-[300px] w-full relative">
-            <div className="absolute inset-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data.revenue7Days}>
-                  <defs>
-                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#2A9D8F" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="rgba(255,255,255,0.3)" 
-                    fontSize={10} 
-                    tickLine={false} 
-                    axisLine={false} 
-                    tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { weekday: 'short' })}
-                  />
-                  <YAxis 
-                    stroke="rgba(255,255,255,0.3)" 
-                    fontSize={10} 
-                    tickLine={false} 
-                    axisLine={false}
-                    tickFormatter={(val) => `${val} DH`}
-                  />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
-                    itemStyle={{ color: '#2A9D8F', fontWeight: 'bold' }}
-                  />
-                  <Area type="monotone" dataKey="revenue" stroke="#2A9D8F" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+            {data.revenue7Days.length > 0 ? (
+              <div className="absolute inset-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={data.revenue7Days}>
+                    <defs>
+                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#2A9D8F" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="rgba(255,255,255,0.3)" 
+                      fontSize={10} 
+                      tickLine={false} 
+                      axisLine={false} 
+                      tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { weekday: 'short' })}
+                    />
+                    <YAxis 
+                      stroke="rgba(255,255,255,0.3)" 
+                      fontSize={10} 
+                      tickLine={false} 
+                      axisLine={false}
+                      tickFormatter={(val) => `${val} DH`}
+                    />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
+                      itemStyle={{ color: '#2A9D8F', fontWeight: 'bold' }}
+                    />
+                    <Area type="monotone" dataKey="revenue" stroke="#2A9D8F" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-500 text-sm">Pas de données de revenus disponibles.</div>
+            )}
           </div>
         </div>
 
@@ -144,24 +143,28 @@ export const DashboardPage: React.FC = () => {
         <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0">
           <h3 className="text-xl font-bold tracking-tight mb-8">Plats Populaires</h3>
           <div className="h-[300px] w-full relative">
-            <div className="absolute inset-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                  <XAxis type="number" hide />
-                  <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
-                  <Tooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                    contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
-                  />
-                  <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
-                    {data.topDishes.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {data.topDishes.length > 0 ? (
+              <div className="absolute inset-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+                    <XAxis type="number" hide />
+                    <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
+                    <Tooltip 
+                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                      contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
+                    />
+                    <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
+                      {data.topDishes.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-500 text-sm">Pas de données de plats disponibles.</div>
+            )}
           </div>
           <div className="mt-4 space-y-2">
               {data.topDishes.slice(0, 3).map((dish, i) => (

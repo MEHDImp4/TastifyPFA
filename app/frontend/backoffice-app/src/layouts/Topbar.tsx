@@ -3,6 +3,8 @@ import { Menu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { NotificationCenter } from '../components/ui/NotificationCenter';
 
+import { SocketIndicator } from '../components/ui/SocketIndicator';
+
 interface TopbarProps {
   setMobileOpen: (open: boolean) => void;
 }
@@ -22,6 +24,7 @@ export const Topbar: React.FC<TopbarProps> = ({ setMobileOpen }) => {
       </div>
 
       <div className="flex items-center gap-4">
+        <SocketIndicator />
         <NotificationCenter />
         <div className="text-right hidden sm:block">
           <p className="text-sm font-medium text-white capitalize">{username}</p>
