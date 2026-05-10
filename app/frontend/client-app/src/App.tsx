@@ -4,12 +4,20 @@ import { PublicLayout } from './layouts/PublicLayout';
 import { PortalHomePage } from './pages/Home/PortalHomePage';
 import { MenuPage } from './pages/Menu/MenuPage';
 import { ReservationWizard } from './pages/Reservations/ReservationWizard';
+import { AccountPage } from './pages/Account/AccountPage';
 import { Login } from './pages/auth/Login';
+import { Register } from './pages/auth/Register';
 import { useAuthStore } from './store/authStore';
 
 const GuestRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (isAuthenticated) return <Navigate to="/" replace />;
+  return <>{children}</>;
+};
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
 
@@ -22,11 +30,25 @@ function App() {
             <Route path="/" element={<PortalHomePage />} />
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/reservations" element={<ReservationWizard />} />
+            
+            <Route path="/account" element={
+              <ProtectedRoute>
+                <AccountPage />
+              </ProtectedRoute>
+            } />
+
             <Route path="/login" element={
               <GuestRoute>
                 <Login />
               </GuestRoute>
             } />
+
+            <Route path="/register" element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+            } />
+
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
