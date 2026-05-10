@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { analyticsApi, DashboardData } from '../../api/analytics';
+import { analyticsApi } from '../../api/analytics';
+import type { DashboardData } from '../../api/analytics';
 import { 
   TrendingUp, 
   Users, 
