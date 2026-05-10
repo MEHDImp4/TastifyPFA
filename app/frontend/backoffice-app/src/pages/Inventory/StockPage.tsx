@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { stockApi, Ingredient } from '../../api/inventory_hr';
+import { stockApi } from '../../api/inventory_hr';
+import type { Ingredient } from '../../api/inventory_hr';
 import { Plus, Edit2, Trash2, Loader2, Package, AlertTriangle } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
