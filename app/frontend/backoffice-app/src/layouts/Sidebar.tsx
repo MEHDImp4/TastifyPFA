@@ -18,6 +18,7 @@ interface SidebarProps {
   setMobileOpen: (open: boolean) => void;
 }
 
+// Sidebar component for backoffice navigation
 export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen }) => {
   const { role, logout } = useAuthStore();
 
