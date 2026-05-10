@@ -1,3 +1,12 @@
+## [2026-05-10] - 11:45
+### Changed
+- **Seeding**: Executed the `seed_all` management command to fully populate the database with test data (Users, Tables, Menu, Ingredients, Recipes, and HR data).
+- **Dashboard**: Updated the project dashboard to reflect the current state (15 Users, 4 Categories).
+
+### Validation
+- `docker compose exec backend python manage.py seed_all` completed successfully.
+- `python scripts/update_dashboard.py` updated the dashboard with live stats.
+
 ## [2026-05-09] - 20:18
 ### Fixed
 - Repaired the portail login role-gate cleanup path so a denied login now calls `/api/users/logout/` with the freshly issued access token instead of relying on an empty auth store, which had been causing a 401 during logout cleanup.
