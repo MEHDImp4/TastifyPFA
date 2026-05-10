@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark: #264653;
+  --color-dark-surface: #1a323b;
+  --color-dark-elevated: #325a6a;
+  --color-teal: #2A9D8F;
+  --color-amber: #E9C46A;
+  --color-orange: #F4A261;
+  --color-terracotta: #E76F51;
+
+  --font-sans: "Satoshi", "Geist", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-[#f9fafb] text-[#18181B] antialiased min-h-[100dvh];
+  }
+  
+  .dark body {
+    @apply bg-dark-surface text-white;
+  }
+}

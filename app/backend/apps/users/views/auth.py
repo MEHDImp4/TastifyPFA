@@ -6,7 +6,22 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from ..serializers import CustomTokenObtainPairSerializer
+from ..serializers import CustomTokenObtainPairSerializer, UserRegisterSerializer
+
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "message": "Compte cree avec succes",
+                "username": user.username
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 AUTH_PORTAL_COOKIE_NAMES = {
     'staff': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_staff",
@@ -94,8 +109,8 @@ class CookieTokenRefreshView(TokenRefreshView):
         return response
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
-    
+    permission_classes = [AllowAny]
+
     def post(self, request):
         response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
         clear_refresh_cookie(response, request)

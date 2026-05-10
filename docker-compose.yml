@@ -82,30 +82,24 @@ services:
     networks:
       - tastify-network
 
-  backoffice:
+  backoffice-app:
     build:
-      context: ./app/frontend/backoffice
-    environment:
-      VITE_PORTAIL_PUBLIC_URL: ${VITE_PORTAIL_PUBLIC_URL}
+      context: ./app/frontend/backoffice-app
     ports:
       - "3000:3000"
     volumes:
-      - ./app/frontend/backoffice:/app
-      - ./app/frontend/shared:/app/shared
+      - ./app/frontend/backoffice-app:/app
       - /app/node_modules
     networks:
       - tastify-network
 
-  portail:
+  client-app:
     build:
-      context: ./app/frontend/portail
-    environment:
-      VITE_PORTAIL_PUBLIC_URL: ${VITE_PORTAIL_PUBLIC_URL}
+      context: ./app/frontend/client-app
     ports:
       - "3003:3003"
     volumes:
-      - ./app/frontend/portail:/app
-      - ./app/frontend/shared:/app/shared
+      - ./app/frontend/client-app:/app
       - /app/node_modules
     networks:
       - tastify-network

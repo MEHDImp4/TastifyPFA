@@ -15,8 +15,11 @@ logger = logging.getLogger(__name__)
 # Models and URLs
 MODEL_MAP = {
     'multilingual': 'nlptown/bert-base-multilingual-uncased-sentiment',
-    'arabic': 'moussaKam/MARBERT-sentiment',
+    'arabic': 'moussaKam/MARBERT-sentiment', 
 }
+
+# Fallback for Arabic if specialized model is not supported by Inference API
+ARABIC_FALLBACK = 'nlptown/bert-base-multilingual-uncased-sentiment'
 
 def get_hf_api_token():
     raw_token = config('HUGGINGFACE_API_TOKEN', default='').strip()
@@ -82,31 +85,37 @@ def analyze_review_sentiment(avis_id):
         avis.lang_code = lang
         
         # Route to model
-        if lang == 'ar':
-            model = MODEL_MAP['arabic']
+        model = MODEL_MAP['arabic'] if lang == 'ar' else MODEL_MAP['multilingual']
+        
+        output = query_hf_api(avis.commentaire[:512], model)
+        
+        # If Arabic specialized model failed (or returned error), try fallback
+        if not output and lang == 'ar':
+            logger.info(f"Falling back to multilingual for Arabic review {avis_id}")
+            model = ARABIC_FALLBACK
             output = query_hf_api(avis.commentaire[:512], model)
-            if output:
-                # MARBERT output format: [{'label': 'LABEL_X', 'score': ...}, ...]
-                # Usually LABEL_0 = Negative, LABEL_1 = Neutral, LABEL_2 = Positive
-                results = output[0] if isinstance(output[0], list) else output
-                best = max(results, key=lambda x: x['score'])
-                # Map to 1-5 scale (Positive=5, Neutral=3, Negative=1)
-                label = best['label'].upper()
+
+        if output:
+            # Handle potential list or single result from API
+            results = output[0] if isinstance(output[0], list) else output
+            best = max(results, key=lambda x: x['score'])
+            
+            label = best['label'].upper()
+            
+            if 'LABEL_' in label or 'POSITIVE' in label or 'NEGATIVE' in label:
+                # Handling specialized models (Positive/Negative/Neutral)
+                # MARBERT: LABEL_0=Neg, LABEL_1=Neu, LABEL_2=Pos
                 if 'LABEL_2' in label or 'POSITIVE' in label: score = 5
                 elif 'LABEL_1' in label or 'NEUTRAL' in label: score = 3
                 else: score = 1
-                avis.sentiment_score = score
-        else:
-            model = MODEL_MAP['multilingual']
-            output = query_hf_api(avis.commentaire[:512], model)
-            if output:
-                results = output[0] if isinstance(output[0], list) else output
-                best = max(results, key=lambda x: x['score'])
-                label = best['label'] # "X stars"
-                avis.sentiment_score = int(label.split()[0])
+            else:
+                # Handling nlptown star format ("X stars")
+                score = int(label.split()[0])
+            
+            avis.sentiment_score = score
         
         avis.save(update_fields=['sentiment_score', 'lang_code', 'updated_at'])
-        return f"Sentiment analyzed ({lang}): {avis.sentiment_score} stars"
+        return f"Sentiment analyzed ({lang}) using {model}: {avis.sentiment_score} stars"
         
     except Exception as e:
         logger.exception(f"Error in sentiment task for Avis {avis_id}")
