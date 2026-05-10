@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
-import { Loader2, Clock, CheckCircle2, AlertCircle, PlayCircle } from 'lucide-react';
+import { Loader2, Clock, CheckCircle2, ChefHat, PlayCircle } from 'lucide-react';
 
 export const KdsPage: React.FC = () => {
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();

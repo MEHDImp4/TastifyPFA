@@ -11,14 +11,17 @@ export default defineConfig({
       '/api': {
         target: 'http://backend:8000',
         changeOrigin: true,
+        xfwd: true,
       },
       '/media': {
         target: 'http://backend:8000',
         changeOrigin: true,
+        xfwd: true,
       },
       '/ws': {
         target: 'ws://backend:8000',
         ws: true,
+        xfwd: true,
       }
     }
   }

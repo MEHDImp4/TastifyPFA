@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Categorie, Plat
+from urllib.parse import urlparse
 
 
 class CategorieSerializer(serializers.ModelSerializer):
@@ -23,6 +24,14 @@ class CategorieSerializer(serializers.ModelSerializer):
             'updated_at',
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if ret.get('image'):
+            image_url = ret['image']
+            if image_url.startswith('http'):
+                ret['image'] = urlparse(image_url).path
+        return ret
 
 
 class PlatSerializer(serializers.ModelSerializer):
@@ -52,3 +61,11 @@ class PlatSerializer(serializers.ModelSerializer):
             'updated_at',
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if ret.get('image'):
+            image_url = ret['image']
+            if image_url.startswith('http'):
+                ret['image'] = urlparse(image_url).path
+        return ret

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { NotificationCenter } from '../components/ui/NotificationCenter';
 
 interface TopbarProps {
   setMobileOpen: (open: boolean) => void;
@@ -20,8 +21,6 @@ export const Topbar: React.FC<TopbarProps> = ({ setMobileOpen }) => {
         </button>
       </div>
 
-import { NotificationCenter } from '../components/ui/NotificationCenter';
-...
       <div className="flex items-center gap-4">
         <NotificationCenter />
         <div className="text-right hidden sm:block">

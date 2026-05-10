@@ -1,3 +1,13 @@
+## [2026-05-10] - 12:15
+### Fixed
+- Resolved `net::ERR_NAME_NOT_RESOLVED` errors for media images in the frontend by forcing relative URLs in `PlatSerializer` and `CategorieSerializer` within `app/backend/apps/menu/serializers.py`.
+- Configured Django to respect `X-Forwarded-Host` headers by setting `USE_X_FORWARDED_HOST = True` and adding `SECURE_PROXY_SSL_HEADER` in `app/backend/tastify_backend/settings/base.py`.
+- Updated Vite proxy configurations in `app/frontend/backoffice-app/vite.config.ts` and `app/frontend/client-app/vite.config.ts` to include `xfwd: true`, ensuring host headers are correctly forwarded to the backend.
+
+### Validation
+- Verified `PlatSerializer` and `CategorieSerializer` correctly parse absolute URLs to relative paths using `urlparse`.
+- Synchronized project dashboard with `python scripts/update_dashboard.py`.
+
 ## [2026-05-10] - 11:45
 ### Fixed
 - Stopped `AuthBootstrap` from blindly probing the `POST /api/users/refresh/` endpoint on every reload when a user has no active session, eliminating the noisy `401 Unauthorized` logs for anonymous users.

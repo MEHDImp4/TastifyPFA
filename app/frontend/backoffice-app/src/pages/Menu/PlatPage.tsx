@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Plat, Categorie } from '../../types/menu';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Utensils, Clock } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
 export const PlatPage: React.FC = () => {

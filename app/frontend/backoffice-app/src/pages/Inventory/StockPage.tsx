@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { stockApi } from '../../api/inventory_hr';
 import type { Ingredient } from '../../types/inventory';
-import { Plus, Edit2, Trash2, Loader2, Package, AlertTriangle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Loader2, AlertTriangle } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
 export const StockPage: React.FC = () => {

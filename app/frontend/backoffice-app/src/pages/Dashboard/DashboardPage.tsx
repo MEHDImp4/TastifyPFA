@@ -6,8 +6,6 @@ import {
   Users, 
   ShoppingBag, 
   Timer, 
-  ArrowUpRight, 
-  ArrowDownRight,
   Loader2,
   Calendar
 } from 'lucide-react';

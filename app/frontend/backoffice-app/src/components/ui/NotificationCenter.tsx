@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, X, CheckCircle2 } from 'lucide-react';
-import { useKdsStore } from '../store/kdsStore';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
 export const NotificationCenter: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications] = useState<any[]>([]);
   const { role } = useAuthStore();
   
   // Listen to store updates or direct WS events? 
