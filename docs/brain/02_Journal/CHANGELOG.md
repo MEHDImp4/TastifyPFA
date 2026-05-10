@@ -1,3 +1,12 @@
+## [2026-05-10] - 19:32
+### Fixed
+- Resolved Recharts `ResponsiveContainer` sizing warnings ("The width(-1) and height(-1) of chart should be greater than 0") in `app/frontend/backoffice-app/src/pages/Dashboard/DashboardPage.tsx`.
+- Implemented a robust sizing pattern using `relative` parent containers with `min-w-0` and an `absolute inset-0` wrapper for the charts, ensuring correct layout calculation during browser reflows.
+
+### Validation
+- Applied the fix to both the "Tendances des revenus" (AreaChart) and "Plats Populaires" (BarChart) components.
+- Verified file changes match the recommended sizing pattern for Recharts in grid layouts.
+
 ## [2026-05-10] - 12:15
 ### Fixed
 - Resolved `net::ERR_NAME_NOT_RESOLVED` errors for media images in the frontend by forcing relative URLs in `PlatSerializer` and `CategorieSerializer` within `app/backend/apps/menu/serializers.py`.

@@ -4,13 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: COMPLETE
 stopped_at: All Phases COMPLETE.
-last_updated: "2026-05-09T05:30:00+01:00"
+last_updated: "2026-05-10T19:35:00+01:00"
 progress:
   total_phases: 39
   completed_phases: 39
   total_plans: 96
   percent: 100
 notes: |
+  - Dashboard Fix (2026-05-10): Resolved Recharts `ResponsiveContainer` sizing warnings in the Back-Office Dashboard. Implemented robust absolute/relative wrapper pattern.
   - Milestone COMPLETE (2026-05-09): All 39 phases of the Tastify ERP Roadmap have been successfully implemented.
   - Phase 39 COMPLETE (2026-05-09): Load Testing & Optimization. Switched backend to Daphne ASGI server for production readiness. Created Locust load testing suite.
   - Phase 38 COMPLETE (2026-05-09): Multilingual BERT Expansion. Added langdetect and MARBERT routing to handle Arabic/Darija reviews alongside French/English.

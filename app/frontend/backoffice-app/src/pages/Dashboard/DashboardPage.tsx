@@ -88,7 +88,7 @@ export const DashboardPage: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Revenue Chart */}
-        <div className="lg:col-span-2 p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl">
+        <div className="lg:col-span-2 p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-bold tracking-tight">Tendances des revenus (7j)</h3>
             <div className="flex items-center gap-4">
@@ -98,61 +98,65 @@ export const DashboardPage: React.FC = () => {
                 </div>
             </div>
           </div>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-              <AreaChart data={data.revenue7Days}>
-                <defs>
-                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#2A9D8F" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="rgba(255,255,255,0.3)" 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false} 
-                  tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { weekday: 'short' })}
-                />
-                <YAxis 
-                  stroke="rgba(255,255,255,0.3)" 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false}
-                  tickFormatter={(val) => `${val} DH`}
-                />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
-                  itemStyle={{ color: '#2A9D8F', fontWeight: 'bold' }}
-                />
-                <Area type="monotone" dataKey="revenue" stroke="#2A9D8F" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="h-[300px] w-full relative">
+            <div className="absolute inset-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data.revenue7Days}>
+                  <defs>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2A9D8F" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#2A9D8F" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="rgba(255,255,255,0.3)" 
+                    fontSize={10} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { weekday: 'short' })}
+                  />
+                  <YAxis 
+                    stroke="rgba(255,255,255,0.3)" 
+                    fontSize={10} 
+                    tickLine={false} 
+                    axisLine={false}
+                    tickFormatter={(val) => `${val} DH`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
+                    itemStyle={{ color: '#2A9D8F', fontWeight: 'bold' }}
+                  />
+                  <Area type="monotone" dataKey="revenue" stroke="#2A9D8F" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
         {/* Top Dishes Chart */}
-        <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl">
+        <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0">
           <h3 className="text-xl font-bold tracking-tight mb-8">Plats Populaires</h3>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-              <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
-                <Tooltip 
-                   cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                   contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
-                />
-                <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
-                  {data.topDishes.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="h-[300px] w-full relative">
+            <div className="absolute inset-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+                  <XAxis type="number" hide />
+                  <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                    contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
+                  />
+                  <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
+                    {data.topDishes.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
           <div className="mt-4 space-y-2">
               {data.topDishes.slice(0, 3).map((dish, i) => (
