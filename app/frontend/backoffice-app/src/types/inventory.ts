@@ -1,0 +1,19 @@
+export interface Ingredient {
+  id: number;
+  nom: string;
+  unite_mesure: 'g' | 'ml' | 'pcs';
+  stock_actuel: string;
+  seuil_alerte: string;
+  est_active: boolean;
+}
+
+export interface Employe {
+  id: number;
+  user: number;
+  username?: string;
+  poste: string;
+  salaire: string;
+  date_embauche: string;
+  telephone: string;
+  cin: string;
+}

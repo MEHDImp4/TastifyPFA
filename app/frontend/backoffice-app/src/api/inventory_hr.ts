@@ -1,13 +1,5 @@
 import { api } from './axios';
-
-export interface Ingredient {
-  id: number;
-  nom: string;
-  unite_mesure: 'g' | 'ml' | 'pcs';
-  stock_actuel: string;
-  seuil_alerte: string;
-  est_active: boolean;
-}
+import type { Ingredient, Employe } from '../types/inventory';
 
 export const stockApi = {
   getIngredients: () => api.get<Ingredient[]>('/stock/ingredients/'),
@@ -15,17 +7,6 @@ export const stockApi = {
   updateIngredient: (id: number, data: Partial<Ingredient>) => api.patch<Ingredient>(`/stock/ingredients/${id}/`, data),
   deleteIngredient: (id: number) => api.delete(`/stock/ingredients/${id}/`),
 };
-
-export interface Employe {
-  id: number;
-  user: number;
-  username?: string;
-  poste: string;
-  salaire: string;
-  date_embauche: string;
-  telephone: string;
-  cin: string;
-}
 
 export const hrApi = {
   getEmployes: () => api.get<Employe[]>('/employes/'),

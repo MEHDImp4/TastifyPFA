@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { hrApi } from '../../api/inventory_hr';
-import type { Employe } from '../../api/inventory_hr';
+import type { Employe } from '../../types/inventory';
 import { Plus, Edit2, Trash2, Loader2, Users, Briefcase } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
