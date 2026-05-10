@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { menuApi, Categorie, Plat } from '../../api/menu';
+import { menuApi } from '../../api/menu';
+import type { Categorie, Plat } from '../../api/menu';
 import { useCartStore } from '../../store/cartStore';
 import { Search, Loader2, Clock, Info, ShoppingCart, Plus } from 'lucide-react';
 

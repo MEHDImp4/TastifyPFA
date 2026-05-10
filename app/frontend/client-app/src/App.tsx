@@ -7,6 +7,8 @@ import { ReservationWizard } from './pages/Reservations/ReservationWizard';
 import { AccountPage } from './pages/Account/AccountPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { CheckoutPage } from './pages/Checkout/CheckoutPage';
+import { PaymentPortal } from './pages/Payment/PaymentPortal';
 import { useAuthStore } from './store/authStore';
 
 const GuestRoute = ({ children }: { children: React.ReactNode }) => {
@@ -28,12 +30,11 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<PortalHomePage />} />
-            import { CheckoutPage } from './pages/Checkout/CheckoutPage';
-            ...
-                        <Route path="/menu" element={<MenuPage />} />
-                        <Route path="/reservations" element={<ReservationWizard />} />
-                        <Route path="/checkout" element={<CheckoutPage />} />
-                        <Route path="/account" element={
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/reservations" element={<ReservationWizard />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            
+            <Route path="/account" element={
               <ProtectedRoute>
                 <AccountPage />
               </ProtectedRoute>
@@ -45,8 +46,6 @@ function App() {
               </GuestRoute>
             } />
 
-import { PaymentPortal } from './pages/Payment/PaymentPortal';
-...
             <Route path="/register" element={
               <GuestRoute>
                 <Register />
@@ -55,8 +54,6 @@ import { PaymentPortal } from './pages/Payment/PaymentPortal';
 
             <Route path="/pay/:token" element={<PaymentPortal />} />
 
-            {/* Fallback */}
-...
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

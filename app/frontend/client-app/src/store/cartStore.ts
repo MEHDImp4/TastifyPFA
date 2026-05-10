@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Plat } from '../api/menu';
+import type { Plat } from '../api/menu';
 
 interface CartItem {
   plat: Plat;

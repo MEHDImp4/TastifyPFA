@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { reservationApi, Reservation } from '../../api/reservations';
+import { reservationApi } from '../../api/reservations';
+import type { Reservation } from '../../api/reservations';
 import { useAuthStore } from '../../store/authStore';
 import { 
   Calendar as CalendarIcon, 

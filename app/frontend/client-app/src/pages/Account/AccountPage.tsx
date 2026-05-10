@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { reservationApi, Reservation } from '../../api/reservations';
-import { avisApi, Avis } from '../../api/avis';
+import { reservationApi } from '../../api/reservations';
+import type { Reservation } from '../../api/reservations';
+import { avisApi } from '../../api/avis';
+import type { Avis } from '../../api/avis';
 import { 
   Calendar, 
   MessageSquare, 
@@ -10,7 +12,7 @@ import {
   User as UserIcon,
   CheckCircle2
 } from 'lucide-react';
-import { Modal } from '../../components/auth/AuthBootstrap'; // Reusing for now or create a UI one
+import { Modal } from '../../components/ui/Modal';
 
 export const AccountPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
