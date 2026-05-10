@@ -1,10 +1,12 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { UtensilsCrossed, User, LogOut } from 'lucide-react';
+import { useCartStore } from '../store/cartStore';
+import { UtensilsCrossed, User, LogOut, ShoppingBag } from 'lucide-react';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
+  const { items } = useCartStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -29,6 +31,14 @@ export const PublicLayout: React.FC = () => {
           </nav>
 
           <div className="flex items-center gap-4">
+            <Link to="/checkout" className="relative p-2.5 text-gray-400 hover:text-dark hover:bg-gray-100 rounded-xl transition-all">
+                <ShoppingBag className="w-6 h-6" />
+                {items.length > 0 && (
+                    <span className="absolute top-2 right-2 w-4 h-4 bg-teal text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-in zoom-in duration-300">
+                        {items.length}
+                    </span>
+                )}
+            </Link>
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <Link to="/account" className="hidden md:block text-right group">

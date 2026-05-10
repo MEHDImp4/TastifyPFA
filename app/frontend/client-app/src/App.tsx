@@ -45,13 +45,18 @@ function App() {
               </GuestRoute>
             } />
 
+import { PaymentPortal } from './pages/Payment/PaymentPortal';
+...
             <Route path="/register" element={
               <GuestRoute>
                 <Register />
               </GuestRoute>
             } />
 
+            <Route path="/pay/:token" element={<PaymentPortal />} />
+
             {/* Fallback */}
+...
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

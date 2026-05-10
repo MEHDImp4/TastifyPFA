@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi, Categorie, Plat } from '../../api/menu';
-import { Search, Loader2, Clock, Info } from 'lucide-react';
+import { useCartStore } from '../../store/cartStore';
+import { Search, Loader2, Clock, Info, ShoppingCart, Plus } from 'lucide-react';
 
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
@@ -8,6 +9,7 @@ export const MenuPage: React.FC = () => {
   const [activeCat, setActiveCat] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const { addItem } = useCartStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,7 +94,14 @@ export const MenuPage: React.FC = () => {
                                 {plat.nom.charAt(0)}
                             </div>
                         )}
-                        <div className="absolute top-6 right-6">
+                        <div className="absolute top-6 right-6 flex gap-2">
+                            <button 
+                                onClick={() => addItem(plat)}
+                                className="p-3 bg-teal text-white rounded-2xl shadow-lg hover:scale-110 active:scale-90 transition-all group/btn"
+                                aria-label="Ajouter au panier"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
                             <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-dark font-bold rounded-2xl shadow-lg border border-white/50">
                                 {plat.prix} DH
                             </span>
