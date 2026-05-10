@@ -51,10 +51,17 @@ function App() {
                             </ProtectedRoute>
                           }>
                             <Route index element={<DashboardPage />} />
-                            <Route path="menu" element={<PlatPage />} />                <Route path="categories" element={<CategoryPage />} />
-                <Route path="salle" element={<SallePage />} />
-                <Route path="kds" element={<KdsPage />} />
-              </Route>
+                            import { StockPage } from './pages/Inventory/StockPage';
+                            import { HrPage } from './pages/HR/HrPage';
+                            ...
+                                            <Route path="menu" element={<PlatPage />} />
+                                            <Route path="categories" element={<CategoryPage />} />
+                                            <Route path="salle" element={<SallePage />} />
+                                            <Route path="kds" element={<KdsPage />} />
+                                            <Route path="stock" element={<StockPage />} />
+                                            <Route path="hr" element={<HrPage />} />
+                                          </Route>
+                            ...
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </BrowserRouter>
