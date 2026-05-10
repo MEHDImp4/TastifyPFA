@@ -31,10 +31,10 @@ export const PublicLayout: React.FC = () => {
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="hidden md:block text-right">
-                  <p className="text-sm font-medium capitalize">{username}</p>
+                <Link to="/account" className="hidden md:block text-right group">
+                  <p className="text-sm font-medium capitalize group-hover:text-teal transition-colors">{username}</p>
                   <p className="text-xs text-teal font-mono">Client</p>
-                </div>
+                </Link>
                 <button 
                   onClick={handleLogout}
                   className="p-2.5 text-gray-400 hover:text-terracotta hover:bg-terracotta/10 rounded-xl transition-colors"

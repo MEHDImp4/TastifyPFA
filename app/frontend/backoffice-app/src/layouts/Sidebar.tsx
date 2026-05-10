@@ -28,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
       links.push({ to: '/categories', icon: Package, label: 'Catégories' });
       links.push({ to: '/stock', icon: Package, label: 'Stock' });
       links.push({ to: '/hr', icon: Users, label: 'Personnel' });
+      links.push({ to: '/avis', icon: Star, label: 'Avis Clients' });
     }
     
     if (role === 'GERANT' || role === 'SERVEUR') {
