@@ -9,6 +9,7 @@ import {
   Package, 
   CalendarDays,
   Map as MapIcon,
+  Star,
   LogOut
 } from 'lucide-react';
 
