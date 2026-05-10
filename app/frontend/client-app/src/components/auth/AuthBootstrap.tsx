@@ -7,20 +7,23 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
   const { isAuthenticated, setAuth, logoutLocally } = useAuthStore();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const bootstrap = async () => {
       if (!isAuthenticated) {
         try {
-          const response = await api.post('/users/refresh/');
+          const response = await api.post('/users/refresh/', {}, { signal: controller.signal });
           const { access, role, username } = response.data;
-          setAuth(access, role, username);
-        } catch (error) {
-          logoutLocally();
+          if (!controller.signal.aborted) setAuth(access, role, username);
+        } catch {
+          if (!controller.signal.aborted) logoutLocally();
         }
       }
-      setIsBootstrapping(false);
+      if (!controller.signal.aborted) setIsBootstrapping(false);
     };
 
     bootstrap();
+    return () => controller.abort();
   }, [isAuthenticated, setAuth, logoutLocally]);
 
   if (isBootstrapping) {
