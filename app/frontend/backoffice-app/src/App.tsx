@@ -3,6 +3,8 @@ import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { useAuthStore } from './store/authStore';
 import { Login } from './pages/auth/Login';
 import { AppShell } from './layouts/AppShell';
+import { CategoryPage } from './pages/Categories/CategoryPage';
+import { PlatPage } from './pages/Menu/PlatPage';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -43,6 +45,8 @@ function App() {
                   </div>
                 </div>
               } />
+              <Route path="menu" element={<PlatPage />} />
+              <Route path="categories" element={<CategoryPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

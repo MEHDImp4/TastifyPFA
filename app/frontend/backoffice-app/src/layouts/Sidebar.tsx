@@ -24,7 +24,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
     const links = [];
     if (role === 'GERANT') {
       links.push({ to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true });
-      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Menu' });
+      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Plats' });
+      links.push({ to: '/categories', icon: Package, label: 'Catégories' });
       links.push({ to: '/stock', icon: Package, label: 'Stock' });
       links.push({ to: '/hr', icon: Users, label: 'Personnel' });
     }
