@@ -28,10 +28,12 @@ function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<PortalHomePage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/reservations" element={<ReservationWizard />} />
-            
-            <Route path="/account" element={
+            import { CheckoutPage } from './pages/Checkout/CheckoutPage';
+            ...
+                        <Route path="/menu" element={<MenuPage />} />
+                        <Route path="/reservations" element={<ReservationWizard />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route path="/account" element={
               <ProtectedRoute>
                 <AccountPage />
               </ProtectedRoute>
