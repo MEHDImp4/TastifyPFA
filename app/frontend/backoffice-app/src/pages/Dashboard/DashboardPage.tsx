@@ -22,6 +22,8 @@ import {
   Cell
 } from 'recharts';
 
+import { SocketIndicator } from '../../components/ui/SocketIndicator';
+
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,9 +64,12 @@ export const DashboardPage: React.FC = () => {
           <h1 className="text-3xl font-bold tracking-tight">Tableau de Bord</h1>
           <p className="text-gray-400 mt-1">Vue d'ensemble de l'activité du restaurant en temps réel.</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-dark-surface rounded-xl border border-white/5 text-xs font-bold text-gray-400 uppercase tracking-widest">
-            <Calendar className="w-4 h-4 text-teal" />
-            <span>{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+        <div className="flex items-center gap-3">
+          <SocketIndicator />
+          <div className="flex items-center gap-2 px-4 py-2 bg-dark-surface rounded-xl border border-white/5 text-xs font-bold text-gray-400 uppercase tracking-widest text-nowrap">
+              <Calendar className="w-4 h-4 text-teal" />
+              <span>{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+          </div>
         </div>
       </div>
 

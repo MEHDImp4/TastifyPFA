@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 19:33:57<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 19:42:25<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1081,6 +1081,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **WebSocket Reconnection**: Refactored `WebSocketProvider` to use `useCallback` and `useRef` for timeout management, preventing infinite reconnection loops after user logout or token expiration.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CORS Credentials**: Updated `dev.py` to specify allowed origins instead of `*` when `CORS_ALLOW_CREDENTIALS` is enabled, ensuring browsers properly send the refresh token cookie.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Observability**: Added detailed logging to `JWTAuthMiddleware` and `CookieTokenRefreshView` to track authentication failures and token extraction.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Commit Hash**: 119439a3ec59e3c1204f9eff53a6524f21673827</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 19:32</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved Recharts `ResponsiveContainer` sizing warnings ("The width(-1) and height(-1) of chart should be greater than 0") in `app/frontend/backoffice-app/src/pages/Dashboard/DashboardPage.tsx`.</p>
                             </li>
@@ -1088,6 +1108,11 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 19:32</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Implemented a robust sizing pattern using `relative` parent containers with `min-w-0` and an `absolute inset-0` wrapper for the charts, ensuring correct layout calculation during browser reflows.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:32</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed a TypeScript regression in `app/frontend/backoffice-app/src/contexts/WebSocketProvider.tsx` where `NodeJS.Timeout` was causing a build failure; switched to `ReturnType<typeof setTimeout>` for browser compatibility.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
@@ -1098,6 +1123,11 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 19:32</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Verified file changes match the recommended sizing pattern for Recharts in grid layouts.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:32</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Successfully executed `npm run build` in `app/frontend/backoffice-app` to confirm no remaining TypeScript or resolution errors.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
@@ -1123,36 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 12:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> Synchronized project dashboard with `python scripts/update_dashboard.py`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped `AuthBootstrap` from blindly probing the `POST /api/users/refresh/` endpoint on every reload when a user has no active session, eliminating the noisy `401 Unauthorized` logs for anonymous users.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `hasSession` boolean to the `useAuthStore` persisted state in both `client-app` and `backoffice-app` to track if a refresh token should exist.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Seeding**: Executed the `seed_all` management command to fully populate the database with test data (Users, Tables, Menu, Ingredients, Recipes, and HR data).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Dashboard**: Updated the project dashboard to reflect the current state (15 Users, 4 Categories).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py seed_all` completed successfully.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `python scripts/update_dashboard.py` updated the dashboard with live stats.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

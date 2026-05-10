@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useKdsStore } from '../store/kdsStore';
+import { useSocketStore } from '../store/socketStore';
 
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { accessToken, isAuthenticated } = useAuthStore();
   const { addTicket, updateTicket, updateLigneStatut } = useKdsStore();
+  const { setStatus } = useSocketStore();
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -22,11 +24,14 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const wsUrl = `${protocol}//${host}/ws/staff/?token=${accessToken}`;
 
     console.log('Connecting to staff websocket...');
+    setStatus('connecting');
+    
     const ws = new WebSocket(wsUrl);
     socketRef.current = ws;
 
     ws.onopen = () => {
       console.log('Staff WebSocket connected');
+      setStatus('connected');
     };
 
     ws.onmessage = (event) => {
@@ -54,17 +59,20 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       socketRef.current = null;
       if (isAuthenticated && accessToken && e.code !== 1000) {
         console.log('Staff WebSocket closed. Reconnecting in 3s...', e.reason);
+        setStatus('disconnected');
         reconnectTimeoutRef.current = setTimeout(connect, 3000);
       } else {
         console.log('Staff WebSocket closed gracefully or unauthenticated');
+        setStatus('disconnected');
       }
     };
 
     ws.onerror = (err) => {
       console.error('Staff WebSocket error:', err);
+      setStatus('error');
       ws.close();
     };
-  }, [accessToken, isAuthenticated, addTicket, updateTicket, updateLigneStatut]);
+  }, [accessToken, isAuthenticated, addTicket, updateTicket, updateLigneStatut, setStatus]);
 
   useEffect(() => {
     connect();
