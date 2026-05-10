@@ -5,6 +5,8 @@ import { Login } from './pages/auth/Login';
 import { AppShell } from './layouts/AppShell';
 import { CategoryPage } from './pages/Categories/CategoryPage';
 import { PlatPage } from './pages/Menu/PlatPage';
+import { SallePage } from './pages/Staff/SallePage';
+import { OrderingPage } from './pages/Staff/OrderingPage';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -29,6 +31,16 @@ function App() {
                 <Login />
               </PublicRoute>
             } />
+            
+            {/* Full-screen protected routes */}
+            <Route path="/ordering/:tableId" element={
+              <ProtectedRoute>
+                <div className="min-h-[100dvh] bg-dark text-white p-6 md:p-8">
+                  <OrderingPage />
+                </div>
+              </ProtectedRoute>
+            } />
+
             <Route path="/" element={
               <ProtectedRoute>
                 <AppShell />
@@ -47,6 +59,7 @@ function App() {
               } />
               <Route path="menu" element={<PlatPage />} />
               <Route path="categories" element={<CategoryPage />} />
+              <Route path="salle" element={<SallePage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
