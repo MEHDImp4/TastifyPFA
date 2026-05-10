@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 18:22:01<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-10 18:50:29<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -76,9 +76,9 @@
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
                         Phase validée
                     </span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
                         <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.647.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
-                        master (Propre)
+                        master (Modifications non validées)
                     </span>
                         <!-- STATUS_BADGE_END -->
                 </div>
@@ -1081,6 +1081,36 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Stopped `AuthBootstrap` from blindly probing the `POST /api/users/refresh/` endpoint on every reload when a user has no active session, eliminating the noisy `401 Unauthorized` logs for anonymous users.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added `hasSession` boolean to the `useAuthStore` persisted state in both `client-app` and `backoffice-app` to track if a refresh token should exist.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Seeding**: Executed the `seed_all` management command to fully populate the database with test data (Users, Tables, Menu, Ingredients, Recipes, and HR data).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Dashboard**: Updated the project dashboard to reflect the current state (15 Users, 4 Categories).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python manage.py seed_all` completed successfully.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-10 11:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `python scripts/update_dashboard.py` updated the dashboard with live stats.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-09 20:18</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Repaired the portail login role-gate cleanup path so a denied login now calls `/api/users/logout/` with the freshly issued access token instead of relying on an empty auth store, which had been causing a 401 during logout cleanup.</p>
                             </li>
@@ -1123,36 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Added portail checkout regression coverage in `app/frontend/portail/src/components/cart/CartOverlay.test.tsx` for the anonymous redirect path.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added backend API coverage in `app/backend/apps/commandes/tests/test_api.py` for client takeaway creation, fire-order PATCH, and blocked `SUR_PLACE` / kitchen-scope access.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm test ---run CartOverlay.test.tsx` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/portail`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py makemigrations --check` returned `No changes detected`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python -m pytest apps/commandes/tests/test_api.py -k "ClientTakeawayCommandeApiTestCase or FireOrderPatchTestCase" -q` passed with `5 passed, 8 deselected`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-09 20:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Code commit: `6099f42` (`Fix client takeaway checkout flow`).</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

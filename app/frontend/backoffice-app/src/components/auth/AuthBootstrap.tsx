@@ -21,7 +21,9 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
     let active = true;
 
     (async () => {
-      if (!isAuthenticated) {
+      const hasSession = useAuthStore.getState().hasSession;
+      
+      if (!isAuthenticated && hasSession) {
         const data = await attemptRefresh();
         if (!active) return;
         if (data) {

@@ -7,6 +7,7 @@ interface AuthState {
   role: string | null;
   username: string | null;
   isAuthenticated: boolean;
+  hasSession: boolean;
   setAuth: (access: string, role: string, username: string) => void;
   logout: () => Promise<void>;
   logoutLocally: () => void;
@@ -19,14 +20,16 @@ export const useAuthStore = create<AuthState>()(
       role: null,
       username: null,
       isAuthenticated: false,
+      hasSession: false,
       setAuth: (access, role, username) => set({
         accessToken: access,
         role: role,
         username: username,
         isAuthenticated: true,
+        hasSession: true,
       }),
       logoutLocally: () => {
-        set({ accessToken: null, role: null, username: null, isAuthenticated: false });
+        set({ accessToken: null, role: null, username: null, isAuthenticated: false, hasSession: false });
       },
       logout: async () => {
         try {
@@ -34,7 +37,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
             console.error('Logout API failed', error);
         } finally {
-            set({ accessToken: null, role: null, username: null, isAuthenticated: false });
+            set({ accessToken: null, role: null, username: null, isAuthenticated: false, hasSession: false });
         }
       }
     }),

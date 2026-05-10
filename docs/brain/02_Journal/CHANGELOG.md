@@ -1,4 +1,8 @@
 ## [2026-05-10] - 11:45
+### Fixed
+- Stopped `AuthBootstrap` from blindly probing the `POST /api/users/refresh/` endpoint on every reload when a user has no active session, eliminating the noisy `401 Unauthorized` logs for anonymous users.
+- Added `hasSession` boolean to the `useAuthStore` persisted state in both `client-app` and `backoffice-app` to track if a refresh token should exist.
+
 ### Changed
 - **Seeding**: Executed the `seed_all` management command to fully populate the database with test data (Users, Tables, Menu, Ingredients, Recipes, and HR data).
 - **Dashboard**: Updated the project dashboard to reflect the current state (15 Users, 4 Categories).
