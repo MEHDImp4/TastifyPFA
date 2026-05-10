@@ -1,11 +1,20 @@
+## [2026-05-10] - 19:35
+### Fixed
+- **WebSocket Reconnection**: Refactored `WebSocketProvider` to use `useCallback` and `useRef` for timeout management, preventing infinite reconnection loops after user logout or token expiration.
+- **CORS Credentials**: Updated `dev.py` to specify allowed origins instead of `*` when `CORS_ALLOW_CREDENTIALS` is enabled, ensuring browsers properly send the refresh token cookie.
+- **Observability**: Added detailed logging to `JWTAuthMiddleware` and `CookieTokenRefreshView` to track authentication failures and token extraction.
+- **Commit Hash**: 119439a3ec59e3c1204f9eff53a6524f21673827
+
 ## [2026-05-10] - 19:32
 ### Fixed
 - Resolved Recharts `ResponsiveContainer` sizing warnings ("The width(-1) and height(-1) of chart should be greater than 0") in `app/frontend/backoffice-app/src/pages/Dashboard/DashboardPage.tsx`.
 - Implemented a robust sizing pattern using `relative` parent containers with `min-w-0` and an `absolute inset-0` wrapper for the charts, ensuring correct layout calculation during browser reflows.
+- Fixed a TypeScript regression in `app/frontend/backoffice-app/src/contexts/WebSocketProvider.tsx` where `NodeJS.Timeout` was causing a build failure; switched to `ReturnType<typeof setTimeout>` for browser compatibility.
 
 ### Validation
 - Applied the fix to both the "Tendances des revenus" (AreaChart) and "Plats Populaires" (BarChart) components.
 - Verified file changes match the recommended sizing pattern for Recharts in grid layouts.
+- Successfully executed `npm run build` in `app/frontend/backoffice-app` to confirm no remaining TypeScript or resolution errors.
 
 ## [2026-05-10] - 12:15
 ### Fixed
