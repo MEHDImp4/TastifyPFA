@@ -1,3 +1,7 @@
+## [2026-05-12] - 10:45
+### Fixed
+- **Assets**: Moved `logo-staff.svg` to the `src/assets` directory and updated `Login` and `Sidebar` to use explicit imports. This ensures Vite correctly bundles and serves the asset, resolving issues where the logo was not showing when using direct public paths.
+
 ## [2026-05-12] - 10:35
 ### Fixed
 - **Assets**: Restored the original `logo-staff.svg` design provided by the user and deployed it across the `Login` page and `Sidebar` layout, replacing text-based branding for complete visual consistency.

@@ -13,6 +13,8 @@ import {
   LogOut
 } from 'lucide-react';
 
+import logoStaff from '../assets/logo-staff.svg';
+
 interface SidebarProps {
   isMobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
@@ -71,7 +73,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-6 flex items-center justify-center">
-          <img src="/logo-staff.svg" alt="Tastify Staff" className="h-12 w-auto" />
+          <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">

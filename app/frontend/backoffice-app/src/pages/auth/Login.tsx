@@ -4,6 +4,8 @@ import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
 import { Loader2 } from 'lucide-react';
 
+import logoStaff from '../../assets/logo-staff.svg';
+
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -42,7 +44,7 @@ export const Login: React.FC = () => {
     <div className="min-h-[100dvh] flex items-center justify-center bg-dark-surface text-white p-4">
       <div className="w-full max-w-md p-8 bg-dark rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-white/10">
         <div className="text-center mb-8">
-          <img src="/logo-staff.svg" alt="Tastify Staff" className="mx-auto h-20 w-auto mb-4" />
+          <img src={logoStaff} alt="Tastify Staff" className="mx-auto h-20 w-auto mb-4" />
           <p className="text-gray-400">Connectez-vous pour accéder au back-office.</p>
         </div>
 
