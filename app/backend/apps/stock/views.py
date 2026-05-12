@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.users.permissions import IsGerant
+from apps.users.permissions import IsGerant, IsCuisinierOrGerant
 from .models import Ingredient, PlatIngredient
 from .serializers import IngredientSerializer, PlatIngredientSerializer
 
@@ -51,4 +51,4 @@ class PlatIngredientViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ('list', 'retrieve'):
             return [IsAuthenticated()]
-        return [IsAuthenticated(), IsGerant()]
+        return [IsAuthenticated(), IsCuisinierOrGerant()]
