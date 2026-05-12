@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 import { User, LogOut, ShoppingBag, MapPin, Phone, Menu, X } from 'lucide-react';
+import { useConfigStore } from '../store/configStore';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import logoPublic from '../assets/logo-public.svg';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
   const { items } = useCartStore();
+  const { config } = useConfigStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -37,7 +41,14 @@ export const PublicLayout: React.FC = () => {
             onClick={handleLogoClick}
             className="flex items-center gap-3 group transition-transform active:scale-95 z-50"
           >
-            <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
+            {config?.logo ? (
+              <img src={config.logo} alt={config.nom} className="h-8 md:h-10 w-auto object-contain" />
+            ) : (
+              <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
+            )}
+            {!config?.logo && config?.nom && (
+              <span className="font-display-accent italic text-2xl md:text-3xl text-on-surface tracking-tighter group-hover:text-primary transition-colors">{config.nom}</span>
+            )}
           </Link>
 
           <nav className="hidden md:flex items-center gap-10">
@@ -137,19 +148,30 @@ export const PublicLayout: React.FC = () => {
             <div className="pt-8 border-t border-surface-container-high space-y-4">
                <div className="flex items-center gap-3 text-on-surface-variant font-medium">
                   <MapPin className="w-5 h-5 text-primary" />
-                  <span className="text-sm">Casablanca, Maroc</span>
+                  <span className="text-sm">{config?.adresse || 'Casablanca, Maroc'}</span>
                </div>
                <div className="flex items-center gap-3 text-on-surface-variant font-medium">
                   <Phone className="w-5 h-5 text-primary" />
-                  <span className="text-sm">+212 5 22 00 00 00</span>
+                  <span className="text-sm">{config?.telephone || '+212 5 22 00 00 00'}</span>
                </div>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col">
-        <Outlet />
+      <main className="flex-1 flex flex-col relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            className="flex-1 flex flex-col"
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <footer className="bg-surface-container-lowest text-on-surface py-16 md:py-24 mt-auto border-t border-surface-container-high">
@@ -160,10 +182,17 @@ export const PublicLayout: React.FC = () => {
               onClick={handleLogoClick}
               className="flex items-center gap-3 mb-8"
             >
-                <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
+                {config?.logo ? (
+                  <img src={config.logo} alt={config.nom} className="h-8 md:h-10 w-auto object-contain" />
+                ) : (
+                  <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
+                )}
+                {!config?.logo && config?.nom && (
+                  <span className="font-display-accent italic text-2xl md:text-3xl text-on-surface tracking-tighter">{config.nom}</span>
+                )}
             </Link>
             <p className="text-on-surface-variant max-w-[40ch] leading-relaxed font-medium text-sm md:text-base">
-              L'expérience culinaire marocaine réinventée par l'intelligence numérique. Frais, local et servi avec une précision chirurgicale.
+              {config?.nom || 'Tastify'} — L'expérience culinaire marocaine réinventée par l'intelligence numérique. Frais, local et servi avec une précision chirurgicale.
             </p>
           </div>
           <div>
@@ -179,17 +208,17 @@ export const PublicLayout: React.FC = () => {
             <ul className="space-y-3 md:space-y-4 font-sans font-semibold text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span className="text-on-surface-variant">123 Avenue Hassan II,<br/>Casablanca, Maroc</span>
+                <span className="text-on-surface-variant">{config?.adresse || '123 Avenue Hassan II, Casablanca, Maroc'}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-primary shrink-0" />
-                <span className="text-on-surface-variant">+212 5 22 00 00 00</span>
+                <span className="text-on-surface-variant">{config?.telephone || '+212 5 22 00 00 00'}</span>
               </li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 pt-8 md:pt-10 border-t border-surface-container-high flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] md:text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60">
-          <p className="text-center md:text-left">© {new Date().getFullYear()} Tastify - Intelligent Restaurant OS. Tous droits réservés.</p>
+          <p className="text-center md:text-left">© {new Date().getFullYear()} {config?.nom || 'Tastify'} - Intelligent Restaurant OS. Tous droits réservés.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-primary transition-colors">Mentions légales</a>
             <a href="#" className="hover:text-primary transition-colors">Confidentialité</a>
