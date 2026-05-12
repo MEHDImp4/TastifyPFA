@@ -7,8 +7,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const accessToken = useAuthStore(state => state.accessToken);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   
-  const addTicket = useKdsStore(state => state.addTicket);
-  const updateTicket = useKdsStore(state => state.updateTicket);
+  const upsertTicket = useKdsStore(state => state.upsertTicket);
+  const removeTicket = useKdsStore(state => state.removeTicket);
   const updateLigneStatut = useKdsStore(state => state.updateLigneStatut);
   
   const setStatus = useSocketStore(state => state.setStatus);
@@ -56,14 +56,25 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         console.log('WS Message:', data);
 
         switch (data.type) {
-          case 'NEW_ORDER':
-            addTicket(data.payload);
+          case 'order_created':
+          case 'order_updated': {
+            const order = data.payload?.order;
+            if (!order) break;
+            if (['PAYEE', 'ANNULEE'].includes(order.statut)) {
+              removeTicket(order.id);
+            } else {
+              upsertTicket(order);
+            }
             break;
-          case 'ORDER_UPDATED':
-            updateTicket(data.payload);
+          }
+          case 'line_launched':
+            updateLigneStatut(data.payload.ligne_id, 'EN_PREPARATION');
             break;
-          case 'ITEM_STATUS_CHANGED':
-            updateLigneStatut(data.payload.ligne_id, data.payload.statut);
+          case 'line_ready':
+            updateLigneStatut(data.payload.ligne_id, 'PRET');
+            break;
+          case 'line_cancelled':
+            updateLigneStatut(data.payload.ligne_id, 'ANNULE');
             break;
         }
       } catch (err) {
@@ -88,7 +99,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setStatus('error');
       // No need to call ws.close() here as onclose will be triggered anyway
     };
-  }, [accessToken, isAuthenticated, addTicket, updateTicket, updateLigneStatut, setStatus]);
+  }, [accessToken, isAuthenticated, upsertTicket, removeTicket, updateLigneStatut, setStatus]);
 
   useEffect(() => {
     connect();
