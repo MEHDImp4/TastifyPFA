@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 09:57:18<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 10:48:58<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1080,6 +1080,11 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 11:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Centered the sidebar logo in the backoffice and positioned the desktop toggle button to the right, creating a cleaner and more balanced header layout.</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-12 11:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **UI/UX**: Reduced the vertical spacing between sidebar navigation items from `space-y-4` to `space-y-2`, resulting in a denser and more professional layout that matches the premium design specifications.</p>
@@ -1148,11 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 20:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **WebSocket Stability**: Optimized `WebSocketProvider` using Zustand selectors to prevent reconnection loops during re-renders. Added a connection guard to avoid multiple concurrent socket initializations.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 20:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Dashboard UI**: Resolved intermittent Recharts sizing warnings in `DashboardPage.tsx` by adding data availability checks and restoring the `absolute inset-0` layout pattern for better measurement accuracy.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

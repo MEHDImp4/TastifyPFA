@@ -21,17 +21,14 @@ interface SidebarProps {
   isDesktopCollapsed: boolean;
   isMobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
-  toggleDesktopSidebar: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   isDesktopCollapsed,
   isMobileOpen,
   setMobileOpen,
-  toggleDesktopSidebar,
 }) => {
   const { role, logout } = useAuthStore();
-  const DesktopToggleIcon = isDesktopCollapsed ? PanelLeftOpen : PanelLeftClose;
 
   const getLinks = () => {
     const links = [];
@@ -95,17 +92,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
           </div>
-          <button
-            type="button"
-            onClick={toggleDesktopSidebar}
-            className={`hidden h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-gray-300 transition-all duration-200 hover:bg-white/5 hover:text-white active:scale-[0.97] md:flex ${
-              isDesktopCollapsed ? 'static' : 'absolute right-4'
-            }`}
-            aria-label={isDesktopCollapsed ? 'Déployer' : 'Réduire'}
-            title={isDesktopCollapsed ? 'Déployer' : 'Réduire'}
-          >
-            <DesktopToggleIcon className="h-5 w-5" />
-          </button>
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto scrollbar-hide">
