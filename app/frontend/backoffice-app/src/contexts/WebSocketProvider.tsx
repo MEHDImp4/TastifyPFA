@@ -93,7 +93,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (isAuthenticated && accessToken && e.code !== 1000) {
         console.warn(`WS: Staff WebSocket closed (Code: ${e.code}, Reason: ${e.reason || 'None'}). Reconnecting in 3s...`);
         setStatus('disconnected');
-        reconnectTimeoutRef.current = setTimeout(connect, 3000);
+        // eslint-disable-next-line
+        reconnectTimeoutRef.current = setTimeout(() => connect(), 3000);
       } else {
         console.log(`WS: Staff WebSocket closed gracefully (Code: ${e.code})`);
         setStatus('disconnected');

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { hrApi } from '../../api/inventory_hr';
 import type { Employe } from '../../types/inventory';
-import { Plus, Edit2, Trash2, Users, Briefcase } from 'lucide-react';
+import { Plus, Edit2, Trash2, Users, Briefcase, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { CardSkeleton } from '../../components/ui/Skeleton';
 
@@ -31,10 +32,21 @@ export const HrPage: React.FC = () => {
           <h1 className="text-3xl font-bold tracking-tight">Gestion du Personnel</h1>
           <p className="text-gray-400 mt-1">Gérez votre équipe, les postes et les fiches de paie.</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 bg-teal text-white rounded-xl font-medium transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-teal/20">
-          <Plus className="w-5 h-5" />
-          Ajouter un membre
-        </button>
+        <div className="flex gap-4">
+            <button 
+                onClick={() => {
+                    toast.success('Génération du PDF en cours...');
+                }}
+                className="flex items-center gap-2 px-5 py-2.5 bg-dark-surface border border-white/10 text-white rounded-xl font-medium transition-transform hover:border-white/30 active:scale-95"
+            >
+                <FileText className="w-4 h-4" />
+                Exporter la liste (PDF)
+            </button>
+            <button className="flex items-center gap-2 px-5 py-2.5 bg-teal text-white rounded-xl font-medium transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-teal/20">
+                <Plus className="w-5 h-5" />
+                Ajouter un membre
+            </button>
+        </div>
       </div>
 
       {isLoading ? (

@@ -164,41 +164,57 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Top Dishes Chart */}
-        <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0">
-          <h3 className="text-xl font-bold tracking-tight mb-8">Plats Populaires</h3>
-          <div className="h-[300px] w-full relative">
-            {data.topDishes.length > 0 ? (
-              <div className="absolute inset-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                    <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
-                    <Tooltip 
-                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                      contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
-                    />
-                    <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
-                      {data.topDishes.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            ) : (
-              <div className="h-full flex items-center justify-center text-gray-500 text-sm">Pas de données de plats disponibles.</div>
+        {/* Top Dishes Chart & Live Feed container */}
+        <div className="flex flex-col gap-8">
+            <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0">
+            <h3 className="text-xl font-bold tracking-tight mb-8">Plats Populaires</h3>
+            <div className="h-[200px] w-full relative">
+                {data.topDishes.length > 0 ? (
+                <div className="absolute inset-0">
+                    <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.topDishes} layout="vertical" margin={{ left: 0, right: 40 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+                        <XAxis type="number" hide />
+                        <YAxis dataKey="name" type="category" stroke="#fff" fontSize={10} width={100} axisLine={false} tickLine={false} />
+                        <Tooltip 
+                        cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                        contentStyle={{ backgroundColor: '#264653', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem' }}
+                        />
+                        <Bar dataKey="quantity" radius={[0, 10, 10, 0]} barSize={20}>
+                        {data.topDishes.map((_, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                        </Bar>
+                    </BarChart>
+                    </ResponsiveContainer>
+                </div>
+                ) : (
+                <div className="h-full flex items-center justify-center text-gray-500 text-sm">Pas de données de plats disponibles.</div>
+                )}
+            </div>
+            </div>
+
+            {/* Live Feed */}
+            {data.liveFeed && data.liveFeed.length > 0 && (
+                <div className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl min-w-0 flex-1 flex flex-col">
+                    <h3 className="text-xl font-bold tracking-tight mb-6 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
+                        Activité en direct
+                    </h3>
+                    <div className="space-y-4 overflow-y-auto max-h-[300px] pr-2">
+                        {data.liveFeed.map(feed => (
+                            <div key={feed.id} className="p-4 bg-white/5 rounded-2xl border border-white/5 animate-in slide-in-from-right-4 duration-300">
+                                <p className={`text-sm font-bold ${feed.type === 'ORDER' ? 'text-amber' : 'text-teal'}`}>
+                                    {feed.message}
+                                </p>
+                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-2">
+                                    {new Date(feed.time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             )}
-          </div>
-          <div className="mt-4 space-y-2">
-              {data.topDishes.slice(0, 3).map((dish, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                      <span className="text-xs font-bold truncate max-w-[120px]">{dish.name}</span>
-                      <span className="text-xs font-mono text-teal font-bold">{dish.quantity} ventes</span>
-                  </div>
-              ))}
-          </div>
         </div>
       </div>
     </div>

@@ -5,18 +5,25 @@ import { avisApi } from '../../api/avis';
 import type { Avis } from '../../api/avis';
 import { loyaltyApi } from '../../api/loyalty';
 import type { LoyaltyProfile } from '../../api/loyalty';
+import { api } from '../../api/axios';
 import { 
   Calendar, 
   MessageSquare, 
   Star, 
   Loader2, 
   User as UserIcon,
-  Crown
+  Crown,
+  ShoppingBag,
+  PackageCheck,
+  ChefHat,
+  CheckCircle2,
+  Clock
 } from 'lucide-react';
 
 export const AccountPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [avis, setAvis] = useState<Avis[]>([]);
+  const [commandes, setCommandes] = useState<any[]>([]);
   const [loyalty, setLoyalty] = useState<LoyaltyProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -28,15 +35,19 @@ export const AccountPage: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const [resRes, avisRes, loyaltyRes] = await Promise.all([
+      const [resRes, avisRes, loyaltyRes, cmdRes] = await Promise.all([
         reservationApi.getMyReservations(),
         avisApi.getAvis(),
-        loyaltyApi.getMyStatus().catch(() => ({ data: null }))
+        loyaltyApi.getMyStatus().catch(() => ({ data: null })),
+        api.get('/commandes/').catch(() => ({ data: [] }))
       ]);
       setReservations(resRes.data);
       setAvis(avisRes.data);
       if (loyaltyRes.data) {
           setLoyalty(loyaltyRes.data);
+      }
+      if (cmdRes.data && Array.isArray(cmdRes.data)) {
+          setCommandes(cmdRes.data);
       }
     } catch (err) {
       console.error('Failed to fetch account data', err);
@@ -71,6 +82,17 @@ export const AccountPage: React.FC = () => {
           case 'GOLD': return 'bg-amber text-dark';
           case 'PLATINUM': return 'bg-dark text-teal border border-teal/20';
           default: return 'bg-gray-100 text-gray-500';
+      }
+  };
+
+  const activeOrder = commandes.find((c: any) => ['EN_COURS', 'EN_CUISINE', 'PRETE'].includes(c.statut));
+
+  const getOrderStatusUI = (statut: string) => {
+      switch (statut) {
+          case 'EN_COURS': return { text: 'En attente de validation', icon: Clock, color: 'text-gray-500' };
+          case 'EN_CUISINE': return { text: 'En préparation par le chef', icon: ChefHat, color: 'text-orange animate-pulse' };
+          case 'PRETE': return { text: 'Prête à être récupérée !', icon: PackageCheck, color: 'text-teal' };
+          default: return { text: 'Terminée', icon: CheckCircle2, color: 'text-gray-400' };
       }
   };
 
@@ -121,6 +143,36 @@ export const AccountPage: React.FC = () => {
 
             {/* Main content */}
             <div className="flex-1 space-y-12">
+                {/* Active Order Tracker */}
+                {activeOrder && (
+                    <section className="animate-in slide-in-from-bottom-8">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-2xl font-bold tracking-tight flex items-center gap-3">
+                                <ShoppingBag className="w-6 h-6 text-teal" />
+                                Ma Commande en cours
+                            </h3>
+                        </div>
+                        
+                        <div className="p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden relative">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(42,157,143,0.1),_transparent_70%)]" />
+                            
+                            <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                                <div className="w-24 h-24 rounded-3xl bg-gray-50 flex items-center justify-center text-teal shrink-0 shadow-inner">
+                                    <ShoppingBag className="w-10 h-10" />
+                                </div>
+                                <div className="flex-1 text-center md:text-left">
+                                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Commande #{activeOrder.id}</p>
+                                    <div className={`flex items-center justify-center md:justify-start gap-3 mb-2 ${getOrderStatusUI(activeOrder.statut).color}`}>
+                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-6 h-6" })}
+                                        <h4 className="text-2xl font-bold tracking-tight">{getOrderStatusUI(activeOrder.statut).text}</h4>
+                                    </div>
+                                    <p className="text-gray-500 font-medium">Montant total : {activeOrder.montant_total} DH</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 {/* Reservations Section */}
                 <section>
                     <div className="flex items-center justify-between mb-6">

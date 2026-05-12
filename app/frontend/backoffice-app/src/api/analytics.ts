@@ -7,6 +7,7 @@ export interface DashboardData {
   avgPrepTime: number;
   revenue7Days: { date: string; revenue: number }[];
   topDishes: { name: string; quantity: number }[];
+  liveFeed?: { id: string, type: string, message: string, time: string }[];
 }
 
 export const analyticsApi = {

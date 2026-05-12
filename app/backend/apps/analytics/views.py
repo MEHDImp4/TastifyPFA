@@ -88,6 +88,30 @@ class DashboardAPIView(APIView):
             for item in top_dishes_qs
         ]
 
+        # 7. Live Activity Feed (last 10 orders/payments)
+        recent_orders = Commande.objects.order_by('-created_at')[:10]
+        live_feed = []
+        for o in recent_orders:
+            live_feed.append({
+                'id': f"cmd_{o.id}",
+                'type': 'ORDER',
+                'message': f"Nouvelle commande #{o.id} ({o.get_statut_display()})",
+                'time': o.created_at.isoformat()
+            })
+            
+        recent_payments = Paiement.objects.order_by('-created_at')[:10]
+        for p in recent_payments:
+            live_feed.append({
+                'id': f"pay_{p.id}",
+                'type': 'PAYMENT',
+                'message': f"Paiement de {p.montant} DH reçu ({p.get_methode_display()})",
+                'time': p.created_at.isoformat()
+            })
+            
+        # sort by time descending and take top 10
+        live_feed.sort(key=lambda x: x['time'], reverse=True)
+        live_feed = live_feed[:10]
+
         data = {
             'todayRevenue': float(today_revenue),
             'activeTables': active_tables,
@@ -95,6 +119,7 @@ class DashboardAPIView(APIView):
             'avgPrepTime': avg_prep_time_minutes,
             'revenue7Days': revenue_7_days,
             'topDishes': top_dishes,
+            'liveFeed': live_feed,
         }
 
         return Response(data)
