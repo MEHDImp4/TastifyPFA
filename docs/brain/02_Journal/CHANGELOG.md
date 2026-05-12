@@ -1,3 +1,7 @@
+## [2026-05-12] - 10:20
+### Changed
+- **Assets**: Refined `logo-staff.svg` to match the clean typographic style shown in the login screen branding, removing the badge/pill for a more cohesive look.
+
 ## [2026-05-12] - 10:15
 ### Added
 - **Assets**: Added `logo-staff.svg` to the backoffice-app public directory to ensure proper branding.
