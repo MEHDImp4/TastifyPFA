@@ -1,3 +1,7 @@
+## [2026-05-12] - 11:40
+### Changed
+- **UI/UX**: Centered the sidebar logo in the backoffice and positioned the desktop toggle button to the right, creating a cleaner and more balanced header layout.
+
 ## [2026-05-12] - 11:25
 ### Fixed
 - **UI/UX**: Reduced the vertical spacing between sidebar navigation items from `space-y-4` to `space-y-2`, resulting in a denser and more professional layout that matches the premium design specifications.

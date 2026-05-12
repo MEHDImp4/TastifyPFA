@@ -87,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ${isDesktopCollapsed ? 'md:w-20' : 'md:w-72'}
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className={`flex items-center border-b border-white/5 p-4 ${isDesktopCollapsed ? 'justify-center' : 'justify-between md:px-5'}`}>
+        <div className={`relative flex items-center border-b border-white/5 p-4 justify-center`}>
           <div
             className={`overflow-hidden transition-[max-width,opacity] duration-200 ${
               isDesktopCollapsed ? 'md:max-w-0 md:opacity-0' : 'max-w-48 opacity-100'
@@ -98,7 +98,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={toggleDesktopSidebar}
-            className="hidden h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-gray-300 transition-all duration-200 hover:bg-white/5 hover:text-white active:scale-[0.97] md:flex"
+            className={`hidden h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-gray-300 transition-all duration-200 hover:bg-white/5 hover:text-white active:scale-[0.97] md:flex ${
+              isDesktopCollapsed ? 'static' : 'absolute right-4'
+            }`}
             aria-label={isDesktopCollapsed ? 'Déployer' : 'Réduire'}
             title={isDesktopCollapsed ? 'Déployer' : 'Réduire'}
           >
