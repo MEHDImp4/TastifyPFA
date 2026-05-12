@@ -11,6 +11,8 @@ import { CheckoutPage } from './pages/Checkout/CheckoutPage';
 import { PaymentPortal } from './pages/Payment/PaymentPortal';
 import { useAuthStore } from './store/authStore';
 
+import { Toaster } from 'sonner';
+
 const GuestRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (isAuthenticated) return <Navigate to="/" replace />;
@@ -26,6 +28,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   return (
     <AuthBootstrap>
+      <Toaster position="top-center" richColors />
       <BrowserRouter>
         <Routes>
           <Route element={<PublicLayout />}>

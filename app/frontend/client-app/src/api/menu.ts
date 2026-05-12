@@ -21,4 +21,5 @@ export interface Plat {
 export const menuApi = {
   getCategories: () => api.get<Categorie[]>('/categories/'),
   getPlats: (params?: any) => api.get<Plat[]>('/plats/', { params }),
+  getTopRecommendations: () => api.get<Plat[]>('/plats/top-recommendations/'),
 };

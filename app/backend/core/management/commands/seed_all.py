@@ -167,6 +167,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Users seeding complete: {created} created, {updated} updated.'))
 
     def seed_tables(self):
+        # Table configurations: (numero, capacite)
         SEED_DATA = [
             (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
             (6, 4), (7, 4), (8, 4), (9, 4), (10, 4),
@@ -177,13 +178,30 @@ class Command(BaseCommand):
             (24, 2), (25, 2),
             (26, 12),
         ]
+        
+        # Grid settings
+        cols = 5
+        spacing_x = 20  # 20% width
+        spacing_y = 18  # 18% height
+        start_x = 10
+        start_y = 10
+
         created = updated = 0
-        for numero, capacite in SEED_DATA:
+        for i, (numero, capacite) in enumerate(SEED_DATA):
+            # Calculate grid position
+            row = i // cols
+            col = i % cols
+            
+            x = start_x + (col * spacing_x)
+            y = start_y + (row * spacing_y)
+
             _, was_created = Table.objects.update_or_create(
                 numero=numero,
                 defaults={
                     'capacite': capacite,
                     'statut': Table.Statut.LIBRE,
+                    'pos_x': float(x),
+                    'pos_y': float(y),
                     'est_active': True,
                 },
             )
@@ -208,7 +226,7 @@ class Command(BaseCommand):
                     {'nom': 'Briouates au Fromage', 'description': "Feuilletés croustillants au fromage (4 pièces)", 'prix': '9.00', 'temps_preparation': 12, 'image': 'plats/briouates_fromage.png'},
                     {'nom': 'Soupe Harira', 'description': 'Soupe traditionnelle marocaine riche et parfumée', 'prix': '6.50', 'temps_preparation': 15, 'image': 'plats/soupe_harira.png'},
                     {'nom': 'Salade César', 'description': 'Salade fraîche avec croûtons et sauce maison', 'prix': '8.50', 'temps_preparation': 10, 'image': 'plats/salade_cesar.png'},
-                    {'nom': 'Salade de Carottes à l’Orange', 'description': 'Carottes râpées à l’orange et cumin', 'prix': '6.00', 'temps_preparation': 10, 'image': 'plats/salade_carottes_orange.png'},
+                    {'nom': 'Salade de Carottes à l\'Orange', 'description': 'Carottes râpées à l’orange et cumin', 'prix': '6.00', 'temps_preparation': 10, 'image': 'plats/salade_carottes_orange.png'},
                     {'nom': 'Salade de Poivrons Grillés', 'description': 'Poivrons rouges et verts grillés à l’huile d’olive', 'prix': '7.00', 'temps_preparation': 15, 'image': 'plats/salade_poivrons.png'},
                 ],
             },

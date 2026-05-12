@@ -1,17 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
 import { Loader2, Clock, CheckCircle2, ChefHat, PlayCircle } from 'lucide-react';
 
+const playDing = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+        oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); // Up to A6
+
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.6);
+    } catch (e) {
+        console.error("Audio playback failed", e);
+    }
+};
+
 export const KdsPage: React.FC = () => {
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
+  const previousTicketsRef = useRef<number>(0);
 
   const fetchTickets = async () => {
     try {
       const res = await kdsApi.getActiveTickets();
-      // Transform backend response to KDS store format if needed, 
-      // but here I'll assume they match for simplicity or transform inline
       const transformed = res.data.map((cmd: any) => ({
         id: cmd.id,
         statut: cmd.statut,
@@ -29,6 +52,7 @@ export const KdsPage: React.FC = () => {
         }))
       }));
       setTickets(transformed);
+      previousTicketsRef.current = transformed.length;
     } catch (err) {
       console.error('Failed to fetch KDS tickets', err);
     } finally {
@@ -39,6 +63,14 @@ export const KdsPage: React.FC = () => {
   useEffect(() => {
     fetchTickets();
   }, []);
+
+  useEffect(() => {
+    // Play sound if new ticket arrived
+    if (!isLoading && tickets.length > previousTicketsRef.current) {
+        playDing();
+    }
+    previousTicketsRef.current = tickets.length;
+  }, [tickets.length, isLoading]);
 
   const handleUpdateItem = async (ligneId: number, currentStatut: string) => {
     let nextStatut = '';

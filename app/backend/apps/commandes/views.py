@@ -149,7 +149,8 @@ class CommandeViewSet(viewsets.ModelViewSet):
             qs = qs.filter(serveur=user)
 
         if statut:
-            qs = qs.filter(statut=statut)
+            statut_list = [s.strip() for s in statut.split(',')]
+            qs = qs.filter(statut__in=statut_list)
 
         return qs
 

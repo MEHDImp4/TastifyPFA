@@ -56,6 +56,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       try {
         const data = JSON.parse(event.data);
         console.log('WS Message:', data);
+        
+        useSocketStore.getState().triggerUpdate();
 
         switch (data.type) {
           case 'order_created':

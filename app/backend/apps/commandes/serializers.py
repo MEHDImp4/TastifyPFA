@@ -7,6 +7,7 @@ from apps.menu.models import Plat
 
 class CommandeLigneSerializer(serializers.ModelSerializer):
     plat_details = serializers.SerializerMethodField()
+    plat_nom = serializers.SerializerMethodField()
     quantite = serializers.IntegerField(min_value=1)
     notes = serializers.CharField(max_length=2000, allow_blank=True, required=False)
 
@@ -15,15 +16,20 @@ class CommandeLigneSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'plat',
+            'plat_nom',
             'plat_details',
             'quantite',
             'prix_unitaire',
             'statut',
             'notes',
+            'heure_lancement',
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'plat_details', 'prix_unitaire', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'plat_nom', 'plat_details', 'prix_unitaire', 'heure_lancement', 'created_at', 'updated_at']
+
+    def get_plat_nom(self, obj):
+        return obj.plat.nom
 
     def get_plat_details(self, obj):
         return {
@@ -37,12 +43,14 @@ class CommandeSerializer(serializers.ModelSerializer):
     lignes = CommandeLigneSerializer(many=True)
     serveur_name = serializers.SerializerMethodField()
     serveur_username = serializers.ReadOnlyField(source='serveur.username')
+    table_numero = serializers.SerializerMethodField()
 
     class Meta:
         model = Commande
         fields = [
             'id',
             'table',
+            'table_numero',
             'type',
             'client_nom',
             'serveur',
@@ -55,7 +63,10 @@ class CommandeSerializer(serializers.ModelSerializer):
             'updated_at',
             'lignes',
         ]
-        read_only_fields = ['id', 'serveur', 'serveur_name', 'serveur_username', 'montant_total', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'table_numero', 'serveur', 'serveur_name', 'serveur_username', 'montant_total', 'created_at', 'updated_at']
+
+    def get_table_numero(self, obj):
+        return obj.table.numero if obj.table else None
 
     def get_serveur_name(self, obj):
         if obj.serveur:

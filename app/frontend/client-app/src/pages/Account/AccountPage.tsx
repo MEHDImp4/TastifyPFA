@@ -3,20 +3,21 @@ import { reservationApi } from '../../api/reservations';
 import type { Reservation } from '../../api/reservations';
 import { avisApi } from '../../api/avis';
 import type { Avis } from '../../api/avis';
+import { loyaltyApi } from '../../api/loyalty';
+import type { LoyaltyProfile } from '../../api/loyalty';
 import { 
   Calendar, 
   MessageSquare, 
   Star, 
   Loader2, 
-  ChevronRight,
   User as UserIcon,
-  CheckCircle2
+  Crown
 } from 'lucide-react';
-import { Modal } from '../../components/ui/Modal';
 
 export const AccountPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [avis, setAvis] = useState<Avis[]>([]);
+  const [loyalty, setLoyalty] = useState<LoyaltyProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
   // Feedback form
@@ -27,12 +28,16 @@ export const AccountPage: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const [resRes, avisRes] = await Promise.all([
+      const [resRes, avisRes, loyaltyRes] = await Promise.all([
         reservationApi.getMyReservations(),
-        avisApi.getAvis()
+        avisApi.getAvis(),
+        loyaltyApi.getMyStatus().catch(() => ({ data: null }))
       ]);
       setReservations(resRes.data);
       setAvis(avisRes.data);
+      if (loyaltyRes.data) {
+          setLoyalty(loyaltyRes.data);
+      }
     } catch (err) {
       console.error('Failed to fetch account data', err);
     } finally {
@@ -59,13 +64,23 @@ export const AccountPage: React.FC = () => {
     }
   };
 
+  const getTierColor = (tier: string) => {
+      switch (tier) {
+          case 'BRONZE': return 'bg-[#CD7F32] text-white';
+          case 'SILVER': return 'bg-gray-400 text-white';
+          case 'GOLD': return 'bg-amber text-dark';
+          case 'PLATINUM': return 'bg-dark text-teal border border-teal/20';
+          default: return 'bg-gray-100 text-gray-500';
+      }
+  };
+
   if (isLoading) return <div className="flex-1 flex items-center justify-center py-24"><Loader2 className="w-12 h-12 animate-spin text-teal" /></div>;
 
   return (
     <div className="flex-1 max-w-7xl mx-auto px-6 py-12 md:py-20 w-full animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row gap-12">
             {/* Sidebar info */}
-            <aside className="md:w-80 shrink-0">
+            <aside className="md:w-80 shrink-0 space-y-6">
                 <div className="p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm text-center">
                     <div className="w-20 h-20 bg-teal/10 rounded-3xl flex items-center justify-center text-teal mx-auto mb-6">
                         <UserIcon className="w-10 h-10" />
@@ -81,6 +96,27 @@ export const AccountPage: React.FC = () => {
                         Laisser un avis
                     </button>
                 </div>
+
+                {/* Loyalty Card */}
+                {loyalty && (
+                    <div className="p-8 bg-dark rounded-[2.5rem] border border-white/5 shadow-xl text-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.1),_transparent_50%)]" />
+                        <div className="relative z-10">
+                            <div className={`w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 ${getTierColor(loyalty.tier)}`}>
+                                <Crown className="w-7 h-7" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white tracking-tight mb-1">Club Tastify</h3>
+                            <div className="inline-block px-3 py-1 bg-white/10 rounded-lg text-xs font-bold uppercase tracking-widest text-white mb-6">
+                                Statut {loyalty.tier_display || loyalty.tier}
+                            </div>
+                            
+                            <div className="p-4 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md">
+                                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Mes Points</p>
+                                <p className="text-4xl font-black font-mono text-teal tracking-tighter">{loyalty.points}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </aside>
 
             {/* Main content */}

@@ -9,7 +9,6 @@ import {
   Minus, 
   ArrowRight, 
   Loader2, 
-  CheckCircle2,
   PackageCheck
 } from 'lucide-react';
 

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, Clock, ChefHat } from 'lucide-react';
+import { ArrowRight, Star, Clock, ChefHat, Sparkles } from 'lucide-react';
+import { menuApi } from '../../api/menu';
+import type { Plat } from '../../api/menu';
 
 export const PortalHomePage: React.FC = () => {
+  const [recommendations, setRecommendations] = useState<Plat[]>([]);
+
+  useEffect(() => {
+    menuApi.getTopRecommendations()
+      .then(res => setRecommendations(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section - Asymmetric layout */}
@@ -56,6 +66,49 @@ export const PortalHomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Recommendations Section */}
+      {recommendations.length > 0 && (
+        <section className="py-24 bg-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+              <div>
+                <div className="flex items-center gap-2 text-teal font-bold uppercase tracking-widest text-xs mb-3">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Suggéré pour vous</span>
+                </div>
+                <h2 className="text-4xl font-bold text-dark tracking-tight">Recommandations</h2>
+              </div>
+              <Link to="/menu" className="text-dark font-bold border-b-2 border-teal pb-1 hover:text-teal transition-colors inline-flex items-center gap-2">
+                Voir toute la carte <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {recommendations.map(plat => (
+                <Link to={`/menu?plat=${plat.id}`} key={plat.id} className="group bg-gray-50 rounded-[2rem] p-4 border border-gray-100 transition-all hover:shadow-xl hover:shadow-gray-200/50 hover:border-teal/30">
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative bg-white">
+                    {plat.image ? (
+                      <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300 font-bold text-3xl uppercase">
+                        {plat.nom.charAt(0)}
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl font-bold text-sm text-dark shadow-sm">
+                      {plat.prix} DH
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-lg text-dark mb-2 group-hover:text-teal transition-colors line-clamp-1">{plat.nom}</h3>
+                  <div className="flex items-center gap-4 text-sm text-gray-500 font-medium">
+                    <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-teal" /> {plat.temps_preparation} min</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Features/Values Section */}
       <section className="py-24 bg-[#f9fafb]">

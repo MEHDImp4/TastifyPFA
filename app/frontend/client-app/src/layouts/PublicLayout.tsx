@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
-import { UtensilsCrossed, User, LogOut, ShoppingBag } from 'lucide-react';
+import { User, LogOut, ShoppingBag } from 'lucide-react';
 
 import logoPublic from '../assets/logo-public.svg';
 

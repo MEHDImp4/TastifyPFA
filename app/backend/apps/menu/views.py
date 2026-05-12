@@ -89,3 +89,14 @@ class PlatViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(popular_plats, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='top-recommendations')
+    def top_recommendations(self, request):
+        popular_plats = Plat.objects.active().filter(
+            est_disponible=True
+        ).annotate(
+            lignes_count=Count('lignes_commande')
+        ).order_by('-lignes_count', 'nom')[:4]
+        
+        serializer = self.get_serializer(popular_plats, many=True)
+        return Response(serializer.data)

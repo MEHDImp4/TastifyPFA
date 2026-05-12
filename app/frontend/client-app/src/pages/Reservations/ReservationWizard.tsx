@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationApi } from '../../api/reservations';
-import type { Reservation } from '../../api/reservations';
 import { useAuthStore } from '../../store/authStore';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
   Users, 
   ChevronRight, 
-  ChevronLeft, 
   CheckCircle2, 
   Loader2,
   Table as TableIcon

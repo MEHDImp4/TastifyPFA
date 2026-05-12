@@ -23,9 +23,12 @@ import {
 } from 'recharts';
 import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
+import { useSocketStore } from '../../store/socketStore';
+
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const lastUpdate = useSocketStore(state => state.lastUpdate);
 
   const fetchDashboard = async () => {
     try {
@@ -40,9 +43,7 @@ export const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     fetchDashboard();
-    const interval = setInterval(fetchDashboard, 30000); // Poll every 30s
-    return () => clearInterval(interval);
-  }, []);
+  }, [lastUpdate]);
 
   if (isLoading) {
     return (

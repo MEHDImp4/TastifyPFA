@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
+import { stockApi } from '../../api/inventory_hr';
 import type { Plat, Categorie } from '../../types/menu';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock } from 'lucide-react';
+import type { Ingredient, PlatIngredient } from '../../types/inventory';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock, Minus } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
+import { toast } from 'sonner';
 
 import { CardSkeleton } from '../../components/ui/Skeleton';
 
 export const PlatPage: React.FC = () => {
   const [plats, setPlats] = useState<Plat[]>([]);
   const [categories, setCategories] = useState<Categorie[]>([]);
+  const [allIngredients, setAllIngredients] = useState<Ingredient[]>([]);
+  const [platIngredients, setPlatIngredients] = useState<PlatIngredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlat, setEditingPlat] = useState<Plat | null>(null);
@@ -22,20 +27,28 @@ export const PlatPage: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Recipe Form State
+  const [selectedIngredients, setSelectedIngredients] = useState<{ingredient: number, quantite: string, isNew: boolean, id?: number}[]>([]);
 
   const fetchData = async () => {
     try {
-      const [platsRes, catsRes] = await Promise.all([
+      const [platsRes, catsRes, ingredientsRes, platIngRes] = await Promise.all([
         menuApi.getPlats(),
-        menuApi.getCategories()
+        menuApi.getCategories(),
+        stockApi.getIngredients(),
+        stockApi.getPlatIngredients()
       ]);
       setPlats(platsRes.data);
       setCategories(catsRes.data);
+      setAllIngredients(ingredientsRes.data);
+      setPlatIngredients(platIngRes.data);
       if (catsRes.data.length > 0 && !selectedCat) {
         setSelectedCat(catsRes.data[0].id);
       }
     } catch (err) {
-      console.error('Failed to fetch plats/categories', err);
+      console.error('Failed to fetch plats data', err);
+      toast.error('Erreur lors du chargement des données');
     } finally {
       setIsLoading(false);
     }
@@ -54,6 +67,14 @@ export const PlatPage: React.FC = () => {
       setTemps(plat.temps_preparation);
       setSelectedCat(plat.categorie);
       setPreview(plat.image);
+      
+      const pIngs = platIngredients.filter(pi => pi.plat === plat.id);
+      setSelectedIngredients(pIngs.map(pi => ({
+        id: pi.id,
+        ingredient: pi.ingredient,
+        quantite: pi.quantite_requise,
+        isNew: false
+      })));
     } else {
       setEditingPlat(null);
       setNom('');
@@ -62,6 +83,7 @@ export const PlatPage: React.FC = () => {
       setTemps(15);
       if (categories.length > 0) setSelectedCat(categories[0].id);
       setPreview(null);
+      setSelectedIngredients([]);
     }
     setImage(null);
     setIsModalOpen(true);
@@ -73,6 +95,32 @@ export const PlatPage: React.FC = () => {
       setImage(file);
       setPreview(URL.createObjectURL(file));
     }
+  };
+
+  const addIngredientRow = () => {
+    if (allIngredients.length > 0) {
+      setSelectedIngredients([...selectedIngredients, { ingredient: allIngredients[0].id, quantite: '0', isNew: true }]);
+    }
+  };
+
+  const updateIngredientRow = (index: number, field: string, value: any) => {
+    const newItems = [...selectedIngredients];
+    newItems[index] = { ...newItems[index], [field]: value };
+    setSelectedIngredients(newItems);
+  };
+
+  const removeIngredientRow = async (index: number) => {
+    const item = selectedIngredients[index];
+    if (!item.isNew && item.id) {
+        try {
+            await stockApi.deletePlatIngredient(item.id);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    const newItems = [...selectedIngredients];
+    newItems.splice(index, 1);
+    setSelectedIngredients(newItems);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,15 +136,38 @@ export const PlatPage: React.FC = () => {
     if (image) formData.append('image', image);
 
     try {
+      let platId = editingPlat?.id;
       if (editingPlat) {
         await menuApi.updatePlat(editingPlat.id, formData);
       } else {
-        await menuApi.createPlat(formData);
+        const res = await menuApi.createPlat(formData);
+        platId = res.data.id;
       }
+      
+      // Save ingredients
+      if (platId) {
+        for (const item of selectedIngredients) {
+            if (item.isNew) {
+                await stockApi.createPlatIngredient({
+                    plat: platId,
+                    ingredient: item.ingredient,
+                    quantite_requise: item.quantite
+                });
+            } else if (item.id) {
+                await stockApi.updatePlatIngredient(item.id, {
+                    ingredient: item.ingredient,
+                    quantite_requise: item.quantite
+                });
+            }
+        }
+      }
+
+      toast.success('Plat enregistré avec succès');
       setIsModalOpen(false);
       fetchData();
     } catch (err) {
       console.error('Failed to save plat', err);
+      toast.error('Erreur lors de la sauvegarde');
     } finally {
       setIsSaving(false);
     }
@@ -106,9 +177,11 @@ export const PlatPage: React.FC = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce plat ?')) {
       try {
         await menuApi.deletePlat(id);
+        toast.success('Plat supprimé');
         fetchData();
       } catch (err) {
         console.error('Failed to delete plat', err);
+        toast.error('Erreur lors de la suppression');
       }
     }
   };
@@ -122,7 +195,7 @@ export const PlatPage: React.FC = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Plats</h1>
-          <p className="text-gray-400 mt-1">Gérez les délices de votre carte.</p>
+          <p className="text-gray-400 mt-1">Gérez les délices de votre carte et leurs recettes.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -207,7 +280,7 @@ export const PlatPage: React.FC = () => {
         onClose={() => setIsModalOpen(false)} 
         title={editingPlat ? 'Modifier le plat' : 'Nouveau plat'}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2 col-span-2">
                 <label className="text-sm font-medium text-gray-400">Nom du plat</label>
@@ -254,39 +327,75 @@ export const PlatPage: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors resize-none"
-              placeholder="Ingrédients, allergènes..."
+              placeholder="Allergènes, détails..."
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Temps de préparation (min)</label>
-            <input 
-              type="number" 
-              value={temps}
-              onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
-              className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Image</label>
-            <div className="relative group">
-              <input 
-                type="file" 
-                onChange={handleImageChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-              />
-              <div className="w-full h-24 bg-[#1a323b] border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center gap-1 transition-colors group-hover:border-teal/50">
-                {preview ? (
-                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-xl" />
-                ) : (
-                  <>
-                    <ImageIcon className="w-6 h-6 text-gray-500" />
-                    <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Ajouter une photo</span>
-                  </>
-                )}
+          <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-400">Temps de préparation (min)</label>
+                <input 
+                  type="number" 
+                  value={temps}
+                  onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
+                  className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
+                />
               </div>
-            </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-400">Image</label>
+                <div className="relative group">
+                  <input 
+                    type="file" 
+                    onChange={handleImageChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <div className="w-full h-12 bg-[#1a323b] border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center gap-2 transition-colors group-hover:border-teal/50">
+                    {preview ? (
+                      <span className="text-xs text-teal font-bold">Image sélectionnée</span>
+                    ) : (
+                      <>
+                        <ImageIcon className="w-4 h-4 text-gray-500" />
+                        <span className="text-xs text-gray-500 font-bold">Ajouter</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div className="pt-4 border-t border-white/5 space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-white">Ingrédients (Recette)</label>
+                <button type="button" onClick={addIngredientRow} className="text-xs text-teal font-bold flex items-center gap-1 hover:brightness-110">
+                    <Plus className="w-3 h-3" /> Ajouter un ingrédient
+                </button>
+              </div>
+              
+              {selectedIngredients.map((item, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                      <select 
+                          value={item.ingredient} 
+                          onChange={(e) => updateIngredientRow(index, 'ingredient', parseInt(e.target.value))}
+                          className="flex-1 bg-[#1a323b] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-teal"
+                      >
+                          {allIngredients.map(ing => (
+                              <option key={ing.id} value={ing.id}>{ing.nom} ({ing.unite_mesure})</option>
+                          ))}
+                      </select>
+                      <input 
+                          type="number" 
+                          step="0.01"
+                          value={item.quantite} 
+                          onChange={(e) => updateIngredientRow(index, 'quantite', e.target.value)}
+                          placeholder="Qté"
+                          className="w-24 bg-[#1a323b] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-teal"
+                      />
+                      <button type="button" onClick={() => removeIngredientRow(index)} className="p-2 text-gray-500 hover:text-terracotta">
+                          <Minus className="w-4 h-4" />
+                      </button>
+                  </div>
+              ))}
           </div>
 
           <button

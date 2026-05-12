@@ -7,6 +7,13 @@ export interface Ingredient {
   est_active: boolean;
 }
 
+export interface PlatIngredient {
+  id: number;
+  plat: number;
+  ingredient: number;
+  quantite_requise: string;
+}
+
 export interface Employe {
   id: number;
   user: number;
