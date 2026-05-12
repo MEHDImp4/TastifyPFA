@@ -10,9 +10,7 @@ import {
   CalendarDays,
   Map as MapIcon,
   Star,
-  LogOut,
-  PanelLeftClose,
-  PanelLeftOpen
+  LogOut
 } from 'lucide-react';
 
 import logoStaff from '../assets/logo-staff.svg';
@@ -32,9 +30,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const getLinks = () => {
     const links = [];
+    if (role === 'GERANT' || role === 'CUISINIER') {
+      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Plats' });
+    }
+    
     if (role === 'GERANT') {
       links.push({ to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true });
-      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Plats' });
       links.push({ to: '/categories', icon: Package, label: 'Catégories' });
       links.push({ to: '/stock', icon: Package, label: 'Stock' });
       links.push({ to: '/hr', icon: Users, label: 'Personnel' });
@@ -86,8 +87,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
       `}>
         <div className={`relative flex items-center border-b border-white/5 p-4 justify-center h-20`}>
           {isDesktopCollapsed ? (
-            <div className="flex items-center justify-center w-10 h-10 bg-dark-elevated rounded-xl border border-white/10 text-teal font-black text-xl shadow-lg shadow-teal/5 animate-in fade-in zoom-in duration-300">
-              T
+            <div className="animate-in fade-in zoom-in duration-300">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
+                <defs>
+                  <linearGradient id="logoShortGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="white" />
+                    <stop offset="100%" stop-color="#E2E8F0" />
+                  </linearGradient>
+                </defs>
+                <text 
+                  x="50%" 
+                  y="50%" 
+                  text-anchor="middle" 
+                  dominant-baseline="central"
+                  style={{ 
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    fontWeight: 800,
+                    fontSize: '32px',
+                    fill: 'url(#logoShortGradient)',
+                    letterSpacing: '-0.03em'
+                  }}
+                >
+                  T
+                </text>
+              </svg>
             </div>
           ) : (
             <div

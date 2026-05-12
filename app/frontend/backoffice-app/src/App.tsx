@@ -8,6 +8,7 @@ import { PlatPage } from './pages/Menu/PlatPage';
 import { SallePage } from './pages/Staff/SallePage';
 import { OrderingPage } from './pages/Staff/OrderingPage';
 import { KdsPage } from './pages/Staff/KdsPage';
+import { ReservationsPage } from './pages/Staff/ReservationsPage';
 import { DashboardPage } from './pages/Dashboard/DashboardPage';
 import { StockPage } from './pages/Inventory/StockPage';
 import { HrPage } from './pages/HR/HrPage';
@@ -56,6 +57,7 @@ function App() {
                 <Route path="menu" element={<PlatPage />} />
                 <Route path="categories" element={<CategoryPage />} />
                 <Route path="salle" element={<SallePage />} />
+                <Route path="reservations" element={<ReservationsPage />} />
                 <Route path="kds" element={<KdsPage />} />
                 <Route path="stock" element={<StockPage />} />
                 <Route path="hr" element={<HrPage />} />

@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 10:59:59<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 12:43:38<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -433,11 +433,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->1<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->0<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->1<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes</p>
@@ -1081,6 +1081,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 12:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **RBAC**: Expanded permissions for the `CUISINIER` role to allow creating, updating, and soft-deleting dishes. Previously, these management tasks were restricted to the `GERANT`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 12:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Updated the backoffice sidebar to expose the "Plats" management link to users with the `CUISINIER` role.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 12:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Refined the sidebar collapsed icon to use an inline SVG that exactly matches the "T" from the official logo (including its gradient and typography), ensuring perfect visual consistency between view modes.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 12:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Implemented a stylized "T" icon for the backoffice sidebar in its collapsed state. This ensures branded visual continuity even when the full "Tastify Staff" logo is hidden.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-12 11:55</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Simplified the backoffice layout by removing the redundant sidebar toggle button from the `Sidebar` component. The sidebar is now exclusively controlled by the dedicated toggle button in the `Topbar`, resulting in a cleaner and more focused interface.</p>
                             </li>
@@ -1133,26 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-12 10:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> **UI/UX**: Refined the sidebar logo in `backoffice-app` to match the high-end design provided in the screenshot, featuring a tight typographic "Tastify" branding with a precisely placed teal square accent.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-12 10:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Assets**: Refined `logo-staff.svg` to match the clean typographic style shown in the login screen branding, removing the badge/pill for a more cohesive look.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-12 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Assets**: Added `logo-staff.svg` to the backoffice-app public directory to ensure proper branding.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-12 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Documentation**: Synchronized `FILE_MAP.md` with the actual project structure, correcting `backoffice` to `backoffice-app` and `portail` to `client-app`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-12 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Dashboard**: Updated `dashboard.html` to reflect the current repository state.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

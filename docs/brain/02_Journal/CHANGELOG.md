@@ -1,3 +1,12 @@
+## [2026-05-12] - 12:30
+### Changed
+- **RBAC**: Expanded permissions for the `CUISINIER` role to allow creating, updating, and soft-deleting dishes. Previously, these management tasks were restricted to the `GERANT`.
+- **UI/UX**: Updated the backoffice sidebar to expose the "Plats" management link to users with the `CUISINIER` role.
+
+## [2026-05-12] - 12:15
+### Changed
+- **UI/UX**: Refined the sidebar collapsed icon to use an inline SVG that exactly matches the "T" from the official logo (including its gradient and typography), ensuring perfect visual consistency between view modes.
+
 ## [2026-05-12] - 12:05
 ### Changed
 - **UI/UX**: Implemented a stylized "T" icon for the backoffice sidebar in its collapsed state. This ensures branded visual continuity even when the full "Tastify Staff" logo is hidden.

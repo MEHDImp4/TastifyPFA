@@ -14,7 +14,8 @@ export const KdsPage: React.FC = () => {
       // but here I'll assume they match for simplicity or transform inline
       const transformed = res.data.map((cmd: any) => ({
         id: cmd.id,
-        table_numero: cmd.table_numero, // Need to ensure serializer includes this or use cmd.table
+        statut: cmd.statut,
+        table_numero: cmd.table_numero,
         type: cmd.type,
         client_nom: cmd.client_nom,
         created_at: cmd.created_at,
