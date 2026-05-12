@@ -70,7 +70,7 @@ export const PortalHomePage: React.FC = () => {
               <span className="text-primary italic relative">
                 Palate.
                 <motion.div 
-                  className="absolute -bottom-2 md:-bottom-4 left-0 w-full h-1 md:h-1.5 bg-primary/10 rounded-full blur-sm" 
+                  className="absolute -bottom-2 md:-bottom-4 left-0 w-full h-1 md:h-1.5 bg-primary rounded-full blur-[2px]" 
                   initial={{ width: 0 }}
                   animate={{ width: '100%' }}
                   transition={{ delay: 1, duration: 1.2, ease: "easeOut" }}
@@ -118,37 +118,64 @@ export const PortalHomePage: React.FC = () => {
           >
             <div className="relative group">
                 <div className="absolute -inset-10 bg-primary opacity-5 blur-[100px] rounded-full group-hover:opacity-10 transition-opacity duration-1000" />
-                <div className="double-bezel p-6 rotate-3 hover:rotate-0 transition-all duration-1000 ease-out-expo relative z-10 bg-white">
-                    <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
+                <div className="double-bezel p-3 rotate-3 hover:rotate-0 transition-all duration-1000 ease-out-expo relative z-10 bg-white">
+                    <div className="relative rounded-xl overflow-hidden aspect-[3/4] shadow-2xl">
                       <img 
-                        src="https://picsum.photos/seed/moroccan_luxury/1000/1400" 
-                        alt="Signature Plate" 
-                        className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
+                        src="https://picsum.photos/seed/tagine_luxury/1000/1400" 
+                        alt="Signature Moroccan Dish" 
+                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-2000 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-transparent to-transparent opacity-60" />
-                      <div className="absolute bottom-0 left-0 p-12 text-white">
-                        <p className="font-display-accent italic text-4xl mb-4 leading-none">Chef's Selection.</p>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-[1px] bg-primary" />
-                            <p className="text-white/50 text-[10px] font-black uppercase tracking-[0.3em]">Session ID: 402-A</p>
-                        </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-on-surface/95 via-on-surface/20 to-transparent opacity-80" />
+                      <div className="absolute bottom-0 left-0 p-10 md:p-14 text-white">
+                        <motion.p 
+                          className="font-display-accent italic text-4xl md:text-5xl mb-4 leading-none tracking-tighter"
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.8, duration: 1, ease: [0.23, 1, 0.32, 1] as const }}
+                        >
+                          Chef's Selection.
+                        </motion.p>
+                        <motion.div 
+                          className="flex items-center gap-4"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          transition={{ delay: 1, duration: 1 }}
+                        >
+                            <div className="w-10 h-[1px] bg-primary" />
+                            <p className="text-white/50 text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">Session ID: 402-A</p>
+                        </motion.div>
                       </div>
                     </div>
                 </div>
-                {/* Secondary floating element */}
+                {/* Secondary floating element - Vertically Staggered Left Alignment */}
                 <motion.div 
-                  className="absolute bottom-6 -left-16 w-64 p-6 glass rounded-[2rem] border border-primary/20 shadow-2xl z-20"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 1 }}
+                  className="absolute -top-12 -left-16 w-64 p-7 bg-white/95 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] z-20"
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: [0, -12, 0],
+                    scale: 1,
+                  }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    y: -5,
+                    boxShadow: "0 30px 60px -12px rgba(0,0,0,0.15)"
+                  }}
+                  transition={{ 
+                    opacity: { duration: 1, delay: 1.2 },
+                    y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+                    scale: { type: "spring", stiffness: 100, damping: 15 }
+                  }}
                 >
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
-                            <Sparkles className="w-4 h-4" />
+                    <div className="flex items-center gap-4 mb-5">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-xl shadow-primary/30">
+                            <Sparkles className="w-5 h-5" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">AI Match: 98%</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface/80">AI MATCH: 98%</span>
                     </div>
-                    <p className="text-sm font-bold text-on-surface leading-tight">Matched to your previous flavor profile preference.</p>
+                    <p className="text-xs font-bold text-on-surface/70 leading-relaxed border-t border-on-surface/5 pt-4">
+                      Matched to your previous flavor profile preference.
+                    </p>
                 </motion.div>
             </div>
           </motion.div>
@@ -402,4 +429,3 @@ export const PortalHomePage: React.FC = () => {
     </div>
   );
 };
-
