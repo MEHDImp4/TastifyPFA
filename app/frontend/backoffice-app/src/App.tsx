@@ -32,6 +32,13 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const RoleIndex = () => {
+  const role = useAuthStore(state => state.role);
+  const home = ROLE_HOME[role ?? ''];
+  if (home) return <Navigate to={home} replace />;
+  return <DashboardPage />;
+};
+
 function App() {
   return (
     <AuthBootstrap>
@@ -59,7 +66,7 @@ function App() {
                   <AppShell />
                 </ProtectedRoute>
               }>
-                <Route index element={<DashboardPage />} />
+                <Route index element={<RoleIndex />} />
                 <Route path="menu" element={<PlatPage />} />
                 <Route path="categories" element={<CategoryPage />} />
                 <Route path="salle" element={<SallePage />} />
