@@ -151,15 +151,15 @@ export const SallePage: React.FC = () => {
                         transform: 'translate(-50%, -50%)',
                     }}
                     className={`
-                        absolute w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center gap-1.5 rounded-[1.5rem] sm:rounded-[2rem] border-2 transition-all duration-300
+                        absolute w-16 h-16 sm:w-20 sm:h-20 flex flex-col items-center justify-center gap-1 rounded-[1rem] sm:rounded-[1.25rem] border-2 transition-all duration-300
                         ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105' : 'cursor-pointer hover:scale-110 active:scale-95'}
                         ${getStatutColor(table.statut)}
                         ${draggingTable === table.id ? 'z-50 shadow-2xl scale-110' : 'z-10 shadow-lg'}
                     `}
                 >
-                    <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tighter">#{table.numero}</div>
-                    <div className="flex items-center gap-1 px-2 py-0.5 bg-black/10 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                        <Users className="w-3 h-3" />
+                    <div className="text-xl sm:text-2xl font-bold font-mono tracking-tighter">#{table.numero}</div>
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 bg-black/10 rounded-full text-[8px] font-bold uppercase tracking-widest">
+                        <Users className="w-2.5 h-2.5" />
                         <span>{table.capacite}</span>
                     </div>
                     
