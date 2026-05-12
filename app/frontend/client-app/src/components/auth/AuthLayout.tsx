@@ -29,28 +29,32 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, visual, isReve
     >
       {/* Visual Identity Section - Desktop Only */}
       <motion.div 
-        layoutId="auth-visual-container"
+        layoutId="auth-visual-section"
         layout
         transition={{ 
-          type: "spring",
-          stiffness: 260,
-          damping: 30,
-          mass: 1
+          duration: 0.8,
+          ease: [0.23, 1, 0.32, 1]
         }}
         className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-on-surface p-20 items-end z-0"
       >
-        {visual}
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute inset-0 z-0"
+        >
+            {visual}
+        </motion.div>
       </motion.div>
 
       {/* Form Section */}
       <motion.div 
-        layoutId="auth-form-container"
+        layoutId="auth-form-section"
         layout
         transition={{ 
-          type: "spring",
-          stiffness: 260,
-          damping: 30,
-          mass: 1
+          duration: 0.8,
+          ease: [0.23, 1, 0.32, 1]
         }}
         className="flex-1 flex flex-col items-center justify-center p-8 md:p-20 relative overflow-hidden bg-background z-10"
       >
@@ -65,9 +69,15 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, visual, isReve
             <img src={logoPublic} alt="Tastify" className="h-8 w-auto lg:hidden" />
         </div>
 
-        <div className="w-full max-w-md space-y-12 relative z-10">
+        <motion.div 
+            initial={{ opacity: 0, x: isReverse ? -20 : 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: isReverse ? 20 : -20 }}
+            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+            className="w-full max-w-md space-y-12 relative z-10"
+        >
             {children}
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
