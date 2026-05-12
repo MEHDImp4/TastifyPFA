@@ -106,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-4 overflow-y-auto scrollbar-hide">
+        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto scrollbar-hide">
           {getLinks().map((link) => {
             const Icon = link.icon;
             return (

@@ -1,3 +1,7 @@
+## [2026-05-12] - 11:25
+### Fixed
+- **UI/UX**: Reduced the vertical spacing between sidebar navigation items from `space-y-4` to `space-y-2`, resulting in a denser and more professional layout that matches the premium design specifications.
+
 ## [2026-05-12] - 11:15
 ### Fixed
 - **UI/UX**: Fixed the sidebar collapsed state in the backoffice. Removed the bulky native scrollbar, centered icons perfectly, and transitioned to square active-state backgrounds for a premium, high-density look.
