@@ -1,3 +1,7 @@
+## [2026-05-12] - 11:05
+### Changed
+- **UI/UX**: Refined the Plat (dish) card design in the backoffice to match the premium specifications. This includes a more immersive image aspect ratio, prominent typography for dish titles, high-end price badges with backdrop blur, and improved spacing for category and preparation time details.
+
 ## [2026-05-12] - 10:55
 ### Added
 - **Assets**: Added `logo-public.svg` to the `client-app` and integrated it into the `PublicLayout` (Header/Footer), `Login` page, and `AuthBootstrap` loading screen.

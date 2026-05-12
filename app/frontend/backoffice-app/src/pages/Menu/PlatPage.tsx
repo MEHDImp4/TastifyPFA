@@ -140,47 +140,56 @@ export const PlatPage: React.FC = () => {
           {plats.filter(p => p.est_active).map((plat) => (
             <div 
               key={plat.id}
-              className="group bg-dark-surface rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-300 hover:border-teal/30 hover:shadow-2xl hover:shadow-teal/5"
+              className="group bg-dark-surface/50 rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-500 hover:bg-dark-surface hover:border-teal/30 hover:shadow-2xl hover:shadow-teal/5"
             >
-              <div className="aspect-square relative overflow-hidden bg-[#1a323b]">
+              <div className="aspect-[4/3] relative overflow-hidden">
                 {plat.image ? (
-                  <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-500">
-                    <ImageIcon className="w-10 h-10 opacity-20" />
+                  <div className="w-full h-full flex items-center justify-center bg-[#1a323b] text-gray-500">
+                    <ImageIcon className="w-12 h-12 opacity-10" />
                   </div>
                 )}
-                <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                
+                {/* Action Buttons */}
+                <div className="absolute top-4 right-4 flex gap-2">
                   <button 
                     onClick={() => handleOpenModal(plat)}
-                    className="p-2.5 bg-dark/80 backdrop-blur-md rounded-xl text-white hover:text-teal transition-colors"
+                    className="p-3 bg-dark-surface/60 backdrop-blur-xl rounded-2xl text-white hover:text-teal hover:bg-dark-surface transition-all duration-200 shadow-xl border border-white/5"
                   >
-                    <Edit2 className="w-4 h-4" />
+                    <Edit2 className="w-5 h-5" />
                   </button>
                   <button 
                     onClick={() => handleDelete(plat.id)}
-                    className="p-2.5 bg-dark/80 backdrop-blur-md rounded-xl text-white hover:text-terracotta transition-colors"
+                    className="p-3 bg-dark-surface/60 backdrop-blur-xl rounded-2xl text-white hover:text-terracotta hover:bg-dark-surface transition-all duration-200 shadow-xl border border-white/5"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
+
+                {/* Price Badge */}
                 <div className="absolute bottom-4 left-4">
-                    <span className="px-3 py-1 bg-teal text-white text-xs font-bold rounded-full shadow-lg">
-                        {plat.prix} DH
-                    </span>
+                  <div className="px-4 py-2 bg-teal/90 backdrop-blur-md text-white text-sm font-extrabold rounded-2xl shadow-xl">
+                    {plat.prix} DH
+                  </div>
                 </div>
               </div>
-              <div className="p-5">
-                <p className="text-[10px] font-bold text-teal uppercase tracking-widest mb-1">{getCategoryName(plat.categorie)}</p>
-                <h3 className="text-lg font-bold tracking-tight mb-2 line-clamp-1">{plat.nom}</h3>
-                <div className="flex items-center gap-3 text-gray-400 text-xs mb-4">
-                    <div className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        <span>{plat.temps_preparation} min</span>
-                    </div>
+
+              <div className="p-7">
+                <p className="text-[11px] font-black text-teal uppercase tracking-[0.2em] mb-3 opacity-80">
+                  {getCategoryName(plat.categorie)}
+                </p>
+                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-teal transition-colors">
+                  {plat.nom}
+                </h3>
+                
+                <div className="flex items-center gap-2 text-gray-400 text-sm mb-5 font-medium">
+                  <Clock className="w-4 h-4 text-teal" />
+                  <span>{plat.temps_preparation} min</span>
                 </div>
-                <p className="text-gray-400 text-xs line-clamp-2 leading-relaxed h-8">
-                  {plat.description || 'Pas de description.'}
+
+                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 h-10 italic">
+                  {plat.description || 'Une création culinaire d\'exception signée Tastify.'}
                 </p>
               </div>
             </div>
