@@ -46,11 +46,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     socketRef.current = ws;
 
     ws.onopen = () => {
+      if (socketRef.current !== ws) return;
       console.log('WS: Staff WebSocket connected');
       setStatus('connected');
     };
 
     ws.onmessage = (event) => {
+      if (socketRef.current !== ws) return;
       try {
         const data = JSON.parse(event.data);
         console.log('WS Message:', data);
@@ -83,6 +85,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     ws.onclose = (e) => {
+      // Ignore stale close events from sockets superseded by a newer connection
+      if (socketRef.current !== ws) return;
       socketRef.current = null;
       if (isAuthenticated && accessToken && e.code !== 1000) {
         console.warn(`WS: Staff WebSocket closed (Code: ${e.code}, Reason: ${e.reason || 'None'}). Reconnecting in 3s...`);
@@ -94,10 +98,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
     };
 
-    ws.onerror = (err) => {
-      console.error('WS: Staff WebSocket error observed:', err);
+    ws.onerror = () => {
+      if (socketRef.current !== ws) return;
       setStatus('error');
-      // No need to call ws.close() here as onclose will be triggered anyway
     };
   }, [accessToken, isAuthenticated, upsertTicket, removeTicket, updateLigneStatut, setStatus]);
 
@@ -105,10 +108,11 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     connect();
 
     return () => {
-      if (socketRef.current) {
-        console.log('WS: Cleaning up socket on unmount/dependency change');
-        socketRef.current.close(1000);
-        socketRef.current = null;
+      // Detach from ref first so onclose/onerror handlers on this socket are ignored
+      const socket = socketRef.current;
+      socketRef.current = null;
+      if (socket && socket.readyState !== WebSocket.CLOSED) {
+        socket.close(1000);
       }
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
