@@ -70,10 +70,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
         md:relative md:translate-x-0 flex flex-col
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold font-sans tracking-tighter text-white flex items-baseline gap-1">
-            Tastify<span className="w-1.5 h-1.5 bg-teal rounded-[1px] mb-1"></span>
-          </h2>
+        <div className="p-6 flex items-center justify-center">
+          <img src="/logo-staff.svg" alt="Tastify Staff" className="h-12 w-auto" />
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">

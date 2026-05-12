@@ -1,3 +1,7 @@
+## [2026-05-12] - 10:35
+### Fixed
+- **Assets**: Restored the original `logo-staff.svg` design provided by the user and deployed it across the `Login` page and `Sidebar` layout, replacing text-based branding for complete visual consistency.
+
 ## [2026-05-12] - 10:25
 ### Changed
 - **UI/UX**: Refined the sidebar logo in `backoffice-app` to match the high-end design provided in the screenshot, featuring a tight typographic "Tastify" branding with a precisely placed teal square accent.
