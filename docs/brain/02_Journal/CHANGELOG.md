@@ -1,8 +1,4 @@
 ## [2026-05-12] - 14:15
-### Changed
-- **UI/UX**: Added scroll-to-top functionality to the 'Tastify' logo in the public portal. Clicking the logo in the header or footer now smoothly scrolls the page to the top if already on the homepage, or navigates back to the homepage.
-
-## [2026-05-12] - 14:15
 ### Added
 - **UI/UX (Animations)**: Implemented premium scroll-triggered animations on the main page (`PortalHomePage.tsx`) using Framer Motion.
 - **Motion Design**: Added staggered reveals for the AI Recommendations grid and Architectural Flow protocols, following high-end design engineering principles.
