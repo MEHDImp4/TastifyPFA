@@ -10,19 +10,28 @@ import {
   CalendarDays,
   Map as MapIcon,
   Star,
-  LogOut
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 
 import logoStaff from '../assets/logo-staff.svg';
 
 interface SidebarProps {
+  isDesktopCollapsed: boolean;
   isMobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
+  toggleDesktopSidebar: () => void;
 }
 
-// Sidebar component for backoffice navigation
-export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  isDesktopCollapsed,
+  isMobileOpen,
+  setMobileOpen,
+  toggleDesktopSidebar,
+}) => {
   const { role, logout } = useAuthStore();
+  const DesktopToggleIcon = isDesktopCollapsed ? PanelLeftOpen : PanelLeftClose;
 
   const getLinks = () => {
     const links = [];
@@ -48,11 +57,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+    flex items-center gap-3 rounded-xl border-l-2 px-4 py-3 transition-[background-color,color,border-color,padding] duration-200
     ${isActive 
-      ? 'bg-dark-elevated text-teal border-l-2 border-teal' 
-      : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
+      ? 'bg-dark-elevated text-teal border-teal' 
+      : 'border-transparent text-gray-400 hover:bg-white/5 hover:text-white'
     }
+    ${isDesktopCollapsed ? 'md:justify-center md:px-3' : ''}
   `;
 
   return (
@@ -69,11 +79,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
       <aside className={`
         fixed inset-y-0 left-0 z-50 w-72 bg-dark-surface border-r border-white/5
         transform transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]
-        md:relative md:translate-x-0 flex flex-col
+        md:relative md:flex md:flex-col md:translate-x-0 md:transition-[width]
+        ${isDesktopCollapsed ? 'md:w-24' : 'md:w-72'}
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-6 flex items-center justify-center">
-          <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
+        <div className={`flex items-center border-b border-white/5 p-4 ${isDesktopCollapsed ? 'justify-center md:px-3' : 'justify-between md:px-5'}`}>
+          <div
+            className={`overflow-hidden transition-[max-width,opacity] duration-200 ${
+              isDesktopCollapsed ? 'max-w-48 opacity-100 md:max-w-0 md:opacity-0' : 'max-w-48 opacity-100'
+            }`}
+          >
+            <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
+          </div>
+          <button
+            type="button"
+            onClick={toggleDesktopSidebar}
+            className="hidden h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-gray-300 transition-[transform,background-color,color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-white/5 hover:text-white active:scale-[0.97] md:flex"
+            aria-label={isDesktopCollapsed ? 'Déployer la barre latérale' : 'Réduire la barre latérale'}
+            title={isDesktopCollapsed ? 'Déployer la barre latérale' : 'Réduire la barre latérale'}
+          >
+            <DesktopToggleIcon className="h-5 w-5" />
+          </button>
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
@@ -86,9 +112,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
                 end={link.exact}
                 className={navClass}
                 onClick={() => setMobileOpen(false)}
+                title={isDesktopCollapsed ? link.label : undefined}
               >
-                <Icon className="w-5 h-5" />
-                <span className="font-medium">{link.label}</span>
+                <Icon className="h-5 w-5 shrink-0" />
+                <span
+                  className={`font-medium transition-[width,opacity] duration-200 ${
+                    isDesktopCollapsed ? 'md:w-0 md:overflow-hidden md:opacity-0' : 'md:w-auto md:opacity-100'
+                  }`}
+                >
+                  {link.label}
+                </span>
               </NavLink>
             );
           })}
@@ -97,10 +130,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
         <div className="p-4 border-t border-white/5">
           <button
             onClick={() => logout()}
-            className="flex items-center gap-3 px-4 py-3 w-full text-left rounded-xl text-terracotta hover:bg-terracotta/10 transition-colors"
+            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-terracotta transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-terracotta/10 active:scale-[0.97] ${isDesktopCollapsed ? 'md:justify-center md:px-3' : ''}`}
+            title={isDesktopCollapsed ? 'Déconnexion' : undefined}
           >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Déconnexion</span>
+            <LogOut className="h-5 w-5 shrink-0" />
+            <span
+              className={`font-medium transition-[width,opacity] duration-200 ${
+                isDesktopCollapsed ? 'md:w-0 md:overflow-hidden md:opacity-0' : 'md:w-auto md:opacity-100'
+              }`}
+            >
+              Déconnexion
+            </span>
           </button>
         </div>
       </aside>
