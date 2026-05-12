@@ -15,15 +15,20 @@ import { HrPage } from './pages/HR/HrPage';
 import { AvisPage } from './pages/Avis/AvisPage';
 import { WebSocketProvider } from './contexts/WebSocketProvider';
 
+import { Toaster } from 'sonner';
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
 
+const ROLE_HOME: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
+
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  if (isAuthenticated) return <Navigate to="/" replace />;
+  const role = useAuthStore(state => state.role);
+  if (isAuthenticated) return <Navigate to={ROLE_HOME[role ?? ''] ?? '/'} replace />;
   return <>{children}</>;
 };
 
@@ -32,6 +37,7 @@ function App() {
     <AuthBootstrap>
       <WebSocketProvider>
         <div className="dark text-white selection:bg-teal selection:text-white">
+          <Toaster theme="dark" position="top-right" richColors />
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={

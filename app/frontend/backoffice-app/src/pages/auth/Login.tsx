@@ -28,7 +28,8 @@ export const Login: React.FC = () => {
       const response = await api.post('/users/login/', { username, password });
       const { access, role, username: resUsername } = response.data;
       setAuth(access, role, resUsername);
-      navigate('/', { replace: true });
+      const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
+      navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
       if (err.response?.status === 401) {
         setError('Identifiants incorrects.');
