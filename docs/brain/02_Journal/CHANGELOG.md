@@ -1,12 +1,13 @@
-## [2026-05-12] - 14:00
-### Fixed
-- **UI/UX (Mobile)**: Dramatically enhanced mobile compatibility across the entire client application.
-- **Navigation**: Implemented a responsive mobile menu (hamburger) with high-end animations and full site coverage.
-- **Typography**: Scaled down oversized headers and titles for small viewports using a fluid typography approach (e.g., text-7xl -> text-5xl on mobile).
-- **Layout**: Fixed excessive horizontal and vertical padding (px-8 -> px-5 for mobile) and adjusted grid gaps for optimal information density on small screens.
-- **Responsiveness**: Refactored the Menu library sidebar into a horizontal scrollable chip system for mobile and updated the Checkout and Account surfaces for better stacking and readability.
-- **Bug Fix**: Fixed a footer layout typo (`md:row` -> `md:flex-row`).
-- **Optimization**: Removed unused imports to ensure clean production builds.
+## [2026-05-12] - 14:15
+### Changed
+- **UI/UX**: Added scroll-to-top functionality to the 'Tastify' logo in the public portal. Clicking the logo in the header or footer now smoothly scrolls the page to the top if already on the homepage, or navigates back to the homepage.
+
+## [2026-05-12] - 14:15
+### Added
+- **UI/UX (Animations)**: Implemented premium scroll-triggered animations on the main page (`PortalHomePage.tsx`) using Framer Motion.
+- **Motion Design**: Added staggered reveals for the AI Recommendations grid and Architectural Flow protocols, following high-end design engineering principles.
+- **Performance**: Utilized custom easing curves (`cubic-bezier(0.23, 1, 0.32, 1)`) and GPU-accelerated transforms for fluid, high-performance motion that feels "architectural."
+- **Feedback**: Added a scale-in reveal for the final CTA section to increase visual impact and conversion focus.
 
 ## [2026-05-12] - 13:00
 ### Added

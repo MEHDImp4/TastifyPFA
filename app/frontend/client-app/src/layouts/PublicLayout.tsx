@@ -20,11 +20,23 @@ export const PublicLayout: React.FC = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (isMenuOpen) setIsMenuOpen(false);
+  };
+
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-on-background font-sans selection:bg-primary/20 selection:text-primary">
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-surface-container-high">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 md:h-24 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group transition-transform active:scale-95 z-50">
+          <Link 
+            to="/" 
+            onClick={handleLogoClick}
+            className="flex items-center gap-3 group transition-transform active:scale-95 z-50"
+          >
             <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
           </Link>
 
@@ -143,7 +155,11 @@ export const PublicLayout: React.FC = () => {
       <footer className="bg-surface-container-lowest text-on-surface py-16 md:py-24 mt-auto border-t border-surface-container-high">
         <div className="max-w-7xl mx-auto px-5 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-8">
+            <Link 
+              to="/" 
+              onClick={handleLogoClick}
+              className="flex items-center gap-3 mb-8"
+            >
                 <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
             </Link>
             <p className="text-on-surface-variant max-w-[40ch] leading-relaxed font-medium text-sm md:text-base">
