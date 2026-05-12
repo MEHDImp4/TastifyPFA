@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/Dashboard/DashboardPage';
 import { StockPage } from './pages/Inventory/StockPage';
 import { HrPage } from './pages/HR/HrPage';
 import { AvisPage } from './pages/Avis/AvisPage';
+import { SettingsPage } from './pages/Settings/SettingsPage';
 import { WebSocketProvider } from './contexts/WebSocketProvider';
 
 import { Toaster } from 'sonner';
@@ -75,6 +76,7 @@ function App() {
                 <Route path="stock" element={<StockPage />} />
                 <Route path="hr" element={<HrPage />} />
                 <Route path="avis" element={<AvisPage />} />
+                <Route path="settings" element={<SettingsPage />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/" replace />} />

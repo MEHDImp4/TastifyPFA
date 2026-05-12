@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Star, Clock, ChefHat, Sparkles, MapPin, ShieldCheck, Quote, Calendar } from 'lucide-react';
 import { menuApi } from '../../api/menu';
 import type { Plat } from '../../api/menu';
+import { useConfigStore } from '../../store/configStore';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -26,6 +27,7 @@ const staggerItem = {
 
 export const PortalHomePage: React.FC = () => {
   const [recommendations, setRecommendations] = useState<Plat[]>([]);
+  const config = useConfigStore(state => state.config);
 
   useEffect(() => {
     menuApi.getTopRecommendations()
@@ -56,7 +58,7 @@ export const PortalHomePage: React.FC = () => {
               transition={{ delay: 0.2, duration: 0.8 }}
             >
               <Star className="w-3 md:w-3.5 h-3 md:h-3.5 fill-primary" />
-              <span>The Intelligent Restaurant OS</span>
+              <span>{config?.nom || 'Tastify'} — The Intelligent Restaurant OS</span>
             </motion.div>
             
             <motion.h1 
@@ -116,9 +118,11 @@ export const PortalHomePage: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
           >
-            <div className="relative group">
+            <div className="relative group perspective-2000">
                 <div className="absolute -inset-10 bg-primary opacity-5 blur-[100px] rounded-full group-hover:opacity-10 transition-opacity duration-1000" />
-                <div className="double-bezel p-3 rotate-3 hover:rotate-0 transition-all duration-1000 ease-out-expo relative z-10 bg-white">
+                
+                {/* Main Hero Image with Double-Bezel and Z-Rotation */}
+                <div className="double-bezel p-3 -rotate-6 group-hover:rotate-0 transition-all duration-1000 ease-out-expo relative z-10 bg-white">
                     <div className="relative rounded-xl overflow-hidden aspect-[3/4] shadow-2xl">
                       <img 
                         src="https://picsum.photos/seed/tagine_luxury/1000/1400" 
@@ -147,24 +151,28 @@ export const PortalHomePage: React.FC = () => {
                       </div>
                     </div>
                 </div>
-                {/* Secondary floating element - Vertically Staggered Left Alignment */}
+
+                {/* Staggered Floating Element 01 - Top Left */}
                 <motion.div 
-                  className="absolute -top-12 -left-16 w-64 p-7 bg-white/95 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] z-20"
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  className="absolute -top-16 -left-20 w-64 p-7 bg-white/95 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)] z-20"
+                  initial={{ opacity: 0, y: 40, scale: 0.8, rotate: -5 }}
                   animate={{ 
                     opacity: 1, 
-                    y: [0, -12, 0],
+                    y: [0, -15, 0],
                     scale: 1,
+                    rotate: -2
                   }}
                   whileHover={{ 
                     scale: 1.05, 
-                    y: -5,
-                    boxShadow: "0 30px 60px -12px rgba(0,0,0,0.15)"
+                    y: -10,
+                    rotate: 0,
+                    boxShadow: "0 40px 80px -15px rgba(0,0,0,0.2)"
                   }}
                   transition={{ 
                     opacity: { duration: 1, delay: 1.2 },
                     y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-                    scale: { type: "spring", stiffness: 100, damping: 15 }
+                    scale: { type: "spring", stiffness: 100, damping: 15 },
+                    rotate: { duration: 1.2, delay: 1.2 }
                   }}
                 >
                     <div className="flex items-center gap-4 mb-5">
@@ -177,6 +185,40 @@ export const PortalHomePage: React.FC = () => {
                       Matched to your previous flavor profile preference.
                     </p>
                 </motion.div>
+
+                {/* Staggered Floating Element 02 - Bottom Right */}
+                <motion.div 
+                  className="absolute -bottom-12 -right-16 w-56 p-6 bg-primary text-white rounded-[2rem] shadow-[0_20px_40px_-10px_rgba(0,64,224,0.3)] z-30"
+                  initial={{ opacity: 0, y: 50, scale: 0.9, rotate: 8 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: [0, 15, 0],
+                    scale: 1,
+                    rotate: 5
+                  }}
+                  whileHover={{ 
+                    scale: 1.1, 
+                    y: 10,
+                    rotate: 0,
+                    boxShadow: "0 30px 60px -10px rgba(0,64,224,0.4)"
+                  }}
+                  transition={{ 
+                    opacity: { duration: 1, delay: 1.5 },
+                    y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+                    scale: { type: "spring", stiffness: 100, damping: 12 },
+                    rotate: { duration: 1.5, delay: 1.5 }
+                  }}
+                >
+                    <div className="flex items-center gap-3 mb-4">
+                        <Clock className="w-4 h-4 text-white/60" />
+                        <span className="text-[9px] font-black uppercase tracking-widest text-white/60">Live Wait Time</span>
+                    </div>
+                    <p className="text-2xl font-display-accent italic leading-none mb-1">12 Mins</p>
+                    <p className="text-[9px] font-bold uppercase tracking-wider opacity-50">Current Preparation Window</p>
+                </motion.div>
+
+                {/* Decorative Geometric Accent */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-primary/5 rounded-full -z-10 animate-pulse" />
             </div>
           </motion.div>
         </div>
@@ -194,11 +236,11 @@ export const PortalHomePage: React.FC = () => {
             </h2>
             <div className="flex flex-col items-center gap-4">
                 <div className="w-14 md:w-16 h-14 md:h-16 rounded-full bg-surface-container-highest border-2 border-primary/20 overflow-hidden shadow-xl">
-                    <img src="https://picsum.photos/seed/chef/200/200" alt="Executive Chef" className="w-full h-full object-cover" />
+                    <img src={config?.logo || "https://picsum.photos/seed/chef/200/200"} alt="Executive Chef" className="w-full h-full object-cover" />
                 </div>
                 <div className="text-center">
                     <p className="font-bold text-base md:text-lg text-on-surface font-sans tracking-tight">Executive Chef Hakim</p>
-                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-primary">Master of Architectural Gastronomy</p>
+                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-primary">Master of Architectural Gastronomy @ {config?.nom || 'Tastify'}</p>
                 </div>
             </div>
          </div>

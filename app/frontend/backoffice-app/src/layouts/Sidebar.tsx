@@ -50,6 +50,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       links.push({ to: '/stock', icon: Package, label: 'Stock / Inventaire' });
       links.push({ to: '/hr', icon: Users, label: 'Personnel (RH)' });
       links.push({ to: '/avis', icon: Star, label: 'Avis Clients' });
+      links.push({ to: '/settings', icon: Settings, label: 'Paramètres' });
     }
 
     if (role === 'GERANT' || role === 'CUISINIER') {

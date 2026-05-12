@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'apps.avis',
     'apps.analytics',
     'apps.loyalty.apps.LoyaltyConfig',
+    'apps.configuration',
     'django_cleanup',
 ]
 

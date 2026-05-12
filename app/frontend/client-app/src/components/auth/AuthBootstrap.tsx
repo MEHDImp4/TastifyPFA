@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
+import { useConfigStore } from '../../store/configStore';
 import { api } from '../../api/axios';
 
 import logoPublic from '../../assets/logo-public.svg';
@@ -20,11 +21,14 @@ const attemptRefresh = () => {
 export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const { isAuthenticated, setAuth, logoutLocally } = useAuthStore();
+  const fetchConfig = useConfigStore(state => state.fetchConfig);
 
   useEffect(() => {
     let active = true;
 
     (async () => {
+      // Fetch public configuration in parallel
+      const configPromise = fetchConfig();
       const hasSession = useAuthStore.getState().hasSession;
       
       if (!isAuthenticated && hasSession) {
@@ -36,6 +40,8 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
           logoutLocally();
         }
       }
+      
+      await configPromise;
       if (active) setIsBootstrapping(false);
     })();
 

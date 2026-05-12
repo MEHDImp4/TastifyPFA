@@ -76,7 +76,12 @@
   /* Signature Double-Bezel Card */
   .double-bezel {
     @apply bg-surface-container-lowest rounded-xl shadow-[0px_20px_40px_rgba(0,0,0,0.04)]
-           border-2 border-surface-container-low ring-1 ring-surface-container-high;
+           border-2 border-surface-container-low ring-1 ring-surface-container-high relative;
+  }
+
+  .double-bezel::before {
+    content: '';
+    @apply absolute -inset-[1.5px] rounded-[inherit] border border-surface-container-high/30 pointer-events-none z-0;
   }
 
   /* Glassmorphism Overlay */
