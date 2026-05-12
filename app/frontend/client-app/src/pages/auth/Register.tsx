@@ -39,6 +39,7 @@ export const Register: React.FC = () => {
     <>
         <div className="absolute inset-0 z-0">
             <motion.img 
+                layoutId="auth-image-bg"
                 initial={{ scale: 1.1, filter: 'grayscale(100%)' }}
                 animate={{ scale: 1, filter: 'grayscale(100%)' }}
                 transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}

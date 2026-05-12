@@ -30,7 +30,7 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="popLayout">
       <Routes location={location} key={location.pathname}>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<PortalHomePage />} />
