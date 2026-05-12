@@ -98,9 +98,11 @@ tastify-pfa/
 │       │           ├── store/     # useKdsStore
 │       │           ├── KdsPage.tsx
 │       │           └── KdsSocketManager.tsx
-│       └── client-app/            # CLIENT — Vite :3003 — public-first portail + authenticated reservation wizard
-│           ├── vitest.config.ts   # Vitest config for portail jsdom tests
-│           └── src/
+└── client-app/            # CLIENT — Vite :3003 — public-first portail + authenticated reservation wizard
+    ├── vitest.config.ts   # Vitest config for portail jsdom tests
+    ├── public/            # Static assets
+    │   └── logo-public.svg # Public portal logo
+    └── src/
 │               ├── App.tsx        # Public shell, route guards, login route, and portail access policy
 │               ├── AppRoutes.test.tsx # Public-vs-authenticated portail route coverage
 │               ├── components/ProtectedFeatureNotice.tsx # Shared gated-feature notice surface

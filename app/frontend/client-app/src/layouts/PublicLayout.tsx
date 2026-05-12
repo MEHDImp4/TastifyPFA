@@ -4,6 +4,8 @@ import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 import { UtensilsCrossed, User, LogOut, ShoppingBag } from 'lucide-react';
 
+import logoPublic from '../assets/logo-public.svg';
+
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
   const { items } = useCartStore();
@@ -18,11 +20,8 @@ export const PublicLayout: React.FC = () => {
     <div className="min-h-[100dvh] flex flex-col bg-[#f9fafb] text-[#18181B] font-sans selection:bg-teal selection:text-white">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-dark rounded-xl flex items-center justify-center text-white transform transition-transform duration-200 group-hover:scale-95 group-active:scale-90">
-              <UtensilsCrossed className="w-5 h-5 text-teal" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">Tastify<span className="text-teal">.</span></span>
+          <Link to="/" className="flex items-center gap-3 group bg-dark px-4 py-2 rounded-xl transition-transform hover:scale-[0.98]">
+            <img src={logoPublic} alt="Tastify" className="h-8 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -73,7 +72,7 @@ export const PublicLayout: React.FC = () => {
       <footer className="bg-dark-surface text-white py-16 mt-auto border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <span className="text-2xl font-bold tracking-tight mb-4 block">Tastify<span className="text-teal">.</span></span>
+            <img src={logoPublic} alt="Tastify" className="h-10 w-auto mb-6" />
             <p className="text-gray-400 max-w-[40ch] leading-relaxed">
               L'expérience culinaire marocaine réinventée. Frais, local et servi avec passion.
             </p>

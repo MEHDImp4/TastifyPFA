@@ -4,6 +4,8 @@ import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
 import { Loader2, ArrowRight } from 'lucide-react';
 
+import logoPublic from '../../assets/logo-public.svg';
+
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -52,6 +54,9 @@ export const Login: React.FC = () => {
     <div className="flex-1 flex items-center justify-center p-6 py-12">
       <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-sm border border-gray-100">
         <div className="text-center mb-8">
+          <div className="bg-dark p-4 rounded-2xl mb-6 inline-block mx-auto">
+            <img src={logoPublic} alt="Tastify" className="h-10 w-auto" />
+          </div>
           <h1 className="text-2xl font-bold font-sans tracking-tight text-dark mb-2">Bienvenue</h1>
           <p className="text-gray-500">Connectez-vous à votre espace client Tastify.</p>
         </div>

@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 09:22:51<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-12 09:28:31<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1081,6 +1081,11 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-12 10:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Assets**: Moved `logo-staff.svg` to the `src/assets` directory and updated `Login` and `Sidebar` to use explicit imports. This ensures Vite correctly bundles and serves the asset, resolving issues where the logo was not showing when using direct public paths.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-12 10:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Assets**: Restored the original `logo-staff.svg` design provided by the user and deployed it across the `Login` page and `Sidebar` layout, replacing text-based branding for complete visual consistency.</p>
                             </li>
@@ -1148,11 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-10 19:40</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> **Visual Feedback**: The indicator includes a pulsing teal dot when connected, a spinning amber loader when connecting, and a red alert icon on error.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-10 19:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **WebSocket Reconnection**: Refactored `WebSocketProvider` to use `useCallback` and `useRef` for timeout management, preventing infinite reconnection loops after user logout or token expiration.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

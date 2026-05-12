@@ -1,3 +1,8 @@
+## [2026-05-12] - 10:55
+### Added
+- **Assets**: Added `logo-public.svg` to the `client-app` and integrated it into the `PublicLayout` (Header/Footer), `Login` page, and `AuthBootstrap` loading screen.
+- **UI/UX**: Implemented reliable rendering pattern for the public portal by moving assets to `src/assets` and using explicit imports, ensuring branding is visible across both light and dark backgrounds.
+
 ## [2026-05-12] - 10:45
 ### Fixed
 - **Assets**: Moved `logo-staff.svg` to the `src/assets` directory and updated `Login` and `Sidebar` to use explicit imports. This ensures Vite correctly bundles and serves the asset, resolving issues where the logo was not showing when using direct public paths.
