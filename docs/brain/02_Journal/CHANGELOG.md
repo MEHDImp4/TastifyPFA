@@ -1,3 +1,9 @@
+## [2026-05-12] - 14:30
+### Added
+- **UI/UX**: Implemented a shared `AuthLayout` for Login and Register pages with `framer-motion` `layoutId` animations. 
+- **Animation**: When switching between Login and Register, the form and visual sections now smoothly swap sides, creating a premium, high-end feel.
+- **Routing**: Enabled `AnimatePresence` in `App.tsx` for cross-route page transitions.
+
 ## [2026-05-12] - 14:15
 ### Added
 - **UI/UX (Animations)**: Implemented premium scroll-triggered animations on the main page (`PortalHomePage.tsx`) using Framer Motion.
