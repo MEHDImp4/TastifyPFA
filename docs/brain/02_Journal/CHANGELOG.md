@@ -1,3 +1,11 @@
+## [2026-05-12] - 10:15
+### Added
+- **Assets**: Added `logo-staff.svg` to the backoffice-app public directory to ensure proper branding.
+
+### Changed
+- **Documentation**: Synchronized `FILE_MAP.md` with the actual project structure, correcting `backoffice` to `backoffice-app` and `portail` to `client-app`.
+- **Dashboard**: Updated `dashboard.html` to reflect the current repository state.
+
 ## [2026-05-10] - 20:00
 ### Fixed
 - **WebSocket Stability**: Optimized `WebSocketProvider` using Zustand selectors to prevent reconnection loops during re-renders. Added a connection guard to avoid multiple concurrent socket initializations.

@@ -70,9 +70,11 @@ tastify-pfa/
 │       │       ├── paiements.ts   # Payment-related types (Phase 27)
 │       │       ├── reservations.ts
 │       │       └── tables.ts
-│       ├── backoffice/            # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
+│       ├── backoffice-app/        # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── vite.config.ts     # Dev server config without Vitest runtime dependency
 │       │   ├── vitest.config.ts   # Vitest-only config for test environment setup
+│       │   ├── public/            # Static assets
+│       │   │   └── logo-staff.svg # Backoffice staff logo
 │       │   ├── src/components/ui/Pagination.tsx # Shared client-side pagination controls for dense backoffice lists
 │       │   ├── src/components/ui/Pagination.test.tsx
 │       │   ├── src/authBootstrap.test.tsx # Covers non-blocking persisted-session bootstrap deadlines
@@ -96,7 +98,7 @@ tastify-pfa/
 │       │           ├── store/     # useKdsStore
 │       │           ├── KdsPage.tsx
 │       │           └── KdsSocketManager.tsx
-│       └── portail/               # CLIENT — Vite :3003 — public-first portail + authenticated reservation wizard
+│       └── client-app/            # CLIENT — Vite :3003 — public-first portail + authenticated reservation wizard
 │           ├── vitest.config.ts   # Vitest config for portail jsdom tests
 │           └── src/
 │               ├── App.tsx        # Public shell, route guards, login route, and portail access policy
