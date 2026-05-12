@@ -1,42 +1,5 @@
-<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;display=swap');
-      
-      .tastify {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 800;
-        font-size: 36px;
-        fill: url(#textGradient);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        letter-spacing: -0.03em;
-      }
-      
-      .staff-pill {
-        fill: rgba(45, 212, 191, 0.1);
-        stroke: rgba(45, 212, 191, 0.3);
-        stroke-width: 1px;
-      }
-      
-      .staff-text {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 800;
-        font-size: 10px;
-        fill: #2DD4BF;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-      }
-    </style>
-    <linearGradient id="textGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" />
-      <stop offset="100%" stop-color="#E2E8F0" />
-    </linearGradient>
-  </defs>
-
-  <!-- Main Branding -->
-  <text x="50%" y="32" text-anchor="middle" class="tastify">Tastify</text>
-
-  <!-- Staff Badge -->
-  <rect x="65" y="42" width="70" height="16" rx="8" class="staff-pill" />
-  <text x="100" y="53" text-anchor="middle" class="staff-text">Staff</text>
+<svg width="160" height="60" viewBox="0 0 160 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="0" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="36" fill="#0040e0" letter-spacing="-0.03em">Tastify</text>
+  <rect x="0" y="40" width="75" height="18" rx="9" fill="rgba(0, 64, 224, 0.1)" stroke="rgba(0, 64, 224, 0.3)" stroke-width="1" />
+  <text x="37.5" y="52" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="10" fill="#0040e0" letter-spacing="0.3em">STAFF OS</text>
 </svg>

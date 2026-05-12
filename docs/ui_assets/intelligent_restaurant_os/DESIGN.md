@@ -1,3 +1,4 @@
+---
 name: Intelligent Restaurant OS
 colors:
   surface: '#fcf9f8'

@@ -12,22 +12,22 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-on-surface/80 backdrop-blur-2xl transition-opacity"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-lg bg-white rounded-[2rem] border border-gray-100 shadow-2xl overflow-hidden animate-in zoom-in-95 fade-in duration-200">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h3 className="text-xl font-bold tracking-tight text-dark">{title}</h3>
+      <div className="relative w-full max-w-xl bg-white rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-500 double-bezel">
+        <div className="flex items-center justify-between p-10 pb-6">
+          <h3 className="text-3xl font-display-accent italic tracking-tight text-on-surface leading-none">{title}</h3>
           <button 
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-dark hover:bg-gray-50 rounded-xl transition-colors"
+            className="p-3 bg-surface-container rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all active:scale-90"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-10 pt-4">
           {children}
         </div>
       </div>

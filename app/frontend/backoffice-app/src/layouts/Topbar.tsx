@@ -20,33 +20,33 @@ export const Topbar: React.FC<TopbarProps> = ({
   const DesktopToggleIcon = isDesktopCollapsed ? PanelLeftOpen : PanelLeftClose;
 
   return (
-    <header className="h-20 bg-dark border-b border-white/5 flex items-center justify-between px-6 sticky top-0 z-30">
-      <div className="flex items-center gap-4">
+    <header className="h-24 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-surface-container-high flex items-center justify-between px-8 sticky top-0 z-30">
+      <div className="flex items-center gap-6">
         <button 
           onClick={() => setMobileOpen(true)}
-          className="flex h-11 w-11 items-center justify-center rounded-xl text-gray-400 transition-colors hover:text-white md:hidden"
+          className="flex h-12 w-12 items-center justify-center rounded-xl text-on-surface-variant transition-colors hover:text-on-surface md:hidden bg-surface-container"
         >
           <Menu className="w-6 h-6" />
         </button>
         <button
           type="button"
           onClick={toggleDesktopSidebar}
-          className="hidden h-11 items-center gap-2 rounded-xl border border-white/10 px-3 text-sm font-medium text-gray-300 transition-[transform,background-color,color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-white/5 hover:text-white active:scale-[0.97] md:inline-flex"
+          className="hidden h-11 items-center gap-2 rounded-xl border border-surface-container-high px-4 text-sm font-semibold text-on-surface-variant transition-all duration-300 ease-out-expo hover:bg-surface-container hover:text-on-surface active:scale-[0.97] md:inline-flex"
           aria-label={isDesktopCollapsed ? 'Déployer la barre latérale' : 'Réduire la barre latérale'}
         >
           <DesktopToggleIcon className="h-4 w-4" />
-          <span>{isDesktopCollapsed ? 'Déployer' : 'Réduire'}</span>
+          <span className="font-sans">{isDesktopCollapsed ? 'Déployer' : 'Réduire'}</span>
         </button>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
         <SocketIndicator />
         <NotificationCenter />
         <div className="text-right hidden sm:block">
-          <p className="text-sm font-medium text-white capitalize">{username}</p>
-          <p className="text-xs text-teal font-mono">{role}</p>
+          <p className="text-sm font-bold text-on-surface capitalize font-sans">{username}</p>
+          <p className="text-[10px] text-primary font-bold uppercase tracking-widest">{role}</p>
         </div>
-        <div className="w-10 h-10 rounded-xl bg-dark-elevated flex items-center justify-center text-teal font-bold border border-white/10">
+        <div className="w-12 h-12 rounded-xl bg-primary-container text-primary flex items-center justify-center font-bold text-lg shadow-sm border border-primary/10 transition-transform hover:scale-105">
           {username?.charAt(0).toUpperCase()}
         </div>
       </div>

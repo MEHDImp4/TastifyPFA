@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
 import type { Table } from '../../types/salle';
-import { Loader2, Users, Move } from 'lucide-react';
+import { Loader2, Users, Move, Map as MapIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useSocketStore } from '../../store/socketStore';
@@ -36,11 +36,11 @@ export const SallePage: React.FC = () => {
 
   const getStatutColor = (statut: Table['statut']) => {
     switch (statut) {
-      case 'LIBRE': return 'bg-teal text-white border-teal/20';
-      case 'OCCUPEE': return 'bg-orange text-white border-orange/20';
-      case 'RESERVEE': return 'bg-amber text-dark border-amber/20';
-      case 'ENCAISSEMENT': return 'bg-terracotta text-white border-terracotta/20 shadow-[0_0_20px_rgba(231,111,81,0.5)]';
-      default: return 'bg-gray-500 text-white';
+      case 'LIBRE': return 'bg-white text-on-surface border-surface-container-high hover:border-primary/50';
+      case 'OCCUPEE': return 'bg-primary text-white border-primary/20 shadow-lg shadow-primary/20';
+      case 'RESERVEE': return 'bg-secondary text-white border-secondary/20';
+      case 'ENCAISSEMENT': return 'bg-error text-white border-error/20 shadow-lg shadow-error/20';
+      default: return 'bg-surface-container text-on-surface-variant border-surface-container-high';
     }
   };
 
@@ -86,58 +86,60 @@ export const SallePage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto h-[calc(100dvh-8rem)] flex flex-col animate-in fade-in duration-500">
-      <div className="flex items-center justify-between mb-8 shrink-0">
+    <div className="max-w-[1600px] mx-auto h-[calc(100dvh-10rem)] flex flex-col animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6 shrink-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Plan de Salle</h1>
-          <p className="text-gray-400 mt-1">Visualisez et gérez l'état de vos tables.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Architectural Floor Plan</h1>
+          <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Real-time occupancy visualization and table management.</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap items-center gap-4">
            {role === 'GERANT' && (
                <button 
                 onClick={() => setIsEditMode(!isEditMode)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all ${isEditMode ? 'bg-amber text-dark' : 'bg-dark-surface border border-white/10 text-white hover:border-white/30'}`}
+                className={`flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 ${isEditMode ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-surface-container-high text-on-surface hover:bg-surface-container-low'}`}
                >
                    <Move className="w-5 h-5" />
-                   <span>{isEditMode ? 'Quitter Édition' : 'Éditer Plan'}</span>
+                   <span className="font-sans text-sm">{isEditMode ? 'Save Layout' : 'Modify Layout'}</span>
                </button>
            )}
-           <div className="hidden md:flex items-center gap-6 px-6 py-3 bg-dark-surface rounded-2xl border border-white/5 shadow-sm">
-             <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-teal" />
-               <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Libre</span>
+           <div className="flex items-center gap-6 px-8 py-4 glass rounded-2xl border border-surface-container-high shadow-sm">
+             <div className="flex items-center gap-2.5">
+               <div className="w-2.5 h-2.5 rounded-full border border-surface-container-highest bg-white" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Available</span>
              </div>
-             <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-orange" />
-               <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Occupée</span>
+             <div className="flex items-center gap-2.5">
+               <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Occupied</span>
              </div>
-             <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-amber" />
-               <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Réservée</span>
+             <div className="flex items-center gap-2.5">
+               <div className="w-2.5 h-2.5 rounded-full bg-secondary" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Reserved</span>
              </div>
-             <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-terracotta" />
-               <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Paiement</span>
+             <div className="flex items-center gap-2.5">
+               <div className="w-2.5 h-2.5 rounded-full bg-error" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Payment</span>
              </div>
            </div>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex-1 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
+        <div className="flex-1 flex items-center justify-center text-primary">
+          <Loader2 className="w-12 h-12 animate-spin" />
         </div>
       ) : (
         <div 
             ref={mapRef}
-            className={`flex-1 relative bg-dark-surface rounded-[2.5rem] border overflow-hidden ${isEditMode ? 'border-amber border-dashed bg-amber/5' : 'border-white/5 shadow-2xl shadow-teal/5'}`}
+            className={`flex-1 relative bg-white rounded-[2.5rem] border-2 transition-all duration-500 overflow-hidden ${isEditMode ? 'border-primary border-dashed bg-primary/5' : 'border-surface-container-high shadow-[0px_40px_80px_rgba(0,0,0,0.03)]'}`}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
         >
             {/* Grid background for editing mode */}
-            {isEditMode && (
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+            {isEditMode ? (
+                <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #0040e0 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+            ) : (
+                <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#0040e0 1px, transparent 1px), linear-gradient(90deg, #0040e0 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
             )}
 
             {tables.filter(t => t.est_active).map((table) => (
@@ -151,28 +153,39 @@ export const SallePage: React.FC = () => {
                         transform: 'translate(-50%, -50%)',
                     }}
                     className={`
-                        absolute w-16 h-16 sm:w-20 sm:h-20 flex flex-col items-center justify-center gap-1 rounded-[1rem] sm:rounded-[1.25rem] border-2 transition-all duration-300
+                        absolute w-20 h-20 sm:w-24 sm:h-24 flex flex-col items-center justify-center gap-1 rounded-2xl border-2 transition-all duration-500 group
                         ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105' : 'cursor-pointer hover:scale-110 active:scale-95'}
                         ${getStatutColor(table.statut)}
-                        ${draggingTable === table.id ? 'z-50 shadow-2xl scale-110' : 'z-10 shadow-lg'}
+                        ${draggingTable === table.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-2xl' : 'z-10 shadow-sm'}
                     `}
                 >
-                    <div className="text-xl sm:text-2xl font-bold font-mono tracking-tighter">#{table.numero}</div>
-                    <div className="flex items-center gap-1 px-1.5 py-0.5 bg-black/10 rounded-full text-[8px] font-bold uppercase tracking-widest">
+                    <div className="text-2xl sm:text-3xl font-bold font-sans tracking-tighter leading-none">{table.numero}</div>
+                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${table.statut === 'LIBRE' ? 'bg-surface-container text-on-surface-variant' : 'bg-black/10 text-white'}`}>
                         <Users className="w-2.5 h-2.5" />
-                        <span>{table.capacite}</span>
+                        <span className="font-sans">{table.capacite}</span>
                     </div>
                     
                     {table.statut === 'ENCAISSEMENT' && !isEditMode && (
                         <div className="absolute -top-2 -right-2">
-                            <span className="relative flex h-4 w-4">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-4 w-4 bg-white"></span>
+                            <span className="relative flex h-5 w-5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-5 w-5 bg-error border-2 border-white"></span>
                             </span>
                         </div>
                     )}
+
+                    {/* Architectural Bezel Effect */}
+                    <div className="absolute inset-1 border border-white/10 rounded-xl pointer-events-none" />
                 </div>
             ))}
+
+            {/* Room Labels or Decorative Elements */}
+            <div className="absolute bottom-10 left-10 pointer-events-none opacity-20">
+                <div className="flex items-center gap-3 text-on-surface-variant">
+                    <MapIcon className="w-8 h-8" />
+                    <span className="text-3xl font-display-accent italic tracking-tighter">Main Dining Hall</span>
+                </div>
+            </div>
         </div>
       )}
     </div>

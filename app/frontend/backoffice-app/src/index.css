@@ -6,28 +6,58 @@
 }
 
 @theme {
-  --color-dark: #264653;
-  --color-dark-surface: #1a323b;
-  --color-dark-elevated: #325a6a;
-  --color-teal: #2A9D8F;
-  --color-amber: #E9C46A;
-  --color-orange: #F4A261;
-  --color-terracotta: #E76F51;
+  /* Surface colors */
+  --color-background: #fcf9f8;
+  --color-on-background: #1c1b1b;
+  --color-surface: #fcf9f8;
+  --color-on-surface: #1c1b1b;
+  --color-surface-dim: #dcd9d9;
+  --color-surface-bright: #fcf9f8;
+  --color-surface-container: #f0eded;
+  --color-surface-container-low: #f6f3f2;
+  --color-surface-container-high: #eae7e7;
+  --color-surface-container-highest: #e5e2e1;
+  --color-surface-container-lowest: #ffffff;
+  --color-outline: #747688;
+  --color-outline-variant: #c4c5d9;
 
-  --font-sans: "Satoshi", "Geist", sans-serif;
+  /* Primary (Cobalt Blue) */
+  --color-primary: #0040e0;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2e5bff;
+  --color-on-primary-container: #efefff;
+
+  /* Secondary */
+  --color-secondary: #5d5f5f;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dddddd;
+
+  /* Status colors */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Typography fonts */
+  --font-sans: "Plus Jakarta Sans", "Satoshi", "Geist", sans-serif;
+  --font-serif: "Instrument Serif", serif;
   --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+
+  /* Animation primitives */
+  --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-expo: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @layer base {
   body {
-    @apply bg-[#f9fafb] text-[#18181B] antialiased min-h-[100dvh];
+    @apply bg-background text-on-background antialiased min-h-[100dvh];
   }
   
   .dark body {
-    @apply bg-dark-surface text-white;
+    @apply bg-black text-white;
   }
 
-  /* Custom Scrollbar for Dark Theme */
+  /* Custom Scrollbar for New Theme */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -38,15 +68,19 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+    @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
+  }
+}
+
+@layer components {
+  /* Signature Double-Bezel Card */
+  .double-bezel {
+    @apply bg-surface-container-lowest rounded-xl shadow-[0px_20px_40px_rgba(0,0,0,0.04)]
+           border-2 border-surface-container-low ring-1 ring-surface-container-high;
   }
 
-  .scrollbar-hide {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  /* Glassmorphism Overlay */
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20;
   }
 }

@@ -13,7 +13,8 @@ import {
   Loader2, 
   Send,
   Trash2,
-  Clock
+  Clock,
+  ArrowRight
 } from 'lucide-react';
 
 export const OrderingPage: React.FC = () => {
@@ -117,54 +118,56 @@ export const OrderingPage: React.FC = () => {
       navigate('/salle');
     } catch (err) {
       console.error('Failed to submit order', err);
-      alert('Erreur lors de la prise de commande.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-teal"><Loader2 className="w-10 h-10 animate-spin" /></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   return (
-    <div className="h-full flex flex-col gap-6 -m-6 md:-m-8">
-      {/* Header */}
-      <div className="bg-dark p-6 border-b border-white/5 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/salle')} className="p-2 hover:bg-white/5 rounded-xl transition-colors">
-            <ChevronLeft className="w-6 h-6" />
+    <div className="h-[calc(100dvh-6rem)] flex flex-col -m-6 md:-m-8 animate-in fade-in duration-700 bg-background">
+      {/* Precision Header */}
+      <header className="bg-surface-container-lowest/80 backdrop-blur-xl border-b border-surface-container-high p-6 flex items-center justify-between z-20">
+        <div className="flex items-center gap-6">
+          <button onClick={() => navigate('/salle')} className="p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-all active:scale-90">
+            <ChevronLeft className="w-6 h-6 text-on-surface" />
           </button>
           <div>
-            <h2 className="text-xl font-bold">Table #{table?.numero}</h2>
-            <p className="text-xs text-gray-500 uppercase tracking-widest font-bold">
-                {currentCommande ? `Commande #${currentCommande.id} active` : 'Nouvelle commande'}
-            </p>
+            <h2 className="text-2xl font-bold font-sans tracking-tight text-on-surface">Station Table #{table?.numero}</h2>
+            <div className="flex items-center gap-2 mt-1">
+                <span className={`w-2 h-2 rounded-full ${currentCommande ? 'bg-primary animate-pulse' : 'bg-outline-variant'}`} />
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold font-sans">
+                    {currentCommande ? `Session Active • #${currentCommande.id}` : 'New Transaction'}
+                </p>
+            </div>
           </div>
         </div>
         
-        <div className="relative w-64 hidden sm:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+        <div className="relative w-80 hidden md:block">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant opacity-40" />
             <input 
                 type="text"
-                placeholder="Rechercher un plat..."
+                placeholder="Lookup culinary data..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-dark-surface border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-teal"
+                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-primary focus:bg-white transition-all font-sans"
             />
         </div>
-      </div>
+      </header>
 
       <div className="flex-1 flex min-h-0">
-        {/* Menu Section */}
-        <div className="flex-1 flex flex-col min-w-0 p-6 pt-0 overflow-hidden">
-          {/* Categories bar */}
-          <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-hide">
+        {/* Menu Section - Catalog style */}
+        <div className="flex-1 flex flex-col min-w-0 p-8 pt-6 overflow-hidden">
+          {/* Categories bar - Minimalist Glass */}
+          <div className="flex gap-3 overflow-x-auto pb-8 scrollbar-hide shrink-0">
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
                 className={`
-                    px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all
-                    ${activeCat === cat.id ? 'bg-teal text-white shadow-lg shadow-teal/20' : 'bg-dark-surface text-gray-400 border border-white/5 hover:border-white/20'}
+                    px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300
+                    ${activeCat === cat.id ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' : 'bg-surface-container text-on-surface-variant border border-surface-container-high hover:bg-surface-container-high hover:text-on-surface'}
                 `}
               >
                 {cat.nom}
@@ -172,31 +175,32 @@ export const OrderingPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Plats grid */}
-          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-6">
+          {/* Plats grid - Modern Bento */}
+          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6 pb-8 scrollbar-hide">
             {filteredPlats.map(plat => (
               <button
                 key={plat.id}
                 onClick={() => addToCart(plat)}
-                className="group flex flex-col text-left bg-dark-surface rounded-[2rem] border border-white/5 overflow-hidden hover:border-teal/40 transition-all active:scale-95 shadow-lg"
+                className="group flex flex-col text-left double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/5 active:scale-95"
               >
-                <div className="aspect-[4/3] relative">
+                <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-surface-container-low mb-4">
                   {plat.image ? (
-                    <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} />
+                    <img src={plat.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={plat.nom} />
                   ) : (
-                    <div className="w-full h-full bg-[#1a323b] flex items-center justify-center text-gray-700 font-bold text-2xl uppercase opacity-20">
+                    <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20 font-bold text-3xl uppercase italic font-display-accent">
                       {plat.nom.charAt(0)}
                     </div>
                   )}
-                  <div className="absolute top-3 right-3 p-2 bg-teal text-white rounded-full opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 shadow-xl">
-                    <Plus className="w-4 h-4" />
+                  <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                  <div className="absolute top-3 right-3 w-10 h-10 bg-primary text-white rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-xl flex items-center justify-center">
+                    <Plus className="w-6 h-6" />
                   </div>
                 </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-sm mb-1 truncate">{plat.nom}</h4>
+                <div className="px-1">
+                  <h4 className="font-bold text-sm text-on-surface mb-2 truncate font-sans tracking-tight leading-none group-hover:text-primary transition-colors">{plat.nom}</h4>
                   <div className="flex items-center justify-between">
-                    <span className="text-teal font-mono text-sm font-bold">{plat.prix} DH</span>
-                    <div className="flex items-center gap-1 text-[10px] text-gray-500">
+                    <span className="text-primary font-bold text-sm font-sans">{plat.prix}DH</span>
+                    <div className="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-bold uppercase tracking-widest opacity-60">
                         <Clock className="w-3 h-3" />
                         <span>{plat.temps_preparation}m</span>
                     </div>
@@ -207,73 +211,80 @@ export const OrderingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Cart Section - Sidebar style */}
-        <div className="w-[400px] bg-dark-surface border-l border-white/5 flex flex-col shadow-2xl">
-          <div className="p-6 border-b border-white/5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5 text-teal" />
-                <h3 className="font-bold tracking-tight">Panier de la table</h3>
+        {/* Cart Section - Operational Sidebar */}
+        <aside className="w-[450px] bg-white border-l border-surface-container-high flex flex-col shadow-[0px_0px_100px_rgba(0,0,0,0.03)] z-10">
+          <div className="p-8 border-b border-surface-container-high flex items-center justify-between bg-surface-container-lowest">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
+                    <ShoppingCart className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold font-sans text-lg tracking-tight text-on-surface">Operational Cart</h3>
             </div>
-            <span className="px-3 py-1 bg-white/5 rounded-full text-xs font-bold text-gray-400">{cart.length} articles</span>
+            <div className="glass px-4 py-1.5 rounded-full text-xs font-bold text-on-surface uppercase tracking-widest border border-surface-container-high">
+                {cart.length} ITEMS
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
             {cart.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-gray-500 gap-4 opacity-50">
-                <div className="p-8 bg-dark rounded-full border border-dashed border-white/10">
+              <div className="h-full flex flex-col items-center justify-center text-on-surface-variant gap-6 animate-in zoom-in duration-700 opacity-40">
+                <div className="w-20 h-20 rounded-full bg-surface-container-low border-2 border-dashed border-surface-container-high flex items-center justify-center">
                     <Plus className="w-8 h-8" />
                 </div>
-                <p className="text-sm font-medium">Le panier est vide</p>
+                <p className="text-lg font-display-accent italic">Transaction buffer is empty.</p>
               </div>
             ) : (
               cart.map(item => (
-                <div key={item.plat.id} className="p-4 bg-dark rounded-2xl border border-white/5 group animate-in slide-in-from-right-4 duration-300">
-                  <div className="flex justify-between items-start mb-4">
+                <div key={item.plat.id} className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high group animate-in slide-in-from-right-6 duration-500 transition-all hover:bg-white hover:shadow-xl hover:shadow-primary/5">
+                  <div className="flex justify-between items-start mb-5">
                     <div>
-                        <h4 className="font-bold text-sm">{item.plat.nom}</h4>
-                        <p className="text-xs text-teal font-mono mt-0.5">{item.plat.prix} DH / unité</p>
+                        <h4 className="font-bold text-base text-on-surface font-sans tracking-tight">{item.plat.nom}</h4>
+                        <p className="text-xs text-primary font-bold mt-1 uppercase tracking-widest opacity-70">{item.plat.prix} DH / UNIT</p>
                     </div>
-                    <button onClick={() => removeFromCart(item.plat.id)} className="p-1 text-gray-600 hover:text-terracotta transition-colors">
-                        <Trash2 className="w-4 h-4" />
+                    <button onClick={() => removeFromCart(item.plat.id)} className="p-2 text-on-surface-variant opacity-40 hover:text-error hover:bg-error-container/30 rounded-lg transition-all active:scale-75">
+                        <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 bg-[#1a323b] rounded-xl p-1 px-3">
-                        <button onClick={() => updateQty(item.plat.id, -1)} className="p-1 text-teal hover:bg-teal/10 rounded-lg"><Minus className="w-4 h-4" /></button>
-                        <span className="font-mono font-bold text-sm w-6 text-center">{item.quantite}</span>
-                        <button onClick={() => updateQty(item.plat.id, 1)} className="p-1 text-teal hover:bg-teal/10 rounded-lg"><Plus className="w-4 h-4" /></button>
+                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-surface-container-high shadow-sm">
+                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><Minus className="w-4 h-4" /></button>
+                        <span className="font-bold text-sm w-8 text-center text-on-surface font-sans">{item.quantite}</span>
+                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><Plus className="w-4 h-4" /></button>
                     </div>
-                    <div className="font-bold text-sm">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)} DH</div>
+                    <div className="font-bold text-lg text-on-surface font-sans">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
                   </div>
                 </div>
               ))
             )}
           </div>
 
-          <div className="p-6 bg-dark border-t border-white/10">
-            <div className="flex items-center justify-between mb-6">
-                <span className="text-gray-400 font-medium">Total</span>
-                <span className="text-2xl font-bold font-mono tracking-tighter text-teal">{cartTotal.toFixed(2)} DH</span>
+          <div className="p-8 bg-surface-container-low border-t border-surface-container-high">
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col">
+                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-1">Estimated Total</span>
+                    <span className="text-sm font-bold text-on-surface-variant opacity-50">Incl. VAT</span>
+                </div>
+                <span className="text-4xl font-bold font-sans tracking-tighter text-on-surface">{cartTotal.toFixed(2)}DH</span>
             </div>
             
             <button 
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
                 className={`
-                    w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold transition-all
-                    ${cart.length > 0 && !isSubmitting ? 'bg-teal text-white shadow-xl shadow-teal/20 hover:brightness-110 active:scale-[0.98]' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}
+                    w-full py-5 rounded-2xl flex items-center justify-center gap-4 font-bold text-lg transition-all duration-300
+                    ${cart.length > 0 && !isSubmitting ? 'bg-primary text-white shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95' : 'bg-surface-container text-outline cursor-not-allowed'}
                 `}
             >
-                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                     <>
-                        <Send className="w-5 h-5" />
-                        <span>Envoyer en cuisine</span>
+                        <span>Push to Kitchen</span>
+                        <ArrowRight className="w-6 h-6" />
                     </>
                 )}
             </button>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

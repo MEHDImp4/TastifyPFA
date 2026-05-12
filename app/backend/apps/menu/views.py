@@ -37,7 +37,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
 
     def get_permissions(self):
-        if self.action in ('list', 'retrieve', 'recommendations'):
+        if self.action in ('list', 'retrieve', 'recommendations', 'top_recommendations'):
             return [AllowAny()]
         if self.action in ('create', 'update', 'partial_update', 'destroy'):
             return [IsAuthenticated(), IsCuisinierOrGerant()]

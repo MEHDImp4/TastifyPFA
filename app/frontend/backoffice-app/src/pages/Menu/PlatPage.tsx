@@ -3,7 +3,7 @@ import { menuApi } from '../../api/menu';
 import { stockApi } from '../../api/inventory_hr';
 import type { Plat, Categorie } from '../../types/menu';
 import type { Ingredient, PlatIngredient } from '../../types/inventory';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock, Minus } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock, Minus, ChefHat, Tag, DollarSign, Timer } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { toast } from 'sonner';
 
@@ -187,87 +187,87 @@ export const PlatPage: React.FC = () => {
   };
 
   const getCategoryName = (id: number) => {
-    return categories.find(c => c.id === id)?.nom || 'Sans catégorie';
+    return categories.find(c => c.id === id)?.nom || 'Uncategorized';
   };
 
   return (
-    <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-[1600px] mx-auto animate-in fade-in duration-700 bg-background">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Plats</h1>
-          <p className="text-gray-400 mt-1">Gérez les délices de votre carte et leurs recettes.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Culinary Catalog</h1>
+          <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage your restaurant's signature dishes and technical recipes.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-teal text-white rounded-xl font-medium transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-teal/20"
+          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20 active:scale-95 shadow-lg shadow-primary/10"
         >
           <Plus className="w-5 h-5" />
-          Nouveau plat
+          <span>New Culinary Creation</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
           {plats.filter(p => p.est_active).map((plat) => (
             <div 
               key={plat.id}
-              className="group bg-dark-surface/50 rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-500 hover:bg-dark-surface hover:border-teal/30 hover:shadow-2xl hover:shadow-teal/5"
+              className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5 cursor-default"
             >
-              <div className="aspect-[4/3] relative overflow-hidden">
+              <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-surface-container-low mb-5">
                 {plat.image ? (
-                  <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-[#1a323b] text-gray-500">
-                    <ImageIcon className="w-12 h-12 opacity-10" />
+                  <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20 font-display-accent italic text-6xl">
+                    {plat.nom.charAt(0)}
                   </div>
                 )}
                 
                 {/* Action Buttons */}
-                <div className="absolute top-4 right-4 flex gap-2">
+                <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <button 
                     onClick={() => handleOpenModal(plat)}
-                    className="p-3 bg-dark-surface/60 backdrop-blur-xl rounded-2xl text-white hover:text-teal hover:bg-dark-surface transition-all duration-200 shadow-xl border border-white/5"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-primary shadow-lg transition-all active:scale-90"
                   >
-                    <Edit2 className="w-5 h-5" />
+                    <Edit2 className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => handleDelete(plat.id)}
-                    className="p-3 bg-dark-surface/60 backdrop-blur-xl rounded-2xl text-white hover:text-terracotta hover:bg-dark-surface transition-all duration-200 shadow-xl border border-white/5"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-error shadow-lg transition-all active:scale-90"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* Price Badge */}
                 <div className="absolute bottom-4 left-4">
-                  <div className="px-4 py-2 bg-teal/90 backdrop-blur-md text-white text-sm font-extrabold rounded-2xl shadow-xl">
+                  <div className="glass px-4 py-2 text-on-surface text-sm font-bold rounded-xl shadow-lg border border-primary/10">
                     {plat.prix} DH
                   </div>
                 </div>
               </div>
 
-              <div className="p-7">
-                <p className="text-[11px] font-black text-teal uppercase tracking-[0.2em] mb-3 opacity-80">
+              <div className="px-3 pb-3">
+                <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3 opacity-80">
                   {getCategoryName(plat.categorie)}
                 </p>
-                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-teal transition-colors">
+                <h3 className="text-2xl font-bold text-on-surface mb-3 tracking-tight font-sans group-hover:text-primary transition-colors">
                   {plat.nom}
                 </h3>
                 
-                <div className="flex items-center gap-2 text-gray-400 text-sm mb-5 font-medium">
-                  <Clock className="w-4 h-4 text-teal" />
-                  <span>{plat.temps_preparation} min</span>
+                <div className="flex items-center gap-2 text-on-surface-variant text-[11px] font-bold uppercase tracking-widest mb-5 opacity-60 font-sans">
+                  <Clock className="w-3.5 h-3.5 text-primary" />
+                  <span>{plat.temps_preparation} MIN PREP</span>
                 </div>
 
-                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 h-10 italic">
-                  {plat.description || 'Une création culinaire d\'exception signée Tastify.'}
+                <p className="text-on-surface-variant text-sm font-medium leading-relaxed line-clamp-2 h-10 opacity-70 font-sans italic">
+                  {plat.description || 'An exceptional culinary creation signed by Tastify.'}
                 </p>
               </div>
             </div>
@@ -278,28 +278,34 @@ export const PlatPage: React.FC = () => {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        title={editingPlat ? 'Modifier le plat' : 'Nouveau plat'}
+        title={editingPlat ? 'Refine Creation' : 'Define Creation'}
       >
-        <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2 col-span-2">
-                <label className="text-sm font-medium text-gray-400">Nom du plat</label>
+        <form onSubmit={handleSubmit} className="space-y-8 p-2 max-h-[75vh] overflow-y-auto pr-4 scrollbar-hide">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-3 sm:col-span-2">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                    <Tag className="w-3 h-3 text-primary" />
+                    <span>Dish Identification</span>
+                </label>
                 <input 
-                type="text" 
-                required
-                value={nom}
-                onChange={(e) => setNom(e.target.value)}
-                className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
-                placeholder="Ex: Couscous Royal..."
+                    type="text" 
+                    required
+                    value={nom}
+                    onChange={(e) => setNom(e.target.value)}
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
+                    placeholder="Ex: Moroccan Spiced Salmon..."
                 />
             </div>
 
-            <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-400">Catégorie</label>
+            <div className="flex flex-col gap-3">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                    <ChefHat className="w-3 h-3 text-primary" />
+                    <span>Sector Allocation</span>
+                </label>
                 <select 
-                value={selectedCat}
-                onChange={(e) => setSelectedCat(parseInt(e.target.value))}
-                className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
+                    value={selectedCat}
+                    onChange={(e) => setSelectedCat(parseInt(e.target.value))}
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans appearance-none"
                 >
                 {categories.map(c => (
                     <option key={c.id} value={c.id}>{c.nom}</option>
@@ -307,56 +313,68 @@ export const PlatPage: React.FC = () => {
                 </select>
             </div>
 
-            <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-400">Prix (DH)</label>
+            <div className="flex flex-col gap-3">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                    <DollarSign className="w-3 h-3 text-primary" />
+                    <span>Market Value (DH)</span>
+                </label>
                 <input 
-                type="text" 
-                required
-                value={prix}
-                onChange={(e) => setPrix(e.target.value)}
-                className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
-                placeholder="0.00"
+                    type="text" 
+                    required
+                    value={prix}
+                    onChange={(e) => setPrix(e.target.value)}
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
+                    placeholder="0.00"
                 />
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Description</label>
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                <ImageIcon className="w-3 h-3 text-primary" />
+                <span>Culinary Context</span>
+            </label>
             <textarea 
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors resize-none"
-              placeholder="Allergènes, détails..."
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none font-sans"
+              placeholder="Allergens, pairing notes, or specific preparation details..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-400">Temps de préparation (min)</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-3">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                    <Timer className="w-3 h-3 text-primary" />
+                    <span>Prep Velocity (Min)</span>
+                </label>
                 <input 
                   type="number" 
                   value={temps}
                   onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
-                  className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
+                  className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-400">Image</label>
+              <div className="flex flex-col gap-3">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                    <ImageIcon className="w-3 h-3 text-primary" />
+                    <span>Visual Identity</span>
+                </label>
                 <div className="relative group">
                   <input 
                     type="file" 
                     onChange={handleImageChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
-                  <div className="w-full h-12 bg-[#1a323b] border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center gap-2 transition-colors group-hover:border-teal/50">
+                  <div className="w-full h-[60px] bg-surface-container-low border-2 border-dashed border-surface-container-high rounded-xl flex items-center justify-center gap-3 transition-all group-hover:border-primary/40 group-hover:bg-primary-container/5">
                     {preview ? (
-                      <span className="text-xs text-teal font-bold">Image sélectionnée</span>
+                      <span className="text-xs text-primary font-bold uppercase tracking-widest">Asset Selected</span>
                     ) : (
                       <>
-                        <ImageIcon className="w-4 h-4 text-gray-500" />
-                        <span className="text-xs text-gray-500 font-bold">Ajouter</span>
+                        <ImageIcon className="w-4 h-4 text-on-surface-variant opacity-40" />
+                        <span className="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">Upload Asset</span>
                       </>
                     )}
                   </div>
@@ -364,46 +382,65 @@ export const PlatPage: React.FC = () => {
               </div>
           </div>
 
-          <div className="pt-4 border-t border-white/5 space-y-4">
+          {/* Recipe Management */}
+          <div className="pt-8 border-t border-surface-container-high space-y-6">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-white">Ingrédients (Recette)</label>
-                <button type="button" onClick={addIngredientRow} className="text-xs text-teal font-bold flex items-center gap-1 hover:brightness-110">
-                    <Plus className="w-3 h-3" /> Ajouter un ingrédient
+                <label className="text-xs font-bold text-on-surface uppercase tracking-[0.2em] ml-1">Technical Recipe (Stock Link)</label>
+                <button type="button" onClick={addIngredientRow} className="px-3 py-1.5 bg-primary-container/20 text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all">
+                    <Plus className="w-3 h-3" /> Add Constituent
                 </button>
               </div>
               
-              {selectedIngredients.map((item, index) => (
-                  <div key={index} className="flex gap-2 items-center">
-                      <select 
-                          value={item.ingredient} 
-                          onChange={(e) => updateIngredientRow(index, 'ingredient', parseInt(e.target.value))}
-                          className="flex-1 bg-[#1a323b] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-teal"
-                      >
-                          {allIngredients.map(ing => (
-                              <option key={ing.id} value={ing.id}>{ing.nom} ({ing.unite_mesure})</option>
-                          ))}
-                      </select>
-                      <input 
-                          type="number" 
-                          step="0.01"
-                          value={item.quantite} 
-                          onChange={(e) => updateIngredientRow(index, 'quantite', e.target.value)}
-                          placeholder="Qté"
-                          className="w-24 bg-[#1a323b] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-teal"
-                      />
-                      <button type="button" onClick={() => removeIngredientRow(index)} className="p-2 text-gray-500 hover:text-terracotta">
-                          <Minus className="w-4 h-4" />
-                      </button>
+              <div className="space-y-4">
+                {selectedIngredients.map((item, index) => (
+                    <div key={index} className="flex gap-4 items-center animate-in slide-in-from-left-4 duration-300">
+                        <div className="flex-1 relative">
+                             <select 
+                                value={item.ingredient} 
+                                onChange={(e) => updateIngredientRow(index, 'ingredient', parseInt(e.target.value))}
+                                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-4 py-3 text-on-surface font-bold text-sm focus:outline-none focus:border-primary transition-all appearance-none"
+                            >
+                                {allIngredients.map(ing => (
+                                    <option key={ing.id} value={ing.id}>{ing.nom} ({ing.unite_mesure})</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="w-32 relative">
+                            <input 
+                                type="number" 
+                                step="0.01"
+                                value={item.quantite} 
+                                onChange={(e) => updateIngredientRow(index, 'quantite', e.target.value)}
+                                placeholder="Qty"
+                                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-4 py-3 text-on-surface font-bold text-sm focus:outline-none focus:border-primary transition-all text-center"
+                            />
+                        </div>
+                        <button type="button" onClick={() => removeIngredientRow(index)} className="p-3 text-on-surface-variant opacity-40 hover:text-error hover:bg-error-container/30 rounded-xl transition-all active:scale-75">
+                            <Minus className="w-4 h-4" />
+                        </button>
+                    </div>
+                ))}
+              </div>
+              
+              {selectedIngredients.length === 0 && (
+                  <div className="py-10 border-2 border-dashed border-surface-container-high rounded-2xl flex flex-col items-center justify-center text-on-surface-variant opacity-30 gap-2">
+                      <ChefHat className="w-8 h-8" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">No stock linkage defined</span>
                   </div>
-              ))}
+              )}
           </div>
 
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full py-4 mt-2 bg-teal text-white rounded-xl font-bold transition-transform hover:brightness-110 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center"
+            className="w-full py-5 mt-4 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >
-            {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (editingPlat ? 'Mettre à jour' : 'Ajouter à la carte')}
+            {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                <>
+                    <span>{editingPlat ? 'Update Culinary Record' : 'Confirm Dish Creation'}</span>
+                    <CheckCircle2 className="w-6 h-6" />
+                </>
+            )}
           </button>
         </form>
       </Modal>

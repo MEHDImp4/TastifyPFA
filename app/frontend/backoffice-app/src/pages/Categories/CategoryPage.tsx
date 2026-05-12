@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Categorie } from '../../types/menu';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, ListOrdered, FileText } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
 import { CardSkeleton } from '../../components/ui/Skeleton';
@@ -98,64 +98,64 @@ export const CategoryPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-7xl mx-auto animate-in fade-in duration-700 bg-background">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Catégories</h1>
-          <p className="text-gray-400 mt-1">Gérez les sections de votre menu.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Menu Architecture</h1>
+          <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage the structural categories of your restaurant's menu.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-teal text-white rounded-xl font-medium transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-teal/20"
+          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20 active:scale-95 shadow-lg shadow-primary/10"
         >
           <Plus className="w-5 h-5" />
-          Ajouter une catégorie
+          <span>Define New Category</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.filter(c => c.est_active).map((cat) => (
             <div 
               key={cat.id}
-              className="group bg-dark-surface rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-300 hover:border-teal/30 hover:shadow-2xl hover:shadow-teal/5"
+              className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
             >
-              <div className="aspect-video relative overflow-hidden bg-[#1a323b]">
+              <div className="aspect-[16/10] relative rounded-xl overflow-hidden bg-surface-container-low mb-5">
                 {cat.image ? (
-                  <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-500">
-                    <ImageIcon className="w-10 h-10 opacity-20" />
+                  <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20">
+                    <ImageIcon className="w-12 h-12" />
                   </div>
                 )}
-                <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <button 
                     onClick={() => handleOpenModal(cat)}
-                    className="p-2.5 bg-dark/80 backdrop-blur-md rounded-xl text-white hover:text-teal transition-colors"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-primary shadow-lg transition-all active:scale-90"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => handleDelete(cat.id)}
-                    className="p-2.5 bg-dark/80 backdrop-blur-md rounded-xl text-white hover:text-terracotta transition-colors"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-error shadow-lg transition-all active:scale-90"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold tracking-tight">{cat.nom}</h3>
-                  <span className="px-2 py-1 bg-white/5 rounded-lg text-xs font-mono text-teal">#{cat.ordre_affichage}</span>
+                <div className="absolute bottom-4 left-4 glass px-4 py-2 rounded-xl text-xs font-bold text-on-surface uppercase tracking-widest border border-primary/10">
+                    Rank: #{cat.ordre_affichage}
                 </div>
-                <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
-                  {cat.description || 'Aucune description.'}
+              </div>
+              <div className="px-3 pb-3">
+                <h3 className="text-2xl font-bold tracking-tight text-on-surface font-sans mb-3">{cat.nom}</h3>
+                <p className="text-on-surface-variant text-sm font-medium leading-relaxed line-clamp-2 h-10 opacity-70">
+                  {cat.description || 'No description provided for this culinary sector.'}
                 </p>
               </div>
             </div>
@@ -166,57 +166,69 @@ export const CategoryPage: React.FC = () => {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        title={editingCategory ? 'Modifier la catégorie' : 'Nouvelle catégorie'}
+        title={editingCategory ? 'Update Sector' : 'Define Sector'}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Nom de la catégorie</label>
+        <form onSubmit={handleSubmit} className="space-y-8 p-2">
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                <FileText className="w-3 h-3 text-primary" />
+                <span>Identification</span>
+            </label>
             <input 
               type="text" 
               required
               value={nom}
               onChange={(e) => setNom(e.target.value)}
-              className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
-              placeholder="Ex: Entrées, Plats principaux..."
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              placeholder="Ex: Signature Starters, Traditional Tagines..."
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Description</label>
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                <ImageIcon className="w-3 h-3 text-primary" />
+                <span>Sector Context</span>
+            </label>
             <textarea 
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors resize-none"
-              placeholder="Décrivez cette catégorie..."
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
+              placeholder="Describe the culinary intent of this category..."
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Ordre d'affichage</label>
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                <ListOrdered className="w-3 h-3 text-primary" />
+                <span>Architectural Rank</span>
+            </label>
             <input 
               type="number" 
               value={ordre}
               onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-              className="w-full bg-[#1a323b] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal transition-colors"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-400">Image</label>
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                <ImageIcon className="w-3 h-3 text-primary" />
+                <span>Visual Asset</span>
+            </label>
             <div className="relative group">
               <input 
                 type="file" 
                 onChange={handleImageChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
-              <div className="w-full h-32 bg-[#1a323b] border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center gap-2 transition-colors group-hover:border-teal/50">
+              <div className="w-full h-40 bg-surface-container-low border-2 border-dashed border-surface-container-high rounded-2xl flex flex-col items-center justify-center gap-3 transition-all group-hover:border-primary/40 group-hover:bg-primary-container/5">
                 {preview ? (
-                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-xl" />
+                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
                 ) : (
                   <>
-                    <ImageIcon className="w-8 h-8 text-gray-500" />
-                    <span className="text-xs text-gray-500">Cliquez pour ajouter une image</span>
+                    <ImageIcon className="w-10 h-10 text-on-surface-variant opacity-20" />
+                    <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">Inject Visual Data</span>
                   </>
                 )}
               </div>
@@ -226,9 +238,14 @@ export const CategoryPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full py-4 mt-2 bg-teal text-white rounded-xl font-bold transition-transform hover:brightness-110 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center"
+            className="w-full py-5 mt-4 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >
-            {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (editingCategory ? 'Sauvegarder les modifications' : 'Créer la catégorie')}
+            {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                <>
+                    <span>{editingCategory ? 'Update Architecture' : 'Confirm Category'}</span>
+                    <CheckCircle2 className="w-6 h-6" />
+                </>
+            )}
           </button>
         </form>
       </Modal>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowRight, User as UserIcon, Lock, ShieldCheck, Sparkles, ChevronLeft } from 'lucide-react';
 
 import logoPublic from '../../assets/logo-public.svg';
 
@@ -29,9 +29,6 @@ export const Login: React.FC = () => {
       const { access, role, username: resUsername } = response.data;
       
       if (role !== 'CLIENT') {
-          // If a staff member tries to log in from the client portal, we should ideally block or warn them,
-          // but for now, we just set auth. The layout guards logic can handle it or we enforce it here.
-          // Enforcing here:
           await api.post('/users/logout/');
           setError("Ce portail est réservé aux clients. Veuillez utiliser l'accès staff.");
           setIsLoading(false);
@@ -51,70 +48,125 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-6 py-12">
-      <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-sm border border-gray-100">
-        <div className="text-center mb-8">
-          <div className="bg-dark p-4 rounded-2xl mb-6 inline-block mx-auto">
-            <img src={logoPublic} alt="Tastify" className="h-10 w-auto" />
-          </div>
-          <h1 className="text-2xl font-bold font-sans tracking-tight text-dark mb-2">Bienvenue</h1>
-          <p className="text-gray-500">Connectez-vous à votre espace client Tastify.</p>
+    <div className="flex-1 flex flex-col lg:flex-row min-h-[calc(100dvh-6rem)] animate-in fade-in duration-1000 bg-background">
+      {/* Visual Identity Section - Desktop Only */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-on-surface p-20 items-end">
+        <div className="absolute inset-0 z-0">
+            <img 
+                src="https://picsum.photos/seed/tastify_auth/1200/1600" 
+                className="w-full h-full object-cover opacity-40 grayscale hover:grayscale-0 transition-all duration-2000" 
+                alt="Atmosphere" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-on-surface via-on-surface/20 to-transparent" />
+        </div>
+        
+        <div className="relative z-10 space-y-8 max-w-xl">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em] border border-primary/20 backdrop-blur-md">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Verified Client Access</span>
+            </div>
+            <h2 className="text-7xl font-display-accent italic text-white leading-none tracking-tighter">
+                The Gateway <br/>
+                <span className="text-primary opacity-80">to Taste.</span>
+            </h2>
+            <p className="text-xl text-white/50 leading-relaxed font-sans font-medium">
+                Access your personalized culinary archive and secure your architectural placements at Tastify.
+            </p>
+        </div>
+      </div>
+
+      {/* Form Section */}
+      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-20 relative overflow-hidden">
+        {/* Mobile Logo & Return */}
+        <div className="absolute top-10 left-10 lg:left-20 right-10 flex items-center justify-between z-20">
+            <button onClick={() => navigate('/')} className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors group">
+                <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
+            </button>
+            <img src={logoPublic} alt="Tastify" className="h-8 w-auto lg:hidden" />
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-terracotta/10 border border-terracotta/20 text-terracotta text-sm text-center">
-            {error}
-          </div>
-        )}
+        <div className="w-full max-w-md space-y-12 relative z-10">
+            <div className="text-center lg:text-left space-y-4">
+                <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-8">
+                    <img src={logoPublic} alt="Tastify" className="h-10 w-auto" />
+                </div>
+                <h1 className="text-5xl font-display-accent italic text-on-surface leading-none tracking-tight">Welcome Back.</h1>
+                <p className="text-on-surface-variant font-medium opacity-60">Authorize your session to continue your journey.</p>
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-700" htmlFor="username">Nom d'utilisateur</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-dark focus:bg-white focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-all"
-              placeholder="votre_pseudo"
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-700" htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-dark focus:bg-white focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-all"
-              placeholder="••••••••"
-              disabled={isLoading}
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3.5 mt-4 bg-teal text-white rounded-xl font-medium transition-transform hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 shadow-sm shadow-teal/20"
-          >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-              <>
-                <span>Se connecter</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
+            {error && (
+                <div className="p-5 rounded-2xl bg-error-container/20 border border-error/20 text-error text-sm text-center font-bold animate-in shake duration-500">
+                    {error}
+                </div>
             )}
-          </button>
-        </form>
-        
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Nouveau chez Tastify ?{' '}
-            <Link to="/register" className="font-semibold text-teal hover:underline">
-              Créer un compte
-            </Link>
-          </p>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="space-y-6">
+                    <div className="flex flex-col gap-3 group">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-40 ml-1 transition-opacity group-focus-within:opacity-100" htmlFor="username">Identity Tag</label>
+                        <div className="relative">
+                            <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant opacity-20 group-focus-within:text-primary group-focus-within:opacity-100 transition-all" />
+                            <input
+                                id="username"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="w-full pl-14 pr-6 py-5 bg-surface-container-low border border-surface-container-high rounded-2xl text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all"
+                                placeholder="Username"
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3 group text-left">
+                        <div className="flex justify-between items-center ml-1">
+                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-40 transition-opacity group-focus-within:opacity-100" htmlFor="password">Pass-phrase</label>
+                            <Link to="#" className="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">Forgot?</Link>
+                        </div>
+                        <div className="relative">
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant opacity-20 group-focus-within:text-primary group-focus-within:opacity-100 transition-all" />
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full pl-14 pr-6 py-5 bg-surface-container-low border border-surface-container-high rounded-2xl text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all"
+                                placeholder="••••••••"
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full group relative flex items-center justify-center gap-4 py-5 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/30 active:scale-95 disabled:opacity-50 overflow-hidden shadow-xl shadow-primary/10"
+                >
+                    <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    {isLoading ? <Loader2 className="w-7 h-7 animate-spin" /> : (
+                    <>
+                        <span className="relative z-10">Authorize Session</span>
+                        <ArrowRight className="w-6 h-6 relative z-10 transition-transform group-hover:translate-x-1" />
+                    </>
+                    )}
+                </button>
+            </form>
+            
+            <div className="pt-10 border-t border-surface-container-high text-center">
+                <p className="text-sm font-medium text-on-surface-variant">
+                    New to the ecosystem?{' '}
+                    <Link to="/register" className="font-black uppercase text-xs tracking-widest text-primary hover:underline ml-2">
+                        Create Archive
+                    </Link>
+                </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 opacity-30">
+                <ShieldCheck className="w-4 h-4" />
+                <span className="text-[8px] font-black uppercase tracking-[0.3em]">End-to-End Cryptographic Security Active</span>
+            </div>
         </div>
       </div>
     </div>

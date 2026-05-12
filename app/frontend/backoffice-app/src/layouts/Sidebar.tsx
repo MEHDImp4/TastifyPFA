@@ -10,7 +10,8 @@ import {
   CalendarDays,
   Map as MapIcon,
   Star,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react';
 
 import logoStaff from '../assets/logo-staff.svg';
@@ -30,21 +31,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const getLinks = () => {
     const links = [];
-    if (role === 'GERANT' || role === 'CUISINIER') {
-      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Plats' });
-    }
     
     if (role === 'GERANT') {
       links.push({ to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true });
-      links.push({ to: '/categories', icon: Package, label: 'Catégories' });
-      links.push({ to: '/stock', icon: Package, label: 'Stock' });
-      links.push({ to: '/hr', icon: Users, label: 'Personnel' });
-      links.push({ to: '/avis', icon: Star, label: 'Avis Clients' });
     }
-    
+
     if (role === 'GERANT' || role === 'SERVEUR') {
       links.push({ to: '/salle', icon: MapIcon, label: 'Plan de Salle' });
       links.push({ to: '/reservations', icon: CalendarDays, label: 'Réservations' });
+    }
+
+    if (role === 'GERANT' || role === 'CUISINIER') {
+      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'Menu & Plats' });
+    }
+    
+    if (role === 'GERANT') {
+      links.push({ to: '/categories', icon: Package, label: 'Catégories' });
+      links.push({ to: '/stock', icon: Package, label: 'Stock / Inventaire' });
+      links.push({ to: '/hr', icon: Users, label: 'Personnel (RH)' });
+      links.push({ to: '/avis', icon: Star, label: 'Avis Clients' });
     }
 
     if (role === 'GERANT' || role === 'CUISINIER') {
@@ -55,16 +60,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-3 rounded-2xl transition-all duration-200
+    flex items-center gap-3 rounded-xl transition-all duration-200 group
     ${isActive 
-      ? 'bg-dark-elevated text-teal shadow-lg shadow-teal/5' 
-      : 'text-gray-400 hover:text-white hover:bg-white/5'
+      ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
     }
     ${isDesktopCollapsed 
       ? 'md:justify-center md:p-3 md:aspect-square md:mx-auto md:w-12' 
-      : 'px-4 py-3 border-l-2'
+      : 'px-4 py-3'
     }
-    ${!isDesktopCollapsed && isActive ? 'border-teal' : 'border-transparent'}
   `;
 
   return (
@@ -72,56 +76,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile overlay */}
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-72 bg-dark-surface border-r border-white/5
-        transform transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]
+        fixed inset-y-0 left-0 z-50 w-72 bg-surface-container-lowest border-r border-surface-container-high
+        transform transition-transform duration-500 ease-out-expo
         md:relative md:flex md:flex-col md:translate-x-0 md:transition-[width]
-        ${isDesktopCollapsed ? 'md:w-20' : 'md:w-72'}
+        ${isDesktopCollapsed ? 'md:w-24' : 'md:w-72'}
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className={`relative flex items-center border-b border-white/5 p-4 justify-center h-20`}>
+        <div className={`relative flex items-center p-6 justify-center h-24`}>
           {isDesktopCollapsed ? (
-            <div className="animate-in fade-in zoom-in duration-300">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
-                <defs>
-                  <linearGradient id="logoShortGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="white" />
-                    <stop offset="100%" stop-color="#E2E8F0" />
-                  </linearGradient>
-                </defs>
-                <text 
-                  x="50%" 
-                  y="50%" 
-                  text-anchor="middle" 
-                  dominant-baseline="central"
-                  style={{ 
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontWeight: 800,
-                    fontSize: '32px',
-                    fill: 'url(#logoShortGradient)',
-                    letterSpacing: '-0.03em'
-                  }}
-                >
-                  T
-                </text>
-              </svg>
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-white font-bold text-2xl shadow-lg shadow-primary/20">
+              T
             </div>
           ) : (
-            <div
-              className={`overflow-hidden transition-all duration-300 max-w-48 opacity-100 animate-in fade-in slide-in-from-left-2`}
-            >
+            <div className="flex items-center gap-3 w-full px-2">
               <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
             </div>
           )}
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto scrollbar-hide">
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto scrollbar-hide">
           {getLinks().map((link) => {
             const Icon = link.icon;
             return (
@@ -133,25 +113,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => setMobileOpen(false)}
                 title={isDesktopCollapsed ? link.label : undefined}
               >
-                <Icon className="h-5 w-5 shrink-0" />
+                <Icon className={`h-5 w-5 shrink-0 transition-transform duration-200 group-active:scale-90`} />
                 {!isDesktopCollapsed && (
-                  <span className="font-medium">{link.label}</span>
+                  <span className="font-sans font-semibold text-sm tracking-tight">{link.label}</span>
                 )}
               </NavLink>
             );
           })}
         </nav>
 
-        <div className={`p-4 border-t border-white/5 ${isDesktopCollapsed ? 'flex justify-center' : ''}`}>
+        <div className="p-4 space-y-2">
+          {!isDesktopCollapsed && (
+            <div className="px-4 py-2">
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Compte</span>
+            </div>
+          )}
           <button
             onClick={() => logout()}
-            className={`flex items-center gap-3 rounded-xl transition-all duration-200 text-terracotta hover:bg-terracotta/10 active:scale-[0.97] ${
-              isDesktopCollapsed ? 'justify-center p-3 w-12 h-12' : 'px-4 py-3 w-full text-left'
+            className={`flex items-center gap-3 rounded-xl transition-all duration-200 text-error hover:bg-error-container/30 active:scale-[0.97] group ${
+              isDesktopCollapsed ? 'justify-center p-3 w-12 h-12 mx-auto' : 'px-4 py-3 w-full text-left'
             }`}
             title={isDesktopCollapsed ? 'Déconnexion' : undefined}
           >
-            <LogOut className="h-5 w-5 shrink-0" />
-            {!isDesktopCollapsed && <span className="font-medium">Déconnexion</span>}
+            <LogOut className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:-translate-x-1" />
+            {!isDesktopCollapsed && <span className="font-sans font-semibold text-sm tracking-tight">Déconnexion</span>}
           </button>
         </div>
       </aside>

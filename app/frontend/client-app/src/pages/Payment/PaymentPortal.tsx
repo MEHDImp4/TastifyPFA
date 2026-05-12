@@ -7,9 +7,10 @@ import {
   CheckCircle2, 
   Loader2, 
   AlertCircle,
-  QrCode,
   Users,
-  ListOrdered
+  ListOrdered,
+  ArrowRight,
+  ShieldCheck
 } from 'lucide-react';
 
 export const PaymentPortal: React.FC = () => {
@@ -35,7 +36,7 @@ export const PaymentPortal: React.FC = () => {
             setPayableAmount(res.data.montant_restant);
         } catch (err) {
             console.error(err);
-            setError("Lien de paiement invalide ou expiré.");
+            setError("Invalid or expired payment secure link.");
         } finally {
             setIsLoading(false);
         }
@@ -84,143 +85,179 @@ export const PaymentPortal: React.FC = () => {
             payload.contributions = session.lignes
                 .filter((l: any) => selectedItems.includes(l.id))
                 .map((l: any) => ({ ligne_id: l.id, montant: l.montant_restant }));
-        } else if (splitMode === 'EQUAL') {
-            // Backend will auto-distribute equal shares if contributions array is empty but we should ideally pass it if backend requires.
-            // Wait, manual payment needs contributions if item-split. For equal, the backend auto-distributes in `create_payment` if no contributions.
         }
 
         await api.post(`/paiements/session/pay/`, payload);
         setIsSuccess(true);
     } catch (err: any) {
-        setError(err.response?.data?.detail || "Erreur de paiement.");
+        setError(err.response?.data?.detail || "Payment authorization failed.");
     } finally {
         setIsPaying(false);
     }
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-gray-50"><Loader2 className="w-10 h-10 animate-spin text-teal" /></div>;
+  if (isLoading) return <div className="min-h-[100dvh] flex items-center justify-center bg-background text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   if (error && !session) return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 text-center">
-          <AlertCircle className="w-16 h-16 text-terracotta mb-4" />
-          <p className="text-gray-500">{error}</p>
-          <button onClick={() => navigate('/')} className="mt-8 px-6 py-2 bg-dark text-white rounded-xl">Retour à l'accueil</button>
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 md:p-8 text-center gap-8 md:gap-10">
+          <div className="w-20 md:w-24 h-20 md:h-24 rounded-full bg-error-container/20 flex items-center justify-center text-error border-2 border-dashed border-error/20">
+            <AlertCircle className="w-8 md:w-10 h-8 md:h-10" />
+          </div>
+          <div className="max-w-md">
+            <h2 className="text-3xl md:text-4xl font-display-accent italic text-on-surface mb-3 md:mb-4">Secure Link Invalid</h2>
+            <p className="text-sm md:text-on-surface-variant font-medium leading-relaxed">{error}</p>
+          </div>
+          <button 
+            onClick={() => navigate('/')} 
+            className="w-full sm:w-auto px-10 py-4 bg-on-surface text-white rounded-xl font-bold shadow-lg shadow-on-surface/10 hover:scale-105 active:scale-95 transition-all"
+          >
+            Return to Safety
+          </button>
       </div>
   );
 
   if (isSuccess) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6 text-center animate-in zoom-in-95 duration-500">
-        <div className="w-20 h-20 bg-teal text-white rounded-full flex items-center justify-center mb-8 shadow-xl shadow-teal/20">
-            <CheckCircle2 className="w-10 h-10" />
-        </div>
-        <h1 className="text-3xl font-bold text-dark mb-2">Paiement réussi</h1>
-        <p className="text-gray-500 mb-12">Merci de votre visite chez Tastify !</p>
-        <div className="w-full max-w-sm p-6 bg-gray-50 rounded-3xl border border-gray-100 flex flex-col gap-3">
-            <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Montant payé</span>
-                <span className="font-bold text-teal">{payableAmount} DH</span>
-            </div>
-            <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Reste à payer (Table)</span>
-                <span className="font-bold text-dark">{(parseFloat(session.montant_restant) - parseFloat(payableAmount)).toFixed(2)} DH</span>
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 md:p-8 text-center animate-in zoom-in-95 duration-1000">
+        <div className="relative inline-flex items-center justify-center mb-8 md:mb-12">
+            <div className="absolute inset-0 bg-primary opacity-10 blur-3xl rounded-full scale-150" />
+            <div className="relative w-24 md:w-32 h-24 md:h-32 rounded-full bg-white double-bezel flex items-center justify-center text-primary">
+                <CheckCircle2 className="w-12 md:w-16 h-12 md:h-16" />
             </div>
         </div>
-        <button onClick={() => window.location.reload()} className="mt-8 text-teal font-bold hover:underline">Effectuer un autre paiement</button>
+        <h1 className="text-4xl md:text-5xl font-display-accent italic tracking-tight text-on-surface mb-4 md:mb-6">Payment Secured.</h1>
+        <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed max-w-md mb-8 md:mb-12">Thank you for your visit at Tastify. We hope the culinary experience was architectural.</p>
+        
+        <div className="w-full max-w-md p-6 md:p-8 bg-white double-bezel flex flex-col gap-4 md:gap-6">
+            <div className="flex justify-between items-center pb-4 border-b border-surface-container-high">
+                <span className="text-[8px] md:text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-left">Authorized Amount</span>
+                <span className="text-lg md:text-xl font-bold text-primary font-sans">{payableAmount} DH</span>
+            </div>
+            <div className="flex justify-between items-center opacity-60">
+                <span className="text-[8px] md:text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-left">Remaining Session Balance</span>
+                <span className="text-base md:text-lg font-bold text-on-surface font-sans">{(parseFloat(session.montant_restant) - parseFloat(payableAmount)).toFixed(2)} DH</span>
+            </div>
+        </div>
+        
+        <button 
+            onClick={() => window.location.reload()} 
+            className="mt-10 md:mt-12 text-primary font-bold uppercase text-[10px] md:text-xs tracking-[0.2em] border-b-2 border-primary/20 pb-1 hover:border-primary transition-all"
+        >
+            Authorize Another Payment
+        </button>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center py-12">
-        <div className="w-full max-w-md bg-white rounded-[3rem] shadow-xl overflow-hidden border border-gray-100">
-            <div className="p-8 bg-dark text-white text-center">
-                <div className="w-12 h-12 bg-teal/10 rounded-2xl flex items-center justify-center text-teal mx-auto mb-4">
-                    <QrCode className="w-6 h-6" />
-                </div>
-                <h2 className="text-xl font-bold tracking-tight">Règlement de votre table</h2>
-                <p className="text-gray-400 text-xs mt-1 uppercase tracking-widest font-bold">Table #{session.table_numero} • Reste: {session.montant_restant} DH</p>
-            </div>
-
-            <div className="p-6 border-b border-gray-100">
-                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 text-center">Comment voulez-vous payer ?</p>
-                <div className="grid grid-cols-3 gap-2 bg-gray-50 p-1.5 rounded-2xl">
-                    <button onClick={() => setSplitMode('ALL')} className={`py-2 rounded-xl text-xs font-bold transition-all ${splitMode === 'ALL' ? 'bg-white shadow-sm text-dark' : 'text-gray-500 hover:text-dark'}`}>Total</button>
-                    <button onClick={() => setSplitMode('EQUAL')} className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${splitMode === 'EQUAL' ? 'bg-white shadow-sm text-dark' : 'text-gray-500 hover:text-dark'}`}><Users className="w-3 h-3"/> Égal</button>
-                    <button onClick={() => setSplitMode('INDIVIDUAL')} className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${splitMode === 'INDIVIDUAL' ? 'bg-white shadow-sm text-dark' : 'text-gray-500 hover:text-dark'}`}><ListOrdered className="w-3 h-3"/> Article</button>
-                </div>
-            </div>
-
-            <div className="p-6">
-                {splitMode === 'EQUAL' && (
-                    <div className="flex flex-col items-center gap-4 mb-6 animate-in slide-in-from-left-4">
-                        <label className="text-sm text-gray-500">Diviser par combien de personnes ?</label>
-                        <div className="flex items-center gap-6 bg-gray-50 rounded-2xl p-2 border border-gray-200">
-                            <button onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-10 h-10 rounded-xl bg-white shadow-sm text-dark font-bold text-lg hover:text-teal">-</button>
-                            <span className="text-2xl font-bold font-mono w-8 text-center">{splitCount}</span>
-                            <button onClick={() => setSplitCount(splitCount + 1)} className="w-10 h-10 rounded-xl bg-white shadow-sm text-dark font-bold text-lg hover:text-teal">+</button>
-                        </div>
+    <div className="min-h-[100dvh] bg-background p-5 md:p-8 flex flex-col items-center py-10 md:py-20 animate-in fade-in duration-700 overflow-x-hidden">
+        <div className="w-full max-w-md flex flex-col gap-8 md:gap-10">
+            <div className="text-center">
+                <div className="flex items-center justify-center gap-3 mb-6 md:mb-8">
+                    <div className="flex items-center justify-center w-10 md:w-12 h-10 md:h-12 rounded-xl bg-primary text-white font-bold text-xl md:text-2xl shadow-lg shadow-primary/20">
+                        T
                     </div>
-                )}
+                    <span className="text-2xl md:text-3xl font-bold font-sans tracking-tight text-on-surface">Tastify</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-primary text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-4 md:mb-6">
+                    <ShieldCheck className="w-3 h-3" />
+                    <span>Secure Payment Protocol</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-display-accent italic tracking-tight text-on-surface mb-2 leading-tight">Session Settlement</h2>
+                <p className="text-on-surface-variant font-medium opacity-60 uppercase text-[8px] md:text-[10px] tracking-[0.2em]">Table #{session.table_numero} • Balance: {session.montant_restant} DH</p>
+            </div>
 
-                {splitMode === 'INDIVIDUAL' && (
-                    <div className="max-h-60 overflow-y-auto mb-6 space-y-2 pr-2 animate-in slide-in-from-right-4">
-                        <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Vos consommations</label>
-                        {session.lignes.filter((l: any) => parseFloat(l.montant_restant) > 0).map((l: any) => (
-                            <button 
-                                key={l.id} 
-                                onClick={() => toggleItem(l.id)}
-                                className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all ${selectedItems.includes(l.id) ? 'bg-teal/5 border-teal/30' : 'bg-gray-50 border-gray-100 hover:border-gray-200'}`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedItems.includes(l.id) ? 'border-teal bg-teal text-white' : 'border-gray-300 bg-white'}`}>
-                                        {selectedItems.includes(l.id) && <CheckCircle2 className="w-3 h-3" />}
+            <div className="double-bezel bg-white overflow-hidden flex flex-col">
+                <div className="p-5 md:p-8 border-b border-surface-container-high bg-surface-container-lowest">
+                    <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4 md:mb-6 text-center opacity-40">Select Distribution Protocol</p>
+                    <div className="grid grid-cols-3 gap-2 bg-surface-container-low p-1.5 rounded-xl md:rounded-2xl border border-surface-container-high">
+                        <button onClick={() => setSplitMode('ALL')} className={`py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${splitMode === 'ALL' ? 'bg-white shadow-lg md:shadow-xl text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}>Total</button>
+                        <button onClick={() => setSplitMode('EQUAL')} className={`py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 ${splitMode === 'EQUAL' ? 'bg-white shadow-lg md:shadow-xl text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}><Users className="w-3 md:w-3.5 h-3 md:h-3.5"/> Equal</button>
+                        <button onClick={() => setSplitMode('INDIVIDUAL')} className={`py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 ${splitMode === 'INDIVIDUAL' ? 'bg-white shadow-lg md:shadow-xl text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}><ListOrdered className="w-3 md:w-3.5 h-3 md:h-3.5"/> Items</button>
+                    </div>
+                </div>
+
+                <div className="p-5 md:p-8 flex-1">
+                    {splitMode === 'EQUAL' && (
+                        <div className="flex flex-col items-center gap-4 md:gap-6 mb-8 md:mb-10 animate-in slide-in-from-left-6 duration-500">
+                            <label className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">Partition Count</label>
+                            <div className="flex items-center gap-8 md:gap-10 bg-surface-container-low rounded-xl md:rounded-2xl p-2 border border-surface-container-high">
+                                <button onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-10 md:w-12 h-10 md:h-12 rounded-lg md:rounded-xl bg-white shadow-md md:shadow-lg text-on-surface font-bold text-lg md:text-xl hover:text-primary transition-all active:scale-75 cursor-default">—</button>
+                                <span className="text-2xl md:text-3xl font-bold font-sans w-6 md:w-8 text-center text-on-surface">{splitCount}</span>
+                                <button onClick={() => setSplitCount(splitCount + 1)} className="w-10 md:w-12 h-10 md:h-12 rounded-lg md:rounded-xl bg-white shadow-md md:shadow-lg text-on-surface font-bold text-lg md:text-xl hover:text-primary transition-all active:scale-75 cursor-default">+</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {splitMode === 'INDIVIDUAL' && (
+                        <div className="max-h-60 md:max-h-72 overflow-y-auto mb-8 md:mb-10 space-y-2 md:space-y-3 pr-2 animate-in slide-in-from-right-6 duration-500 scrollbar-hide">
+                            <label className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-40 mb-2 md:mb-3 block ml-1">Individual Item Selection</label>
+                            {session.lignes.filter((l: any) => parseFloat(l.montant_restant) > 0).map((l: any) => (
+                                <button 
+                                    key={l.id} 
+                                    onClick={() => toggleItem(l.id)}
+                                    className={`w-full flex items-center justify-between p-4 md:p-5 rounded-xl md:rounded-2xl border-2 transition-all duration-500 ${selectedItems.includes(l.id) ? 'bg-primary-container/10 border-primary shadow-md md:shadow-lg' : 'bg-surface-container-lowest border-surface-container-high hover:border-primary/20'}`}
+                                >
+                                    <div className="flex items-center gap-3 md:gap-4">
+                                        <div className={`w-5 md:w-6 h-5 md:h-6 rounded-lg border-2 flex items-center justify-center transition-all ${selectedItems.includes(l.id) ? 'border-primary bg-primary text-white scale-110' : 'border-surface-container-highest bg-white'}`}>
+                                            {selectedItems.includes(l.id) && <CheckCircle2 className="w-3 md:w-4 h-3 md:h-4" />}
+                                        </div>
+                                        <span className="text-xs md:text-sm font-bold text-on-surface font-sans text-left">{l.plat_nom}</span>
                                     </div>
-                                    <span className="text-sm font-bold text-dark">{l.plat_nom} x{l.quantite}</span>
-                                </div>
-                                <span className="font-mono text-sm text-teal font-bold">{l.montant_restant} DH</span>
-                            </button>
-                        ))}
+                                    <span className="font-bold text-xs md:text-sm text-primary font-sans shrink-0">{l.montant_restant} DH</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex flex-col items-center justify-center py-8 md:py-10 border-y border-surface-container-high mb-8 md:mb-10">
+                        <span className="text-on-surface-variant text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] mb-3 md:mb-4 opacity-40">Your Individual Allocation</span>
+                        <div className="flex items-baseline gap-1 md:gap-2">
+                            <span className="text-4xl md:text-6xl font-bold font-sans tracking-tighter text-on-surface">{payableAmount}</span>
+                            <span className="text-lg md:text-xl font-bold text-primary font-sans">DH</span>
+                        </div>
                     </div>
-                )}
 
-                <div className="flex flex-col items-center justify-center py-6 border-y border-gray-100 mb-6">
-                    <span className="text-gray-400 text-sm mb-1 font-medium">Votre part à régler</span>
-                    <span className="text-5xl font-bold font-mono tracking-tighter text-dark">{payableAmount}<span className="text-2xl ml-2">DH</span></span>
+                    <div className="space-y-3 md:space-y-4">
+                        {error && <p className="text-error text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-center bg-error-container/20 py-2.5 md:py-3 rounded-lg md:rounded-xl animate-in shake duration-500">{error}</p>}
+                        
+                        <button 
+                            onClick={() => handlePay()}
+                            disabled={isPaying || parseFloat(payableAmount) <= 0}
+                            className="w-full flex items-center justify-between p-4 md:p-6 bg-surface-container-low border border-surface-container-high rounded-2xl md:rounded-[2rem] hover:border-primary hover:bg-white transition-all duration-500 group disabled:opacity-40 shadow-sm"
+                        >
+                            <div className="flex items-center gap-4 md:gap-5">
+                                <div className="w-10 md:w-14 h-10 md:h-14 bg-white rounded-xl md:rounded-2xl border border-surface-container-high flex items-center justify-center group-hover:scale-110 group-hover:shadow-md md:group-hover:shadow-xl transition-all duration-500">
+                                    <Smartphone className="w-5 md:w-7 h-5 md:h-7 text-primary" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs md:text-sm font-bold text-on-surface uppercase tracking-widest">Apple / Google Pay</p>
+                                    <p className="text-[8px] md:text-[10px] text-on-surface-variant opacity-60 font-medium">One-tap biometric auth</p>
+                                </div>
+                            </div>
+                            <ArrowRight className="hidden md:block w-6 h-6 text-on-surface-variant opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all" />
+                        </button>
+
+                        <button 
+                            onClick={() => handlePay()}
+                            disabled={isPaying || parseFloat(payableAmount) <= 0}
+                            className="w-full flex items-center justify-between p-4 md:p-6 bg-surface-container-low border border-surface-container-high rounded-2xl md:rounded-[2rem] hover:border-primary hover:bg-white transition-all duration-500 group disabled:opacity-40 shadow-sm"
+                        >
+                            <div className="flex items-center gap-4 md:gap-5">
+                                <div className="w-10 md:w-14 h-10 md:h-14 bg-white rounded-xl md:rounded-2xl border border-surface-container-high flex items-center justify-center group-hover:scale-110 group-hover:shadow-md md:group-hover:shadow-xl transition-all duration-500">
+                                    <CreditCard className="w-5 md:w-7 h-5 md:h-7 text-primary" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs md:text-sm font-bold text-on-surface uppercase tracking-widest">Debit / Credit Card</p>
+                                    <p className="text-[8px] md:text-[10px] text-on-surface-variant opacity-60 font-medium">Encrypted terminal relay</p>
+                                </div>
+                            </div>
+                            <ArrowRight className="hidden md:block w-6 h-6 text-on-surface-variant opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all" />
+                        </button>
+                    </div>
                 </div>
-
-                <div className="space-y-4">
-                    {error && <p className="text-terracotta text-sm text-center font-medium bg-terracotta/10 py-2 rounded-lg">{error}</p>}
-                    <button 
-                        onClick={() => handlePay()}
-                        disabled={isPaying || parseFloat(payableAmount) <= 0}
-                        className="w-full flex items-center justify-between p-5 bg-gray-50 border border-gray-200 rounded-3xl hover:border-teal transition-all group disabled:opacity-50"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-white rounded-2xl border border-gray-100 group-hover:scale-110 transition-transform">
-                                <Smartphone className="w-6 h-6 text-teal" />
-                            </div>
-                            <div className="text-left">
-                                <p className="font-bold text-dark">Apple / Google Pay</p>
-                            </div>
-                        </div>
-                        <CheckCircle2 className="w-5 h-5 text-gray-200 group-hover:text-teal" />
-                    </button>
-
-                    <button 
-                        onClick={() => handlePay()}
-                        disabled={isPaying || parseFloat(payableAmount) <= 0}
-                        className="w-full flex items-center justify-between p-5 bg-gray-50 border border-gray-200 rounded-3xl hover:border-teal transition-all group disabled:opacity-50"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-white rounded-2xl border border-gray-100 group-hover:scale-110 transition-transform">
-                                <CreditCard className="w-6 h-6 text-orange" />
-                            </div>
-                            <div className="text-left">
-                                <p className="font-bold text-dark">Carte Bancaire</p>
-                            </div>
-                        </div>
-                        <CheckCircle2 className="w-5 h-5 text-gray-200 group-hover:text-teal" />
-                    </button>
-                </div>
+            </div>
+            <div className="flex items-center justify-center gap-2 md:gap-3 opacity-30 mt-4">
+                <ShieldCheck className="w-3 md:w-4 h-3 md:h-4" />
+                <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-[0.3em]">End-to-End Cryptographic Security Hub</span>
             </div>
         </div>
     </div>

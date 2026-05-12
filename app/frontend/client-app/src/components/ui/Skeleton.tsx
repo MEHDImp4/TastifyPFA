@@ -7,10 +7,10 @@ interface SkeletonProps {
 export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
   return (
     <div 
-      className={`animate-pulse bg-gray-100 rounded-lg ${className}`}
+      className={`animate-pulse bg-surface-container-high rounded-xl ${className}`}
       style={{
-        animationDuration: '1.5s',
-        backgroundImage: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.02), transparent)',
+        animationDuration: '2s',
+        backgroundImage: 'linear-gradient(90deg, transparent, rgba(0,64,224,0.03), transparent)',
         backgroundSize: '200% 100%',
         animationName: 'shimmer',
         animationIterationCount: 'infinite',
@@ -21,14 +21,14 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
 };
 
 export const CardSkeleton: React.FC = () => (
-  <div className="bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden shadow-sm">
-    <Skeleton className="aspect-[4/3] w-full rounded-none" />
-    <div className="p-8 space-y-4">
-      <div className="space-y-2">
-        <Skeleton className="w-3/4 h-7" />
-        <Skeleton className="w-1/4 h-4" />
+  <div className="bg-white rounded-2xl border-2 border-surface-container-low ring-1 ring-surface-container-high overflow-hidden shadow-sm p-4">
+    <Skeleton className="aspect-[4/3] w-full rounded-xl" />
+    <div className="p-6 space-y-6">
+      <div className="space-y-3">
+        <Skeleton className="w-3/4 h-8" />
+        <Skeleton className="w-1/2 h-4" />
       </div>
-      <Skeleton className="w-full h-10" />
+      <Skeleton className="w-full h-12" />
     </div>
   </div>
 );
