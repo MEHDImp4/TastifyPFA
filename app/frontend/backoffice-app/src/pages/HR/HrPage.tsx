@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { hrApi } from '../../api/inventory_hr';
 import type { Employe } from '../../types/inventory';
-import { Plus, Edit2, Trash2, Loader2, Users, Briefcase } from 'lucide-react';
+import { Plus, Edit2, Trash2, Users, Briefcase } from 'lucide-react';
+
+import { CardSkeleton } from '../../components/ui/Skeleton';
 
 export const HrPage: React.FC = () => {
   const [employes, setEmployes] = useState<Employe[]>([]);
@@ -36,8 +38,10 @@ export const HrPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,3 +1,8 @@
+## [2026-05-12] - 13:00
+### Added
+- **UI/UX**: Implemented the missing Reservations route and management page in the back-office. Gérants and Serveurs can now view, confirm, and cancel customer bookings.
+- **API**: Added `reservationApi` and TypeScript types for administrative reservation management.
+
 ## [2026-05-12] - 12:30
 ### Changed
 - **RBAC**: Expanded permissions for the `CUISINIER` role to allow creating, updating, and soft-deleting dishes. Previously, these management tasks were restricted to the `GERANT`.

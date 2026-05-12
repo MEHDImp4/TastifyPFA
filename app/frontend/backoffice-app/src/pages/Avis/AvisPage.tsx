@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../api/axios';
-import { Star, MessageSquare, Loader2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Star, MessageSquare, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+
+import { Skeleton } from '../../components/ui/Skeleton';
 
 export const AvisPage: React.FC = () => {
   const [avis, setAvis] = useState<any[]>([]);
@@ -33,7 +35,23 @@ export const AvisPage: React.FC = () => {
     return "Neutre";
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-teal"><Loader2 className="w-10 h-10 animate-spin" /></div>;
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+            <div className="space-y-2">
+                <Skeleton className="w-48 h-8" />
+                <Skeleton className="w-64 h-4" />
+            </div>
+        </div>
+        <div className="grid grid-cols-1 gap-6">
+            <Skeleton className="h-48 rounded-[2.5rem]" />
+            <Skeleton className="h-48 rounded-[2.5rem]" />
+            <Skeleton className="h-48 rounded-[2.5rem]" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto animate-in fade-in duration-500">

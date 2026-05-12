@@ -4,6 +4,8 @@ import type { Categorie } from '../../types/menu';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
+import { CardSkeleton } from '../../components/ui/Skeleton';
+
 export const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -112,8 +114,10 @@ export const CategoryPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

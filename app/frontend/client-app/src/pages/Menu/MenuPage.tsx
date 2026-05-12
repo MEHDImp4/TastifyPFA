@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
 import { useCartStore } from '../../store/cartStore';
-import { Search, Loader2, Clock, Info, ShoppingCart, Plus } from 'lucide-react';
+import { Search, Clock, Info, Plus } from 'lucide-react';
+
+import { CardSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
@@ -38,8 +40,28 @@ export const MenuPage: React.FC = () => {
   );
 
   if (isLoading) return (
-    <div className="flex-1 flex items-center justify-center py-24">
-        <Loader2 className="w-12 h-12 animate-spin text-teal" />
+    <div className="flex-1 flex flex-col animate-in fade-in duration-500">
+        <div className="bg-white border-b border-gray-100 py-12 md:py-16">
+            <div className="max-w-7xl mx-auto px-6 space-y-4">
+                <Skeleton className="w-64 h-12" />
+                <Skeleton className="w-96 h-4" />
+            </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 py-12 w-full space-y-8">
+            <div className="flex gap-3 pb-4">
+                <Skeleton className="w-28 h-10 rounded-full" />
+                <Skeleton className="w-28 h-10 rounded-full" />
+                <Skeleton className="w-28 h-10 rounded-full" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+            </div>
+        </div>
     </div>
   );
 

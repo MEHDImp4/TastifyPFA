@@ -5,10 +5,10 @@ import {
   TrendingUp, 
   Users, 
   ShoppingBag, 
-  Timer, 
-  Loader2,
+  Timer,
   Calendar
-} from 'lucide-react';
+  } from 'lucide-react';
+
 import { 
   AreaChart, 
   Area, 
@@ -21,6 +21,7 @@ import {
   Bar,
   Cell
 } from 'recharts';
+import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -43,7 +44,30 @@ export const DashboardPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-teal"><Loader2 className="w-10 h-10 animate-spin" /></div>;
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="w-48 h-8" />
+            <Skeleton className="w-64 h-4" />
+          </div>
+          <Skeleton className="w-32 h-10 rounded-xl" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <KpiSkeleton />
+          <KpiSkeleton />
+          <KpiSkeleton />
+          <KpiSkeleton />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           <Skeleton className="lg:col-span-2 h-[400px] rounded-[2.5rem]" />
+           <Skeleton className="h-[400px] rounded-[2.5rem]" />
+        </div>
+      </div>
+    );
+  }
+  
   if (!data) return <div className="text-center py-20 text-gray-500">Erreur lors du chargement des données.</div>;
 
   const kpis = [

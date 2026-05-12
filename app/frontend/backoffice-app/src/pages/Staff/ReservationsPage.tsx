@@ -7,10 +7,11 @@ import {
   Users, 
   CheckCircle2, 
   XCircle, 
-  Loader2, 
   Search,
   MoreVertical
 } from 'lucide-react';
+
+import { Skeleton } from '../../components/ui/Skeleton';
 
 export const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -31,6 +32,25 @@ export const ReservationsPage: React.FC = () => {
   useEffect(() => {
     fetchReservations();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+            <div className="space-y-2">
+                <Skeleton className="w-48 h-8" />
+                <Skeleton className="w-64 h-4" />
+            </div>
+            <Skeleton className="w-32 h-10 rounded-xl" />
+        </div>
+        <div className="grid grid-cols-1 gap-4">
+            <Skeleton className="h-32 rounded-[2rem]" />
+            <Skeleton className="h-32 rounded-[2rem]" />
+            <Skeleton className="h-32 rounded-[2rem]" />
+        </div>
+      </div>
+    );
+  }
 
   const handleStatusUpdate = async (id: number, action: 'confirm' | 'cancel') => {
     try {
@@ -91,98 +111,92 @@ export const ReservationsPage: React.FC = () => {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4">
-          {filteredReservations.map((res) => (
-            <div 
-              key={res.id} 
-              className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-dark-surface rounded-[2rem] border border-white/10 hover:border-teal/30 transition-all shadow-xl"
-            >
-              <div className="flex items-center gap-6 mb-4 md:mb-0">
-                <div className="w-16 h-16 bg-white/5 rounded-2xl flex flex-col items-center justify-center text-teal">
-                    <Calendar className="w-6 h-6 mb-1" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                        {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
-                    </span>
-                </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="text-lg font-bold text-white capitalize">{res.user_username || 'Client'}</h3>
-                    <span className={`px-3 py-0.5 rounded-full text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
-                        {res.statut}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
-                    <div className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4 text-teal" />
-                        <span>{res.heure_debut} - {res.heure_fin}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <Users className="w-4 h-4 text-teal" />
-                        <span>{res.nombre_personnes} couverts</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <div className="w-4 h-4 rounded-full bg-orange/20 flex items-center justify-center">
-                            <div className="w-1.5 h-1.5 rounded-full bg-orange" />
-                        </div>
-                        <span className="font-bold text-white">Table #{res.table_numero || res.table}</span>
-                    </div>
-                  </div>
-                  {res.notes && (
-                      <p className="mt-3 text-xs text-gray-500 italic bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
-                        "{res.notes}"
-                      </p>
-                  )}
-                </div>
+      <div className="grid grid-cols-1 gap-4">
+        {filteredReservations.map((res) => (
+          <div 
+            key={res.id} 
+            className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-dark-surface rounded-[2rem] border border-white/10 hover:border-teal/30 transition-all shadow-xl"
+          >
+            <div className="flex items-center gap-6 mb-4 md:mb-0">
+              <div className="w-16 h-16 bg-white/5 rounded-2xl flex flex-col items-center justify-center text-teal">
+                  <Calendar className="w-6 h-6 mb-1" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                      {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
+                  </span>
               </div>
-
-              <div className="flex items-center gap-2 w-full md:w-auto">
-                {res.statut === 'EN_ATTENTE' && (
-                  <>
-                    <button 
-                      onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-teal text-white rounded-xl font-bold hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-teal/10"
-                    >
-                      <CheckCircle2 className="w-4 h-4" />
-                      Confirmer
-                    </button>
-                    <button 
-                      onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                      className="p-3 bg-white/5 text-gray-400 rounded-xl hover:text-terracotta hover:bg-terracotta/10 transition-all"
-                    >
-                      <XCircle className="w-5 h-5" />
-                    </button>
-                  </>
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="text-lg font-bold text-white capitalize">{res.user_username || 'Client'}</h3>
+                  <span className={`px-3 py-0.5 rounded-full text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
+                      {res.statut}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                  <div className="flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 text-teal" />
+                      <span>{res.heure_debut} - {res.heure_fin}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                      <Users className="w-4 h-4 text-teal" />
+                      <span>{res.nombre_personnes} couverts</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                      <div className="w-4 h-4 rounded-full bg-orange/20 flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 rounded-full bg-orange" />
+                      </div>
+                      <span className="font-bold text-white">Table #{res.table_numero || res.table}</span>
+                  </div>
+                </div>
+                {res.notes && (
+                    <p className="mt-3 text-xs text-gray-500 italic bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+                      "{res.notes}"
+                    </p>
                 )}
-                
-                {res.statut === 'CONFIRMEE' && (
-                   <button 
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              {res.statut === 'EN_ATTENTE' && (
+                <>
+                  <button 
+                    onClick={() => handleStatusUpdate(res.id, 'confirm')}
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-teal text-white rounded-xl font-bold hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-teal/10"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    Confirmer
+                  </button>
+                  <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-gray-400 rounded-xl font-bold hover:text-terracotta hover:bg-terracotta/10 transition-all"
-                   >
-                     Annuler
-                   </button>
-                )}
+                    className="p-3 bg-white/5 text-gray-400 rounded-xl hover:text-terracotta hover:bg-terracotta/10 transition-all"
+                  >
+                    <XCircle className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+              
+              {res.statut === 'CONFIRMEE' && (
+                 <button 
+                  onClick={() => handleStatusUpdate(res.id, 'cancel')}
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-gray-400 rounded-xl font-bold hover:text-terracotta hover:bg-terracotta/10 transition-all"
+                 >
+                   Annuler
+                 </button>
+              )}
 
-                <button className="p-3 text-gray-500 hover:text-white transition-colors">
-                    <MoreVertical className="w-5 h-5" />
-                </button>
-              </div>
+              <button className="p-3 text-gray-500 hover:text-white transition-colors">
+                  <MoreVertical className="w-5 h-5" />
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
 
-          {filteredReservations.length === 0 && (
-            <div className="py-20 flex flex-col items-center justify-center text-gray-500 opacity-30">
-                <Calendar className="w-16 h-16 mb-4" />
-                <p>Aucune réservation trouvée.</p>
-            </div>
-          )}
-        </div>
-      )}
+        {filteredReservations.length === 0 && (
+          <div className="py-20 flex flex-col items-center justify-center text-gray-500 opacity-30">
+              <Calendar className="w-16 h-16 mb-4" />
+              <p>Aucune réservation trouvée.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

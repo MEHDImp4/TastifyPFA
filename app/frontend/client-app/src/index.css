@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @theme {
   --color-dark: #264653;
   --color-dark-surface: #1a323b;

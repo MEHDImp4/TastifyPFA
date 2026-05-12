@@ -4,6 +4,8 @@ import type { Plat, Categorie } from '../../types/menu';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
+import { CardSkeleton } from '../../components/ui/Skeleton';
+
 export const PlatPage: React.FC = () => {
   const [plats, setPlats] = useState<Plat[]>([]);
   const [categories, setCategories] = useState<Categorie[]>([]);
@@ -132,8 +134,11 @@ export const PlatPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

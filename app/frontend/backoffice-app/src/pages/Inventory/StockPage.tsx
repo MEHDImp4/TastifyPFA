@@ -4,6 +4,8 @@ import type { Ingredient } from '../../types/inventory';
 import { Plus, Edit2, Trash2, Loader2, AlertTriangle } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
+import { TableRowSkeleton } from '../../components/ui/Skeleton';
+
 export const StockPage: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,8 +86,12 @@ export const StockPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-teal" />
+        <div className="bg-dark-surface rounded-[2rem] border border-white/10 overflow-hidden shadow-xl p-6 space-y-4">
+            <TableRowSkeleton />
+            <TableRowSkeleton />
+            <TableRowSkeleton />
+            <TableRowSkeleton />
+            <TableRowSkeleton />
         </div>
       ) : (
         <div className="bg-dark-surface rounded-[2rem] border border-white/10 overflow-hidden shadow-xl">
