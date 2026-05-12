@@ -1,3 +1,7 @@
+## [2026-05-12] - 10:25
+### Changed
+- **UI/UX**: Refined the sidebar logo in `backoffice-app` to match the high-end design provided in the screenshot, featuring a tight typographic "Tastify" branding with a precisely placed teal square accent.
+
 ## [2026-05-12] - 10:20
 ### Changed
 - **Assets**: Refined `logo-staff.svg` to match the clean typographic style shown in the login screen branding, removing the badge/pill for a more cohesive look.

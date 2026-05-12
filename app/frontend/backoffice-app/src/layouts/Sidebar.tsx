@@ -71,7 +71,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, setMobileOpen })
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold font-sans tracking-tight text-white">Tastify<span className="text-teal">.</span></h2>
+          <h2 className="text-2xl font-bold font-sans tracking-tighter text-white flex items-baseline gap-1">
+            Tastify<span className="w-1.5 h-1.5 bg-teal rounded-[1px] mb-1"></span>
+          </h2>
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
