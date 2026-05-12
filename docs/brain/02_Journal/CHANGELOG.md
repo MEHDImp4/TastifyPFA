@@ -1,3 +1,7 @@
+## [2026-05-12] - 12:05
+### Changed
+- **UI/UX**: Implemented a stylized "T" icon for the backoffice sidebar in its collapsed state. This ensures branded visual continuity even when the full "Tastify Staff" logo is hidden.
+
 ## [2026-05-12] - 11:55
 ### Changed
 - **UI/UX**: Simplified the backoffice layout by removing the redundant sidebar toggle button from the `Sidebar` component. The sidebar is now exclusively controlled by the dedicated toggle button in the `Topbar`, resulting in a cleaner and more focused interface.

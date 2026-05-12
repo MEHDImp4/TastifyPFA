@@ -84,14 +84,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ${isDesktopCollapsed ? 'md:w-20' : 'md:w-72'}
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className={`relative flex items-center border-b border-white/5 p-4 justify-center`}>
-          <div
-            className={`overflow-hidden transition-[max-width,opacity] duration-200 ${
-              isDesktopCollapsed ? 'md:max-w-0 md:opacity-0' : 'max-w-48 opacity-100'
-            }`}
-          >
-            <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
-          </div>
+        <div className={`relative flex items-center border-b border-white/5 p-4 justify-center h-20`}>
+          {isDesktopCollapsed ? (
+            <div className="flex items-center justify-center w-10 h-10 bg-dark-elevated rounded-xl border border-white/10 text-teal font-black text-xl shadow-lg shadow-teal/5 animate-in fade-in zoom-in duration-300">
+              T
+            </div>
+          ) : (
+            <div
+              className={`overflow-hidden transition-all duration-300 max-w-48 opacity-100 animate-in fade-in slide-in-from-left-2`}
+            >
+              <img src={logoStaff} alt="Tastify Staff" className="h-12 w-auto" />
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto scrollbar-hide">
