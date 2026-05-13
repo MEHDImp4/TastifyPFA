@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation, ScrollRestoration } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
 import { PortalHomePage } from './pages/Home/PortalHomePage';
@@ -63,10 +63,8 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <AuthBootstrap>
-      <div className="noise-overlay" />
       <Toaster position="top-center" richColors />
       <BrowserRouter>
-        <ScrollRestoration />
         <AnimatedRoutes />
       </BrowserRouter>
     </AuthBootstrap>

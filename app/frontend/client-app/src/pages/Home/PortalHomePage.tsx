@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Star, Clock, ChefHat, Sparkles, MapPin, ShieldCheck, Quote, Calendar } from 'lucide-react';
 import { menuApi } from '../../api/menu';
 import type { Plat } from '../../api/menu';
@@ -28,6 +28,7 @@ const staggerItem = {
 export const PortalHomePage: React.FC = () => {
   const [recommendations, setRecommendations] = useState<Plat[]>([]);
   const config = useConfigStore(state => state.config);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     menuApi.getTopRecommendations()
@@ -119,7 +120,7 @@ export const PortalHomePage: React.FC = () => {
             transition={{ delay: 0.5, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
           >
             <div className="relative group perspective-2000">
-                <div className="absolute -inset-10 bg-primary opacity-5 blur-[100px] rounded-full group-hover:opacity-10 transition-opacity duration-1000" />
+                <div className="absolute -inset-8 bg-primary opacity-5 blur-[48px] rounded-full group-hover:opacity-10 transition-opacity duration-700" />
                 
                 {/* Main Hero Image with Double-Bezel and Z-Rotation */}
                 <div className="double-bezel p-3 -rotate-6 group-hover:rotate-0 transition-all duration-1000 ease-out-expo relative z-10 bg-white">
@@ -127,7 +128,7 @@ export const PortalHomePage: React.FC = () => {
                       <img 
                         src="https://picsum.photos/seed/tagine_luxury/1000/1400" 
                         alt="Signature Moroccan Dish" 
-                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-2000 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-on-surface/95 via-on-surface/20 to-transparent opacity-80" />
                       <div className="absolute bottom-0 left-0 p-10 md:p-14 text-white">
@@ -154,23 +155,17 @@ export const PortalHomePage: React.FC = () => {
 
                 {/* Staggered Floating Element 01 - Top Left */}
                 <motion.div 
-                  className="absolute -top-16 -left-20 w-64 p-7 bg-white/95 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)] z-20"
+                  className="absolute -top-16 -left-20 w-64 p-7 bg-white/95 rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)] z-20"
                   initial={{ opacity: 0, y: 40, scale: 0.8, rotate: -5 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: [0, -15, 0],
-                    scale: 1,
-                    rotate: -2
-                  }}
+                  animate={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, rotate: -2 } : { opacity: 1, y: 0, scale: 1, rotate: -2 }}
                   whileHover={{ 
-                    scale: 1.05, 
-                    y: -10,
+                    scale: 1.03, 
+                    y: -4,
                     rotate: 0,
                     boxShadow: "0 40px 80px -15px rgba(0,0,0,0.2)"
                   }}
                   transition={{ 
                     opacity: { duration: 1, delay: 1.2 },
-                    y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
                     scale: { type: "spring", stiffness: 100, damping: 15 },
                     rotate: { duration: 1.2, delay: 1.2 }
                   }}
@@ -190,21 +185,15 @@ export const PortalHomePage: React.FC = () => {
                 <motion.div 
                   className="absolute -bottom-12 -right-16 w-56 p-6 bg-primary text-white rounded-[2rem] shadow-[0_20px_40px_-10px_rgba(0,64,224,0.3)] z-30"
                   initial={{ opacity: 0, y: 50, scale: 0.9, rotate: 8 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: [0, 15, 0],
-                    scale: 1,
-                    rotate: 5
-                  }}
+                  animate={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, rotate: 5 } : { opacity: 1, y: 0, scale: 1, rotate: 5 }}
                   whileHover={{ 
-                    scale: 1.1, 
-                    y: 10,
+                    scale: 1.04, 
+                    y: 4,
                     rotate: 0,
                     boxShadow: "0 30px 60px -10px rgba(0,64,224,0.4)"
                   }}
                   transition={{ 
                     opacity: { duration: 1, delay: 1.5 },
-                    y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
                     scale: { type: "spring", stiffness: 100, damping: 12 },
                     rotate: { duration: 1.5, delay: 1.5 }
                   }}
@@ -218,7 +207,7 @@ export const PortalHomePage: React.FC = () => {
                 </motion.div>
 
                 {/* Decorative Geometric Accent */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-primary/5 rounded-full -z-10 animate-pulse" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-primary/5 rounded-full -z-10" />
             </div>
           </motion.div>
         </div>

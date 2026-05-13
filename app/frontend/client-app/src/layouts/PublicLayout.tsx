@@ -4,7 +4,6 @@ import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 import { User, LogOut, ShoppingBag, MapPin, Phone, Menu, X } from 'lucide-react';
 import { useConfigStore } from '../store/configStore';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import logoPublic from '../assets/logo-public.svg';
 
@@ -34,7 +33,7 @@ export const PublicLayout: React.FC = () => {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary">
-      <header className="sticky top-0 z-50 bg-surface-container-lowest/82 backdrop-blur-xl border-b border-outline-variant/70">
+      <header className="sticky top-0 z-50 bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant/70">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 md:h-24 flex items-center justify-between">
           <Link 
             to="/" 
@@ -160,18 +159,9 @@ export const PublicLayout: React.FC = () => {
       </header>
 
       <main className="flex-1 flex flex-col relative overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-            className="flex-1 flex flex-col"
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        <div key={location.pathname} className="flex-1 flex flex-col">
+          <Outlet />
+        </div>
       </main>
 
       <footer className="bg-surface-container-lowest text-on-surface py-16 md:py-24 mt-auto border-t border-outline-variant/70">

@@ -93,7 +93,7 @@
   }
 
   .glass {
-    @apply bg-surface-container-lowest/82 backdrop-blur-xl border border-outline-variant/60;
+    @apply bg-surface-container-lowest/88 backdrop-blur-sm border border-outline-variant/60;
   }
 
   /* Editorial Texture - Noise */
