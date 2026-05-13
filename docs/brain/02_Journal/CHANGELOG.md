@@ -1,3 +1,7 @@
+## [2026-05-13] - 10:30
+### Fixed
+- **Dashboard UI**: Resolved a critical Vite compilation error (`[plugin:vite:oxc]`) caused by duplicate import declarations in `DashboardPage.tsx`. Cleaned up redundant import blocks to restore dashboard functionality.
+
 ## [2026-05-12] - 23:55
 ### Added
 - **SaaS Architecture**: Implemented a new `configuration` backend app to manage establishment-specific metadata (name, logo, contact, hours), enabling multi-client personalization.

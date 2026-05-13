@@ -1,33 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { analyticsApi } from '../../api/analytics';
-import type { DashboardData } from '../../api/analytics';
-import { 
-  TrendingUp, 
-  Users, 
-  ShoppingBag, 
-  Timer,
-  Calendar,
-  ArrowUpRight,
-  ArrowDownRight
-  } from 'lucide-react';
-
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
-} from 'recharts';
-import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
-
-import { useSocketStore } from '../../store/socketStore';
-
-import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { analyticsApi } from '../../api/analytics';
 import type { DashboardData } from '../../api/analytics';
@@ -57,7 +28,6 @@ import {
 import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
 import { useSocketStore } from '../../store/socketStore';
-
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
