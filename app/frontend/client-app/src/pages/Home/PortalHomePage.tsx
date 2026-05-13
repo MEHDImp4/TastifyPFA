@@ -38,7 +38,7 @@ export const PortalHomePage: React.FC = () => {
   return (
     <div className="w-full bg-background selection:bg-primary/10 selection:text-primary overflow-x-hidden">
       {/* Hero Section - Editorial Luxury Masterpiece */}
-      <section className="relative overflow-hidden min-h-[90dvh] md:min-h-[95dvh] flex items-center pt-20 md:pt-24 pb-12 md:pb-0">
+      <section className="relative overflow-hidden min-h-[90dvh] md:min-h-[95dvh] flex items-center pt-20 md:pt-24 pb-20 md:pb-28">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_rgba(209,133,78,0.16),_transparent_45%)]" />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(rgba(141,78,28,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(141,78,28,0.12) 1px, transparent 1px)', backgroundSize: '72px 72px' }} />
