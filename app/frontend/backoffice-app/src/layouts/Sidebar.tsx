@@ -61,10 +61,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-3 rounded-xl transition-all duration-200 group
+    flex items-center gap-3 rounded-2xl transition-all duration-200 group border
     ${isActive 
-      ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+      ? 'border-primary/20 bg-primary-container/20 text-on-primary-container shadow-[0_18px_40px_rgba(141,78,28,0.12)]' 
+      : 'border-transparent text-on-surface-variant hover:border-outline-variant/60 hover:text-on-surface hover:bg-surface-container'
     }
     ${isDesktopCollapsed 
       ? 'md:justify-center md:p-3 md:aspect-square md:mx-auto md:w-12' 
@@ -77,14 +77,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile overlay */}
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-[#301400]/15 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-72 bg-surface-container-lowest border-r border-surface-container-high
+        fixed inset-y-0 left-0 z-50 w-72 bg-surface-container-lowest/95 border-r border-outline-variant/70 backdrop-blur-xl
         transform transition-transform duration-500 ease-out-expo
         md:relative md:flex md:flex-col md:translate-x-0 md:transition-[width]
         ${isDesktopCollapsed ? 'md:w-24' : 'md:w-72'}
@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       `}>
         <div className={`relative flex items-center p-6 justify-center h-24`}>
           {isDesktopCollapsed ? (
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-white font-bold text-2xl shadow-lg shadow-primary/20">
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl tonal-spot font-serif text-2xl shadow-[0_14px_28px_rgba(141,78,28,0.12)]">
               T
             </div>
           ) : (
@@ -102,7 +102,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto scrollbar-hide">
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-hide">
           {getLinks().map((link) => {
             const Icon = link.icon;
             return (
@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <Icon className={`h-5 w-5 shrink-0 transition-transform duration-200 group-active:scale-90`} />
                 {!isDesktopCollapsed && (
-                  <span className="font-sans font-semibold text-sm tracking-tight">{link.label}</span>
+                  <span className="font-sans font-semibold text-sm tracking-[0.02em]">{link.label}</span>
                 )}
               </NavLink>
             );
@@ -126,18 +126,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-4 space-y-2">
           {!isDesktopCollapsed && (
             <div className="px-4 py-2">
-               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Compte</span>
+               <span className="editorial-kicker">Compte</span>
             </div>
           )}
           <button
             onClick={() => logout()}
-            className={`flex items-center gap-3 rounded-xl transition-all duration-200 text-error hover:bg-error-container/30 active:scale-[0.97] group ${
+            className={`flex items-center gap-3 rounded-2xl border border-transparent transition-all duration-200 text-error hover:border-error/10 hover:bg-error-container/30 active:scale-[0.97] group ${
               isDesktopCollapsed ? 'justify-center p-3 w-12 h-12 mx-auto' : 'px-4 py-3 w-full text-left'
             }`}
             title={isDesktopCollapsed ? 'Déconnexion' : undefined}
           >
             <LogOut className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:-translate-x-1" />
-            {!isDesktopCollapsed && <span className="font-sans font-semibold text-sm tracking-tight">Déconnexion</span>}
+            {!isDesktopCollapsed && <span className="font-sans font-semibold text-sm tracking-[0.02em]">Déconnexion</span>}
           </button>
         </div>
       </aside>

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Libre+Caslon+Text:wght@400;700&display=swap");
 @import "tailwindcss";
 
 @keyframes shimmer {
@@ -7,30 +8,28 @@
 
 @theme {
   /* Surface colors */
-  --color-background: #fcf9f8;
-  --color-on-background: #1c1b1b;
-  --color-surface: #fcf9f8;
-  --color-on-surface: #1c1b1b;
-  --color-surface-dim: #dcd9d9;
-  --color-surface-bright: #fcf9f8;
-  --color-surface-container: #f0eded;
-  --color-surface-container-low: #f6f3f2;
-  --color-surface-container-high: #eae7e7;
-  --color-surface-container-highest: #e5e2e1;
+  --color-background: #fff8f5;
+  --color-on-background: #301400;
+  --color-surface: #fff8f5;
+  --color-on-surface: #301400;
+  --color-surface-dim: #ffd1b3;
+  --color-surface-bright: #fff8f5;
+  --color-surface-container: #ffeade;
+  --color-surface-container-low: #fff1ea;
+  --color-surface-container-high: #ffe3d2;
+  --color-surface-container-highest: #ffdcc5;
   --color-surface-container-lowest: #ffffff;
-  --color-outline: #747688;
-  --color-outline-variant: #c4c5d9;
+  --color-outline: #867369;
+  --color-outline-variant: #d8c2b6;
 
-  /* Primary (Cobalt Blue) */
-  --color-primary: #0040e0;
+  --color-primary: #8d4e1c;
   --color-on-primary: #ffffff;
-  --color-primary-container: #2e5bff;
-  --color-on-primary-container: #efefff;
+  --color-primary-container: #d1854e;
+  --color-on-primary-container: #4e2400;
 
-  /* Secondary */
-  --color-secondary: #5d5f5f;
+  --color-secondary: #8f4d17;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #dddddd;
+  --color-secondary-container: #fea86a;
 
   /* Status colors */
   --color-error: #ba1a1a;
@@ -39,9 +38,10 @@
   --color-on-error-container: #93000a;
 
   /* Typography fonts */
-  --font-sans: "Plus Jakarta Sans", "Satoshi", "Geist", sans-serif;
-  --font-serif: "Instrument Serif", serif;
-  --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+  --font-sans: "Bricolage Grotesque", sans-serif;
+  --font-serif: "Libre Caslon Text", serif;
+  --font-body: "Bodoni Moda", serif;
+  --font-mono: "Bricolage Grotesque", sans-serif;
 
   /* Animation primitives */
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
@@ -50,11 +50,28 @@
 
 @layer base {
   body {
+    font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh];
+    background-image:
+      radial-gradient(circle at top left, rgba(209, 133, 78, 0.12), transparent 32%),
+      radial-gradient(circle at right center, rgba(180, 144, 118, 0.08), transparent 26%);
   }
-  
-  .dark body {
-    @apply bg-black text-white;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  label {
+    font-family: var(--font-sans);
   }
 
   /* Custom Scrollbar for New Theme */
@@ -74,18 +91,30 @@
 
 @layer components {
   /* Signature Double-Bezel Card */
+  .tonal-card {
+    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest;
+    box-shadow: 0 24px 60px rgba(141, 78, 28, 0.08);
+  }
+
   .double-bezel {
-    @apply bg-surface-container-lowest rounded-xl shadow-[0px_20px_40px_rgba(0,0,0,0.04)]
-           border-2 border-surface-container-low ring-1 ring-surface-container-high relative;
+    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest relative overflow-hidden;
+    box-shadow: 0 24px 60px rgba(141, 78, 28, 0.08);
   }
 
   .double-bezel::before {
     content: '';
-    @apply absolute -inset-[1.5px] rounded-[inherit] border border-surface-container-high/30 pointer-events-none z-0;
+    @apply absolute inset-0 rounded-[inherit] border border-white/40 pointer-events-none z-0;
   }
 
-  /* Glassmorphism Overlay */
   .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20;
+    @apply bg-surface-container-lowest/82 backdrop-blur-xl border border-outline-variant/60;
+  }
+
+  .tonal-spot {
+    @apply bg-primary-container/20 text-on-primary-container;
+  }
+
+  .editorial-kicker {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-primary;
   }
 }

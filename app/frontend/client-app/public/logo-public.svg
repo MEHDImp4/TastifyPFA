@@ -1,20 +1,20 @@
 <svg width="200" height="45" viewBox="0 0 200 45" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700&amp;display=swap');
       
       .tastify {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 800;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 700;
         font-size: 36px;
         fill: url(#textGradientPublic);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        filter: drop-shadow(0 2px 4px rgba(141,78,28,0.16));
         letter-spacing: -0.03em;
       }
     </style>
     <linearGradient id="textGradientPublic" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" />
-      <stop offset="100%" stop-color="#E2E8F0" />
+      <stop offset="0%" stop-color="#d1854e" />
+      <stop offset="100%" stop-color="#8d4e1c" />
     </linearGradient>
   </defs>
 

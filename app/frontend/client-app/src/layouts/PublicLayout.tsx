@@ -33,8 +33,8 @@ export const PublicLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background text-on-background font-sans selection:bg-primary/20 selection:text-primary">
-      <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-surface-container-high">
+    <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary">
+      <header className="sticky top-0 z-50 bg-surface-container-lowest/82 backdrop-blur-xl border-b border-outline-variant/70">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 md:h-24 flex items-center justify-between">
           <Link 
             to="/" 
@@ -47,20 +47,20 @@ export const PublicLayout: React.FC = () => {
               <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
             )}
             {!config?.logo && config?.nom && (
-              <span className="font-display-accent italic text-2xl md:text-3xl text-on-surface tracking-tighter group-hover:text-primary transition-colors">{config.nom}</span>
+              <span className="font-display-accent text-2xl md:text-3xl text-on-surface tracking-tight group-hover:text-primary transition-colors">{config.nom}</span>
             )}
           </Link>
 
           <nav className="hidden md:flex items-center gap-10">
-            <Link to="/menu" className="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Notre Menu</Link>
-            <Link to="/reservations" className="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Réserver</Link>
+            <Link to="/menu" className="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-[0.22em]">Notre Menu</Link>
+            <Link to="/reservations" className="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-[0.22em]">Réserver</Link>
           </nav>
 
           <div className="flex items-center gap-4 md:gap-6">
-            <Link to="/checkout" className="relative p-2 md:p-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-xl transition-all active:scale-90">
+            <Link to="/checkout" className="relative p-2 md:p-3 text-on-surface-variant hover:text-primary hover:bg-surface-container rounded-2xl transition-all active:scale-90">
                 <ShoppingBag className="w-5 h-5 md:w-6 md:h-6" />
                 {items.length > 0 && (
-                    <span className="absolute top-1.5 right-1.5 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-primary text-white text-[9px] md:text-[10px] font-bold rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-lg shadow-primary/20">
+                    <span className="absolute top-1.5 right-1.5 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-primary text-white text-[9px] md:text-[10px] font-semibold rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-[0_10px_22px_rgba(141,78,28,0.2)]">
                         {items.length}
                     </span>
                 )}
@@ -70,12 +70,12 @@ export const PublicLayout: React.FC = () => {
               {isAuthenticated ? (
                 <div className="flex items-center gap-6">
                   <Link to="/account" className="flex flex-col items-end group">
-                    <p className="text-sm font-bold text-on-surface capitalize transition-colors group-hover:text-primary">{username}</p>
-                    <p className="text-[10px] text-primary font-bold uppercase tracking-widest">Client Fidélité</p>
+                    <p className="text-sm font-semibold text-on-surface capitalize transition-colors group-hover:text-primary">{username}</p>
+                    <p className="text-[10px] text-primary font-semibold uppercase tracking-[0.24em]">Client Fidélité</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-3 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded-xl transition-colors active:scale-90"
+                    className="p-3 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded-2xl transition-colors active:scale-90"
                     aria-label="Déconnexion"
                   >
                     <LogOut className="w-5 h-5" />
@@ -84,7 +84,7 @@ export const PublicLayout: React.FC = () => {
               ) : (
                 <Link 
                   to="/login"
-                  className="flex items-center gap-2.5 px-6 py-3 bg-on-surface text-white rounded-xl font-bold transition-all duration-300 hover:scale-105 hover:bg-primary active:scale-95 shadow-lg shadow-on-surface/10"
+                  className="flex items-center gap-2.5 px-6 py-3 bg-primary text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:bg-primary-container active:scale-95 shadow-[0_18px_40px_rgba(141,78,28,0.16)]"
                 >
                   <User className="w-4 h-4" />
                   <span className="text-sm">Connexion</span>
@@ -94,7 +94,7 @@ export const PublicLayout: React.FC = () => {
 
             <button 
               onClick={toggleMenu}
-              className="md:hidden p-2 text-on-surface-variant hover:text-primary bg-surface-container-low rounded-xl transition-all active:scale-90 z-50"
+              className="md:hidden p-2 text-on-surface-variant hover:text-primary bg-surface-container rounded-2xl transition-all active:scale-90 z-50"
               aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -106,28 +106,28 @@ export const PublicLayout: React.FC = () => {
         <div className={`fixed inset-0 bg-background z-40 transition-transform duration-500 ease-out-expo ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'} md:hidden pt-24`}>
           <div className="flex flex-col h-full px-5 py-8 gap-8 overflow-y-auto">
             <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Navigation Principale</p>
-              <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-display-accent italic text-on-surface hover:text-primary transition-colors">Notre Menu</Link>
-              <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-display-accent italic text-on-surface hover:text-primary transition-colors">Réserver une table</Link>
+              <p className="editorial-kicker mb-6">Navigation Principale</p>
+              <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-display-accent text-on-surface hover:text-primary transition-colors">Notre Menu</Link>
+              <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-display-accent text-on-surface hover:text-primary transition-colors">Réserver une table</Link>
             </div>
 
             <div className="space-y-4 mt-auto">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Votre Compte</p>
+              <p className="editorial-kicker mb-6">Votre Compte</p>
               {isAuthenticated ? (
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-surface-container-low">
-                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl">
+                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-surface-container">
+                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-xl">
                       {username?.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-on-surface capitalize">{username}</p>
-                      <p className="text-[10px] text-primary font-black uppercase tracking-widest">Client Fidélité</p>
+                      <p className="text-lg font-semibold text-on-surface capitalize">{username}</p>
+                      <p className="text-[10px] text-primary font-semibold uppercase tracking-[0.24em]">Client Fidélité</p>
                     </div>
                   </div>
-                  <Link to="/account" onClick={() => setIsMenuOpen(false)} className="block w-full py-4 text-center font-bold text-on-surface border border-surface-container-high rounded-xl">Mon Espace Client</Link>
+                  <Link to="/account" onClick={() => setIsMenuOpen(false)} className="block w-full py-4 text-center font-semibold text-on-surface border border-outline-variant/70 rounded-xl bg-surface-container-lowest">Mon Espace Client</Link>
                   <button 
                     onClick={handleLogout}
-                    className="w-full py-4 bg-error-container/20 text-error font-bold rounded-xl flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-error-container/20 text-error font-semibold rounded-xl flex items-center justify-center gap-2"
                   >
                     <LogOut className="w-5 h-5" />
                     <span>Se Déconnecter</span>
@@ -137,7 +137,7 @@ export const PublicLayout: React.FC = () => {
                 <Link 
                   to="/login"
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center gap-3 w-full py-5 bg-on-surface text-white rounded-2xl font-bold text-lg"
+                  className="flex items-center justify-center gap-3 w-full py-5 bg-primary text-white rounded-2xl font-semibold text-lg"
                 >
                   <User className="w-5 h-5" />
                   <span>Se Connecter</span>
@@ -145,7 +145,7 @@ export const PublicLayout: React.FC = () => {
               )}
             </div>
 
-            <div className="pt-8 border-t border-surface-container-high space-y-4">
+            <div className="pt-8 border-t border-outline-variant/70 space-y-4">
                <div className="flex items-center gap-3 text-on-surface-variant font-medium">
                   <MapPin className="w-5 h-5 text-primary" />
                   <span className="text-sm">{config?.adresse || 'Casablanca, Maroc'}</span>
@@ -174,7 +174,7 @@ export const PublicLayout: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-surface-container-lowest text-on-surface py-16 md:py-24 mt-auto border-t border-surface-container-high">
+      <footer className="bg-surface-container-lowest text-on-surface py-16 md:py-24 mt-auto border-t border-outline-variant/70">
         <div className="max-w-7xl mx-auto px-5 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
           <div className="col-span-1 md:col-span-2">
             <Link 
@@ -188,15 +188,15 @@ export const PublicLayout: React.FC = () => {
                   <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
                 )}
                 {!config?.logo && config?.nom && (
-                  <span className="font-display-accent italic text-2xl md:text-3xl text-on-surface tracking-tighter">{config.nom}</span>
+                  <span className="font-display-accent text-2xl md:text-3xl text-on-surface tracking-tight">{config.nom}</span>
                 )}
             </Link>
             <p className="text-on-surface-variant max-w-[40ch] leading-relaxed font-medium text-sm md:text-base">
-              {config?.nom || 'Tastify'} — L'expérience culinaire marocaine réinventée par l'intelligence numérique. Frais, local et servi avec une précision chirurgicale.
+              {config?.nom || 'Tastify'} — Une hospitalité éditoriale pensée pour marier chaleur artisanale, service attentif et orchestration numérique discrète.
             </p>
           </div>
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.2em] text-primary mb-6 md:mb-8">Navigation</h4>
+            <h4 className="font-semibold text-xs uppercase tracking-[0.2em] text-primary mb-6 md:mb-8">Navigation</h4>
             <ul className="space-y-3 md:space-y-4 font-sans font-semibold text-sm">
               <li><Link to="/menu" className="text-on-surface-variant hover:text-primary transition-colors">Menu & Carte</Link></li>
               <li><Link to="/reservations" className="text-on-surface-variant hover:text-primary transition-colors">Réservations</Link></li>
@@ -204,7 +204,7 @@ export const PublicLayout: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.2em] text-primary mb-6 md:mb-8">Contact</h4>
+            <h4 className="font-semibold text-xs uppercase tracking-[0.2em] text-primary mb-6 md:mb-8">Contact</h4>
             <ul className="space-y-3 md:space-y-4 font-sans font-semibold text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -217,8 +217,8 @@ export const PublicLayout: React.FC = () => {
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 pt-8 md:pt-10 border-t border-surface-container-high flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] md:text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60">
-          <p className="text-center md:text-left">© {new Date().getFullYear()} {config?.nom || 'Tastify'} - Intelligent Restaurant OS. Tous droits réservés.</p>
+        <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 pt-8 md:pt-10 border-t border-outline-variant/70 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant opacity-70">
+          <p className="text-center md:text-left">© {new Date().getFullYear()} {config?.nom || 'Tastify'} - Organic Sophistication. Tous droits réservés.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-primary transition-colors">Mentions légales</a>
             <a href="#" className="hover:text-primary transition-colors">Confidentialité</a>

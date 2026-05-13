@@ -21,7 +21,7 @@ export const AppShell: React.FC = () => {
   };
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-dark text-white">
+    <div className="flex h-[100dvh] overflow-hidden bg-background text-on-background">
       <Sidebar
         isDesktopCollapsed={isDesktopCollapsed}
         isMobileOpen={isMobileOpen}
@@ -33,7 +33,7 @@ export const AppShell: React.FC = () => {
           setMobileOpen={setMobileOpen}
           toggleDesktopSidebar={toggleDesktopSidebar}
         />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-5 md:p-8 scroll-smooth">
           <Outlet />
         </main>
       </div>
