@@ -2040,6 +2040,18 @@ and this project adheres to semantic tracking for development.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
 # Changelog
 
+## [2026-05-13] - 21:31
+### Changed
+- Unified the public client branding around a shared configurable wordmark so the restaurant name replaces the default Tastify mark in the same slot instead of rendering beside it.
+- Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.
+- Added `app/frontend/client-app/src/components/branding/BrandWordmark.tsx` as the single fallback source of truth, defaulting to `Tastify` when the establishment has not set a custom name.
+
+### Validation
+- `npm run build` passed in `app/frontend/client-app`.
+
+### Commit
+- `a5389a1` `Unify client branding around configurable wordmark`
+
 ## [2026-05-13] - 21:13
 ### Changed
 - Reduced client portal rendering overhead by removing the global fixed noise overlay, dropping route-level slide transitions from `PublicLayout`, lowering shared blur intensity in `index.css`, and simplifying the homepage hero card/image effects in `PortalHomePage.tsx`.
