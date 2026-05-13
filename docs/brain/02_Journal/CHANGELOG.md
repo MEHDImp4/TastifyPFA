@@ -2040,6 +2040,17 @@ and this project adheres to semantic tracking for development.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
 # Changelog
 
+## [2026-05-13] - 21:13
+### Changed
+- Reduced client portal rendering overhead by removing the global fixed noise overlay, dropping route-level slide transitions from `PublicLayout`, lowering shared blur intensity in `index.css`, and simplifying the homepage hero card/image effects in `PortalHomePage.tsx`.
+
+### Validation
+- `npm run build` passed in `app/frontend/client-app`.
+- Vite still reports the existing large JS chunk warning for `dist/assets/index-*.js`, but the production build completes successfully.
+
+### Commit
+- `0853ffe` `Improve client portal rendering smoothness`
+
 ## [2026-05-13] - 21:08
 ### Changed
 - Increased the client portal hero section bottom padding in `app/frontend/client-app/src/pages/Home/PortalHomePage.tsx` so the CTA block and lower fold have more breathing room on the refreshed Tastify landing page.
