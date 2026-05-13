@@ -5,6 +5,8 @@ import { useCartStore } from '../../store/cartStore';
 import { Search, Clock, Info, Plus, ArrowRight, Sparkles, Filter } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { CardSkeleton, Skeleton } from '../../components/ui/Skeleton';
+import { useConfigStore } from '../../store/configStore';
+import { getBrandName } from '../../components/branding/BrandWordmark';
 
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
@@ -14,6 +16,8 @@ export const MenuPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
   const { addItem } = useCartStore();
+  const config = useConfigStore(state => state.config);
+  const brandName = getBrandName(config?.nom);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,7 +114,7 @@ export const MenuPage: React.FC = () => {
 
         <div className="hidden xl:block mt-16 pt-10 border-t border-surface-container-high text-center">
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant opacity-30 leading-relaxed">
-                Tastify Intelligence Hub <br/> Verified Gastronomy
+                {brandName} Intelligence Hub <br/> Verified Gastronomy
             </p>
         </div>
       </aside>
@@ -128,10 +132,10 @@ export const MenuPage: React.FC = () => {
                     <span>Live Catalog Protocol</span>
                 </div>
                 <h1 className="text-5xl md:text-8xl font-display-accent italic text-on-surface leading-none tracking-tighter">
-                    {categories.find(c => c.id === activeCat)?.nom || 'The Archives.'}
+                    {activeCat ? categories.find(c => c.id === activeCat)?.nom : (config?.nom ? `${config.nom} Library.` : 'The Archives.')}
                 </h1>
                 <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed opacity-70">
-                    {categories.find(c => c.id === activeCat)?.description || 'Exploring the boundaries of traditional flavor through architectural precision.'}
+                    {activeCat ? categories.find(c => c.id === activeCat)?.description : (config?.description || 'Exploring the boundaries of traditional flavor through architectural precision.')}
                 </p>
             </div>
 

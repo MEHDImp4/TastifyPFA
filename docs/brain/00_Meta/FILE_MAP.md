@@ -46,6 +46,7 @@ tastify-pfa/
 │       └── client-app/            # CLIENT — Vite :3003 — Public portal
 │           ├── src/api/           # API wrappers
 │           ├── src/store/         # Zustand stores (including configStore.ts)
+│           ├── src/components/    # Shared UI/auth/branding primitives
 │           ├── src/layouts/       # PublicLayout (Dynamic branding)
 │           └── src/pages/
 │               ├── Home/          # High-end Hero (Z-Axis Cascade)
@@ -71,6 +72,6 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 ### SaaS Pivot & Design Philosophy
-Tastify is an intelligent restaurant SaaS platform. Every establishment instance can be personalized via the `configuration` module for branding and contact identity.
+Tastify is an intelligent restaurant SaaS platform. Every establishment instance can be personalized via the `configuration` module for branding and contact identity, with the client portal now resolving a shared `BrandWordmark` fallback to `Tastify` when no custom restaurant name exists.
 The current visual language follows the **Organic Sophistication** design system: warm parchment and terracotta surfaces, editorial serif display typography, Bricolage utility labels, and tonal card hierarchy rather than cold glass-heavy minimalism.
 All services are containerized and orchestrated via Docker Compose, with a shared backend serving multiple specialized frontend interfaces.

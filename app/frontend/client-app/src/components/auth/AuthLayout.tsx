@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import logoPublic from '../../assets/logo-public.svg';
+import { BrandWordmark } from '../branding/BrandWordmark';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -66,7 +66,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, visual, isReve
                 </motion.div>
                 <motion.span layoutId="auth-back-text" className="text-[10px] font-black uppercase tracking-widest">Back</motion.span>
             </button>
-            <img src={logoPublic} alt="Tastify" className="h-8 w-auto lg:hidden" />
+            <BrandWordmark className="font-sans text-3xl font-bold tracking-tight text-primary lg:hidden" />
         </div>
 
         <motion.div 

@@ -5,6 +5,7 @@ import { ArrowRight, Star, Clock, ChefHat, Sparkles, MapPin, ShieldCheck, Quote,
 import { menuApi } from '../../api/menu';
 import type { Plat } from '../../api/menu';
 import { useConfigStore } from '../../store/configStore';
+import { getBrandName } from '../../components/branding/BrandWordmark';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -29,6 +30,7 @@ export const PortalHomePage: React.FC = () => {
   const [recommendations, setRecommendations] = useState<Plat[]>([]);
   const config = useConfigStore(state => state.config);
   const shouldReduceMotion = useReducedMotion();
+  const brandName = getBrandName(config?.nom);
 
   useEffect(() => {
     menuApi.getTopRecommendations()
@@ -59,7 +61,7 @@ export const PortalHomePage: React.FC = () => {
               transition={{ delay: 0.2, duration: 0.8 }}
             >
               <Star className="w-3 md:w-3.5 h-3 md:h-3.5 fill-primary" />
-              <span>{config?.nom || 'Tastify'} — Organic Sophistication</span>
+              <span>{brandName} — Organic Sophistication</span>
             </motion.div>
             
             <motion.h1 
@@ -87,7 +89,7 @@ export const PortalHomePage: React.FC = () => {
               animate={{ opacity: 0.8 }}
               transition={{ delay: 0.6, duration: 1 }}
             >
-              Tastify pairs editorial warmth, Moroccan culinary heritage, and precise operations so every reservation, table, and course feels intentionally hosted.
+              {brandName} pairs editorial warmth, Moroccan culinary heritage, and precise operations so every reservation, table, and course feels intentionally hosted.
             </motion.p>
             
             <motion.div 
@@ -229,7 +231,7 @@ export const PortalHomePage: React.FC = () => {
                 </div>
                 <div className="text-center">
                     <p className="font-bold text-base md:text-lg text-on-surface font-sans tracking-tight">Executive Chef Hakim</p>
-                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-primary">Master of Architectural Gastronomy @ {config?.nom || 'Tastify'}</p>
+                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-primary">Master of Architectural Gastronomy @ {brandName}</p>
                 </div>
             </div>
          </div>
@@ -403,7 +405,7 @@ export const PortalHomePage: React.FC = () => {
                       transition={{ duration: 0.8, delay: 0.4 }}
                     >
                         <h4 className="text-2xl md:text-3xl font-bold font-sans tracking-tight leading-none uppercase italic font-black">Secured Excellence.</h4>
-                        <p className="text-white/70 font-medium leading-relaxed font-sans text-xs md:text-sm">Every element of your visit is tracked and optimized by our Tastify OS, ensuring a zero-defect experience.</p>
+                        <p className="text-white/70 font-medium leading-relaxed font-sans text-xs md:text-sm">Every element of your visit is tracked and optimized by the {brandName} OS, ensuring a zero-defect experience.</p>
                         <div className="flex items-center gap-3 pt-2 md:pt-4">
                             <MapPin className="w-4 md:w-5 h-4 md:h-5 text-white/50" />
                             <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Global Standard Certified</span>

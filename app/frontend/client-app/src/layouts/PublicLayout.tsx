@@ -4,8 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 import { User, LogOut, ShoppingBag, MapPin, Phone, Menu, X } from 'lucide-react';
 import { useConfigStore } from '../store/configStore';
-
-import logoPublic from '../assets/logo-public.svg';
+import { BrandWordmark, getBrandName } from '../components/branding/BrandWordmark';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
@@ -14,6 +13,7 @@ export const PublicLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const brandName = getBrandName(config?.nom);
 
   const handleLogout = async () => {
     await logout();
@@ -40,14 +40,7 @@ export const PublicLayout: React.FC = () => {
             onClick={handleLogoClick}
             className="flex items-center gap-3 group transition-transform active:scale-95 z-50"
           >
-            {config?.logo ? (
-              <img src={config.logo} alt={config.nom} className="h-8 md:h-10 w-auto object-contain" />
-            ) : (
-              <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
-            )}
-            {!config?.logo && config?.nom && (
-              <span className="font-display-accent text-2xl md:text-3xl text-on-surface tracking-tight group-hover:text-primary transition-colors">{config.nom}</span>
-            )}
+            <BrandWordmark className="font-sans text-3xl md:text-5xl font-bold tracking-tight text-primary group-hover:text-primary-container transition-colors" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-10">
@@ -172,17 +165,10 @@ export const PublicLayout: React.FC = () => {
               onClick={handleLogoClick}
               className="flex items-center gap-3 mb-8"
             >
-                {config?.logo ? (
-                  <img src={config.logo} alt={config.nom} className="h-8 md:h-10 w-auto object-contain" />
-                ) : (
-                  <img src={logoPublic} alt="Tastify" className="h-8 md:h-10 w-auto" />
-                )}
-                {!config?.logo && config?.nom && (
-                  <span className="font-display-accent text-2xl md:text-3xl text-on-surface tracking-tight">{config.nom}</span>
-                )}
+                <BrandWordmark className="font-sans text-3xl md:text-5xl font-bold tracking-tight text-primary" />
             </Link>
             <p className="text-on-surface-variant max-w-[40ch] leading-relaxed font-medium text-sm md:text-base">
-              {config?.nom || 'Tastify'} — Une hospitalité éditoriale pensée pour marier chaleur artisanale, service attentif et orchestration numérique discrète.
+              {brandName} — Une hospitalité éditoriale pensée pour marier chaleur artisanale, service attentif et orchestration numérique discrète.
             </p>
           </div>
           <div>
@@ -208,7 +194,7 @@ export const PublicLayout: React.FC = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 pt-8 md:pt-10 border-t border-outline-variant/70 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant opacity-70">
-          <p className="text-center md:text-left">© {new Date().getFullYear()} {config?.nom || 'Tastify'} - Organic Sophistication. Tous droits réservés.</p>
+          <p className="text-center md:text-left">© {new Date().getFullYear()} {brandName} - Organic Sophistication. Tous droits réservés.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-primary transition-colors">Mentions légales</a>
             <a href="#" className="hover:text-primary transition-colors">Confidentialité</a>

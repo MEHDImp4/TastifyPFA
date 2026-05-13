@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { useConfigStore } from '../../store/configStore';
 import { api } from '../../api/axios';
-
-import logoPublic from '../../assets/logo-public.svg';
+import { BrandWordmark } from '../branding/BrandWordmark';
 
 // One promise shared across all effect invocations (StrictMode, re-renders, etc.)
 // so the network request fires exactly once per page load.
@@ -52,7 +51,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
     return (
       <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-dark text-white p-6">
         <div className="animate-in fade-in zoom-in duration-500 flex flex-col items-center">
-            <img src={logoPublic} alt="Tastify" className="h-12 w-auto mb-8 animate-pulse" />
+            <BrandWordmark className="mb-8 font-sans text-5xl font-bold tracking-tight text-primary animate-pulse" />
             <div className="text-teal font-medium tracking-widest text-[10px] uppercase">Chargement</div>
         </div>
       </div>

@@ -5,8 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 import { Loader2, ArrowRight, UserPlus, Mail, Lock, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-
-import logoPublic from '../../assets/logo-public.svg';
+import { BrandWordmark } from '../../components/branding/BrandWordmark';
 
 export const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -85,7 +84,7 @@ export const Register: React.FC = () => {
     <AuthLayout visual={visualContent} isReverse>
         <div className="text-center lg:text-left space-y-4">
             <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-8">
-                <img src={logoPublic} alt="Tastify" className="h-10 w-auto" />
+                <BrandWordmark className="font-sans text-4xl font-bold tracking-tight text-primary" />
             </div>
             <motion.h1 
                 initial={{ opacity: 0, x: 20 }}

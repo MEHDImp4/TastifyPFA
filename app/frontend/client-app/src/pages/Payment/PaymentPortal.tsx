@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api/axios';
+import { useConfigStore } from '../../store/configStore';
+import { BrandWordmark, getBrandName } from '../../components/branding/BrandWordmark';
 import { 
   CreditCard, 
   Smartphone, 
@@ -16,6 +18,7 @@ import {
 export const PaymentPortal: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
+  const config = useConfigStore(state => state.config);
   const [session, setSession] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPaying, setIsPaying] = useState(false);
@@ -27,6 +30,7 @@ export const PaymentPortal: React.FC = () => {
   const [splitCount, setSplitCount] = useState(2);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [payableAmount, setPayableAmount] = useState('0.00');
+  const brandName = getBrandName(config?.nom);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -125,7 +129,7 @@ export const PaymentPortal: React.FC = () => {
             </div>
         </div>
         <h1 className="text-4xl md:text-5xl font-display-accent italic tracking-tight text-on-surface mb-4 md:mb-6">Payment Secured.</h1>
-        <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed max-w-md mb-8 md:mb-12">Thank you for your visit at Tastify. We hope the culinary experience was architectural.</p>
+        <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed max-w-md mb-8 md:mb-12">Thank you for your visit at {brandName}. We hope the culinary experience was architectural.</p>
         
         <div className="w-full max-w-md p-6 md:p-8 bg-white double-bezel flex flex-col gap-4 md:gap-6">
             <div className="flex justify-between items-center pb-4 border-b border-surface-container-high">
@@ -155,7 +159,7 @@ export const PaymentPortal: React.FC = () => {
                     <div className="flex items-center justify-center w-10 md:w-12 h-10 md:h-12 rounded-xl bg-primary text-white font-bold text-xl md:text-2xl shadow-lg shadow-primary/20">
                         T
                     </div>
-                    <span className="text-2xl md:text-3xl font-bold font-sans tracking-tight text-on-surface">Tastify</span>
+                    <BrandWordmark className="text-2xl md:text-3xl font-bold font-sans tracking-tight text-on-surface" />
                 </div>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-primary text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-4 md:mb-6">
                     <ShieldCheck className="w-3 h-3" />

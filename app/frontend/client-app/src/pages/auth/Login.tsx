@@ -5,8 +5,8 @@ import { useAuthStore } from '../../store/authStore';
 import { Loader2, ArrowRight, User as UserIcon, Lock, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-
-import logoPublic from '../../assets/logo-public.svg';
+import { BrandWordmark, getBrandName } from '../../components/branding/BrandWordmark';
+import { useConfigStore } from '../../store/configStore';
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -15,6 +15,8 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore(state => state.setAuth);
+  const config = useConfigStore(state => state.config);
+  const brandName = getBrandName(config?.nom);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +91,7 @@ export const Login: React.FC = () => {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="text-xl text-white/50 leading-relaxed font-sans font-medium"
             >
-                Access your personalized culinary archive and secure your architectural placements at Tastify.
+                Access your personalized culinary archive and secure your architectural placements at {brandName}.
             </motion.p>
         </div>
     </>
@@ -99,7 +101,7 @@ export const Login: React.FC = () => {
     <AuthLayout visual={visualContent}>
         <div className="text-center lg:text-left space-y-4">
             <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-8">
-                <img src={logoPublic} alt="Tastify" className="h-10 w-auto" />
+                <BrandWordmark className="font-sans text-4xl font-bold tracking-tight text-primary" />
             </div>
             <motion.h1 
                 initial={{ opacity: 0, x: -20 }}

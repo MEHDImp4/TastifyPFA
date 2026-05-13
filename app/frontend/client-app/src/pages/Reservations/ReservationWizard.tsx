@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationApi } from '../../api/reservations';
 import { useAuthStore } from '../../store/authStore';
+import { useConfigStore } from '../../store/configStore';
+import { getBrandName } from '../../components/branding/BrandWordmark';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -16,7 +18,9 @@ import {
 
 export const ReservationWizard: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
+  const config = useConfigStore(state => state.config);
   const navigate = useNavigate();
+  const brandName = getBrandName(config?.nom);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -317,7 +321,7 @@ export const ReservationWizard: React.FC = () => {
             </div>
             <div className="space-y-3 md:space-y-6">
                 <h2 className="text-5xl md:text-6xl font-display-accent italic tracking-tight text-on-surface leading-tight">Confirmed.</h2>
-                <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed">Your table has been digitally secured. An architectural dining experience awaits you at Tastify.</p>
+                <p className="text-lg md:text-xl text-on-surface-variant font-medium leading-relaxed">Your table has been digitally secured. An architectural dining experience awaits you at {brandName}.</p>
             </div>
             <div className="pt-6 md:pt-8 flex flex-col sm:flex-row gap-4 md:gap-6">
                 <button onClick={() => navigate('/')} className="flex-1 py-4 md:py-5 bg-on-surface text-white rounded-xl md:rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-on-surface/10">Return Home</button>
