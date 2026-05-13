@@ -2040,6 +2040,16 @@ and this project adheres to semantic tracking for development.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
 # Changelog
 
+## [2026-05-13] - 21:08
+### Changed
+- Increased the client portal hero section bottom padding in `app/frontend/client-app/src/pages/Home/PortalHomePage.tsx` so the CTA block and lower fold have more breathing room on the refreshed Tastify landing page.
+
+### Validation
+- `npm run build` passed in `app/frontend/client-app`.
+
+### Commit
+- `49572e9` `Increase portal hero spacing`
+
 ## [2026-05-13] - 20:55
 ### Changed
 - Replaced the previous minimalist blue UI direction in `DESIGN.md` with the new Tastify "Organic Sophistication" system built around warm sienna surfaces, editorial serif display type, and tonal hospitality layering.
