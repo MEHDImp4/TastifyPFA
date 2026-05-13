@@ -1,4 +1,15 @@
-## [2026-05-12] - 14:30
+## [2026-05-12] - 23:55
+### Added
+- **SaaS Architecture**: Implemented a new `configuration` backend app to manage establishment-specific metadata (name, logo, contact, hours), enabling multi-client personalization.
+- **Business Feature**: Created the "Establishment Settings" management page in the back-office with image upload support for restaurant branding.
+- **UI/UX (Haptic Depth)**: Refined the `double-bezel` component with nested borders and shadows for a machined hardware aesthetic.
+- **Motion Design**: Implemented "Z-Axis Cascade" in the Hero section with staggered floating cards and spring physics.
+- **Editorial Texture**: Integrated a global fixed-position noise overlay (`opacity: 0.03`) for a premium physical paper feel.
+- **Dashboard Refinement**: Applied "Strategic Intelligence" motion choreography to the back-office dashboard with staggered entry animations and high-velocity easing curves.
+
+### Changed
+- **Branding**: Unified the public portal branding by dynamically fetching establishment settings on bootstrap and applying them to headers, footers, and hero content.
+- **Global Styles**: Updated `index.css` across both frontends to support the new haptic UI standards and editorial textures.
 ### Added
 - **UI/UX**: Implemented a shared `AuthLayout` for Login and Register pages with `framer-motion` `layoutId` animations. 
 - **Animation**: When switching between Login and Register, the form and visual sections now smoothly swap sides, creating a premium, high-end feel.
@@ -2027,3 +2038,17 @@ and this project adheres to semantic tracking for development.
 - Ingested `cahier_de_charge_tastify.md` specifications and created `PROJECT_OVERVIEW.md`.
 - Initialized `.planning/` GSD framework with 6 architectural phases mapped from the specifications.
 - Restructured GSD Roadmap into 35 hyper-granular, vertical-slice phases as per user instruction.
+# Changelog
+
+## [2026-05-13] - 20:55
+### Changed
+- Replaced the previous minimalist blue UI direction in `DESIGN.md` with the new Tastify "Organic Sophistication" system built around warm sienna surfaces, editorial serif display type, and tonal hospitality layering.
+- Rethemed the shared backoffice shells (`AppShell`, `Sidebar`, `Topbar`) to use warm cards, softer outlines, and the new amber identity instead of the prior cobalt treatment.
+- Rethemed the client portal shell and homepage to match the new editorial hospitality direction, including updated hero copy, tonal surfaces, and warm branded SVG assets.
+
+### Validation
+- `npm run build` passed in `app/frontend/client-app`.
+- `npm run build` still fails in `app/frontend/backoffice-app` because of pre-existing TypeScript issues in untouched files such as `src/pages/Dashboard/DashboardPage.tsx`, `src/pages/Categories/CategoryPage.tsx`, `src/pages/Menu/PlatPage.tsx`, and `src/pages/Settings/SettingsPage.tsx`.
+
+### Commit
+- `407e75b` `Refresh frontend theme for new Tastify design system`
