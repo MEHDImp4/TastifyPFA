@@ -10,8 +10,7 @@ import {
   Plus, 
   Minus, 
   ShoppingCart, 
-  Loader2, 
-  Send,
+  Loader2,
   Trash2,
   Clock,
   ArrowRight

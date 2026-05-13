@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { configurationApi, RestaurantConfiguration } from '../../api/configuration';
+import { configurationApi } from '../../api/configuration';
+import type { RestaurantConfiguration } from '../../api/configuration';
 import { 
   Building2, 
   Mail, 
   Phone, 
   MapPin, 
-  Clock, 
   Globe, 
   Save, 
   Upload,
   Settings as SettingsIcon,
-  CheckCircle2
+  AtSign,
+  MessageCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -142,6 +143,18 @@ export const SettingsPage: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-2">
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Description Courte</label>
+                <div className="relative">
+                  <textarea 
+                    name="description"
+                    value={config.description || ''}
+                    onChange={handleInputChange}
+                    className="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                    placeholder="Une brève description de votre restaurant..."
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Devise Locale</label>
                 <input 
                   type="text" 
@@ -202,6 +215,59 @@ export const SettingsPage: React.FC = () => {
                   onChange={handleInputChange}
                   className="w-full bg-surface-container-low border-none rounded-2xl pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
                   placeholder="123 Rue de la Gastronomie, Casablanca"
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Social Media Section */}
+        <motion.div className="double-bezel p-8 md:p-10 bg-white" variants={fadeInUp}>
+          <h2 className="text-xl font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
+            <Globe className="w-5 h-5 text-primary" />
+            Réseaux Sociaux
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Facebook</label>
+              <div className="relative flex items-center">
+                <Globe className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40" />
+                <input 
+                  type="url" 
+                  name="facebook"
+                  value={config.facebook || ''}
+                  onChange={handleInputChange}
+                  className="w-full bg-surface-container-low border-none rounded-2xl pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  placeholder="https://facebook.com/..."
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Instagram</label>
+              <div className="relative flex items-center">
+                <AtSign className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40" />
+                <input 
+                  type="url" 
+                  name="instagram"
+                  value={config.instagram || ''}
+                  onChange={handleInputChange}
+                  className="w-full bg-surface-container-low border-none rounded-2xl pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  placeholder="https://instagram.com/..."
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Twitter (X)</label>
+              <div className="relative flex items-center">
+                <MessageCircle className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40" />
+                <input 
+                  type="url" 
+                  name="twitter"
+                  value={config.twitter || ''}
+                  onChange={handleInputChange}
+                  className="w-full bg-surface-container-low border-none rounded-2xl pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  placeholder="https://twitter.com/..."
                 />
               </div>
             </div>

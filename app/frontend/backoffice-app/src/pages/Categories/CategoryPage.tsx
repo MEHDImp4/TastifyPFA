@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Categorie } from '../../types/menu';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, ListOrdered, FileText } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, ListOrdered, FileText, CheckCircle2 } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 
 import { CardSkeleton } from '../../components/ui/Skeleton';

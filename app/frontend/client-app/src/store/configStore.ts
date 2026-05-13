@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { configurationApi, RestaurantConfiguration } from '../api/configuration';
+import { configurationApi } from '../api/configuration';
+import type { RestaurantConfiguration } from '../api/configuration';
 
 interface ConfigState {
   config: RestaurantConfiguration | null;

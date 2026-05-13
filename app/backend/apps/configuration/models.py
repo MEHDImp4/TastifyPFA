@@ -2,10 +2,16 @@ from django.db import models
 
 class RestaurantConfiguration(models.Model):
     nom = models.CharField(max_length=100, default="Tastify Restaurant")
+    description = models.TextField(blank=True, null=True)
     adresse = models.TextField(blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     telephone = models.CharField(max_length=20, blank=True, null=True)
     logo = models.ImageField(upload_to='restaurant_logos/', blank=True, null=True)
+    
+    # Social Media
+    facebook = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
     
     # JSON field for opening hours: {"lun": "09:00-22:00", ...}
     horaires = models.JSONField(default=dict, blank=True)

@@ -10,7 +10,7 @@ class RestaurantConfigurationViewSet(viewsets.ModelViewSet):
     serializer_class = RestaurantConfigurationSerializer
     
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'public']:
             return [permissions.AllowAny()]
         return [IsGerant()]
 

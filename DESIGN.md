@@ -1,158 +1,93 @@
 ---
-name: Tastify
+name: Tastify Staff OS
 colors:
-  surface: '#fff8f5'
-  surface-dim: '#ffd1b3'
-  surface-bright: '#fff8f5'
-  surface-container-lowest: '#ffffff'
-  surface-container-low: '#fff1ea'
-  surface-container: '#ffeade'
-  surface-container-high: '#ffe3d2'
-  surface-container-highest: '#ffdcc5'
-  on-surface: '#301400'
-  on-surface-variant: '#53443a'
-  inverse-surface: '#4b2709'
-  inverse-on-surface: '#ffede4'
-  outline: '#867369'
-  outline-variant: '#d8c2b6'
-  surface-tint: '#8d4e1c'
-  primary: '#8d4e1c'
+  background: '#0a0a0a'
+  on-background: '#e4e4e7'
+  surface: '#121212'
+  on-surface: '#ffffff'
+  surface-bright: '#18181b'
+  surface-container: '#1c1c1f'
+  surface-container-low: '#141416'
+  surface-container-high: '#27272a'
+  surface-container-highest: '#3f3f46'
+  outline: '#52525b'
+  outline-variant: '#27272a'
+  primary: '#ff5c00' # High-intensity Tactical Orange
   on-primary: '#ffffff'
-  primary-container: '#d1854e'
-  on-primary-container: '#4e2400'
-  inverse-primary: '#ffb785'
-  secondary: '#8f4d17'
-  on-secondary: '#ffffff'
-  secondary-container: '#fea86a'
-  on-secondary-container: '#773b03'
-  tertiary: '#775841'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#b49076'
-  on-tertiary-container: '#422a16'
-  error: '#ba1a1a'
+  primary-container: '#4e2000'
+  on-primary-container: '#ffccb3'
+  accent: '#00f0ff' # Cyber Cyan for telemetry
+  error: '#ff0033' # Hazard Red
   on-error: '#ffffff'
-  error-container: '#ffdad6'
-  on-error-container: '#93000a'
-  primary-fixed: '#ffdcc6'
-  primary-fixed-dim: '#ffb785'
-  on-primary-fixed: '#301400'
-  on-primary-fixed-variant: '#703704'
-  secondary-fixed: '#ffdcc6'
-  secondary-fixed-dim: '#ffb785'
-  on-secondary-fixed: '#301400'
-  on-secondary-fixed-variant: '#713700'
-  tertiary-fixed: '#ffdcc4'
-  tertiary-fixed-dim: '#e7bfa2'
-  on-tertiary-fixed: '#2b1605'
-  on-tertiary-fixed-variant: '#5d412b'
-  background: '#fff8f5'
-  on-background: '#301400'
-  surface-variant: '#ffdcc5'
 typography:
-  display-accent:
-    fontFamily: Libre Caslon Text
-    fontSize: 48px
-    fontWeight: '400'
-    lineHeight: '1.1'
-    letterSpacing: -0.01em
-  headline-lg:
-    fontFamily: Libre Caslon Text
+  display-macro:
+    fontFamily: Geist Black
+    fontSize: 64px
+    fontWeight: '900'
+    lineHeight: '0.9'
+    letterSpacing: -0.04em
+  headline-tactical:
+    fontFamily: Geist Bold
     fontSize: 32px
-    fontWeight: '600'
-    lineHeight: '1.2'
-  headline-md:
-    fontFamily: Libre Caslon Text
-    fontSize: 24px
-    fontWeight: '600'
-    lineHeight: '1.3'
-  body-lg:
-    fontFamily: Bodoni Moda
-    fontSize: 18px
+    fontWeight: '700'
+    lineHeight: '1.1'
+    letterSpacing: -0.02em
+  body-mono:
+    fontFamily: JetBrains Mono
+    fontSize: 14px
     fontWeight: '400'
-    lineHeight: '1.6'
-  body-md:
-    fontFamily: Bodoni Moda
-    fontSize: 16px
-    fontWeight: '400'
-    lineHeight: '1.6'
-  label-sm:
-    fontFamily: Bricolage Grotesque
-    fontSize: 12px
+    lineHeight: '1.5'
+  label-telemetry:
+    fontFamily: JetBrains Mono
+    fontSize: 10px
     fontWeight: '600'
     lineHeight: '1'
-    letterSpacing: 0.03em
+    letterSpacing: 0.15em
 rounded:
-  sm: 0.25rem
-  DEFAULT: 0.5rem
-  md: 0.75rem
-  lg: 1rem
-  xl: 1.5rem
-  full: 9999px
+  none: 0
+  sm: 2px
+  DEFAULT: 4px
+  md: 8px
+  lg: 12px
 spacing:
   unit: 4px
-  gutter: 24px
-  margin-desktop: 64px
-  margin-mobile: 20px
-  container-max: 1440px
+  grid-gap: 1px
 ---
 
-## Brand & Style
+# Design System: Tactical Command (Staff OS)
 
-This design system embodies **Organic Sophistication** tailored for high-end hospitality environments. The brand personality is warm, heritage-inspired, and deeply editorial, acting as a curated digital concierge that manages complex restaurant operations with grace.
+## 1. Visual Theme & Atmosphere
+The "Staff OS" embodies a **Tactical Command Center** aesthetic. It is a high-density, Dark Mode interface designed for precision, speed, and reliability. The atmosphere is mechanical, raw, and utilitarian — discarding soft gradients and organic shapes in favor of rigid grids, monospaced telemetry, and high-contrast indicators.
 
-The aesthetic fuses **Classical Typography** with modern tonal harmony. It relies on a rich, sun-drenched color palette, high-contrast serif typefaces, and a "Tonal Spot" architecture to create a sense of grounded luxury. The emotional response should be one of artisanal quality, timeless reliability, and thoughtful attention to detail.
+## 2. Color Palette
+- **Obsidian Core** (#0a0a0a) — The primary substrate. Deep, non-reflective black.
+- **Tactical Orange** (#ff5c00) — The primary interactive accent. High visibility, inspired by aerospace instrumentation.
+- **Cyber Cyan** (#00f0ff) — Used for secondary data visualizations and telemetry highlights.
+- **Hazard Red** (#ff0033) — Strictly for alerts, errors, and critical system statuses.
+- **Zinc Phosphor** (#e4e4e7) — Primary text color, simulating aged CRT phosphor.
 
-The style leverages **Layered Tonality** for depth, using subtle shifts in warm ambers and soft terracotta tones to define hierarchy, ensuring the UI feels inviting and expensive even when displaying dense operational data.
+## 3. Typography
+- **Macro-Headers:** Geist Black (fallback: Inter Black). Massive scale, negative tracking, uppercase.
+- **Telemetry Data:** JetBrains Mono. Used for all inputs, data points, and technical metadata.
+- **Interface UI:** Geist SemiBold. Used for primary navigation and button labels.
 
-## Colors
+## 4. Layout Principles
+- **Rigid Compartmentalization:** Use 1px solid dividers (`border-zinc-800`) to segregate information zones.
+- **Zero Radius:** Rejection of soft corners. Elements use `rounded-none` or `rounded-sm` (2px) to enforce industrial precision.
+- **Bimodal Density:** Clustered data groups framed by massive, calculated negative space.
+- **The Blueprint Grid:** All elements are anchored to a strict modular grid. Visible crosshairs (`+`) mark key intersections.
 
-The palette is strictly curated to maintain a warm, high-end hospitality aesthetic, moving toward a more vibrant, sun-baked warmth.
+## 5. Components
+- **Buttons:** Hard-edged rectangles. Active state uses a 1px negative translate. No glows.
+- **Inputs:** Monospaced text entry. Borders illuminate in Tactical Orange on focus. 1px solid outline always.
+- **Status Indicators:** ASCII-inspired markers (e.g., `[ ONLINE ]`, `< ERROR >`).
+- **Telemetry Cards:** No shadows. Defined by 1px borders and internal technical labels (e.g., `UNIT-01`, `REV-B`).
 
-- **Primary:** Burnt Sienna (#d1854e) is used for primary brand moments and essential interactive states, providing a glowing, clay-inspired focal point.
-- **Surface:** The canvas utilizes a range of warm earth neutrals. Surfaces move away from cold whites toward a layered approach of soft tans and parchment-inspired tones.
-- **Accents:** Secondary and tertiary tones provide categorization and subtle status differentiation without the harshness of traditional UI colors.
-- **Typography Colors:** Primary text uses deep roasted neutrals to keep a rich ink-on-paper contrast.
-
-## Typography
-
-The typographic system utilizes a sophisticated trio of fonts to balance classical heritage with modern utility.
-
-- **Libre Caslon Text:** Used for headlines and display moments.
-- **Bodoni Moda:** The primary body typeface for editorial long-form content.
-- **Bricolage Grotesque:** Used for labels, data points, and technical UI elements.
-
-**Scaling:** For mobile devices, `display-accent` should scale down to 32px, and `headline-lg` to 24px.
-
-## Layout & Spacing
-
-This design system employs a **Fixed Grid** philosophy for desktop to maintain an architectural feel, switching to a fluid model for mobile tablets.
-
-- **Grid:** A 12-column grid with generous 24px gutters.
-- **Rhythm:** An 8px linear scale with a 4px sub-unit for fine-tuning.
-- **Padding:** Content containers should use at least 32px internal padding to preserve breathing room.
-
-## Elevation & Depth
-
-Hierarchy is established through a sophisticated layering system:
-
-1. **Base Layer:** Warm parchment and terracotta neutrals.
-2. **Structural Layer:** Use subtle tonal shifts rather than harsh borders.
-3. **Tonal Spotting:** Important elements are elevated using soft fills in primary and secondary hues.
-4. **Shadows:** Rare, soft, and warm when needed.
-
-## Shapes
-
-The shape language is rounded to provide a soft, organic feel that counters the crispness of the serif typography.
-
-- **Primary Containers:** 1rem (16px) corner radius.
-- **Secondary Elements:** 0.5rem (8px) corner radius.
-- **Status Badges:** Softly rounded rectangles rather than digital pills.
-
-## Components
-
-- **Buttons:** Primary buttons use Burnt Sienna with high-contrast text.
-- **Inputs:** Fields are defined by subtle tonal backgrounds and a 1px bottom border, transforming into primary sienna on focus.
-- **Tonal Cards:** Warm neutral backgrounds with soft corners and low-contrast borders.
-- **Selection Controls:** Use primary sienna for active states.
-- **Status Badges:** Use secondary and tertiary palettes with deep-toned text.
-- **The "Floor Plan" Grid:** Uses the same warm tonal aesthetic to map tables and zones with architectural clarity.
+## 6. Anti-Patterns (Banned)
+- No emojis.
+- No soft shadows or blurs (except for terminal glow).
+- No rounded corners > 4px.
+- No "Organic" colors (browns, tans, pastels).
+- No center-aligned text for data.
+- No generic serif fonts.
+- No "Elevate your experience" marketing copy.

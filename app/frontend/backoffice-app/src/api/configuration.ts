@@ -3,10 +3,14 @@ import { api as axiosInstance } from './axios';
 export interface RestaurantConfiguration {
   id: number;
   nom: string;
+  description: string | null;
   adresse: string | null;
   email: string | null;
   telephone: string | null;
   logo: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  twitter: string | null;
   horaires: Record<string, string>;
   devise: string;
   updated_at: string;
@@ -16,7 +20,7 @@ export const configurationApi = {
   getSettings: () => axiosInstance.get<RestaurantConfiguration>('/settings/'),
   updateSettings: (data: Partial<RestaurantConfiguration>) => {
     // Handle multipart/form-data if logo is being updated
-    if (data.logo instanceof File) {
+    if ((data.logo as any) instanceof File) {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         if (value !== null) {

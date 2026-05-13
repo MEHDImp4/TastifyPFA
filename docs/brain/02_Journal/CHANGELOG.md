@@ -1,4 +1,20 @@
-## [2026-05-13] - 10:30
+## [2026-05-14] - 14:00
+### Added
+- **Design System Pivot**: Transitioned the back-office design system from "Organic Sophistication" to a high-end **"Tactical Command"** aesthetic (Industrial Brutalism / Tactical Telemetry).
+- **Tactical Theme**: Updated `DESIGN.md` and `index.css` with a high-density Dark Mode palette (#0a0a0a substrate, #ff5c00 tactical orange), Geist and JetBrains Mono typography, and rigid grid principles.
+- **Redesigned Login**: Completely rebuilt `Login.tsx` from scratch as a cinematic terminal interface with scanlines, grid backgrounds, and staggered Framer Motion reveal sequences.
+
+### Fixed
+- **Build Integrity**: Resolved multiple project-wide TypeScript errors to achieve a 100% green production build:
+  - Fixed Framer Motion v12 `Variants` type mismatches and literal type requirements in `Login.tsx`.
+  - Restored missing `CheckCircle2` imports in `CategoryPage.tsx` and `PlatPage.tsx`.
+  - Removed unused `Send` import in `OrderingPage.tsx`.
+  - Fixed `instanceof File` type error in `configuration.ts` via explicit casting.
+
+### Validation
+- **Production Build**: Successfully executed `npm run build` in `app/frontend/backoffice-app` with 0 errors.
+- **Dashboard**: Synced project state and design mandates.
+
 ### Fixed
 - **Dashboard UI**: Resolved a critical Vite compilation error (`[plugin:vite:oxc]`) caused by duplicate import declarations in `DashboardPage.tsx`. Cleaned up redundant import blocks to restore dashboard functionality.
 

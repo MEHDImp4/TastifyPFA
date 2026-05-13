@@ -3,7 +3,7 @@ import { menuApi } from '../../api/menu';
 import { stockApi } from '../../api/inventory_hr';
 import type { Plat, Categorie } from '../../types/menu';
 import type { Ingredient, PlatIngredient } from '../../types/inventory';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock, Minus, ChefHat, Tag, DollarSign, Timer } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Clock, Minus, ChefHat, Tag, DollarSign, Timer, CheckCircle2 } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { toast } from 'sonner';
 
