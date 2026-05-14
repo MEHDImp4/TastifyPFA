@@ -12,31 +12,19 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { type: 'spring', stiffness: 80, damping: 18 },
+    transition: { type: 'spring', stiffness: 100, damping: 20 },
   },
-};
-
-const floatVariants: Variants = {
-  animate: {
-    y: [0, -10, 0],
-    transition: {
-      duration: 5,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
 };
 
 export const Login: React.FC = () => {
@@ -52,7 +40,7 @@ export const Login: React.FC = () => {
     setError(null);
 
     if (!username || !password) {
-      setError('Saisie requise : Identifiants manquants');
+      setError('SAISIE_REQUISE');
       return;
     }
 
@@ -65,21 +53,24 @@ export const Login: React.FC = () => {
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
       if (err.response?.status === 401) {
-        setError('Accès refusé : Identifiants invalides');
+        setError('ACCES_REFUSE');
       } else {
-        setError('Erreur système : Liaison interrompue');
+        setError('ERREUR_SYSTEME');
       }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const DARK_BROWN = '#301400';
+  const PRIMARY_ORANGE = '#8d4e1c';
+
   return (
-    <div className="relative min-h-[100dvh] bg-background flex items-center justify-center p-6 md:p-12 overflow-hidden selection:bg-primary/20 selection:text-primary">
+    <div className="relative min-h-[100dvh] bg-[#fff8f5] flex items-center justify-center p-6 md:p-12 overflow-hidden">
       {/* Background Decorative Elements */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 blur-[150px] rounded-full" />
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#8d4e1c]/10 blur-[100px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#8f4d17]/10 blur-[130px] rounded-full" />
       </div>
 
       <motion.div
@@ -91,41 +82,47 @@ export const Login: React.FC = () => {
         {/* Left Side: Editorial Content */}
         <div className="hidden lg:block space-y-8">
           <motion.div variants={itemVariants} className="space-y-4">
-            <span className="editorial-kicker">Backoffice Access</span>
-            <h1 className="text-5xl xl:text-7xl font-serif text-on-background leading-[1.05] tracking-tight">
+            <span className="font-sans text-[11px] font-bold uppercase tracking-[0.24em]" style={{ color: PRIMARY_ORANGE }}>
+              Backoffice Access
+            </span>
+            <h1 className="text-5xl xl:text-7xl font-serif leading-[1.05] tracking-tight" style={{ color: DARK_BROWN }}>
               Service orchestration for the dining room, kitchen, and command floor.
             </h1>
-            <p className="text-xl text-on-surface font-body leading-relaxed max-w-[50ch]">
+            <p className="text-xl font-bold leading-relaxed max-w-[50ch]" style={{ color: DARK_BROWN }}>
               A curated digital concierge managing complex restaurant operations with grace and heritage-inspired precision.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-2 gap-6">
-            <motion.div variants={itemVariants} className="double-bezel p-6 space-y-3 bg-surface-container-low/80">
-              <span className="editorial-kicker text-[10px]">Station Control</span>
+            <motion.div variants={itemVariants} className="rounded-2xl border border-[#d8c2b6] p-6 space-y-3 bg-[#fff1ea]">
+              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: PRIMARY_ORANGE }}>
+                Station Control
+              </span>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Compass className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                <div className="p-2 rounded-lg bg-[#8d4e1c]/10">
+                  <Compass className="w-5 h-5" style={{ color: PRIMARY_ORANGE }} strokeWidth={2.5} />
                 </div>
-                <h2 className="text-2xl font-serif text-on-surface">Staff OS</h2>
+                <h2 className="text-2xl font-serif font-bold" style={{ color: DARK_BROWN }}>Staff OS</h2>
               </div>
-              <p className="text-sm text-on-surface-variant font-body">
+              <p className="text-sm font-bold leading-snug" style={{ color: DARK_BROWN }}>
                 Un point d'entrée unique pour la salle, les commandes et la cuisine.
               </p>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="double-bezel p-6 space-y-3 bg-surface-container-low/80">
-              <span className="editorial-kicker text-[10px]">Live</span>
+            <motion.div variants={itemVariants} className="rounded-2xl border border-[#d8c2b6] p-6 space-y-3 bg-[#fff1ea]">
+              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: PRIMARY_ORANGE }}>
+                Live
+              </span>
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-primary/20 animate-ping rounded-full" />
-                  <div className="relative p-2 rounded-lg bg-primary/10">
-                    <Activity className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                  <div className="absolute inset-0 bg-[#8d4e1c]/20 animate-ping rounded-full" />
+                  <div className="relative p-2 rounded-lg bg-[#8d4e1c]/10">
+                    <Activity className="w-5 h-5" style={{ color: PRIMARY_ORANGE }} strokeWidth={2.5} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-serif text-on-surface">Systems Ready</h2>
+                <h2 className="text-2xl font-serif font-bold" style={{ color: DARK_BROWN }}>Systems Ready</h2>
               </div>
-              <p className="text-sm text-on-surface-variant font-body">
+              <p className="text-sm font-bold leading-snug" style={{ color: DARK_BROWN }}>
                 Surveillance en temps réel de l'activité opérationnelle.
               </p>
             </motion.div>
@@ -135,108 +132,83 @@ export const Login: React.FC = () => {
         {/* Right Side: Login Interface */}
         <motion.div variants={itemVariants} className="flex justify-center">
           <div className="w-full max-w-[460px] relative">
-            {/* Logo area above the card */}
             <motion.div 
               variants={itemVariants} 
               className="flex flex-col items-center mb-8"
             >
               <img src={logoStaff} alt="Tastify" className="h-14 mb-2" />
-              <div className="flex items-center gap-2">
-                <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-on-surface/40">Staff OS</span>
-              </div>
+              <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: DARK_BROWN }}>Staff OS</span>
             </motion.div>
 
-            <div className="double-bezel bg-surface-container-lowest p-8 md:p-12 shadow-2xl shadow-primary/5">
+            <div className="rounded-3xl bg-white p-8 md:p-12 shadow-2xl border border-[#d8c2b6]/30">
               <motion.div variants={itemVariants} className="mb-10 text-center lg:text-left">
-                <h3 className="text-3xl font-serif mb-2">Bienvenue</h3>
-                <p className="text-on-surface-variant font-body">Identifiez-vous pour accéder au poste de commande.</p>
+                <h3 className="text-3xl font-serif mb-2 font-bold" style={{ color: DARK_BROWN }}>Bienvenue</h3>
+                <p className="font-bold" style={{ color: DARK_BROWN }}>Identifiez-vous pour accéder au poste de commande.</p>
               </motion.div>
 
               <AnimatePresence mode="wait">
                 {error && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="mb-8 overflow-hidden"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-8 bg-[#ba1a1a]/10 border-2 border-[#ba1a1a] rounded-xl p-4 flex items-start gap-3"
                   >
-                    <div className="bg-error/5 border border-error/20 rounded-xl p-4 flex items-start gap-3">
-                      <ShieldAlert className="w-5 h-5 text-error shrink-0" strokeWidth={1.5} />
-                      <p className="text-sm font-sans font-medium text-error leading-tight">
-                        {error}
-                      </p>
-                    </div>
+                    <ShieldAlert className="w-5 h-5 text-[#ba1a1a] shrink-0" strokeWidth={2.5} />
+                    <p className="text-sm font-black text-[#ba1a1a] uppercase">{error}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <motion.div variants={itemVariants} className="space-y-2">
-                  <label htmlFor="username" className="editorial-kicker text-[10px]">Identifiant</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest" style={{ color: PRIMARY_ORANGE }}>Identifiant</label>
                   <input
-                    id="username"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="e.g. mehdi_mgr"
+                    placeholder="E.G. MEHDI_MGR"
                     disabled={isLoading}
-                    className="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary px-4 py-3 font-sans transition-all outline-none rounded-t-lg disabled:opacity-50"
+                    style={{ color: DARK_BROWN, borderBottom: `2px solid ${DARK_BROWN}` }}
+                    className="w-full bg-[#fff1ea] px-4 py-3 font-bold outline-none rounded-t-lg disabled:opacity-50"
                   />
-                </motion.div>
+                </div>
 
-                <motion.div variants={itemVariants} className="space-y-2">
-                  <label htmlFor="password" className="editorial-kicker text-[10px]">Clé d'accès</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest" style={{ color: PRIMARY_ORANGE }}>Clé d'accès</label>
                   <input
-                    id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     disabled={isLoading}
-                    className="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary px-4 py-3 font-sans transition-all outline-none rounded-t-lg disabled:opacity-50"
+                    style={{ color: DARK_BROWN, borderBottom: `2px solid ${DARK_BROWN}` }}
+                    className="w-full bg-[#fff1ea] px-4 py-3 font-bold outline-none rounded-t-lg disabled:opacity-50"
                   />
-                </motion.div>
+                </div>
 
-                <motion.div variants={itemVariants} className="pt-4">
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="group relative w-full bg-primary text-white py-4 rounded-xl font-sans font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <>
-                        <span>Connexion</span>
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
-                      </>
-                    )}
-                  </button>
-                </motion.div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  style={{ backgroundColor: PRIMARY_ORANGE }}
+                  className="w-full text-white py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-transform active:scale-[0.98] disabled:opacity-50"
+                >
+                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Connexion</span><ArrowRight className="w-4 h-4" /></>}
+                </button>
               </form>
 
-              <motion.div variants={itemVariants} className="mt-12 flex items-center justify-center gap-4 border-t border-outline-variant/30 pt-8">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-primary/40" />
-                  <span className="font-sans text-[9px] uppercase tracking-widest text-on-surface/40 font-bold">Secure Gateway 4.0</span>
-                </div>
-              </motion.div>
+              <div className="mt-12 flex items-center justify-center gap-4 border-t border-[#d8c2b6] pt-8">
+                <ShieldCheck className="w-4 h-4" style={{ color: PRIMARY_ORANGE }} />
+                <span className="text-[9px] uppercase tracking-widest font-black" style={{ color: DARK_BROWN }}>Secure Gateway 4.0</span>
+              </div>
             </div>
-
-            {/* Floating decoration for high-end feel */}
-            <motion.div
-              variants={floatVariants}
-              animate="animate"
-              className="absolute -top-6 -right-6 w-12 h-12 bg-primary/20 rounded-full blur-xl"
-            />
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Footer Meta */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-6xl px-6 flex justify-between items-center opacity-80">
-        <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface">Tastify PFA // 2026</span>
-        <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface">Operational Terminal 0xAF</span>
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-6xl px-6 flex justify-between items-center z-50">
+        <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-black" style={{ color: DARK_BROWN }}>Tastify PFA // 2026</span>
+        <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-black" style={{ color: DARK_BROWN }}>Operational Terminal 0xAF</span>
       </div>
     </div>
   );

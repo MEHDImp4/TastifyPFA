@@ -25,6 +25,7 @@ You are an elite autonomous AI software engineer. This file defines the core beh
 ## 5. Frontend & Design
 - **Follow Guidelines**: Always read and respect `DESIGN.md` before making any UI changes.
 - **Strict Adherence**: Do not deviate from the design system without explicit permission.
+- **Absolute Visibility**: Functional pages (Login, KDS, Dashboard) must prioritize legibility. Use bold weights and high-contrast colors (e.g., `#301400` on light backgrounds) for all text. Avoid blur animations on critical content.
 
 ## 6. Clean Code & Trivial Comments (CRITICAL)
 - **NO TRIVIAL COMMENTS**: DO NOT add trivial, obvious, or boilerplate comments (e.g., `# This function adds two numbers`).
