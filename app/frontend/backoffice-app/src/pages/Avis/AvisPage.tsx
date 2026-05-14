@@ -24,9 +24,9 @@ export const AvisPage: React.FC = () => {
   }, []);
 
   const getSentimentIcon = (score: number) => {
-    if (score > 10) return <TrendingUp className="w-5 h-5 text-teal" />;
-    if (score < -10) return <TrendingDown className="w-5 h-5 text-terracotta" />;
-    return <Minus className="w-5 h-5 text-gray-500" />;
+    if (score > 10) return <TrendingUp className="w-5 h-5" style={{ color: '#8d4e1c' }} />;
+    if (score < -10) return <TrendingDown className="w-5 h-5" style={{ color: '#ba1a1a' }} />;
+    return <Minus className="w-5 h-5" style={{ color: '#53443a' }} />;
   };
 
   const getSentimentLabel = (score: number) => {
@@ -57,51 +57,51 @@ export const AvisPage: React.FC = () => {
     <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analyse des Sentiments</h1>
-          <p className="text-gray-400 mt-1">Écoutez vos clients grâce à notre moteur d'IA.</p>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: '#301400' }}>Analyse des Sentiments</h1>
+          <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Écoutez vos clients grâce à notre moteur d'IA.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
         {avis.map((a) => (
-          <div key={a.id} className="p-8 bg-dark-surface rounded-[2.5rem] border border-white/10 shadow-xl flex flex-col md:flex-row gap-8 items-start">
+          <div key={a.id} className="p-8 tonal-card flex flex-col md:flex-row gap-8 items-start">
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400">
+                  <div className="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center" style={{ color: '#53443a' }}>
                       <MessageSquare className="w-6 h-6" />
                   </div>
                   <div>
-                      <h3 className="font-bold text-lg text-white">Avis #{a.id}</h3>
+                      <h3 className="font-bold text-lg" style={{ color: '#301400' }}>Avis #{a.id}</h3>
                       <div className="flex gap-1">
                           {[...Array(5)].map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < a.note ? 'text-amber fill-current' : 'text-gray-800'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < a.note ? 'text-primary fill-current' : 'text-outline-variant'}`} />
                           ))}
                       </div>
                   </div>
               </div>
-              <p className="text-gray-300 leading-relaxed italic text-lg">"{a.commentaire}"</p>
-              <p className="text-xs text-gray-500 mt-6 font-medium uppercase tracking-widest">Posté par {a.user_username} • {new Date(a.created_at).toLocaleDateString()}</p>
+              <p className="leading-relaxed italic text-lg font-medium" style={{ color: '#301400' }}>"{a.commentaire}"</p>
+              <p className="text-xs mt-6 font-bold uppercase tracking-widest" style={{ color: '#53443a' }}>Posté par {a.user_username} • {new Date(a.created_at).toLocaleDateString()}</p>
             </div>
 
-            <div className="w-full md:w-64 p-6 bg-dark rounded-3xl border border-white/5 flex flex-col items-center justify-center text-center gap-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Score Sentiment IA</p>
-                <div className="p-4 bg-white/5 rounded-full">
+            <div className="w-full md:w-64 p-6 bg-surface-container rounded-3xl border border-outline-variant/30 flex flex-col items-center justify-center text-center gap-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: '#53443a' }}>Score Sentiment IA</p>
+                <div className="p-4 bg-surface-container-high rounded-full">
                     {getSentimentIcon(a.sentiment_score || 0)}
                 </div>
                 <div>
-                    <p className={`text-xl font-bold ${ (a.sentiment_score || 0) > 10 ? 'text-teal' : (a.sentiment_score || 0) < -10 ? 'text-terracotta' : 'text-white'}`}>
+                    <p className="text-xl font-bold" style={{ color: (a.sentiment_score || 0) > 10 ? '#8d4e1c' : (a.sentiment_score || 0) < -10 ? '#ba1a1a' : '#301400' }}>
                         {getSentimentLabel(a.sentiment_score || 0)}
                     </p>
-                    <p className="text-xs font-mono text-gray-500 mt-1">{a.sentiment_score || 0} pts</p>
+                    <p className="text-xs font-mono mt-1" style={{ color: '#53443a' }}>{a.sentiment_score || 0} pts</p>
                 </div>
             </div>
           </div>
         ))}
 
         {avis.length === 0 && (
-            <div className="py-20 flex flex-col items-center justify-center text-gray-500 opacity-30">
+            <div className="py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
                 <MessageSquare className="w-16 h-16 mb-4" />
-                <p>Aucun avis client pour le moment.</p>
+                <p className="font-bold">Aucun avis client pour le moment.</p>
             </div>
         )}
       </div>

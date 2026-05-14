@@ -2,10 +2,41 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
-import { Loader2, ArrowRight, UserPlus, Mail, Lock, ShieldCheck, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Loader2, ArrowRight, UserPlus, Mail, Lock, ShieldCheck, Sparkles, ShieldAlert } from 'lucide-react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
 import { BrandWordmark } from '../../components/branding/BrandWordmark';
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 100, damping: 20 },
+  },
+};
+
+const floatVariants: Variants = {
+  animate: {
+    y: [0, -10, 0],
+    transition: {
+      duration: 5,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
 
 export const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -28,167 +59,189 @@ export const Register: React.FC = () => {
       setAuth(access, role, resUsername);
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Erreur lors de l’inscription. Le pseudo ou l’email est peut-être déjà utilisé.');
+      setError(err.response?.data?.detail || 'Erreur lors de l’inscription.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const DARK_BROWN = '#301400';
+  const PRIMARY_ORANGE = '#8d4e1c';
+
   const visualContent = (
-    <>
+    <div className="h-full w-full relative flex flex-col justify-end p-12 md:p-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
             <motion.img 
-                layoutId="auth-image-bg"
-                initial={{ scale: 1.1, filter: 'grayscale(100%)' }}
-                animate={{ scale: 1, filter: 'grayscale(100%)' }}
-                transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+                initial={{ scale: 1.05 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 2, ease: "easeOut" }}
                 src="https://picsum.photos/seed/tastify_register/1200/1600" 
-                className="w-full h-full object-cover opacity-40 hover:grayscale-0 transition-all duration-2000" 
+                className="w-full h-full object-cover opacity-60 grayscale" 
                 alt="Atmosphere" 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-on-surface via-on-surface/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#301400] via-[#301400]/40 to-transparent" />
         </div>
         
         <div className="relative z-10 space-y-8 max-w-xl text-right ml-auto">
             <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em] border border-primary/20 backdrop-blur-md"
+                variants={itemVariants}
+                className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#8d4e1c] text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-xl"
             >
                 <span>The Culinary Network</span>
                 <Sparkles className="w-3.5 h-3.5" />
             </motion.div>
             <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-7xl font-display-accent italic text-white leading-none tracking-tighter"
+                variants={itemVariants}
+                className="text-7xl font-serif italic leading-none tracking-tighter text-white"
             >
                 Create your <br/>
-                <span className="text-primary opacity-80">Profile.</span>
+                <span style={{ color: PRIMARY_ORANGE }}>Profile.</span>
             </motion.h2>
             <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-xl text-white/50 leading-relaxed font-sans font-medium"
+                variants={itemVariants}
+                className="text-xl leading-relaxed font-bold opacity-80"
+                style={{ color: '#fff1ea' }}
             >
                 Join our exclusive dining community and unlock AI-powered culinary insights tailored to your unique palette.
             </motion.p>
         </div>
-    </>
+    </div>
   );
 
   return (
     <AuthLayout visual={visualContent} isReverse>
-        <div className="text-center lg:text-left space-y-4">
-            <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-8">
-                <BrandWordmark className="font-sans text-4xl font-bold tracking-tight text-primary" />
-            </div>
-            <motion.h1 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-5xl font-display-accent italic text-on-surface leading-none tracking-tight"
-            >
-                New Beginnings.
-            </motion.h1>
-            <motion.p 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.6 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-on-surface-variant font-medium"
-            >
-                Initialize your architectural member record.
-            </motion.p>
-        </div>
-
-        {error && (
-            <div className="p-5 rounded-2xl bg-error-container/20 border border-error/20 text-error text-sm text-center font-bold animate-in shake duration-500">
-                {error}
-            </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-5">
-                <div className="flex flex-col gap-2.5 group">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-40 ml-1 transition-opacity group-focus-within:opacity-100">Identity Tag</label>
-                    <div className="relative">
-                        <UserPlus className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant opacity-20 group-focus-within:text-primary group-focus-within:opacity-100 transition-all" />
-                        <input
-                            type="text"
-                            required
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full pl-14 pr-6 py-4.5 bg-surface-container-low border border-surface-container-high rounded-2xl text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all"
-                            placeholder="Username"
-                            disabled={isLoading}
-                        />
-                    </div>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-12"
+        >
+            <div className="text-center lg:text-left space-y-4">
+                <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-10">
+                    <BrandWordmark className="text-4xl font-bold tracking-tighter" style={{ color: PRIMARY_ORANGE }} />
                 </div>
-
-                <div className="flex flex-col gap-2.5 group">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-40 ml-1 transition-opacity group-focus-within:opacity-100">Communication Link</label>
-                    <div className="relative">
-                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant opacity-20 group-focus-within:text-primary group-focus-within:opacity-100 transition-all" />
-                        <input
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full pl-14 pr-6 py-4.5 bg-surface-container-low border border-surface-container-high rounded-2xl text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all"
-                            placeholder="Email address"
-                            disabled={isLoading}
-                        />
-                    </div>
-                </div>
-
-                <div className="flex flex-col gap-2.5 group">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-40 ml-1 transition-opacity group-focus-within:opacity-100">Pass-phrase</label>
-                    <div className="relative">
-                        <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant opacity-20 group-focus-within:text-primary group-focus-within:opacity-100 transition-all" />
-                        <input
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full pl-14 pr-6 py-4.5 bg-surface-container-low border border-surface-container-high rounded-2xl text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all"
-                            placeholder="••••••••"
-                            disabled={isLoading}
-                        />
-                    </div>
-                </div>
+                <motion.h1 
+                    variants={itemVariants}
+                    className="text-6xl font-serif italic leading-none tracking-tighter"
+                    style={{ color: DARK_BROWN }}
+                >
+                    New Beginnings.
+                </motion.h1>
+                <motion.p 
+                    variants={itemVariants}
+                    className="text-lg font-bold"
+                    style={{ color: DARK_BROWN }}
+                >
+                    Initialize your architectural member record.
+                </motion.p>
             </div>
 
-            <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full group relative flex items-center justify-center gap-4 py-5 mt-4 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/30 active:scale-95 disabled:opacity-50 overflow-hidden shadow-xl shadow-primary/10"
-            >
-                <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                {isLoading ? <Loader2 className="w-7 h-7 animate-spin" /> : (
-                <>
-                    <span className="relative z-10">Initialize Account</span>
-                    <ArrowRight className="w-6 h-6 relative z-10 transition-transform group-hover:translate-x-1" />
-                </>
+            <AnimatePresence mode="wait">
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="p-5 rounded-2xl bg-[#ba1a1a]/10 border-2 border-[#ba1a1a] flex items-center gap-4"
+                    >
+                        <ShieldAlert className="w-6 h-6 shrink-0" style={{ color: '#ba1a1a' }} strokeWidth={2.5} />
+                        <p className="text-sm font-black uppercase" style={{ color: '#ba1a1a' }}>{error}</p>
+                    </motion.div>
                 )}
-            </button>
-        </form>
-        
-        <div className="pt-10 border-t border-surface-container-high text-center">
-            <p className="text-sm font-medium text-on-surface-variant">
-                Already part of the network?{' '}
-                <Link to="/login" className="font-black uppercase text-xs tracking-widest text-primary hover:underline ml-2">
-                    Sign In
-                </Link>
-            </p>
-        </div>
+            </AnimatePresence>
 
-        <div className="flex items-center justify-center gap-3 opacity-30">
-            <ShieldCheck className="w-4 h-4" />
-            <span className="text-[8px] font-black uppercase tracking-[0.3em]">End-to-End Cryptographic Security Active</span>
-        </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-5">
+                    <motion.div variants={itemVariants} className="flex flex-col gap-2.5 group">
+                        <label className="text-[11px] font-black uppercase tracking-[0.25em] ml-1" style={{ color: PRIMARY_ORANGE }}>Identity Tag</label>
+                        <div className="relative">
+                            <UserPlus className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 transition-all" style={{ color: DARK_BROWN }} strokeWidth={2.5} />
+                            <input
+                                type="text"
+                                required
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="w-full pl-14 pr-6 py-4.5 bg-[#fff1ea] border-b-2 border-[#d8c2b6] rounded-t-2xl font-bold focus:border-[#8d4e1c] outline-none transition-all"
+                                style={{ color: DARK_BROWN }}
+                                placeholder="USERNAME"
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants} className="flex flex-col gap-2.5 group">
+                        <label className="text-[11px] font-black uppercase tracking-[0.25em] ml-1" style={{ color: PRIMARY_ORANGE }}>Communication Link</label>
+                        <div className="relative">
+                            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 transition-all" style={{ color: DARK_BROWN }} strokeWidth={2.5} />
+                            <input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full pl-14 pr-6 py-4.5 bg-[#fff1ea] border-b-2 border-[#d8c2b6] rounded-t-2xl font-bold focus:border-[#8d4e1c] outline-none transition-all"
+                                style={{ color: DARK_BROWN }}
+                                placeholder="EMAIL_ADDRESS"
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants} className="flex flex-col gap-2.5 group">
+                        <label className="text-[11px] font-black uppercase tracking-[0.25em] ml-1" style={{ color: PRIMARY_ORANGE }}>Pass-phrase</label>
+                        <div className="relative">
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 transition-all" style={{ color: DARK_BROWN }} strokeWidth={2.5} />
+                            <input
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full pl-14 pr-6 py-4.5 bg-[#fff1ea] border-b-2 border-[#d8c2b6] rounded-t-2xl font-bold focus:border-[#8d4e1c] outline-none transition-all"
+                                style={{ color: DARK_BROWN }}
+                                placeholder="••••••••"
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </motion.div>
+                </div>
+
+                <motion.button
+                    variants={itemVariants}
+                    type="submit"
+                    disabled={isLoading}
+                    style={{ backgroundColor: PRIMARY_ORANGE }}
+                    className="w-full group relative flex items-center justify-center gap-4 py-5 mt-4 text-white rounded-2xl font-black text-lg transition-all active:scale-[0.98] disabled:opacity-50 overflow-hidden shadow-2xl shadow-[#8d4e1c]/20"
+                >
+                    <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    {isLoading ? <Loader2 className="w-7 h-7 animate-spin" /> : (
+                    <>
+                        <span className="relative z-10 uppercase tracking-widest">Initialize Account</span>
+                        <ArrowRight className="w-6 h-6 relative z-10 transition-transform group-hover:translate-x-1" strokeWidth={3} />
+                    </>
+                    )}
+                </motion.button>
+            </form>
+            
+            <motion.div variants={itemVariants} className="pt-10 border-t border-[#d8c2b6] text-center">
+                <p className="text-sm font-bold" style={{ color: DARK_BROWN }}>
+                    Already part of the network?{' '}
+                    <Link to="/login" className="font-black uppercase text-xs tracking-widest hover:underline ml-2" style={{ color: PRIMARY_ORANGE }}>
+                        Sign In
+                    </Link>
+                </p>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="flex items-center justify-center gap-3 opacity-60">
+                <ShieldCheck className="w-4 h-4" style={{ color: PRIMARY_ORANGE }} strokeWidth={2.5} />
+                <span className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: DARK_BROWN }}>End-to-End Cryptographic Security Active</span>
+            </motion.div>
+        </motion.div>
+
+        {/* Floating decoration */}
+        <motion.div
+            variants={floatVariants}
+            animate="animate"
+            className="fixed top-12 left-12 w-24 h-24 bg-[#8d4e1c]/5 rounded-full blur-3xl pointer-events-none"
+        />
     </AuthLayout>
   );
 };

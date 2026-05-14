@@ -127,16 +127,16 @@ export const OrderingPage: React.FC = () => {
   return (
     <div className="h-[calc(100dvh-6rem)] flex flex-col -m-6 md:-m-8 animate-in fade-in duration-700 bg-background">
       {/* Precision Header */}
-      <header className="bg-surface-container-lowest/80 backdrop-blur-xl border-b border-surface-container-high p-6 flex items-center justify-between z-20">
+      <header className="bg-surface-container-lowest border-b border-surface-container-high p-6 flex items-center justify-between z-20">
         <div className="flex items-center gap-6">
-          <button onClick={() => navigate('/salle')} className="p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-all active:scale-90">
-            <ChevronLeft className="w-6 h-6 text-on-surface" />
+          <button onClick={() => navigate('/salle')} className="p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-all active:scale-90 border border-outline-variant/30">
+            <ChevronLeft className="w-6 h-6" style={{ color: '#301400' }} />
           </button>
           <div>
-            <h2 className="text-2xl font-bold font-sans tracking-tight text-on-surface">Station Table #{table?.numero}</h2>
+            <h2 className="text-2xl font-bold font-sans tracking-tight" style={{ color: '#301400' }}>Station Table #{table?.numero}</h2>
             <div className="flex items-center gap-2 mt-1">
-                <span className={`w-2 h-2 rounded-full ${currentCommande ? 'bg-primary animate-pulse' : 'bg-outline-variant'}`} />
-                <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold font-sans">
+                <span className={`w-2.5 h-2.5 rounded-full ${currentCommande ? 'bg-primary animate-pulse' : 'bg-outline'}`} />
+                <p className="text-[10px] uppercase tracking-widest font-bold font-sans" style={{ color: '#53443a' }}>
                     {currentCommande ? `Session Active • #${currentCommande.id}` : 'New Transaction'}
                 </p>
             </div>
@@ -144,13 +144,14 @@ export const OrderingPage: React.FC = () => {
         </div>
         
         <div className="relative w-80 hidden md:block">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant opacity-40" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#53443a' }} />
             <input 
                 type="text"
                 placeholder="Lookup culinary data..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-primary focus:bg-white transition-all font-sans"
+                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl pl-12 pr-4 py-3 text-sm font-bold focus:outline-none focus:border-primary focus:bg-white transition-all font-sans"
+                style={{ color: '#301400' }}
             />
         </div>
       </header>
@@ -165,9 +166,10 @@ export const OrderingPage: React.FC = () => {
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
                 className={`
-                    px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300
-                    ${activeCat === cat.id ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' : 'bg-surface-container text-on-surface-variant border border-surface-container-high hover:bg-surface-container-high hover:text-on-surface'}
+                    px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300 border
+                    ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/20 scale-105' : 'bg-surface-container border-outline-variant/30 hover:bg-surface-container-high hover:border-primary transition-colors'}
                 `}
+                style={{ color: activeCat === cat.id ? undefined : '#301400' }}
               >
                 {cat.nom}
               </button>
@@ -180,27 +182,27 @@ export const OrderingPage: React.FC = () => {
               <button
                 key={plat.id}
                 onClick={() => addToCart(plat)}
-                className="group flex flex-col text-left double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/5 active:scale-95"
+                className="group flex flex-col text-left double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/5 active:scale-95 border-outline-variant/30"
               >
                 <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-surface-container-low mb-4">
                   {plat.image ? (
                     <img src={plat.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={plat.nom} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20 font-bold text-3xl uppercase italic font-display-accent">
+                    <div className="w-full h-full flex items-center justify-center font-bold text-3xl uppercase italic font-display-accent" style={{ color: '#301400', opacity: 0.2 }}>
                       {plat.nom.charAt(0)}
                     </div>
                   )}
                   <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                  <div className="absolute top-3 right-3 w-10 h-10 bg-primary text-white rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-xl flex items-center justify-center">
+                  <div className="absolute top-3 right-3 w-10 h-10 bg-primary text-on-primary rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-xl flex items-center justify-center">
                     <Plus className="w-6 h-6" />
                   </div>
                 </div>
                 <div className="px-1">
-                  <h4 className="font-bold text-sm text-on-surface mb-2 truncate font-sans tracking-tight leading-none group-hover:text-primary transition-colors">{plat.nom}</h4>
+                  <h4 className="font-bold text-sm mb-2 truncate font-sans tracking-tight leading-none group-hover:text-primary transition-colors" style={{ color: '#301400' }}>{plat.nom}</h4>
                   <div className="flex items-center justify-between">
                     <span className="text-primary font-bold text-sm font-sans">{plat.prix}DH</span>
-                    <div className="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-bold uppercase tracking-widest opacity-60">
-                        <Clock className="w-3 h-3" />
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#53443a' }}>
+                        <Clock className="w-3.5 h-3.5" />
                         <span>{plat.temps_preparation}m</span>
                     </div>
                   </div>
@@ -217,41 +219,41 @@ export const OrderingPage: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold font-sans text-lg tracking-tight text-on-surface">Operational Cart</h3>
+                <h3 className="font-bold font-sans text-lg tracking-tight" style={{ color: '#301400' }}>Operational Cart</h3>
             </div>
-            <div className="glass px-4 py-1.5 rounded-full text-xs font-bold text-on-surface uppercase tracking-widest border border-surface-container-high">
+            <div className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-outline-variant/30" style={{ color: '#301400' }}>
                 {cart.length} ITEMS
             </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
             {cart.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-on-surface-variant gap-6 animate-in zoom-in duration-700 opacity-40">
-                <div className="w-20 h-20 rounded-full bg-surface-container-low border-2 border-dashed border-surface-container-high flex items-center justify-center">
+              <div className="h-full flex flex-col items-center justify-center gap-6 animate-in zoom-in duration-700" style={{ color: '#53443a', opacity: 0.6 }}>
+                <div className="w-20 h-20 rounded-full bg-surface-container-low border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
                     <Plus className="w-8 h-8" />
                 </div>
                 <p className="text-lg font-display-accent italic">Transaction buffer is empty.</p>
               </div>
             ) : (
               cart.map(item => (
-                <div key={item.plat.id} className="p-5 bg-surface-container-low rounded-2xl border border-surface-container-high group animate-in slide-in-from-right-6 duration-500 transition-all hover:bg-white hover:shadow-xl hover:shadow-primary/5">
+                <div key={item.plat.id} className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant/30 group animate-in slide-in-from-right-6 duration-500 transition-all hover:bg-white hover:shadow-xl hover:shadow-primary/5">
                   <div className="flex justify-between items-start mb-5">
                     <div>
-                        <h4 className="font-bold text-base text-on-surface font-sans tracking-tight">{item.plat.nom}</h4>
-                        <p className="text-xs text-primary font-bold mt-1 uppercase tracking-widest opacity-70">{item.plat.prix} DH / UNIT</p>
+                        <h4 className="font-bold text-base font-sans tracking-tight" style={{ color: '#301400' }}>{item.plat.nom}</h4>
+                        <p className="text-xs text-primary font-bold mt-1 uppercase tracking-widest">{item.plat.prix} DH / UNIT</p>
                     </div>
-                    <button onClick={() => removeFromCart(item.plat.id)} className="p-2 text-on-surface-variant opacity-40 hover:text-error hover:bg-error-container/30 rounded-lg transition-all active:scale-75">
-                        <Trash2 className="w-5 h-5" />
+                    <button onClick={() => removeFromCart(item.plat.id)} className="p-2 transition-all active:scale-75" style={{ color: '#53443a' }}>
+                        <Trash2 className="w-5 h-5 hover:text-error transition-colors" />
                     </button>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-surface-container-high shadow-sm">
-                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><Minus className="w-4 h-4" /></button>
-                        <span className="font-bold text-sm w-8 text-center text-on-surface font-sans">{item.quantite}</span>
-                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><Plus className="w-4 h-4" /></button>
+                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-outline-variant/30 shadow-sm">
+                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors" style={{ color: '#53443a' }}><Minus className="w-4 h-4" /></button>
+                        <span className="font-bold text-sm w-8 text-center font-sans" style={{ color: '#301400' }}>{item.quantite}</span>
+                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors" style={{ color: '#53443a' }}><Plus className="w-4 h-4" /></button>
                     </div>
-                    <div className="font-bold text-lg text-on-surface font-sans">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
+                    <div className="font-bold text-lg font-sans" style={{ color: '#301400' }}>{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
                   </div>
                 </div>
               ))
@@ -261,10 +263,10 @@ export const OrderingPage: React.FC = () => {
           <div className="p-8 bg-surface-container-low border-t border-surface-container-high">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-1">Estimated Total</span>
-                    <span className="text-sm font-bold text-on-surface-variant opacity-50">Incl. VAT</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: '#53443a' }}>Estimated Total</span>
+                    <span className="text-sm font-bold opacity-70" style={{ color: '#53443a' }}>Incl. VAT</span>
                 </div>
-                <span className="text-4xl font-bold font-sans tracking-tighter text-on-surface">{cartTotal.toFixed(2)}DH</span>
+                <span className="text-4xl font-bold font-sans tracking-tighter" style={{ color: '#301400' }}>{cartTotal.toFixed(2)}DH</span>
             </div>
             
             <button 
@@ -272,7 +274,7 @@ export const OrderingPage: React.FC = () => {
                 disabled={cart.length === 0 || isSubmitting}
                 className={`
                     w-full py-5 rounded-2xl flex items-center justify-center gap-4 font-bold text-lg transition-all duration-300
-                    ${cart.length > 0 && !isSubmitting ? 'bg-primary text-white shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95' : 'bg-surface-container text-outline cursor-not-allowed'}
+                    ${cart.length > 0 && !isSubmitting ? 'bg-primary text-on-primary shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95' : 'bg-surface-container text-outline cursor-not-allowed'}
                 `}
             >
                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (

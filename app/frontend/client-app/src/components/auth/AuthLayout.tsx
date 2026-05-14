@@ -60,13 +60,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, visual, isReve
       >
         {/* Mobile Logo & Return */}
         <div className={`absolute top-10 left-10 lg:left-auto ${isReverse ? 'lg:right-20' : 'lg:left-20'} right-10 flex items-center justify-between ${isReverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} z-20 w-full lg:w-auto px-10 md:px-0`}>
-            <button onClick={() => navigate('/')} className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors group">
+            <button onClick={() => navigate('/')} className="flex items-center gap-2 transition-colors group">
                 <motion.div layoutId="auth-back-icon">
-                    <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+                    <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" style={{ color: '#8d4e1c' }} strokeWidth={3} />
                 </motion.div>
-                <motion.span layoutId="auth-back-text" className="text-[10px] font-black uppercase tracking-widest">Back</motion.span>
+                <motion.span layoutId="auth-back-text" className="text-[11px] font-black uppercase tracking-widest" style={{ color: '#301400' }}>Back</motion.span>
             </button>
-            <BrandWordmark className="font-sans text-3xl font-bold tracking-tight text-primary lg:hidden" />
+            <BrandWordmark className="text-3xl font-bold tracking-tighter lg:hidden" style={{ color: '#8d4e1c' }} />
         </div>
 
         <motion.div 

@@ -34,31 +34,32 @@ export const NotificationCenter: React.FC = () => {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2.5 text-gray-400 hover:text-teal hover:bg-white/5 rounded-xl transition-all relative"
+        className="p-2.5 hover:text-primary hover:bg-surface-container rounded-xl transition-all relative"
+        style={{ color: '#53443a' }}
       >
         <Bell className="w-6 h-6" />
         {notifications.length > 0 && (
-            <span className="absolute top-2 right-2 w-2 h-2 bg-terracotta rounded-full animate-pulse" />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse" />
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-4 w-80 bg-dark-surface border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="p-4 bg-dark border-b border-white/5 flex items-center justify-between">
-            <h4 className="font-bold text-sm tracking-tight text-white uppercase tracking-widest">Alertes de Stock</h4>
-            <button onClick={() => setIsOpen(false)}><X className="w-4 h-4 text-gray-500" /></button>
+        <div className="absolute top-full right-0 mt-4 w-80 bg-surface border border-outline-variant/30 rounded-3xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="p-4 bg-surface-container border-b border-outline-variant/20 flex items-center justify-between">
+            <h4 className="font-bold text-sm uppercase tracking-widest" style={{ color: '#301400' }}>Alertes de Stock</h4>
+            <button onClick={() => setIsOpen(false)}><X className="w-4 h-4" style={{ color: '#53443a' }} /></button>
           </div>
           <div className="max-h-[300px] overflow-y-auto">
             {notifications.length === 0 ? (
-                <div className="p-10 text-center text-gray-500">
-                    <CheckCircle2 className="w-8 h-8 mx-auto mb-2 opacity-20 text-teal" />
-                    <p className="text-xs font-medium">Tout est en ordre !</p>
+                <div className="p-10 text-center" style={{ color: '#53443a' }}>
+                    <CheckCircle2 className="w-8 h-8 mx-auto mb-2 opacity-20 text-primary" />
+                    <p className="text-xs font-bold">Tout est en ordre !</p>
                 </div>
             ) : (
                 notifications.map((n, i) => (
-                    <div key={i} className="p-4 border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer bg-terracotta/5">
-                        <p className="text-sm font-bold text-terracotta">{n.message}</p>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1">{n.time}</p>
+                    <div key={i} className="p-4 border-b border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer bg-error/5">
+                        <p className="text-sm font-bold" style={{ color: '#ba1a1a' }}>{n.message}</p>
+                        <p className="text-[10px] font-bold uppercase mt-1" style={{ color: '#53443a' }}>{n.time}</p>
                     </div>
                 ))
             )}

@@ -44,8 +44,8 @@ function App() {
   return (
     <AuthBootstrap>
       <WebSocketProvider>
-        <div className="dark text-white selection:bg-teal selection:text-white">
-          <Toaster theme="dark" position="top-right" richColors />
+        <div className="selection:bg-primary-container selection:text-on-primary-container">
+          <Toaster position="top-right" richColors />
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={
@@ -56,7 +56,7 @@ function App() {
               
               <Route path="/ordering/:tableId" element={
                 <ProtectedRoute>
-                  <div className="min-h-[100dvh] bg-dark text-white p-6 md:p-8">
+                  <div className="min-h-[100dvh] bg-background text-on-background p-6 md:p-8">
                     <OrderingPage />
                   </div>
                 </ProtectedRoute>

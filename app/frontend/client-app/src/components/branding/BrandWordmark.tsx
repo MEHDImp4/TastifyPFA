@@ -10,10 +10,11 @@ export const getBrandName = (name?: string | null) => {
 
 interface BrandWordmarkProps {
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export const BrandWordmark: React.FC<BrandWordmarkProps> = ({ className }) => {
+export const BrandWordmark: React.FC<BrandWordmarkProps> = ({ className, style }) => {
   const config = useConfigStore(state => state.config);
 
-  return <span className={className}>{getBrandName(config?.nom)}</span>;
+  return <span className={className} style={style}>{getBrandName(config?.nom)}</span>;
 };

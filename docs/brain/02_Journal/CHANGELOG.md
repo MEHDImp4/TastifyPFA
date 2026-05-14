@@ -1,3 +1,28 @@
+## [2026-05-14] - 15:00
+### Changed
+- **Absolute Visibility Overhaul**: Applied the "Absolute Visibility Rule" across the backoffice-app to ensure high contrast and legibility in the "Tactical Command" aesthetic.
+- **Theme Standardization**: Updated `index.css` with `on-surface-variant` (#53443a) and verified all surface mappings.
+- **Root Cleanup**: Removed legacy `dark` and `text-white` classes from `App.tsx` to support the new light-based theme.
+- **Page-Specific Visibility**: Fixed text visibility in `AvisPage`, `HrPage`, `StockPage`, `ReservationsPage`, and `OrderingPage` using explicit hex codes (#301400) and theme-consistent classes.
+- **Component Visibility**: Updated `Modal` and `NotificationCenter` to ensure headers and alerts are highly visible and accessible.
+
+## [2026-05-14] - 14:40
+### Changed
+- **Portal Header Redesign**: Redesigned the client portal header for a more premium, compact, and elegant appearance.
+- **Logo Calibration**: Reduced the logo scale from `5xl` to `2xl`/`3xl` and switched to a **serif italic** font for a luxury editorial feel.
+- **Navigation Refinement**: Updated navigation links with high-density tracking (`0.25em`), font-black weights, and sophisticated hover underline effects.
+- **Branding Detail**: Added an "Est. 2026" editorial kicker to the logo area for heritage-inspired depth.
+- **Login Integration**: Refined the "Connexion" button into a high-contrast pill with direct border/text coloring for guaranteed visibility.
+
+## [2026-05-14] - 14:30
+### Changed
+- **Client Auth Redesign**: Redesigned the client portal **Login** and **Register** pages with the same high-end "Absolute Visibility" style as the backoffice.
+- **Visual Refinement**: Implemented direct hex coloring (`#301400`), high-contrast display typography, and spring-physics motion orchestration.
+- **Component Upgrades**: Updated `BrandWordmark` and `AuthLayout` to support high-visibility styling and guaranteed rendering.
+
+### Fixed
+- **Build Integrity**: Achieved 100% green build for `client-app` by fixing Framer Motion variant types and adding `style` prop support to shared branding components.
+
 ## [2026-05-14] - 14:15
 ### Changed
 - **Premium Login Redesign**: Completely rebuilt the backoffice login page from scratch following the **"Organic Sophistication"** design system.

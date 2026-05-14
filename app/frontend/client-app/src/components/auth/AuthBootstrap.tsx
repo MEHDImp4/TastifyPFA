@@ -49,10 +49,10 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
 
   if (isBootstrapping) {
     return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-dark text-white p-6">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#fff8f5] p-6">
         <div className="animate-in fade-in zoom-in duration-500 flex flex-col items-center">
-            <BrandWordmark className="mb-8 font-sans text-5xl font-bold tracking-tight text-primary animate-pulse" />
-            <div className="text-teal font-medium tracking-widest text-[10px] uppercase">Chargement</div>
+            <BrandWordmark className="mb-8 font-sans text-5xl font-bold tracking-tighter" style={{ color: '#8d4e1c' }} />
+            <div className="font-black tracking-[0.3em] text-[11px] uppercase" style={{ color: '#301400' }}>Initializing Gateway</div>
         </div>
       </div>
     );

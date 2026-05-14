@@ -33,26 +33,35 @@ export const PublicLayout: React.FC = () => {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary">
-      <header className="sticky top-0 z-50 bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant/70">
-        <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 md:h-24 flex items-center justify-between">
-          <Link 
-            to="/" 
-            onClick={handleLogoClick}
-            className="flex items-center gap-3 group transition-transform active:scale-95 z-50"
-          >
-            <BrandWordmark className="font-sans text-3xl md:text-5xl font-bold tracking-tight text-primary group-hover:text-primary-container transition-colors" />
-          </Link>
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/30">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-12">
+            <Link 
+              to="/" 
+              onClick={handleLogoClick}
+              className="flex flex-col group transition-transform active:scale-95 z-50"
+            >
+              <BrandWordmark className="font-serif text-xl md:text-2xl font-bold tracking-tighter text-on-surface group-hover:text-primary transition-colors italic" />
+              <span className="text-[8px] uppercase tracking-[0.4em] font-black text-primary/40 -mt-1 ml-0.5">Est. 2026</span>
+            </Link>
 
-          <nav className="hidden md:flex items-center gap-10">
-            <Link to="/menu" className="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-[0.22em]">Notre Menu</Link>
-            <Link to="/reservations" className="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-[0.22em]">Réserver</Link>
-          </nav>
+            <nav className="hidden lg:flex items-center gap-8">
+              <Link to="/menu" className="relative text-[11px] font-black text-on-surface hover:text-primary transition-colors uppercase tracking-[0.25em] group/nav">
+                Notre Menu
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover/nav:w-full" />
+              </Link>
+              <Link to="/reservations" className="relative text-[11px] font-black text-on-surface hover:text-primary transition-colors uppercase tracking-[0.25em] group/nav">
+                Réserver
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover/nav:w-full" />
+              </Link>
+            </nav>
+          </div>
 
-          <div className="flex items-center gap-4 md:gap-6">
-            <Link to="/checkout" className="relative p-2 md:p-3 text-on-surface-variant hover:text-primary hover:bg-surface-container rounded-2xl transition-all active:scale-90">
-                <ShoppingBag className="w-5 h-5 md:w-6 md:h-6" />
+          <div className="flex items-center gap-3 md:gap-5">
+            <Link to="/checkout" className="relative p-2.5 text-on-surface hover:text-primary hover:bg-primary/5 rounded-full transition-all active:scale-90">
+                <ShoppingBag className="w-5 h-5" strokeWidth={2.5} />
                 {items.length > 0 && (
-                    <span className="absolute top-1.5 right-1.5 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-primary text-white text-[9px] md:text-[10px] font-semibold rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-[0_10px_22px_rgba(141,78,28,0.2)]">
+                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-primary text-white text-[9px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-lg">
                         {items.length}
                     </span>
                 )}
@@ -60,36 +69,36 @@ export const PublicLayout: React.FC = () => {
             
             <div className="hidden md:block">
               {isAuthenticated ? (
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-5">
                   <Link to="/account" className="flex flex-col items-end group">
-                    <p className="text-sm font-semibold text-on-surface capitalize transition-colors group-hover:text-primary">{username}</p>
-                    <p className="text-[10px] text-primary font-semibold uppercase tracking-[0.24em]">Client Fidélité</p>
+                    <p className="text-xs font-black text-on-surface capitalize transition-colors group-hover:text-primary">{username}</p>
+                    <p className="text-[9px] text-primary font-black uppercase tracking-[0.2em]">Archive Client</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-3 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded-2xl transition-colors active:scale-90"
+                    className="p-2.5 text-on-surface/40 hover:text-error hover:bg-error/5 rounded-full transition-colors active:scale-90"
                     aria-label="Déconnexion"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" strokeWidth={2.5} />
                   </button>
                 </div>
               ) : (
                 <Link 
                   to="/login"
-                  className="flex items-center gap-2.5 px-6 py-3 bg-primary text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:bg-primary-container active:scale-95 shadow-[0_18px_40px_rgba(141,78,28,0.16)]"
+                  className="flex items-center gap-3 px-6 py-2.5 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-full font-black transition-all duration-300 active:scale-95 text-xs uppercase tracking-widest"
                 >
-                  <User className="w-4 h-4" />
-                  <span className="text-sm">Connexion</span>
+                  <User className="w-3.5 h-3.5" strokeWidth={3} />
+                  <span>Connexion</span>
                 </Link>
               )}
             </div>
 
             <button 
               onClick={toggleMenu}
-              className="md:hidden p-2 text-on-surface-variant hover:text-primary bg-surface-container rounded-2xl transition-all active:scale-90 z-50"
+              className="lg:hidden p-2.5 text-on-surface hover:text-primary bg-primary/5 rounded-full transition-all active:scale-90 z-50"
               aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? <X className="w-5 h-5" strokeWidth={2.5} /> : <Menu className="w-5 h-5" strokeWidth={2.5} />}
             </button>
           </div>
         </div>
@@ -163,9 +172,10 @@ export const PublicLayout: React.FC = () => {
             <Link 
               to="/" 
               onClick={handleLogoClick}
-              className="flex items-center gap-3 mb-8"
+              className="flex flex-col group mb-8"
             >
-                <BrandWordmark className="font-sans text-3xl md:text-5xl font-bold tracking-tight text-primary" />
+                <BrandWordmark className="font-serif text-2xl md:text-3xl font-bold tracking-tighter text-on-surface group-hover:text-primary transition-colors italic" />
+                <span className="text-[9px] uppercase tracking-[0.4em] font-black text-primary/40 -mt-1 ml-0.5">Est. 2026</span>
             </Link>
             <p className="text-on-surface-variant max-w-[40ch] leading-relaxed font-medium text-sm md:text-base">
               {brandName} — Une hospitalité éditoriale pensée pour marier chaleur artisanale, service attentif et orchestration numérique discrète.
