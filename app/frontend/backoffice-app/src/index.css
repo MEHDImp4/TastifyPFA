@@ -1,123 +1,120 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Libre+Caslon+Text:wght@400;700&display=swap");
 @import "tailwindcss";
 
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @theme {
-  /* Tactical Substrate */
-  --color-background: #0a0a0a;
-  --color-on-background: #e4e4e7;
-  --color-surface: #121212;
-  --color-on-surface: #ffffff;
-  --color-surface-dim: #050505;
-  --color-surface-bright: #18181b;
-  --color-surface-container: #1c1c1f;
-  --color-surface-container-low: #141416;
-  --color-surface-container-high: #27272a;
-  --color-surface-container-highest: #3f3f46;
-  --color-surface-container-lowest: #0a0a0a;
-  --color-outline: #27272a;
-  --color-outline-variant: #18181b;
+  /* Surface colors */
+  --color-background: #fff8f5;
+  --color-on-background: #301400;
+  --color-surface: #fff8f5;
+  --color-on-surface: #301400;
+  --color-surface-dim: #ffd1b3;
+  --color-surface-bright: #fff8f5;
+  --color-surface-container: #ffeade;
+  --color-surface-container-low: #fff1ea;
+  --color-surface-container-high: #ffe3d2;
+  --color-surface-container-highest: #ffdcc5;
+  --color-surface-container-lowest: #ffffff;
+  --color-outline: #867369;
+  --color-outline-variant: #d8c2b6;
 
-  /* Instrumentation Accents */
-  --color-primary: #ff5c00;
+  --color-primary: #8d4e1c;
   --color-on-primary: #ffffff;
-  --color-primary-container: #4e2000;
-  --color-on-primary-container: #ffccb3;
+  --color-primary-container: #d1854e;
+  --color-on-primary-container: #4e2400;
 
-  --color-secondary: #00f0ff;
-  --color-on-secondary: #000000;
-  --color-secondary-container: #003a3d;
+  --color-secondary: #8f4d17;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fea86a;
 
-  /* Hazard & Warning */
-  --color-error: #ff0033;
+  /* Status colors */
+  --color-error: #ba1a1a;
   --color-on-error: #ffffff;
-  --color-error-container: #4e0000;
-  --color-on-error-container: #ffdad6;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
 
-  /* Typography Stacks */
-  --font-sans: "Geist", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --font-body: "Geist", sans-serif;
+  /* Typography fonts */
+  --font-sans: "Bricolage Grotesque", sans-serif;
+  --font-serif: "Libre Caslon Text", serif;
+  --font-body: "Bodoni Moda", serif;
+  --font-mono: "Bricolage Grotesque", sans-serif;
 
-  /* Animation Primitives */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Animation primitives */
+  --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-expo: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @layer base {
   body {
+    font-family: var(--font-body);
+    @apply bg-background text-on-background antialiased min-h-[100dvh];
+    background-image:
+      radial-gradient(circle at top left, rgba(209, 133, 78, 0.12), transparent 32%),
+      radial-gradient(circle at right center, rgba(180, 144, 118, 0.08), transparent 26%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  label {
     font-family: var(--font-sans);
-    @apply bg-background text-on-background antialiased min-h-[100dvh] selection:bg-primary selection:text-white;
-    background-image: 
-      linear-gradient(rgba(255, 92, 0, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 92, 0, 0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-black tracking-tighter uppercase;
-  }
-
-  button, input, select, textarea, label {
-    font-family: var(--font-mono);
-  }
-
-  /* Industrial Scrollbar */
+  /* Custom Scrollbar for New Theme */
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-background;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-800 hover:bg-primary transition-colors;
+    @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
   }
 }
 
 @layer components {
-  .tactical-container {
-    @apply border border-zinc-800 bg-surface/50 backdrop-blur-sm relative;
+  /* Signature Double-Bezel Card */
+  .tonal-card {
+    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest;
+    box-shadow: 0 24px 60px rgba(141, 78, 28, 0.08);
   }
 
-  .telemetry-label {
-    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500;
+  .double-bezel {
+    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest relative overflow-hidden;
+    box-shadow: 0 24px 60px rgba(141, 78, 28, 0.08);
   }
 
-  .hazard-border {
-    @apply border-error relative;
-  }
-
-  .hazard-border::after {
+  .double-bezel::before {
     content: '';
-    @apply absolute -inset-[1px] border border-error/20 pointer-events-none;
+    @apply absolute inset-0 rounded-[inherit] border border-white/40 pointer-events-none z-0;
   }
 
-  .glass-terminal {
-    @apply bg-zinc-950/80 backdrop-blur-md border border-zinc-800;
-  }
-  
-  /* Scanline Effect */
-  .scanlines {
-    position: relative;
-    overflow: hidden;
+  .glass {
+    @apply bg-surface-container-lowest/82 backdrop-blur-xl border border-outline-variant/60;
   }
 
-  .scanlines::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.05) 2px,
-      rgba(0, 0, 0, 0.05) 4px
-    );
-    pointer-events: none;
-    z-index: 50;
+  .tonal-spot {
+    @apply bg-primary-container/20 text-on-primary-container;
+  }
+
+  .editorial-kicker {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-primary;
   }
 }

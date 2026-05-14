@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
-import { Loader2, ShieldAlert, Cpu, Terminal, ArrowRight } from 'lucide-react';
+import { Loader2, ShieldAlert, ArrowRight, Compass, Activity, ShieldCheck } from 'lucide-react';
 
 import logoStaff from '../../assets/logo-staff.svg';
 
@@ -12,20 +12,31 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
+      staggerChildren: 0.12,
+      delayChildren: 0.2,
     },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 10, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { type: 'spring', stiffness: 100, damping: 20 },
+    transition: { type: 'spring', stiffness: 80, damping: 18 },
   },
+};
+
+const floatVariants: Variants = {
+  animate: {
+    y: [0, -10, 0],
+    transition: {
+      duration: 5,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
 };
 
 export const Login: React.FC = () => {
@@ -41,7 +52,7 @@ export const Login: React.FC = () => {
     setError(null);
 
     if (!username || !password) {
-      setError('FIELD_ERROR: MISSING_CREDENTIALS');
+      setError('Saisie requise : Identifiants manquants');
       return;
     }
 
@@ -54,9 +65,9 @@ export const Login: React.FC = () => {
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
       if (err.response?.status === 401) {
-        setError('AUTH_ERROR: INVALID_CREDENTIALS');
+        setError('Accès refusé : Identifiants invalides');
       } else {
-        setError('SYS_ERROR: UNEXPECTED_EXCEPTION');
+        setError('Erreur système : Liaison interrompue');
       }
     } finally {
       setIsLoading(false);
@@ -64,169 +75,169 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-[100dvh] bg-background selection:bg-primary selection:text-white flex flex-col items-center justify-center p-4 scanlines overflow-hidden">
-      {/* Structural Grid Background Decoration */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-10 left-10 w-40 h-px bg-zinc-800" />
-        <div className="absolute top-10 left-10 h-40 w-px bg-zinc-800" />
-        <div className="absolute bottom-10 right-10 w-40 h-px bg-zinc-800" />
-        <div className="absolute bottom-10 right-10 h-40 w-px bg-zinc-800" />
-        
-        <div className="absolute top-1/4 -left-4 font-mono text-[8px] tracking-[0.4em] text-zinc-800 uppercase vertical-text">
-          Telemetry stream active // 0xAF32 // Unit-01
-        </div>
-        <div className="absolute top-1/4 -right-4 font-mono text-[8px] tracking-[0.4em] text-zinc-800 uppercase vertical-text">
-          Tastify Systems Protocol // Rev 4.0
-        </div>
+    <div className="relative min-h-[100dvh] bg-background flex items-center justify-center p-6 md:p-12 overflow-hidden selection:bg-primary/20 selection:text-primary">
+      {/* Background Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 blur-[150px] rounded-full" />
       </div>
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 w-full max-w-md"
+        className="relative z-10 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
       >
-        {/* Top Telemetry Header */}
-        <motion.div variants={itemVariants} className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-zinc-900 border border-zinc-800">
-              <Cpu className="w-4 h-4 text-primary" strokeWidth={1.5} />
-            </div>
-            <div>
-              <p className="telemetry-label">Access Terminal</p>
-              <p className="font-sans font-bold text-xs uppercase tracking-wider text-white">Station 01-A</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="telemetry-label">Status</p>
-            <div className="flex items-center justify-end gap-2">
-              <span className="w-1.5 h-1.5 bg-primary animate-pulse" />
-              <span className="font-mono text-[10px] text-primary">ENCRYPTED_AUTH</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Main Interface Box */}
-        <section className="glass-terminal p-8 relative overflow-hidden">
-          {/* Internal Crosshairs */}
-          <div className="absolute top-2 left-2 text-zinc-800"><span className="font-mono text-[10px]">+</span></div>
-          <div className="absolute top-2 right-2 text-zinc-800"><span className="font-mono text-[10px]">+</span></div>
-          <div className="absolute bottom-2 left-2 text-zinc-800"><span className="font-mono text-[10px]">+</span></div>
-          <div className="absolute bottom-2 right-2 text-zinc-800"><span className="font-mono text-[10px]">+</span></div>
-
-          <motion.div variants={itemVariants} className="mb-8 text-center">
-            <img src={logoStaff} alt="Tastify Staff" className="mx-auto h-16 w-auto grayscale brightness-200" />
-            <h1 className="mt-6 text-4xl font-black leading-none tracking-tighter text-white">
-              STAFF OS
+        {/* Left Side: Editorial Content */}
+        <div className="hidden lg:block space-y-8">
+          <motion.div variants={itemVariants} className="space-y-4">
+            <span className="editorial-kicker">Backoffice Access</span>
+            <h1 className="text-5xl xl:text-7xl font-serif text-on-background leading-[1.05] tracking-tight">
+              Service orchestration for the dining room, kitchen, and command floor.
             </h1>
-            <p className="mt-2 font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
-              Command & Control Interface
+            <p className="text-xl text-on-surface font-body leading-relaxed max-w-[50ch]">
+              A curated digital concierge managing complex restaurant operations with grace and heritage-inspired precision.
             </p>
           </motion.div>
 
-          <AnimatePresence mode="wait">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                className="mb-6 bg-error/10 border border-error/20 p-3 flex items-start gap-3"
-              >
-                <ShieldAlert className="w-5 h-5 text-error shrink-0" strokeWidth={1.5} />
-                <div className="font-mono text-[10px] text-error leading-relaxed uppercase">
-                  {error}
+          <div className="grid grid-cols-2 gap-6">
+            <motion.div variants={itemVariants} className="double-bezel p-6 space-y-3 bg-surface-container-low/80">
+              <span className="editorial-kicker text-[10px]">Station Control</span>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Compass className="w-5 h-5 text-primary" strokeWidth={1.5} />
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <h2 className="text-2xl font-serif text-on-surface">Staff OS</h2>
+              </div>
+              <p className="text-sm text-on-surface-variant font-body">
+                Un point d'entrée unique pour la salle, les commandes et la cuisine.
+              </p>
+            </motion.div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="telemetry-label block" htmlFor="username">
-                [ USER_IDENTITY ]
-              </label>
-              <div className="relative group">
-                <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-zinc-950/50 border border-zinc-800 px-4 py-3.5 font-mono text-sm text-white focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
-                  placeholder="IDENTIFIER"
-                  disabled={isLoading}
-                />
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20 group-focus-within:opacity-100 transition-opacity">
-                  <Terminal className="w-4 h-4 text-primary" strokeWidth={1.5} />
+            <motion.div variants={itemVariants} className="double-bezel p-6 space-y-3 bg-surface-container-low/80">
+              <span className="editorial-kicker text-[10px]">Live</span>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-primary/20 animate-ping rounded-full" />
+                  <div className="relative p-2 rounded-lg bg-primary/10">
+                    <Activity className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                  </div>
                 </div>
+                <h2 className="text-2xl font-serif text-on-surface">Systems Ready</h2>
+              </div>
+              <p className="text-sm text-on-surface-variant font-body">
+                Surveillance en temps réel de l'activité opérationnelle.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Right Side: Login Interface */}
+        <motion.div variants={itemVariants} className="flex justify-center">
+          <div className="w-full max-w-[460px] relative">
+            {/* Logo area above the card */}
+            <motion.div 
+              variants={itemVariants} 
+              className="flex flex-col items-center mb-8"
+            >
+              <img src={logoStaff} alt="Tastify" className="h-14 mb-2" />
+              <div className="flex items-center gap-2">
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-on-surface/40">Staff OS</span>
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="telemetry-label block" htmlFor="password">
-                [ ACCESS_KEY ]
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-zinc-950/50 border border-zinc-800 px-4 py-3.5 font-mono text-sm text-white focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
-                placeholder="********"
-                disabled={isLoading}
-              />
-            </motion.div>
+            <div className="double-bezel bg-surface-container-lowest p-8 md:p-12 shadow-2xl shadow-primary/5">
+              <motion.div variants={itemVariants} className="mb-10 text-center lg:text-left">
+                <h3 className="text-3xl font-serif mb-2">Bienvenue</h3>
+                <p className="text-on-surface-variant font-body">Identifiez-vous pour accéder au poste de commande.</p>
+              </motion.div>
 
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full bg-primary py-4 flex items-center justify-center gap-3 overflow-hidden disabled:bg-zinc-800 disabled:cursor-not-allowed"
-            >
-              {/* Button Shimmer Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-              
-              <span className="font-sans font-black text-sm uppercase tracking-widest text-white relative z-10">
-                {isLoading ? 'ESTABLISHING_LINK...' : 'INITIALIZE_AUTH'}
-              </span>
-              
-              {!isLoading && (
-                <ArrowRight className="w-4 h-4 text-white relative z-10 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
-              )}
-              
-              {isLoading && <Loader2 className="h-4 w-4 animate-spin text-white relative z-10" strokeWidth={2.5} />}
-            </motion.button>
-          </form>
-        </section>
+              <AnimatePresence mode="wait">
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mb-8 overflow-hidden"
+                  >
+                    <div className="bg-error/5 border border-error/20 rounded-xl p-4 flex items-start gap-3">
+                      <ShieldAlert className="w-5 h-5 text-error shrink-0" strokeWidth={1.5} />
+                      <p className="text-sm font-sans font-medium text-error leading-tight">
+                        {error}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-        {/* Footer Technical Metadata */}
-        <motion.div variants={itemVariants} className="mt-8 flex items-center justify-between">
-          <div className="font-mono text-[9px] text-zinc-600 uppercase">
-            Built for Tactical Efficiency // Tastify PFA v4.2
-          </div>
-          <div className="font-mono text-[9px] text-zinc-600 uppercase flex items-center gap-2">
-            <span className="w-1 h-1 bg-zinc-700 rounded-full" />
-            0x42_STAFF_NODE
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <motion.div variants={itemVariants} className="space-y-2">
+                  <label htmlFor="username" className="editorial-kicker text-[10px]">Identifiant</label>
+                  <input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="e.g. mehdi_mgr"
+                    disabled={isLoading}
+                    className="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary px-4 py-3 font-sans transition-all outline-none rounded-t-lg disabled:opacity-50"
+                  />
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="space-y-2">
+                  <label htmlFor="password" className="editorial-kicker text-[10px]">Clé d'accès</label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    disabled={isLoading}
+                    className="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary px-4 py-3 font-sans transition-all outline-none rounded-t-lg disabled:opacity-50"
+                  />
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="pt-4">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="group relative w-full bg-primary text-white py-4 rounded-xl font-sans font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        <span>Connexion</span>
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
+                      </>
+                    )}
+                  </button>
+                </motion.div>
+              </form>
+
+              <motion.div variants={itemVariants} className="mt-12 flex items-center justify-center gap-4 border-t border-outline-variant/30 pt-8">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-primary/40" />
+                  <span className="font-sans text-[9px] uppercase tracking-widest text-on-surface/40 font-bold">Secure Gateway 4.0</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Floating decoration for high-end feel */}
+            <motion.div
+              variants={floatVariants}
+              animate="animate"
+              className="absolute -top-6 -right-6 w-12 h-12 bg-primary/20 rounded-full blur-xl"
+            />
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Extreme Visual Detail: Fixed Corner ID */}
-      <div className="fixed bottom-6 left-6 font-mono text-[8px] text-zinc-800 uppercase tracking-widest mix-blend-difference hidden md:block">
-        Tstfy // Cmd-OS // 2026
+      {/* Footer Meta */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-6xl px-6 flex justify-between items-center opacity-80">
+        <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface">Tastify PFA // 2026</span>
+        <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface">Operational Terminal 0xAF</span>
       </div>
-
-      <style>{`
-        .vertical-text {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
     </div>
   );
 };
