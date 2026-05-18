@@ -41,22 +41,22 @@ export const PublicLayout: React.FC = () => {
               onClick={handleLogoClick}
               className="flex flex-col group transition-transform active:scale-95 z-50"
             >
-              <BrandWordmark className="font-serif text-2xl md:text-3xl font-bold tracking-tighter text-on-surface group-hover:text-primary transition-colors italic" />
+              <BrandWordmark className="font-serif text-2xl md:text-3xl font-bold tracking-tighter text-[#301400] group-hover:text-primary transition-colors italic" />
               <div className="flex items-center gap-2 -mt-1 ml-0.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                <span className="text-[8px] uppercase tracking-[0.4em] font-black text-primary/60">Operational Portal</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[8px] uppercase tracking-[0.25em] font-black text-[#301400]/60">The Private Estate</span>
               </div>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-10">
               {[
-                { to: '/menu', label: 'Collection' },
-                { to: '/reservations', label: 'Placements' },
+                { to: '/menu', label: 'The Menu' },
+                { to: '/reservations', label: 'Reservations' },
               ].map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className="relative text-[10px] font-black text-on-surface/60 hover:text-primary transition-all uppercase tracking-[0.3em] group/nav"
+                  className="relative text-[10px] font-black text-[#301400] hover:text-primary transition-all uppercase tracking-[0.25em] group/nav"
                 >
                   {link.label}
                   <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-primary transition-all group-hover/nav:w-1 group-hover/nav:h-1 rounded-full" />

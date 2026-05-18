@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Instrument+Serif:ital,wght@0,400;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @keyframes shimmer {
@@ -42,6 +42,9 @@
   --font-serif: "Instrument Serif", serif;
   --font-body: "Geist", "Bricolage Grotesque", sans-serif;
   --font-mono: "Bricolage Grotesque", sans-serif;
+  
+  --font-display-accent: var(--font-serif);
+  --font-body-text: var(--font-body);
 
   /* Animation primitives */
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
