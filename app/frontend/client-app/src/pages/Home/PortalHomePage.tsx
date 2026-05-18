@@ -108,7 +108,7 @@ export const PortalHomePage: React.FC = () => {
                   >
                     <span>Secure a Table</span>
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:rotate-45">
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                     </div>
                   </Link>
                   <Link 
@@ -233,11 +233,11 @@ export const PortalHomePage: React.FC = () => {
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Wind className="w-5 h-5" />
+                  <Wind className="w-5 h-5" strokeWidth={1.5} />
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">Freshness Index</span>
               </div>
-              <p className="text-xs font-bold text-on-surface-variant leading-relaxed">
+              <p className="text-xs font-bold text-on-surface-variant leading-relaxed font-body-text">
                 Ingredients sourced within a 40km radius, authenticated by our digital ledger.
               </p>
             </motion.div>
@@ -255,7 +255,7 @@ export const PortalHomePage: React.FC = () => {
             >
               <div className="space-y-6">
                 <div className="flex items-center gap-3 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4" strokeWidth={1.5} />
                   <span>Neural Recommendations</span>
                 </div>
                 <h2 className="text-5xl md:text-8xl font-display-accent text-on-surface tracking-tighter leading-[0.85]">
@@ -269,7 +269,7 @@ export const PortalHomePage: React.FC = () => {
               >
                 <span>Full Collection</span> 
                 <div className="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-                  <ArrowRight className="w-5 h-5 group-hover:text-white transition-colors" />
+                  <ArrowRight className="w-5 h-5 group-hover:text-white transition-colors" strokeWidth={2} />
                 </div>
               </Link>
             </motion.div>
@@ -301,7 +301,7 @@ export const PortalHomePage: React.FC = () => {
                           <div className="flex items-center justify-between pt-4 border-t border-white/20">
                             <span className="text-lg font-bold font-sans">{plat.prix} DH</span>
                             <div className="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center">
-                              <ArrowRight className="w-5 h-5" />
+                              <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
                             </div>
                           </div>
                         </div>
@@ -312,8 +312,8 @@ export const PortalHomePage: React.FC = () => {
                     <div className="mt-8 px-4 group-hover:opacity-0 transition-opacity duration-300">
                       <h3 className="text-xl font-sans font-black text-on-surface uppercase tracking-tight line-clamp-1">{plat.nom}</h3>
                       <div className="flex items-center gap-4 mt-3 text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">
-                        <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-primary" /> {plat.temps_preparation}m</span>
-                        <span className="flex items-center gap-2"><Layers className="w-3.5 h-3.5 text-primary" /> Neural Pick</span>
+                        <span className="flex items-center gap-2 font-body-text"><Clock className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> {plat.temps_preparation}m</span>
+                        <span className="flex items-center gap-2 font-body-text"><Layers className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> Neural Pick</span>
                       </div>
                     </div>
                   </Link>
@@ -342,13 +342,13 @@ export const PortalHomePage: React.FC = () => {
                   Flow.
                 </h2>
               </div>
-              <p className="text-xl font-body text-white/50 leading-relaxed max-w-sm">
+              <p className="text-xl font-body-text text-white/50 leading-relaxed max-w-sm">
                 Our operations are governed by three core digital protocols, designed to remove friction and amplify presence.
               </p>
               
               <div className="pt-12 hidden lg:block">
                 <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center animate-bounce">
-                  <ChevronDown className="w-6 h-6 text-white/20" />
+                  <ChevronDown className="w-6 h-6 text-white/20" strokeWidth={1.5} />
                 </div>
               </div>
             </motion.div>
@@ -386,11 +386,11 @@ export const PortalHomePage: React.FC = () => {
                   variants={staggerItem}
                 >
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-10 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                    <step.icon className="w-8 h-8" />
+                    <step.icon className="w-8 h-8" strokeWidth={1.5} />
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/40 block mb-4">{step.num} // Protocol</span>
                   <h3 className="text-3xl font-sans font-bold text-white mb-6 tracking-tight">{step.title}</h3>
-                  <p className="text-white/40 font-body text-base leading-relaxed">{step.desc}</p>
+                  <p className="text-white/40 font-body-text text-base leading-relaxed">{step.desc}</p>
                 </motion.div>
               ))}
             </motion.div>
