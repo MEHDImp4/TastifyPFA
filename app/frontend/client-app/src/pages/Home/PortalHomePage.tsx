@@ -1,549 +1,301 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import type { Variants } from 'framer-motion';
+import { ChevronRight, ArrowRight, Clock, Star, Users, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { 
-  ArrowRight, 
-  Clock, 
-  ChefHat, 
-  Sparkles, 
-  Calendar,
-  ChevronDown,
-  Wind,
-  Layers,
-  Zap
-} from 'lucide-react';
-import { menuApi } from '../../api/menu';
-import type { Plat } from '../../api/menu';
-import { useConfigStore } from '../../store/configStore';
-import { getBrandName } from '../../components/branding/BrandWordmark';
+import { useRef } from 'react';
 
-// Animation primitives
-const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-100px" },
-  transition: { duration: 1, ease: [0.23, 1, 0.32, 1] as const }
+// Variants for orchestrating the bento grid reveal
+const bentoContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
 };
 
-const staggerContainer = {
-  initial: {},
-  whileInView: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
-  viewport: { once: true, margin: "-100px" }
+const bentoItemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 80,
+      damping: 20,
+    },
+  },
 };
 
-const staggerItem = {
-  initial: { opacity: 0, y: 30 },
-  whileInView: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, ease: [0.23, 1, 0.32, 1] as const }
-};
-
-export const PortalHomePage: React.FC = () => {
-  const [recommendations, setRecommendations] = useState<Plat[]>([]);
-  const config = useConfigStore(state => state.config);
-  const brandName = getBrandName(config?.nom);
+export const PortalHomePage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  useEffect(() => {
-    menuApi.getTopRecommendations()
-      .then(res => setRecommendations(res.data))
-      .catch(err => console.error(err));
-  }, []);
-
-  // Parallax transforms
-  const heroY = useTransform(smoothProgress, [0, 0.2], [0, -100]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
-    <div ref={containerRef} className="w-full bg-background selection:bg-primary/20 selection:text-primary overflow-x-hidden">
-      {/* Noise Overlay */}
-      <div className="noise-overlay" />
-
-      {/* Premium Editorial Hero - Asymmetrical Split */}
-      <section className="relative min-h-[100dvh] flex items-center pt-24 lg:pt-0 overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-          
-          {/* Left: Cinematic Typography */}
-          <div className="lg:col-span-7 relative z-20 order-2 lg:order-1">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
-              className="space-y-10 md:space-y-16"
-            >
-              <motion.div 
-                className="inline-flex items-center gap-3 px-0 text-primary"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <div className="w-12 h-[1px] bg-primary/40" />
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Est. 2024 — {brandName} Estate</span>
-              </motion.div>
-
-              <h1 className="text-7xl sm:text-8xl md:text-[9rem] lg:text-[11rem] font-serif leading-[0.8] tracking-[-0.04em] text-[#301400]">
-                A Taste of <br />
-                <span className="italic font-light text-primary/80 block mt-4">Infinity.</span>
-              </h1>
-
-              <div className="max-w-xl space-y-8">
-                <p className="text-xl md:text-2xl font-sans text-[#301400]/80 leading-relaxed text-balance">
-                  Where Moroccan heritage meets architectural precision. <br className="hidden md:block" />
-                  An orchestrated experience for the most discerning tables.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-8 pt-4">
-                  <Link 
-                    to="/reservations"
-                    className="group relative flex items-center gap-4 pl-10 pr-4 py-4 bg-[#301400] text-white rounded-full font-black uppercase text-[10px] tracking-[0.25em] transition-all hover:scale-105 active:scale-95"
-                  >
-                    <span>Secure a Table</span>
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:rotate-45">
-                      <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
-                    </div>
-                  </Link>
-                  <Link 
-                    to="/menu"
-                    className="group flex items-center gap-3 text-[#301400] font-black uppercase text-[10px] tracking-[0.25em] hover:text-primary transition-colors"
-                  >
-                    <span>Explore Menu</span>
-                    <div className="w-1 h-1 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right: Architectural Visual */}
-          <div className="lg:col-span-5 order-1 lg:order-2">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, x: 20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-              className="relative aspect-[4/5] lg:aspect-[3/4] w-full"
-            >
-              {/* Double-Bezel Architecture */}
-              <div className="absolute inset-0 p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl overflow-hidden">
-                <div className="relative w-full h-full rounded-[calc(3rem-0.75rem)] overflow-hidden">
-                  <motion.div 
-                    style={{ y: heroY }}
-                    className="absolute inset-0"
-                  >
-                    <img 
-                      src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000" 
-                      alt="Luxury Dining"
-                      className="w-full h-full object-cover scale-110"
-                    />
-                    <div className="absolute inset-0 bg-[#301400]/10 mix-blend-multiply" />
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Decorative Accent */}
-              <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/10 blur-3xl rounded-full" />
-              <div className="absolute -top-12 -right-12 w-48 h-48 bg-secondary/5 blur-3xl rounded-full animate-pulse" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* The Vision - Full Bleed Editorial */}
-      <section className="py-32 md:py-60 bg-surface relative overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
-          <motion.div 
-            className="lg:col-span-6 lg:pr-12 space-y-12"
-            {...fadeInUp}
-          >
-            <div className="space-y-6">
-              <span className="editorial-kicker">Our Philosophy</span>
-              <h2 className="text-5xl md:text-7xl font-display-accent text-[#301400] leading-[0.9] tracking-tight">
-                Crafting <br />
-                <span className="italic">Emotional</span> <br />
-                Architecture.
-              </h2>
-            </div>
-            
-            <div className="space-y-8 text-[#301400]/80 font-sans text-xl leading-relaxed opacity-80">
-              <p>
-                We believe a restaurant is more than a space; it's a living organism. At {brandName}, technology serves as the invisible pulse, ensuring every moment is timed to perfection, while our culinary soul remains rooted in the sun-baked earth of the Maghreb.
-              </p>
-              <p className="italic text-primary font-serif">
-                "We don't just serve food; we design the memory of a meal."
-              </p>
-            </div>
-
-            <div className="flex items-center gap-8 pt-8">
-              <div className="text-center">
-                <p className="text-4xl font-display-accent text-[#301400]">12</p>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Master Chefs</p>
-              </div>
-              <div className="w-px h-12 bg-[#301400]/10" />
-              <div className="text-center">
-                <p className="text-4xl font-display-accent text-[#301400]">402</p>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Neural Pairings</p>
-              </div>
-              <div className="w-px h-12 bg-[#301400]/10" />
-              <div className="text-center">
-                <p className="text-4xl font-display-accent text-[#301400]">100%</p>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Verified Traceability</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="lg:col-span-6 lg:pl-12 relative"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
-            viewport={{ once: true }}
-          >
-            {/* Double-Bezel Architecture */}
-            <div className="relative aspect-[4/5] p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl overflow-hidden group">
-              <div className="relative w-full h-full rounded-[calc(3rem-0.75rem)] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Chef at work"
-                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/60 to-transparent" />
-                <div className="absolute bottom-10 left-10 text-white">
-                  <p className="font-display-accent italic text-3xl">Precision in every cut.</p>
-                  <div className="flex items-center gap-3 mt-4">
-                    <div className="w-8 h-px bg-primary" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.4em] opacity-60">Verified Origin</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating Glass Element */}
-            <motion.div 
-              className="absolute -top-10 -left-10 md:-left-20 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-[2.5rem] shadow-2xl z-20 max-w-[280px]"
-              animate={{ y: [0, -15, 0] }}
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Wind className="w-5 h-5" strokeWidth={1.5} />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#301400]">Freshness Index</span>
-              </div>
-              <p className="text-xs font-bold text-[#301400]/80 leading-relaxed font-sans">
-                Ingredients sourced within a 40km radius, authenticated by our digital ledger.
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Seasonal Recommendations - The Neural Feed */}
-      {recommendations.length > 0 && (
-        <section className="py-32 md:py-60 bg-surface-container-low border-y border-surface-container-high relative overflow-hidden">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-            <motion.div 
-              className="flex flex-col md:flex-row md:items-end justify-between mb-20 md:mb-32 gap-10"
-              {...fadeInUp}
-            >
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
-                  <Sparkles className="w-4 h-4" strokeWidth={1.5} />
-                  <span>Neural Recommendations</span>
-                </div>
-                <h2 className="text-5xl md:text-8xl font-display-accent text-[#301400] tracking-tighter leading-[0.85]">
-                  Savor the <br />
-                  <span className="italic">Selection.</span>
-                </h2>
-              </div>
-              <Link 
-                to="/menu" 
-                className="group inline-flex items-center gap-4 text-[#301400] font-black uppercase text-xs md:text-sm tracking-[0.3em] transition-all"
-              >
-                <span>Full Collection</span> 
-                <div className="w-12 h-12 rounded-full border border-[#301400]/10 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-                  <ArrowRight className="w-5 h-5 group-hover:text-white transition-colors" strokeWidth={1.5} />
-                </div>
-              </Link>
-            </motion.div>
-
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12"
-              variants={staggerContainer}
-              initial="initial"
-              whileInView="whileInView"
-              viewport={{ once: true }}
-            >
-              {recommendations.map((plat, idx) => (
-                <motion.div key={plat.id} variants={staggerItem}>
-                  <Link to={`/menu?plat=${plat.id}`} className={`group relative block ${idx % 2 !== 0 ? 'lg:mt-24' : ''}`}>
-                    <div className="aspect-[3/4] rounded-[2rem] overflow-hidden relative shadow-xl bg-surface-container transition-transform duration-700 group-hover:-translate-y-4">
-                      {plat.image ? (
-                        <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-[#301400]/10 font-display-accent text-7xl italic">
-                          {plat.nom.charAt(0)}
-                        </div>
-                      )}
-                      
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 text-white">
-                        <div className="space-y-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em]">Signature Dish</p>
-                          <h3 className="text-3xl font-display-accent italic leading-none">{plat.nom}</h3>
-                          <div className="flex items-center justify-between pt-4 border-t border-white/20">
-                            <span className="text-lg font-bold font-sans">{plat.prix} DH</span>
-                            <div className="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center">
-                              <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Default Label (Visible when not hovered) */}
-                    <div className="mt-8 px-4 group-hover:opacity-0 transition-opacity duration-300">
-                      <h3 className="text-xl font-sans font-black text-[#301400] uppercase tracking-tight line-clamp-1">{plat.nom}</h3>
-                      <div className="flex items-center gap-4 mt-3 text-[10px] font-black uppercase tracking-widest text-[#301400]/40">
-                        <span className="flex items-center gap-2 font-sans"><Clock className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> {plat.temps_preparation}m</span>
-                        <span className="flex items-center gap-2 font-sans"><Layers className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> Neural Pick</span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
-      {/* Guest Journey - Architectural Flow */}
-      <section className="py-32 md:py-60 bg-on-surface text-surface relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] z-0" style={{ backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-            <motion.div 
-              className="lg:col-span-4 space-y-12"
-              {...fadeInUp}
-            >
-              <div className="space-y-6">
-                <span className="editorial-kicker text-primary">Protocol Sequence</span>
-                <h2 className="text-5xl md:text-7xl font-display-accent text-white leading-[0.9] tracking-tight">
-                  The <br />
-                  <span className="italic">Immersive</span> <br />
-                  Flow.
-                </h2>
-              </div>
-              <p className="text-xl font-body-text text-white/50 leading-relaxed max-w-sm">
-                Our operations are governed by three core digital protocols, designed to remove friction and amplify presence.
-              </p>
-              
-              <div className="pt-12 hidden lg:block">
-                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center animate-bounce">
-                  <ChevronDown className="w-6 h-6 text-white/20" strokeWidth={1.5} />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8"
-              variants={staggerContainer}
-              initial="initial"
-              whileInView="whileInView"
-              viewport={{ once: true }}
-            >
-              {[
-                { 
-                  icon: Calendar, 
-                  title: "Neural Booking", 
-                  desc: "Predictive table allocation that aligns with your party's preferred atmosphere and lighting.",
-                  num: "01" 
-                },
-                { 
-                  icon: ChefHat, 
-                  title: "KDS Sync", 
-                  desc: "Direct sub-second telemetry between your preferences and the kitchen line's execution.",
-                  num: "02" 
-                },
-                { 
-                  icon: Zap, 
-                  title: "QR Finality", 
-                  desc: "Redefining settlement. Instant, cryptographic splits without the need for physical hardware.",
-                  num: "03" 
-                }
-              ].map((step, i) => (
-                <motion.div 
-                  key={i} 
-                  className={`p-10 rounded-[3rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-700 group ${i === 1 ? 'md:mt-20' : i === 2 ? 'md:mt-40' : ''}`}
-                  variants={staggerItem}
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-10 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                    <step.icon className="w-8 h-8" strokeWidth={1.5} />
-                  </div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/40 block mb-4">{step.num} // Protocol</span>
-                  <h3 className="text-3xl font-sans font-bold text-white mb-6 tracking-tight">{step.title}</h3>
-                  <p className="text-white/40 font-body-text text-base leading-relaxed">{step.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Atmosphere Gallery - Liquid Grid */}
-      <section className="py-32 md:py-60 bg-surface">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-          <motion.div 
-            className="mb-20 md:mb-40 space-y-6"
-            {...fadeInUp}
-          >
-            <span className="editorial-kicker">Vibe & Texture</span>
-            <h2 className="text-5xl md:text-8xl font-display-accent text-[#301400] tracking-tighter leading-[0.85]">
-              The Dining <br />
-              <span className="italic text-primary">Landscape.</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-            {/* Main Image - Double Bezel */}
-            <motion.div 
-              className="lg:col-span-7 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1 }}
-            >
-              <div className="relative aspect-[16/9] rounded-[calc(3rem-0.75rem)] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1550966842-28c2e2009aa2?auto=format&fit=crop&q=80&w=1200" 
-                  alt="Atmosphere" 
-                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/60 via-transparent to-transparent" />
-                <div className="absolute bottom-12 left-12 text-white">
-                  <h4 className="text-4xl font-display-accent italic">Main Atrium.</h4>
-                  <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mt-4">Casablanca / District 0xAF</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Service Image - Double Bezel */}
-            <motion.div 
-              className="lg:col-span-5 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group lg:-mt-24 z-10"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.2 }}
-            >
-              <div className="relative aspect-[4/5] rounded-[calc(3rem-0.75rem)] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&q=80&w=600" 
-                  alt="Service" 
-                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
-              </div>
-            </motion.div>
-
-            {/* Third Element: Stylized Quote / Detail */}
-            <motion.div 
-              className="lg:col-span-4 lg:col-start-8 lg:-mt-12 space-y-8 px-6 lg:px-0"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.4 }}
-            >
-              <div className="w-12 h-[2px] bg-primary" />
-              <p className="font-display-accent italic text-4xl lg:text-5xl text-[#301400] leading-[1.1]">
-                "Luminosity that adapts to the rhythm of the evening."
-              </p>
-              <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 rounded-full border border-[#301400]/10 flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-primary" strokeWidth={1.5} />
-                 </div>
-                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#301400]/60">
-                    Atmospheric Control Protocol
-                 </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* High-End CTA */}
+    <div ref={containerRef} className="min-h-screen bg-[#FDF8F4] text-[#1C140E] overflow-x-hidden font-['Bodoni_Moda']">
+      
+      {/* --- HERO SECTION: BENTO-COMMAND --- */}
       <motion.section 
-        className="py-32 md:py-80 bg-on-surface relative overflow-hidden"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
+        style={{ scale: heroScale, opacity: heroOpacity }}
+        className="relative pt-24 pb-12 px-6 md:px-12 max-w-[1440px] mx-auto min-h-screen flex flex-col justify-center"
       >
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/10 blur-[180px] rounded-full animate-pulse" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10 space-y-24">
+        <motion.div 
+          variants={bentoContainerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[minmax(200px,auto)]"
+        >
+          {/* Main Headline Block */}
           <motion.div 
-            className="space-y-12"
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
+            variants={bentoItemVariants}
+            className="md:col-span-8 flex flex-col justify-end p-8 md:p-12 bg-[#F5E6D8] rounded-[3rem] border border-[#1C140E]/5 relative overflow-hidden"
           >
-            <h2 className="text-7xl md:text-[11rem] font-serif text-white leading-[0.8] tracking-tighter">
-              Ready for <br />
-              <span className="italic font-light text-primary">Arrival?</span>
-            </h2>
-            <p className="text-xl md:text-3xl font-sans text-white/40 max-w-3xl mx-auto leading-relaxed">
-              Reserve your place in our orchestrated landscape of flavor and heritage. <br className="hidden md:block" />
-              An encounter with the extraordinary awaits.
-            </p>
+            <div className="relative z-10">
+              <span className="font-['Bricolage_Grotesque'] font-black uppercase tracking-[0.3em] text-[10px] text-[#D1854E] mb-6 block">
+                Expérience Gastronomique
+              </span>
+              <h1 className="font-['Libre_Caslon_Text'] text-5xl md:text-8xl leading-[0.9] tracking-tighter mb-8">
+                L'Art de <span className="italic">Recevoir</span> 
+                <span className="inline-block w-16 h-16 md:w-24 md:h-24 mx-4 rounded-full overflow-hidden align-middle border-4 border-[#FDF8F4] shadow-xl">
+                  <img 
+                    src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=400" 
+                    alt="Punctuation" 
+                    className="w-full h-full object-cover"
+                  />
+                </span>
+                avec Distinction.
+              </h1>
+              <p className="max-w-md text-lg text-[#1C140E]/70 font-medium leading-relaxed">
+                Tastify redéfinit l'excellence culinaire marocaine à travers une interface pensée pour les sens et orchestrée pour la précision.
+              </p>
+            </div>
+            {/* Tactical background detail */}
+            <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
+              <div className="w-64 h-64 border-2 border-[#D1854E] rounded-full" />
+            </div>
           </motion.div>
 
+          {/* Tactical Status Card */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center justify-center gap-12"
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            variants={bentoItemVariants}
+            className="md:col-span-4 bg-[#1C140E] text-[#FDF8F4] p-8 rounded-[3rem] flex flex-col justify-between group cursor-pointer overflow-hidden relative"
           >
-            {/* Button-in-Button Pattern */}
-            <Link 
-              to="/register"
-              className="group relative flex items-center gap-12 pl-12 pr-4 py-6 bg-[#301400] text-white rounded-full border border-white/10 overflow-hidden transition-all hover:scale-105 active:scale-95 hover:shadow-[0_30px_70px_rgba(48,20,0,0.4)]"
-            >
-              <span className="font-black uppercase text-xs tracking-[0.5em] relative z-10">Initialize Profile</span>
-              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:rotate-45">
-                <ArrowRight className="w-5 h-5 text-[#301400]" strokeWidth={1.5} />
+            <div className="relative z-10">
+              <div className="flex justify-between items-start mb-12">
+                <div className="w-12 h-12 bg-[#D1854E] rounded-2xl flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <span className="block text-2xl font-bold">12:30</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#D1854E] font-black">Prochain Service</span>
+                </div>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-
+              <h3 className="font-['Libre_Caslon_Text'] text-3xl mb-4">Prêt pour le Déjeuner</h3>
+              <p className="text-sm text-[#FDF8F4]/60">9 tables disponibles pour le service de midi. Réservez votre expérience.</p>
+            </div>
             <Link 
-              to="/menu" 
-              className="group flex flex-col items-center gap-2"
+              to="/reservations" 
+              className="relative z-10 flex items-center gap-2 font-['Bricolage_Grotesque'] font-bold text-sm text-[#D1854E] group-hover:gap-4 transition-all duration-300"
             >
-              <span className="text-white font-black uppercase text-[10px] tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity">Full Collection</span>
-              <div className="w-12 h-px bg-primary/40 group-hover:w-20 transition-all" />
+              RÉSERVER MAINTENANT <ArrowRight className="w-4 h-4" />
             </Link>
+            {/* Animated Glow */}
+            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-[#D1854E]/20 blur-[80px] rounded-full transition-transform group-hover:scale-150 duration-700" />
           </motion.div>
-        </div>
+
+          {/* Cinematic Image Block */}
+          <motion.div 
+            variants={bentoItemVariants}
+            className="md:col-span-4 rounded-[3rem] overflow-hidden relative group"
+          >
+            <div className="absolute inset-0 bg-[#1C140E]/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
+            <img 
+              src="https://images.unsplash.com/photo-1585937421612-70a0f2455f75?auto=format&fit=crop&q=80&w=800" 
+              alt="Plat Gastronomique" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute bottom-8 left-8 z-20">
+                <span className="bg-[#D1854E] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Signature</span>
+            </div>
+          </motion.div>
+
+          {/* Experience Specs Card */}
+          <motion.div 
+            variants={bentoItemVariants}
+            className="md:col-span-5 bg-white p-10 rounded-[3rem] border border-[#1C140E]/5 flex flex-col justify-center"
+          >
+            <div className="space-y-8">
+              <div className="flex items-center gap-6">
+                <div className="text-4xl font-black text-[#D1854E]">4.9</div>
+                <div>
+                  <div className="flex gap-1 text-[#EAB308]">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                  </div>
+                  <span className="text-xs font-bold text-[#1C140E]/40 uppercase tracking-widest">Avis Clients</span>
+                </div>
+              </div>
+              <div className="h-[1px] bg-[#1C140E]/5 w-full" />
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <span className="block text-2xl font-black italic">850+</span>
+                  <span className="text-[10px] font-bold text-[#1C140E]/40 uppercase">Réservations</span>
+                </div>
+                <div>
+                  <span className="block text-2xl font-black italic">12</span>
+                  <span className="text-[10px] font-bold text-[#1C140E]/40 uppercase">Chefs Étoilés</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Location / Action Block */}
+          <motion.div 
+            variants={bentoItemVariants}
+            className="md:col-span-3 bg-[#F5E6D8] p-8 rounded-[3rem] border border-[#1C140E]/5 flex flex-col items-center justify-center text-center group cursor-pointer"
+          >
+            <MapPin className="w-10 h-10 text-[#D1854E] mb-6 transition-transform group-hover:-translate-y-2 duration-300" />
+            <h4 className="font-['Libre_Caslon_Text'] text-xl mb-2">Marrakech, Medina</h4>
+            <p className="text-xs text-[#1C140E]/50 font-medium">L'élégance au cœur du patrimoine.</p>
+          </motion.div>
+        </motion.div>
       </motion.section>
 
-      {/* Dynamic Footer Status */}
-      <div className="fixed bottom-8 left-12 z-50 hidden xl:flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40">
-        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-        <span>Live Status: High Occupancy</span>
-        <div className="w-px h-4 bg-outline-variant/30" />
-        <span>Current Region: Casablanca</span>
-      </div>
+      {/* --- THE RITUAL: HORIZONTAL SCROLL TRACK --- */}
+      <section className="py-24 bg-[#1C140E] text-[#FDF8F4]">
+        <div className="px-6 md:px-12 max-w-[1440px] mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+            <div className="max-w-2xl">
+              <span className="font-['Bricolage_Grotesque'] font-black uppercase tracking-[0.3em] text-[10px] text-[#D1854E] mb-6 block">Le Protocole</span>
+              <h2 className="font-['Libre_Caslon_Text'] text-4xl md:text-7xl leading-[0.9]">
+                Le <span className="italic">Rituel</span> Tastify.
+              </h2>
+            </div>
+            <p className="max-w-xs text-sm text-[#FDF8F4]/50 leading-relaxed pb-2">
+              Une symphonie digitale en trois actes, conçue pour magnifier chaque instant de votre visite.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { 
+                step: "01", 
+                title: "L'Anticipation", 
+                desc: "Réservez votre table en quelques clics via notre interface immersive.",
+                icon: <Users className="w-6 h-6" />
+              },
+              { 
+                step: "02", 
+                title: "La Découverte", 
+                desc: "Explorez notre carte interactive, orchestrée par une IA sensorielle.",
+                icon: <ChevronRight className="w-6 h-6" />
+              },
+              { 
+                step: "03", 
+                title: "L'Apothéose", 
+                desc: "Réglez votre note sans interruption grâce à notre tunnel de paiement invisible.",
+                icon: <Star className="w-6 h-6" />
+              }
+            ].map((item, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="relative p-10 bg-white/5 rounded-[2.5rem] border border-white/10 group hover:bg-white/10 transition-colors"
+              >
+                <span className="text-5xl font-black text-[#D1854E]/20 absolute top-8 right-10 group-hover:text-[#D1854E]/40 transition-colors">
+                  {item.step}
+                </span>
+                <div className="w-12 h-12 rounded-full border border-[#D1854E]/30 flex items-center justify-center text-[#D1854E] mb-12">
+                  {item.icon}
+                </div>
+                <h3 className="font-['Libre_Caslon_Text'] text-3xl mb-6">{item.title}</h3>
+                <p className="text-[#FDF8F4]/60 text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- MENU PREVIEW: ELEGANT CARDS --- */}
+      <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">
+        <div className="text-center mb-24">
+          <span className="font-['Bricolage_Grotesque'] font-black uppercase tracking-[0.3em] text-[10px] text-[#D1854E] mb-6 block">Sélection Exclusive</span>
+          <h2 className="font-['Libre_Caslon_Text'] text-4xl md:text-6xl mb-8">La Carte des Sens</h2>
+          <Link 
+            to="/menu" 
+            className="inline-flex items-center gap-2 font-['Bricolage_Grotesque'] font-bold text-sm border-b-2 border-[#1C140E] pb-1 hover:border-[#D1854E] transition-colors"
+          >
+            VOIR TOUT LE MENU <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { name: "Tajine Royal", price: "280 MAD", tag: "Populaire", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=400" },
+            { name: "Couscous d'Or", price: "320 MAD", tag: "Signature", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=401" },
+            { name: "Pastilla Mer", price: "350 MAD", tag: "Chef's", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=402" },
+            { name: "Thé Cérémonial", price: "45 MAD", tag: "Rituel", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=403" }
+          ].map((item, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-[2rem] overflow-hidden border border-[#1C140E]/5 group cursor-pointer"
+            >
+              <div className="h-64 overflow-hidden relative">
+                <img src={item.img} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute top-6 left-6">
+                  <span className="bg-[#D1854E] text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
+                    {item.tag}
+                  </span>
+                </div>
+              </div>
+              <div className="p-8">
+                <h4 className="font-['Libre_Caslon_Text'] text-xl mb-2">{item.name}</h4>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#1C140E]/40 text-sm font-bold">{item.price}</span>
+                  <div className="w-8 h-8 rounded-full border border-[#1C140E]/10 flex items-center justify-center transition-colors group-hover:bg-[#1C140E] group-hover:text-white">
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* --- FOOTER CTA --- */}
+      <footer className="py-24 px-6 md:px-12 bg-[#F5E6D8] border-t border-[#1C140E]/5 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="font-['Libre_Caslon_Text'] text-4xl md:text-6xl mb-12">Prêt pour une expérience hors du temps ?</h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <Link 
+              to="/reservations" 
+              className="w-full md:w-auto px-12 py-6 bg-[#1C140E] text-[#FDF8F4] rounded-full font-['Bricolage_Grotesque'] font-black text-sm uppercase tracking-widest hover:bg-[#D1854E] transition-all duration-300"
+            >
+              Réserver ma Table
+            </Link>
+            <Link 
+              to="/menu" 
+              className="w-full md:w-auto px-12 py-6 border-2 border-[#1C140E] text-[#1C140E] rounded-full font-['Bricolage_Grotesque'] font-black text-sm uppercase tracking-widest hover:bg-[#1C140E] hover:text-white transition-all duration-300"
+            >
+              Explorer le Menu
+            </Link>
+          </div>
+          <p className="mt-16 text-[10px] font-bold text-[#1C140E]/30 uppercase tracking-[0.4em]">
+            © 2026 TASTIFY PFA • L'ART DE RECEVOIR
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
