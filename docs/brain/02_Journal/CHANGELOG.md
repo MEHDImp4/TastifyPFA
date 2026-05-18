@@ -7,6 +7,9 @@
 - Exposed `/api/schema/`, `/api/docs/`, and `/api/redoc/` from `tastify_backend.urls`.
 - Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to document the new API documentation surface.
 
+### Commit
+- `7875a10` `Add Swagger API documentation`
+
 ## [2026-05-18] - 15:46
 ### Fixed
 - **Staff Login Username Normalization**: Updated `CustomTokenObtainPairSerializer` so `/api/users/login/` trims surrounding whitespace and resolves usernames case-insensitively before delegating to SimpleJWT authentication. This fixes staff login 401s caused by uppercase operator IDs like `GERANT_TEST` against lowercase stored usernames such as `gerant_test`.
