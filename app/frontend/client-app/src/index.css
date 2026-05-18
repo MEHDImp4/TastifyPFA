@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Libre+Caslon+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @keyframes shimmer {
@@ -38,9 +38,9 @@
   --color-on-error-container: #93000a;
 
   /* Typography fonts */
-  --font-sans: "Bricolage Grotesque", sans-serif;
-  --font-serif: "Libre Caslon Text", serif;
-  --font-body: "Bodoni Moda", serif;
+  --font-sans: "Geist", "Bricolage Grotesque", sans-serif;
+  --font-serif: "Instrument Serif", serif;
+  --font-body: "Geist", "Bricolage Grotesque", sans-serif;
   --font-mono: "Bricolage Grotesque", sans-serif;
 
   /* Animation primitives */
