@@ -475,7 +475,7 @@ export const PortalHomePage: React.FC = () => {
 
       {/* High-End CTA */}
       <motion.section 
-        className="py-32 md:py-60 bg-on-surface relative overflow-hidden"
+        className="py-32 md:py-80 bg-on-surface relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -483,42 +483,52 @@ export const PortalHomePage: React.FC = () => {
       >
         {/* Animated Gradient Background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/10 blur-[180px] rounded-full animate-pulse" />
         </div>
 
-        <div className="max-w-5xl mx-auto px-6 md:px-12 text-center relative z-10 space-y-16">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10 space-y-24">
           <motion.div 
-            className="space-y-8"
+            className="space-y-12"
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <h2 className="text-6xl md:text-[9rem] font-display-accent text-white leading-[0.8] tracking-tighter">
+            <h2 className="text-7xl md:text-[11rem] font-display-accent text-white leading-[0.8] tracking-tighter">
               Ready for <br />
               <span className="italic font-light text-primary">Arrival?</span>
             </h2>
-            <p className="text-xl md:text-3xl font-body text-white/40 max-w-2xl mx-auto leading-relaxed">
-              Reserve your place in our orchestrated landscape of flavor and heritage.
+            <p className="text-xl md:text-3xl font-body-text text-white/40 max-w-3xl mx-auto leading-relaxed">
+              Reserve your place in our orchestrated landscape of flavor and heritage. <br className="hidden md:block" />
+              An encounter with the extraordinary awaits.
             </p>
           </motion.div>
 
           <motion.div 
-            className="flex flex-col sm:flex-row items-center justify-center gap-10"
+            className="flex flex-col sm:flex-row items-center justify-center gap-12"
             initial={{ scale: 0.9, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
+            {/* Button-in-Button Pattern */}
             <Link 
               to="/register"
-              className="px-16 py-6 bg-primary text-white rounded-full font-black uppercase text-sm tracking-[0.4em] transition-all hover:scale-110 hover:shadow-[0_20px_50px_rgba(209,133,78,0.5)] active:scale-95 shadow-2xl"
+              className="group relative p-1 bg-white/5 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 hover:shadow-[0_30px_70px_rgba(209,133,78,0.3)]"
             >
-              Initialize Profile
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative flex items-center gap-8 pl-14 pr-1.5 py-1.5 bg-[#301400] rounded-full border border-white/10">
+                <span className="text-white font-black uppercase text-xs tracking-[0.5em]">Initialize Profile</span>
+                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                  <ArrowRight className="w-6 h-6 text-white" strokeWidth={2.5} />
+                </div>
+              </div>
             </Link>
+
             <Link 
               to="/menu" 
-              className="text-white font-black uppercase text-sm tracking-[0.4em] border-b-2 border-primary pb-2 hover:text-primary transition-all"
+              className="group flex items-center gap-4 text-white font-black uppercase text-xs tracking-[0.4em] transition-all"
             >
-              View Collection
+              <span className="border-b border-primary/40 pb-1 group-hover:border-primary group-hover:text-primary transition-all">View Collection</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 group-hover:scale-150 transition-all" />
             </Link>
           </motion.div>
         </div>
