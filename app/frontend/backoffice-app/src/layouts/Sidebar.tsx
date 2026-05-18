@@ -110,6 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={link.to} 
                 to={link.to} 
                 end={link.exact}
+                data-testid={`nav-${link.to === '/' ? 'dashboard' : link.to.slice(1).replace('/', '-')}`}
                 className={navClass}
                 onClick={() => setMobileOpen(false)}
                 title={isDesktopCollapsed ? link.label : undefined}
@@ -131,6 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
           <button
             onClick={() => logout()}
+            data-testid="logout-button"
             className={`flex items-center gap-3 rounded-2xl border border-transparent transition-all duration-200 text-error hover:border-error/10 hover:bg-error-container/30 active:scale-[0.97] group ${
               isDesktopCollapsed ? 'justify-center p-3 w-12 h-12 mx-auto' : 'px-4 py-3 w-full text-left'
             }`}

@@ -162,6 +162,7 @@ export const Login: React.FC = () => {
                   <div className="relative">
                     <input
                       type="text"
+                      data-testid="login-username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="E.g. MEHDI_MGR"
@@ -179,6 +180,7 @@ export const Login: React.FC = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      data-testid="login-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
@@ -190,6 +192,7 @@ export const Login: React.FC = () => {
 
                 <button
                   type="submit"
+                  data-testid="login-submit"
                   disabled={isLoading}
                   className="relative w-full overflow-hidden bg-primary text-on-primary py-4 rounded-xl font-sans font-bold uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 transition-transform duration-200 active:scale-[0.98] disabled:opacity-50 hover:shadow-lg hover:shadow-primary/30 mt-8"
                 >

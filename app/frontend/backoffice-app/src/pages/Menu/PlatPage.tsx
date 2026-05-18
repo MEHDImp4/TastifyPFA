@@ -198,6 +198,7 @@ export const PlatPage: React.FC = () => {
           <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage your restaurant's signature dishes and technical recipes.</p>
         </div>
         <button 
+          data-testid="plat-create-button"
           onClick={() => handleOpenModal()}
           className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20 active:scale-95 shadow-lg shadow-primary/10"
         >
@@ -218,6 +219,7 @@ export const PlatPage: React.FC = () => {
           {plats.filter(p => p.est_active).map((plat) => (
             <div 
               key={plat.id}
+              data-testid={`plat-card-${plat.id}`}
               className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5 cursor-default"
             >
               <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-surface-container-low mb-5">
@@ -232,12 +234,14 @@ export const PlatPage: React.FC = () => {
                 {/* Action Buttons */}
                 <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <button 
+                    data-testid={`plat-edit-${plat.id}`}
                     onClick={() => handleOpenModal(plat)}
                     className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-primary shadow-lg transition-all active:scale-90"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button 
+                    data-testid={`plat-delete-${plat.id}`}
                     onClick={() => handleDelete(plat.id)}
                     className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-error shadow-lg transition-all active:scale-90"
                   >
@@ -289,6 +293,7 @@ export const PlatPage: React.FC = () => {
                 </label>
                 <input 
                     type="text" 
+                    data-testid="plat-name-input"
                     required
                     value={nom}
                     onChange={(e) => setNom(e.target.value)}
@@ -303,6 +308,7 @@ export const PlatPage: React.FC = () => {
                     <span>Sector Allocation</span>
                 </label>
                 <select 
+                    data-testid="plat-category-select"
                     value={selectedCat}
                     onChange={(e) => setSelectedCat(parseInt(e.target.value))}
                     className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans appearance-none"
@@ -320,6 +326,7 @@ export const PlatPage: React.FC = () => {
                 </label>
                 <input 
                     type="text" 
+                    data-testid="plat-price-input"
                     required
                     value={prix}
                     onChange={(e) => setPrix(e.target.value)}
@@ -335,6 +342,7 @@ export const PlatPage: React.FC = () => {
                 <span>Culinary Context</span>
             </label>
             <textarea 
+              data-testid="plat-description-input"
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -351,6 +359,7 @@ export const PlatPage: React.FC = () => {
                 </label>
                 <input 
                   type="number" 
+                  data-testid="plat-time-input"
                   value={temps}
                   onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
                   className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
@@ -365,6 +374,7 @@ export const PlatPage: React.FC = () => {
                 <div className="relative group">
                   <input 
                     type="file" 
+                    data-testid="plat-image-input"
                     onChange={handleImageChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
@@ -432,6 +442,7 @@ export const PlatPage: React.FC = () => {
 
           <button
             type="submit"
+            data-testid="plat-save-button"
             disabled={isSaving}
             className="w-full py-5 mt-4 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >

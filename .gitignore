@@ -59,6 +59,9 @@ node_modules/
 .stylelintcache
 dist/
 .vite/
+.playwright/
+playwright-report/
+test-results/
 .next/
 out/
 build/
@@ -94,3 +97,6 @@ desktop.ini
 
 # Docker
 docker-compose.override.yml
+
+# Playwright auth state
+app/frontend/backoffice-app/tests/e2e/.auth/
