@@ -1,42 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
-import { Loader2, ArrowRight, User as UserIcon, Lock, ShieldCheck, Sparkles, ShieldAlert } from 'lucide-react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { AuthLayout } from '../../components/auth/AuthLayout';
-import { BrandWordmark, getBrandName } from '../../components/branding/BrandWordmark';
-import { useConfigStore } from '../../store/configStore';
+import { 
+  Loader2, 
+  ArrowRight, 
+  User as UserIcon, 
+  Lock, 
+  ShieldCheck, 
+  Sparkles, 
+  ShieldAlert,
+  ChevronLeft
+} from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 
-const containerVariants: Variants = {
+// Bento Animation Variants
+const bentoContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.1,
+      delayChildren: 0.2,
     },
   },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
+const bentoItemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 100, damping: 20 },
-  },
-};
-
-const floatVariants: Variants = {
-  animate: {
-    y: [0, -10, 0],
     transition: {
-      duration: 5,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
+      type: 'spring' as const,
+      stiffness: 80,
+      damping: 20,
+    },
+  },
 };
 
 export const Login: React.FC = () => {
@@ -46,8 +47,14 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore(state => state.setAuth);
-  const config = useConfigStore(state => state.config);
-  const brandName = getBrandName(config?.nom);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const contentScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.98]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,169 +89,179 @@ export const Login: React.FC = () => {
     }
   };
 
-  const DARK_BROWN = '#301400';
-  const PRIMARY_ORANGE = '#8d4e1c';
-
-  const visualContent = (
-    <div className="h-full w-full relative flex flex-col justify-end p-12 md:p-20 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-            <motion.img 
-                initial={{ scale: 1.05 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 2, ease: "easeOut" }}
-                src="https://picsum.photos/seed/tastify_auth/1200/1600" 
-                className="w-full h-full object-cover opacity-60 grayscale" 
-                alt="Atmosphere" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#301400] via-[#301400]/40 to-transparent" />
-        </div>
-        
-        <div className="relative z-10 space-y-8 max-w-xl">
-            <motion.div 
-                variants={itemVariants}
-                className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#8d4e1c] text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-xl"
-            >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Verified Client Access</span>
-            </motion.div>
-            <motion.h2 
-                variants={itemVariants}
-                className="text-7xl font-serif italic leading-none tracking-tighter text-white"
-            >
-                The Gateway <br/>
-                <span style={{ color: PRIMARY_ORANGE }}>to Taste.</span>
-            </motion.h2>
-            <motion.p 
-                variants={itemVariants}
-                className="text-xl leading-relaxed font-bold opacity-80"
-                style={{ color: '#fff1ea' }}
-            >
-                Access your personalized culinary archive and secure your architectural placements at {brandName}.
-            </motion.p>
-        </div>
-    </div>
-  );
-
   return (
-    <AuthLayout visual={visualContent}>
-        <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-12"
-        >
-            <div className="text-center lg:text-left space-y-4">
-                <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 mb-10">
-                    <BrandWordmark className="text-4xl font-bold tracking-tighter" style={{ color: PRIMARY_ORANGE }} />
-                </div>
-                <motion.h1 
-                    variants={itemVariants}
-                    className="text-6xl font-serif italic leading-none tracking-tighter"
-                    style={{ color: DARK_BROWN }}
-                >
-                    Welcome Back.
-                </motion.h1>
-                <motion.p 
-                    variants={itemVariants}
-                    className="text-lg font-bold"
-                    style={{ color: DARK_BROWN }}
-                >
-                    Authorize your session to continue your journey.
-                </motion.p>
-            </div>
+    <div ref={containerRef} className="min-h-screen bg-[#FDF8F4] text-[#1C140E] overflow-x-hidden font-['Bodoni_Moda'] pt-12 pb-24 px-6 md:px-12">
+      <motion.div 
+        style={{ scale: contentScale }}
+        className="max-w-[1440px] mx-auto"
+      >
+        {/* Navigation & Context */}
+        <div className="flex justify-between items-center mb-16">
+          <Link 
+            to="/" 
+            className="group flex items-center gap-3 font-['Bricolage_Grotesque'] font-black text-[10px] uppercase tracking-[0.3em] text-[#D1854E] hover:text-[#1C140E] transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            RETOUR À L'ACCUEIL
+          </Link>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-[#D1854E] animate-pulse" />
+            <span className="font-['JetBrains_Mono'] text-[9px] font-bold uppercase tracking-widest text-[#1C140E]/40">
+              Système d'Accès Sécurisé
+            </span>
+          </div>
+        </div>
 
-            <AnimatePresence mode="wait">
+        {/* --- AUTH BENTO GRID --- */}
+        <motion.div 
+          variants={bentoContainerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[minmax(200px,auto)]"
+        >
+          {/* Main Login Form Card */}
+          <motion.div 
+            variants={bentoItemVariants}
+            className="md:col-span-7 lg:col-span-8 bg-white rounded-[3rem] border border-[#1C140E]/5 p-8 md:p-16 flex flex-col justify-center relative overflow-hidden"
+          >
+            <div className="max-w-md w-full mx-auto relative z-10">
+              <span className="font-['Bricolage_Grotesque'] font-black uppercase tracking-[0.3em] text-[10px] text-[#D1854E] mb-6 block">
+                Identification Client
+              </span>
+              <h1 className="font-['Libre_Caslon_Text'] text-5xl md:text-7xl leading-[0.9] tracking-tighter mb-12">
+                Bienvenue <br/><span className="italic text-[#D1854E]">chez vous.</span>
+              </h1>
+
+              <AnimatePresence mode="wait">
                 {error && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="p-5 rounded-2xl bg-[#ba1a1a]/10 border-2 border-[#ba1a1a] flex items-center gap-4"
+                        className="p-6 rounded-2xl bg-[#D1854E]/10 border border-[#D1854E]/20 flex items-center gap-4 mb-10"
                     >
-                        <ShieldAlert className="w-6 h-6 shrink-0" style={{ color: '#ba1a1a' }} strokeWidth={2.5} />
-                        <p className="text-sm font-black uppercase" style={{ color: '#ba1a1a' }}>{error}</p>
+                        <ShieldAlert className="w-6 h-6 text-[#D1854E]" strokeWidth={2.5} />
+                        <p className="text-sm font-['Bricolage_Grotesque'] font-bold uppercase tracking-wider text-[#D1854E]">{error}</p>
                     </motion.div>
                 )}
-            </AnimatePresence>
+              </AnimatePresence>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="space-y-6">
-                    <motion.div variants={itemVariants} className="flex flex-col gap-3 group">
-                        <label className="text-[11px] font-black uppercase tracking-[0.25em] ml-1" style={{ color: PRIMARY_ORANGE }} htmlFor="username">Identity Tag</label>
-                        <div className="relative">
-                            <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 transition-all" style={{ color: DARK_BROWN }} strokeWidth={2.5} />
-                            <input
-                                id="username"
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full pl-14 pr-6 py-5 bg-[#fff1ea] border-b-2 border-[#d8c2b6] rounded-t-2xl font-bold focus:border-[#8d4e1c] outline-none transition-all"
-                                style={{ color: DARK_BROWN }}
-                                placeholder="USERNAME"
-                                disabled={isLoading}
-                            />
-                        </div>
-                    </motion.div>
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="space-y-8">
+                  <div className="group relative">
+                    <label className="font-['Bricolage_Grotesque'] text-[10px] font-black uppercase tracking-[0.25em] text-[#D1854E] ml-4 mb-2 block">Identifiant</label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1C140E]/30 group-focus-within:text-[#D1854E] transition-colors" />
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="w-full pl-16 pr-8 py-6 bg-[#FDF8F4] border border-[#1C140E]/5 rounded-[2rem] font-['Bodoni_Moda'] font-bold text-lg focus:border-[#D1854E] focus:bg-white outline-none transition-all shadow-sm group-hover:shadow-md"
+                        placeholder="USERNAME"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
 
-                    <motion.div variants={itemVariants} className="flex flex-col gap-3 group text-left">
-                        <div className="flex justify-between items-center ml-1">
-                            <label className="text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: PRIMARY_ORANGE }} htmlFor="password">Pass-phrase</label>
-                            <Link to="#" className="text-[10px] font-black uppercase tracking-widest hover:underline" style={{ color: PRIMARY_ORANGE }}>Forgot?</Link>
-                        </div>
-                        <div className="relative">
-                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 transition-all" style={{ color: DARK_BROWN }} strokeWidth={2.5} />
-                            <input
-                                id="password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-14 pr-6 py-5 bg-[#fff1ea] border-b-2 border-[#d8c2b6] rounded-t-2xl font-bold focus:border-[#8d4e1c] outline-none transition-all"
-                                style={{ color: DARK_BROWN }}
-                                placeholder="••••••••"
-                                disabled={isLoading}
-                            />
-                        </div>
-                    </motion.div>
+                  <div className="group relative">
+                    <div className="flex justify-between items-center ml-4 mb-2">
+                      <label className="font-['Bricolage_Grotesque'] text-[10px] font-black uppercase tracking-[0.25em] text-[#D1854E] block">Mot de Passe</label>
+                      <Link to="#" className="font-['Bricolage_Grotesque'] text-[9px] font-bold uppercase tracking-widest text-[#1C140E]/40 hover:text-[#D1854E] transition-colors">Oublié ?</Link>
+                    </div>
+                    <div className="relative">
+                      <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1C140E]/30 group-focus-within:text-[#D1854E] transition-colors" />
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-16 pr-8 py-6 bg-[#FDF8F4] border border-[#1C140E]/5 rounded-[2rem] font-['Bodoni_Moda'] font-bold text-lg focus:border-[#D1854E] focus:bg-white outline-none transition-all shadow-sm group-hover:shadow-md"
+                        placeholder="••••••••"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <motion.button
-                    variants={itemVariants}
-                    type="submit"
-                    disabled={isLoading}
-                    style={{ backgroundColor: PRIMARY_ORANGE }}
-                    className="w-full group relative flex items-center justify-center gap-4 py-5 text-white rounded-2xl font-black text-lg transition-all active:scale-[0.98] disabled:opacity-50 overflow-hidden shadow-2xl shadow-[#8d4e1c]/20"
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-7 bg-[#1C140E] text-white rounded-[2rem] font-['Bricolage_Grotesque'] font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-4 hover:bg-[#D1854E] transition-all duration-300 shadow-xl disabled:opacity-50 relative overflow-hidden group/btn"
                 >
-                    <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    {isLoading ? <Loader2 className="w-7 h-7 animate-spin" /> : (
+                  {isLoading ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
                     <>
-                        <span className="relative z-10 uppercase tracking-widest">Authorize Session</span>
-                        <ArrowRight className="w-6 h-6 relative z-10 transition-transform group-hover:translate-x-1" strokeWidth={3} />
+                      <span>AUTORISER LA SESSION</span>
+                      <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" strokeWidth={3} />
                     </>
-                    )}
+                  )}
+                  {/* Subtle sweep effect */}
+                  <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out" />
                 </motion.button>
-            </form>
-            
-            <motion.div variants={itemVariants} className="pt-10 border-t border-[#d8c2b6] text-center">
-                <p className="text-sm font-bold" style={{ color: DARK_BROWN }}>
-                    New to the ecosystem?{' '}
-                    <Link to="/register" className="font-black uppercase text-xs tracking-widest hover:underline ml-2" style={{ color: PRIMARY_ORANGE }}>
-                        Create Archive
-                    </Link>
+              </form>
+
+              <div className="mt-16 pt-10 border-t border-[#1C140E]/5 text-center md:text-left">
+                <p className="text-sm font-bold text-[#1C140E]/60">
+                  Nouveau dans l'écosystème ? {' '}
+                  <Link to="/register" className="font-['Bricolage_Grotesque'] font-black uppercase text-xs tracking-widest text-[#D1854E] hover:underline ml-2">
+                    Créer mon Archive
+                  </Link>
                 </p>
-            </motion.div>
+              </div>
+            </div>
 
-            <motion.div variants={itemVariants} className="flex items-center justify-center gap-3 opacity-60">
-                <ShieldCheck className="w-4 h-4" style={{ color: PRIMARY_ORANGE }} strokeWidth={2.5} />
-                <span className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: DARK_BROWN }}>End-to-End Cryptographic Security Active</span>
-            </motion.div>
+            {/* Tactical background detail */}
+            <div className="absolute bottom-0 right-0 p-12 opacity-[0.03] pointer-events-none">
+              <ShieldCheck className="w-96 h-96" />
+            </div>
+          </motion.div>
+
+          {/* Cinematic Side Block */}
+          <motion.div 
+            variants={bentoItemVariants}
+            className="md:col-span-5 lg:col-span-4 space-y-8"
+          >
+            {/* Image Card */}
+            <div className="h-[400px] rounded-[3rem] overflow-hidden relative group border-4 border-white shadow-2xl">
+              <div className="absolute inset-0 bg-[#1C140E]/40 group-hover:bg-[#1C140E]/20 transition-colors z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1550966841-3ee5ad0110d3?auto=format&fit=crop&q=80&w=800" 
+                alt="Ambiance" 
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+              />
+              <div className="absolute bottom-8 left-8 z-20">
+                <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-black uppercase tracking-[0.3em]">
+                  <Sparkles className="w-3 h-3 text-[#D1854E]" />
+                  <span>Accès Vérifié</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tactical Info Card */}
+            <div className="bg-[#1C140E] text-[#FDF8F4] p-10 rounded-[3rem] relative overflow-hidden group">
+              <div className="relative z-10">
+                <h3 className="font-['Libre_Caslon_Text'] text-3xl mb-4 italic">Le Privilège.</h3>
+                <p className="text-sm text-[#FDF8F4]/60 font-medium leading-relaxed mb-8">
+                  Votre compte Tastify est la clé d'un service sur-mesure et d'une gestion intelligente de vos réservations.
+                </p>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-[#D1854E]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#D1854E]" />
+                        Cryptage de Bout en Bout
+                    </div>
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-[#D1854E]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#D1854E]" />
+                        Authentification Biométrique
+                    </div>
+                </div>
+              </div>
+              {/* Glow Effect */}
+              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-[#D1854E]/10 blur-[80px] rounded-full group-hover:scale-125 transition-transform duration-700" />
+            </div>
+          </motion.div>
         </motion.div>
-
-        {/* Floating decoration */}
-        <motion.div
-            variants={floatVariants}
-            animate="animate"
-            className="fixed top-12 right-12 w-24 h-24 bg-[#8d4e1c]/5 rounded-full blur-3xl pointer-events-none"
-        />
-    </AuthLayout>
+      </motion.div>
+    </div>
   );
 };
