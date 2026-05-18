@@ -108,7 +108,7 @@ export const PortalHomePage: React.FC = () => {
                   >
                     <span>Secure a Table</span>
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:rotate-45">
-                      <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                      <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                     </div>
                   </Link>
                   <Link 
@@ -160,19 +160,19 @@ export const PortalHomePage: React.FC = () => {
       <section className="py-32 md:py-60 bg-surface relative overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
           <motion.div 
-            className="lg:col-span-6 space-y-12"
+            className="lg:col-span-6 lg:pr-12 space-y-12"
             {...fadeInUp}
           >
             <div className="space-y-6">
               <span className="editorial-kicker">Our Philosophy</span>
-              <h2 className="text-5xl md:text-7xl font-display-accent text-on-surface leading-[0.9] tracking-tight">
+              <h2 className="text-5xl md:text-7xl font-display-accent text-[#301400] leading-[0.9] tracking-tight">
                 Crafting <br />
                 <span className="italic">Emotional</span> <br />
                 Architecture.
               </h2>
             </div>
             
-            <div className="space-y-8 text-on-surface-variant font-body-text text-xl leading-relaxed opacity-80">
+            <div className="space-y-8 text-[#301400]/80 font-sans text-xl leading-relaxed opacity-80">
               <p>
                 We believe a restaurant is more than a space; it's a living organism. At {brandName}, technology serves as the invisible pulse, ensuring every moment is timed to perfection, while our culinary soul remains rooted in the sun-baked earth of the Maghreb.
               </p>
@@ -183,24 +183,24 @@ export const PortalHomePage: React.FC = () => {
 
             <div className="flex items-center gap-8 pt-8">
               <div className="text-center">
-                <p className="text-4xl font-display-accent text-on-surface">12</p>
+                <p className="text-4xl font-display-accent text-[#301400]">12</p>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Master Chefs</p>
               </div>
-              <div className="w-px h-12 bg-outline-variant/30" />
+              <div className="w-px h-12 bg-[#301400]/10" />
               <div className="text-center">
-                <p className="text-4xl font-display-accent text-on-surface">402</p>
+                <p className="text-4xl font-display-accent text-[#301400]">402</p>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Neural Pairings</p>
               </div>
-              <div className="w-px h-12 bg-outline-variant/30" />
+              <div className="w-px h-12 bg-[#301400]/10" />
               <div className="text-center">
-                <p className="text-4xl font-display-accent text-on-surface">100%</p>
+                <p className="text-4xl font-display-accent text-[#301400]">100%</p>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary mt-2">Verified Traceability</p>
               </div>
             </div>
           </motion.div>
 
           <motion.div 
-            className="lg:col-span-6 relative"
+            className="lg:col-span-6 lg:pl-12 relative"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
@@ -214,7 +214,7 @@ export const PortalHomePage: React.FC = () => {
                   alt="Chef at work"
                   className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/60 to-transparent" />
                 <div className="absolute bottom-10 left-10 text-white">
                   <p className="font-display-accent italic text-3xl">Precision in every cut.</p>
                   <div className="flex items-center gap-3 mt-4">
@@ -227,7 +227,7 @@ export const PortalHomePage: React.FC = () => {
             
             {/* Floating Glass Element */}
             <motion.div 
-              className="absolute -top-10 -left-10 md:-left-20 glass p-8 rounded-[2.5rem] shadow-2xl z-20 max-w-[280px]"
+              className="absolute -top-10 -left-10 md:-left-20 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-[2.5rem] shadow-2xl z-20 max-w-[280px]"
               animate={{ y: [0, -15, 0] }}
               transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
             >
@@ -235,9 +235,9 @@ export const PortalHomePage: React.FC = () => {
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                   <Wind className="w-5 h-5" strokeWidth={1.5} />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">Freshness Index</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#301400]">Freshness Index</span>
               </div>
-              <p className="text-xs font-bold text-on-surface-variant leading-relaxed font-body-text">
+              <p className="text-xs font-bold text-[#301400]/80 leading-relaxed font-sans">
                 Ingredients sourced within a 40km radius, authenticated by our digital ledger.
               </p>
             </motion.div>
@@ -258,18 +258,18 @@ export const PortalHomePage: React.FC = () => {
                   <Sparkles className="w-4 h-4" strokeWidth={1.5} />
                   <span>Neural Recommendations</span>
                 </div>
-                <h2 className="text-5xl md:text-8xl font-display-accent text-on-surface tracking-tighter leading-[0.85]">
+                <h2 className="text-5xl md:text-8xl font-display-accent text-[#301400] tracking-tighter leading-[0.85]">
                   Savor the <br />
                   <span className="italic">Selection.</span>
                 </h2>
               </div>
               <Link 
                 to="/menu" 
-                className="group inline-flex items-center gap-4 text-on-surface font-black uppercase text-xs md:text-sm tracking-[0.3em] transition-all"
+                className="group inline-flex items-center gap-4 text-[#301400] font-black uppercase text-xs md:text-sm tracking-[0.3em] transition-all"
               >
                 <span>Full Collection</span> 
-                <div className="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-                  <ArrowRight className="w-5 h-5 group-hover:text-white transition-colors" strokeWidth={2} />
+                <div className="w-12 h-12 rounded-full border border-[#301400]/10 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+                  <ArrowRight className="w-5 h-5 group-hover:text-white transition-colors" strokeWidth={1.5} />
                 </div>
               </Link>
             </motion.div>
@@ -288,7 +288,7 @@ export const PortalHomePage: React.FC = () => {
                       {plat.image ? (
                         <img src={plat.image} alt={plat.nom} className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant font-display-accent text-7xl italic opacity-10">
+                        <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-[#301400]/10 font-display-accent text-7xl italic">
                           {plat.nom.charAt(0)}
                         </div>
                       )}
@@ -301,7 +301,7 @@ export const PortalHomePage: React.FC = () => {
                           <div className="flex items-center justify-between pt-4 border-t border-white/20">
                             <span className="text-lg font-bold font-sans">{plat.prix} DH</span>
                             <div className="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center">
-                              <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
+                              <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
                             </div>
                           </div>
                         </div>
@@ -310,10 +310,10 @@ export const PortalHomePage: React.FC = () => {
                     
                     {/* Default Label (Visible when not hovered) */}
                     <div className="mt-8 px-4 group-hover:opacity-0 transition-opacity duration-300">
-                      <h3 className="text-xl font-sans font-black text-on-surface uppercase tracking-tight line-clamp-1">{plat.nom}</h3>
-                      <div className="flex items-center gap-4 mt-3 text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">
-                        <span className="flex items-center gap-2 font-body-text"><Clock className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> {plat.temps_preparation}m</span>
-                        <span className="flex items-center gap-2 font-body-text"><Layers className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> Neural Pick</span>
+                      <h3 className="text-xl font-sans font-black text-[#301400] uppercase tracking-tight line-clamp-1">{plat.nom}</h3>
+                      <div className="flex items-center gap-4 mt-3 text-[10px] font-black uppercase tracking-widest text-[#301400]/40">
+                        <span className="flex items-center gap-2 font-sans"><Clock className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> {plat.temps_preparation}m</span>
+                        <span className="flex items-center gap-2 font-sans"><Layers className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> Neural Pick</span>
                       </div>
                     </div>
                   </Link>
@@ -402,32 +402,32 @@ export const PortalHomePage: React.FC = () => {
       <section className="py-32 md:py-60 bg-surface">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12">
           <motion.div 
-            className="text-center mb-20 md:mb-40 space-y-6"
+            className="mb-20 md:mb-40 space-y-6"
             {...fadeInUp}
           >
-            <span className="editorial-kicker mx-auto">Vibe & Texture</span>
-            <h2 className="text-5xl md:text-8xl font-display-accent text-on-surface tracking-tighter leading-[0.85]">
+            <span className="editorial-kicker">Vibe & Texture</span>
+            <h2 className="text-5xl md:text-8xl font-display-accent text-[#301400] tracking-tighter leading-[0.85]">
               The Dining <br />
               <span className="italic text-primary">Landscape.</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
             {/* Main Image - Double Bezel */}
             <motion.div 
-              className="md:col-span-7 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group"
+              className="lg:col-span-7 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1 }}
             >
-              <div className="relative aspect-[4/3] rounded-[calc(3rem-0.75rem)] overflow-hidden">
+              <div className="relative aspect-[16/9] rounded-[calc(3rem-0.75rem)] overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1550966842-28c2e2009aa2?auto=format&fit=crop&q=80&w=1200" 
                   alt="Atmosphere" 
                   className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/60 via-transparent to-transparent" />
                 <div className="absolute bottom-12 left-12 text-white">
                   <h4 className="text-4xl font-display-accent italic">Main Atrium.</h4>
                   <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mt-4">Casablanca / District 0xAF</p>
@@ -435,38 +435,43 @@ export const PortalHomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Stylized Text Block */}
+            {/* Service Image - Double Bezel */}
             <motion.div 
-              className="md:col-span-4 md:col-start-9 space-y-8 px-6 md:px-0"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.2 }}
-            >
-              <div className="w-12 h-[2px] bg-primary" />
-              <p className="font-display-accent italic text-4xl lg:text-5xl text-on-surface leading-[1.1]">
-                "Luminosity that adapts to the rhythm of the evening."
-              </p>
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-on-surface-variant/60">
-                Atmospheric Control
-              </p>
-            </motion.div>
-
-            {/* Offset Secondary Image - Double Bezel */}
-            <motion.div 
-              className="md:col-span-5 md:col-start-3 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group mt-12 md:-mt-40 z-10"
+              className="lg:col-span-5 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group lg:-mt-24 z-10"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.4 }}
+              transition={{ duration: 1, delay: 0.2 }}
             >
-              <div className="relative aspect-[3/4] rounded-[calc(3rem-0.75rem)] overflow-hidden">
+              <div className="relative aspect-[4/5] rounded-[calc(3rem-0.75rem)] overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&q=80&w=600" 
                   alt="Service" 
                   className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
+              </div>
+            </motion.div>
+
+            {/* Third Element: Stylized Quote / Detail */}
+            <motion.div 
+              className="lg:col-span-4 lg:col-start-8 lg:-mt-12 space-y-8 px-6 lg:px-0"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.4 }}
+            >
+              <div className="w-12 h-[2px] bg-primary" />
+              <p className="font-display-accent italic text-4xl lg:text-5xl text-[#301400] leading-[1.1]">
+                "Luminosity that adapts to the rhythm of the evening."
+              </p>
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-full border border-[#301400]/10 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                 </div>
+                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#301400]/60">
+                    Atmospheric Control Protocol
+                 </p>
               </div>
             </motion.div>
           </div>
@@ -493,11 +498,11 @@ export const PortalHomePage: React.FC = () => {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <h2 className="text-7xl md:text-[11rem] font-display-accent text-white leading-[0.8] tracking-tighter">
+            <h2 className="text-7xl md:text-[11rem] font-serif text-white leading-[0.8] tracking-tighter">
               Ready for <br />
               <span className="italic font-light text-primary">Arrival?</span>
             </h2>
-            <p className="text-xl md:text-3xl font-body-text text-white/40 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-3xl font-sans text-white/40 max-w-3xl mx-auto leading-relaxed">
               Reserve your place in our orchestrated landscape of flavor and heritage. <br className="hidden md:block" />
               An encounter with the extraordinary awaits.
             </p>
@@ -512,23 +517,21 @@ export const PortalHomePage: React.FC = () => {
             {/* Button-in-Button Pattern */}
             <Link 
               to="/register"
-              className="group relative p-1 bg-white/5 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 hover:shadow-[0_30px_70px_rgba(209,133,78,0.3)]"
+              className="group relative flex items-center gap-12 pl-12 pr-4 py-6 bg-[#301400] text-white rounded-full border border-white/10 overflow-hidden transition-all hover:scale-105 active:scale-95 hover:shadow-[0_30px_70px_rgba(48,20,0,0.4)]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center gap-8 pl-14 pr-1.5 py-1.5 bg-[#301400] rounded-full border border-white/10">
-                <span className="text-white font-black uppercase text-xs tracking-[0.5em]">Initialize Profile</span>
-                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
-                  <ArrowRight className="w-6 h-6 text-white" strokeWidth={2.5} />
-                </div>
+              <span className="font-black uppercase text-xs tracking-[0.5em] relative z-10">Initialize Profile</span>
+              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center relative z-10 transition-transform duration-500 group-hover:rotate-45">
+                <ArrowRight className="w-5 h-5 text-[#301400]" strokeWidth={1.5} />
               </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
 
             <Link 
               to="/menu" 
-              className="group flex items-center gap-4 text-white font-black uppercase text-xs tracking-[0.4em] transition-all"
+              className="group flex flex-col items-center gap-2"
             >
-              <span className="border-b border-primary/40 pb-1 group-hover:border-primary group-hover:text-primary transition-all">View Collection</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 group-hover:scale-150 transition-all" />
+              <span className="text-white font-black uppercase text-[10px] tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity">Full Collection</span>
+              <div className="w-12 h-px bg-primary/40 group-hover:w-20 transition-all" />
             </Link>
           </motion.div>
         </div>

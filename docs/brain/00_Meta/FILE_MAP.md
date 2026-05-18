@@ -49,7 +49,7 @@ tastify-pfa/
 │           ├── src/components/    # Shared UI/auth/branding primitives
 │           ├── src/layouts/       # PublicLayout (Dynamic branding)
 │           └── src/pages/
-│               ├── Home/          # High-end Hero (Z-Axis Cascade)
+│               ├── Home/          # Bento-Command Landing (Horizontal Scroll)
 │               ├── Menu/          # Cinematic Catalog
 │               └── Reservations/  # Multi-step booking wizard
 ├── docs/                          # Obsidian Brain
