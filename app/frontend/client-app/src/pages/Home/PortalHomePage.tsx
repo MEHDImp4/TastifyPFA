@@ -402,7 +402,7 @@ export const PortalHomePage: React.FC = () => {
       <section className="py-32 md:py-60 bg-surface">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12">
           <motion.div 
-            className="text-center mb-20 md:mb-32 space-y-6"
+            className="text-center mb-20 md:mb-40 space-y-6"
             {...fadeInUp}
           >
             <span className="editorial-kicker mx-auto">Vibe & Texture</span>
@@ -412,39 +412,62 @@ export const PortalHomePage: React.FC = () => {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 items-center">
+            {/* Main Image - Double Bezel */}
             <motion.div 
-              className="md:col-span-8 aspect-video rounded-[3rem] overflow-hidden shadow-2xl relative group"
+              className="md:col-span-7 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1 }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1550966842-28c2e2009aa2?auto=format&fit=crop&q=80&w=1200" 
-                alt="Atmosphere" 
-                className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-12 left-12 text-white">
-                <h4 className="text-4xl font-display-accent italic">Main Atrium.</h4>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mt-4">Casablanca / District 0xAF</p>
+              <div className="relative aspect-[4/3] rounded-[calc(3rem-0.75rem)] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1550966842-28c2e2009aa2?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Atmosphere" 
+                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-12 left-12 text-white">
+                  <h4 className="text-4xl font-display-accent italic">Main Atrium.</h4>
+                  <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 mt-4">Casablanca / District 0xAF</p>
+                </div>
               </div>
             </motion.div>
 
+            {/* Stylized Text Block */}
             <motion.div 
-              className="md:col-span-4 aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative group"
+              className="md:col-span-4 md:col-start-9 space-y-8 px-6 md:px-0"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              <div className="w-12 h-[2px] bg-primary" />
+              <p className="font-display-accent italic text-4xl lg:text-5xl text-on-surface leading-[1.1]">
+                "Luminosity that adapts to the rhythm of the evening."
+              </p>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-on-surface-variant/60">
+                Atmospheric Control
+              </p>
+            </motion.div>
+
+            {/* Offset Secondary Image - Double Bezel */}
+            <motion.div 
+              className="md:col-span-5 md:col-start-3 relative p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl group mt-12 md:-mt-40 z-10"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.3 }}
+              transition={{ duration: 1, delay: 0.4 }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&q=80&w=600" 
-                alt="Service" 
-                className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
+              <div className="relative aspect-[3/4] rounded-[calc(3rem-0.75rem)] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&q=80&w=600" 
+                  alt="Service" 
+                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
+              </div>
             </motion.div>
           </div>
         </div>
