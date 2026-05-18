@@ -32,6 +32,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
+        submitted_username = attrs.get('username')
+        if isinstance(submitted_username, str):
+            normalized_username = submitted_username.strip()
+            matched_user = User.objects.filter(username__iexact=normalized_username).only('username').first()
+            attrs['username'] = matched_user.username if matched_user else normalized_username
+
         data = super().validate(attrs)
         data['role'] = self.user.role
         data['username'] = self.user.username

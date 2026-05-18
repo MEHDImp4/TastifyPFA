@@ -1,3 +1,12 @@
+## [2026-05-18] - 15:46
+### Fixed
+- **Staff Login Username Normalization**: Updated `CustomTokenObtainPairSerializer` so `/api/users/login/` trims surrounding whitespace and resolves usernames case-insensitively before delegating to SimpleJWT authentication. This fixes staff login 401s caused by uppercase operator IDs like `GERANT_TEST` against lowercase stored usernames such as `gerant_test`.
+
+### Validation
+- **Django System Check**: `docker compose exec backend python manage.py check` passed.
+- **Serializer Runtime Check**: Verified inside the live backend container that `CustomTokenObtainPairSerializer` accepts both `LOGIN_CASE_TEST` and `  login_case_test  ` for a lowercase stored account.
+- **Pytest Blocker**: `docker compose exec backend pytest apps/users/tests/test_auth.py -q` is currently blocked by the existing MySQL privilege quirk where `tastify_user` cannot create the Django test database (`1044 Access denied`).
+
 ## [2026-05-14] - 15:00
 ### Changed
 - **Absolute Visibility Overhaul**: Applied the "Absolute Visibility Rule" across the backoffice-app to ensure high contrast and legibility in the "Tactical Command" aesthetic.

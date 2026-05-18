@@ -36,6 +36,26 @@ class AuthTests(APITestCase):
         self.assertIn(self.staff_cookie_name, response.cookies)
         self.assertTrue(response.cookies[self.staff_cookie_name]['httponly'])
 
+    def test_login_accepts_case_insensitive_username(self):
+        response = self.client.post(
+            self.login_url,
+            {"username": self.username.upper(), "password": self.password},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], self.username)
+
+    def test_login_trims_username_whitespace(self):
+        response = self.client.post(
+            self.login_url,
+            {"username": f"  {self.username}  ", "password": self.password},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], self.username)
+
     def test_refresh_token_from_cookie(self):
         # First login to get the cookie
         login_data = {"username": self.username, "password": self.password}
