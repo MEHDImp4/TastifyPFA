@@ -95,7 +95,7 @@ export const DashboardPage: React.FC = () => {
     { label: "Temps prep. moyen", value: `${data.avgPrepTime} min`, icon: Timer, color: "text-primary", bg: "bg-primary-container/20", trend: "Optimal", trendUp: true },
   ];
 
-  const COLORS = ['#0040e0', '#2e5bff', '#5d5f5f', '#124af0', '#0035be'];
+  const COLORS = ['#8d4e1c', '#2e5bff', '#5d5f5f', '#124af0', '#0035be'];
 
   return (
     <motion.div 
@@ -168,8 +168,8 @@ export const DashboardPage: React.FC = () => {
                   <AreaChart data={data.revenue7Days} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0040e0" stopOpacity={0.15}/>
-                        <stop offset="95%" stopColor="#0040e0" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#8d4e1c" stopOpacity={0.15}/>
+                        <stop offset="95%" stopColor="#8d4e1c" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#eae7e7" vertical={false} />
@@ -192,12 +192,12 @@ export const DashboardPage: React.FC = () => {
                       tickFormatter={(val) => `${val} DH`}
                     />
                     <Tooltip 
-                      cursor={{ stroke: '#0040e0', strokeWidth: 1, strokeDasharray: '4 4' }}
+                      cursor={{ stroke: '#8d4e1c', strokeWidth: 1, strokeDasharray: '4 4' }}
                       contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)', border: '1px solid #eae7e7', borderRadius: '1.25rem', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', padding: '16px' }}
-                      itemStyle={{ color: '#0040e0', fontWeight: 'bold', fontSize: '14px' }}
+                      itemStyle={{ color: '#8d4e1c', fontWeight: 'bold', fontSize: '14px' }}
                       labelStyle={{ color: '#1c1b1b', fontWeight: '800', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '11px' }}
                     />
-                    <Area type="monotone" dataKey="revenue" stroke="#0040e0" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" animationDuration={1500} />
+                    <Area type="monotone" dataKey="revenue" stroke="#8d4e1c" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" animationDuration={1500} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
