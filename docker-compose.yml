@@ -37,6 +37,8 @@ services:
     env_file: .env
     environment:
       COLLECTSTATIC_ON_STARTUP: "1"
+      SEED_ON_STARTUP: "1"
+      SEED_COMMAND: "seed_all"
     ports:
       - "8000:8000"
     volumes:

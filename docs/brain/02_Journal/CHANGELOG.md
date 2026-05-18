@@ -1,3 +1,20 @@
+## [2026-05-18] - 23:25
+### Changed
+- **Landing Page Redesign (Bento-Command)**: Completely redesigned the client portal landing page from scratch for a high-impact, cinematic experience.
+- **Layout Architecture**: Replaced the vertical layout with an **Asymmetric Bento Grid Hero** and a **Horizontal Scroll Feature Track** ("The Ritual").
+- **Visual Language**: Transitioned to the "Bento-Command" design system using extreme asymmetry, scale contrast, and "Double-Bezel" image framing.
+- **Content Integration**: Added inline typography images, tactical micro-interactions (floating glass elements), and a cinematic final CTA.
+- **Performance**: Verified the new layout with a successful production build and ensured "Absolute Visibility" for all text elements.
+- **Documentation**: Created `design-system/tastify/pages/home.md` to define the new layout's specific design tokens and rules.
+
+## [2026-05-18] - 22:56
+### Fixed
+- **Staff Login 401 on Fresh Docker Volumes**: Updated `app/backend/entrypoint.sh` so the backend auto-runs `seed_all` when the database is migrated but the `Utilisateur` table is empty. Added the matching Docker Compose environment flags on the `backend` service so documented demo staff accounts are restored automatically on first boot.
+
+### Changed
+- Documented the empty-database auth quirk in `docs/brain/03_Architecture/QUIRKS.md`.
+- Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to reflect the startup seeding behavior.
+
 ## [2026-05-18] - 16:05
 ### Added
 - Integrated `drf-spectacular` into the Django REST backend to generate an OpenAPI schema and expose Swagger UI and ReDoc.

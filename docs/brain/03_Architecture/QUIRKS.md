@@ -70,3 +70,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 3. Beat schedule registration on no-op migrate
 - **Issue**: Relying only on a `post_migrate` hook to create `django-celery-beat` rows can miss the live database when `migrate` has nothing to apply.
 - **Fix**: Seed required `PeriodicTask` rows with a dedicated data migration, then keep signal-based registration only as a secondary safety net.
+
+### 4. Empty Docker DB Breaks Demo Auth
+- **Issue**: A fresh MySQL volume can come up fully migrated but still contain zero `Utilisateur` rows, which makes every documented demo login return `401 Unauthorized` even when the frontend request is correct.
+- **Fix**: In Docker development, enable `SEED_ON_STARTUP=1` on the `backend` service so `entrypoint.sh` runs `python manage.py seed_all` exactly when the user table is empty.

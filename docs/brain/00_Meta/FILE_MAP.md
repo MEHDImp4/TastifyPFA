@@ -29,7 +29,7 @@ tastify-pfa/
 │   │   │   ├── loyalty/           # Loyalty points & rewards system
 │   │   │   └── configuration/      # Establishment personalization (SaaS)
 │   │   ├── requirements.txt       # Backend runtime deps
-│   │   ├── entrypoint.sh          # Migrations + Server start
+│   │   ├── entrypoint.sh          # Migrations + optional empty-DB seed + Server start
 │   │   └── Dockerfile
 │   └── frontend/                  # 2 independent Vite SPAs
 │       ├── backoffice-app/        # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER

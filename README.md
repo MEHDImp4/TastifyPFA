@@ -14,6 +14,8 @@ cp .env.example .env
 docker compose up --build
 ```
 
+On a fresh MySQL volume, the `backend` container now auto-runs `seed_all` after migrations when the user table is empty, so the documented demo logins are available immediately.
+
 ### Seeding
 To populate the database with initial users, tables, menu, ingredients, and recipes:
 ```bash
