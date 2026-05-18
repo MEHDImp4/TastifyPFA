@@ -42,3 +42,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['role'] = self.user.role
         data['username'] = self.user.username
         return data
+
+
+class AuthMessageSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+
+class RegisterResponseSerializer(AuthMessageSerializer):
+    username = serializers.CharField()

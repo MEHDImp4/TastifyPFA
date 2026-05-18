@@ -33,6 +33,9 @@ Then visit:
 - `http://localhost:3003/` → Portail Client SPA
 - `http://localhost:3000/` → Staff SPA (GERANT, SERVEUR, CUISINIER)
 - `http://localhost:8000/api/` → Django REST API
+- `http://localhost:8000/api/docs/` → Swagger UI
+- `http://localhost:8000/api/redoc/` → ReDoc
+- `http://localhost:8000/api/schema/` → OpenAPI schema
 
 Each frontend Vite dev server proxies `/api` and `/media` to `http://backend:8000` inside the Docker network.
 Both Vite dev servers now accept all hosts during development so `localhost`, `127.0.0.1`, Docker bridge names, and direct LAN-IP access reuse the same proxy path.
@@ -73,6 +76,18 @@ Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of t
 - `apps.stock` — ingredients inventory (51 Moroccan cooking items), dish-recipe mappings (129 plat-ingredient links), async stock deduction tasks/services, and soft-delete.
 - `apps.hr` — employees linked to users, salary, position, personal details, and soft-delete.
 - `app/backend/entrypoint.sh` — applies pending migrations before the ASGI server starts.
+
+## API documentation
+Swagger and OpenAPI are generated automatically with `drf-spectacular`.
+The backend exposes:
+- `/api/schema/` for the raw OpenAPI schema
+- `/api/docs/` for Swagger UI
+- `/api/redoc/` for ReDoc
+
+If the backend container is already running, refresh dependencies with:
+```bash
+docker compose up -d --build backend
+```
 
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.

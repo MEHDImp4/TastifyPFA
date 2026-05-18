@@ -11,10 +11,10 @@ tastify-pfa/
 │   │   ├── media/                  # User-uploaded content (images)
 │   │   ├── tastify_backend/
 │   │   │   ├── settings/{base,dev,prod}.py
-│   │   │   ├── urls.py
+│   │   │   ├── urls.py           # API routes + OpenAPI/Swagger/ReDoc endpoints
 │   │   │   ├── asgi.py            # Daphne entry — ProtocolTypeRouter
 │   │   │   └── wsgi.py
-│   │   ├── core/                  # Root config app, Channels middleware/consumers/helpers/tests
+│   │   ├── core/                  # Root config app, Channels middleware/consumers/helpers/tests (incl. API docs smoke tests)
 │   │   ├── apps/                  # Domain apps
 │   │   │   ├── users/             # Custom User model, Auth (Phase 2 & 3)
 │   │   │   ├── menu/              # Categories & Dishes (Phase 4+)
@@ -67,6 +67,9 @@ tastify-pfa/
 | URL                  | Service            | Role          |
 |----------------------|--------------------|---------------|
 | `localhost:8000/api/`   | backend:8000       | Django REST   |
+| `localhost:8000/api/docs/` | backend:8000    | Swagger UI    |
+| `localhost:8000/api/redoc/` | backend:8000   | ReDoc         |
+| `localhost:8000/api/schema/` | backend:8000  | OpenAPI schema |
 | `localhost:8000/ws/`    | backend:8000       | Channels WS (Phase 13+) |
 | `localhost:3000/`       | backoffice:3000    | GERANT / SERVEUR / CUISINIER |
 | `localhost:3003/`       | portail:3003       | CLIENT        |

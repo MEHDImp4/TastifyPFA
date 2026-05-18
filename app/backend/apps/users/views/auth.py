@@ -2,16 +2,27 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from ..serializers import CustomTokenObtainPairSerializer, UserRegisterSerializer
+from ..serializers import (
+    AuthMessageSerializer,
+    CustomTokenObtainPairSerializer,
+    RegisterResponseSerializer,
+    UserRegisterSerializer,
+)
 
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = UserRegisterSerializer
 
+    @extend_schema(
+        request=UserRegisterSerializer,
+        responses={201: RegisterResponseSerializer, 400: UserRegisterSerializer},
+    )
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -126,7 +137,9 @@ class CookieTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = AuthMessageSerializer
 
+    @extend_schema(responses={200: AuthMessageSerializer})
     def post(self, request):
         response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
         clear_refresh_cookie(response, request)

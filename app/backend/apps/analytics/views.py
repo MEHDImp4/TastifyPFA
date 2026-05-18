@@ -2,19 +2,50 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Sum, Count, F, Avg, Q
 from django.db.models.functions import TruncDate
+from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 from apps.paiements.models import Paiement
 from apps.tables.models import Table
 from apps.commandes.models import Commande, CommandeLigne
 from apps.users.permissions import IsGerant  # Assuming there's a custom permission
 
+
+class RevenuePointSerializer(serializers.Serializer):
+    date = serializers.CharField()
+    revenue = serializers.FloatField()
+
+
+class TopDishSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    quantity = serializers.IntegerField()
+
+
+class LiveFeedItemSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    type = serializers.CharField()
+    message = serializers.CharField()
+    time = serializers.DateTimeField()
+
+
+class DashboardResponseSerializer(serializers.Serializer):
+    todayRevenue = serializers.FloatField()
+    activeTables = serializers.IntegerField()
+    pendingOrders = serializers.IntegerField()
+    avgPrepTime = serializers.IntegerField()
+    revenue7Days = RevenuePointSerializer(many=True)
+    topDishes = TopDishSerializer(many=True)
+    liveFeed = LiveFeedItemSerializer(many=True)
+
 class DashboardAPIView(APIView):
     # Only authenticated users with the GERANT role should access this
     permission_classes = [IsAuthenticated, IsGerant]
+    serializer_class = DashboardResponseSerializer
 
+    @extend_schema(responses={200: DashboardResponseSerializer})
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
         
