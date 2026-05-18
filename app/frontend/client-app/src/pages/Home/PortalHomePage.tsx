@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { 
   ArrowRight, 
-  Star, 
   Clock, 
   ChefHat, 
   Sparkles, 
@@ -63,100 +62,105 @@ export const PortalHomePage: React.FC = () => {
 
   // Parallax transforms
   const heroY = useTransform(smoothProgress, [0, 0.2], [0, -100]);
-  const heroOpacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
-  const scale = useTransform(smoothProgress, [0, 0.1], [1, 0.95]);
 
   return (
     <div ref={containerRef} className="w-full bg-background selection:bg-primary/20 selection:text-primary overflow-x-hidden">
       {/* Noise Overlay */}
       <div className="noise-overlay" />
 
-      {/* Cinematic Hero - Liquid Glass Concept */}
-      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
-        <motion.div 
-          style={{ y: heroY, opacity: heroOpacity, scale }}
-          className="absolute inset-0 z-0"
-        >
-          <div className="absolute inset-0 bg-black/30 z-10" />
-          <img 
-            src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000" 
-            alt="Luxury Dining"
-            className="w-full h-full object-cover scale-105 animate-[pulse_10s_ease-in-out_infinite]"
-          />
+      {/* Premium Editorial Hero - Asymmetrical Split */}
+      <section className="relative min-h-[100dvh] flex items-center pt-24 lg:pt-0 overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
           
-          {/* Liquid Gradient Orbs */}
-          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/20 blur-[150px] rounded-full mix-blend-overlay animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/10 blur-[120px] rounded-full mix-blend-overlay animate-bounce" style={{ animationDuration: '8s' }} />
-        </motion.div>
-
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 relative z-20 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-            className="space-y-8 md:space-y-12"
-          >
-            <motion.div 
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
+          {/* Left: Cinematic Typography */}
+          <div className="lg:col-span-7 relative z-20 order-2 lg:order-1">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
+              className="space-y-10 md:space-y-16"
             >
-              <Star className="w-3.5 h-3.5 fill-primary text-primary" />
-              <span>{brandName} — A Private Culinary Estate</span>
+              <motion.div 
+                className="inline-flex items-center gap-3 px-0 text-primary"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="w-12 h-[1px] bg-primary/40" />
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Est. 2024 — {brandName} Estate</span>
+              </motion.div>
+
+              <h1 className="text-7xl sm:text-8xl md:text-[9rem] lg:text-[11rem] font-serif leading-[0.8] tracking-[-0.04em] text-[#301400]">
+                A Taste of <br />
+                <span className="italic font-light text-primary/80 block mt-4">Infinity.</span>
+              </h1>
+
+              <div className="max-w-xl space-y-8">
+                <p className="text-xl md:text-2xl font-sans text-[#301400]/80 leading-relaxed text-balance">
+                  Where Moroccan heritage meets architectural precision. <br className="hidden md:block" />
+                  An orchestrated experience for the most discerning tables.
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-8 pt-4">
+                  <Link 
+                    to="/reservations"
+                    className="group relative flex items-center gap-4 pl-10 pr-4 py-4 bg-[#301400] text-white rounded-full font-black uppercase text-[10px] tracking-[0.25em] transition-all hover:scale-105 active:scale-95"
+                  >
+                    <span>Secure a Table</span>
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center transition-transform group-hover:rotate-45">
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </Link>
+                  <Link 
+                    to="/menu"
+                    className="group flex items-center gap-3 text-[#301400] font-black uppercase text-[10px] tracking-[0.25em] hover:text-primary transition-colors"
+                  >
+                    <span>Explore Menu</span>
+                    <div className="w-1 h-1 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </div>
+              </div>
             </motion.div>
+          </div>
 
-            <h1 className="text-6xl sm:text-8xl md:text-[10rem] font-display-accent leading-[0.85] tracking-tighter">
-              A Taste of <br />
-              <span className="italic font-light text-primary drop-shadow-[0_0_30px_rgba(209,133,78,0.3)]">Infinity.</span>
-            </h1>
+          {/* Right: Architectural Visual */}
+          <div className="lg:col-span-5 order-1 lg:order-2">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+              className="relative aspect-[4/5] lg:aspect-[3/4] w-full"
+            >
+              {/* Double-Bezel Architecture */}
+              <div className="absolute inset-0 p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl overflow-hidden">
+                <div className="relative w-full h-full rounded-[calc(3rem-0.75rem)] overflow-hidden">
+                  <motion.div 
+                    style={{ y: heroY }}
+                    className="absolute inset-0"
+                  >
+                    <img 
+                      src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000" 
+                      alt="Luxury Dining"
+                      className="w-full h-full object-cover scale-110"
+                    />
+                    <div className="absolute inset-0 bg-[#301400]/10 mix-blend-multiply" />
+                  </motion.div>
+                </div>
+              </div>
 
-            <p className="text-lg md:text-2xl font-body max-w-2xl mx-auto opacity-90 leading-relaxed text-balance">
-              Where Moroccan heritage meets architectural precision. An orchestrated experience for the most discerning tables.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-10 pt-8">
-              <Link 
-                to="/reservations"
-                className="group relative px-12 py-5 bg-primary text-white rounded-full font-black uppercase text-xs md:text-sm tracking-[0.3em] overflow-hidden transition-all hover:scale-105 hover:shadow-[0_20px_50px_rgba(141,78,28,0.4)] active:scale-95"
-              >
-                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                <span className="relative z-10 flex items-center gap-3">
-                  Secure a Table <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
-              <Link 
-                to="/menu"
-                className="group px-10 py-5 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-full font-black uppercase text-xs md:text-sm tracking-[0.3em] hover:bg-white hover:text-on-surface transition-all active:scale-95"
-              >
-                Explore Menu
-              </Link>
-            </div>
-          </motion.div>
+              {/* Decorative Accent */}
+              <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/10 blur-3xl rounded-full" />
+              <div className="absolute -top-12 -right-12 w-48 h-48 bg-secondary/5 blur-3xl rounded-full animate-pulse" />
+            </motion.div>
+          </div>
         </div>
-
-        <motion.div 
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/40 flex flex-col items-center gap-4 cursor-pointer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-        >
-          <span className="text-[9px] font-black uppercase tracking-[0.5em]">Scroll to Discover</span>
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <ChevronDown className="w-6 h-6" />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* The Vision - Full Bleed Editorial */}
       <section className="py-32 md:py-60 bg-surface relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
           <motion.div 
-            className="space-y-12"
+            className="lg:col-span-6 space-y-12"
             {...fadeInUp}
           >
             <div className="space-y-6">
@@ -168,7 +172,7 @@ export const PortalHomePage: React.FC = () => {
               </h2>
             </div>
             
-            <div className="space-y-8 text-on-surface-variant font-body text-xl leading-relaxed opacity-80">
+            <div className="space-y-8 text-on-surface-variant font-body-text text-xl leading-relaxed opacity-80">
               <p>
                 We believe a restaurant is more than a space; it's a living organism. At {brandName}, technology serves as the invisible pulse, ensuring every moment is timed to perfection, while our culinary soul remains rooted in the sun-baked earth of the Maghreb.
               </p>
@@ -196,24 +200,27 @@ export const PortalHomePage: React.FC = () => {
           </motion.div>
 
           <motion.div 
-            className="relative"
+            className="lg:col-span-6 relative"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
             viewport={{ once: true }}
           >
-            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group">
-              <img 
-                src="https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=1000" 
-                alt="Chef at work"
-                className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent" />
-              <div className="absolute bottom-10 left-10 text-white">
-                <p className="font-display-accent italic text-3xl">Precision in every cut.</p>
-                <div className="flex items-center gap-3 mt-4">
-                  <div className="w-8 h-px bg-primary" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.4em] opacity-60">Verified Origin</span>
+            {/* Double-Bezel Architecture */}
+            <div className="relative aspect-[4/5] p-3 bg-white/5 border border-[#301400]/5 rounded-[3rem] shadow-2xl overflow-hidden group">
+              <div className="relative w-full h-full rounded-[calc(3rem-0.75rem)] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=1000" 
+                  alt="Chef at work"
+                  className="w-full h-full object-cover transition-transform duration-2000 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent" />
+                <div className="absolute bottom-10 left-10 text-white">
+                  <p className="font-display-accent italic text-3xl">Precision in every cut.</p>
+                  <div className="flex items-center gap-3 mt-4">
+                    <div className="w-8 h-px bg-primary" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.4em] opacity-60">Verified Origin</span>
+                  </div>
                 </div>
               </div>
             </div>
