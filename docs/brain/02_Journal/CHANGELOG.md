@@ -6,6 +6,7 @@
 - **Django System Check**: `docker compose exec backend python manage.py check` passed.
 - **Serializer Runtime Check**: Verified inside the live backend container that `CustomTokenObtainPairSerializer` accepts both `LOGIN_CASE_TEST` and `  login_case_test  ` for a lowercase stored account.
 - **Pytest Blocker**: `docker compose exec backend pytest apps/users/tests/test_auth.py -q` is currently blocked by the existing MySQL privilege quirk where `tastify_user` cannot create the Django test database (`1044 Access denied`).
+- **Code Commit**: `adff380` (`Fix case-insensitive staff login usernames`).
 
 ## [2026-05-14] - 15:00
 ### Changed
