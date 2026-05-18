@@ -33,35 +33,46 @@ export const PublicLayout: React.FC = () => {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary">
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/30">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-12">
+      <header className="sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-outline-variant/20">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 h-20 md:h-24 flex items-center justify-between">
+          <div className="flex items-center gap-16">
             <Link 
               to="/" 
               onClick={handleLogoClick}
               className="flex flex-col group transition-transform active:scale-95 z-50"
             >
-              <BrandWordmark className="font-serif text-xl md:text-2xl font-bold tracking-tighter text-on-surface group-hover:text-primary transition-colors italic" />
-              <span className="text-[8px] uppercase tracking-[0.4em] font-black text-primary/40 -mt-1 ml-0.5">Est. 2026</span>
+              <BrandWordmark className="font-serif text-2xl md:text-3xl font-bold tracking-tighter text-on-surface group-hover:text-primary transition-colors italic" />
+              <div className="flex items-center gap-2 -mt-1 ml-0.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <span className="text-[8px] uppercase tracking-[0.4em] font-black text-primary/60">Operational Portal</span>
+              </div>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-8">
-              <Link to="/menu" className="relative text-[11px] font-black text-on-surface hover:text-primary transition-colors uppercase tracking-[0.25em] group/nav">
-                Notre Menu
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover/nav:w-full" />
-              </Link>
-              <Link to="/reservations" className="relative text-[11px] font-black text-on-surface hover:text-primary transition-colors uppercase tracking-[0.25em] group/nav">
-                Réserver
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover/nav:w-full" />
-              </Link>
+            <nav className="hidden lg:flex items-center gap-10">
+              {[
+                { to: '/menu', label: 'Collection' },
+                { to: '/reservations', label: 'Placements' },
+              ].map((link) => (
+                <Link 
+                  key={link.to}
+                  to={link.to} 
+                  className="relative text-[10px] font-black text-on-surface/60 hover:text-primary transition-all uppercase tracking-[0.3em] group/nav"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-primary transition-all group-hover/nav:w-1 group-hover/nav:h-1 rounded-full" />
+                </Link>
+              ))}
             </nav>
           </div>
 
-          <div className="flex items-center gap-3 md:gap-5">
-            <Link to="/checkout" className="relative p-2.5 text-on-surface hover:text-primary hover:bg-primary/5 rounded-full transition-all active:scale-90">
-                <ShoppingBag className="w-5 h-5" strokeWidth={2.5} />
+          <div className="flex items-center gap-4 md:gap-8">
+            <Link 
+                to="/checkout" 
+                className="relative w-12 h-12 flex items-center justify-center text-on-surface hover:text-primary bg-on-surface/5 hover:bg-primary/5 rounded-full transition-all active:scale-90"
+            >
+                <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
                 {items.length > 0 && (
-                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-primary text-white text-[9px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-lg">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-xl border-2 border-white">
                         {items.length}
                     </span>
                 )}
