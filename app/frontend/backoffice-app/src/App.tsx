@@ -18,6 +18,8 @@ import { WebSocketProvider } from './contexts/WebSocketProvider';
 
 import { Toaster } from 'sonner';
 
+type StaffRole = 'GERANT' | 'SERVEUR' | 'CUISINIER';
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (!isAuthenticated) return <Navigate to="/login" replace />;
@@ -25,6 +27,22 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ROLE_HOME: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
+
+const RoleRoute = ({
+  allowedRoles,
+  children,
+}: {
+  allowedRoles: StaffRole[];
+  children: React.ReactNode;
+}) => {
+  const role = useAuthStore(state => state.role) as StaffRole | null;
+
+  if (!role || !allowedRoles.includes(role)) {
+    return <Navigate to={ROLE_HOME[role ?? ''] ?? '/'} replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -56,9 +74,11 @@ function App() {
               
               <Route path="/ordering/:tableId" element={
                 <ProtectedRoute>
-                  <div className="min-h-[100dvh] bg-background text-on-background p-6 md:p-8">
-                    <OrderingPage />
-                  </div>
+                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                    <div className="min-h-[100dvh] bg-background text-on-background p-6 md:p-8">
+                      <OrderingPage />
+                    </div>
+                  </RoleRoute>
                 </ProtectedRoute>
               } />
 
@@ -68,15 +88,51 @@ function App() {
                 </ProtectedRoute>
               }>
                 <Route index element={<RoleIndex />} />
-                <Route path="menu" element={<PlatPage />} />
-                <Route path="categories" element={<CategoryPage />} />
-                <Route path="salle" element={<SallePage />} />
-                <Route path="reservations" element={<ReservationsPage />} />
-                <Route path="kds" element={<KdsPage />} />
-                <Route path="stock" element={<StockPage />} />
-                <Route path="hr" element={<HrPage />} />
-                <Route path="avis" element={<AvisPage />} />
-                <Route path="settings" element={<SettingsPage />} />
+                <Route path="menu" element={
+                  <RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
+                    <PlatPage />
+                  </RoleRoute>
+                } />
+                <Route path="categories" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <CategoryPage />
+                  </RoleRoute>
+                } />
+                <Route path="salle" element={
+                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                    <SallePage />
+                  </RoleRoute>
+                } />
+                <Route path="reservations" element={
+                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                    <ReservationsPage />
+                  </RoleRoute>
+                } />
+                <Route path="kds" element={
+                  <RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
+                    <KdsPage />
+                  </RoleRoute>
+                } />
+                <Route path="stock" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <StockPage />
+                  </RoleRoute>
+                } />
+                <Route path="hr" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <HrPage />
+                  </RoleRoute>
+                } />
+                <Route path="avis" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <AvisPage />
+                  </RoleRoute>
+                } />
+                <Route path="settings" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <SettingsPage />
+                  </RoleRoute>
+                } />
               </Route>
 
               <Route path="*" element={<Navigate to="/" replace />} />

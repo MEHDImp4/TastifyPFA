@@ -15,6 +15,31 @@ test.describe('gerant browser workflows', () => {
     await expect(page).toHaveURL(/\/login$/);
   });
 
+  test('lets gerant users open every protected management route directly', async ({ page }) => {
+    await page.goto('/login');
+    await expect(page).toHaveURL(/\/$/);
+
+    await page.goto('/categories');
+    await expect(page).toHaveURL(/\/categories$/);
+    await expect(page.getByRole('heading', { name: 'Menu Architecture' })).toBeVisible();
+
+    await page.goto('/menu');
+    await expect(page).toHaveURL(/\/menu$/);
+    await expect(page.getByRole('heading', { name: 'Culinary Catalog' })).toBeVisible();
+
+    await page.goto('/stock');
+    await expect(page).toHaveURL(/\/stock$/);
+    await expect(page.getByRole('heading', { name: 'Gestion du Stock' })).toBeVisible();
+
+    await page.goto('/reservations');
+    await expect(page).toHaveURL(/\/reservations$/);
+    await expect(page.getByRole('heading', { name: 'Réservations' })).toBeVisible();
+
+    await page.goto('/kds');
+    await expect(page).toHaveURL(/\/kds$/);
+    await expect(page.getByRole('heading', { name: 'Kitchen Command Center' })).toBeVisible();
+  });
+
   test('creates, edits, and deletes a category', async ({ page }) => {
     const unique = Date.now();
     const initialName = `PW Category ${unique}`;

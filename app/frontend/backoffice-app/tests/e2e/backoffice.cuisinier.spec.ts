@@ -12,4 +12,20 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByTestId('nav-categories')).toHaveCount(0);
     await expect(page.getByTestId('nav-dashboard')).toHaveCount(0);
   });
+
+  test('keeps cuisinier users on allowed routes and redirects forbidden ones', async ({ page }) => {
+    await page.goto('/menu');
+    await expect(page).toHaveURL(/\/menu$/);
+    await expect(page.getByRole('heading', { name: 'Culinary Catalog' })).toBeVisible();
+
+    for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/salle', '/reservations', '/ordering/1']) {
+      await page.goto(forbiddenPath);
+      await expect(page).toHaveURL(/\/kds$/);
+    }
+  });
+
+  test('redirects an authenticated cuisinier away from login', async ({ page }) => {
+    await page.goto('/login');
+    await expect(page).toHaveURL(/\/kds$/);
+  });
 });

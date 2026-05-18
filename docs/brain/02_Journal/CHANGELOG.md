@@ -1,3 +1,15 @@
+## [2026-05-19] - 01:10
+### Added
+- Expanded backoffice Playwright coverage from smoke-level auth checks to a broader role matrix: unauthenticated route protection, authenticated `/login` redirects, direct URL access for GERANT, and forbidden-route redirects for SERVEUR and CUISINIER.
+
+### Fixed
+- Added role-based route guards in `app/frontend/backoffice-app/src/App.tsx` so staff can no longer bypass sidebar restrictions by typing protected URLs directly.
+
+### Validation
+- `docker compose up -d --build backoffice-app`
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`14/14` passed)
+
 ## [2026-05-19] - 00:40
 ### Added
 - Added a Playwright backoffice browser suite with authenticated setup storage states for `GERANT`, `SERVEUR`, and `CUISINIER`, plus public-auth coverage and manager CRUD scenarios for categories and plats.
