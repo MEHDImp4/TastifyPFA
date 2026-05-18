@@ -78,3 +78,11 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 5. Shared Backend Image Prevents Celery Drift
 - **Issue**: If `backend`, `celery-worker`, and `celery-beat` each keep separate Docker images, rebuilding only the web service can leave Celery containers on stale Python dependencies. The visible symptom is that worker/beat crash on startup with import errors like `ModuleNotFoundError: No module named 'drf_spectacular'` while the backend still works.
 - **Fix**: Make all three services share the same named backend image in `docker-compose.yml` so one rebuild refreshes Daphne, Celery worker, and Celery beat together.
+
+### 6. Playwright Can Reach `/login` Before Auth API Is Warm
+- **Issue**: Right after `docker compose up -d --build backend backoffice-app`, the Vite front can already serve `/login` while the proxied backend auth endpoint is still warming up. Browser tests then fail with `ERREUR_SYSTEME` even though credentials and selectors are correct.
+- **Fix**: In Playwright `globalSetup`, poll both `/login` and `/api/users/login/` before starting auth bootstrap or role-based browser projects.
+
+### 7. DRF Multipart Omits Boolean Defaults on Category/Plat Forms
+- **Issue**: Category and plat creation forms submit `multipart/form-data`. If the frontend omits boolean flags like `est_active` or `est_disponible`, Django REST Framework persists them as `false`, so newly created records vanish immediately from UI lists filtered on active records.
+- **Fix**: Explicitly append boolean fields into `FormData` during create/update flows, even when the UI does not expose a visible toggle.

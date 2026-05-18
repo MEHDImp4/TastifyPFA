@@ -1,3 +1,18 @@
+## [2026-05-19] - 00:40
+### Added
+- Added a Playwright backoffice browser suite with authenticated setup storage states for `GERANT`, `SERVEUR`, and `CUISINIER`, plus public-auth coverage and manager CRUD scenarios for categories and plats.
+- Added `scripts/run_full_stack_tests.ps1` as a single Docker-first validation entrypoint for backend `pytest` plus backoffice Playwright.
+
+### Fixed
+- Fixed backoffice category and plat `multipart/form-data` submissions so `est_active` and `est_disponible` are always sent explicitly, preventing newly created records from being persisted as inactive and disappearing immediately from the UI.
+- Hardened Playwright startup by waiting for both the Vite login page and the proxied `/api/users/login/` endpoint before generating role storage states.
+
+### Validation
+- `npm run build` in `app/frontend/backoffice-app`
+- `docker compose up -d --build db redis backend backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`8/8` passed)
+- `docker compose exec backend python -m pytest` is still blocked by pre-existing import failures in untouched backend tests (`apps/avis/tests.py`, `apps/commandes/tests/test_stock_integration.py`, `apps/stock/tests/test_tasks.py`)
+
 ## [2026-05-18] - 23:40
 ### Fixed
 - **Celery Containers Failing to Start After Partial Rebuilds**: Updated `docker-compose.yml` so `backend`, `celery-worker`, and `celery-beat` all share the same named backend image. This prevents Docker image drift where Celery kept an older Python environment and crashed on startup with missing modules such as `drf_spectacular`.

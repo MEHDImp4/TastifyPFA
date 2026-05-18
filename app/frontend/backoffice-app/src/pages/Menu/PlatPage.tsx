@@ -133,6 +133,8 @@ export const PlatPage: React.FC = () => {
     formData.append('prix', prix);
     formData.append('temps_preparation', temps.toString());
     formData.append('categorie', selectedCat.toString());
+    formData.append('est_active', String(editingPlat?.est_active ?? true));
+    formData.append('est_disponible', String(editingPlat?.est_disponible ?? true));
     if (image) formData.append('image', image);
 
     try {

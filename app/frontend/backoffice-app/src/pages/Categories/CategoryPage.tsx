@@ -69,6 +69,7 @@ export const CategoryPage: React.FC = () => {
     formData.append('nom', nom);
     formData.append('description', description);
     formData.append('ordre_affichage', ordre.toString());
+    formData.append('est_active', String(editingCategory?.est_active ?? true));
     if (image) formData.append('image', image);
 
     try {

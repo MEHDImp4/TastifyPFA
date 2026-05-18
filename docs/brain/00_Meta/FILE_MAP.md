@@ -35,6 +35,8 @@ tastify-pfa/
 │       ├── backoffice-app/        # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── src/api/           # API wrappers (including configuration.ts)
 │       │   ├── src/layouts/       # AppShell, Sidebar, Topbar
+│       │   ├── tests/e2e/         # Playwright auth bootstrap + multi-role browser flows
+│       │   ├── playwright.config.ts # Role-scoped E2E projects and storage-state setup
 │       │   └── src/pages/
 │       │       ├── Dashboard/     # Strategic Intelligence (High-End Motion)
 │       │       ├── Settings/      # Establishment personalize (SaaS)
@@ -59,6 +61,9 @@ tastify-pfa/
 │   ├── ROADMAP.md                 # Current phase tracking
 │   ├── STATE.md                   # Current execution state
 │   └── phases/                    # Phase-specific files
+├── scripts/
+│   ├── update_dashboard.py        # Dashboard synchronizer after every state shift
+│   └── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
 ├── docker-compose.yml             # Single root Compose configuration
 └── dashboard.html                 # Live project health dashboard
 ```

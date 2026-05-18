@@ -1,13 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-function categoryCardByText(page: import('@playwright/test').Page, text: string) {
-  return page.locator('[data-testid^="category-card-"]').filter({ hasText: text }).first();
-}
-
-function platCardByText(page: import('@playwright/test').Page, text: string) {
-  return page.locator('[data-testid^="plat-card-"]').filter({ hasText: text }).first();
-}
-
 test.describe('gerant browser workflows', () => {
   test('shows the manager navigation surface and can logout', async ({ page }) => {
     await page.goto('/');
@@ -33,25 +25,37 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('category-name-input').fill(initialName);
     await page.getByTestId('category-description-input').fill('Playwright seeded category for browser CRUD coverage.');
     await page.getByTestId('category-order-input').fill('91');
+    const createResponsePromise = page.waitForResponse((response) =>
+      response.url().includes('/api/categories/') && response.request().method() === 'POST',
+    );
     await page.getByTestId('category-save-button').click();
+    const createdCategory = await (await createResponsePromise).json();
 
-    await expect(categoryCardByText(page, initialName)).toBeVisible();
-
-    const createdCard = categoryCardByText(page, initialName);
+    const createdCard = page.getByTestId(`category-card-${createdCategory.id}`);
+    await createdCard.scrollIntoViewIfNeeded();
+    await expect(createdCard).toContainText(initialName);
     await createdCard.hover();
     await createdCard.locator('[data-testid^="category-edit-"]').click();
     await page.getByTestId('category-name-input').fill(updatedName);
     await page.getByTestId('category-description-input').fill('Updated category description from Playwright.');
+    const updateResponsePromise = page.waitForResponse((response) =>
+      response.url().includes(`/api/categories/${createdCategory.id}/`) && response.request().method() === 'PATCH',
+    );
     await page.getByTestId('category-save-button').click();
+    await updateResponsePromise;
 
-    await expect(categoryCardByText(page, updatedName)).toBeVisible();
-
-    const updatedCard = categoryCardByText(page, updatedName);
+    const updatedCard = page.getByTestId(`category-card-${createdCategory.id}`);
+    await updatedCard.scrollIntoViewIfNeeded();
+    await expect(updatedCard).toContainText(updatedName);
     page.once('dialog', (dialog) => dialog.accept());
     await updatedCard.hover();
+    const deleteResponsePromise = page.waitForResponse((response) =>
+      response.url().includes(`/api/categories/${createdCategory.id}/`) && response.request().method() === 'DELETE',
+    );
     await updatedCard.locator('[data-testid^="category-delete-"]').click();
+    await deleteResponsePromise;
 
-    await expect(categoryCardByText(page, updatedName)).toHaveCount(0);
+    await expect(page.getByTestId(`category-card-${createdCategory.id}`)).toHaveCount(0);
   });
 
   test('creates, edits, and deletes a plat', async ({ page }) => {
@@ -65,24 +69,36 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-price-input').fill('77.00');
     await page.getByTestId('plat-description-input').fill('Playwright seeded dish for manager catalog coverage.');
     await page.getByTestId('plat-time-input').fill('18');
+    const createResponsePromise = page.waitForResponse((response) =>
+      response.url().includes('/api/plats/') && response.request().method() === 'POST',
+    );
     await page.getByTestId('plat-save-button').click();
+    const createdPlat = await (await createResponsePromise).json();
 
-    await expect(platCardByText(page, initialName)).toBeVisible();
-
-    const createdCard = platCardByText(page, initialName);
+    const createdCard = page.getByTestId(`plat-card-${createdPlat.id}`);
+    await createdCard.scrollIntoViewIfNeeded();
+    await expect(createdCard).toContainText(initialName);
     await createdCard.hover();
     await createdCard.locator('[data-testid^="plat-edit-"]').click();
     await page.getByTestId('plat-name-input').fill(updatedName);
     await page.getByTestId('plat-description-input').fill('Updated Playwright dish description.');
+    const updateResponsePromise = page.waitForResponse((response) =>
+      response.url().includes(`/api/plats/${createdPlat.id}/`) && response.request().method() === 'PATCH',
+    );
     await page.getByTestId('plat-save-button').click();
+    await updateResponsePromise;
 
-    await expect(platCardByText(page, updatedName)).toBeVisible();
-
-    const updatedCard = platCardByText(page, updatedName);
+    const updatedCard = page.getByTestId(`plat-card-${createdPlat.id}`);
+    await updatedCard.scrollIntoViewIfNeeded();
+    await expect(updatedCard).toContainText(updatedName);
     page.once('dialog', (dialog) => dialog.accept());
     await updatedCard.hover();
+    const deleteResponsePromise = page.waitForResponse((response) =>
+      response.url().includes(`/api/plats/${createdPlat.id}/`) && response.request().method() === 'DELETE',
+    );
     await updatedCard.locator('[data-testid^="plat-delete-"]').click();
+    await deleteResponsePromise;
 
-    await expect(platCardByText(page, updatedName)).toHaveCount(0);
+    await expect(page.getByTestId(`plat-card-${createdPlat.id}`)).toHaveCount(0);
   });
 });

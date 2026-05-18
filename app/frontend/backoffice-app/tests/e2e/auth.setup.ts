@@ -16,7 +16,7 @@ test('capture authenticated storage states for seeded staff roles', async ({ bro
 
     const page = await browser.newPage();
     await loginThroughUi(page, user.username, user.password);
-    await expect(page).toHaveURL(new RegExp(`${user.homePath === '/' ? '/$' : user.homePath}$`));
+    await expect.poll(() => new URL(page.url()).pathname).toBe(user.homePath);
     await page.context().storageState({ path: authFile });
     await page.close();
   }

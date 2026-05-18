@@ -55,6 +55,7 @@ The client portail now follows a public-first access model: `/`, `/menu`, `/rese
 The public portail shell and gated notices now live in `app/frontend/portail/src/App.tsx`, `app/frontend/portail/src/components/ProtectedFeatureNotice.tsx`, and `app/frontend/portail/src/pages/Home/PortalHomePage.tsx`, while the authenticated booking flow stays backed by `app/frontend/portail/src/pages/Reservations/` and `app/frontend/portail/src/api/reservations.ts`.
 The portail test surface now mirrors the backoffice setup through `app/frontend/portail/vitest.config.ts` and `app/frontend/portail/src/test/setup.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
+The back-office browser automation suite now lives under `app/frontend/backoffice-app/tests/e2e/`, with `playwright.config.ts` defining guest, GERANT, SERVEUR, and CUISINIER projects plus authenticated storage-state bootstrap.
 Dense back-office list views now use a shared client-side pagination surface in `app/frontend/backoffice/src/components/ui/Pagination.tsx`, currently wired into dishes, stock, and HR screens.
 Cross-frontend role gates live in `app/frontend/shared/auth/roleAccess.ts`, with focused coverage in `app/frontend/backoffice/src/roleAccess.test.ts`.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
@@ -91,6 +92,13 @@ If the backend container is already running, refresh dependencies with:
 ```bash
 docker compose up -d --build backend
 ```
+
+## Automated validation
+- `docker compose exec backend python -m pytest`
+- `npm --prefix app/frontend/backoffice-app run test:e2e`
+- `powershell -ExecutionPolicy Bypass -File scripts/run_full_stack_tests.ps1`
+
+The PowerShell runner rebuilds `db`, `redis`, `backend`, and `backoffice-app`, then executes backend `pytest` followed by Playwright browser flows. Right now, the Playwright campaign is green for public auth, multi-role redirects, logout, category CRUD, and plat CRUD. Backend `pytest` is still partially blocked by pre-existing import issues in untouched modules such as `apps.avis.tests` and `apps.stock.tasks`.
 
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
