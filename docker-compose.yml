@@ -31,6 +31,7 @@ services:
       - tastify-network
 
   backend:
+    image: tastifypfa-backend-dev
     build:
       context: ./app/backend
     command: daphne -b 0.0.0.0 -p 8000 tastify_backend.asgi:application
@@ -53,8 +54,7 @@ services:
       - tastify-network
 
   celery-worker:
-    build:
-      context: ./app/backend
+    image: tastifypfa-backend-dev
     env_file: .env
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
     volumes:
@@ -69,8 +69,7 @@ services:
       - tastify-network
 
   celery-beat:
-    build:
-      context: ./app/backend
+    image: tastifypfa-backend-dev
     env_file: .env
     command: celery -A tastify_backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:

@@ -1,3 +1,16 @@
+## [2026-05-18] - 23:40
+### Fixed
+- **Celery Containers Failing to Start After Partial Rebuilds**: Updated `docker-compose.yml` so `backend`, `celery-worker`, and `celery-beat` all share the same named backend image. This prevents Docker image drift where Celery kept an older Python environment and crashed on startup with missing modules such as `drf_spectacular`.
+
+### Changed
+- Documented the shared-image Docker rule in `README.md` and `docs/brain/03_Architecture/QUIRKS.md`.
+
+### Validation
+- `docker compose images`
+- `docker compose up -d --build backend celery-worker celery-beat`
+- `docker compose ps -a`
+- `docker compose exec backend python manage.py check`
+
 ## [2026-05-18] - 23:25
 ### Changed
 - **Landing Page Redesign (Bento-Command)**: Completely redesigned the client portal landing page from scratch for a high-impact, cinematic experience.

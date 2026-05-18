@@ -74,3 +74,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 4. Empty Docker DB Breaks Demo Auth
 - **Issue**: A fresh MySQL volume can come up fully migrated but still contain zero `Utilisateur` rows, which makes every documented demo login return `401 Unauthorized` even when the frontend request is correct.
 - **Fix**: In Docker development, enable `SEED_ON_STARTUP=1` on the `backend` service so `entrypoint.sh` runs `python manage.py seed_all` exactly when the user table is empty.
+
+### 5. Shared Backend Image Prevents Celery Drift
+- **Issue**: If `backend`, `celery-worker`, and `celery-beat` each keep separate Docker images, rebuilding only the web service can leave Celery containers on stale Python dependencies. The visible symptom is that worker/beat crash on startup with import errors like `ModuleNotFoundError: No module named 'drf_spectacular'` while the backend still works.
+- **Fix**: Make all three services share the same named backend image in `docker-compose.yml` so one rebuild refreshes Daphne, Celery worker, and Celery beat together.

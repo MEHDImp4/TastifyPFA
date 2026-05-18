@@ -44,6 +44,7 @@ Both Vite dev servers now accept all hosts during development so `localhost`, `1
 Each frontend rejects accounts outside its allowed role family: the staff app accepts GERANT, SERVEUR, and CUISINIER; the client app accepts CLIENT only.
 Shared auth persistence is now portal-scoped: `app/frontend/shared/auth/portalContext.ts` namespaces the persisted Zustand key and sends an `X-Tastify-Portal` header so staff and client refresh cookies no longer overwrite each other in the same browser.
 The backend container runs pending Django migrations before starting Daphne, while Celery worker and Beat reuse the same migration path without re-running `collectstatic`.
+The Docker backend, Celery worker, and Celery beat now share the same named backend image so partial rebuilds cannot leave the async services on stale Python dependencies.
 Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for task results, leaving Redis DB `0` available for Channels/WebSocket traffic.
 
 ## Layout
