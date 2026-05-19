@@ -237,16 +237,16 @@ class Command(BaseCommand):
                     'image': 'categories/plats_principaux.png'
                 },
                 'plats': [
-                    {'nom': 'Tajine Poulet', 'description': 'Poulet aux olives et citron confit', 'prix': '28.00', 'temps_preparation': 35, 'image': 'plats/tajine_poulet.png'},
-                    {'nom': 'Tajine Agneau', 'description': "Agneau aux pruneaux et amandes grillées", 'prix': '32.00', 'temps_preparation': 40, 'image': 'plats/tajine_agneau.png'},
-                    {'nom': 'Couscous Royal', 'description': 'Semoule fine, sept légumes, poulet et merguez', 'prix': '30.00', 'temps_preparation': 40, 'image': 'plats/couscous_royal.png'},
-                    {'nom': 'Mechoui', 'description': "Épaule d'agneau rôtie lentement aux épices", 'prix': '38.00', 'temps_preparation': 45, 'image': 'plats/mechoui.png'},
-                    {'nom': 'Rfissa', 'description': "Poulet fermier, lentilles et crêpes msemen émiettées", 'prix': '29.00', 'temps_preparation': 40, 'image': 'plats/rfissa.png'},
-                    {'nom': 'Tanjia Marrakchia', 'description': "Viande de boeuf fondante cuite à l'étouffée", 'prix': '34.00', 'temps_preparation': 45, 'image': 'plats/tanjia_marrakchia.png'},
-                    {'nom': 'Pastilla au Poulet', 'description': 'Feuilleté sucré-salé traditionnel à la cannelle', 'prix': '22.00', 'temps_preparation': 30, 'image': 'plats/pastilla_poulet.png'},
-                    {'nom': 'Pastilla aux Poissons', 'description': 'Feuilleté épicé aux fruits de mer et vermicelles', 'prix': '25.00', 'temps_preparation': 35, 'image': 'plats/pastilla_poissons.png'},
-                    {'nom': 'Tajine de Poisson', 'description': "Filets de poisson cuits avec légumes et épices", 'prix': '29.00', 'temps_preparation': 30, 'image': 'plats/tajine_poisson.png'},
-                    {'nom': 'Tajine de Légumes', 'description': "Légumes de saison mijotés aux épices", 'prix': '20.00', 'temps_preparation': 25, 'image': 'plats/tajine_legumes.png'},
+                    {'nom': 'Tajine de Poulet', 'description': 'Poulet fermier aux olives et citron confit de Marrakech', 'prix': '28.00', 'temps_preparation': 35, 'image': 'plats/tajine_poulet.png'},
+                    {'nom': "Tajine d'Agneau Royal", 'description': "Agneau fondant aux pruneaux, amandes grillées et sésame", 'prix': '32.00', 'temps_preparation': 40, 'image': 'plats/tajine_agneau.png'},
+                    {'nom': 'Couscous aux Sept Légumes', 'description': 'Semoule fine, légumes de saison et bouillon parfumé traditionnel', 'prix': '30.00', 'temps_preparation': 40, 'image': 'plats/couscous_royal.png'},
+                    {'nom': 'Mechoui Impérial', 'description': "Épaule d'agneau rôtie lentement, parfumée aux herbes de l'Atlas", 'prix': '38.00', 'temps_preparation': 45, 'image': 'plats/mechoui.png'},
+                    {'nom': 'Rfissa de la Casbah', 'description': "Poulet fermier, lentilles et crêpes msemen aux saveurs du terroir", 'prix': '29.00', 'temps_preparation': 40, 'image': 'plats/rfissa.png'},
+                    {'nom': 'Tanjia Marrakchia', 'description': "Viande de boeuf fondante cuite à l'étouffée dans une jarre de terre", 'prix': '34.00', 'temps_preparation': 45, 'image': 'plats/tanjia_marrakchia.png'},
+                    {'nom': 'Pastilla au Poulet', 'description': 'Feuilleté croustillant aux amandes et cannelle, héritage fassi', 'prix': '22.00', 'temps_preparation': 30, 'image': 'plats/pastilla_poulet.png'},
+                    {'nom': 'Pastilla aux Fruits de Mer', 'description': 'Feuilleté épicé aux fruits de mer et vermicelles', 'prix': '25.00', 'temps_preparation': 35, 'image': 'plats/pastilla_poissons.png'},
+                    {'nom': 'Tajine de Mer', 'description': "Filets de poisson frais du jour mijotés aux herbes fines", 'prix': '29.00', 'temps_preparation': 30, 'image': 'plats/tajine_poisson.png'},
+                    {'nom': 'Tajine de Légumes Jardinier', 'description': "Légumes du potager mijotés aux épices douces", 'prix': '20.00', 'temps_preparation': 25, 'image': 'plats/tajine_legumes.png'},
                 ],
             },
             {
@@ -463,7 +463,7 @@ class Command(BaseCommand):
                 ('Citron', 1),
                 ('Sel fin', 1),
             ],
-            'Tajine Poulet': [
+            'Tajine de Poulet': [
                 ('Poulet fermier', 450),
                 ('Oignon', 180),
                 ('Citron confit', 80),
@@ -473,7 +473,7 @@ class Command(BaseCommand):
                 ('Sel fin', 3),
                 ('Huile d\'olive', 40),
             ],
-            'Tajine Agneau': [
+            'Tajine d\'Agneau Royal': [
                 ('Agneau', 500),
                 ('Oignon', 200),
                 ('Pruneaux', 120),
@@ -483,7 +483,7 @@ class Command(BaseCommand):
                 ('Sel fin', 3),
                 ('Huile d\'olive', 40),
             ],
-            'Couscous Royal': [
+            'Couscous aux Sept Légumes': [
                 ('Semoule fine', 350),
                 ('Poulet fermier', 250),
                 ('Merguez', 180),
@@ -494,7 +494,7 @@ class Command(BaseCommand):
                 ('Sel fin', 3),
                 ('Huile d\'olive', 35),
             ],
-            'Mechoui': [
+            'Mechoui Impérial': [
                 ('Agneau', 600),
                 ('Cumin', 8),
                 ('Paprika', 3),
@@ -502,7 +502,7 @@ class Command(BaseCommand):
                 ('Sel fin', 4),
                 ('Huile d\'olive', 30),
             ],
-            'Rfissa': [
+            'Rfissa de la Casbah': [
                 ('Poulet fermier', 450),
                 ('Lentilles vertes', 180),
                 ('Farine', 200),
@@ -534,7 +534,7 @@ class Command(BaseCommand):
                 ('Miel', 40),
                 ('Huile d\'olive', 30),
             ],
-            'Pastilla aux Poissons': [
+            'Pastilla aux Fruits de Mer': [
                 ('Feuille de pâte phyllo', 250),
                 ('Poisson blanc', 280),
                 ('Crevettes', 120),
@@ -545,7 +545,7 @@ class Command(BaseCommand):
                 ('Persil frais', 15),
                 ('Huile d\'olive', 25),
             ],
-            'Tajine de Poisson': [
+            'Tajine de Mer': [
                 ('Poisson blanc', 450),
                 ('Tomate', 200),
                 ('Oignon', 130),
@@ -557,7 +557,7 @@ class Command(BaseCommand):
                 ('Sel fin', 2),
                 ('Huile d\'olive', 35),
             ],
-            'Tajine de Légumes': [
+            'Tajine de Légumes Jardinier': [
                 ('Carotte', 180),
                 ('Courgette', 180),
                 ('Pois chiches', 120),
