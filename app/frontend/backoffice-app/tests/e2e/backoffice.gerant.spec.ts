@@ -38,6 +38,22 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/kds');
     await expect(page).toHaveURL(/\/kds$/);
     await expect(page.getByRole('heading', { name: 'Kitchen Command Center' })).toBeVisible();
+
+    await page.goto('/hr');
+    await expect(page).toHaveURL(/\/hr$/);
+    await expect(page.getByRole('heading', { name: 'Gestion du Personnel' })).toBeVisible();
+
+    await page.goto('/avis');
+    await expect(page).toHaveURL(/\/avis$/);
+    await expect(page.getByRole('heading', { name: 'Analyse des Sentiments' })).toBeVisible();
+
+    await page.goto('/settings');
+    await expect(page).toHaveURL(/\/settings$/);
+    await expect(page.getByRole('button', { name: 'Enregistrer les modifications' })).toBeVisible();
+
+    await page.goto('/ordering/1');
+    await expect(page).toHaveURL(/\/ordering\/1$/);
+    await expect(page.getByText('Operational Cart')).toBeVisible();
   });
 
   test('creates, edits, and deletes a category', async ({ page }) => {
@@ -125,5 +141,87 @@ test.describe('gerant browser workflows', () => {
     await deleteResponsePromise;
 
     await expect(page.getByTestId(`plat-card-${createdPlat.id}`)).toHaveCount(0);
+  });
+
+  test('resets category create drafts when the modal is reopened', async ({ page }) => {
+    await page.goto('/categories');
+    await page.getByTestId('category-create-button').click();
+    await page.getByTestId('category-name-input').fill('Transient category');
+    await page.getByTestId('category-description-input').fill('This draft should be discarded.');
+    await page.getByTestId('category-order-input').fill('42');
+    await page.locator('div.fixed.inset-0.z-\\[100\\] button').first().click();
+    await expect(page.getByTestId('category-name-input')).toHaveCount(0);
+
+    await page.getByTestId('category-create-button').click();
+    await expect(page.getByTestId('category-name-input')).toHaveValue('');
+    await expect(page.getByTestId('category-description-input')).toHaveValue('');
+    await expect(page.getByTestId('category-order-input')).toHaveValue('0');
+  });
+
+  test('keeps the category draft visible when creation fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      if (route.request().method() === 'POST') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'category write failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/categories');
+    await page.getByTestId('category-create-button').click();
+    await page.getByTestId('category-name-input').fill('Broken category draft');
+    await page.getByTestId('category-description-input').fill('The modal should stay open after the API failure.');
+    await page.getByTestId('category-order-input').fill('7');
+    await page.getByTestId('category-save-button').click();
+
+    await expect(page.getByTestId('category-name-input')).toHaveValue('Broken category draft');
+    await expect(page.getByTestId('category-description-input')).toHaveValue('The modal should stay open after the API failure.');
+    await expect(page.getByTestId('category-order-input')).toHaveValue('7');
+  });
+
+  test('shows a save error and keeps the plat draft after a failed create', async ({ page }) => {
+    await page.route('**/api/plats/', async (route) => {
+      if (route.request().method() === 'POST') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'plat write failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/menu');
+    await page.getByTestId('plat-create-button').click();
+    await page.getByTestId('plat-name-input').fill('Broken plat draft');
+    await page.getByTestId('plat-price-input').fill('31.50');
+    await page.getByTestId('plat-description-input').fill('This draft should survive a failing save.');
+    await page.getByTestId('plat-time-input').fill('12');
+    await page.getByTestId('plat-save-button').click();
+
+    await expect(page.getByText('Erreur lors de la sauvegarde')).toBeVisible();
+    await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken plat draft');
+    await expect(page.getByTestId('plat-price-input')).toHaveValue('31.50');
+    await expect(page.getByTestId('plat-description-input')).toHaveValue('This draft should survive a failing save.');
+  });
+
+  test('renders the settings fallback state when configuration loading fails', async ({ page }) => {
+    await page.route('**/api/settings/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'settings unavailable' }),
+      });
+    });
+
+    await page.goto('/settings');
+    await expect(page.getByText('Impossible de charger la configuration.')).toBeVisible();
   });
 });

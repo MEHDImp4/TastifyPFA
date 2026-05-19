@@ -22,4 +22,30 @@ test.describe('public authentication flows', () => {
     await page.getByTestId('login-submit').click();
     await expect(page.getByText('ACCES_REFUSE')).toBeVisible();
   });
+
+  test('normalizes seeded credentials before authenticating', async ({ page }) => {
+    await page.goto('/login');
+    await page.getByTestId('login-username').fill('  GERANT_TEST  ');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByTestId('nav-dashboard')).toBeVisible();
+  });
+
+  test('shows system error when login transport fails', async ({ page }) => {
+    await page.route('**/api/users/login/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'temporary failure' }),
+      });
+    });
+
+    await page.goto('/login');
+    await page.getByTestId('login-username').fill('gerant_test');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByText('ERREUR_SYSTEME')).toBeVisible();
+    await expect(page).toHaveURL(/\/login$/);
+  });
 });

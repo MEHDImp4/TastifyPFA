@@ -20,6 +20,9 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/ordering/1');
     await expect(page).toHaveURL(/\/ordering\/1$/);
+    await expect(page.getByText(/Station Table/i)).toBeVisible();
+    await expect(page.getByText('Operational Cart')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Push to Kitchen' })).toBeVisible();
 
     for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/menu', '/kds']) {
       await page.goto(forbiddenPath);

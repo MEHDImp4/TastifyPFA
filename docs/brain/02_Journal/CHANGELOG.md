@@ -1,3 +1,13 @@
+## [2026-05-19] - 01:33
+### Added
+- Expanded the backoffice Playwright suite beyond the first role matrix to cover normalized seeded login, auth transport failure handling, direct GERANT access to `hr`, `avis`, `settings`, and `ordering/:tableId`, plus stronger SERVEUR ordering assertions.
+- Added manager-side failure-path coverage for category and plat creation so the browser suite now verifies draft reset on modal reopen, draft persistence after failed saves, and the settings fallback state when configuration loading fails.
+
+### Validation
+- `docker compose up -d --build db redis backend backoffice-app`
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`20/20` passed)
+
 ## [2026-05-19] - 01:35
 ### Added
 - Created `.github/workflows/backoffice-ci.yml` to automate the current stable validation surface on GitHub Actions for pull requests and pushes to `main`/`master`.

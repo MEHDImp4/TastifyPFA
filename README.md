@@ -98,7 +98,7 @@ docker compose up -d --build backend
 - `npm --prefix app/frontend/backoffice-app run test:e2e`
 - `powershell -ExecutionPolicy Bypass -File scripts/run_full_stack_tests.ps1`
 
-The PowerShell runner rebuilds `db`, `redis`, `backend`, and `backoffice-app`, then executes backend `pytest` followed by Playwright browser flows. Right now, the Playwright campaign is green for public auth, unauthenticated route protection, multi-role redirects, role-based URL guards, logout, category CRUD, and plat CRUD. Backend `pytest` is still partially blocked by pre-existing import issues in untouched modules such as `apps.avis.tests` and `apps.stock.tasks`.
+The PowerShell runner rebuilds `db`, `redis`, `backend`, and `backoffice-app`, then executes backend `pytest` followed by Playwright browser flows. Right now, the Playwright campaign is green for public auth, unauthenticated route protection, login normalization, auth transport failures, multi-role redirects, role-based URL guards, logout, direct manager route access, ordering access, category CRUD, plat CRUD, modal draft reset, failed-save draft persistence, and settings failure fallback. Backend `pytest` is still partially blocked by pre-existing import issues in untouched modules such as `apps.avis.tests` and `apps.stock.tasks`.
 
 ## GitHub Actions
 - `.github/workflows/backoffice-ci.yml` runs on pull requests plus pushes to `main` and `master`.
