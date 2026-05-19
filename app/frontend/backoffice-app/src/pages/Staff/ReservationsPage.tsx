@@ -42,7 +42,7 @@ export const ReservationsPage: React.FC = () => {
                 <Skeleton className="w-48 h-8" />
                 <Skeleton className="w-64 h-4" />
             </div>
-            <Skeleton className="w-32 h-10 rounded-xl" />
+            <Skeleton className="w-32 h-10 rounded-none" />
         </div>
         <div className="grid grid-cols-1 gap-4">
             <Skeleton className="h-32 rounded-[2rem]" />
@@ -96,22 +96,22 @@ export const ReservationsPage: React.FC = () => {
         
         <div className="flex items-center gap-3">
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#53443a' }} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#53443a' }}  strokeWidth={1.5}/>
                 <input 
                     type="text" 
                     placeholder="Chercher un client..."
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="pl-10 pr-4 py-2 bg-surface-container border border-outline-variant/30 rounded-xl text-sm focus:outline-none focus:border-primary transition-colors font-bold"
+                    className="pl-10 pr-4 py-2 bg-surface-container border border-outline-variant/30 rounded-none text-sm focus:outline-none focus:border-primary transition-colors font-bold"
                     style={{ color: '#301400' }}
                 />
             </div>
-            <div className="flex bg-surface-container p-1 rounded-xl border border-outline-variant/30">
+            <div className="flex bg-surface-container p-1 rounded-none border border-outline-variant/30">
                 {['ALL', 'EN_ATTENTE', 'CONFIRMEE', 'ANNULEE'].map(f => (
                     <button
                         key={f}
                         onClick={() => setFilter(f)}
-                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${filter === f ? 'bg-primary text-on-primary shadow-lg' : 'hover:text-primary'}`}
+                        className={`px-4 py-1.5 rounded-none text-xs font-bold transition-all ${filter === f ? 'bg-primary text-on-primary shadow-[2px_2px_0px_rgba(15,23,42,0.1)]' : 'hover:text-primary'}`}
                         style={{ color: filter === f ? undefined : '#53443a' }}
                     >
                         {f === 'ALL' ? 'Tout' : f.replace('_', ' ')}
@@ -128,37 +128,37 @@ export const ReservationsPage: React.FC = () => {
             className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 tonal-card hover:border-primary/30 transition-all"
           >
             <div className="flex items-center gap-6 mb-4 md:mb-0">
-              <div className="w-16 h-16 bg-surface-container rounded-2xl flex flex-col items-center justify-center text-primary border border-outline-variant/30">
-                  <Calendar className="w-6 h-6 mb-1" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#53443a' }}>
+              <div className="w-16 h-16 bg-surface-container rounded-none flex flex-col items-center justify-center text-primary border border-outline-variant/30">
+                  <Calendar className="w-6 h-6 mb-1"  strokeWidth={1.5}/>
+                  <span className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>
                       {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
                   </span>
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <h3 className="text-lg font-bold capitalize" style={{ color: '#301400' }}>{res.user_username || 'Client'}</h3>
-                  <span className={`px-3 py-0.5 rounded-full text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
+                  <span className={`px-3 py-0.5 rounded-none text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
                       {res.statut}
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                   <div className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-primary" />
+                      <Clock className="w-4 h-4 text-primary"  strokeWidth={1.5}/>
                       <span className="font-bold" style={{ color: '#53443a' }}>{res.heure_debut} - {res.heure_fin}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-primary" />
+                      <Users className="w-4 h-4 text-primary"  strokeWidth={1.5}/>
                       <span className="font-bold" style={{ color: '#53443a' }}>{res.nombre_personnes} couverts</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                      <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <div className="w-4 h-4 rounded-none bg-primary/20 flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 rounded-none bg-primary" />
                       </div>
                       <span className="font-bold" style={{ color: '#301400' }}>Table #{res.table_numero || res.table}</span>
                   </div>
                 </div>
                 {res.notes && (
-                    <p className="mt-3 text-xs italic bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/30" style={{ color: '#53443a' }}>
+                    <p className="mt-3 text-xs italic bg-surface-container-low px-3 py-1.5 rounded-none border border-outline-variant/30" style={{ color: '#53443a' }}>
                       "{res.notes}"
                     </p>
                 )}
@@ -170,17 +170,17 @@ export const ReservationsPage: React.FC = () => {
                 <>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-bold hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-primary/10"
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-none font-bold hover:brightness-110 transition-all active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
                   >
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-4 h-4"  strokeWidth={1.5}/>
                     Confirmer
                   </button>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    className="p-3 bg-surface-container-low border border-outline-variant/30 rounded-xl hover:text-error hover:bg-error-container/20 transition-all"
+                    className="p-3 bg-surface-container-low border border-outline-variant/30 rounded-none hover:text-error hover:bg-error-container/20 transition-all"
                     style={{ color: '#53443a' }}
                   >
-                    <XCircle className="w-5 h-5" />
+                    <XCircle className="w-5 h-5"  strokeWidth={1.5}/>
                   </button>
                 </>
               )}
@@ -188,7 +188,7 @@ export const ReservationsPage: React.FC = () => {
               {res.statut === 'CONFIRMEE' && (
                  <button 
                   onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-surface-container-low border border-outline-variant/30 rounded-xl font-bold hover:text-error hover:bg-error-container/20 transition-all"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-surface-container-low border border-outline-variant/30 rounded-none font-bold hover:text-error hover:bg-error-container/20 transition-all"
                   style={{ color: '#53443a' }}
                  >
                    Annuler
@@ -196,7 +196,7 @@ export const ReservationsPage: React.FC = () => {
               )}
 
               <button className="p-3 hover:text-primary transition-colors" style={{ color: '#53443a' }}>
-                  <MoreVertical className="w-5 h-5" />
+                  <MoreVertical className="w-5 h-5"  strokeWidth={1.5}/>
               </button>
             </div>
           </div>
@@ -204,7 +204,7 @@ export const ReservationsPage: React.FC = () => {
 
         {filteredReservations.length === 0 && (
           <div className="py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-              <Calendar className="w-16 h-16 mb-4" />
+              <Calendar className="w-16 h-16 mb-4"  strokeWidth={1.5}/>
               <p className="font-bold">Aucune réservation trouvée.</p>
           </div>
         )}

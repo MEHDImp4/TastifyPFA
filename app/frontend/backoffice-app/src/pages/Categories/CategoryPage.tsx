@@ -108,9 +108,9 @@ export const CategoryPage: React.FC = () => {
         <button 
           data-testid="category-create-button"
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20 active:scale-95 shadow-lg shadow-primary/10"
+          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-none font-bold transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-5 h-5"  strokeWidth={1.5}/>
           <span>Define New Category</span>
         </button>
       </div>
@@ -127,9 +127,9 @@ export const CategoryPage: React.FC = () => {
             <div 
               key={cat.id}
               data-testid={`category-card-${cat.id}`}
-              className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5"
+              className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/5"
             >
-              <div className="aspect-[16/10] relative rounded-xl overflow-hidden bg-surface-container-low mb-5">
+              <div className="aspect-[16/10] relative rounded-none overflow-hidden bg-surface-container-low mb-5">
                 {cat.image ? (
                   <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 ) : (
@@ -141,19 +141,19 @@ export const CategoryPage: React.FC = () => {
                   <button 
                     data-testid={`category-edit-${cat.id}`}
                     onClick={() => handleOpenModal(cat)}
-                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-primary shadow-lg transition-all active:scale-90"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-none text-on-surface hover:text-primary shadow-[2px_2px_0px_rgba(15,23,42,0.1)] transition-all active:scale-90"
                   >
-                    <Edit2 className="w-4 h-4" />
+                    <Edit2 className="w-4 h-4"  strokeWidth={1.5}/>
                   </button>
                   <button 
                     data-testid={`category-delete-${cat.id}`}
                     onClick={() => handleDelete(cat.id)}
-                    className="p-3 bg-white/80 backdrop-blur-xl rounded-xl text-on-surface hover:text-error shadow-lg transition-all active:scale-90"
+                    className="p-3 bg-white/80 backdrop-blur-xl rounded-none text-on-surface hover:text-error shadow-[2px_2px_0px_rgba(15,23,42,0.1)] transition-all active:scale-90"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4"  strokeWidth={1.5}/>
                   </button>
                 </div>
-                <div className="absolute bottom-4 left-4 glass px-4 py-2 rounded-xl text-xs font-bold text-on-surface uppercase tracking-widest border border-primary/10">
+                <div className="absolute bottom-4 left-4 glass px-4 py-2 rounded-none text-xs font-bold text-on-surface uppercase tracking-widest font-mono border border-primary/10">
                     Rank: #{cat.ordre_affichage}
                 </div>
               </div>
@@ -176,7 +176,7 @@ export const CategoryPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-8 p-2">
           <div className="flex flex-col gap-3">
             <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <FileText className="w-3 h-3 text-primary" />
+                <FileText className="w-3 h-3 text-primary"  strokeWidth={1.5}/>
                 <span>Identification</span>
             </label>
             <input 
@@ -185,7 +185,7 @@ export const CategoryPage: React.FC = () => {
               required
               value={nom}
               onChange={(e) => setNom(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
               placeholder="Ex: Signature Starters, Traditional Tagines..."
             />
           </div>
@@ -200,14 +200,14 @@ export const CategoryPage: React.FC = () => {
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
               placeholder="Describe the culinary intent of this category..."
             />
           </div>
 
           <div className="flex flex-col gap-3">
             <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <ListOrdered className="w-3 h-3 text-primary" />
+                <ListOrdered className="w-3 h-3 text-primary"  strokeWidth={1.5}/>
                 <span>Architectural Rank</span>
             </label>
             <input 
@@ -215,7 +215,7 @@ export const CategoryPage: React.FC = () => {
               data-testid="category-order-input"
               value={ordre}
               onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
             />
           </div>
 
@@ -231,13 +231,13 @@ export const CategoryPage: React.FC = () => {
                 onChange={handleImageChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
-              <div className="w-full h-40 bg-surface-container-low border-2 border-dashed border-surface-container-high rounded-2xl flex flex-col items-center justify-center gap-3 transition-all group-hover:border-primary/40 group-hover:bg-primary-container/5">
+              <div className="w-full h-40 bg-surface-container-low border-2 border-dashed border-surface-container-high rounded-none flex flex-col items-center justify-center gap-3 transition-all group-hover:border-primary/40 group-hover:bg-primary-container/5">
                 {preview ? (
-                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
+                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-none" />
                 ) : (
                   <>
                     <ImageIcon className="w-10 h-10 text-on-surface-variant opacity-20" />
-                    <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">Inject Visual Data</span>
+                    <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest font-mono">Inject Visual Data</span>
                   </>
                 )}
               </div>
@@ -248,12 +248,12 @@ export const CategoryPage: React.FC = () => {
             type="submit"
             data-testid="category-save-button"
             disabled={isSaving}
-            className="w-full py-5 mt-4 bg-primary text-white rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full py-5 mt-4 bg-primary text-white rounded-none font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >
-            {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+            {isSaving ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={1.5}/> : (
                 <>
                     <span>{editingCategory ? 'Update Architecture' : 'Confirm Category'}</span>
-                    <CheckCircle2 className="w-6 h-6" />
+                    <CheckCircle2 className="w-6 h-6"  strokeWidth={1.5}/>
                 </>
             )}
           </button>

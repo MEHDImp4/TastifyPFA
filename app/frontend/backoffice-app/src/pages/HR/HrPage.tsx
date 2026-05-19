@@ -37,14 +37,14 @@ export const HrPage: React.FC = () => {
                 onClick={() => {
                     toast.success('Génération du PDF en cours...');
                 }}
-                className="flex items-center gap-2 px-5 py-2.5 bg-surface-container border border-outline-variant/30 rounded-xl font-bold transition-transform hover:border-primary active:scale-95"
+                className="flex items-center gap-2 px-5 py-2.5 bg-surface-container border border-outline-variant/30 rounded-none font-bold transition-transform hover:border-primary active:scale-95"
                 style={{ color: '#301400' }}
             >
-                <FileText className="w-4 h-4" />
+                <FileText className="w-4 h-4"  strokeWidth={1.5}/>
                 Exporter la liste (PDF)
             </button>
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-xl font-bold transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-primary/20">
-                <Plus className="w-5 h-5" />
+            <button className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-none font-bold transition-transform hover:brightness-110 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20">
+                <Plus className="w-5 h-5"  strokeWidth={1.5}/>
                 Ajouter un membre
             </button>
         </div>
@@ -61,18 +61,18 @@ export const HrPage: React.FC = () => {
           {employes.map((emp) => (
             <div key={emp.id} className="p-6 tonal-card group hover:border-primary/30 transition-all">
               <div className="flex items-start justify-between mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-primary-container/20 flex items-center justify-center text-primary">
-                    <Users className="w-7 h-7" />
+                <div className="w-14 h-14 rounded-none bg-primary-container/20 flex items-center justify-center text-primary">
+                    <Users className="w-7 h-7"  strokeWidth={1.5}/>
                 </div>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 bg-surface-container rounded-xl text-primary hover:bg-primary hover:text-on-primary transition-colors"><Edit2 className="w-4 h-4" /></button>
-                    <button className="p-2 bg-surface-container rounded-xl text-error hover:bg-error hover:text-on-error transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    <button className="p-2 bg-surface-container rounded-none text-primary hover:bg-primary hover:text-on-primary transition-colors"><Edit2 className="w-4 h-4"  strokeWidth={1.5}/></button>
+                    <button className="p-2 bg-surface-container rounded-none text-error hover:bg-error hover:text-on-error transition-colors"><Trash2 className="w-4 h-4"  strokeWidth={1.5}/></button>
                 </div>
               </div>
               
               <h3 className="text-xl font-bold mb-1" style={{ color: '#301400' }}>{emp.username}</h3>
-              <p className="text-primary font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
-                  <Briefcase className="w-3 h-3" />
+              <p className="text-primary font-mono text-xs font-bold uppercase tracking-widest font-mono flex items-center gap-2 mb-4">
+                  <Briefcase className="w-3 h-3"  strokeWidth={1.5}/>
                   <span>{emp.poste}</span>
               </p>
               
@@ -95,7 +95,7 @@ export const HrPage: React.FC = () => {
           
           {employes.length === 0 && (
             <div className="col-span-full py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-                <Users className="w-16 h-16 mb-4" />
+                <Users className="w-16 h-16 mb-4"  strokeWidth={1.5}/>
                 <p className="font-bold">Aucun employé enregistré.</p>
             </div>
           )}

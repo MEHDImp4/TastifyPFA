@@ -21,7 +21,11 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  History
+  History,
+  MapPin,
+  Settings,
+  Bell,
+  CreditCard
 } from 'lucide-react';
 
 export const AccountPage: React.FC = () => {
@@ -83,8 +87,8 @@ export const AccountPage: React.FC = () => {
       switch (tier) {
           case 'BRONZE': return 'bg-[#CD7F32] text-white';
           case 'SILVER': return 'bg-slate-400 text-white';
-          case 'GOLD': return 'bg-amber-400 text-on-surface';
-          case 'PLATINUM': return 'bg-primary text-white shadow-lg shadow-primary/30';
+          case 'GOLD': return 'bg-[#FFD700] text-[#301400]';
+          case 'PLATINUM': return 'bg-[#8d4e1c] text-white shadow-lg shadow-[#8d4e1c]/30';
           default: return 'bg-surface-container text-on-surface-variant';
       }
   };
@@ -93,159 +97,196 @@ export const AccountPage: React.FC = () => {
 
   const getOrderStatusUI = (statut: string) => {
       switch (statut) {
-          case 'EN_COURS': return { text: 'Validating Session', icon: Clock, color: 'text-on-surface-variant' };
-          case 'EN_CUISINE': return { text: 'Culinary Orchestration', icon: ChefHat, color: 'text-primary animate-pulse' };
-          case 'PRETE': return { text: 'Signature Ready for Pickup', icon: PackageCheck, color: 'text-primary' };
+          case 'EN_COURS': return { text: 'Validating Session', icon: Clock, color: 'text-[#8d4e1c]' };
+          case 'EN_CUISINE': return { text: 'Culinary Orchestration', icon: ChefHat, color: 'text-[#8d4e1c] animate-pulse' };
+          case 'PRETE': return { text: 'Signature Ready', icon: PackageCheck, color: 'text-[#8d4e1c]' };
           default: return { text: 'Session Finalized', icon: CheckCircle2, color: 'text-outline' };
       }
   };
 
-  if (isLoading) return <div className="min-h-[100dvh] flex items-center justify-center bg-background text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
+  if (isLoading) return <div className="min-h-[100dvh] flex items-center justify-center bg-[#fff8f5] text-[#8d4e1c]"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   return (
-    <div className="flex-1 max-w-[1600px] mx-auto px-5 md:px-8 py-10 md:py-24 w-full animate-in fade-in duration-700 bg-background overflow-x-hidden">
-        <div className="flex flex-col xl:flex-row gap-10 md:gap-16">
-            {/* Architectural Profile Card */}
-            <aside className="xl:w-[400px] shrink-0 space-y-8 md:space-y-10">
-                <div className="p-8 md:p-12 bg-white double-bezel text-center relative overflow-hidden group">
-                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#0040e0 1px, transparent 1px), linear-gradient(90deg, #0040e0 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                    <div className="relative z-10">
-                        <div className="w-20 md:w-28 h-20 md:h-28 rounded-2xl md:rounded-3xl bg-surface-container-low border border-surface-container-high flex items-center justify-center text-primary mx-auto mb-6 md:mb-8 shadow-inner transition-transform group-hover:scale-105 duration-700">
-                            <UserIcon className="w-10 md:w-12 h-10 md:h-12" />
+    <div className="flex-1 bg-[#fff8f5] selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12 md:py-24">
+        
+        {/* Editorial Header */}
+        <header className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                    <span className="w-8 h-[2px] bg-[#8d4e1c]" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Espace Privé</span>
+                </div>
+                <h1 className="text-6xl md:text-8xl font-serif italic text-[#301400] leading-[0.9] tracking-tighter">
+                    Tableau de Bord.
+                </h1>
+                <p className="max-w-md text-[#53443a] text-lg font-medium leading-relaxed opacity-80">
+                    Gérez vos réservations, suivez vos commandes et consultez vos privilèges exclusifs Tastify.
+                </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+                <button className="w-12 h-12 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
+                    <Bell className="w-5 h-5" />
+                </button>
+                <button className="w-12 h-12 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
+                    <Settings className="w-5 h-5" />
+                </button>
+            </div>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
+            
+            {/* Sidebar Profile */}
+            <aside className="lg:col-span-4 space-y-12">
+                <div className="p-10 bg-white border border-[#d8c2b6] rounded-[2rem] shadow-[0_24px_60px_rgba(48,20,0,0.04)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#8d4e1c]/5 blur-3xl -mr-16 -mt-16" />
+                    
+                    <div className="relative z-10 text-center">
+                        <div className="w-24 h-24 rounded-3xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] mx-auto mb-8 shadow-inner">
+                            <UserIcon className="w-10 h-10" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-2 font-sans">Client Profile</h2>
-                        <p className="text-on-surface-variant font-bold uppercase text-[8px] md:text-[10px] tracking-[0.3em] mb-8 md:mb-10 opacity-40">Architectural Member</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-[#301400] mb-1">Mehdouch</h2>
+                        <p className="text-[#8d4e1c] text-[10px] font-black uppercase tracking-[0.2em] mb-8">Membre Privilégié</p>
                         
-                        <button 
-                            onClick={() => setIsAvisModalOpen(true)}
-                            className="w-full py-4 glass text-on-surface rounded-xl font-bold text-sm flex items-center justify-center gap-3 transition-all hover:bg-white active:scale-95 border border-surface-container-high"
-                        >
-                            <MessageSquare className="w-4 h-4 text-primary" />
-                            Submit Review
-                        </button>
+                        <div className="space-y-3">
+                            <button className="w-full py-4 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#4b2709] transition-all active:scale-95 shadow-lg shadow-black/10">
+                                <CreditCard className="w-4 h-4" />
+                                Gérer Paiements
+                            </button>
+                            <button 
+                                onClick={() => setIsAvisModalOpen(true)}
+                                className="w-full py-4 bg-white border border-[#d8c2b6] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#fff8f5] transition-all active:scale-95"
+                            >
+                                <MessageSquare className="w-4 h-4 text-[#8d4e1c]" />
+                                Laisser un Avis
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Exclusive Loyalty Tier */}
+                {/* Loyalty Focus */}
                 {loyalty && (
-                    <div className="p-8 md:p-12 bg-on-surface text-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-10 blur-3xl -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-1000" />
+                    <div className="p-10 bg-[#301400] text-white rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#8d4e1c] opacity-20 blur-3xl -mr-32 -mt-32" />
+                        
                         <div className="relative z-10">
-                            <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
-                                <Crown className="w-7 md:w-8 h-7 md:h-8" />
-                            </div>
-                            <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight mb-2 font-sans italic font-display-accent text-center">The Club.</h3>
-                            <div className="flex justify-center mb-8 md:mb-10">
-                                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white border border-white/10">
-                                    <Sparkles className="w-3 h-3 text-primary" />
-                                    <span>{loyalty.tier_display || loyalty.tier} STATUS</span>
-                                </div>
+                            <div className={`w-16 h-16 rounded-2xl mb-8 flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
+                                <Crown className="w-8 h-8" />
                             </div>
                             
-                            <div className="p-6 md:p-8 bg-white/5 rounded-2xl md:rounded-3xl border border-white/10 backdrop-blur-xl text-center">
-                                <p className="text-[8px] md:text-[10px] text-white/30 font-black uppercase tracking-[0.3em] mb-2 md:mb-3">Allocated Points</p>
-                                <p className="text-4xl md:text-6xl font-bold font-sans text-primary tracking-tighter">{loyalty.points}</p>
+                            <div className="space-y-6">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8d4e1c] mb-2">Club Tastify</p>
+                                    <h3 className="text-4xl font-serif italic tracking-tight">Statut {loyalty.tier_display || loyalty.tier}.</h3>
+                                </div>
+                                
+                                <div className="p-8 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-xl">
+                                    <p className="text-[9px] text-white/40 font-black uppercase tracking-[0.3em] mb-2">Points Accumulés</p>
+                                    <div className="flex items-end gap-2">
+                                        <span className="text-6xl font-bold tracking-tighter text-[#8d4e1c] leading-none">{loyalty.points}</span>
+                                        <span className="text-xs font-bold text-white/60 mb-1">PTS</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-3 text-white/60">
+                                    <Sparkles className="w-4 h-4 text-[#8d4e1c]" />
+                                    <p className="text-[10px] font-bold uppercase tracking-widest">Privilèges Actifs</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
             </aside>
 
-            {/* Main Operational Hub */}
-            <div className="flex-1 space-y-12 md:space-y-20">
-                {/* Active Session Tracker */}
+            {/* Main Content Hub */}
+            <div className="lg:col-span-8 space-y-20">
+                
+                {/* Active Session / Order */}
                 {activeOrder && (
                     <section className="animate-in slide-in-from-bottom-12 duration-1000">
-                        <div className="flex items-center justify-between mb-6 md:mb-8">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
-                                    <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-                                </div>
-                                <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface font-sans">Active Session</h3>
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                                <ShoppingBag className="w-5 h-5" />
                             </div>
-                            <div className="glass px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold text-primary uppercase tracking-widest border border-primary/10">
-                                Session #{activeOrder.id}
-                            </div>
+                            <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Session Active</h3>
                         </div>
                         
-                        <div className="p-6 md:p-10 bg-white double-bezel relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-primary opacity-[0.03] blur-3xl -mr-32 -mt-32" />
+                        <div className="p-10 bg-white border border-[#d8c2b6] rounded-[2rem] relative overflow-hidden shadow-sm">
+                            <div className="absolute top-0 right-0 w-96 h-96 bg-[#8d4e1c]/5 blur-3xl -mr-48 -mt-48" />
                             
-                            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative z-10 text-center md:text-left">
-                                <div className="w-24 h-24 md:w-32 md:h-32 rounded-[1.5rem] md:rounded-[2rem] bg-surface-container-low border border-surface-container-high flex items-center justify-center text-primary shrink-0 shadow-sm relative">
-                                    <ShoppingBag className="w-10 md:w-12 h-10 md:h-12" />
-                                    <div className="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg md:rounded-xl shadow-lg border border-surface-container-high flex items-center justify-center">
-                                        <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                            <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
+                                <div className="w-32 h-32 rounded-[2rem] bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] shrink-0 relative">
+                                    <ChefHat className="w-12 h-12" />
+                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white rounded-xl shadow-lg border border-[#d8c2b6] flex items-center justify-center">
+                                        <Loader2 className="w-5 h-5 animate-spin text-[#8d4e1c]" />
                                     </div>
                                 </div>
-                                <div className="flex-1 space-y-4 md:space-y-6">
-                                    <div className={`inline-flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-surface-container-low border border-surface-container-high ${getOrderStatusUI(activeOrder.statut).color}`}>
-                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-4 h-4 md:w-5 md:h-5" })}
-                                        <span className="text-xs font-bold uppercase tracking-widest font-sans">{getOrderStatusUI(activeOrder.statut).text}</span>
+                                
+                                <div className="flex-1 space-y-6">
+                                    <div className={`inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#fff1ea] border border-[#ffe3d2] ${getOrderStatusUI(activeOrder.statut).color}`}>
+                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-5 h-5" })}
+                                        <span className="text-xs font-black uppercase tracking-widest">{getOrderStatusUI(activeOrder.statut).text}</span>
                                     </div>
-                                    <h4 className="text-2xl md:text-4xl font-display-accent italic text-on-surface leading-tight md:leading-none">The culinary process is in motion.</h4>
-                                    <div className="flex items-center justify-center md:justify-start gap-6 md:gap-8 pt-2">
-                                        <div className="flex flex-col">
-                                            <span className="text-[8px] md:text-[10px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Value</span>
-                                            <span className="text-base md:text-xl font-bold text-on-surface font-sans">{activeOrder.montant_total} DH</span>
+                                    <h4 className="text-4xl font-serif italic text-[#301400] leading-none">Votre dégustation est en cours de préparation.</h4>
+                                    
+                                    <div className="flex items-center gap-10 pt-4">
+                                        <div className="space-y-1">
+                                            <p className="text-[9px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Valeur Totale</p>
+                                            <p className="text-2xl font-bold text-[#301400]">{activeOrder.montant_total} DH</p>
                                         </div>
-                                        <div className="w-[1px] h-8 md:h-10 bg-surface-container-high" />
-                                        <div className="flex flex-col">
-                                            <span className="text-[8px] md:text-[10px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Estimate</span>
-                                            <span className="text-base md:text-xl font-bold text-on-surface font-sans">12:45 PM</span>
+                                        <div className="w-[1px] h-10 bg-[#d8c2b6]" />
+                                        <div className="space-y-1">
+                                            <p className="text-[9px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Session ID</p>
+                                            <p className="text-2xl font-bold text-[#301400]">#{activeOrder.id}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <button className="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20 flex items-center justify-center gap-3">
-                                    <span>View Details</span>
-                                    <ArrowRight className="w-5 h-5" />
-                                </button>
                             </div>
                         </div>
                     </section>
                 )}
 
-                {/* Reserved Placements */}
+                {/* Reservations List */}
                 <section>
-                    <div className="flex items-center justify-between mb-8 md:mb-10">
-                        <div className="flex items-center gap-3 md:gap-4">
-                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
-                                <Calendar className="w-4 h-4 md:w-5 md:h-5" />
+                    <div className="flex items-center justify-between mb-10">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                                <Calendar className="w-5 h-5" />
                             </div>
-                            <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface font-sans">Upcoming Placements</h3>
+                            <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Réservations à Venir</h3>
                         </div>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-[#8d4e1c] hover:underline underline-offset-8">Voir Historique</button>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {reservations.length === 0 ? (
-                            <div className="col-span-full p-12 md:p-20 bg-surface-container-low rounded-[1.5rem] md:rounded-[2.5rem] border-2 border-dashed border-surface-container-high text-center text-on-surface-variant opacity-30 flex flex-col items-center gap-4 md:gap-6">
-                                <History className="w-10 h-10 md:w-12 md:h-12" />
-                                <p className="text-lg md:text-xl font-display-accent italic">The reservation logs are silent.</p>
+                            <div className="col-span-full p-20 bg-[#fff1ea] rounded-[2.5rem] border-2 border-dashed border-[#ffe3d2] text-center flex flex-col items-center gap-6">
+                                <History className="w-12 h-12 text-[#8d4e1c] opacity-20" />
+                                <p className="text-2xl font-serif italic text-[#301400]/40">Aucune réservation prévue pour le moment.</p>
+                                <button className="px-8 py-3 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#4b2709] transition-all">Réserver une Table</button>
                             </div>
                         ) : (
                             reservations.map(res => (
-                                <div key={res.id} className="p-5 md:p-8 bg-white double-bezel flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 md:gap-8 group hover:bg-surface-container-lowest hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500">
-                                    <div className="flex items-center gap-5 md:gap-8">
-                                        <div className="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-surface-container-low rounded-xl md:rounded-2xl text-on-surface border border-surface-container-high transition-transform group-hover:scale-105">
-                                            <span className="text-[8px] md:text-[10px] uppercase font-black text-primary leading-none mb-1 md:mb-1.5 tracking-widest">
+                                <div key={res.id} className="p-8 bg-white border border-[#d8c2b6] rounded-3xl flex items-center justify-between group hover:border-[#8d4e1c] hover:shadow-xl transition-all duration-500">
+                                    <div className="flex items-center gap-6">
+                                        <div className="w-16 h-16 bg-[#fff1ea] rounded-2xl flex flex-col items-center justify-center text-[#301400] border border-[#ffe3d2] group-hover:scale-105 transition-transform">
+                                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-widest leading-none mb-1">
                                                 {new Date(res.date_reservation).toLocaleDateString('fr-FR', { month: 'short' })}
                                             </span>
-                                            <span className="text-2xl md:text-3xl font-bold leading-none font-sans tracking-tighter">
+                                            <span className="text-2xl font-bold tracking-tighter">
                                                 {new Date(res.date_reservation).getDate()}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="font-bold text-lg md:text-xl text-on-surface font-sans tracking-tight">Table Placement #{res.table}</p>
-                                            <div className="flex items-center gap-2 md:gap-3 mt-1 text-on-surface-variant font-medium opacity-60">
-                                                <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
-                                                <span className="text-xs md:text-sm">{res.heure_debut} — {res.heure_fin} • {res.nombre_personnes} Guests</span>
+                                            <p className="font-bold text-lg text-[#301400]">Table #{res.table}</p>
+                                            <div className="flex items-center gap-3 mt-1 text-[#53443a] opacity-60">
+                                                <Clock className="w-4 h-4 text-[#8d4e1c]" />
+                                                <span className="text-xs font-medium">{res.heure_debut} — {res.heure_fin} • {res.nombre_personnes} pers.</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`
-                                        px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] self-end sm:self-auto
-                                        ${res.statut === 'CONFIRMEE' ? 'bg-primary-container/10 text-primary border border-primary/20' : 'bg-surface-container text-on-surface-variant border border-surface-container-high'}
-                                    `}>
+                                    <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${res.statut === 'CONFIRMEE' ? 'bg-[#8d4e1c]/10 text-[#8d4e1c]' : 'bg-[#fff1ea] text-[#53443a]'}`}>
                                         {res.statut}
                                     </div>
                                 </div>
@@ -256,29 +297,29 @@ export const AccountPage: React.FC = () => {
 
                 {/* Experience Feedback */}
                 <section>
-                    <div className="flex items-center justify-between mb-8 md:mb-10">
-                        <div className="flex items-center gap-3 md:gap-4">
-                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
-                                <Star className="w-4 h-4 md:w-5 md:h-5" />
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface font-sans">Verified Reviews</h3>
+                    <div className="flex items-center gap-4 mb-10">
+                        <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                            <Star className="w-5 h-5" />
                         </div>
+                        <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Mes Expériences</h3>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {avis.map(a => (
-                            <div key={a.id} className="p-8 md:p-10 bg-surface-container-low rounded-[1.5rem] md:rounded-[2.5rem] border border-surface-container-high group hover:bg-white hover:shadow-xl transition-all duration-700">
-                                <div className="flex gap-1.5 mb-4 md:mb-6">
+                            <div key={a.id} className="p-10 bg-white border border-[#d8c2b6] rounded-[2.5rem] group hover:border-[#8d4e1c] transition-all duration-700">
+                                <div className="flex gap-2 mb-6">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:scale-110 ${i < a.note ? 'text-primary fill-primary' : 'text-surface-container-highest'}`} />
+                                        <Star key={i} className={`w-4 h-4 ${i < a.note ? 'text-[#8d4e1c] fill-[#8d4e1c]' : 'text-[#d8c2b6]'}`} />
                                     ))}
                                 </div>
-                                <p className="text-on-surface text-base md:text-lg leading-relaxed italic font-display-accent tracking-tight">"{a.commentaire}"</p>
-                                {a.sentiment_score !== undefined && (
-                                    <div className="mt-6 md:mt-8 flex items-center gap-2 md:gap-3">
-                                        <div className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full shadow-lg ${a.sentiment_score > 0 ? 'bg-primary animate-pulse' : a.sentiment_score < 0 ? 'bg-error' : 'bg-outline-variant'}`} />
-                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant opacity-40">AI-Validated Experience Hub</span>
+                                <p className="text-[#301400] text-xl font-serif italic leading-relaxed tracking-tight">"{a.commentaire}"</p>
+                                <div className="mt-8 pt-8 border-t border-[#fff1ea] flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-2.5 h-2.5 rounded-full ${a.sentiment_score > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#53443a] opacity-40">Vérifié par AI</span>
                                     </div>
-                                )}
+                                    <span className="text-[9px] font-bold text-[#53443a]/40">{new Date().toLocaleDateString()}</span>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -288,56 +329,56 @@ export const AccountPage: React.FC = () => {
 
         {/* High-End Feedback Modal */}
         {isAvisModalOpen && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
-                <div className="absolute inset-0 bg-on-surface/80 backdrop-blur-2xl" onClick={() => setIsAvisModalOpen(false)} />
-                <div className="relative w-full max-w-xl bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl p-8 md:p-12 animate-in zoom-in-95 duration-500">
-                    <div className="text-center mb-8 md:mb-12">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-primary text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-4 md:mb-6">
-                            <Sparkles className="w-3 h-3" />
-                            <span>Experience Analysis</span>
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
+                <div className="absolute inset-0 bg-[#301400]/80 backdrop-blur-2xl" onClick={() => setIsAvisModalOpen(false)} />
+                <div className="relative w-full max-w-xl bg-white rounded-[3rem] overflow-hidden shadow-2xl p-12 animate-in zoom-in-95 duration-500">
+                    <div className="text-center mb-12">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[10px] font-black uppercase tracking-widest mb-6">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Analyse d'Expérience</span>
                         </div>
-                        <h3 className="text-3xl md:text-5xl font-display-accent italic text-on-surface mb-3 md:mb-4">Share your taste.</h3>
-                        <p className="text-sm md:text-on-surface-variant font-medium opacity-60">Help us refine our architectural culinary algorithms.</p>
+                        <h3 className="text-5xl font-serif italic text-[#301400] mb-4">Votre avis.</h3>
+                        <p className="text-[#53443a] font-medium opacity-60">Aidez-nous à perfectionner l'expérience Tastify.</p>
                     </div>
                     
-                    <form onSubmit={handleSubmitAvis} className="space-y-8 md:space-y-10">
-                        <div className="flex flex-col items-center gap-4 md:gap-6">
-                            <label className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant opacity-40">Quality Assessment</label>
-                            <div className="flex gap-2 md:gap-4">
+                    <form onSubmit={handleSubmitAvis} className="space-y-12">
+                        <div className="flex flex-col items-center gap-6">
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40">Évaluation Globale</label>
+                            <div className="flex gap-4">
                                 {[1, 2, 3, 4, 5].map(s => (
                                     <button 
                                         key={s} 
                                         type="button"
                                         onClick={() => setRating(s)}
-                                        className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-lg md:rounded-xl transition-all duration-500 ${rating >= s ? 'bg-primary text-white scale-110 shadow-xl shadow-primary/20' : 'bg-surface-container-low text-surface-container-highest hover:bg-surface-container-high'}`}
+                                        className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-500 ${rating >= s ? 'bg-[#8d4e1c] text-white scale-110 shadow-xl shadow-[#8d4e1c]/20' : 'bg-[#fff1ea] text-[#d8c2b6] hover:bg-[#ffe3d2]'}`}
                                     >
-                                        <Star className={`w-5 h-5 md:w-6 md:h-6 ${rating >= s ? 'fill-current' : ''}`} />
+                                        <Star className={`w-7 h-7 ${rating >= s ? 'fill-current' : ''}`} />
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-3 md:gap-4">
-                            <label className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant opacity-40 ml-1">Detailed Context</label>
+                        <div className="flex flex-col gap-4">
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40 ml-1">Commentaire Détaillé</label>
                             <textarea 
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                                 required
-                                rows={3}
-                                className="w-full p-4 md:p-6 bg-surface-container-low border border-surface-container-high rounded-xl md:rounded-2xl focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none font-semibold text-sm md:text-base text-on-surface"
-                                placeholder="Describe the nuances of your culinary journey..."
+                                rows={4}
+                                className="w-full p-6 bg-[#fff1ea] border border-[#ffe3d2] rounded-[2rem] focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400]"
+                                placeholder="Décrivez les nuances de votre voyage culinaire..."
                             />
                         </div>
 
                         <button 
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-4 md:py-5 bg-primary text-white rounded-xl md:rounded-2xl font-bold text-base md:text-lg flex items-center justify-center gap-3 md:gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 active:scale-95 disabled:opacity-50"
+                            className="w-full py-6 bg-[#8d4e1c] text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#8d4e1c]/20 active:scale-95 disabled:opacity-50"
                         >
-                            {isSubmitting ? <Loader2 className="w-5 h-5 md:w-6 md:h-6 animate-spin" /> : (
+                            {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                                 <>
-                                    <span>Deploy Feedback</span>
-                                    <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
+                                    <span>Publier mon Avis</span>
+                                    <ArrowRight className="w-6 h-6" />
                                 </>
                             )}
                         </button>
@@ -345,6 +386,8 @@ export const AccountPage: React.FC = () => {
                 </div>
             </div>
         )}
+      </div>
     </div>
   );
 };
+

@@ -54,9 +54,9 @@ export const SallePage: React.FC = () => {
   const getStatutColor = (statut: Table['statut']) => {
     switch (statut) {
       case 'LIBRE': return 'bg-white text-on-surface border-surface-container-high hover:border-primary/50';
-      case 'OCCUPEE': return 'bg-primary text-white border-primary/20 shadow-lg shadow-primary/20';
+      case 'OCCUPEE': return 'bg-primary text-white border-primary/20 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20';
       case 'RESERVEE': return 'bg-secondary text-white border-secondary/20';
-      case 'ENCAISSEMENT': return 'bg-error text-white border-error/20 shadow-lg shadow-error/20';
+      case 'ENCAISSEMENT': return 'bg-error text-white border-error/20 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-error/20';
       default: return 'bg-surface-container text-on-surface-variant border-surface-container-high';
     }
   };
@@ -192,9 +192,9 @@ export const SallePage: React.FC = () => {
                             setFormData({ numero: '', capacite: '' });
                             setSelectedTableForEdit(null);
                         }}
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"
+                        className="flex items-center gap-2 px-6 py-3 rounded-none font-bold transition-all duration-300 active:scale-95 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"
                      >
-                        <Plus className="w-5 h-5" />
+                        <Plus className="w-5 h-5"  strokeWidth={1.5}/>
                         <span className="font-sans text-sm">Add Table</span>
                      </button>
                      <button
@@ -203,38 +203,38 @@ export const SallePage: React.FC = () => {
                             setTextFormData({ texte: '' });
                             setSelectedTextForEdit(null);
                         }}
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"
+                        className="flex items-center gap-2 px-6 py-3 rounded-none font-bold transition-all duration-300 active:scale-95 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"
                      >
-                        <Type className="w-5 h-5" />
+                        <Type className="w-5 h-5"  strokeWidth={1.5}/>
                         <span className="font-sans text-sm">Add Text</span>
                      </button>
                      </>
                  )}
                  <button 
                   onClick={() => setIsEditMode(!isEditMode)}
-                  className={`flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 ${isEditMode ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-surface-container-high text-on-surface hover:bg-surface-container-low'}`}
+                  className={`flex items-center gap-3 px-6 py-3 rounded-none font-bold transition-all duration-300 active:scale-95 ${isEditMode ? 'bg-primary text-white shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20' : 'bg-white border border-surface-container-high text-on-surface hover:bg-surface-container-low'}`}
                  >
-                     <Move className="w-5 h-5" />
+                     <Move className="w-5 h-5"  strokeWidth={1.5}/>
                      <span className="font-sans text-sm">{isEditMode ? 'Save Layout' : 'Modify Layout'}</span>
                  </button>
                </div>
            )}
-           <div className="flex items-center gap-6 px-8 py-4 glass rounded-2xl border border-surface-container-high shadow-sm">
+           <div className="flex items-center gap-6 px-8 py-4 glass rounded-none border border-surface-container-high shadow-[2px_2px_0px_rgba(15,23,42,0.1)]">
              <div className="flex items-center gap-2.5">
-               <div className="w-2.5 h-2.5 rounded-full border border-surface-container-highest bg-white" />
-               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Available</span>
+               <div className="w-2.5 h-2.5 rounded-none border border-surface-container-highest bg-white" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-mono font-sans">Available</span>
              </div>
              <div className="flex items-center gap-2.5">
-               <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Occupied</span>
+               <div className="w-2.5 h-2.5 rounded-none bg-primary" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-mono font-sans">Occupied</span>
              </div>
              <div className="flex items-center gap-2.5">
-               <div className="w-2.5 h-2.5 rounded-full bg-secondary" />
-               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Reserved</span>
+               <div className="w-2.5 h-2.5 rounded-none bg-secondary" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-mono font-sans">Reserved</span>
              </div>
              <div className="flex items-center gap-2.5">
-               <div className="w-2.5 h-2.5 rounded-full bg-error" />
-               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-sans">Payment</span>
+               <div className="w-2.5 h-2.5 rounded-none bg-error" />
+               <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest font-mono font-sans">Payment</span>
              </div>
            </div>
         </div>
@@ -242,7 +242,7 @@ export const SallePage: React.FC = () => {
 
       {isLoading ? (
         <div className="flex-1 flex items-center justify-center text-primary">
-          <Loader2 className="w-12 h-12 animate-spin" />
+          <Loader2 className="w-12 h-12 animate-spin"  strokeWidth={1.5}/>
         </div>
       ) : (
         <div 
@@ -277,8 +277,8 @@ export const SallePage: React.FC = () => {
                         }}
                         className={`
                             absolute flex flex-col items-center justify-center gap-1 transition-all duration-500 group
-                            ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105 touch-none px-4 py-2 border-2 border-dashed border-on-surface-variant/30 rounded-xl bg-white/50 backdrop-blur-sm' : 'pointer-events-none'}
-                            ${draggingItem?.type === 'text' && draggingItem.id === textObj.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-2xl' : 'z-0'}
+                            ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105 touch-none px-4 py-2 border-2 border-dashed border-on-surface-variant/30 rounded-none bg-white/50 backdrop-blur-sm' : 'pointer-events-none'}
+                            ${draggingItem?.type === 'text' && draggingItem.id === textObj.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-[2px_2px_0px_rgba(15,23,42,0.1)]' : 'z-0'}
                         `}
                     >
                         <span className="text-3xl font-display-accent italic tracking-tighter text-on-surface-variant/50 whitespace-nowrap">{textObj.texte}</span>
@@ -297,29 +297,29 @@ export const SallePage: React.FC = () => {
                             transform: 'translate(-50%, -50%)',
                         }}
                         className={`
-                            absolute w-20 h-20 sm:w-24 sm:h-24 flex flex-col items-center justify-center gap-1 rounded-2xl border-2 transition-all duration-500 group
+                            absolute w-20 h-20 sm:w-24 sm:h-24 flex flex-col items-center justify-center gap-1 rounded-none border-2 transition-all duration-500 group
                             ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105 touch-none' : 'cursor-pointer hover:scale-110 active:scale-95'}
                             ${getStatutColor(table.statut)}
-                            ${draggingItem?.type === 'table' && draggingItem.id === table.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-2xl' : 'z-10 shadow-sm'}
+                            ${draggingItem?.type === 'table' && draggingItem.id === table.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-[2px_2px_0px_rgba(15,23,42,0.1)]' : 'z-10 shadow-[2px_2px_0px_rgba(15,23,42,0.1)]'}
                         `}
                     >
                         <div className="text-2xl sm:text-3xl font-bold font-sans tracking-tighter leading-none">{table.numero}</div>
-                        <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${table.statut === 'LIBRE' ? 'bg-surface-container text-on-surface-variant' : 'bg-black/10 text-white'}`}>
-                            <Users className="w-2.5 h-2.5" />
+                        <div className={`flex items-center gap-1 px-2 py-0.5 rounded-none text-[9px] font-bold uppercase tracking-widest font-mono ${table.statut === 'LIBRE' ? 'bg-surface-container text-on-surface-variant' : 'bg-black/10 text-white'}`}>
+                            <Users className="w-2.5 h-2.5"  strokeWidth={1.5}/>
                             <span className="font-sans">{table.capacite}</span>
                         </div>
                         
                         {table.statut === 'ENCAISSEMENT' && !isEditMode && (
                             <div className="absolute -top-2 -right-2">
                                 <span className="relative flex h-5 w-5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-5 w-5 bg-error border-2 border-white"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-error opacity-75"></span>
+                                    <span className="relative inline-flex rounded-none h-5 w-5 bg-error border-2 border-white"></span>
                                 </span>
                             </div>
                         )}
 
                         {/* Architectural Bezel Effect */}
-                        <div className="absolute inset-1 border border-white/10 rounded-xl pointer-events-none" />
+                        <div className="absolute inset-1 border border-white/10 rounded-none pointer-events-none" />
                     </div>
                 ))}
             </div>
@@ -329,32 +329,32 @@ export const SallePage: React.FC = () => {
       {/* Edit/Add Table Modal */}
       {(selectedTableForEdit || isAddingTable) && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-none p-8 max-w-md w-full shadow-[2px_2px_0px_rgba(15,23,42,0.1)] animate-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-on-surface font-display">{selectedTableForEdit ? 'Edit Table' : 'Add New Table'}</h2>
-                    <button onClick={() => { setSelectedTableForEdit(null); setIsAddingTable(false); }} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
-                        <X className="w-6 h-6" />
+                    <button onClick={() => { setSelectedTableForEdit(null); setIsAddingTable(false); }} className="p-2 hover:bg-surface-container rounded-none text-on-surface-variant transition-colors">
+                        <X className="w-6 h-6"  strokeWidth={1.5}/>
                     </button>
                 </div>
                 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider">Table Number</label>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider font-mono">Table Number</label>
                         <input 
                             type="number" 
                             value={formData.numero}
                             onChange={(e) => setFormData({ ...formData, numero: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
+                            className="w-full px-4 py-3 rounded-none bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
                             placeholder="e.g. 12"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider">Capacity</label>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider font-mono">Capacity</label>
                         <input 
                             type="number" 
                             value={formData.capacite}
                             onChange={(e) => setFormData({ ...formData, capacite: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
+                            className="w-full px-4 py-3 rounded-none bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
                             placeholder="e.g. 4"
                         />
                     </div>
@@ -373,10 +373,10 @@ export const SallePage: React.FC = () => {
                                     toast.error('Failed to delete table');
                                 }
                             }}
-                            className="p-3 text-error hover:bg-error/10 rounded-xl transition-colors"
+                            className="p-3 text-error hover:bg-error/10 rounded-none transition-colors"
                             title="Delete Table"
                         >
-                            <Trash2 className="w-6 h-6" />
+                            <Trash2 className="w-6 h-6"  strokeWidth={1.5}/>
                         </button>
                     )}
                     <button 
@@ -406,7 +406,7 @@ export const SallePage: React.FC = () => {
                                 toast.error('Failed to save table');
                             }
                         }}
-                        className="flex-1 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-95"
+                        className="flex-1 py-3 bg-primary text-white font-bold rounded-none hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/30 transition-all active:scale-95"
                     >
                         Save Changes
                     </button>
@@ -418,22 +418,22 @@ export const SallePage: React.FC = () => {
       {/* Edit/Add Text Modal */}
       {(selectedTextForEdit || isAddingText) && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-none p-8 max-w-md w-full shadow-[2px_2px_0px_rgba(15,23,42,0.1)] animate-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-on-surface font-display">{selectedTextForEdit ? 'Edit Text' : 'Add New Text'}</h2>
-                    <button onClick={() => { setSelectedTextForEdit(null); setIsAddingText(false); }} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
-                        <X className="w-6 h-6" />
+                    <button onClick={() => { setSelectedTextForEdit(null); setIsAddingText(false); }} className="p-2 hover:bg-surface-container rounded-none text-on-surface-variant transition-colors">
+                        <X className="w-6 h-6"  strokeWidth={1.5}/>
                     </button>
                 </div>
                 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider">Text Content</label>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider font-mono">Text Content</label>
                         <input 
                             type="text" 
                             value={textFormData.texte}
                             onChange={(e) => setTextFormData({ ...textFormData, texte: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
+                            className="w-full px-4 py-3 rounded-none bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
                             placeholder="e.g. VIP Lounge"
                         />
                     </div>
@@ -452,10 +452,10 @@ export const SallePage: React.FC = () => {
                                     toast.error('Failed to delete text');
                                 }
                             }}
-                            className="p-3 text-error hover:bg-error/10 rounded-xl transition-colors"
+                            className="p-3 text-error hover:bg-error/10 rounded-none transition-colors"
                             title="Delete Text"
                         >
-                            <Trash2 className="w-6 h-6" />
+                            <Trash2 className="w-6 h-6"  strokeWidth={1.5}/>
                         </button>
                     )}
                     <button 
@@ -483,7 +483,7 @@ export const SallePage: React.FC = () => {
                                 toast.error('Failed to save text');
                             }
                         }}
-                        className="flex-1 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-95"
+                        className="flex-1 py-3 bg-primary text-white font-bold rounded-none hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/30 transition-all active:scale-95"
                     >
                         Save Changes
                     </button>

@@ -45,7 +45,7 @@ export const PublicLayout: React.FC = () => {
               {[
                 { to: '/menu', label: 'Menu' },
                 { to: '/reservations', label: 'Réservations' },
-                { to: '#contact', label: 'Contact' },
+                { to: '/contact', label: 'Contact' },
               ].map((link) => (
                 <Link 
                   key={link.to}
