@@ -1,3 +1,21 @@
+## [2026-05-19] - 10:20
+### Fixed
+- Fixed table drag and drop on touch devices by adding `touch-none` class to table elements in edit mode.
+- Fixed a collision issue where dragging a table also triggered a click event, incorrectly opening the table edit modal, by adding pointer movement detection (`hasDragged` ref).
+- Added table management UI in `Plan de Salle` allowing Gerant to Add, Edit, and Delete tables. (Commit: 9d5ecb66783c4a0e8bdb808f6b2c0a62cfffa11b)
+
+### Validation
+- `npm run build` in `app/frontend/backoffice-app` (passed)
+
+## [2026-05-19] - 10:40
+### Added
+- Expanded the backoffice Playwright suite with the next deterministic reservation and cart regressions: cross-tab reservation action isolation after failed updates, fallback client-name filtering by active status, fallback-versus-real-name search collisions, and hidden-cart-line stability when removing a different visible item.
+
+### Validation
+- `npm run test:e2e -- --project=serveur-chromium` (`23/23` passed)
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`50/50` passed)
+
 ## [2026-05-19] - 10:15
 ### Added
 - Expanded the backoffice Playwright suite with the next deterministic ordering and KDS regressions: multi-item cart persistence across category/search intersections, filtered `add_items` retention on existing orders, and sibling-ticket isolation when a KDS line-status mutation fails.

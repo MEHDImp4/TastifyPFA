@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 10:05:55<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 10:27:48<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1080,6 +1080,21 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed table drag and drop on touch devices by adding `touch-none` class to table elements in edit mode.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added table management UI in `Plan de Salle` allowing Gerant to Add, Edit, and Delete tables. (Commit: 9d5ecb66783c4a0e8bdb808f6b2c0a62cfffa11b)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app` (passed)</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic ordering and KDS regressions: multi-item cart persistence across category/search intersections, filtered `add_items` retention on existing orders, and sibling-ticket isolation when a KDS line-status mutation fails.</p>
@@ -1138,21 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Wired the reservations search input in `app/frontend/backoffice-app/src/pages/Staff/ReservationsPage.tsx` so client-name filtering now works alongside status tabs, and exposed an `ANNULEE` filter tab for staff-side reservation review.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Tightened the new reservation-search spec to scope assertions to the reservation grid itself, avoiding false negatives from overly broad page-wide text locators.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

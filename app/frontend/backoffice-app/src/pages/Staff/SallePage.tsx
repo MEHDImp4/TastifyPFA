@@ -22,6 +22,9 @@ export const SallePage: React.FC = () => {
   const [isAddingTable, setIsAddingTable] = useState(false);
   const [formData, setFormData] = useState({ numero: '', capacite: '' });
 
+  const hasDragged = useRef(false);
+  const startPos = useRef({ x: 0, y: 0 });
+
   const fetchTables = async () => {
     try {
       const res = await salleApi.getTables();
@@ -48,6 +51,8 @@ export const SallePage: React.FC = () => {
   };
 
   const handleTableClick = (table: Table) => {
+    if (hasDragged.current) return;
+    
     if (isEditMode) {
       setSelectedTableForEdit(table);
       setFormData({ numero: table.numero.toString(), capacite: table.capacite.toString() });
@@ -60,11 +65,20 @@ export const SallePage: React.FC = () => {
     if (!isEditMode) return;
     e.stopPropagation();
     setDraggingTable(id);
+    startPos.current = { x: e.clientX, y: e.clientY };
+    hasDragged.current = false;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isEditMode || draggingTable === null || !mapRef.current) return;
+    
+    const dx = Math.abs(e.clientX - startPos.current.x);
+    const dy = Math.abs(e.clientY - startPos.current.y);
+    if (dx > 5 || dy > 5) {
+        hasDragged.current = true;
+    }
+
     const rect = mapRef.current.getBoundingClientRect();
     let x = ((e.clientX - rect.left) / rect.width) * 100;
     let y = ((e.clientY - rect.top) / rect.height) * 100;
