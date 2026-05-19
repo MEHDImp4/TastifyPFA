@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
 import type { Table } from '../../types/salle';
-import { Loader2, Users, Move, Map as MapIcon } from 'lucide-react';
+import { Loader2, Users, Move, Map as MapIcon, Plus, X, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useSocketStore } from '../../store/socketStore';
@@ -18,6 +18,9 @@ export const SallePage: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
   const [draggingTable, setDraggingTable] = useState<number | null>(null);
+  const [selectedTableForEdit, setSelectedTableForEdit] = useState<Table | null>(null);
+  const [isAddingTable, setIsAddingTable] = useState(false);
+  const [formData, setFormData] = useState({ numero: '', capacite: '' });
 
   const fetchTables = async () => {
     try {
@@ -45,7 +48,11 @@ export const SallePage: React.FC = () => {
   };
 
   const handleTableClick = (table: Table) => {
-    if (isEditMode) return;
+    if (isEditMode) {
+      setSelectedTableForEdit(table);
+      setFormData({ numero: table.numero.toString(), capacite: table.capacite.toString() });
+      return;
+    }
     navigate(`/ordering/${table.id}`);
   };
 
@@ -94,13 +101,28 @@ export const SallePage: React.FC = () => {
         </div>
         <div className="flex flex-wrap items-center gap-4">
            {role === 'GERANT' && (
-               <button 
-                onClick={() => setIsEditMode(!isEditMode)}
-                className={`flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 ${isEditMode ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-surface-container-high text-on-surface hover:bg-surface-container-low'}`}
-               >
-                   <Move className="w-5 h-5" />
-                   <span className="font-sans text-sm">{isEditMode ? 'Save Layout' : 'Modify Layout'}</span>
-               </button>
+               <div className="flex items-center gap-3">
+                 {isEditMode && (
+                     <button
+                        onClick={() => {
+                            setIsAddingTable(true);
+                            setFormData({ numero: '', capacite: '' });
+                            setSelectedTableForEdit(null);
+                        }}
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"
+                     >
+                        <Plus className="w-5 h-5" />
+                        <span className="font-sans text-sm">Add Table</span>
+                     </button>
+                 )}
+                 <button 
+                  onClick={() => setIsEditMode(!isEditMode)}
+                  className={`flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 ${isEditMode ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-surface-container-high text-on-surface hover:bg-surface-container-low'}`}
+                 >
+                     <Move className="w-5 h-5" />
+                     <span className="font-sans text-sm">{isEditMode ? 'Save Layout' : 'Modify Layout'}</span>
+                 </button>
+               </div>
            )}
            <div className="flex items-center gap-6 px-8 py-4 glass rounded-2xl border border-surface-container-high shadow-sm">
              <div className="flex items-center gap-2.5">
@@ -154,7 +176,7 @@ export const SallePage: React.FC = () => {
                     }}
                     className={`
                         absolute w-20 h-20 sm:w-24 sm:h-24 flex flex-col items-center justify-center gap-1 rounded-2xl border-2 transition-all duration-500 group
-                        ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105' : 'cursor-pointer hover:scale-110 active:scale-95'}
+                        ${isEditMode ? 'cursor-grab active:cursor-grabbing hover:scale-105 touch-none' : 'cursor-pointer hover:scale-110 active:scale-95'}
                         ${getStatutColor(table.statut)}
                         ${draggingTable === table.id ? 'z-50 ring-4 ring-primary/20 scale-110 shadow-2xl' : 'z-10 shadow-sm'}
                     `}
@@ -184,6 +206,95 @@ export const SallePage: React.FC = () => {
                 <div className="flex items-center gap-3 text-on-surface-variant">
                     <MapIcon className="w-8 h-8" />
                     <span className="text-3xl font-display-accent italic tracking-tighter">Main Dining Hall</span>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* Edit/Add Table Modal */}
+      {(selectedTableForEdit || isAddingTable) && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-on-surface font-display">{selectedTableForEdit ? 'Edit Table' : 'Add New Table'}</h2>
+                    <button onClick={() => { setSelectedTableForEdit(null); setIsAddingTable(false); }} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
+                
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider">Table Number</label>
+                        <input 
+                            type="number" 
+                            value={formData.numero}
+                            onChange={(e) => setFormData({ ...formData, numero: e.target.value })}
+                            className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
+                            placeholder="e.g. 12"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2 font-sans uppercase tracking-wider">Capacity</label>
+                        <input 
+                            type="number" 
+                            value={formData.capacite}
+                            onChange={(e) => setFormData({ ...formData, capacite: e.target.value })}
+                            className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-transparent focus:border-primary focus:bg-white transition-all outline-none font-sans text-lg font-bold"
+                            placeholder="e.g. 4"
+                        />
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-4 mt-8">
+                    {selectedTableForEdit && (
+                        <button
+                            onClick={async () => {
+                                try {
+                                    await salleApi.deleteTable(selectedTableForEdit.id);
+                                    toast.success('Table deleted');
+                                    fetchTables();
+                                    setSelectedTableForEdit(null);
+                                } catch (err) {
+                                    toast.error('Failed to delete table');
+                                }
+                            }}
+                            className="p-3 text-error hover:bg-error/10 rounded-xl transition-colors"
+                            title="Delete Table"
+                        >
+                            <Trash2 className="w-6 h-6" />
+                        </button>
+                    )}
+                    <button 
+                        onClick={async () => {
+                            try {
+                                if (selectedTableForEdit) {
+                                    await salleApi.updateTable(selectedTableForEdit.id, { 
+                                        numero: parseInt(formData.numero), 
+                                        capacite: parseInt(formData.capacite) 
+                                    });
+                                    toast.success('Table updated');
+                                } else {
+                                    await salleApi.createTable({ 
+                                        numero: parseInt(formData.numero), 
+                                        capacite: parseInt(formData.capacite),
+                                        pos_x: 50,
+                                        pos_y: 50,
+                                        statut: 'LIBRE',
+                                        est_active: true
+                                    });
+                                    toast.success('Table added');
+                                }
+                                fetchTables();
+                                setSelectedTableForEdit(null);
+                                setIsAddingTable(false);
+                            } catch (err) {
+                                toast.error('Failed to save table');
+                            }
+                        }}
+                        className="flex-1 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-95"
+                    >
+                        Save Changes
+                    </button>
                 </div>
             </div>
         </div>
