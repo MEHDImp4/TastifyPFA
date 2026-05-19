@@ -14,10 +14,11 @@ test('capture authenticated storage states for seeded staff roles', async ({ bro
     const authFile = authFiles[role as keyof typeof authFiles];
     mkdirSync(dirname(authFile), { recursive: true });
 
-    const page = await browser.newPage();
+    const context = await browser.newContext();
+    const page = await context.newPage();
     await loginThroughUi(page, user.username, user.password);
     await expect.poll(() => new URL(page.url()).pathname).toBe(user.homePath);
-    await page.context().storageState({ path: authFile });
-    await page.close();
+    await context.storageState({ path: authFile });
+    await context.close();
   }
 });

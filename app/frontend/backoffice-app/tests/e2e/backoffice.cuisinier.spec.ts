@@ -28,4 +28,66 @@ test.describe('cuisinier browser workflows', () => {
     await page.goto('/login');
     await expect(page).toHaveURL(/\/kds$/);
   });
+
+  test('renders the KDS empty state when no active kitchen tickets exist', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/kds');
+    await expect(page.getByText('Kitchen is clear. No active orders.')).toBeVisible();
+  });
+
+  test('advances a kitchen ticket from waiting to preparation and ready', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9201,
+            statut: 'EN_CUISINE',
+            table_numero: 7,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T11:45:00Z',
+            lignes: [
+              {
+                id: 8801,
+                plat_nom: 'Risotto safran',
+                quantite: 2,
+                statut: 'EN_ATTENTE',
+                notes: 'Sans parmesan',
+                heure_lancement: '2026-05-19T11:46:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandelignes/8801/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 8801, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.goto('/kds');
+    await expect(page.getByText('Risotto safran')).toBeVisible();
+    await expect(page.getByText('Sans parmesan')).toBeVisible();
+
+    await page.getByRole('button', { name: 'Démarrer' }).click();
+    await expect(page.getByText('EN PREPARATION')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Prêt' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Prêt' }).click();
+    await expect(page.getByText('PRET')).toBeVisible();
+    await expect(page.getByText('Complet')).toBeVisible();
+  });
 });

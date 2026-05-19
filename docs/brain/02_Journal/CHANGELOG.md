@@ -1,3 +1,18 @@
+## [2026-05-19] - 08:56
+### Added
+- Expanded the backoffice Playwright suite with deeper SERVEUR flows for reservation status transitions, ordering search and cart manipulation, and fresh order submission to the kitchen.
+- Added CUISINIER coverage for the KDS empty state and the full `EN_ATTENTE -> EN_PREPARATION -> PRET` ticket progression path.
+
+### Changed
+- Hardened `app/frontend/backoffice-app/tests/e2e/auth.setup.ts` by capturing storage state from an explicit browser context, removing an intermittent auth bootstrap failure during role-specific Playwright runs.
+
+### Validation
+- `docker compose up -d --build db redis backend backoffice-app`
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e -- --project=serveur-chromium` (`7/7` passed)
+- `npm run test:e2e -- --project=cuisinier-chromium` (`6/6` passed)
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`30/30` passed)
+
 ## [2026-05-19] - 07:15
 ### Added
 - Extended the backoffice Playwright suite with additional manager-side cases: successful and failing `settings` saves, `HR` empty-state plus export toast coverage, `Avis` empty-state coverage, and low-stock alert rendering.
