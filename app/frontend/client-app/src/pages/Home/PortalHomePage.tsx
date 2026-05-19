@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -11,8 +12,27 @@ import {
   Mail
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { menuApi, Plat } from '../../api/menu';
+import { Skeleton } from '../../components/ui/Skeleton';
 
 export const PortalHomePage = () => {
+  const [topDishes, setTopDishes] = useState<Plat[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopDishes = async () => {
+      try {
+        const res = await menuApi.getTopRecommendations();
+        setTopDishes(res.data.slice(0, 3));
+      } catch (err) {
+        console.error('Failed to fetch top dishes', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTopDishes();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-[#111111] font-sans selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
       
@@ -149,28 +169,49 @@ export const PortalHomePage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: "Tajine d'Agneau Royal", price: "280 MAD", img: "https://images.unsplash.com/photo-1585937421612-70a0f2455f75?auto=format&fit=crop&q=80&w=800", desc: "Mijoté aux pruneaux, amandes grillées et sésame." },
-              { name: "Couscous aux Sept Légumes", price: "240 MAD", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800", desc: "La tradition par excellence, semoule fine et bouillon parfumé." },
-              { name: "Pastilla aux Fruits de Mer", price: "320 MAD", img: "https://images.unsplash.com/photo-1563245332-6101183188d8?auto=format&fit=crop&q=80&w=800", desc: "Feuilleté croustillant garni de poissons nobles et vermicelles." }
-            ].map((dish, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ y: -8 }}
-                className="bg-white rounded-[2rem] overflow-hidden border border-[#EAEAEA] group shadow-sm transition-all hover:shadow-2xl"
-              >
-                <div className="h-64 overflow-hidden relative">
-                    <img src={dish.img} alt={dish.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <div className="absolute top-6 right-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-lg">
-                        <span className="text-[10px] font-black">{dish.price}</span>
+            {isLoading ? (
+                [1, 2, 3].map(i => (
+                    <div key={i} className="bg-white rounded-[2rem] overflow-hidden border border-[#EAEAEA] h-[400px]">
+                        <Skeleton className="w-full h-64" />
+                        <div className="p-8 space-y-4">
+                            <Skeleton className="w-3/4 h-6" />
+                            <Skeleton className="w-full h-4" />
+                        </div>
                     </div>
+                ))
+            ) : topDishes.length > 0 ? (
+                topDishes.map((dish, i) => (
+                    <motion.div 
+                        key={dish.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        whileHover={{ y: -8 }}
+                        className="bg-white rounded-[2rem] overflow-hidden border border-[#EAEAEA] group shadow-sm transition-all hover:shadow-2xl"
+                    >
+                        <div className="h-64 overflow-hidden relative bg-gray-100">
+                            {dish.image ? (
+                                <img src={dish.image} alt={dish.nom} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-[#EAEAEA]">
+                                    <Utensils className="w-12 h-12" />
+                                </div>
+                            )}
+                            <div className="absolute top-6 right-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-lg">
+                                <span className="text-[10px] font-black">{dish.prix} MAD</span>
+                            </div>
+                        </div>
+                        <div className="p-8 space-y-3">
+                            <h4 className="text-xl font-bold">{dish.nom}</h4>
+                            <p className="text-[#787774] text-xs leading-relaxed line-clamp-2">{dish.description}</p>
+                        </div>
+                    </motion.div>
+                ))
+            ) : (
+                <div className="col-span-full text-center py-12">
+                    <p className="text-[#787774] font-serif italic">Découvrez notre menu complet pour voir nos créations.</p>
                 </div>
-                <div className="p-8 space-y-3">
-                  <h4 className="text-xl font-bold">{dish.name}</h4>
-                  <p className="text-[#787774] text-xs leading-relaxed">{dish.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+            )}
           </div>
         </div>
       </section>
