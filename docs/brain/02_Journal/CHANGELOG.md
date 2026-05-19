@@ -1,3 +1,12 @@
+## [2026-05-19] - 07:15
+### Added
+- Extended the backoffice Playwright suite with additional manager-side cases: successful and failing `settings` saves, `HR` empty-state plus export toast coverage, `Avis` empty-state coverage, and low-stock alert rendering.
+- Expanded guest protection coverage to include unauthenticated access checks for `/hr`, `/avis`, `/settings`, and `/ordering/:tableId`.
+
+### Validation
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`25/25` passed)
+
 ## [2026-05-19] - 01:33
 ### Added
 - Expanded the backoffice Playwright suite beyond the first role matrix to cover normalized seeded login, auth transport failure handling, direct GERANT access to `hr`, `avis`, `settings`, and `ordering/:tableId`, plus stronger SERVEUR ordering assertions.

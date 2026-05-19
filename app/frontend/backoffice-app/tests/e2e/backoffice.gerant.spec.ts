@@ -224,4 +224,119 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/settings');
     await expect(page.getByText('Impossible de charger la configuration.')).toBeVisible();
   });
+
+  test('saves settings successfully with a deterministic API response', async ({ page }) => {
+    const settingsPayload = {
+      id: 1,
+      nom: 'Tastify Test House',
+      description: 'Base config',
+      adresse: 'Casablanca',
+      email: 'ops@tastify.test',
+      telephone: '+212600000000',
+      logo: null,
+      facebook: null,
+      instagram: null,
+      twitter: null,
+      horaires: {},
+      devise: 'DH',
+      updated_at: '2026-05-19T00:00:00Z',
+    };
+
+    await page.route('**/api/settings/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(settingsPayload),
+      });
+    });
+
+    await page.route('**/api/settings/1/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          ...settingsPayload,
+          nom: 'Playwright Bistro',
+          description: 'Saved from E2E',
+        }),
+      });
+    });
+
+    await page.goto('/settings');
+    await page.locator('input[name="nom"]').fill('Playwright Bistro');
+    await page.locator('textarea[name="description"]').fill('Saved from E2E');
+    await page.getByRole('button', { name: 'Enregistrer les modifications' }).click();
+
+    await expect(page.getByText('Paramètres enregistrés avec succès')).toBeVisible();
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Playwright Bistro');
+    await expect(page.locator('textarea[name="description"]')).toHaveValue('Saved from E2E');
+  });
+
+  test('shows a settings save error when the update request fails', async ({ page }) => {
+    await page.route('**/api/settings/1/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'settings write failed' }),
+      });
+    });
+
+    await page.goto('/settings');
+    await page.locator('input[name="nom"]').fill('Broken save');
+    await page.getByRole('button', { name: 'Enregistrer les modifications' }).click();
+
+    await expect(page.getByText("Erreur lors de l'enregistrement")).toBeVisible();
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Broken save');
+  });
+
+  test('renders the HR empty state and export toast when no employees are returned', async ({ page }) => {
+    await page.route('**/api/employes/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/hr');
+    await expect(page.getByText('Aucun employé enregistré.')).toBeVisible();
+    await page.getByRole('button', { name: /Exporter la liste/ }).click();
+    await expect(page.getByText('Génération du PDF en cours...')).toBeVisible();
+  });
+
+  test('renders the avis empty state when no feedback is returned', async ({ page }) => {
+    await page.route('**/api/avis/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/avis');
+    await expect(page.getByText('Aucun avis client pour le moment.')).toBeVisible();
+  });
+
+  test('surfaces low stock rows when ingredient thresholds are crossed', async ({ page }) => {
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9001,
+            nom: 'Safran test',
+            unite_mesure: 'g',
+            stock_actuel: '2.00',
+            seuil_alerte: '5.00',
+            est_active: true,
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/stock');
+    await expect(page.getByText('Safran test')).toBeVisible();
+    await expect(page.getByText('Réappro', { exact: true })).toBeVisible();
+  });
 });

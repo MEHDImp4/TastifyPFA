@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 01:34:41<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 07:28:29<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -429,7 +429,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->12<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->14<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
@@ -1081,6 +1081,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 07:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Extended the backoffice Playwright suite with additional manager-side cases: successful and failing `settings` saves, `HR` empty-state plus export toast coverage, `Avis` empty-state coverage, and low-stock alert rendering.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 07:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded guest protection coverage to include unauthenticated access checks for `/hr`, `/avis`, `/settings`, and `/ordering/:tableId`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 07:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 07:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`25/25` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 01:33</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite beyond the first role matrix to cover normalized seeded login, auth transport failure handling, direct GERANT access to `hr`, `avis`, `settings`, and `ordering/:tableId`, plus stronger SERVEUR ordering assertions.</p>
                             </li>
@@ -1133,26 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py check`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py makemigrations --check --dry-run`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build db redis backend backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
