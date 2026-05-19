@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 09:39:48<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 10:05:55<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -429,7 +429,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->22<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->23<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
@@ -1081,6 +1081,31 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic ordering and KDS regressions: multi-item cart persistence across category/search intersections, filtered `add_items` retention on existing orders, and sibling-ticket isolation when a KDS line-status mutation fails.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`19/19` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium` (`10/10` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`46/46` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 09:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic SERVEUR and CUISINIER regression scenarios: reservation search normalization with fallback client names, confirmed-to-cancelled tab handoff, cart persistence through category switches and search filtering, and single-ticket KDS completion isolation after a successful line-status mutation.</p>
                             </li>
@@ -1128,31 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`13/13` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium` (`8/8` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`38/38` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the Wave 1 gap scenarios for SERVEUR and CUISINIER: reservation empty states, reservation confirm/cancel failure handling, mixed-cart quantity flooring, existing-order `add_items` submission, and KDS status-update failure coverage.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:20</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Hardened the GERANT CRUD browser checks so category and plat edit assertions now wait on visible modal closure instead of brittle exact PATCH-response listeners during full-suite execution.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

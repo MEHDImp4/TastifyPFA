@@ -616,6 +616,76 @@ test.describe('serveur browser workflows', () => {
     await expect(cartPanel.getByText('19.00DH').last()).toBeVisible();
   });
 
+  test('preserves a multi-item cart across category and search intersections', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 161, nom: 'Entrees', ordre_affichage: 1, est_active: true },
+          { id: 162, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 171, nom: 'Salade orange', prix: '10.00', temps_preparation: 5, categorie: 161, image: null, est_active: true, est_disponible: true },
+          { id: 172, nom: 'Tarte orange', prix: '13.00', temps_preparation: 7, categorie: 162, image: null, est_active: true, est_disponible: true },
+          { id: 173, nom: 'Mousse cacao', prix: '12.00', temps_preparation: 4, categorie: 162, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Salade orange 10\.00DH 5m/i }).click();
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await page.getByRole('button', { name: /Tarte orange 13\.00DH 7m/i }).click();
+
+    const cartPanel = page.locator('aside');
+    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+    await expect(cartPanel.getByText('Salade orange')).toBeVisible();
+    await expect(cartPanel.getByText('Tarte orange')).toBeVisible();
+    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+
+    await searchInput.fill('orange');
+    await expect(page.getByText('Tarte orange')).toHaveCount(2);
+    await expect(page.getByText('Mousse cacao')).toHaveCount(0);
+    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Entrees' }).click();
+    await expect(page.getByText('Salade orange')).toHaveCount(2);
+    await expect(page.getByText('Tarte orange')).toHaveCount(1);
+    await expect(cartPanel.getByText('Salade orange')).toBeVisible();
+    await expect(cartPanel.getByText('Tarte orange')).toBeVisible();
+    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+
+    await searchInput.fill('');
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await expect(page.getByText('Tarte orange')).toHaveCount(2);
+    await expect(page.getByText('Mousse cacao')).toBeVisible();
+    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+  });
+
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {
     let createdCommande: any = null;
 
@@ -748,6 +818,93 @@ test.describe('serveur browser workflows', () => {
     expect(createCalled).toBe(false);
     expect(addItemsPayload).toEqual({
       lignes: [{ plat: 91, quantite: 1, notes: '' }],
+    });
+  });
+
+  test('keeps existing-order add_items payload intact while filters change', async ({ page }) => {
+    let addItemsPayload: any = null;
+    let createCalled = false;
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 181, nom: 'Entrees', ordre_affichage: 1, est_active: true },
+          { id: 182, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 191, nom: 'Salade mechouia', prix: '11.00', temps_preparation: 6, categorie: 181, image: null, est_active: true, est_disponible: true },
+          { id: 192, nom: 'Creme orange', prix: '9.00', temps_preparation: 3, categorie: 182, image: null, est_active: true, est_disponible: true },
+          { id: 193, nom: 'Millefeuille', prix: '14.00', temps_preparation: 5, categorie: 182, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 9911, statut: 'EN_COURS', table: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/', async (route) => {
+      if (route.request().method() === 'POST') {
+        createCalled = true;
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'should not create' }),
+        });
+        return;
+      }
+      await route.continue();
+    });
+
+    await page.route('**/api/commandes/9911/add_items/', async (route) => {
+      addItemsPayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Salade mechouia 11\.00DH 6m/i }).click();
+
+    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await searchInput.fill('orange');
+    await page.getByRole('button', { name: /Creme orange 9\.00DH 3m/i }).click();
+    await expect(page.getByText('Millefeuille')).toHaveCount(0);
+
+    await searchInput.fill('');
+    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    expect(createCalled).toBe(false);
+    expect(addItemsPayload).toEqual({
+      lignes: [
+        { plat: 191, quantite: 1, notes: '' },
+        { plat: 192, quantite: 1, notes: '' },
+      ],
     });
   });
 });

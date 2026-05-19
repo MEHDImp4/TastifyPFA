@@ -1,3 +1,13 @@
+## [2026-05-19] - 10:15
+### Added
+- Expanded the backoffice Playwright suite with the next deterministic ordering and KDS regressions: multi-item cart persistence across category/search intersections, filtered `add_items` retention on existing orders, and sibling-ticket isolation when a KDS line-status mutation fails.
+
+### Validation
+- `npm run test:e2e -- --project=serveur-chromium` (`19/19` passed)
+- `npm run test:e2e -- --project=cuisinier-chromium` (`10/10` passed)
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`46/46` passed)
+
 ## [2026-05-19] - 09:50
 ### Added
 - Expanded the backoffice Playwright suite with the next deterministic SERVEUR and CUISINIER regression scenarios: reservation search normalization with fallback client names, confirmed-to-cancelled tab handoff, cart persistence through category switches and search filtering, and single-ticket KDS completion isolation after a successful line-status mutation.

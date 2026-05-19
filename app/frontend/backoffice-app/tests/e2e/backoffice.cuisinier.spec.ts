@@ -296,4 +296,83 @@ test.describe('cuisinier browser workflows', () => {
     await expect(secondTicket.getByText('EN PREPARATION')).toBeVisible();
     await expect(secondTicket.getByText('Complet')).toHaveCount(0);
   });
+
+  test('keeps sibling tickets unchanged when one KDS mutation fails', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9601,
+            statut: 'EN_CUISINE',
+            table_numero: 11,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:35:00Z',
+            lignes: [
+              {
+                id: 9201,
+                plat_nom: 'Couscous legumes',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: '',
+                heure_lancement: '2026-05-19T12:36:00Z',
+              },
+            ],
+          },
+          {
+            id: 9602,
+            statut: 'EN_CUISINE',
+            table_numero: 12,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:40:00Z',
+            lignes: [
+              {
+                id: 9211,
+                plat_nom: 'Poisson chermoula',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: 'Sans sel',
+                heure_lancement: '2026-05-19T12:41:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9201/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'update failed' }),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9211/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 9211, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.goto('/kds');
+    const firstTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #11') }).first();
+    const secondTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #12') }).first();
+
+    await firstTicket.getByRole('button', { name: 'Prêt' }).click();
+
+    await expect(firstTicket.getByText('Couscous legumes')).toBeVisible();
+    await expect(firstTicket.getByText('EN PREPARATION')).toBeVisible();
+    await expect(firstTicket.getByText('Complet')).toHaveCount(0);
+
+    await expect(secondTicket.getByText('Poisson chermoula')).toBeVisible();
+    await expect(secondTicket.getByText('EN PREPARATION')).toBeVisible();
+    await expect(secondTicket.getByRole('button', { name: 'Prêt' })).toBeVisible();
+    await expect(secondTicket.getByText('Sans sel')).toBeVisible();
+    await expect(secondTicket.getByText('Complet')).toHaveCount(0);
+  });
 });
