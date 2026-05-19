@@ -239,6 +239,102 @@ test.describe('serveur browser workflows', () => {
     await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
   });
 
+  test('normalizes reservation search input and supports fallback client names', async ({ page }) => {
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 7311,
+            user_username: 'Nadia Search',
+            statut: 'CONFIRMEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '19:00',
+            heure_fin: '20:30',
+            nombre_personnes: 5,
+            table: 8,
+            table_numero: 8,
+            notes: '',
+          },
+          {
+            id: 7312,
+            user_username: null,
+            statut: 'EN_ATTENTE',
+            date_reservation: '2026-05-19',
+            heure_debut: '20:00',
+            heure_fin: '21:00',
+            nombre_personnes: 2,
+            table: 3,
+            table_numero: 3,
+            notes: 'Sans gluten',
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const searchInput = page.getByPlaceholder('Chercher un client...');
+
+    await searchInput.fill('  naDIA  ');
+    await expect(searchInput).toHaveValue('  naDIA  ');
+    await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(0);
+
+    await searchInput.fill('client');
+    await expect(reservationsGrid.getByText('Nadia Search')).toHaveCount(0);
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toBeVisible();
+    await expect(reservationsGrid.getByText('"Sans gluten"')).toBeVisible();
+  });
+
+  test('moves a confirmed reservation into the cancelled tab after cancellation', async ({ page }) => {
+    const reservations = [
+      {
+        id: 7321,
+        user_username: 'Salma Transit',
+        statut: 'CONFIRMEE',
+        date_reservation: '2026-05-19',
+        heure_debut: '19:30',
+        heure_fin: '21:00',
+        nombre_personnes: 4,
+        table: 5,
+        table_numero: 5,
+        notes: '',
+      },
+    ];
+
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations),
+      });
+    });
+
+    await page.route('**/api/reservations/*/annuler/', async (route) => {
+      reservations[0].statut = 'ANNULEE';
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations[0]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+
+    await page.getByRole('button', { name: 'CONFIRMEE' }).click();
+    await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
+
+    await page.getByRole('button', { name: 'Annuler' }).click();
+    await expect(reservationsGrid.getByText('Salma Transit')).toHaveCount(0);
+    await expect(page.getByText('Aucune réservation trouvée.')).toBeVisible();
+
+    await page.getByRole('button', { name: 'ANNULEE' }).click();
+    await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
+  });
+
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
     await page.route('**/api/categories/', async (route) => {
       await route.fulfill({
@@ -408,6 +504,116 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByText('Salade orange')).toHaveCount(0);
     await expect(page.getByText('Tarte orange')).toBeVisible();
     await expect(page.getByText('Mousse chocolat')).toHaveCount(0);
+  });
+
+  test('preserves cart state while category tabs change', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 121, nom: 'Entrees', ordre_affichage: 1, est_active: true },
+          { id: 122, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 131, nom: 'Briouates', prix: '11.00', temps_preparation: 6, categorie: 121, image: null, est_active: true, est_disponible: true },
+          { id: 132, nom: 'Corne de gazelle', prix: '9.50', temps_preparation: 4, categorie: 122, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Briouates 11\.00DH 6m/i }).click();
+
+    const cartPanel = page.locator('aside');
+    await expect(cartPanel.getByText('Briouates')).toBeVisible();
+    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await expect(page.getByText('Corne de gazelle')).toBeVisible();
+    await expect(page.getByText('Briouates')).toHaveCount(1);
+    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Entrees' }).click();
+    await expect(page.getByText('Briouates')).toHaveCount(2);
+    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+  });
+
+  test('preserves cart state while catalog search hides and reveals items', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 141, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 151, nom: 'Tagine citron', prix: '19.00', temps_preparation: 15, categorie: 141, image: null, est_active: true, est_disponible: true },
+          { id: 152, nom: 'Pastilla mer', prix: '21.00', temps_preparation: 17, categorie: 141, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Tagine citron 19\.00DH 15m/i }).click();
+
+    const cartPanel = page.locator('aside');
+    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+
+    await searchInput.fill('pastilla');
+    await expect(page.getByText('Tagine citron')).toHaveCount(1);
+    await expect(page.getByText('Pastilla mer')).toBeVisible();
+    await expect(cartPanel.getByText('Tagine citron')).toBeVisible();
+    await expect(cartPanel.getByText('19.00DH').last()).toBeVisible();
+
+    await searchInput.fill('');
+    await expect(page.getByText('Tagine citron')).toHaveCount(2);
+    await expect(cartPanel.getByText('Tagine citron')).toBeVisible();
+    await expect(cartPanel.getByText('19.00DH').last()).toBeVisible();
   });
 
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {

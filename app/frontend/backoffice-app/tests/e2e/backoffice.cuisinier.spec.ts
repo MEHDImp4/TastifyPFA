@@ -200,4 +200,100 @@ test.describe('cuisinier browser workflows', () => {
     await expect(secondTicket.getByText('Complet')).toBeVisible();
     await expect(secondTicket.getByText('Extra chaud')).toBeVisible();
   });
+
+  test('marks only the updated ticket complete when its last active line becomes ready', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9501,
+            statut: 'EN_CUISINE',
+            table_numero: 4,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:20:00Z',
+            lignes: [
+              {
+                id: 9101,
+                plat_nom: 'Tajine agneau',
+                quantite: 1,
+                statut: 'PRET',
+                notes: '',
+                heure_lancement: '2026-05-19T12:21:00Z',
+              },
+              {
+                id: 9102,
+                plat_nom: 'Legumes rôtis',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: '',
+                heure_lancement: '2026-05-19T12:22:00Z',
+              },
+            ],
+          },
+          {
+            id: 9502,
+            statut: 'EN_CUISINE',
+            table_numero: 6,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:25:00Z',
+            lignes: [
+              {
+                id: 9111,
+                plat_nom: 'Haricots verts',
+                quantite: 1,
+                statut: 'PRET',
+                notes: '',
+                heure_lancement: '2026-05-19T12:26:00Z',
+              },
+              {
+                id: 9112,
+                plat_nom: 'Filet poisson',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: 'Sauce a part',
+                heure_lancement: '2026-05-19T12:27:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9102/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 9102, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9112/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 9112, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.goto('/kds');
+    const firstTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #4') }).first();
+    const secondTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #6') }).first();
+
+    await expect(firstTicket.getByText('Complet')).toHaveCount(0);
+    await expect(secondTicket.getByText('Complet')).toHaveCount(0);
+
+    await firstTicket.getByRole('button', { name: 'Prêt' }).click();
+
+    await expect(firstTicket.getByText('Legumes rôtis')).toBeVisible();
+    await expect(firstTicket.getByText('PRET')).toHaveCount(2);
+    await expect(firstTicket.getByText('Complet')).toBeVisible();
+
+    await expect(secondTicket.getByText('Filet poisson')).toBeVisible();
+    await expect(secondTicket.getByText('EN PREPARATION')).toBeVisible();
+    await expect(secondTicket.getByText('Complet')).toHaveCount(0);
+  });
 });

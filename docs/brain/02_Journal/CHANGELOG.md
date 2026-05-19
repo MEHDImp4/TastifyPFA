@@ -1,3 +1,13 @@
+## [2026-05-19] - 09:50
+### Added
+- Expanded the backoffice Playwright suite with the next deterministic SERVEUR and CUISINIER regression scenarios: reservation search normalization with fallback client names, confirmed-to-cancelled tab handoff, cart persistence through category switches and search filtering, and single-ticket KDS completion isolation after a successful line-status mutation.
+
+### Validation
+- `npm run test:e2e -- --project=serveur-chromium` (`17/17` passed)
+- `npm run test:e2e -- --project=cuisinier-chromium` (`9/9` passed)
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`43/43` passed)
+
 ## [2026-05-19] - 09:35
 ### Added
 - Expanded the backoffice Playwright suite with the next Wave 2 scenarios: reservation client-search coverage, cancelled-status visibility, ordering category/search intersection coverage, and multi-ticket KDS completion isolation.
