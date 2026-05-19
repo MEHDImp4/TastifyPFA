@@ -1,3 +1,18 @@
+## [2026-05-19] - 09:35
+### Added
+- Expanded the backoffice Playwright suite with the next Wave 2 scenarios: reservation client-search coverage, cancelled-status visibility, ordering category/search intersection coverage, and multi-ticket KDS completion isolation.
+
+### Changed
+- Wired the reservations search input in `app/frontend/backoffice-app/src/pages/Staff/ReservationsPage.tsx` so client-name filtering now works alongside status tabs, and exposed an `ANNULEE` filter tab for staff-side reservation review.
+- Tightened the new reservation-search spec to scope assertions to the reservation grid itself, avoiding false negatives from overly broad page-wide text locators.
+
+### Validation
+- `docker compose up -d --build backoffice-app`
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e -- --project=serveur-chromium` (`13/13` passed)
+- `npm run test:e2e -- --project=cuisinier-chromium` (`8/8` passed)
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`38/38` passed)
+
 ## [2026-05-19] - 09:20
 ### Added
 - Expanded the backoffice Playwright suite with the Wave 1 gap scenarios for SERVEUR and CUISINIER: reservation empty states, reservation confirm/cancel failure handling, mixed-cart quantity flooring, existing-order `add_items` submission, and KDS status-update failure coverage.

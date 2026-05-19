@@ -17,6 +17,7 @@ export const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
+  const [search, setSearch] = useState('');
 
   const fetchReservations = async () => {
     try {
@@ -76,8 +77,13 @@ export const ReservationsPage: React.FC = () => {
   };
 
   const filteredReservations = reservations.filter(res => {
-    if (filter === 'ALL') return true;
-    return res.statut === filter;
+    const matchesFilter = filter === 'ALL' ? true : res.statut === filter;
+    const normalizedSearch = search.trim().toLowerCase();
+    const matchesSearch =
+      normalizedSearch === '' ||
+      (res.user_username || 'Client').toLowerCase().includes(normalizedSearch);
+
+    return matchesFilter && matchesSearch;
   });
 
   return (
@@ -94,12 +100,14 @@ export const ReservationsPage: React.FC = () => {
                 <input 
                     type="text" 
                     placeholder="Chercher un client..."
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
                     className="pl-10 pr-4 py-2 bg-surface-container border border-outline-variant/30 rounded-xl text-sm focus:outline-none focus:border-primary transition-colors font-bold"
                     style={{ color: '#301400' }}
                 />
             </div>
             <div className="flex bg-surface-container p-1 rounded-xl border border-outline-variant/30">
-                {['ALL', 'EN_ATTENTE', 'CONFIRMEE'].map(f => (
+                {['ALL', 'EN_ATTENTE', 'CONFIRMEE', 'ANNULEE'].map(f => (
                     <button
                         key={f}
                         onClick={() => setFilter(f)}

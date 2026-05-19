@@ -133,4 +133,71 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByRole('button', { name: 'Démarrer' })).toBeVisible();
     await expect(page.getByText('Complet')).toHaveCount(0);
   });
+
+  test('shows completion only for tickets whose every line is ready', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9401,
+            statut: 'EN_CUISINE',
+            table_numero: 9,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:10:00Z',
+            lignes: [
+              {
+                id: 9001,
+                plat_nom: 'Harira',
+                quantite: 1,
+                statut: 'PRET',
+                notes: '',
+                heure_lancement: '2026-05-19T12:11:00Z',
+              },
+              {
+                id: 9002,
+                plat_nom: 'Brochettes',
+                quantite: 2,
+                statut: 'EN_PREPARATION',
+                notes: '',
+                heure_lancement: '2026-05-19T12:12:00Z',
+              },
+            ],
+          },
+          {
+            id: 9402,
+            statut: 'PRETE',
+            table_numero: 10,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:15:00Z',
+            lignes: [
+              {
+                id: 9010,
+                plat_nom: 'Rfissa',
+                quantite: 1,
+                statut: 'PRET',
+                notes: 'Extra chaud',
+                heure_lancement: '2026-05-19T12:16:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/kds');
+    const firstTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #9') }).first();
+    const secondTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #10') }).first();
+
+    await expect(firstTicket.getByText('Harira')).toBeVisible();
+    await expect(firstTicket.getByText('Brochettes')).toBeVisible();
+    await expect(firstTicket.getByText('Complet')).toHaveCount(0);
+
+    await expect(secondTicket.getByText('Rfissa')).toBeVisible();
+    await expect(secondTicket.getByText('Complet')).toBeVisible();
+    await expect(secondTicket.getByText('Extra chaud')).toBeVisible();
+  });
 });

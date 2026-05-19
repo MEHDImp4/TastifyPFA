@@ -191,6 +191,54 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByRole('button', { name: 'Annuler' })).toHaveCount(1);
   });
 
+  test('filters reservations by client search and cancelled status', async ({ page }) => {
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 7301,
+            user_username: 'Nadia Search',
+            statut: 'ANNULEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '19:00',
+            heure_fin: '20:30',
+            nombre_personnes: 5,
+            table: 8,
+            table_numero: 8,
+            notes: 'Allergies',
+          },
+          {
+            id: 7302,
+            user_username: 'Karim Visible',
+            statut: 'CONFIRMEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '20:00',
+            heure_fin: '21:30',
+            nombre_personnes: 2,
+            table: 2,
+            table_numero: 2,
+            notes: '',
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    await page.getByPlaceholder('Chercher un client...').fill('nadia');
+    await expect(page.getByPlaceholder('Chercher un client...')).toHaveValue('nadia');
+    await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
+    await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
+    await expect(reservationsGrid.getByText('"Allergies"')).toBeVisible();
+
+    await page.getByPlaceholder('Chercher un client...').fill('');
+    await page.getByRole('button', { name: 'ANNULEE' }).click();
+    await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
+    await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
+  });
+
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
     await page.route('**/api/categories/', async (route) => {
       await route.fulfill({
@@ -309,6 +357,57 @@ test.describe('serveur browser workflows', () => {
     await expect(pouletItem.getByText('15.00DH')).toBeVisible();
     await expect(pouletItem.locator('span.w-8').first()).toHaveText('1');
     await expect(page.locator('aside').getByText('19.00DH').last()).toBeVisible();
+  });
+
+  test('intersects ordering category switches with text search', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 101, nom: 'Entrees', ordre_affichage: 1, est_active: true },
+          { id: 102, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 111, nom: 'Salade orange', prix: '10.00', temps_preparation: 5, categorie: 101, image: null, est_active: true, est_disponible: true },
+          { id: 112, nom: 'Tarte orange', prix: '13.00', temps_preparation: 7, categorie: 102, image: null, est_active: true, est_disponible: true },
+          { id: 113, nom: 'Mousse chocolat', prix: '12.00', temps_preparation: 4, categorie: 102, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByPlaceholder('Lookup culinary data...').fill('orange');
+    await expect(page.getByText('Salade orange')).toBeVisible();
+    await expect(page.getByText('Tarte orange')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await expect(page.getByText('Salade orange')).toHaveCount(0);
+    await expect(page.getByText('Tarte orange')).toBeVisible();
+    await expect(page.getByText('Mousse chocolat')).toHaveCount(0);
   });
 
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {
