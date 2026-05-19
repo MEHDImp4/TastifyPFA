@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('menu catalog', () => {
   test('shows category navigation after load', async ({ page }) => {
     await page.goto('/menu');
-    await expect(page.getByRole('button', { name: /Full Archive/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Vue d'ensemble/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Entrées/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Plats/ })).toBeVisible();
   });
@@ -40,9 +40,9 @@ test.describe('menu catalog', () => {
     await expect(page.getByText('Tagine Poulet')).toHaveCount(0);
   });
 
-  test('Full Archive shows all dishes across all categories', async ({ page }) => {
+  test('Vue d\'ensemble shows all dishes across all categories', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /Full Archive/ }).click();
+    await page.getByRole('button', { name: /Vue d'ensemble/ }).click();
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
   });
@@ -58,29 +58,29 @@ test.describe('menu catalog', () => {
   test('search filters dishes within the active category', async ({ page }) => {
     await page.goto('/menu');
     // Default: Entrées active — search within Entrées
-    await page.getByPlaceholder('Search by flavor signature...').fill('harira');
+    await page.getByPlaceholder('Rechercher une signature...').fill('harira');
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Briouates')).toHaveCount(0);
   });
 
-  test('search across Full Archive finds dishes in any category', async ({ page }) => {
+  test('search across Vue d\'ensemble finds dishes in any category', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /Full Archive/ }).click();
-    await page.getByPlaceholder('Search by flavor signature...').fill('tagine');
+    await page.getByRole('button', { name: /Vue d'ensemble/ }).click();
+    await page.getByPlaceholder('Rechercher une signature...').fill('tagine');
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
   });
 
   test('shows empty state when no dish matches search', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /Full Archive/ }).click();
-    await page.getByPlaceholder('Search by flavor signature...').fill('doesnotexist12345');
-    await expect(page.getByText('No records found.')).toBeVisible();
+    await page.getByRole('button', { name: /Vue d'ensemble/ }).click();
+    await page.getByPlaceholder('Rechercher une signature...').fill('doesnotexist12345');
+    await expect(page.getByText('Aucun résultat trouvé.')).toBeVisible();
   });
 
   test('clearing search restores category view', async ({ page }) => {
     await page.goto('/menu');
-    const searchInput = page.getByPlaceholder('Search by flavor signature...');
+    const searchInput = page.getByPlaceholder('Rechercher une signature...');
     await searchInput.fill('harira');
     await expect(page.getByText('Briouates')).toHaveCount(0);
     await searchInput.fill('');
