@@ -124,6 +124,14 @@ class TableSerializer(serializers.ModelSerializer):
     def get_prochaine_reservation(self, obj):
         return _compute_prochaine_reservation(obj)
 
+    def get_has_payable_order(self, obj):
+        from apps.paiements.constants import PAYABLE_COMMANDE_STATUSES
+
+        return obj.commandes.filter(
+            est_active=True,
+            statut__in=PAYABLE_COMMANDE_STATUSES,
+        ).exists()
+
 class PlanTextSerializer(serializers.ModelSerializer):
     est_active = serializers.BooleanField(default=True)
 

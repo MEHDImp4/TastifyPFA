@@ -375,4 +375,141 @@ test.describe('cuisinier browser workflows', () => {
     await expect(secondTicket.getByText('Sans sel')).toBeVisible();
     await expect(secondTicket.getByText('Complet')).toHaveCount(0);
   });
+
+  test('updates only the targeted ready button when multiple tickets expose the same action', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9701,
+            statut: 'EN_CUISINE',
+            table_numero: 14,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:45:00Z',
+            lignes: [
+              {
+                id: 9301,
+                plat_nom: 'Tajine pruneaux',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: '',
+                heure_lancement: '2026-05-19T12:46:00Z',
+              },
+            ],
+          },
+          {
+            id: 9702,
+            statut: 'EN_CUISINE',
+            table_numero: 15,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:47:00Z',
+            lignes: [
+              {
+                id: 9302,
+                plat_nom: 'Seffa medfouna',
+                quantite: 1,
+                statut: 'EN_PREPARATION',
+                notes: 'Cannelle extra',
+                heure_lancement: '2026-05-19T12:48:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9301/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 9301, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.route('**/api/commandelignes/9302/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 9302, statut: route.request().postDataJSON().statut }),
+      });
+    });
+
+    await page.goto('/kds');
+    const firstTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #14') }).first();
+    const secondTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #15') }).first();
+
+    await firstTicket.getByRole('button', { name: 'Prêt' }).click();
+
+    await expect(firstTicket.getByText('PRET')).toBeVisible();
+    await expect(firstTicket.getByText('Complet')).toBeVisible();
+
+    await expect(secondTicket.getByText('Seffa medfouna')).toBeVisible();
+    await expect(secondTicket.getByText('EN PREPARATION')).toBeVisible();
+    await expect(secondTicket.getByRole('button', { name: 'Prêt' })).toBeVisible();
+    await expect(secondTicket.getByText('Cannelle extra')).toBeVisible();
+    await expect(secondTicket.getByText('Complet')).toHaveCount(0);
+  });
+
+  test('renders takeaway fallback identities and keeps them isolated from table tickets', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9801,
+            statut: 'EN_CUISINE',
+            table_numero: null,
+            type: 'EMPORTER',
+            client_nom: null,
+            created_at: '2026-05-19T12:55:00Z',
+            lignes: [
+              {
+                id: 9401,
+                plat_nom: 'Sandwich kefta',
+                quantite: 1,
+                statut: 'EN_ATTENTE',
+                notes: 'Sans oignons',
+                heure_lancement: '2026-05-19T12:56:00Z',
+              },
+            ],
+          },
+          {
+            id: 9802,
+            statut: 'EN_CUISINE',
+            table_numero: 16,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T12:57:00Z',
+            lignes: [
+              {
+                id: 9402,
+                plat_nom: 'Pastilla fruits de mer',
+                quantite: 1,
+                statut: 'EN_ATTENTE',
+                notes: '',
+                heure_lancement: '2026-05-19T12:58:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/kds');
+    const takeawayTicket = page.locator('.double-bezel').filter({ has: page.getByText('Takeaway: Client') }).first();
+    const tableTicket = page.locator('.double-bezel').filter({ has: page.getByText('Table #16') }).first();
+
+    await expect(takeawayTicket.getByText('Sandwich kefta')).toBeVisible();
+    await expect(takeawayTicket.getByText('Sans oignons')).toBeVisible();
+    await expect(takeawayTicket.getByRole('button', { name: 'Démarrer' })).toBeVisible();
+
+    await expect(tableTicket.getByText('Pastilla fruits de mer')).toBeVisible();
+    await expect(tableTicket.getByText('Takeaway: Client')).toHaveCount(0);
+    await expect(tableTicket.getByRole('button', { name: 'Démarrer' })).toBeVisible();
+  });
 });

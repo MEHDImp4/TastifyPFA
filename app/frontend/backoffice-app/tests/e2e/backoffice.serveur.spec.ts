@@ -1003,6 +1003,70 @@ test.describe('serveur browser workflows', () => {
     });
   });
 
+  test('selects the mutable existing order when multiple active orders are returned for one table', async ({ page }) => {
+    let addItemsPayload: any = null;
+    let addItemsTargetId: number | null = null;
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 101, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 111, nom: 'Brochettes agneau', prix: '21.00', temps_preparation: 13, categorie: 101, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 9952, statut: 'PRETE', table: 1 },
+          { id: 9951, statut: 'EN_COURS', table: 1 },
+          { id: 9953, statut: 'EN_CUISINE', table: 1 },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandes/*/add_items/', async (route) => {
+      addItemsTargetId = Number(route.request().url().match(/commandes\/(\d+)\/add_items/)?.[1] ?? 0);
+      addItemsPayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await expect(page.getByText(/Session Active/i)).toBeVisible();
+    await page.getByRole('button', { name: /Brochettes agneau 21\.00DH 13m/i }).click();
+    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    expect(addItemsTargetId).toBe(9951);
+    expect(addItemsPayload).toEqual({
+      lignes: [{ plat: 111, quantite: 1, notes: '' }],
+    });
+  });
+
   test('keeps existing-order add_items payload intact while filters change', async ({ page }) => {
     let addItemsPayload: any = null;
     let createCalled = false;
@@ -1088,6 +1152,150 @@ test.describe('serveur browser workflows', () => {
         { plat: 192, quantite: 1, notes: '' },
       ],
     });
+  });
+
+  test('preserves existing-order quantities after cart edits under changing filters', async ({ page }) => {
+    let addItemsPayload: any = null;
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 281, nom: 'Plats', ordre_affichage: 1, est_active: true },
+          { id: 282, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 291, nom: 'Tajine citron', prix: '19.00', temps_preparation: 16, categorie: 281, image: null, est_active: true, est_disponible: true },
+          { id: 292, nom: 'Orange mousse', prix: '8.00', temps_preparation: 4, categorie: 282, image: null, est_active: true, est_disponible: true },
+          { id: 293, nom: 'Corne de gazelle', prix: '7.00', temps_preparation: 5, categorie: 282, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 9921, statut: 'EN_COURS', table: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/9921/add_items/', async (route) => {
+      addItemsPayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    const cartPanel = page.locator('aside');
+    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+
+    await page.getByRole('button', { name: /Tajine citron 19\.00DH 16m/i }).click();
+    await page.getByRole('button', { name: /Tajine citron 19\.00DH 16m/i }).click();
+    await expect(cartPanel.getByText('38.00DH').last()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Desserts' }).click();
+    await searchInput.fill('orange');
+    await page.getByRole('button', { name: /Orange mousse 8\.00DH 4m/i }).click();
+    await expect(page.getByText('Corne de gazelle')).toHaveCount(0);
+
+    await searchInput.fill('tajine');
+    const tajineCartItem = cartPanel.locator('div').filter({
+      has: page.getByText('Tajine citron', { exact: true }),
+    }).first();
+    await tajineCartItem.getByRole('button').nth(2).click();
+    await expect(tajineCartItem.getByText('3')).toBeVisible();
+
+    await searchInput.fill('');
+    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    expect(addItemsPayload).toEqual({
+      lignes: [
+        { plat: 291, quantite: 3, notes: '' },
+        { plat: 292, quantite: 1, notes: '' },
+      ],
+    });
+  });
+
+  test('keeps cart and session pinned when existing-order add_items fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 301, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 311, nom: 'Tacos poulet', prix: '17.00', temps_preparation: 9, categorie: 301, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 9961, statut: 'EN_COURS', table: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/9961/add_items/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'add_items failed' }),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    const cartPanel = page.locator('aside');
+
+    await expect(page.getByText('Session Active • #9961')).toBeVisible();
+    await page.getByRole('button', { name: /Tacos poulet 17\.00DH 9m/i }).click();
+    await page.getByRole('button', { name: /Tacos poulet 17\.00DH 9m/i }).click();
+    await expect(cartPanel.getByText('34.00DH').last()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+
+    await expect(page).toHaveURL(/\/ordering\/1$/);
+    await expect(page.getByText('Session Active • #9961')).toBeVisible();
+    await expect(cartPanel.getByText('Tacos poulet')).toBeVisible();
+    await expect(cartPanel.getByText('2')).toBeVisible();
+    await expect(cartPanel.getByText('34.00DH').last()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Push to Kitchen' })).toBeEnabled();
   });
 
   test('keeps hidden cart items stable when removing a different visible line', async ({ page }) => {

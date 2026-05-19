@@ -16,6 +16,23 @@ import {
   ArrowRight
 } from 'lucide-react';
 
+const MUTABLE_COMMANDE_PRIORITY: Record<Commande['statut'], number> = {
+  EN_COURS: 0,
+  EN_CUISINE: 1,
+  PRETE: 2,
+  PAYEE: 3,
+  ANNULEE: 4,
+};
+
+const selectCurrentCommande = (commandes: Commande[]) =>
+  [...commandes].sort((left, right) => {
+    const priorityDiff = MUTABLE_COMMANDE_PRIORITY[left.statut] - MUTABLE_COMMANDE_PRIORITY[right.statut];
+    if (priorityDiff !== 0) {
+      return priorityDiff;
+    }
+    return left.id - right.id;
+  })[0] ?? null;
+
 export const OrderingPage: React.FC = () => {
   const { tableId } = useParams<{ tableId: string }>();
   const navigate = useNavigate();
@@ -49,9 +66,7 @@ export const OrderingPage: React.FC = () => {
         const currentTable = tablesRes.data.find(t => t.id === Number(tableId));
         setTable(currentTable || null);
         
-        if (cmdRes.data.length > 0) {
-            setCurrentCommande(cmdRes.data[0]);
-        }
+        setCurrentCommande(selectCurrentCommande(cmdRes.data));
       } catch (err) {
         console.error('Failed to load ordering data', err);
       } finally {

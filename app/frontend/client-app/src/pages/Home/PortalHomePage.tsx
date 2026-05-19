@@ -150,9 +150,9 @@ export const PortalHomePage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { name: "Tajine d'Agneau Royal", price: "280 MAD", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=600", desc: "Mijoté aux pruneaux, amandes grillées et sésame." },
-              { name: "Couscous aux Sept Légumes", price: "240 MAD", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=601", desc: "La tradition par excellence, semoule fine et bouillon parfumé." },
-              { name: "Pastilla aux Fruits de Mer", price: "320 MAD", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=602", desc: "Feuilleté croustillant garni de poissons nobles et vermicelles." }
+              { name: "Tajine d'Agneau Royal", price: "280 MAD", img: "https://images.unsplash.com/photo-1585937421612-70a0f2455f75?auto=format&fit=crop&q=80&w=800", desc: "Mijoté aux pruneaux, amandes grillées et sésame." },
+              { name: "Couscous aux Sept Légumes", price: "240 MAD", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800", desc: "La tradition par excellence, semoule fine et bouillon parfumé." },
+              { name: "Pastilla aux Fruits de Mer", price: "320 MAD", img: "https://images.unsplash.com/photo-1563245332-6101183188d8?auto=format&fit=crop&q=80&w=800", desc: "Feuilleté croustillant garni de poissons nobles et vermicelles." }
             ].map((dish, i) => (
               <motion.div 
                 key={i}
