@@ -65,6 +65,118 @@ jobs:
         working-directory: app/frontend/backoffice-app
         run: npm run build
 
+  backoffice-unit:
+    name: Backoffice unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/frontend/backoffice-app/package-lock.json
+
+      - name: Install backoffice dependencies
+        working-directory: app/frontend/backoffice-app
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: app/frontend/backoffice-app
+        run: npm run test:unit
+
+  client-build:
+    name: Client build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/frontend/client-app/package-lock.json
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Build client
+        working-directory: app/frontend/client-app
+        run: npm run build
+
+  client-e2e:
+    name: Client Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - backend-smoke
+      - client-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/frontend/client-app/package-lock.json
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Install Playwright browser
+        working-directory: app/frontend/client-app
+        run: npx playwright install --with-deps chromium
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Start client app
+        run: docker compose up -d --build client-app
+
+      - name: Run Playwright suite
+        working-directory: app/frontend/client-app
+        env:
+          CI: "true"
+          CLIENT_BASE_URL: http://127.0.0.1:3003
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-playwright-report
+          path: app/frontend/client-app/playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-playwright-test-results
+          path: app/frontend/client-app/test-results
+          if-no-files-found: ignore
+
+      - name: Dump Docker logs on failure
+        if: failure()
+        run: docker compose logs client-app
+
+      - name: Stop Docker services
+        if: always()
+        run: docker compose down --volumes --remove-orphans
+
   backoffice-e2e:
     name: Backoffice Playwright E2E
     runs-on: ubuntu-latest
