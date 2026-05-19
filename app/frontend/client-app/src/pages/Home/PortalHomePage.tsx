@@ -6,18 +6,6 @@ export const PortalHomePage = () => {
   return (
     <div className="min-h-screen bg-white text-[#111111] font-sans selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
       
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#EAEAEA]">
-        <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight">TASTIFY</Link>
-          <div className="flex items-center gap-8">
-            <Link to="/menu" className="text-xs font-bold uppercase tracking-widest hover:text-[#8d4e1c] transition-colors">Menu</Link>
-            <Link to="/reservations" className="text-xs font-bold uppercase tracking-widest hover:text-[#8d4e1c] transition-colors">Réservations</Link>
-            <Link to="/login" className="px-5 py-2 bg-[#111111] text-white rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#333333] transition-all active:scale-95">Connexion</Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <main className="pt-40 pb-24 px-6 max-w-5xl mx-auto">
         <motion.div 

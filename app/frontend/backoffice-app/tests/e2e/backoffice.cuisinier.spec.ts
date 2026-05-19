@@ -90,4 +90,47 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByText('PRET')).toBeVisible();
     await expect(page.getByText('Complet')).toBeVisible();
   });
+
+  test('does not advance KDS item state when the backend update fails', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 9301,
+            statut: 'EN_CUISINE',
+            table_numero: 2,
+            type: 'SUR_PLACE',
+            client_nom: null,
+            created_at: '2026-05-19T11:55:00Z',
+            lignes: [
+              {
+                id: 8901,
+                plat_nom: 'Pastilla poulet',
+                quantite: 1,
+                statut: 'EN_ATTENTE',
+                notes: '',
+                heure_lancement: '2026-05-19T11:56:00Z',
+              },
+            ],
+          },
+        ]),
+      });
+    });
+
+    await page.route('**/api/commandelignes/8901/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'update failed' }),
+      });
+    });
+
+    await page.goto('/kds');
+    await page.getByRole('button', { name: 'Démarrer' }).click();
+    await expect(page.getByText('EN ATTENTE')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Démarrer' })).toBeVisible();
+    await expect(page.getByText('Complet')).toHaveCount(0);
+  });
 });

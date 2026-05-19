@@ -116,6 +116,81 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByText('Alice Martin')).toHaveCount(0);
   });
 
+  test('renders the reservations empty state when no bookings are returned', async ({ page }) => {
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/reservations');
+    await expect(page.getByText('Aucune réservation trouvée.')).toBeVisible();
+  });
+
+  test('keeps reservation actions stable when confirm and cancel fail', async ({ page }) => {
+    const reservations = [
+      {
+        id: 7201,
+        user_username: 'Sara Bennani',
+        statut: 'EN_ATTENTE',
+        date_reservation: '2026-05-19',
+        heure_debut: '18:30',
+        heure_fin: '20:00',
+        nombre_personnes: 3,
+        table: 4,
+        table_numero: 4,
+        notes: 'Fenetre',
+      },
+      {
+        id: 7202,
+        user_username: 'Omar Idrissi',
+        statut: 'CONFIRMEE',
+        date_reservation: '2026-05-19',
+        heure_debut: '20:30',
+        heure_fin: '22:00',
+        nombre_personnes: 2,
+        table: 6,
+        table_numero: 6,
+        notes: '',
+      },
+    ];
+
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations),
+      });
+    });
+
+    await page.route('**/api/reservations/*/confirmer/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'confirm failed' }),
+      });
+    });
+
+    await page.route('**/api/reservations/*/annuler/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'cancel failed' }),
+      });
+    });
+
+    await page.goto('/reservations');
+    await page.getByRole('button', { name: 'Confirmer' }).click();
+    await expect(page.getByText('Sara Bennani')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Confirmer' })).toHaveCount(1);
+
+    await page.getByRole('button', { name: 'Annuler' }).last().click();
+    await expect(page.getByText('Omar Idrissi')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Annuler' })).toHaveCount(1);
+  });
+
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
     await page.route('**/api/categories/', async (route) => {
       await route.fulfill({
@@ -185,6 +260,57 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByText('Transaction buffer is empty.')).toBeVisible();
   });
 
+  test('keeps ordering quantities floored at one and totals mixed carts correctly', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 61, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 71, nom: 'Poulet grille', prix: '15.00', temps_preparation: 12, categorie: 61, image: null, est_active: true, est_disponible: true },
+          { id: 72, nom: 'The menthe', prix: '4.00', temps_preparation: 2, categorie: 61, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Poulet grille 15\.00DH 12m/i }).click();
+    await page.getByRole('button', { name: /The menthe 4\.00DH 2m/i }).click();
+    await expect(page.locator('aside').getByText('19.00DH').last()).toBeVisible();
+
+    const pouletItem = page.locator('aside').locator('div').filter({
+      has: page.getByText('Poulet grille', { exact: true }),
+    }).first();
+
+    await pouletItem.locator('button').nth(1).click();
+    await expect(pouletItem.getByText('15.00DH')).toBeVisible();
+    await expect(pouletItem.locator('span.w-8').first()).toHaveText('1');
+    await expect(page.locator('aside').getByText('19.00DH').last()).toBeVisible();
+  });
+
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {
     let createdCommande: any = null;
 
@@ -245,6 +371,78 @@ test.describe('serveur browser workflows', () => {
       table: 1,
       type: 'SUR_PLACE',
       lignes: [{ plat: 51, quantite: 1, notes: '' }],
+    });
+  });
+
+  test('adds items to an existing in-progress order instead of creating a new one', async ({ page }) => {
+    let addItemsPayload: any = null;
+    let createCalled = false;
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 81, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 91, nom: 'Couscous royal', prix: '22.00', temps_preparation: 18, categorie: 81, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 9901, statut: 'EN_COURS', table: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/', async (route) => {
+      if (route.request().method() === 'POST') {
+        createCalled = true;
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'should not create' }),
+        });
+        return;
+      }
+      await route.continue();
+    });
+
+    await page.route('**/api/commandes/9901/add_items/', async (route) => {
+      addItemsPayload = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await expect(page.getByText('Session Active • #9901')).toBeVisible();
+    await page.getByRole('button', { name: /Couscous royal 22\.00DH 18m/i }).click();
+    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    expect(createCalled).toBe(false);
+    expect(addItemsPayload).toEqual({
+      lignes: [{ plat: 91, quantite: 1, notes: '' }],
     });
   });
 });
