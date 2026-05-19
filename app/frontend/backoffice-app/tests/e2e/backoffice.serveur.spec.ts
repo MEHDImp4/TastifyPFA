@@ -335,6 +335,188 @@ test.describe('serveur browser workflows', () => {
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
   });
 
+  test('keeps reservation statuses isolated across tabs when an action fails', async ({ page }) => {
+    const reservations = [
+      {
+        id: 7331,
+        user_username: 'Amina Pending',
+        statut: 'EN_ATTENTE',
+        date_reservation: '2026-05-19',
+        heure_debut: '18:00',
+        heure_fin: '19:30',
+        nombre_personnes: 2,
+        table: 1,
+        table_numero: 1,
+        notes: '',
+      },
+      {
+        id: 7332,
+        user_username: 'Rachid Confirmed',
+        statut: 'CONFIRMEE',
+        date_reservation: '2026-05-19',
+        heure_debut: '20:00',
+        heure_fin: '21:30',
+        nombre_personnes: 4,
+        table: 6,
+        table_numero: 6,
+        notes: '',
+      },
+      {
+        id: 7333,
+        user_username: 'Leila Cancelled',
+        statut: 'ANNULEE',
+        date_reservation: '2026-05-19',
+        heure_debut: '21:00',
+        heure_fin: '22:00',
+        nombre_personnes: 3,
+        table: 7,
+        table_numero: 7,
+        notes: '',
+      },
+    ];
+
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations),
+      });
+    });
+
+    await page.route('**/api/reservations/*/confirmer/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'confirm failed' }),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+
+    await page.getByRole('button', { name: 'EN ATTENTE' }).click();
+    await page.getByRole('button', { name: 'Confirmer' }).click();
+    await expect(reservationsGrid.getByText('Amina Pending')).toBeVisible();
+
+    await page.getByRole('button', { name: 'CONFIRMEE' }).click();
+    await expect(reservationsGrid.getByText('Rachid Confirmed')).toBeVisible();
+    await expect(reservationsGrid.getByText('Amina Pending')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'ANNULEE' }).click();
+    await expect(reservationsGrid.getByText('Leila Cancelled')).toBeVisible();
+    await expect(reservationsGrid.getByText('Amina Pending')).toHaveCount(0);
+  });
+
+  test('filters fallback client identities by active reservation status', async ({ page }) => {
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 7341,
+            user_username: null,
+            statut: 'EN_ATTENTE',
+            date_reservation: '2026-05-19',
+            heure_debut: '18:30',
+            heure_fin: '20:00',
+            nombre_personnes: 2,
+            table: 3,
+            table_numero: 3,
+            notes: '',
+          },
+          {
+            id: 7342,
+            user_username: null,
+            statut: 'ANNULEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '20:30',
+            heure_fin: '22:00',
+            nombre_personnes: 5,
+            table: 9,
+            table_numero: 9,
+            notes: '',
+          },
+          {
+            id: 7343,
+            user_username: 'Nadia Named',
+            statut: 'EN_ATTENTE',
+            date_reservation: '2026-05-19',
+            heure_debut: '19:00',
+            heure_fin: '20:00',
+            nombre_personnes: 3,
+            table: 4,
+            table_numero: 4,
+            notes: '',
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const searchInput = page.getByPlaceholder('Chercher un client...');
+
+    await searchInput.fill('client');
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(2);
+    await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'EN ATTENTE' }).click();
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(1);
+    await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'ANNULEE' }).click();
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(1);
+    await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
+  });
+
+  test('distinguishes fallback client matches from real client names during search normalization', async ({ page }) => {
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 7351,
+            user_username: 'Client Karim',
+            statut: 'CONFIRMEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '19:15',
+            heure_fin: '20:45',
+            nombre_personnes: 2,
+            table: 2,
+            table_numero: 2,
+            notes: '',
+          },
+          {
+            id: 7352,
+            user_username: null,
+            statut: 'CONFIRMEE',
+            date_reservation: '2026-05-19',
+            heure_debut: '21:00',
+            heure_fin: '22:30',
+            nombre_personnes: 4,
+            table: 8,
+            table_numero: 8,
+            notes: '',
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const searchInput = page.getByPlaceholder('Chercher un client...');
+
+    await searchInput.fill('  cLiEnt  ');
+    await expect(reservationsGrid.getByText('Client Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toBeVisible();
+
+    await searchInput.fill('karim');
+    await expect(reservationsGrid.getByText('Client Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(0);
+  });
+
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
     await page.route('**/api/categories/', async (route) => {
       await route.fulfill({
@@ -906,5 +1088,67 @@ test.describe('serveur browser workflows', () => {
         { plat: 192, quantite: 1, notes: '' },
       ],
     });
+  });
+
+  test('keeps hidden cart items stable when removing a different visible line', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 201, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 211, nom: 'Tagine olive', prix: '18.00', temps_preparation: 14, categorie: 201, image: null, est_active: true, est_disponible: true },
+          { id: 212, nom: 'Pastilla lait', prix: '12.00', temps_preparation: 6, categorie: 201, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1 }]),
+      });
+    });
+
+    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/ordering/1');
+    await page.getByRole('button', { name: /Tagine olive 18\.00DH 14m/i }).click();
+    await page.getByRole('button', { name: /Pastilla lait 12\.00DH 6m/i }).click();
+
+    const cartPanel = page.locator('aside');
+    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+    await expect(cartPanel.getByText('30.00DH').last()).toBeVisible();
+
+    await searchInput.fill('tagine');
+    await expect(page.getByText('Pastilla lait')).toHaveCount(1);
+
+    const visibleCartItem = cartPanel.locator('div').filter({
+      has: page.getByText('Tagine olive', { exact: true }),
+    }).first();
+    await visibleCartItem.locator('button').first().click();
+
+    await expect(cartPanel.getByText('Tagine olive')).toHaveCount(0);
+    await expect(cartPanel.getByText('Pastilla lait')).toBeVisible();
+    await expect(cartPanel.getByText('12.00DH').last()).toBeVisible();
+
+    await searchInput.fill('');
+    await expect(page.getByText('Pastilla lait')).toHaveCount(2);
+    await expect(cartPanel.getByText('Pastilla lait')).toBeVisible();
+    await expect(cartPanel.getByText('Tagine olive')).toHaveCount(0);
   });
 });

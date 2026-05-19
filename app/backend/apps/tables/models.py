@@ -48,3 +48,24 @@ class Table(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.est_active = False
         self.save(update_fields=['est_active', 'updated_at'])
+
+
+class PlanText(models.Model):
+    texte = models.CharField(max_length=255)
+    pos_x = models.FloatField(default=0.0)
+    pos_y = models.FloatField(default=0.0)
+    est_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = TableManager()
+
+    class Meta:
+        verbose_name = 'Texte du Plan'
+        verbose_name_plural = 'Textes du Plan'
+        ordering = ['created_at']
+
+    def delete(self, using=None, keep_parents=False):
+        self.est_active = False
+        self.save(update_fields=['est_active', 'updated_at'])
+

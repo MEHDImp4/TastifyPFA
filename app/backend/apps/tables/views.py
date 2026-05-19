@@ -11,8 +11,8 @@ from apps.paiements.exceptions import AmbiguousPayableOrderError, NoPayableOrder
 from apps.paiements.services import resolve_payable_session
 from apps.paiements.tokens import issue_payment_token
 from apps.users.permissions import IsGerant
-from .models import Table
-from .serializers import TableSerializer
+from .models import Table, PlanText
+from .serializers import TableSerializer, PlanTextSerializer
 
 
 def _today_reservations_prefetch():
@@ -73,3 +73,22 @@ class TableViewSet(viewsets.ModelViewSet):
                 'payment_url': f'/pay/{quote(token, safe="")}',
             }
         )
+
+class PlanTextViewSet(viewsets.ModelViewSet):
+    serializer_class = PlanTextSerializer
+
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsGerant()]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and user.role == 'GERANT':
+            return PlanText.objects.all()
+        return PlanText.objects.active()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,7 +1,7 @@
 import datetime
 
 from rest_framework import serializers
-from .models import Table
+from .models import Table, PlanText
 
 
 def _compute_statut_effectif(table):
@@ -124,10 +124,18 @@ class TableSerializer(serializers.ModelSerializer):
     def get_prochaine_reservation(self, obj):
         return _compute_prochaine_reservation(obj)
 
-    def get_has_payable_order(self, obj):
-        from apps.paiements.constants import PAYABLE_COMMANDE_STATUSES
+class PlanTextSerializer(serializers.ModelSerializer):
+    est_active = serializers.BooleanField(default=True)
 
-        return obj.commandes.filter(
-            est_active=True,
-            statut__in=PAYABLE_COMMANDE_STATUSES,
-        ).exists()
+    class Meta:
+        model = PlanText
+        fields = [
+            'id',
+            'texte',
+            'pos_x',
+            'pos_y',
+            'est_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']

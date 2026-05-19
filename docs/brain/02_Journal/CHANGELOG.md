@@ -1,3 +1,9 @@
+## [2026-05-19] - 10:30
+### Added
+- Added `PlanText` model to backend tables app to allow decorative text on the floor plan.
+- Added "Add Text" feature in `Plan de Salle` layout editor to place custom labels.
+- Floor plan map is now scrollable/pannable using an `overflow-auto` container with fixed minimal dimensions, allowing navigation across larger map areas.
+
 ## [2026-05-19] - 10:20
 ### Fixed
 - Fixed table drag and drop on touch devices by adding `touch-none` class to table elements in edit mode.

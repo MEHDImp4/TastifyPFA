@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 10:27:48<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 11:42:26<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -429,7 +429,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->23<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->24<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
@@ -1087,12 +1087,37 @@
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed a collision issue where dragging a table also triggered a click event, incorrectly opening the table edit modal, by adding pointer movement detection (`hasDragged` ref).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Added table management UI in `Plan de Salle` allowing Gerant to Add, Edit, and Delete tables. (Commit: 9d5ecb66783c4a0e8bdb808f6b2c0a62cfffa11b)</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app` (passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic reservation and cart regressions: cross-tab reservation action isolation after failed updates, fallback client-name filtering by active status, fallback-versus-real-name search collisions, and hidden-cart-line stability when removing a different visible item.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`23/23` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`50/50` passed)</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
@@ -1128,31 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 09:50</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`17/17` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium` (`9/9` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`43/43` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next Wave 2 scenarios: reservation client-search coverage, cancelled-status visibility, ordering category/search intersection coverage, and multi-ticket KDS completion isolation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 09:35</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Wired the reservations search input in `app/frontend/backoffice-app/src/pages/Staff/ReservationsPage.tsx` so client-name filtering now works alongside status tabs, and exposed an `ANNULEE` filter tab for staff-side reservation review.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

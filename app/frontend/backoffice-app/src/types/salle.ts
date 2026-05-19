@@ -8,6 +8,14 @@ export interface Table {
   est_active: boolean;
 }
 
+export interface PlanText {
+  id: number;
+  texte: string;
+  pos_x: number;
+  pos_y: number;
+  est_active: boolean;
+}
+
 export interface CommandeLigne {
   id?: number;
   plat: number;
