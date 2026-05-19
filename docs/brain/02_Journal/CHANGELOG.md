@@ -4,6 +4,20 @@
 - Added "Add Text" feature in `Plan de Salle` layout editor to place custom labels.
 - Floor plan map is now scrollable/pannable using an `overflow-auto` container with fixed minimal dimensions, allowing navigation across larger map areas.
 
+## [2026-05-19] - 11:20
+### Added
+- Expanded the backoffice Playwright suite with more deterministic ordering and KDS regressions: mutable existing-order selection across multiple active tickets, pinned ordering/cart state after `add_items` failures, preserved edited quantities through category/search churn, same-action `Prêt` isolation across neighboring KDS tickets, and takeaway fallback identity rendering.
+
+### Changed
+- Hardened `app/frontend/backoffice-app/src/pages/Staff/OrderingPage.tsx` so the staff ordering flow now picks the highest-priority mutable commande (`EN_COURS`, then `EN_CUISINE`, then `PRETE`) instead of blindly taking the first API result for a table.
+
+### Validation
+- `docker compose up -d --build backoffice-app`
+- `npm run test:e2e -- --project=serveur-chromium` (`26/26` passed)
+- `npm run test:e2e -- --project=cuisinier-chromium` (`12/12` passed)
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`55/55` passed)
+
 ## [2026-05-19] - 10:20
 ### Fixed
 - Fixed table drag and drop on touch devices by adding `touch-none` class to table elements in edit mode.

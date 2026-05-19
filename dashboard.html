@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 11:57:54<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 12:00:50<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -429,7 +429,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->24<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->25<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
@@ -1095,6 +1095,41 @@
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Floor plan map is now scrollable/pannable using an `overflow-auto` container with fixed minimal dimensions, allowing navigation across larger map areas.</p>
                             </li>
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with more deterministic ordering and KDS regressions: mutable existing-order selection across multiple active tickets, pinned ordering/cart state after `add_items` failures, preserved edited quantities through category/search churn, same-action `Prêt` isolation across neighboring KDS tickets, and takeaway fallback identity rendering.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Hardened `app/frontend/backoffice-app/src/pages/Staff/OrderingPage.tsx` so the staff ordering flow now picks the highest-priority mutable commande (`EN_COURS`, then `EN_CUISINE`, then `PRETE`) instead of blindly taking the first API result for a table.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`26/26` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium` (`12/12` passed)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 11:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`55/55` passed)</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 10:20</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed table drag and drop on touch devices by adding `touch-none` class to table elements in edit mode.</p>
@@ -1118,41 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic reservation and cart regressions: cross-tab reservation action isolation after failed updates, fallback client-name filtering by active status, fallback-versus-real-name search collisions, and hidden-cart-line stability when removing a different visible item.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`23/23` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`50/50` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded the backoffice Playwright suite with the next deterministic ordering and KDS regressions: multi-item cart persistence across category/search intersections, filtered `add_items` retention on existing orders, and sibling-ticket isolation when a KDS line-status mutation fails.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium` (`19/19` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium` (`10/10` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 10:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
