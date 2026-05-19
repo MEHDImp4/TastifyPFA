@@ -33,7 +33,7 @@ export const AppShell: React.FC = () => {
           setMobileOpen={setMobileOpen}
           toggleDesktopSidebar={toggleDesktopSidebar}
         />
-        <main className="flex-1 overflow-y-auto p-5 md:p-8 scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-3 md:p-5 scroll-smooth">
           <Outlet />
         </main>
       </div>
