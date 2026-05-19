@@ -100,6 +100,15 @@ docker compose up -d --build backend
 
 The PowerShell runner rebuilds `db`, `redis`, `backend`, and `backoffice-app`, then executes backend `pytest` followed by Playwright browser flows. Right now, the Playwright campaign is green for public auth, unauthenticated route protection, multi-role redirects, role-based URL guards, logout, category CRUD, and plat CRUD. Backend `pytest` is still partially blocked by pre-existing import issues in untouched modules such as `apps.avis.tests` and `apps.stock.tasks`.
 
+## GitHub Actions
+- `.github/workflows/backoffice-ci.yml` runs on pull requests plus pushes to `main` and `master`.
+- The workflow is split into `backend-smoke`, `backoffice-build`, and `backoffice-e2e` jobs.
+- `backend-smoke` brings up `db`, `redis`, and `backend` with Docker Compose, then runs `python manage.py check` and `makemigrations --check --dry-run`.
+- `backoffice-build` runs `npm ci` and `npm run build` in `app/frontend/backoffice-app`.
+- `backoffice-e2e` installs Chromium for Playwright, starts `db`, `redis`, `backend`, and `backoffice-app` in Docker, then executes the full backoffice browser suite and uploads the Playwright report.
+
+The CI intentionally does not execute repo-wide backend `pytest` yet because the current branch still contains known red import failures in untouched backend modules. Once those blockers are fixed, the workflow can be extended from backend smoke checks to full backend test execution.
+
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
 - `app/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.

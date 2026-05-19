@@ -6,6 +6,9 @@
 
 ```
 tastify-pfa/
+├── .github/
+│   └── workflows/
+│       └── backoffice-ci.yml      # PR/push CI: backend smoke, backoffice build, Playwright E2E
 ├── app/
 │   ├── backend/                    # Django + Daphne + Channels
 │   │   ├── media/                  # User-uploaded content (images)

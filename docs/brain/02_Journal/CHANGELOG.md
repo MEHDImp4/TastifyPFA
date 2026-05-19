@@ -1,3 +1,20 @@
+## [2026-05-19] - 01:35
+### Added
+- Created `.github/workflows/backoffice-ci.yml` to automate the current stable validation surface on GitHub Actions for pull requests and pushes to `main`/`master`.
+- Split CI into dedicated `backend-smoke`, `backoffice-build`, and `backoffice-e2e` jobs so Docker health, production build integrity, and browser flows fail independently with clearer diagnostics.
+
+### Changed
+- Documented the new CI workflow in `README.md` and mapped `.github/workflows/` in `docs/brain/00_Meta/FILE_MAP.md`.
+
+### Validation
+- YAML syntax check for `.github/workflows/backoffice-ci.yml`
+- `docker compose up -d --build db redis backend`
+- `docker compose exec -T backend python manage.py check`
+- `docker compose exec -T backend python manage.py makemigrations --check --dry-run`
+- `npm run build` in `app/frontend/backoffice-app`
+- `docker compose up -d --build db redis backend backoffice-app`
+- `npm run test:e2e` in `app/frontend/backoffice-app`
+
 ## [2026-05-19] - 01:10
 ### Added
 - Expanded backoffice Playwright coverage from smoke-level auth checks to a broader role matrix: unauthenticated route protection, authenticated `/login` redirects, direct URL access for GERANT, and forbidden-route redirects for SERVEUR and CUISINIER.

@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 00:44:39<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-19 01:02:00<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1081,6 +1081,56 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created `.github/workflows/backoffice-ci.yml` to automate the current stable validation surface on GitHub Actions for pull requests and pushes to `main`/`master`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Split CI into dedicated `backend-smoke`, `backoffice-build`, and `backoffice-e2e` jobs so Docker health, production build integrity, and browser flows fail independently with clearer diagnostics.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Documented the new CI workflow in `README.md` and mapped `.github/workflows/` in `docs/brain/00_Meta/FILE_MAP.md`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> YAML syntax check for `.github/workflows/backoffice-ci.yml`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build db redis backend`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py check`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py makemigrations --check --dry-run`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build db redis backend backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-19 01:35</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 01:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded backoffice Playwright coverage from smoke-level auth checks to a broader role matrix: unauthenticated route protection, authenticated `/login` redirects, direct URL access for GERANT, and forbidden-route redirects for SERVEUR and CUISINIER.</p>
                             </li>
@@ -1103,56 +1153,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-19 01:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`14/14` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a Playwright backoffice browser suite with authenticated setup storage states for `GERANT`, `SERVEUR`, and `CUISINIER`, plus public-auth coverage and manager CRUD scenarios for categories and plats.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `scripts/run_full_stack_tests.ps1` as a single Docker-first validation entrypoint for backend `pytest` plus backoffice Playwright.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Fixed backoffice category and plat `multipart/form-data` submissions so `est_active` and `est_disponible` are always sent explicitly, preventing newly created records from being persisted as inactive and disappearing immediately from the UI.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened Playwright startup by waiting for both the Vite login page and the proxied `/api/users/login/` endpoint before generating role storage states.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose up -d --build db redis backend backoffice-app`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e` in `app/frontend/backoffice-app` (`8/8` passed)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-19 00:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec backend python -m pytest` is still blocked by pre-existing import failures in untouched backend tests (`apps/avis/tests.py`, `apps/commandes/tests/test_stock_integration.py`, `apps/stock/tests/test_tasks.py`)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-18 23:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Celery Containers Failing to Start After Partial Rebuilds**: Updated `docker-compose.yml` so `backend`, `celery-worker`, and `celery-beat` all share the same named backend image. This prevents Docker image drift where Celery kept an older Python environment and crashed on startup with missing modules such as `drf_spectacular`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-18 23:40</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Documented the shared-image Docker rule in `README.md` and `docs/brain/03_Architecture/QUIRKS.md`.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

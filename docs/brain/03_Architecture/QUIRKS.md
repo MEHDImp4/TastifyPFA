@@ -86,3 +86,6 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 7. DRF Multipart Omits Boolean Defaults on Category/Plat Forms
 - **Issue**: Category and plat creation forms submit `multipart/form-data`. If the frontend omits boolean flags like `est_active` or `est_disponible`, Django REST Framework persists them as `false`, so newly created records vanish immediately from UI lists filtered on active records.
 - **Fix**: Explicitly append boolean fields into `FormData` during create/update flows, even when the UI does not expose a visible toggle.
+## GitHub Actions CI Scope
+- The current repo-wide backend `pytest` command is not CI-safe yet because unrelated import failures still exist in untouched modules such as `apps.avis.tests` and stock task imports.
+- Until those legacy blockers are fixed, the GitHub Actions pipeline should gate backend integrity through Dockerized `python manage.py check` and `makemigrations --check --dry-run`, while Playwright provides full-stack browser coverage against the live backend.
