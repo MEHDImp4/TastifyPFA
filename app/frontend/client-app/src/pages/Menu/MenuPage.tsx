@@ -5,9 +5,6 @@ import { useCartStore } from '../../store/cartStore';
 import { Search, Clock, Info, Plus, ArrowRight, Sparkles, Filter, ChevronRight, UtensilsCrossed } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { CardSkeleton, Skeleton } from '../../components/ui/Skeleton';
-import { useConfigStore } from '../../store/configStore';
-import { getBrandName } from '../../components/branding/BrandWordmark';
-
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [plats, setPlats] = useState<Plat[]>([]);
@@ -16,8 +13,6 @@ export const MenuPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
   const { addItem } = useCartStore();
-  const config = useConfigStore(state => state.config);
-  const brandName = getBrandName(config?.nom);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
-  Send, 
-  MessageSquare, 
-  Instagram, 
-  Facebook, 
-  Twitter,
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Share2,
+  Globe,
+  MessageCircle,
   Loader2,
   Sparkles,
   ArrowRight
@@ -119,7 +117,7 @@ export const ContactPage: React.FC = () => {
                 <section className="space-y-8">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Réseaux</h3>
                     <div className="flex gap-4">
-                        {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                        {[Share2, Globe, MessageCircle].map((Icon, i) => (
                             <button key={i} className="w-14 h-14 rounded-2xl border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-[#301400] hover:text-white transition-all duration-500 hover:-translate-y-2">
                                 <Icon className="w-6 h-6" />
                             </button>

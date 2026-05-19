@@ -20,9 +20,7 @@ import {
   Clock,
   Sparkles,
   ArrowRight,
-  ShieldCheck,
   History,
-  MapPin,
   Settings,
   Bell,
   CreditCard
@@ -315,7 +313,7 @@ export const AccountPage: React.FC = () => {
                                 <p className="text-[#301400] text-xl font-serif italic leading-relaxed tracking-tight">"{a.commentaire}"</p>
                                 <div className="mt-8 pt-8 border-t border-[#fff1ea] flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-2.5 h-2.5 rounded-full ${a.sentiment_score > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
+                                        <div className={`w-2.5 h-2.5 rounded-full ${(a.sentiment_score ?? 0) > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-[#53443a] opacity-40">Vérifié par AI</span>
                                     </div>
                                     <span className="text-[9px] font-bold text-[#53443a]/40">{new Date().toLocaleDateString()}</span>

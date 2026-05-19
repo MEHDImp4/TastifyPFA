@@ -13,9 +13,7 @@ import {
   Loader2,
   Table as TableIcon,
   ArrowLeft,
-  Sparkles,
-  MapPin,
-  UtensilsCrossed
+  Sparkles
 } from 'lucide-react';
 
 export const ReservationWizard: React.FC = () => {
