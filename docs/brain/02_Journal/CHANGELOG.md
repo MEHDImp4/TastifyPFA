@@ -1,3 +1,15 @@
+## [2026-05-19] - 09:20
+### Added
+- Expanded the backoffice Playwright suite with the Wave 1 gap scenarios for SERVEUR and CUISINIER: reservation empty states, reservation confirm/cancel failure handling, mixed-cart quantity flooring, existing-order `add_items` submission, and KDS status-update failure coverage.
+
+### Changed
+- Hardened the GERANT CRUD browser checks so category and plat edit assertions now wait on visible modal closure instead of brittle exact PATCH-response listeners during full-suite execution.
+
+### Validation
+- `npm run build` in `app/frontend/backoffice-app`
+- `npm run test:e2e -- --project=gerant-chromium` (`14/14` passed)
+- `npm run test:e2e` in `app/frontend/backoffice-app` (`35/35` passed)
+
 ## [2026-05-19] - 08:56
 ### Added
 - Expanded the backoffice Playwright suite with deeper SERVEUR flows for reservation status transitions, ordering search and cart manipulation, and fresh order submission to the kitchen.
