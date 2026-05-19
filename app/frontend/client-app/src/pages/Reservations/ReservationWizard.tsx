@@ -12,10 +12,7 @@ import {
   CheckCircle2, 
   Loader2,
   Table as TableIcon,
-  ArrowLeft,
-  Sparkles,
-  MapPin,
-  UtensilsCrossed
+  Sparkles
 } from 'lucide-react';
 
 export const ReservationWizard: React.FC = () => {
@@ -82,17 +79,17 @@ export const ReservationWizard: React.FC = () => {
 
   if (!isAuthenticated && step < 4) {
       return (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-12 py-32 bg-[#fff8f5] animate-in fade-in duration-1000">
-              <div className="w-24 h-24 rounded-full bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] border-2 border-dashed border-[#8d4e1c]/30">
-                <Users className="w-10 h-10" />
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-8 py-20 bg-[#fff8f5] animate-in fade-in duration-1000">
+              <div className="w-20 h-20 rounded-full bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] border-2 border-dashed border-[#8d4e1c]/30">
+                <Users className="w-8 h-8" />
               </div>
-              <div className="max-w-md space-y-4">
-                <h2 className="text-5xl font-serif italic text-[#301400]">Accès Réservé.</h2>
-                <p className="text-[#53443a] font-medium leading-relaxed text-lg">Veuillez vous authentifier pour accéder à notre système de réservation architectural et sécuriser votre expérience gastronomique.</p>
+              <div className="max-w-md space-y-3">
+                <h2 className="text-4xl font-serif italic text-[#301400]">Accès Réservé.</h2>
+                <p className="text-[#53443a] font-medium leading-relaxed text-base opacity-70">Authentifiez-vous pour sécuriser votre expérience gastronomique.</p>
               </div>
               <button 
                 onClick={() => navigate('/login')}
-                className="px-12 py-4 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-black/20"
+                className="px-10 py-3.5 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-black/10"
               >
                   Se Connecter
               </button>
@@ -102,22 +99,22 @@ export const ReservationWizard: React.FC = () => {
 
   return (
     <div className="flex-1 bg-[#fff8f5]">
-      <div className="max-w-4xl mx-auto w-full px-8 py-20 md:py-32">
+      <div className="max-w-3xl mx-auto w-full px-6 py-10 md:py-16">
         
-        {/* Architectural Stepper */}
-        <div className="mb-24 px-4">
+        {/* Compact Stepper */}
+        <div className="mb-12 px-2">
             <div className="flex items-center justify-between relative">
-                <div className="absolute top-[24px] left-0 w-full h-[1px] bg-[#d8c2b6] z-0" />
+                <div className="absolute top-[20px] left-0 w-full h-[1px] bg-[#d8c2b6] z-0" />
                 {[1, 2, 3, 4].map(s => (
-                    <div key={s} className="relative z-10 flex flex-col items-center gap-4">
+                    <div key={s} className="relative z-10 flex flex-col items-center gap-2">
                         <div className={`
-                            w-12 h-12 rounded-xl flex items-center justify-center border-2 transition-all duration-700 font-bold text-sm
-                            ${step >= s ? 'bg-[#301400] border-[#301400] text-white shadow-2xl shadow-black/20 scale-110' : 'bg-white border-[#d8c2b6] text-[#53443a]/40'}
+                            w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all duration-500 font-bold text-xs
+                            ${step >= s ? 'bg-[#301400] border-[#301400] text-white shadow-lg scale-105' : 'bg-white border-[#d8c2b6] text-[#53443a]/40'}
                         `}>
-                            {step > s ? <CheckCircle2 className="w-6 h-6" /> : s}
+                            {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                         </div>
-                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-opacity duration-500 ${step === s ? 'opacity-100 text-[#8d4e1c]' : 'opacity-40 text-[#53443a]'}`}>
-                            {s === 1 ? 'Plan' : s === 2 ? 'Placement' : s === 3 ? 'Validation' : 'Sécurisé'}
+                        <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-opacity duration-300 ${step === s ? 'opacity-100 text-[#8d4e1c]' : 'opacity-40 text-[#53443a]'}`}>
+                            {s === 1 ? 'Plan' : s === 2 ? 'Place' : s === 3 ? 'Conf' : 'Prêt'}
                         </span>
                     </div>
                 ))}
@@ -125,43 +122,43 @@ export const ReservationWizard: React.FC = () => {
         </div>
 
         {error && (
-            <div className="mb-12 p-5 bg-[#ffdad6] border border-[#ba1a1a]/20 rounded-2xl text-[#ba1a1a] text-sm text-center font-bold animate-in shake duration-500">
+            <div className="mb-8 p-4 bg-[#ffdad6] border border-[#ba1a1a]/20 rounded-xl text-[#ba1a1a] text-xs text-center font-bold">
                 {error}
             </div>
         )}
 
-        {/* Step 1: Configuration */}
+        {/* Step 1: Configuration - Compact */}
         {step === 1 && (
-            <div className="space-y-16 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center max-w-xl mx-auto space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[10px] font-black uppercase tracking-widest mb-4">
-                        <Sparkles className="w-4 h-4" />
-                        <span>Intelligence de Planning</span>
+            <div className="space-y-10 animate-in slide-in-from-right-8 duration-700">
+                <div className="text-center max-w-xl mx-auto space-y-2">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[8px] font-black uppercase tracking-widest mb-2">
+                        <Sparkles className="w-3 h-3" />
+                        <span>Planning</span>
                     </div>
-                    <h2 className="text-6xl font-serif italic tracking-tight text-[#301400] leading-[0.9]">Configurez votre Session.</h2>
-                    <p className="text-[#53443a] font-medium opacity-70">Définissez les paramètres temporels de votre visite.</p>
+                    <h2 className="text-4xl md:text-5xl font-serif italic tracking-tight text-[#301400] leading-tight">Votre Session.</h2>
+                    <p className="text-base text-[#53443a] font-medium opacity-60">Paramètres temporels.</p>
                 </div>
                 
-                <div className="bg-white border border-[#d8c2b6] rounded-[2.5rem] p-10 grid grid-cols-1 md:grid-cols-2 gap-10 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#8d4e1c]/5 blur-3xl -mr-32 -mt-32" />
+                <div className="bg-white border border-[#d8c2b6] rounded-[1.5rem] p-8 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-[#8d4e1c]/5 blur-3xl -mr-24 -mt-24" />
                     
-                    <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[10px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-3 opacity-40">
-                            <CalendarIcon className="w-4 h-4 text-[#8d4e1c]" />
-                            <span>Sélection Date</span>
+                    <div className="flex flex-col gap-2 relative z-10">
+                        <label className="text-[8px] font-black text-[#53443a] uppercase tracking-[0.2em] ml-1 flex items-center gap-2 opacity-40">
+                            <CalendarIcon className="w-3.5 h-3.5 text-[#8d4e1c]" />
+                            <span>Date</span>
                         </label>
                         <input 
                             type="date" 
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full p-5 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl text-[#301400] font-bold text-lg focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-base focus:bg-white focus:outline-none focus:border-[#8d4e1c] transition-all"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[10px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-3 opacity-40">
-                            <Users className="w-4 h-4 text-[#8d4e1c]" />
-                            <span>Nombre de Convives</span>
+                    <div className="flex flex-col gap-2 relative z-10">
+                        <label className="text-[8px] font-black text-[#53443a] uppercase tracking-[0.2em] ml-1 flex items-center gap-2 opacity-40">
+                            <Users className="w-3.5 h-3.5 text-[#8d4e1c]" />
+                            <span>Convives</span>
                         </label>
                         <input 
                             type="number" 
@@ -169,33 +166,33 @@ export const ReservationWizard: React.FC = () => {
                             max="20"
                             value={guests}
                             onChange={(e) => setGuests(parseInt(e.target.value))}
-                            className="w-full p-5 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl text-[#301400] font-bold text-lg focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-base focus:bg-white focus:outline-none focus:border-[#8d4e1c] transition-all"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[10px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-3 opacity-40">
-                            <Clock className="w-4 h-4 text-[#8d4e1c]" />
-                            <span>Heure d'Arrivée</span>
+                    <div className="flex flex-col gap-2 relative z-10">
+                        <label className="text-[8px] font-black text-[#53443a] uppercase tracking-[0.2em] ml-1 flex items-center gap-2 opacity-40">
+                            <Clock className="w-3.5 h-3.5 text-[#8d4e1c]" />
+                            <span>Arrivée</span>
                         </label>
                         <input 
                             type="time" 
                             value={startTime}
                             onChange={(e) => setStartTime(e.target.value)}
-                            className="w-full p-5 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl text-[#301400] font-bold text-lg focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-base focus:bg-white focus:outline-none focus:border-[#8d4e1c] transition-all"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[10px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-3 opacity-40">
-                            <Clock className="w-4 h-4 text-[#8d4e1c] opacity-50" />
-                            <span>Fin Estimée</span>
+                    <div className="flex flex-col gap-2 relative z-10">
+                        <label className="text-[8px] font-black text-[#53443a] uppercase tracking-[0.2em] ml-1 flex items-center gap-2 opacity-40">
+                            <Clock className="w-3.5 h-3.5 text-[#8d4e1c] opacity-50" />
+                            <span>Fin</span>
                         </label>
                         <input 
                             type="time" 
                             value={endTime}
                             onChange={(e) => setEndTime(e.target.value)}
-                            className="w-full p-5 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl text-[#301400] font-bold text-lg focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-base focus:bg-white focus:outline-none focus:border-[#8d4e1c] transition-all"
                         />
                     </div>
                 </div>
@@ -203,123 +200,108 @@ export const ReservationWizard: React.FC = () => {
                 <button 
                     onClick={fetchAvailableTables}
                     disabled={isLoading}
-                    className="w-full py-6 bg-[#301400] text-white rounded-[2rem] font-bold text-xl flex items-center justify-center gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/20 active:scale-95 disabled:opacity-50"
+                    className="w-full py-5 bg-[#301400] text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all hover:bg-[#4b2709] active:scale-95 disabled:opacity-50"
                 >
-                    {isLoading ? <Loader2 className="w-8 h-8 animate-spin" /> : (
+                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                         <>
                             <span>Vérifier la Disponibilité</span>
-                            <ChevronRight className="w-8 h-8 text-[#8d4e1c]" />
+                            <ChevronRight className="w-6 h-6 text-[#8d4e1c]" />
                         </>
                     )}
                 </button>
             </div>
         )}
 
-        {/* Step 2: Placement Mapping */}
+        {/* Step 2: Placement Mapping - Compact */}
         {step === 2 && (
-            <div className="space-y-16 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center space-y-4">
-                    <h2 className="text-6xl font-serif italic tracking-tight text-[#301400] leading-[0.9]">Sélection de Placement.</h2>
-                    <p className="text-[#53443a] font-medium opacity-70">Placement architectural pour une atmosphère optimale.</p>
+            <div className="space-y-10 animate-in slide-in-from-right-8 duration-700">
+                <div className="text-center space-y-2">
+                    <h2 className="text-4xl md:text-5xl font-serif italic tracking-tight text-[#301400] leading-tight">Placement.</h2>
+                    <p className="text-base text-[#53443a] font-medium opacity-60">Sélection architecturale.</p>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {availableTables.map(t => (
                         <button
                             key={t.id}
                             onClick={() => setSelectedTable(t.id)}
                             className={`
-                                relative p-8 flex flex-col items-center justify-center gap-4 transition-all duration-700 rounded-[2.5rem] border
-                                ${selectedTable === t.id ? 'bg-[#301400] border-[#301400] text-white shadow-2xl scale-105 z-10' : 'bg-white border-[#d8c2b6] text-[#53443a] hover:border-[#8d4e1c] group'}
+                                relative p-6 flex flex-col items-center justify-center gap-3 transition-all duration-300 rounded-2xl border
+                                ${selectedTable === t.id ? 'bg-[#301400] border-[#301400] text-white shadow-xl scale-[1.02] z-10' : 'bg-white border-[#d8c2b6] text-[#53443a] hover:border-[#8d4e1c] group'}
                             `}
                         >
-                            <TableIcon className={`w-10 h-10 transition-transform duration-700 ${selectedTable === t.id ? 'scale-110 text-[#8d4e1c]' : 'group-hover:scale-110 opacity-20'}`} />
+                            <TableIcon className={`w-8 h-8 transition-all ${selectedTable === t.id ? 'text-[#8d4e1c]' : 'opacity-20'}`} />
                             <div className="text-center">
-                                <span className="text-2xl font-bold tracking-tighter block leading-none mb-1">Table {t.numero}</span>
-                                <span className={`text-[10px] uppercase font-black tracking-[0.3em] ${selectedTable === t.id ? 'text-[#8d4e1c]' : 'text-[#53443a]/40'}`}>{t.capacite} SIÈGES</span>
+                                <span className="text-lg font-bold tracking-tighter block leading-none mb-0.5">Table {t.numero}</span>
+                                <span className={`text-[7px] uppercase font-black tracking-[0.2em] ${selectedTable === t.id ? 'text-[#8d4e1c]' : 'text-[#53443a]/40'}`}>{t.capacite} SIÈGES</span>
                             </div>
-                            
-                            {selectedTable === t.id && (
-                                <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#8d4e1c] rounded-full flex items-center justify-center shadow-lg border-4 border-[#301400]">
-                                    <CheckCircle2 className="w-4 h-4 text-white" />
-                                </div>
-                            )}
                         </button>
                     ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-6">
-                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-5 bg-[#fff1ea] text-[#301400] rounded-2xl font-bold hover:bg-[#ffe3d2] transition-all flex items-center justify-center gap-3">
-                        <ArrowLeft className="w-5 h-5" />
-                        Précédent
-                    </button>
-                    <button 
-                        onClick={nextStep} 
-                        className="order-1 sm:order-2 flex-[2] py-5 bg-[#301400] text-white rounded-2xl font-bold text-xl flex items-center justify-center gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl shadow-black/10 active:scale-95"
-                    >
-                        <span>Continuer le Placement</span>
-                        <ChevronRight className="w-8 h-8 text-[#8d4e1c]" />
+                <div className="flex gap-4">
+                    <button onClick={prevStep} className="flex-1 py-4 bg-[#fff1ea] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest transition-all">Retour</button>
+                    <button onClick={nextStep} className="flex-[2] py-4 bg-[#301400] text-white rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all active:scale-95 shadow-black/10">
+                        <span>Continuer</span>
+                        <ChevronRight className="w-5 h-5 text-[#8d4e1c]" />
                     </button>
                 </div>
             </div>
         )}
 
-        {/* Step 3: Formal Validation */}
+        {/* Step 3: Formal Validation - Compact */}
         {step === 3 && (
-            <div className="space-y-16 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center space-y-4">
-                    <h2 className="text-6xl font-serif italic tracking-tight text-[#301400] leading-[0.9]">Validation Formelle.</h2>
-                    <p className="text-[#53443a] font-medium opacity-70">Confirmation finale des paramètres de session.</p>
+            <div className="space-y-10 animate-in slide-in-from-right-8 duration-700">
+                <div className="text-center space-y-2">
+                    <h2 className="text-4xl md:text-5xl font-serif italic tracking-tight text-[#301400] leading-tight">Validation.</h2>
+                    <p className="text-base text-[#53443a] font-medium opacity-60">Confirmation finale.</p>
                 </div>
 
-                <div className="bg-white border border-[#d8c2b6] rounded-[3rem] p-12 space-y-12 shadow-sm">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 pb-12 border-b border-[#fff1ea]">
-                        <div className="space-y-2">
-                            <span className="text-[10px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Date de Session</span>
-                            <p className="text-2xl font-serif italic text-[#301400] capitalize">
-                                {new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                <div className="bg-white border border-[#d8c2b6] rounded-[2rem] p-8 space-y-8 shadow-sm">
+                    <div className="grid grid-cols-2 gap-6 pb-8 border-b border-[#fff1ea]">
+                        <div className="space-y-1">
+                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-[0.3em]">Date</span>
+                            <p className="text-lg font-serif italic text-[#301400] leading-tight">
+                                {new Date(date).toLocaleDateString('fr-FR', { month: 'long', day: 'numeric' })}
                             </p>
                         </div>
-                        <div className="space-y-2">
-                            <span className="text-[10px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Fenêtre Temporelle</span>
-                            <p className="text-2xl font-serif italic text-[#301400]">{startTime} — {endTime}</p>
+                        <div className="space-y-1">
+                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-[0.3em]">Fenêtre</span>
+                            <p className="text-lg font-serif italic text-[#301400] leading-tight">{startTime} — {endTime}</p>
                         </div>
-                        <div className="space-y-2">
-                            <span className="text-[10px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Placement</span>
-                            <p className="text-2xl font-serif italic text-[#301400]">Table #{availableTables.find(t => t.id === selectedTable)?.numero}</p>
+                        <div className="space-y-1">
+                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-[0.3em]">Place</span>
+                            <p className="text-lg font-serif italic text-[#301400] leading-tight">Table #{availableTables.find(t => t.id === selectedTable)?.numero}</p>
                         </div>
-                        <div className="space-y-2">
-                            <span className="text-[10px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Participants</span>
-                            <p className="text-2xl font-serif italic text-[#301400]">{guests} Convives</p>
+                        <div className="space-y-1">
+                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-[0.3em]">Convives</span>
+                            <p className="text-lg font-serif italic text-[#301400] leading-tight">{guests} pers.</p>
                         </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <label className="text-[10px] font-black text-[#53443a] uppercase tracking-[0.4em] ml-1 opacity-40">Exigences Particulières</label>
+                    <div className="space-y-2">
+                        <label className="text-[8px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 opacity-40">Exigences</label>
                         <textarea 
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Allergies, célébrations, ou préférences architecturales de placement..."
-                            className="w-full p-6 bg-[#fff1ea] border border-[#ffe3d2] rounded-[2rem] focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400]"
-                            rows={4}
+                            placeholder="Allergies, célébrations..."
+                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl focus:bg-white focus:outline-none focus:border-[#8d4e1c] transition-all resize-none text-sm font-semibold text-[#301400]"
+                            rows={3}
                         />
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-6">
-                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-5 bg-[#fff1ea] text-[#301400] rounded-2xl font-bold hover:bg-[#ffe3d2] transition-all flex items-center justify-center gap-3">
-                        <ArrowLeft className="w-5 h-5" />
-                        Précédent
-                    </button>
+                <div className="flex gap-4">
+                    <button onClick={prevStep} className="flex-1 py-4 bg-[#fff1ea] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest transition-all">Retour</button>
                     <button 
                         onClick={handleFinish}
                         disabled={isLoading}
-                        className="order-1 sm:order-2 flex-[2] py-5 bg-[#301400] text-white rounded-2xl font-bold text-xl flex items-center justify-center gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl shadow-black/20 active:scale-95 disabled:opacity-50"
+                        className="flex-[2] py-4 bg-[#301400] text-white rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
                     >
-                        {isLoading ? <Loader2 className="w-8 h-8 animate-spin" /> : (
+                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                             <>
-                                <span>Confirmer la Réservation</span>
-                                <CheckCircle2 className="w-6 h-6 text-[#8d4e1c]" />
+                                <span>Confirmer</span>
+                                <CheckCircle2 className="w-5 h-5 text-[#8d4e1c]" />
                             </>
                         )}
                     </button>
@@ -327,24 +309,21 @@ export const ReservationWizard: React.FC = () => {
             </div>
         )}
 
-        {/* Step 4: Security Confirmed */}
+        {/* Step 4: Security Confirmed - Dense */}
         {step === 4 && (
-            <div className="text-center space-y-12 animate-in zoom-in-95 duration-1000 max-w-2xl mx-auto py-12">
-                <div className="relative inline-flex items-center justify-center">
-                    <div className="absolute inset-0 bg-[#8d4e1c] opacity-10 blur-[100px] rounded-full scale-150" />
-                    <div className="relative w-32 h-32 rounded-[2.5rem] bg-white border border-[#d8c2b6] flex items-center justify-center text-[#8d4e1c] shadow-2xl animate-in zoom-in duration-700">
-                        <CheckCircle2 className="w-16 h-16" />
-                    </div>
+            <div className="text-center space-y-8 animate-in zoom-in-95 duration-700 max-w-xl mx-auto py-10">
+                <div className="w-20 h-20 rounded-2xl bg-white border border-[#d8c2b6] flex items-center justify-center text-[#8d4e1c] shadow-xl mx-auto">
+                    <CheckCircle2 className="w-10 h-10" />
                 </div>
                 
-                <div className="space-y-6">
-                    <h2 className="text-7xl font-serif italic tracking-tight text-[#301400] leading-none">Confirmé.</h2>
-                    <p className="text-2xl text-[#53443a] font-medium leading-relaxed italic font-serif">Votre table a été sécurisée numériquement. Une expérience gastronomique architecturale vous attend chez {brandName}.</p>
+                <div className="space-y-3">
+                    <h2 className="text-5xl font-serif italic tracking-tight text-[#301400] leading-none">Confirmé.</h2>
+                    <p className="text-xl text-[#53443a] font-medium italic font-serif">Réservation sécurisée chez {brandName}.</p>
                 </div>
                 
-                <div className="pt-10 flex flex-col sm:flex-row gap-6">
-                    <button onClick={() => navigate('/')} className="flex-1 py-5 bg-[#301400] text-white rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10">Retour à l'Accueil</button>
-                    <button className="flex-1 py-5 bg-white border border-[#d8c2b6] text-[#301400] rounded-2xl font-bold transition-all hover:bg-[#fff1ea] active:scale-95">Générer le Pass</button>
+                <div className="pt-6 flex gap-4">
+                    <button onClick={() => navigate('/')} className="flex-1 py-4 bg-[#301400] text-white rounded-xl font-bold text-sm transition-all active:scale-95">Accueil</button>
+                    <button className="flex-1 py-4 bg-white border border-[#d8c2b6] text-[#301400] rounded-xl font-bold text-sm transition-all hover:bg-[#fff8f5]">Générer Pass</button>
                 </div>
             </div>
         )}
@@ -352,4 +331,3 @@ export const ReservationWizard: React.FC = () => {
     </div>
   );
 };
-

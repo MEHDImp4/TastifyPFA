@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -12,7 +12,8 @@ import {
   Mail
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { menuApi, Plat } from '../../api/menu';
+import { menuApi } from '../../api/menu';
+import type { Plat } from '../../api/menu';
 import { Skeleton } from '../../components/ui/Skeleton';
 
 export const PortalHomePage = () => {

@@ -17,15 +17,13 @@ import {
   PackageCheck,
   ChefHat,
   CheckCircle2,
-  Clock,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  History,
-  MapPin,
-  Settings,
-  Bell,
-  CreditCard
+  Clock, 
+  Sparkles, 
+  ArrowRight, 
+  History, 
+  Settings, 
+  Bell, 
+  CreditCard 
 } from 'lucide-react';
 
 export const AccountPage: React.FC = () => {
@@ -108,90 +106,85 @@ export const AccountPage: React.FC = () => {
 
   return (
     <div className="flex-1 bg-[#fff8f5] selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12 md:py-24">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-8 md:py-12">
         
-        {/* Editorial Header */}
-        <header className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <div className="space-y-4">
+        {/* Compact Editorial Header */}
+        <header className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                    <span className="w-8 h-[2px] bg-[#8d4e1c]" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Espace Privé</span>
+                    <span className="w-6 h-[1.5px] bg-[#8d4e1c]" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#8d4e1c]">Espace Privé</span>
                 </div>
-                <h1 className="text-6xl md:text-8xl font-serif italic text-[#301400] leading-[0.9] tracking-tighter">
+                <h1 className="text-4xl md:text-5xl font-serif italic text-[#301400] leading-[1] tracking-tighter">
                     Tableau de Bord.
                 </h1>
-                <p className="max-w-md text-[#53443a] text-lg font-medium leading-relaxed opacity-80">
-                    Gérez vos réservations, suivez vos commandes et consultez vos privilèges exclusifs Tastify.
+                <p className="max-w-md text-[#53443a] text-base font-medium leading-relaxed opacity-70">
+                    Gérez vos réservations et privilèges Tastify.
                 </p>
             </div>
             
-            <div className="flex items-center gap-4">
-                <button className="w-12 h-12 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
-                    <Bell className="w-5 h-5" />
+            <div className="flex items-center gap-3">
+                <button className="w-10 h-10 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
+                    <Bell className="w-4 h-4" />
                 </button>
-                <button className="w-12 h-12 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
-                    <Settings className="w-5 h-5" />
+                <button className="w-10 h-10 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
+                    <Settings className="w-4 h-4" />
                 </button>
             </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
             
-            {/* Sidebar Profile */}
-            <aside className="lg:col-span-4 space-y-12">
-                <div className="p-10 bg-white border border-[#d8c2b6] rounded-[2rem] shadow-[0_24px_60px_rgba(48,20,0,0.04)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#8d4e1c]/5 blur-3xl -mr-16 -mt-16" />
+            {/* Sidebar Profile - Optimized */}
+            <aside className="lg:col-span-3 space-y-8">
+                <div className="p-8 bg-white border border-[#d8c2b6] rounded-[1.5rem] shadow-[0_12px_40px_rgba(48,20,0,0.03)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#8d4e1c]/5 blur-2xl -mr-12 -mt-12" />
                     
                     <div className="relative z-10 text-center">
-                        <div className="w-24 h-24 rounded-3xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] mx-auto mb-8 shadow-inner">
-                            <UserIcon className="w-10 h-10" />
+                        <div className="w-20 h-20 rounded-2xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] mx-auto mb-6 shadow-inner">
+                            <UserIcon className="w-8 h-8" />
                         </div>
-                        <h2 className="text-2xl font-bold tracking-tight text-[#301400] mb-1">Mehdouch</h2>
-                        <p className="text-[#8d4e1c] text-[10px] font-black uppercase tracking-[0.2em] mb-8">Membre Privilégié</p>
+                        <h2 className="text-xl font-bold tracking-tight text-[#301400] mb-0.5">Mehdouch</h2>
+                        <p className="text-[#8d4e1c] text-[8px] font-black uppercase tracking-[0.2em] mb-6">Membre Privilégié</p>
                         
-                        <div className="space-y-3">
-                            <button className="w-full py-4 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#4b2709] transition-all active:scale-95 shadow-lg shadow-black/10">
-                                <CreditCard className="w-4 h-4" />
-                                Gérer Paiements
+                        <div className="space-y-2">
+                            <button className="w-full py-3 bg-[#301400] text-white rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#4b2709] transition-all active:scale-95">
+                                <CreditCard className="w-3.5 h-3.5" />
+                                Paiements
                             </button>
                             <button 
                                 onClick={() => setIsAvisModalOpen(true)}
-                                className="w-full py-4 bg-white border border-[#d8c2b6] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#fff8f5] transition-all active:scale-95"
+                                className="w-full py-3 bg-white border border-[#d8c2b6] text-[#301400] rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#fff8f5] transition-all active:scale-95"
                             >
-                                <MessageSquare className="w-4 h-4 text-[#8d4e1c]" />
-                                Laisser un Avis
+                                <MessageSquare className="w-3.5 h-3.5 text-[#8d4e1c]" />
+                                Laisser Avis
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Loyalty Focus */}
+                {/* Loyalty Focus - Compact */}
                 {loyalty && (
-                    <div className="p-10 bg-[#301400] text-white rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#8d4e1c] opacity-20 blur-3xl -mr-32 -mt-32" />
+                    <div className="p-8 bg-[#301400] text-white rounded-[1.5rem] shadow-xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-48 h-48 bg-[#8d4e1c] opacity-10 blur-3xl -mr-24 -mt-24" />
                         
                         <div className="relative z-10">
-                            <div className={`w-16 h-16 rounded-2xl mb-8 flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
-                                <Crown className="w-8 h-8" />
+                            <div className={`w-12 h-12 rounded-xl mb-6 flex items-center justify-center shadow-lg transition-all duration-700 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
+                                <Crown className="w-6 h-6" />
                             </div>
                             
-                            <div className="space-y-6">
+                            <div className="space-y-4">
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8d4e1c] mb-2">Club Tastify</p>
-                                    <h3 className="text-4xl font-serif italic tracking-tight">Statut {loyalty.tier_display || loyalty.tier}.</h3>
+                                    <p className="text-[8px] font-black uppercase tracking-[0.3em] text-[#8d4e1c] mb-1">Club Tastify</p>
+                                    <h3 className="text-2xl font-serif italic tracking-tight">Statut {loyalty.tier_display || loyalty.tier}.</h3>
                                 </div>
                                 
-                                <div className="p-8 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-xl">
-                                    <p className="text-[9px] text-white/40 font-black uppercase tracking-[0.3em] mb-2">Points Accumulés</p>
+                                <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl">
+                                    <p className="text-[8px] text-white/40 font-black uppercase tracking-[0.3em] mb-1">Points</p>
                                     <div className="flex items-end gap-2">
-                                        <span className="text-6xl font-bold tracking-tighter text-[#8d4e1c] leading-none">{loyalty.points}</span>
-                                        <span className="text-xs font-bold text-white/60 mb-1">PTS</span>
+                                        <span className="text-4xl font-bold tracking-tighter text-[#8d4e1c] leading-none">{loyalty.points}</span>
+                                        <span className="text-[10px] font-bold text-white/60 mb-0.5">PTS</span>
                                     </div>
-                                </div>
-                                
-                                <div className="flex items-center gap-3 text-white/60">
-                                    <Sparkles className="w-4 h-4 text-[#8d4e1c]" />
-                                    <p className="text-[10px] font-bold uppercase tracking-widest">Privilèges Actifs</p>
                                 </div>
                             </div>
                         </div>
@@ -199,46 +192,46 @@ export const AccountPage: React.FC = () => {
                 )}
             </aside>
 
-            {/* Main Content Hub */}
-            <div className="lg:col-span-8 space-y-20">
+            {/* Main Content Hub - Denser */}
+            <div className="lg:col-span-9 space-y-12">
                 
-                {/* Active Session / Order */}
+                {/* Active Session / Order - Fitted */}
                 {activeOrder && (
-                    <section className="animate-in slide-in-from-bottom-12 duration-1000">
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                                <ShoppingBag className="w-5 h-5" />
+                    <section>
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                                <ShoppingBag className="w-4 h-4" />
                             </div>
-                            <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Session Active</h3>
+                            <h3 className="text-2xl font-bold tracking-tight text-[#301400]">Session Active</h3>
                         </div>
                         
-                        <div className="p-10 bg-white border border-[#d8c2b6] rounded-[2rem] relative overflow-hidden shadow-sm">
-                            <div className="absolute top-0 right-0 w-96 h-96 bg-[#8d4e1c]/5 blur-3xl -mr-48 -mt-48" />
+                        <div className="p-8 bg-white border border-[#d8c2b6] rounded-[1.5rem] relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#8d4e1c]/5 blur-3xl -mr-32 -mt-32" />
                             
-                            <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
-                                <div className="w-32 h-32 rounded-[2rem] bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] shrink-0 relative">
-                                    <ChefHat className="w-12 h-12" />
-                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white rounded-xl shadow-lg border border-[#d8c2b6] flex items-center justify-center">
-                                        <Loader2 className="w-5 h-5 animate-spin text-[#8d4e1c]" />
+                            <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                                <div className="w-24 h-24 rounded-2xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] shrink-0 relative">
+                                    <ChefHat className="w-10 h-10" />
+                                    <div className="absolute -bottom-1.5 -right-1.5 w-8 h-8 bg-white rounded-lg shadow-md border border-[#d8c2b6] flex items-center justify-center">
+                                        <Loader2 className="w-4 h-4 animate-spin text-[#8d4e1c]" />
                                     </div>
                                 </div>
                                 
-                                <div className="flex-1 space-y-6">
-                                    <div className={`inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#fff1ea] border border-[#ffe3d2] ${getOrderStatusUI(activeOrder.statut).color}`}>
-                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-5 h-5" })}
-                                        <span className="text-xs font-black uppercase tracking-widest">{getOrderStatusUI(activeOrder.statut).text}</span>
+                                <div className="flex-1 space-y-4 text-center md:text-left">
+                                    <div className={`inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#fff1ea] border border-[#ffe3d2] ${getOrderStatusUI(activeOrder.statut).color}`}>
+                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-4 h-4" })}
+                                        <span className="text-[9px] font-black uppercase tracking-widest">{getOrderStatusUI(activeOrder.statut).text}</span>
                                     </div>
-                                    <h4 className="text-4xl font-serif italic text-[#301400] leading-none">Votre dégustation est en cours de préparation.</h4>
+                                    <h4 className="text-3xl font-serif italic text-[#301400] leading-tight">Votre dégustation est en préparation.</h4>
                                     
-                                    <div className="flex items-center gap-10 pt-4">
-                                        <div className="space-y-1">
-                                            <p className="text-[9px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Valeur Totale</p>
-                                            <p className="text-2xl font-bold text-[#301400]">{activeOrder.montant_total} DH</p>
+                                    <div className="flex items-center justify-center md:justify-start gap-8">
+                                        <div className="space-y-0.5">
+                                            <p className="text-[8px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Valeur</p>
+                                            <p className="text-xl font-bold text-[#301400]">{activeOrder.montant_total} DH</p>
                                         </div>
-                                        <div className="w-[1px] h-10 bg-[#d8c2b6]" />
-                                        <div className="space-y-1">
-                                            <p className="text-[9px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Session ID</p>
-                                            <p className="text-2xl font-bold text-[#301400]">#{activeOrder.id}</p>
+                                        <div className="w-[1px] h-8 bg-[#d8c2b6]" />
+                                        <div className="space-y-0.5">
+                                            <p className="text-[8px] font-black text-[#53443a] uppercase tracking-widest opacity-40">ID</p>
+                                            <p className="text-xl font-bold text-[#301400]">#{activeOrder.id}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -247,46 +240,46 @@ export const AccountPage: React.FC = () => {
                     </section>
                 )}
 
-                {/* Reservations List */}
+                {/* Reservations List - Denser Grid */}
                 <section>
-                    <div className="flex items-center justify-between mb-10">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                                <Calendar className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                                <Calendar className="w-4 h-4" />
                             </div>
-                            <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Réservations à Venir</h3>
+                            <h3 className="text-2xl font-bold tracking-tight text-[#301400]">À Venir</h3>
                         </div>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-[#8d4e1c] hover:underline underline-offset-8">Voir Historique</button>
+                        <button className="text-[9px] font-black uppercase tracking-widest text-[#8d4e1c] hover:underline underline-offset-4">Historique</button>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {reservations.length === 0 ? (
-                            <div className="col-span-full p-20 bg-[#fff1ea] rounded-[2.5rem] border-2 border-dashed border-[#ffe3d2] text-center flex flex-col items-center gap-6">
-                                <History className="w-12 h-12 text-[#8d4e1c] opacity-20" />
-                                <p className="text-2xl font-serif italic text-[#301400]/40">Aucune réservation prévue pour le moment.</p>
-                                <button className="px-8 py-3 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#4b2709] transition-all">Réserver une Table</button>
+                            <div className="col-span-full p-12 bg-[#fff1ea] rounded-[1.5rem] border-2 border-dashed border-[#ffe3d2] text-center flex flex-col items-center gap-4">
+                                <History className="w-8 h-8 text-[#8d4e1c] opacity-20" />
+                                <p className="text-xl font-serif italic text-[#301400]/40">Aucune réservation.</p>
+                                <button className="px-6 py-2.5 bg-[#301400] text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-[#4b2709] transition-all">Réserver</button>
                             </div>
                         ) : (
                             reservations.map(res => (
-                                <div key={res.id} className="p-8 bg-white border border-[#d8c2b6] rounded-3xl flex items-center justify-between group hover:border-[#8d4e1c] hover:shadow-xl transition-all duration-500">
-                                    <div className="flex items-center gap-6">
-                                        <div className="w-16 h-16 bg-[#fff1ea] rounded-2xl flex flex-col items-center justify-center text-[#301400] border border-[#ffe3d2] group-hover:scale-105 transition-transform">
-                                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-widest leading-none mb-1">
+                                <div key={res.id} className="p-6 bg-white border border-[#d8c2b6] rounded-2xl flex items-center justify-between group hover:border-[#8d4e1c] transition-all duration-300">
+                                    <div className="flex items-center gap-5">
+                                        <div className="w-12 h-12 bg-[#fff1ea] rounded-xl flex flex-col items-center justify-center text-[#301400] border border-[#ffe3d2]">
+                                            <span className="text-[7px] font-black text-[#8d4e1c] uppercase tracking-widest leading-none mb-0.5">
                                                 {new Date(res.date_reservation).toLocaleDateString('fr-FR', { month: 'short' })}
                                             </span>
-                                            <span className="text-2xl font-bold tracking-tighter">
+                                            <span className="text-xl font-bold tracking-tighter">
                                                 {new Date(res.date_reservation).getDate()}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="font-bold text-lg text-[#301400]">Table #{res.table}</p>
-                                            <div className="flex items-center gap-3 mt-1 text-[#53443a] opacity-60">
-                                                <Clock className="w-4 h-4 text-[#8d4e1c]" />
-                                                <span className="text-xs font-medium">{res.heure_debut} — {res.heure_fin} • {res.nombre_personnes} pers.</span>
+                                            <p className="font-bold text-base text-[#301400]">Table #{res.table}</p>
+                                            <div className="flex items-center gap-2.5 mt-0.5 text-[#53443a] opacity-60">
+                                                <Clock className="w-3.5 h-3.5 text-[#8d4e1c]" />
+                                                <span className="text-[11px] font-medium">{res.heure_debut} • {res.nombre_personnes} pers.</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${res.statut === 'CONFIRMEE' ? 'bg-[#8d4e1c]/10 text-[#8d4e1c]' : 'bg-[#fff1ea] text-[#53443a]'}`}>
+                                    <div className={`px-3 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest ${res.statut === 'CONFIRMEE' ? 'bg-[#8d4e1c]/10 text-[#8d4e1c]' : 'bg-[#fff1ea] text-[#53443a]'}`}>
                                         {res.statut}
                                     </div>
                                 </div>
@@ -295,30 +288,30 @@ export const AccountPage: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Experience Feedback */}
+                {/* Experience Feedback - Compact Grid */}
                 <section>
-                    <div className="flex items-center gap-4 mb-10">
-                        <div className="w-10 h-10 rounded-xl bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                            <Star className="w-5 h-5" />
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
+                            <Star className="w-4 h-4" />
                         </div>
-                        <h3 className="text-3xl font-bold tracking-tight text-[#301400]">Mes Expériences</h3>
+                        <h3 className="text-2xl font-bold tracking-tight text-[#301400]">Expériences</h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {avis.map(a => (
-                            <div key={a.id} className="p-10 bg-white border border-[#d8c2b6] rounded-[2.5rem] group hover:border-[#8d4e1c] transition-all duration-700">
-                                <div className="flex gap-2 mb-6">
+                            <div key={a.id} className="p-6 bg-white border border-[#d8c2b6] rounded-[1.5rem] group hover:border-[#8d4e1c] transition-all duration-500">
+                                <div className="flex gap-1.5 mb-4">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`w-4 h-4 ${i < a.note ? 'text-[#8d4e1c] fill-[#8d4e1c]' : 'text-[#d8c2b6]'}`} />
+                                        <Star key={i} className={`w-3 h-3 ${i < a.note ? 'text-[#8d4e1c] fill-[#8d4e1c]' : 'text-[#d8c2b6]'}`} />
                                     ))}
                                 </div>
-                                <p className="text-[#301400] text-xl font-serif italic leading-relaxed tracking-tight">"{a.commentaire}"</p>
-                                <div className="mt-8 pt-8 border-t border-[#fff1ea] flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-2.5 h-2.5 rounded-full ${a.sentiment_score > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#53443a] opacity-40">Vérifié par AI</span>
+                                <p className="text-[#301400] text-base font-serif italic leading-snug tracking-tight line-clamp-3">"{a.commentaire}"</p>
+                                <div className="mt-6 pt-4 border-t border-[#fff1ea] flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${(a.sentiment_score ?? 0) > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
+                                        <span className="text-[8px] font-black uppercase tracking-widest text-[#53443a] opacity-40">AI</span>
                                     </div>
-                                    <span className="text-[9px] font-bold text-[#53443a]/40">{new Date().toLocaleDateString()}</span>
+                                    <span className="text-[8px] font-bold text-[#53443a]/40">{new Date().toLocaleDateString()}</span>
                                 </div>
                             </div>
                         ))}
@@ -327,58 +320,57 @@ export const AccountPage: React.FC = () => {
             </div>
         </div>
 
-        {/* High-End Feedback Modal */}
+        {/* Feedback Modal - Refined Scale */}
         {isAvisModalOpen && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
-                <div className="absolute inset-0 bg-[#301400]/80 backdrop-blur-2xl" onClick={() => setIsAvisModalOpen(false)} />
-                <div className="relative w-full max-w-xl bg-white rounded-[3rem] overflow-hidden shadow-2xl p-12 animate-in zoom-in-95 duration-500">
-                    <div className="text-center mb-12">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[10px] font-black uppercase tracking-widest mb-6">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                <div className="absolute inset-0 bg-[#301400]/60 backdrop-blur-xl" onClick={() => setIsAvisModalOpen(false)} />
+                <div className="relative w-full max-w-lg bg-white rounded-[2rem] overflow-hidden shadow-2xl p-10 animate-in zoom-in-95 duration-300">
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[9px] font-black uppercase tracking-widest mb-4">
                             <Sparkles className="w-3.5 h-3.5" />
-                            <span>Analyse d'Expérience</span>
+                            <span>Expérience</span>
                         </div>
-                        <h3 className="text-5xl font-serif italic text-[#301400] mb-4">Votre avis.</h3>
-                        <p className="text-[#53443a] font-medium opacity-60">Aidez-nous à perfectionner l'expérience Tastify.</p>
+                        <h3 className="text-4xl font-serif italic text-[#301400] mb-2">Votre avis.</h3>
                     </div>
                     
-                    <form onSubmit={handleSubmitAvis} className="space-y-12">
-                        <div className="flex flex-col items-center gap-6">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40">Évaluation Globale</label>
-                            <div className="flex gap-4">
+                    <form onSubmit={handleSubmitAvis} className="space-y-8">
+                        <div className="flex flex-col items-center gap-4">
+                            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#53443a] opacity-40">Évaluation</label>
+                            <div className="flex gap-3">
                                 {[1, 2, 3, 4, 5].map(s => (
                                     <button 
                                         key={s} 
                                         type="button"
                                         onClick={() => setRating(s)}
-                                        className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-500 ${rating >= s ? 'bg-[#8d4e1c] text-white scale-110 shadow-xl shadow-[#8d4e1c]/20' : 'bg-[#fff1ea] text-[#d8c2b6] hover:bg-[#ffe3d2]'}`}
+                                        className={`w-12 h-12 flex items-center justify-center rounded-xl transition-all duration-300 ${rating >= s ? 'bg-[#8d4e1c] text-white scale-105' : 'bg-[#fff1ea] text-[#d8c2b6] hover:bg-[#ffe3d2]'}`}
                                     >
-                                        <Star className={`w-7 h-7 ${rating >= s ? 'fill-current' : ''}`} />
+                                        <Star className={`w-6 h-6 ${rating >= s ? 'fill-current' : ''}`} />
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40 ml-1">Commentaire Détaillé</label>
+                        <div className="flex flex-col gap-3">
+                            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#53443a] opacity-40 ml-1">Commentaire</label>
                             <textarea 
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                                 required
-                                rows={4}
-                                className="w-full p-6 bg-[#fff1ea] border border-[#ffe3d2] rounded-[2rem] focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400]"
-                                placeholder="Décrivez les nuances de votre voyage culinaire..."
+                                rows={3}
+                                className="w-full p-5 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400]"
+                                placeholder="Décrivez votre voyage..."
                             />
                         </div>
 
                         <button 
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-6 bg-[#8d4e1c] text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-4 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#8d4e1c]/20 active:scale-95 disabled:opacity-50"
+                            className="w-full py-4 bg-[#8d4e1c] text-white rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:bg-[#301400] active:scale-95 disabled:opacity-50"
                         >
-                            {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                            {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                                 <>
-                                    <span>Publier mon Avis</span>
-                                    <ArrowRight className="w-6 h-6" />
+                                    <span>Publier</span>
+                                    <ArrowRight className="w-5 h-5" />
                                 </>
                             )}
                         </button>
@@ -390,4 +382,3 @@ export const AccountPage: React.FC = () => {
     </div>
   );
 };
-
