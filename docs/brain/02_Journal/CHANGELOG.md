@@ -1,3 +1,7 @@
+## [2026-05-19] - 12:45
+### Changed
+- Applied "Compact Data-Dense" aesthetic refactoring across backoffice-app `pages/` (Avis, Categories, HR, Inventory, Menu, Settings, Staff). Reduced padding, margins, gaps, heights, widths, and typography sizes.
+
 ## [2026-05-19] - 10:30
 ### Added
 - Added `PlanText` model to backend tables app to allow decorative text on the floor plan.

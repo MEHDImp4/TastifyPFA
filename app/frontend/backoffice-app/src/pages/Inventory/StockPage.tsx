@@ -73,12 +73,12 @@ export const StockPage: React.FC = () => {
     <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: '#301400' }}>Gestion du Stock</h1>
+          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Gestion du Stock</h1>
           <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Suivez vos ingrédients et recevez des alertes de réapprovisionnement.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-none font-bold transition-transform hover:brightness-110 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20"
+          className="flex items-center gap-2 px-3 py-2.5 bg-primary text-on-primary rounded-none font-bold transition-transform hover:brightness-110 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20"
         >
           <Plus className="w-5 h-5"  strokeWidth={1.5}/>
           Nouvel ingrédient
@@ -86,7 +86,7 @@ export const StockPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="tonal-card p-6 space-y-4">
+        <div className="tonal-card p-4 space-y-4">
             <TableRowSkeleton />
             <TableRowSkeleton />
             <TableRowSkeleton />
@@ -98,12 +98,12 @@ export const StockPage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container border-b border-outline-variant/30">
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>Ingrédient</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Unité</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Stock Actuel</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Seuil d'alerte</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>Statut</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest font-mono text-right" style={{ color: '#53443a' }}>Actions</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>Ingrédient</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Unité</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Stock Actuel</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono text-center" style={{ color: '#53443a' }}>Seuil d'alerte</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>Statut</th>
+                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-mono text-right" style={{ color: '#53443a' }}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/20">
@@ -111,11 +111,11 @@ export const StockPage: React.FC = () => {
                 const isLow = parseFloat(item.stock_actuel) <= parseFloat(item.seuil_alerte);
                 return (
                   <tr key={item.id} className="hover:bg-surface-container-low transition-colors group">
-                    <td className="px-6 py-4 font-bold" style={{ color: '#301400' }}>{item.nom}</td>
-                    <td className="px-6 py-4 text-center"><span className="px-2 py-1 bg-surface-container rounded-none text-xs font-mono font-bold" style={{ color: '#53443a' }}>{item.unite_mesure}</span></td>
-                    <td className="px-6 py-4 text-center font-mono font-bold" style={{ color: '#301400' }}>{item.stock_actuel}</td>
-                    <td className="px-6 py-4 text-center font-mono font-bold" style={{ color: '#53443a' }}>{item.seuil_alerte}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-2 font-bold" style={{ color: '#301400' }}>{item.nom}</td>
+                    <td className="px-4 py-2 text-center"><span className="px-2 py-1 bg-surface-container rounded-none text-xs font-mono font-bold" style={{ color: '#53443a' }}>{item.unite_mesure}</span></td>
+                    <td className="px-4 py-2 text-center font-mono font-bold" style={{ color: '#301400' }}>{item.stock_actuel}</td>
+                    <td className="px-4 py-2 text-center font-mono font-bold" style={{ color: '#53443a' }}>{item.seuil_alerte}</td>
+                    <td className="px-4 py-2">
                       {isLow ? (
                         <div className="flex items-center gap-1.5 text-error font-bold text-xs uppercase tracking-wider font-mono animate-pulse">
                           <AlertTriangle className="w-3.5 h-3.5"  strokeWidth={1.5}/>
@@ -125,7 +125,7 @@ export const StockPage: React.FC = () => {
                         <span className="text-primary font-bold text-xs uppercase tracking-wider font-mono">OK</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-4 py-2 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleOpenModal(item)} className="p-2 text-primary hover:bg-primary-container/20 rounded-none transition-colors"><Edit2 className="w-4 h-4"  strokeWidth={1.5}/></button>
                         <button className="p-2 text-error hover:bg-error-container/20 rounded-none transition-colors"><Trash2 className="w-4 h-4"  strokeWidth={1.5}/></button>
@@ -145,7 +145,7 @@ export const StockPage: React.FC = () => {
             <label className="text-sm font-bold" style={{ color: '#53443a' }}>Nom de l'ingrédient</label>
             <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-none px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-bold" style={{ color: '#53443a' }}>Unité</label>
                 <select value={unite} onChange={(e) => setUnite(e.target.value as any)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-none px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }}>
@@ -163,7 +163,7 @@ export const StockPage: React.FC = () => {
             <label className="text-sm font-bold" style={{ color: '#53443a' }}>Seuil d'alerte</label>
             <input type="number" step="0.01" value={seuil} onChange={(e) => setSeuil(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-none px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }} />
           </div>
-          <button type="submit" disabled={isSaving} className="w-full py-4 bg-primary text-on-primary rounded-none font-bold transition-transform active:scale-95 disabled:opacity-50 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20">
+          <button type="submit" disabled={isSaving} className="w-full py-2 bg-primary text-on-primary rounded-none font-bold transition-transform active:scale-95 disabled:opacity-50 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20">
             {isSaving ? <Loader2 className="w-5 h-5 animate-spin mx-auto"  strokeWidth={1.5}/> : 'Enregistrer'}
           </button>
         </form>

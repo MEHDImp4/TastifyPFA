@@ -93,28 +93,28 @@ export const KdsPage: React.FC = () => {
     return `${diff}m`;
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin"  strokeWidth={1.5}/></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={1.5}/></div>;
 
   return (
     <div className="max-w-[1700px] mx-auto animate-in fade-in duration-700">
       <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Kitchen Command Center</h1>
+          <h1 className="text-xl font-bold tracking-tight text-on-surface font-sans">Kitchen Command Center</h1>
           <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Real-time order orchestration and preparation management.</p>
         </div>
-        <div className="flex items-center gap-4 px-5 py-2.5 bg-surface-container-low rounded-none border border-surface-container-high">
+        <div className="flex items-center gap-2 px-3 py-2.5 bg-surface-container-low rounded-none border border-surface-container-high">
           <div className="w-2.5 h-2.5 rounded-none bg-primary animate-pulse" />
           <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono font-sans">Live System</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {tickets.map((ticket) => (
           <div key={ticket.id} className="double-bezel flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-500 hover:scale-[1.01] transition-transform">
             {/* Ticket Header */}
-            <div className={`p-6 flex items-center justify-between border-b border-surface-container-high ${ticket.type === 'EMPORTER' ? 'bg-secondary-container/30' : 'bg-primary-container/10'}`}>
+            <div className={`p-4 flex items-center justify-between border-b border-surface-container-high ${ticket.type === 'EMPORTER' ? 'bg-secondary-container/30' : 'bg-primary-container/10'}`}>
               <div>
-                <h3 className="font-bold text-xl text-on-surface tracking-tight font-sans">
+                <h3 className="font-bold text-base text-on-surface tracking-tight font-sans">
                     {ticket.type === 'SUR_PLACE' ? `Table #${ticket.table_numero || '?'}` : `Takeaway: ${ticket.client_nom || 'Client'}`}
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-on-surface-variant font-bold uppercase tracking-wider font-mono mt-1 opacity-70">
@@ -128,14 +128,14 @@ export const KdsPage: React.FC = () => {
             </div>
 
             {/* Items List */}
-            <div className="flex-1 p-6 space-y-4 max-h-[450px] overflow-y-auto scrollbar-hide">
+            <div className="flex-1 p-4 space-y-4 max-h-[450px] overflow-y-auto scrollbar-hide">
               {ticket.lignes.map((item) => (
                 <div key={item.id} className="relative flex flex-col gap-3 p-5 bg-surface-container-low rounded-none border border-surface-container-high transition-all">
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl font-bold text-primary leading-none font-sans">x{item.quantite}</span>
-                        <span className={`text-lg font-bold font-sans tracking-tight ${item.statut === 'PRET' ? 'text-on-surface-variant line-through opacity-50' : 'text-on-surface'}`}>
+                        <span className="text-base font-bold text-primary leading-none font-sans">x{item.quantite}</span>
+                        <span className={`text-sm font-bold font-sans tracking-tight ${item.statut === 'PRET' ? 'text-on-surface-variant line-through opacity-50' : 'text-on-surface'}`}>
                           {item.plat_nom}
                         </span>
                       </div>
@@ -165,7 +165,7 @@ export const KdsPage: React.FC = () => {
                     <button 
                       onClick={() => handleUpdateItem(item.id, item.statut)}
                       className={`
-                        w-full py-4 rounded-none flex items-center justify-center gap-3 font-bold transition-all mt-2 font-sans text-sm tracking-tight
+                        w-full py-2 rounded-none flex items-center justify-center gap-3 font-bold transition-all mt-2 font-sans text-sm tracking-tight
                         ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container-highest text-on-surface hover:bg-surface-container-high active:scale-95' : 'bg-primary text-white hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95'}
                       `}
                     >
@@ -205,9 +205,9 @@ export const KdsPage: React.FC = () => {
         {tickets.length === 0 && (
           <div className="col-span-full py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-40 animate-in zoom-in duration-700">
             <div className="w-24 h-24 rounded-none bg-surface-container-high border-2 border-dashed border-outline-variant flex items-center justify-center mb-8">
-                <ChefHat className="w-12 h-12"  strokeWidth={1.5}/>
+                <ChefHat className="w-8 h-8"  strokeWidth={1.5}/>
             </div>
-            <p className="text-2xl font-display-accent italic">Kitchen is clear. No active orders.</p>
+            <p className="text-lg font-display-accent italic">Kitchen is clear. No active orders.</p>
           </div>
         )}
       </div>

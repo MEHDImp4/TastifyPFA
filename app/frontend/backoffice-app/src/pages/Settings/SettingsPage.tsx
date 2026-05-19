@@ -88,7 +88,7 @@ export const SettingsPage: React.FC = () => {
     >
       <motion.div className="flex items-center justify-between" variants={fadeInUp}>
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-on-surface font-sans flex items-center gap-3">
+          <h1 className="text-2xl font-bold tracking-tight text-on-surface font-sans flex items-center gap-3">
             Establishment Settings
             <SettingsIcon className="w-6 h-6 text-primary/40" />
           </h1>
@@ -98,8 +98,8 @@ export const SettingsPage: React.FC = () => {
 
       <form onSubmit={handleSave} className="space-y-8">
         {/* Branding Section */}
-        <motion.div className="double-bezel p-8 md:p-10 bg-white" variants={fadeInUp}>
-          <h2 className="text-xl font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
+        <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
+          <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
             <Building2 className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
             Branding & Identity
           </h2>
@@ -137,7 +137,7 @@ export const SettingsPage: React.FC = () => {
                     name="nom"
                     value={config.nom}
                     onChange={handleInputChange}
-                    className="w-full bg-surface-container-low border-none rounded-none px-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                     placeholder="Ex: Le Petit Tajine"
                   />
                 </div>
@@ -149,7 +149,7 @@ export const SettingsPage: React.FC = () => {
                     name="description"
                     value={config.description || ''}
                     onChange={handleInputChange}
-                    className="w-full bg-surface-container-low border-none rounded-none px-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                    className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
                     placeholder="Une brève description de votre restaurant..."
                   />
                 </div>
@@ -161,7 +161,7 @@ export const SettingsPage: React.FC = () => {
                   name="devise"
                   value={config.devise}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none px-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all max-w-[100px]"
+                  className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all max-w-[100px]"
                   placeholder="DH"
                 />
               </div>
@@ -170,13 +170,13 @@ export const SettingsPage: React.FC = () => {
         </motion.div>
 
         {/* Contact & Location Section */}
-        <motion.div className="double-bezel p-8 md:p-10 bg-white" variants={fadeInUp}>
-          <h2 className="text-xl font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
+        <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
+          <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
             <MapPin className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
             Contact & Location
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Email de contact</label>
               <div className="relative flex items-center">
@@ -186,7 +186,7 @@ export const SettingsPage: React.FC = () => {
                   name="email"
                   value={config.email || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="contact@restaurant.ma"
                 />
               </div>
@@ -200,7 +200,7 @@ export const SettingsPage: React.FC = () => {
                   name="telephone"
                   value={config.telephone || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="+212 5XX XXX XXX"
                 />
               </div>
@@ -213,7 +213,7 @@ export const SettingsPage: React.FC = () => {
                   name="adresse"
                   value={config.adresse || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
                   placeholder="123 Rue de la Gastronomie, Casablanca"
                 />
               </div>
@@ -222,13 +222,13 @@ export const SettingsPage: React.FC = () => {
         </motion.div>
 
         {/* Social Media Section */}
-        <motion.div className="double-bezel p-8 md:p-10 bg-white" variants={fadeInUp}>
-          <h2 className="text-xl font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
+        <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
+          <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
             <Globe className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
             Réseaux Sociaux
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Facebook</label>
               <div className="relative flex items-center">
@@ -238,7 +238,7 @@ export const SettingsPage: React.FC = () => {
                   name="facebook"
                   value={config.facebook || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://facebook.com/..."
                 />
               </div>
@@ -252,7 +252,7 @@ export const SettingsPage: React.FC = () => {
                   name="instagram"
                   value={config.instagram || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://instagram.com/..."
                 />
               </div>
@@ -266,7 +266,7 @@ export const SettingsPage: React.FC = () => {
                   name="twitter"
                   value={config.twitter || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-4 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://twitter.com/..."
                 />
               </div>
@@ -276,13 +276,13 @@ export const SettingsPage: React.FC = () => {
 
         {/* Action Bar */}
         <motion.div 
-          className="flex items-center justify-end gap-6 pt-4"
+          className="flex items-center justify-end gap-3 pt-4"
           variants={fadeInUp}
         >
           <button 
             type="submit" 
             disabled={isSaving}
-            className="flex items-center gap-3 px-10 py-5 bg-primary text-white rounded-none font-bold shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20 hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
+            className="flex items-center gap-3 px-10 py-3 bg-primary text-white rounded-none font-bold shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20 hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
           >
             {isSaving ? (
               <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-none animate-spin" />

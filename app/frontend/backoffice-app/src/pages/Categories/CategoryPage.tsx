@@ -102,13 +102,13 @@ export const CategoryPage: React.FC = () => {
     <div className="max-w-7xl mx-auto animate-in fade-in duration-700 bg-background">
       <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Menu Architecture</h1>
+          <h1 className="text-xl font-bold tracking-tight text-on-surface font-sans">Menu Architecture</h1>
           <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage the structural categories of your restaurant's menu.</p>
         </div>
         <button 
           data-testid="category-create-button"
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-none font-bold transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
+          className="flex items-center gap-3 px-4 py-3.5 bg-primary text-white rounded-none font-bold transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
         >
           <Plus className="w-5 h-5"  strokeWidth={1.5}/>
           <span>Define New Category</span>
@@ -116,13 +116,13 @@ export const CategoryPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.filter(c => c.est_active).map((cat) => (
             <div 
               key={cat.id}
@@ -134,7 +134,7 @@ export const CategoryPage: React.FC = () => {
                   <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20">
-                    <ImageIcon className="w-12 h-12" />
+                    <ImageIcon className="w-8 h-8" />
                   </div>
                 )}
                 <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
@@ -158,7 +158,7 @@ export const CategoryPage: React.FC = () => {
                 </div>
               </div>
               <div className="px-3 pb-3">
-                <h3 className="text-2xl font-bold tracking-tight text-on-surface font-sans mb-3">{cat.nom}</h3>
+                <h3 className="text-lg font-bold tracking-tight text-on-surface font-sans mb-3">{cat.nom}</h3>
                 <p className="text-on-surface-variant text-sm font-medium leading-relaxed line-clamp-2 h-10 opacity-70">
                   {cat.description || 'No description provided for this culinary sector.'}
                 </p>
@@ -185,7 +185,7 @@ export const CategoryPage: React.FC = () => {
               required
               value={nom}
               onChange={(e) => setNom(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
               placeholder="Ex: Signature Starters, Traditional Tagines..."
             />
           </div>
@@ -200,7 +200,7 @@ export const CategoryPage: React.FC = () => {
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
               placeholder="Describe the culinary intent of this category..."
             />
           </div>
@@ -215,7 +215,7 @@ export const CategoryPage: React.FC = () => {
               data-testid="category-order-input"
               value={ordre}
               onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
             />
           </div>
 
@@ -248,7 +248,7 @@ export const CategoryPage: React.FC = () => {
             type="submit"
             data-testid="category-save-button"
             disabled={isSaving}
-            className="w-full py-5 mt-4 bg-primary text-white rounded-none font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full py-3 mt-4 bg-primary text-white rounded-none font-bold text-sm transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >
             {isSaving ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={1.5}/> : (
                 <>

@@ -196,13 +196,13 @@ export const PlatPage: React.FC = () => {
     <div className="max-w-[1600px] mx-auto animate-in fade-in duration-700 bg-background">
       <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-on-surface font-sans">Culinary Catalog</h1>
+          <h1 className="text-xl font-bold tracking-tight text-on-surface font-sans">Culinary Catalog</h1>
           <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage your restaurant's signature dishes and technical recipes.</p>
         </div>
         <button 
           data-testid="plat-create-button"
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-none font-bold transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
+          className="flex items-center gap-3 px-4 py-3.5 bg-primary text-white rounded-none font-bold transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
         >
           <Plus className="w-5 h-5"  strokeWidth={1.5}/>
           <span>New Culinary Creation</span>
@@ -210,14 +210,14 @@ export const PlatPage: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {plats.filter(p => p.est_active).map((plat) => (
             <div 
               key={plat.id}
@@ -263,7 +263,7 @@ export const PlatPage: React.FC = () => {
                 <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3 opacity-80">
                   {getCategoryName(plat.categorie)}
                 </p>
-                <h3 className="text-2xl font-bold text-on-surface mb-3 tracking-tight font-sans group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-bold text-on-surface mb-3 tracking-tight font-sans group-hover:text-primary transition-colors">
                   {plat.nom}
                 </h3>
                 
@@ -287,7 +287,7 @@ export const PlatPage: React.FC = () => {
         title={editingPlat ? 'Refine Creation' : 'Define Creation'}
       >
         <form onSubmit={handleSubmit} className="space-y-8 p-2 max-h-[75vh] overflow-y-auto pr-4 scrollbar-hide">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-3 sm:col-span-2">
                 <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <Tag className="w-3 h-3 text-primary"  strokeWidth={1.5}/>
@@ -299,7 +299,7 @@ export const PlatPage: React.FC = () => {
                     required
                     value={nom}
                     onChange={(e) => setNom(e.target.value)}
-                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
                     placeholder="Ex: Moroccan Spiced Salmon..."
                 />
             </div>
@@ -313,7 +313,7 @@ export const PlatPage: React.FC = () => {
                     data-testid="plat-category-select"
                     value={selectedCat}
                     onChange={(e) => setSelectedCat(parseInt(e.target.value))}
-                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans appearance-none"
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans appearance-none"
                 >
                 {categories.map(c => (
                     <option key={c.id} value={c.id}>{c.nom}</option>
@@ -332,7 +332,7 @@ export const PlatPage: React.FC = () => {
                     required
                     value={prix}
                     onChange={(e) => setPrix(e.target.value)}
-                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
+                    className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
                     placeholder="0.00"
                 />
             </div>
@@ -348,12 +348,12 @@ export const PlatPage: React.FC = () => {
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none font-sans"
+              className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none font-sans"
               placeholder="Allergens, pairing notes, or specific preparation details..."
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <Timer className="w-3 h-3 text-primary"  strokeWidth={1.5}/>
@@ -364,7 +364,7 @@ export const PlatPage: React.FC = () => {
                   data-testid="plat-time-input"
                   value={temps}
                   onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
-                  className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-5 py-4 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
+                  className="w-full bg-surface-container-low border border-surface-container-high rounded-none px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-sans"
                 />
               </div>
 
@@ -405,7 +405,7 @@ export const PlatPage: React.FC = () => {
               
               <div className="space-y-4">
                 {selectedIngredients.map((item, index) => (
-                    <div key={index} className="flex gap-4 items-center animate-in slide-in-from-left-4 duration-300">
+                    <div key={index} className="flex gap-2 items-center animate-in slide-in-from-left-4 duration-300">
                         <div className="flex-1 relative">
                              <select 
                                 value={item.ingredient} 
@@ -446,7 +446,7 @@ export const PlatPage: React.FC = () => {
             type="submit"
             data-testid="plat-save-button"
             disabled={isSaving}
-            className="w-full py-5 mt-4 bg-primary text-white rounded-none font-bold text-lg transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full py-3 mt-4 bg-primary text-white rounded-none font-bold text-sm transition-all hover:scale-[1.02] hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
           >
             {isSaving ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={1.5}/> : (
                 <>

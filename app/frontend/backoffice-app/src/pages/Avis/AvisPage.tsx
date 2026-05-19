@@ -44,7 +44,7 @@ export const AvisPage: React.FC = () => {
                 <Skeleton className="w-64 h-4" />
             </div>
         </div>
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-3">
             <Skeleton className="h-48 rounded-[2.5rem]" />
             <Skeleton className="h-48 rounded-[2.5rem]" />
             <Skeleton className="h-48 rounded-[2.5rem]" />
@@ -57,21 +57,21 @@ export const AvisPage: React.FC = () => {
     <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: '#301400' }}>Analyse des Sentiments</h1>
+          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Analyse des Sentiments</h1>
           <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Écoutez vos clients grâce à notre moteur d'IA.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-3">
         {avis.map((a) => (
-          <div key={a.id} className="p-8 tonal-card flex flex-col md:flex-row gap-8 items-start">
+          <div key={a.id} className="p-5 tonal-card flex flex-col md:flex-row gap-4 items-start">
             <div className="flex-1">
-              <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-none bg-surface-container flex items-center justify-center" style={{ color: '#53443a' }}>
+              <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 rounded-none bg-surface-container flex items-center justify-center" style={{ color: '#53443a' }}>
                       <MessageSquare className="w-6 h-6"  strokeWidth={1.5}/>
                   </div>
                   <div>
-                      <h3 className="font-bold text-lg" style={{ color: '#301400' }}>Avis #{a.id}</h3>
+                      <h3 className="font-bold text-sm" style={{ color: '#301400' }}>Avis #{a.id}</h3>
                       <div className="flex gap-1">
                           {[...Array(5)].map((_, i) => (
                               <Star key={i} className={`w-3.5 h-3.5 ${i < a.note ? 'text-primary fill-current' : 'text-outline-variant'}`}  strokeWidth={1.5}/>
@@ -79,17 +79,17 @@ export const AvisPage: React.FC = () => {
                       </div>
                   </div>
               </div>
-              <p className="leading-relaxed italic text-lg font-medium" style={{ color: '#301400' }}>"{a.commentaire}"</p>
+              <p className="leading-relaxed italic text-sm font-medium" style={{ color: '#301400' }}>"{a.commentaire}"</p>
               <p className="text-xs mt-6 font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>Posté par {a.user_username} • {new Date(a.created_at).toLocaleDateString()}</p>
             </div>
 
-            <div className="w-full md:w-64 p-6 bg-surface-container rounded-none border border-outline-variant/30 flex flex-col items-center justify-center text-center gap-4">
+            <div className="w-full md:w-64 p-4 bg-surface-container rounded-none border border-outline-variant/30 flex flex-col items-center justify-center text-center gap-2">
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: '#53443a' }}>Score Sentiment IA</p>
                 <div className="p-4 bg-surface-container-high rounded-none">
                     {getSentimentIcon(a.sentiment_score || 0)}
                 </div>
                 <div>
-                    <p className="text-xl font-bold" style={{ color: (a.sentiment_score || 0) > 10 ? '#8d4e1c' : (a.sentiment_score || 0) < -10 ? '#ba1a1a' : '#301400' }}>
+                    <p className="text-base font-bold" style={{ color: (a.sentiment_score || 0) > 10 ? '#8d4e1c' : (a.sentiment_score || 0) < -10 ? '#ba1a1a' : '#301400' }}>
                         {getSentimentLabel(a.sentiment_score || 0)}
                     </p>
                     <p className="text-xs font-mono mt-1" style={{ color: '#53443a' }}>{a.sentiment_score || 0} pts</p>
@@ -100,7 +100,7 @@ export const AvisPage: React.FC = () => {
 
         {avis.length === 0 && (
             <div className="py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-                <MessageSquare className="w-16 h-16 mb-4"  strokeWidth={1.5}/>
+                <MessageSquare className="w-16 h-10 mb-4"  strokeWidth={1.5}/>
                 <p className="font-bold">Aucun avis client pour le moment.</p>
             </div>
         )}

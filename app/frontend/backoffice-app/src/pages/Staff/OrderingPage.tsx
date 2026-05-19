@@ -137,18 +137,18 @@ export const OrderingPage: React.FC = () => {
     }
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin"  strokeWidth={1.5}/></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={1.5}/></div>;
 
   return (
     <div className="h-[calc(100dvh-6rem)] flex flex-col -m-6 md:-m-8 animate-in fade-in duration-700 bg-background">
       {/* Precision Header */}
-      <header className="bg-surface-container-lowest border-b border-surface-container-high p-6 flex items-center justify-between z-20">
-        <div className="flex items-center gap-6">
+      <header className="bg-surface-container-lowest border-b border-surface-container-high p-4 flex items-center justify-between z-20">
+        <div className="flex items-center gap-3">
           <button onClick={() => navigate('/salle')} className="p-3 bg-surface-container rounded-none hover:bg-surface-container-high transition-all active:scale-90 border border-outline-variant/30">
             <ChevronLeft className="w-6 h-6" style={{ color: '#301400' }}  strokeWidth={1.5}/>
           </button>
           <div>
-            <h2 className="text-2xl font-bold font-sans tracking-tight" style={{ color: '#301400' }}>Station Table #{table?.numero}</h2>
+            <h2 className="text-lg font-bold font-sans tracking-tight" style={{ color: '#301400' }}>Station Table #{table?.numero}</h2>
             <div className="flex items-center gap-2 mt-1">
                 <span className={`w-2.5 h-2.5 rounded-none ${currentCommande ? 'bg-primary animate-pulse' : 'bg-outline'}`} />
                 <p className="text-[10px] uppercase tracking-widest font-mono font-bold font-sans" style={{ color: '#53443a' }}>
@@ -173,7 +173,7 @@ export const OrderingPage: React.FC = () => {
 
       <div className="flex-1 flex min-h-0">
         {/* Menu Section - Catalog style */}
-        <div className="flex-1 flex flex-col min-w-0 p-8 pt-6 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 p-5 pt-6 overflow-hidden">
           {/* Categories bar - Minimalist Glass */}
           <div className="flex gap-3 overflow-x-auto pb-8 scrollbar-hide shrink-0">
             {categories.map(cat => (
@@ -181,7 +181,7 @@ export const OrderingPage: React.FC = () => {
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
                 className={`
-                    px-6 py-2.5 rounded-none text-xs font-bold uppercase tracking-widest font-mono whitespace-nowrap transition-all duration-300 border
+                    px-4 py-2.5 rounded-none text-xs font-bold uppercase tracking-widest font-mono whitespace-nowrap transition-all duration-300 border
                     ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20 scale-105' : 'bg-surface-container border-outline-variant/30 hover:bg-surface-container-high hover:border-primary transition-colors'}
                 `}
                 style={{ color: activeCat === cat.id ? undefined : '#301400' }}
@@ -192,7 +192,7 @@ export const OrderingPage: React.FC = () => {
           </div>
 
           {/* Plats grid - Modern Bento */}
-          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6 pb-8 scrollbar-hide">
+          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 pb-8 scrollbar-hide">
             {filteredPlats.map(plat => (
               <button
                 key={plat.id}
@@ -203,7 +203,7 @@ export const OrderingPage: React.FC = () => {
                   {plat.image ? (
                     <img src={plat.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={plat.nom} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-bold text-3xl uppercase italic font-display-accent" style={{ color: '#301400', opacity: 0.2 }}>
+                    <div className="w-full h-full flex items-center justify-center font-bold text-xl uppercase italic font-display-accent" style={{ color: '#301400', opacity: 0.2 }}>
                       {plat.nom.charAt(0)}
                     </div>
                   )}
@@ -229,25 +229,25 @@ export const OrderingPage: React.FC = () => {
 
         {/* Cart Section - Operational Sidebar */}
         <aside className="w-[450px] bg-white border-l border-surface-container-high flex flex-col shadow-[0px_0px_100px_rgba(0,0,0,0.03)] z-10">
-          <div className="p-8 border-b border-surface-container-high flex items-center justify-between bg-surface-container-lowest">
+          <div className="p-5 border-b border-surface-container-high flex items-center justify-between bg-surface-container-lowest">
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-none bg-primary-container/20 text-primary flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5"  strokeWidth={1.5}/>
                 </div>
-                <h3 className="font-bold font-sans text-lg tracking-tight" style={{ color: '#301400' }}>Operational Cart</h3>
+                <h3 className="font-bold font-sans text-sm tracking-tight" style={{ color: '#301400' }}>Operational Cart</h3>
             </div>
             <div className="px-4 py-1.5 rounded-none text-xs font-bold uppercase tracking-widest font-mono border border-outline-variant/30" style={{ color: '#301400' }}>
                 {cart.length} ITEMS
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
+          <div className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide">
             {cart.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center gap-6 animate-in zoom-in duration-700" style={{ color: '#53443a', opacity: 0.6 }}>
+              <div className="h-full flex flex-col items-center justify-center gap-3 animate-in zoom-in duration-700" style={{ color: '#53443a', opacity: 0.6 }}>
                 <div className="w-20 h-20 rounded-none bg-surface-container-low border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
                     <Plus className="w-8 h-8"  strokeWidth={1.5}/>
                 </div>
-                <p className="text-lg font-display-accent italic">Transaction buffer is empty.</p>
+                <p className="text-sm font-display-accent italic">Transaction buffer is empty.</p>
               </div>
             ) : (
               cart.map(item => (
@@ -268,27 +268,27 @@ export const OrderingPage: React.FC = () => {
                         <span className="font-bold text-sm w-8 text-center font-sans" style={{ color: '#301400' }}>{item.quantite}</span>
                         <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors" style={{ color: '#53443a' }}><Plus className="w-4 h-4"  strokeWidth={1.5}/></button>
                     </div>
-                    <div className="font-bold text-lg font-sans" style={{ color: '#301400' }}>{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
+                    <div className="font-bold text-sm font-sans" style={{ color: '#301400' }}>{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
                   </div>
                 </div>
               ))
             )}
           </div>
 
-          <div className="p-8 bg-surface-container-low border-t border-surface-container-high">
+          <div className="p-5 bg-surface-container-low border-t border-surface-container-high">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex flex-col">
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: '#53443a' }}>Estimated Total</span>
                     <span className="text-sm font-bold opacity-70" style={{ color: '#53443a' }}>Incl. VAT</span>
                 </div>
-                <span className="text-4xl font-bold font-sans tracking-tighter" style={{ color: '#301400' }}>{cartTotal.toFixed(2)}DH</span>
+                <span className="text-2xl font-bold font-sans tracking-tighter" style={{ color: '#301400' }}>{cartTotal.toFixed(2)}DH</span>
             </div>
             
             <button 
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
                 className={`
-                    w-full py-5 rounded-none flex items-center justify-center gap-4 font-bold text-lg transition-all duration-300
+                    w-full py-3 rounded-none flex items-center justify-center gap-2 font-bold text-sm transition-all duration-300
                     ${cart.length > 0 && !isSubmitting ? 'bg-primary text-on-primary shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20 hover:scale-[1.02] active:scale-95' : 'bg-surface-container text-outline cursor-not-allowed'}
                 `}
             >

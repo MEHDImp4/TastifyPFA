@@ -44,10 +44,10 @@ export const ReservationsPage: React.FC = () => {
             </div>
             <Skeleton className="w-32 h-10 rounded-none" />
         </div>
-        <div className="grid grid-cols-1 gap-4">
-            <Skeleton className="h-32 rounded-[2rem]" />
-            <Skeleton className="h-32 rounded-[2rem]" />
-            <Skeleton className="h-32 rounded-[2rem]" />
+        <div className="grid grid-cols-1 gap-2">
+            <Skeleton className="h-20 rounded-[2rem]" />
+            <Skeleton className="h-20 rounded-[2rem]" />
+            <Skeleton className="h-20 rounded-[2rem]" />
         </div>
       </div>
     );
@@ -88,9 +88,9 @@ export const ReservationsPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: '#301400' }}>Réservations</h1>
+          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Réservations</h1>
           <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Gérez les réservations et l'occupation des tables.</p>
         </div>
         
@@ -121,14 +121,14 @@ export const ReservationsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-2">
         {filteredReservations.map((res) => (
           <div 
             key={res.id} 
-            className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 tonal-card hover:border-primary/30 transition-all"
+            className="group flex flex-col md:flex-row items-start md:items-center justify-between p-4 tonal-card hover:border-primary/30 transition-all"
           >
-            <div className="flex items-center gap-6 mb-4 md:mb-0">
-              <div className="w-16 h-16 bg-surface-container rounded-none flex flex-col items-center justify-center text-primary border border-outline-variant/30">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
+              <div className="w-16 h-10 bg-surface-container rounded-none flex flex-col items-center justify-center text-primary border border-outline-variant/30">
                   <Calendar className="w-6 h-6 mb-1"  strokeWidth={1.5}/>
                   <span className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: '#53443a' }}>
                       {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
@@ -136,12 +136,12 @@ export const ReservationsPage: React.FC = () => {
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-lg font-bold capitalize" style={{ color: '#301400' }}>{res.user_username || 'Client'}</h3>
+                  <h3 className="text-sm font-bold capitalize" style={{ color: '#301400' }}>{res.user_username || 'Client'}</h3>
                   <span className={`px-3 py-0.5 rounded-none text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
                       {res.statut}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-sm">
+                <div className="flex flex-wrap items-center gap-2 text-sm">
                   <div className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-primary"  strokeWidth={1.5}/>
                       <span className="font-bold" style={{ color: '#53443a' }}>{res.heure_debut} - {res.heure_fin}</span>
@@ -170,7 +170,7 @@ export const ReservationsPage: React.FC = () => {
                 <>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-none font-bold hover:brightness-110 transition-all active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-primary text-on-primary rounded-none font-bold hover:brightness-110 transition-all active:scale-95 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/10"
                   >
                     <CheckCircle2 className="w-4 h-4"  strokeWidth={1.5}/>
                     Confirmer
@@ -188,7 +188,7 @@ export const ReservationsPage: React.FC = () => {
               {res.statut === 'CONFIRMEE' && (
                  <button 
                   onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-surface-container-low border border-outline-variant/30 rounded-none font-bold hover:text-error hover:bg-error-container/20 transition-all"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-surface-container-low border border-outline-variant/30 rounded-none font-bold hover:text-error hover:bg-error-container/20 transition-all"
                   style={{ color: '#53443a' }}
                  >
                    Annuler
@@ -204,7 +204,7 @@ export const ReservationsPage: React.FC = () => {
 
         {filteredReservations.length === 0 && (
           <div className="py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-              <Calendar className="w-16 h-16 mb-4"  strokeWidth={1.5}/>
+              <Calendar className="w-16 h-10 mb-4"  strokeWidth={1.5}/>
               <p className="font-bold">Aucune réservation trouvée.</p>
           </div>
         )}
