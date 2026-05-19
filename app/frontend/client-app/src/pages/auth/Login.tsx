@@ -50,9 +50,9 @@ export const Login: React.FC = () => {
     <div className="min-h-screen bg-white text-[#111111] font-sans flex flex-col items-center justify-center p-6 selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
       <Link 
         to="/" 
-        className="fixed top-12 left-12 group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#787774] hover:text-[#111111] transition-colors"
+        className="fixed top-6 left-6 group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#787774] hover:text-[#111111] transition-colors"
       >
-        <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <ChevronLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
         Retour
       </Link>
 
@@ -60,11 +60,11 @@ export const Login: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-sm space-y-12"
+        className="w-full max-w-sm space-y-8"
       >
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-serif italic tracking-tight">Bienvenue.</h1>
-          <p className="text-sm font-bold text-[#787774] uppercase tracking-widest">Identifiez-vous pour continuer.</p>
+        <div className="text-center space-y-3">
+          <h1 className="text-3xl font-serif italic tracking-tight">Bienvenue.</h1>
+          <p className="text-[10px] font-black text-[#787774] uppercase tracking-widest">Identifiez-vous pour continuer.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -73,43 +73,43 @@ export const Login: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3"
+              className="p-3 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3"
             >
               <ShieldAlert className="w-4 h-4 text-red-500" strokeWidth={2.5} />
-              <p className="text-xs font-bold text-red-600 uppercase tracking-wide">{error}</p>
+              <p className="text-[10px] font-black text-red-600 uppercase tracking-wide">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#787774] ml-1">Identifiant</label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#787774] ml-1">Identifiant</label>
               <div className="relative">
-                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787774]" />
+                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#787774]" />
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-11 pr-4 py-4 bg-[#F7F6F3] border border-transparent rounded-xl font-bold focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3.5 bg-[#F7F6F3] border border-transparent rounded-xl font-bold text-sm focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
                   placeholder="USERNAME"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between items-center ml-1">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#787774]">Mot de Passe</label>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#787774]">Mot de Passe</label>
                 <Link to="#" className="text-[9px] font-bold text-[#787774] hover:text-[#111111] uppercase tracking-widest">Oublié ?</Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787774]" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#787774]" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-4 bg-[#F7F6F3] border border-transparent rounded-xl font-bold focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
+                  className="w-full pl-11 pr-4 py-3.5 bg-[#F7F6F3] border border-transparent rounded-xl font-bold text-sm focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
                   placeholder="••••••••"
                   disabled={isLoading}
                 />
@@ -120,7 +120,7 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-5 bg-[#111111] text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#333333] transition-all active:scale-95 disabled:opacity-50"
+            className="w-full py-4 bg-[#111111] text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#333333] transition-all active:scale-95 disabled:opacity-50"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <>
@@ -131,8 +131,8 @@ export const Login: React.FC = () => {
           </button>
         </form>
 
-        <div className="pt-8 border-t border-[#EAEAEA] text-center">
-          <p className="text-xs font-bold text-[#787774] uppercase tracking-widest">
+        <div className="pt-6 border-t border-[#EAEAEA] text-center">
+          <p className="text-[10px] font-black text-[#787774] uppercase tracking-widest">
             Nouveau ici ? {' '}
             <Link to="/register" className="text-[#111111] hover:underline ml-2">Créer un compte</Link>
           </p>

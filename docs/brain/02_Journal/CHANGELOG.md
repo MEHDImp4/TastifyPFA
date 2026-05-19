@@ -1,3 +1,14 @@
+## [2026-05-19] - 13:30
+### Changed
+- **Project-Wide UI Overhaul (Tactique Compacte)**: Transitioned from "Cinématographique Large" to "Tactique Compacte" (Staff OS) aesthetic across all interfaces for maximum density and perfect screen adaptation.
+- **Client-App Density Optimization**:
+    - **Global Scaling**: Reduced all typography scales (e.g., titles from 9xl to 5xl/4xl) and halved vertical margins/paddings.
+    - **Menu Page (/menu)**: Narrowed sidebar (320px), optimized Bento grid for up to 4 items per row, and densified dish cards.
+    - **Account Page (/account)**: Compacted sidebar and experience/reservation cards; switched feedback grid to 3 columns.
+    - **Reservations & Contact**: Miniaturized reservation stepper and "fitted" form fields for immediate visibility.
+- **Backoffice-App Density Optimization**:
+    - Applied "Compact Data-Dense" aesthetic across all management pages (Avis, Categories, HR, Inventory, Menu, Settings, Staff).
+
 ## [2026-05-19] - 12:45
 ### Changed
 - Applied "Compact Data-Dense" aesthetic refactoring across backoffice-app `pages/` (Avis, Categories, HR, Inventory, Menu, Settings, Staff). Reduced padding, margins, gaps, heights, widths, and typography sizes.

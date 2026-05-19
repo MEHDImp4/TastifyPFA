@@ -83,6 +83,12 @@ tastify-pfa/
 | `localhost:3003/`       | portail:3003       | CLIENT        |
 
 ### SaaS Pivot & Design Philosophy
-Tastify is an intelligent restaurant SaaS platform. Every establishment instance can be personalized via the `configuration` module for branding and contact identity, with the client portal now resolving a shared `BrandWordmark` fallback to `Tastify` when no custom restaurant name exists.
-The current visual language follows the **Organic Sophistication** design system: warm parchment and terracotta surfaces, editorial serif display typography, Bricolage utility labels, and tonal card hierarchy rather than cold glass-heavy minimalism.
+Tastify is an intelligent restaurant SaaS platform. Every establishment instance can be personalized via the `configuration` module for branding and contact identity.
+
+The current visual language follows the **Tactique Compacte (Staff OS)** design system: a high-density, utilitarian yet premium aesthetic. It prioritizes data density, immediate visibility, and perfect screen adaptation. Key characteristics include:
+- **Calibrated Density**: Minimal vertical scrolling, compact sidebars (320px), and optimized Bento grids.
+- **Absolute Visibility**: Bold weights and high-contrast colors (#301400) on parchment/white backgrounds.
+- **Staff OS Aesthetic**: Raw mechanical interfaces fused with editorial typographic precision.
+- **Dynamic Branding**: The client portal resolves establishment identity via a shared `BrandWordmark` fallback.
+
 All services are containerized and orchestrated via Docker Compose, with a shared backend serving multiple specialized frontend interfaces.
