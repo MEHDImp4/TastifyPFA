@@ -26,8 +26,8 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
     let active = true;
 
     (async () => {
-      // Create a promise that resolves after 2 seconds
-      const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
+      // Create a promise that resolves after 600ms
+      const minDelay = new Promise(resolve => setTimeout(resolve, 600));
       
       // Fetch public configuration in parallel
       const configPromise = fetchConfig();

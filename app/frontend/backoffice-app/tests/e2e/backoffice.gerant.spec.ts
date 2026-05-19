@@ -79,11 +79,8 @@ test.describe('gerant browser workflows', () => {
     await createdCard.locator('[data-testid^="category-edit-"]').click();
     await page.getByTestId('category-name-input').fill(updatedName);
     await page.getByTestId('category-description-input').fill('Updated category description from Playwright.');
-    const updateResponsePromise = page.waitForResponse((response) =>
-      response.url().includes(`/api/categories/${createdCategory.id}/`) && response.request().method() === 'PATCH',
-    );
     await page.getByTestId('category-save-button').click();
-    await updateResponsePromise;
+    await expect(page.getByTestId('category-name-input')).toHaveCount(0);
 
     const updatedCard = page.getByTestId(`category-card-${createdCategory.id}`);
     await updatedCard.scrollIntoViewIfNeeded();
@@ -123,11 +120,8 @@ test.describe('gerant browser workflows', () => {
     await createdCard.locator('[data-testid^="plat-edit-"]').click();
     await page.getByTestId('plat-name-input').fill(updatedName);
     await page.getByTestId('plat-description-input').fill('Updated Playwright dish description.');
-    const updateResponsePromise = page.waitForResponse((response) =>
-      response.url().includes(`/api/plats/${createdPlat.id}/`) && response.request().method() === 'PATCH',
-    );
     await page.getByTestId('plat-save-button').click();
-    await updateResponsePromise;
+    await expect(page.getByTestId('plat-name-input')).toHaveCount(0);
 
     const updatedCard = page.getByTestId(`plat-card-${createdPlat.id}`);
     await updatedCard.scrollIntoViewIfNeeded();
