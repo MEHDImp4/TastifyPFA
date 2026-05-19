@@ -21,6 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Create .env for CI
+        run: cp .env.example .env
+
       - name: Start Docker services
         run: docker compose up -d --build db redis backend
 
@@ -88,6 +91,9 @@ jobs:
       - name: Install Playwright browser
         working-directory: app/frontend/backoffice-app
         run: npx playwright install --with-deps chromium
+
+      - name: Create .env for CI
+        run: cp .env.example .env
 
       - name: Start Docker services for E2E
         run: docker compose up -d --build db redis backend backoffice-app
