@@ -226,7 +226,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
     await page.getByPlaceholder('Chercher un client...').fill('nadia');
     await expect(page.getByPlaceholder('Chercher un client...')).toHaveValue('nadia');
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
@@ -274,7 +274,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
     const searchInput = page.getByPlaceholder('Chercher un client...');
 
     await searchInput.fill('  naDIA  ');
@@ -322,7 +322,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
 
     await page.getByRole('button', { name: 'CONFIRMEE' }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
@@ -392,7 +392,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
 
     await page.getByRole('button', { name: 'EN ATTENTE' }).click();
     await page.getByRole('button', { name: 'Confirmer' }).click();
@@ -454,7 +454,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
     const searchInput = page.getByPlaceholder('Chercher un client...');
 
     await searchInput.fill('client');
@@ -505,7 +505,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-2').first();
     const searchInput = page.getByPlaceholder('Chercher un client...');
 
     await searchInput.fill('  cLiEnt  ');
