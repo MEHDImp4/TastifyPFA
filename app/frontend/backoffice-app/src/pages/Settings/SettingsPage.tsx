@@ -100,19 +100,19 @@ export const SettingsPage: React.FC = () => {
         {/* Branding Section */}
         <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
           <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
-            <Building2 className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
+            <Building2 className="w-5 h-5 text-primary"  strokeWidth={2}/>
             Branding & Identity
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
             <div className="space-y-4">
-              <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60">Logo Restaurant</p>
-              <div className="relative group w-full aspect-square rounded-none overflow-hidden bg-surface-container-low border-2 border-dashed border-surface-container-high flex flex-col items-center justify-center transition-all hover:border-primary/40">
+              <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60">Logo Restaurant</p>
+              <div className="relative group w-full aspect-square rounded-xl overflow-hidden bg-surface-container-low border-2 border-dashed border-surface-container-high flex flex-col items-center justify-center transition-all hover:border-primary/40">
                 {logoPreview ? (
                   <>
                     <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-contain p-4" />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <label className="cursor-pointer bg-white text-on-surface px-4 py-2 rounded-none text-xs font-bold shadow-[2px_2px_0px_rgba(15,23,42,0.1)]">
+                        <label className="cursor-pointer bg-white text-on-surface px-4 py-2 rounded-2xl text-xs font-bold shadow-lg shadow-primary/10">
                             Modifier le logo
                             <input type="file" className="hidden" onChange={handleLogoChange} accept="image/*" />
                         </label>
@@ -120,8 +120,8 @@ export const SettingsPage: React.FC = () => {
                   </>
                 ) : (
                   <label className="cursor-pointer flex flex-col items-center gap-3 w-full h-full justify-center">
-                    <Upload className="w-8 h-8 text-on-surface-variant"  strokeWidth={1.5}/>
-                    <span className="text-[10px] font-bold uppercase tracking-widest font-mono text-on-surface-variant">Upload Logo</span>
+                    <Upload className="w-8 h-8 text-on-surface-variant"  strokeWidth={2}/>
+                    <span className="text-[10px] font-bold uppercase tracking-widest font-sans text-on-surface-variant">Upload Logo</span>
                     <input type="file" className="hidden" onChange={handleLogoChange} accept="image/*" />
                   </label>
                 )}
@@ -130,38 +130,38 @@ export const SettingsPage: React.FC = () => {
             
             <div className="md:col-span-2 space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Nom de l'établissement</label>
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Nom de l'établissement</label>
                 <div className="relative">
                   <input 
                     type="text" 
                     name="nom"
                     value={config.nom}
                     onChange={handleInputChange}
-                    className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="w-full bg-surface-container-low border-none rounded-xl px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                     placeholder="Ex: Le Petit Tajine"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Description Courte</label>
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Description Courte</label>
                 <div className="relative">
                   <textarea 
                     name="description"
                     value={config.description || ''}
                     onChange={handleInputChange}
-                    className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                    className="w-full bg-surface-container-low border-none rounded-xl px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
                     placeholder="Une brève description de votre restaurant..."
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Devise Locale</label>
+                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Devise Locale</label>
                 <input 
                   type="text" 
                   name="devise"
                   value={config.devise}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all max-w-[100px]"
+                  className="w-full bg-surface-container-low border-none rounded-xl px-3 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all max-w-[100px]"
                   placeholder="DH"
                 />
               </div>
@@ -172,48 +172,48 @@ export const SettingsPage: React.FC = () => {
         {/* Contact & Location Section */}
         <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
           <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
-            <MapPin className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
+            <MapPin className="w-5 h-5 text-primary"  strokeWidth={2}/>
             Contact & Location
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Email de contact</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Email de contact</label>
               <div className="relative flex items-center">
-                <Mail className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <Mail className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <input 
                   type="email" 
                   name="email"
                   value={config.email || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="contact@restaurant.ma"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Téléphone</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Téléphone</label>
               <div className="relative flex items-center">
-                <Phone className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <Phone className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <input 
                   type="text" 
                   name="telephone"
                   value={config.telephone || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="+212 5XX XXX XXX"
                 />
               </div>
             </div>
             <div className="md:col-span-2 space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Adresse physique</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Adresse physique</label>
               <div className="relative flex items-start">
-                <MapPin className="absolute left-5 top-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <MapPin className="absolute left-5 top-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <textarea 
                   name="adresse"
                   value={config.adresse || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]"
                   placeholder="123 Rue de la Gastronomie, Casablanca"
                 />
               </div>
@@ -224,49 +224,49 @@ export const SettingsPage: React.FC = () => {
         {/* Social Media Section */}
         <motion.div className="double-bezel p-5 md:p-10 bg-white" variants={fadeInUp}>
           <h2 className="text-base font-bold text-on-surface mb-8 flex items-center gap-3 font-sans">
-            <Globe className="w-5 h-5 text-primary"  strokeWidth={1.5}/>
+            <Globe className="w-5 h-5 text-primary"  strokeWidth={2}/>
             Réseaux Sociaux
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Facebook</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Facebook</label>
               <div className="relative flex items-center">
-                <Globe className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <Globe className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <input 
                   type="url" 
                   name="facebook"
                   value={config.facebook || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://facebook.com/..."
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Instagram</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Instagram</label>
               <div className="relative flex items-center">
-                <AtSign className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <AtSign className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <input 
                   type="url" 
                   name="instagram"
                   value={config.instagram || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://instagram.com/..."
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-mono opacity-60 px-1">Twitter (X)</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 px-1">Twitter (X)</label>
               <div className="relative flex items-center">
-                <MessageCircle className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={1.5}/>
+                <MessageCircle className="absolute left-5 w-4 h-4 text-on-surface-variant opacity-40"  strokeWidth={2}/>
                 <input 
                   type="url" 
                   name="twitter"
                   value={config.twitter || ''}
                   onChange={handleInputChange}
-                  className="w-full bg-surface-container-low border-none rounded-none pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full bg-surface-container-low border-none rounded-xl pl-12 pr-5 py-2 font-sans font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 transition-all"
                   placeholder="https://twitter.com/..."
                 />
               </div>
@@ -282,12 +282,12 @@ export const SettingsPage: React.FC = () => {
           <button 
             type="submit" 
             disabled={isSaving}
-            className="flex items-center gap-3 px-10 py-3 bg-primary text-white rounded-none font-bold shadow-[2px_2px_0px_rgba(15,23,42,0.1)] shadow-primary/20 hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
+            className="flex items-center gap-3 px-10 py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/10 shadow-primary/20 hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100"
           >
             {isSaving ? (
-              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-none animate-spin" />
+              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-xl animate-spin" />
             ) : (
-              <Save className="w-5 h-5"  strokeWidth={1.5}/>
+              <Save className="w-5 h-5"  strokeWidth={2}/>
             )}
             {isSaving ? 'Enregistrement...' : 'Enregistrer les modifications'}
           </button>

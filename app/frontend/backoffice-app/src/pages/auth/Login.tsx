@@ -69,8 +69,8 @@ export const Login: React.FC = () => {
       
       {/* Soft Tonal Orbs for depth */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-container opacity-30 blur-[120px] rounded-none mix-blend-multiply" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-tertiary-container opacity-30 blur-[100px] rounded-none mix-blend-multiply" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-container opacity-30 blur-[120px] rounded-xl mix-blend-multiply" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-tertiary-container opacity-30 blur-[100px] rounded-xl mix-blend-multiply" />
       </div>
 
       <motion.div
@@ -102,15 +102,15 @@ export const Login: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-6 mt-16">
             <motion.div variants={itemVariants} className="flex flex-col gap-3">
-              <Compass className="w-6 h-6 text-primary" strokeWidth={1.5} />
+              <Compass className="w-6 h-6 text-primary" strokeWidth={2} />
               <h2 className="text-lg font-serif font-bold text-on-surface">Staff OS</h2>
               <p className="text-sm font-body text-on-surface-variant leading-snug">Unified entry point for dining room, orders, and culinary coordination.</p>
             </motion.div>
 
             <motion.div variants={itemVariants} className="flex flex-col gap-3">
               <div className="relative">
-                <div className="absolute -inset-1 bg-primary/20 animate-pulse rounded-none" />
-                <Activity className="relative w-6 h-6 text-primary" strokeWidth={1.5} />
+                <div className="absolute -inset-1 bg-primary/20 animate-pulse rounded-xl" />
+                <Activity className="relative w-6 h-6 text-primary" strokeWidth={2} />
               </div>
               <h2 className="text-lg font-serif font-bold text-on-surface">Live Systems</h2>
               <p className="text-sm font-body text-on-surface-variant leading-snug">Real-time surveillance of operational activity and flow.</p>
@@ -126,13 +126,13 @@ export const Login: React.FC = () => {
             <motion.div variants={itemVariants} className="flex flex-col items-center lg:items-start mb-8 lg:mb-10">
               <img src={logoStaff} alt="Tastify" className="h-12 mb-4" />
               <div className="flex items-center gap-2">
-                <Lock className="w-3 h-3 text-primary"  strokeWidth={1.5}/>
+                <Lock className="w-3 h-3 text-primary"  strokeWidth={2}/>
                 <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-on-surface">Secure Gateway</span>
               </div>
             </motion.div>
 
             {/* Main Login Card - Double Bezel & Glassmorphism */}
-            <div className="double-bezel glass p-8 md:p-10 shadow-[2px_2px_0px_rgba(15,23,42,0.1)] relative group">
+            <div className="double-bezel glass p-8 md:p-10 shadow-lg shadow-primary/10 relative group">
               <motion.div variants={itemVariants} className="mb-10">
                 <h3 className="text-3xl font-serif mb-2 font-bold text-on-surface">Authentication</h3>
                 <p className="font-body text-on-surface-variant text-sm">Please identify yourself to proceed.</p>
@@ -146,9 +146,9 @@ export const Login: React.FC = () => {
                     exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-error-container/40 border border-error/20 rounded-none p-4 flex items-start gap-3">
-                      <ShieldAlert className="w-5 h-5 text-error shrink-0 mt-0.5" strokeWidth={1.5} />
-                      <p className="text-xs font-bold text-error uppercase tracking-wider font-mono mt-0.5">{error}</p>
+                    <div className="bg-error-container/40 border border-error/20 rounded-xl p-4 flex items-start gap-3">
+                      <ShieldAlert className="w-5 h-5 text-error shrink-0 mt-0.5" strokeWidth={2} />
+                      <p className="text-xs font-bold text-error uppercase tracking-wider font-sans mt-0.5">{error}</p>
                     </div>
                   </motion.div>
                 )}
@@ -168,7 +168,7 @@ export const Login: React.FC = () => {
                       placeholder="E.g. MEHDI_MGR"
                       disabled={isLoading}
                       style={{ color: '#301400' }}
-                      className="w-full bg-surface-container-low/50 px-4 py-3.5 font-sans font-semibold text-on-surface outline-none rounded-none border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:ring-4 focus:ring-primary/10 transition-all duration-300 disabled:opacity-50 placeholder:text-on-surface-variant/40"
+                      className="w-full bg-surface-container-low/50 px-4 py-3.5 font-sans font-semibold text-on-surface outline-none rounded-xl border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:ring-4 focus:ring-primary/10 transition-all duration-300 disabled:opacity-50 placeholder:text-on-surface-variant/40"
                     />
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export const Login: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       disabled={isLoading}
-                      className="w-full bg-surface-container-low/50 px-4 py-3.5 font-sans font-semibold text-on-surface outline-none rounded-none border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:ring-4 focus:ring-primary/10 transition-all duration-300 disabled:opacity-50 placeholder:text-on-surface-variant/40"
+                      className="w-full bg-surface-container-low/50 px-4 py-3.5 font-sans font-semibold text-on-surface outline-none rounded-xl border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:ring-4 focus:ring-primary/10 transition-all duration-300 disabled:opacity-50 placeholder:text-on-surface-variant/40"
                     />
                   </div>
                 </div>
@@ -194,17 +194,17 @@ export const Login: React.FC = () => {
                   type="submit"
                   data-testid="login-submit"
                   disabled={isLoading}
-                  className="relative w-full overflow-hidden bg-primary text-on-primary py-4 rounded-none font-sans font-bold uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 transition-transform duration-200 active:scale-[0.98] disabled:opacity-50 hover:shadow-[2px_2px_0px_rgba(15,23,42,0.1)] hover:shadow-primary/30 mt-8"
+                  className="relative w-full overflow-hidden bg-primary text-on-primary py-4 rounded-xl font-sans font-bold uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 transition-transform duration-200 active:scale-[0.98] disabled:opacity-50 hover:shadow-lg shadow-primary/10 hover:shadow-primary/30 mt-8"
                 >
                   {/* Subtle shine effect */}
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
                   
                   {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin relative z-10"  strokeWidth={1.5}/>
+                    <Loader2 className="w-5 h-5 animate-spin relative z-10"  strokeWidth={2}/>
                   ) : (
                     <div className="flex items-center gap-2 relative z-10">
                       <span>Engage</span>
-                      <ArrowRight className="w-4 h-4"  strokeWidth={1.5}/>
+                      <ArrowRight className="w-4 h-4"  strokeWidth={2}/>
                     </div>
                   )}
                 </button>
@@ -215,7 +215,7 @@ export const Login: React.FC = () => {
             <div className="mt-8 flex items-center justify-between px-2">
               <span className="font-sans text-[9px] uppercase tracking-[0.25em] font-bold text-on-surface-variant/60">Tastify PFA v4.0</span>
               <span className="font-sans text-[9px] uppercase tracking-[0.25em] font-bold text-on-surface-variant/60 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3"  strokeWidth={1.5}/> Encrypted
+                <ShieldCheck className="w-3 h-3"  strokeWidth={2}/> Encrypted
               </span>
             </div>
           </div>
