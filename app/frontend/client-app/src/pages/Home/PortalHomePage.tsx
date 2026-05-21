@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Utensils, 
   MapPin,
-  Phone,
-  ArrowRight
+  ArrowRight,
+  ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';

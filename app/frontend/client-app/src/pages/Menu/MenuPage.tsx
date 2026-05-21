@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
 import { useCartStore } from '../../store/cartStore';
-import { Search, Clock, Info, Plus, Sparkles, ChevronRight, UtensilsCrossed } from 'lucide-react';
+import { Search, Clock, Info, Plus, ChevronRight } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { CardSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
@@ -40,9 +40,6 @@ export const MenuPage: React.FC = () => {
     (activeCat === null || p.categorie === activeCat) &&
     (search === '' || p.nom.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase()))
   );
-
-  const featuredPlat = filteredPlats.length > 0 ? filteredPlats[0] : null;
-  const otherPlats = filteredPlats.slice(1);
 
   if (isLoading) return (
     <div className="flex-1 flex bg-background">

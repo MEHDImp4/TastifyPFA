@@ -12,15 +12,14 @@ import {
   Loader2, 
   CreditCard,
   ChevronLeft,
-  ShieldCheck,
-  UtensilsCrossed
+  ShieldCheck
 } from 'lucide-react';
 
 export const CheckoutPage: React.FC = () => {
   const { items, updateQty, removeItem, clearCart } = useCartStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [tipPercent, setTipPercent] = useState<number>(0);
   const navigate = useNavigate();
 
