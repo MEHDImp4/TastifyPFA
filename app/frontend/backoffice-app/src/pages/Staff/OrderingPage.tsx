@@ -253,19 +253,29 @@ export const OrderingPage: React.FC = () => {
               </div>
             ) : (
               cart.map(item => (
-                <div key={item.plat.id} className="p-3 bg-background border-2 border-on-surface flex justify-between items-start transition-all hover:shadow-[4px_4px_0px_#301400/20] animate-in slide-in-from-right-4">
-                  <div className="flex gap-3 flex-1 min-w-0 pr-2">
-                    <span className="font-ui-label-bold text-primary text-sm font-black">{item.quantite}x</span>
-                    <div className="flex-1 min-w-0">
-                        <p className="font-ui-label-bold text-[12px] text-on-surface uppercase tracking-tight truncate">{item.plat.nom}</p>
-                        <p className="font-ui-data-dense text-[9px] text-on-surface-variant opacity-60 uppercase tracking-widest mt-0.5">{item.plat.prix} DH / EA</p>
+                <div key={item.plat.id} className="p-3 bg-background border-2 border-on-surface flex flex-col gap-2 transition-all hover:shadow-[4px_4px_0px_#301400/20] animate-in slide-in-from-right-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex gap-3 flex-1 min-w-0 pr-2">
+                      <span className="font-ui-label-bold text-primary text-sm font-black">{item.quantite}x</span>
+                      <div className="flex-1 min-w-0">
+                          <p className="font-ui-label-bold text-[12px] text-on-surface uppercase tracking-tight truncate">{item.plat.nom}</p>
+                          <p className="font-ui-data-dense text-[9px] text-on-surface-variant opacity-60 uppercase tracking-widest mt-0.5">{item.plat.prix} DH / EA</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-2 shrink-0">
+                      <span className="font-ui-data-dense text-ui-data-dense font-black">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}</span>
+                      <button onClick={() => removeFromCart(item.plat.id)} className="text-on-surface-variant/40 hover:text-error transition-colors p-1">
+                          <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5}/>
+                      </button>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-2 shrink-0">
-                    <span className="font-ui-data-dense text-ui-data-dense font-black">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}</span>
-                    <button onClick={() => removeFromCart(item.plat.id)} className="text-on-surface-variant/40 hover:text-error transition-colors p-1">
-                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5}/>
-                    </button>
+                  
+                  <div className="flex items-center justify-between border-t border-on-surface/10 pt-2">
+                    <div className="flex items-center bg-surface-container border border-on-surface overflow-hidden">
+                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-r border-on-surface"><Minus className="w-3 h-3" /></button>
+                        <span className="text-ui-data-dense font-black text-sm w-10 text-center text-on-surface">{item.quantite}</span>
+                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-l border-on-surface"><Plus className="w-3 h-3" /></button>
+                    </div>
                   </div>
                 </div>
               ))
