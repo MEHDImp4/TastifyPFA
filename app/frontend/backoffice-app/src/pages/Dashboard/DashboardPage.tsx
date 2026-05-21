@@ -8,9 +8,10 @@ import {
   ShoppingBag, 
   Timer,
   Calendar,
-  ArrowUpRight,
-  ArrowDownRight,
-  Sparkles
+  Sparkles,
+  Info,
+  ChevronRight,
+  Plus
   } from 'lucide-react';
 
 import { 
@@ -20,14 +21,12 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
 import { useSocketStore } from '../../store/socketStore';
+
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -86,142 +85,157 @@ export const DashboardPage: React.FC = () => {
     );
   }
   
-  if (!data) return <div className="text-center py-10 text-on-surface-variant font-sans font-bold tracking-widest uppercase text-[10px]">Erreur lors du chargement des données.</div>;
+  if (!data) return <div className="text-center py-10 text-on-surface-variant font-sans font-bold tracking-widest uppercase text-[10px]">Communication protocol failure. Data registry offline.</div>;
 
   const kpis = [
     { label: "REAL-TIME REVENUE (CA)", value: `${data.todayRevenue.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DH`, icon: TrendingUp, color: "text-primary", bg: "bg-surface-container", trend: "+12.4%", trendUp: true },
-    { label: "COVER OCCUPANCY", value: `${data.activeTables} Tables`, icon: Users, color: "text-secondary", bg: "bg-surface-container", trend: "75%", trendUp: null },
+    { label: "COVER OCCUPANCY", value: `${data.activeTables} UNIT`, icon: Users, color: "text-secondary", bg: "bg-surface-container", trend: "75%", trendUp: null },
     { label: "PENDING ORDERS", value: data.pendingOrders, icon: ShoppingBag, color: "text-primary", bg: "bg-surface-container", trend: "-5.2%", trendUp: false },
-    { label: "AVG TURN TIME", value: `${data.avgPrepTime}m`, icon: Timer, color: "text-on-primary-container", bg: "bg-primary-container", trend: "TARGET: 90m", trendUp: true },
+    { label: "AVG TURN TIME", value: `${data.avgPrepTime}M`, icon: Timer, color: "text-on-primary-container", bg: "bg-primary-container", trend: "TARGET: 90M", trendUp: true },
   ];
-
-  const COLORS = ['#8d4e1c', '#8f4d17', '#703704', '#633e22', '#d1854e'];
 
   return (
     <motion.div 
-      className="space-y-6"
+      className="space-y-staff-gutter"
       initial="initial"
       animate="animate"
       variants={staggerContainer}
     >
-      <motion.div className="flex items-center justify-between" variants={fadeInUp}>
+      {/* Tactical Header */}
+      <motion.header className="flex justify-between items-center mb-unit-lg" variants={fadeInUp}>
         <div>
-          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Live Dashboard</h1>
+          <h2 className="text-display-lg text-[32px] text-on-surface leading-none">Live Dashboard</h2>
           <div className="flex items-center gap-2 mt-2">
-            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
-            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Service Active: Dinner Operations</span>
+            <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold text-[10px]">Service Active: Operational Status Green</span>
           </div>
         </div>
         <div className="flex items-center gap-4">
+          <div className="flex -space-x-2 mr-4">
+              {[1, 2].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-background bg-surface-container-high flex items-center justify-center text-primary text-[10px] font-black">ST</div>
+              ))}
+          </div>
+          <div className="bg-surface-container-high px-4 py-2 rounded-lg border border-on-surface flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-secondary"></div>
+              <span className="text-ui-data-dense font-black text-[10px] tracking-widest">12 STAFF ONLINE</span>
+          </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-background border-2 border-on-surface shadow-[4px_4px_0px_#301400]">
               <Calendar strokeWidth={2.5} className="w-4 h-4 text-primary" />
-              <span className="text-ui-label-bold text-[10px]">{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              <span className="text-ui-label-bold text-[10px] font-black">{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' }).toUpperCase()}</span>
           </div>
         </div>
-      </motion.div>
+      </motion.header>
 
-      {/* KPI Grid */}
+      {/* KPI Grid - High Contrast */}
       <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" variants={staggerContainer}>
         {kpis.map((kpi, i) => (
-          <motion.div 
+          <motion.section 
             key={i} 
             className={`${kpi.bg} border-2 border-on-surface p-6 flex flex-col justify-between min-h-[160px] relative overflow-hidden transition-all duration-150 hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#301400]`}
             variants={fadeInUp}
           >
             <div>
-              <h3 className={`text-ui-label-bold text-[10px] mb-4 ${kpi.bg === 'bg-primary-container' ? 'text-on-primary-container/80' : 'text-on-surface-variant'}`}>{kpi.label}</h3>
+              <h3 className={`text-ui-label-bold text-[10px] font-black tracking-[0.2em] mb-4 ${kpi.bg === 'bg-primary-container' ? 'text-on-primary-container' : 'text-on-surface-variant'}`}>{kpi.label}</h3>
               <div className="flex items-baseline gap-2">
-                <span className={`text-display-lg text-[36px] font-black ${kpi.bg === 'bg-primary-container' ? 'text-on-primary-container' : 'text-on-surface'}`}>{kpi.value}</span>
+                <span className={`text-display-lg text-[40px] font-black leading-none ${kpi.bg === 'bg-primary-container' ? 'text-on-primary-container' : 'text-primary'}`} style={{ color: kpi.bg === 'bg-primary-container' ? '#ffceaf' : '#703704' }}>{kpi.value}</span>
+                <span className={`text-ui-data-dense font-black text-[11px] ${kpi.trendUp === false ? 'text-error' : kpi.bg === 'bg-primary-container' ? 'text-on-primary-container/60' : 'text-secondary'}`}>
+                  {kpi.trendUp !== null && (kpi.trendUp ? '↑ ' : '↓ ')}
+                  {kpi.trend}
+                </span>
               </div>
             </div>
             
-            <div className="mt-4 flex items-center justify-between border-t border-on-surface/10 pt-4">
-              <span className={`text-ui-data-dense font-black ${kpi.trendUp === false ? 'text-error' : kpi.bg === 'bg-primary-container' ? 'text-on-primary-container' : 'text-secondary'}`}>
-                {kpi.trendUp !== null && (kpi.trendUp ? '↑ ' : '↓ ')}
-                {kpi.trend}
-              </span>
+            <div className={`mt-4 flex items-center justify-between border-t pt-4 ${kpi.bg === 'bg-primary-container' ? 'border-on-primary-container/20' : 'border-on-surface/10'}`}>
+              <div className="flex gap-1 h-6 items-end">
+                {[1, 2, 3, 4, 5].map(j => (
+                    <div key={j} className={`w-1 rounded-sm ${kpi.bg === 'bg-primary-container' ? 'bg-on-primary-container/30' : 'bg-primary/20'}`} style={{ height: `${20 + Math.random() * 80}%` }} />
+                ))}
+              </div>
               <kpi.icon strokeWidth={2.5} className={`w-5 h-5 ${kpi.bg === 'bg-primary-container' ? 'text-on-primary-container/40' : 'text-primary/30'}`} />
             </div>
-          </motion.div>
+          </motion.section>
         ))}
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Revenue Chart */}
-        <motion.div 
-          className="lg:col-span-2 border-2 border-on-surface bg-surface-container p-6 flex flex-col shadow-[6px_6px_0px_#301400]"
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Main Orchestration Feed (Replacing Recharts with something more tactical or heavily styling it) */}
+        <motion.section 
+          className="lg:col-span-8 border-2 border-on-surface bg-surface-container p-0 flex flex-col shadow-[6px_6px_0px_#301400]"
           variants={fadeInUp}
         >
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="text-ui-label-bold text-[12px] text-on-surface">REVENUE VELOCITY (7D)</h3>
-              <p className="text-ui-data-dense text-on-surface-variant mt-1 opacity-60">Geometric trend analysis</p>
-            </div>
-            <div className="bg-on-surface text-background px-3 py-1 text-[9px] font-black uppercase tracking-widest">Live Feed</div>
-          </div>
-          <div className="flex-1 w-full min-h-[240px] relative">
-            {data.revenue7Days.length > 0 ? (
-              <div className="absolute inset-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data.revenue7Days} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8d4e1c" stopOpacity={0.2}/>
-                        <stop offset="95%" stopColor="#8d4e1c" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="0" stroke="#301400" opacity={0.05} vertical={false} />
-                    <XAxis 
-                      dataKey="date" 
-                      stroke="#301400" 
-                      fontSize={10} 
-                      fontFamily="Bricolage Grotesque"
-                      fontWeight={800}
-                      tickLine={false} 
-                      axisLine={{ stroke: '#301400', strokeWidth: 2 }} 
-                      dy={10}
-                      tickFormatter={(val) => new Date(val).toLocaleDateString('fr-FR', { weekday: 'short' }).toUpperCase()}
-                    />
-                    <YAxis 
-                      stroke="#301400" 
-                      fontSize={10} 
-                      fontFamily="Bricolage Grotesque"
-                      fontWeight={800}
-                      tickLine={false} 
-                      axisLine={{ stroke: '#301400', strokeWidth: 2 }}
-                      tickFormatter={(val) => `${val}`}
-                    />
-                    <Tooltip 
-                      cursor={{ stroke: '#301400', strokeWidth: 2 }}
-                      contentStyle={{ backgroundColor: '#fff8f5', border: '2px solid #301400', borderRadius: '0', boxShadow: '4px 4px 0px #301400', padding: '12px' }}
-                      itemStyle={{ color: '#8d4e1c', fontWeight: '900', fontSize: '14px', fontFamily: 'Bricolage Grotesque' }}
-                      labelStyle={{ color: '#301400', fontWeight: '800', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '10px', fontFamily: 'Bricolage Grotesque' }}
-                    />
-                    <Area type="stepAfter" dataKey="revenue" stroke="#8d4e1c" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" animationDuration={800} />
-                  </AreaChart>
-                </ResponsiveContainer>
+          <div className="border-b-2 border-on-surface p-unit-md flex justify-between items-center bg-surface-container-high">
+              <div>
+                <h3 className="text-ui-label-bold text-[12px] font-black text-on-surface tracking-widest uppercase">Live Kitchen Orchestration (KDS)</h3>
+                <p className="text-[9px] font-black text-on-surface-variant opacity-60 uppercase">Real-time station status</p>
               </div>
-            ) : (
-              <div className="h-full flex items-center justify-center text-ui-label-bold text-on-surface-variant opacity-30 italic">NO DATA AVAILABLE</div>
-            )}
+              <div className="flex gap-2">
+                <span className="px-3 py-1 bg-on-surface text-background font-ui-data-dense text-[10px] font-black rounded uppercase">Urgent: 03</span>
+                <span className="px-3 py-1 border-2 border-on-surface font-ui-data-dense text-[10px] font-black rounded uppercase">Pending: {data.pendingOrders}</span>
+              </div>
           </div>
-        </motion.div>
+          
+          <div className="flex-grow overflow-x-auto">
+            <table className="w-full text-left font-ui-data-dense border-collapse min-w-[600px]">
+              <thead className="bg-surface-container-highest border-b-2 border-on-surface">
+                <tr>
+                  <th className="p-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Unit</th>
+                  <th className="p-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Selections</th>
+                  <th className="p-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-center">Station</th>
+                  <th className="p-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-center">Interval</th>
+                  <th className="p-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y-2 divide-on-surface/5">
+                {[
+                    { unit: 'T12-4', items: '2x WAGYU TARTARE, 1x SCALLOP', station: 'COLD', time: '12:04', status: 'FIRING', urgent: true },
+                    { unit: 'T05-2', items: '1x DUCK BREAST, 1x SEA BASS', station: 'HOT', time: '08:45', status: 'COOKING', urgent: false },
+                    { unit: 'T24-6', items: 'CHEF\'S TASTING MENU x6', station: 'MAIN', time: '05:12', status: 'PLATING', urgent: false },
+                    { unit: 'T02-2', items: '2x SOUFFLÉ (WAIT 15M)', station: 'PASTRY', time: '02:30', status: 'HOLD', urgent: false },
+                ].map((row, idx) => (
+                    <tr key={idx} className="hover:bg-surface-container-high transition-colors group">
+                        <td className="p-4 font-black text-on-surface text-sm">{row.unit}</td>
+                        <td className="p-4 font-bold text-on-surface text-xs uppercase tracking-tight">{row.items}</td>
+                        <td className="p-4 text-center"><span className="text-[10px] font-black px-2 py-1 bg-surface-container-highest rounded border border-on-surface/10">{row.station}</span></td>
+                        <td className={`p-4 text-center font-black text-xs ${row.urgent ? 'text-error animate-pulse' : 'text-on-surface'}`}>{row.time}</td>
+                        <td className="p-4 text-right">
+                            <span className={`inline-block px-3 py-1 rounded text-[10px] font-black tracking-widest ${row.status === 'FIRING' ? 'bg-secondary-container text-on-secondary-fixed' : 'bg-surface-container-high border border-on-surface text-on-surface'}`}>
+                                {row.status}
+                            </span>
+                        </td>
+                    </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="p-4 border-t-2 border-on-surface bg-surface-container-high flex justify-center">
+              <button className="text-[10px] font-black uppercase tracking-[0.4em] text-primary hover:text-secondary transition-colors flex items-center gap-2">
+                  Launch Full KDS Module <ChevronRight className="w-4 h-4" />
+              </button>
+          </div>
+        </motion.section>
 
-        {/* Right Column: Top Dishes & Live Activity */}
-        <div className="flex flex-col gap-6">
-            <motion.div 
+        {/* Right Column: Performance & System Status */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+            
+            {/* Top Performance */}
+            <motion.section 
               className="border-2 border-on-surface bg-surface-container p-6 flex flex-col shadow-[6px_6px_0px_#301400]"
               variants={fadeInUp}
             >
-                <h3 className="text-ui-label-bold text-[12px] text-on-surface mb-6 uppercase">Top Performing Dishes</h3>
-                <div className="space-y-6 overflow-y-auto max-h-[300px] pr-2 scrollbar-hide">
-                    {data.topDishes.length > 0 ? data.topDishes.map((dish, index) => (
-                        <div key={index} className="space-y-2">
-                            <div className="flex justify-between items-end">
-                                <span className="text-ui-label-bold text-[11px] text-on-surface truncate pr-4">{dish.name.toUpperCase()}</span>
-                                <span className="text-ui-data-dense font-black text-primary">{dish.quantity} UNIT</span>
+                <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-ui-label-bold text-[12px] font-black text-on-surface uppercase tracking-widest">High Velocity Creations</h3>
+                    <Sparkles className="w-4 h-4 text-secondary" />
+                </div>
+                <div className="space-y-8">
+                    {data.topDishes.slice(0, 3).map((dish, index) => (
+                        <div key={index} className="group cursor-default">
+                            <div className="flex justify-between items-end mb-2">
+                                <span className="text-ui-label-bold text-[11px] font-black text-on-surface uppercase tracking-tight truncate pr-4">{dish.name}</span>
+                                <span className="text-ui-data-dense font-black text-primary text-[10px]">{dish.quantity} UNIT</span>
                             </div>
-                            <div className="w-full h-4 bg-background border border-on-surface/20">
+                            <div className="w-full h-2 bg-background border border-on-surface/20 rounded-full overflow-hidden">
                                 <motion.div 
                                     className="h-full bg-secondary" 
                                     initial={{ width: 0 }}
@@ -230,41 +244,71 @@ export const DashboardPage: React.FC = () => {
                                 />
                             </div>
                         </div>
-                    )) : (
-                        <div className="h-full flex items-center justify-center text-ui-data-dense text-on-surface-variant opacity-30 italic">NO PERFORMANCE DATA</div>
-                    )}
+                    ))}
                 </div>
-            </motion.div>
+                <button className="mt-10 w-full py-3 border-2 border-on-surface text-[10px] font-black uppercase tracking-[0.3em] hover:bg-on-surface hover:text-background transition-all active:scale-95">
+                    Full Registry Log
+                </button>
+            </motion.section>
 
-            {/* Live Operations Feed */}
+            {/* System Status / Floor Plan Alpha */}
+            <motion.section 
+              className="border-2 border-on-surface bg-surface-container p-6 flex flex-col shadow-[6px_6px_0px_#301400]"
+              variants={fadeInUp}
+            >
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 className="text-ui-label-bold text-[12px] font-black text-on-surface uppercase tracking-widest">Floor Plan Alpha</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                            <span className="w-2 h-2 bg-secondary rounded-sm"></span>
+                            <span className="text-ui-data-dense text-[9px] font-black text-on-surface-variant uppercase tracking-widest">3 Units Awaiting Reset</span>
+                        </div>
+                    </div>
+                    <Plus className="w-4 h-4 text-on-surface cursor-pointer hover:rotate-90 transition-transform" />
+                </div>
+                <div className="grid grid-cols-4 gap-3 p-4 bg-background border border-on-surface/10 rounded-xl relative group overflow-hidden">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                        <div key={i} className={`aspect-square border-2 border-on-surface rounded-md transition-all ${[1, 4, 7].includes(i) ? 'bg-secondary/20 shadow-inner' : 'bg-on-surface/5'}`} />
+                    ))}
+                    <div className="absolute inset-0 bg-on-surface/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                        <span className="text-[9px] font-black text-background uppercase tracking-[0.4em]">Initialize Map View</span>
+                    </div>
+                </div>
+            </motion.section>
+
+            {/* Critical Updates Feed */}
             {data.liveFeed && data.liveFeed.length > 0 && (
-                <motion.div 
-                  className="border-2 border-secondary bg-background p-6 flex flex-col shadow-[6px_6px_0px_#8f4d17]"
+                <motion.section 
+                  className="border-2 border-secondary bg-secondary-container/5 p-6 flex flex-col shadow-[6px_6px_0px_#8f4d17]"
                   variants={fadeInUp}
                 >
-                    <h3 className="text-ui-label-bold text-[12px] text-secondary mb-4 flex items-center gap-2">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-                        </span>
-                        CRITICAL FEED
-                    </h3>
-                    <div className="space-y-3 overflow-y-auto max-h-[160px] pr-1 scrollbar-hide">
-                        {data.liveFeed.map(feed => (
-                            <div key={feed.id} className="p-3 border-l-4 border-secondary bg-surface-container-low flex flex-col gap-1 transition-all duration-150 hover:bg-surface-container-high">
-                                <p className="text-ui-data-dense font-black text-on-surface leading-tight">
-                                    {feed.message.toUpperCase()}
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-ui-label-bold text-[11px] font-black text-secondary flex items-center gap-2 tracking-[0.2em]">
+                            <Info className="w-4 h-4" />
+                            CRITICAL LIAISON
+                        </h3>
+                        <span className="text-[8px] font-black text-secondary bg-secondary/10 px-2 py-0.5 rounded uppercase">Real-time</span>
+                    </div>
+                    <div className="space-y-4">
+                        {data.liveFeed.slice(0, 1).map(feed => (
+                            <div key={feed.id} className="space-y-4">
+                                <p className="text-ui-data-dense font-black text-on-surface leading-tight text-xs uppercase tracking-tight">
+                                    {feed.message}
                                 </p>
-                                <span className="text-[9px] font-black text-on-surface-variant opacity-50 font-sans tracking-widest">
-                                    {new Date(feed.time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">
+                                        {new Date(feed.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                    <button className="bg-secondary text-on-secondary px-6 py-2 text-[9px] font-black uppercase tracking-[0.3em] rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-secondary/20">ACKNOWLEDGE</button>
+                                </div>
                             </div>
                         ))}
                     </div>
-                </motion.div>
+                </motion.section>
             )}
         </div>
       </div>
     </motion.div>
   );
 };
+
