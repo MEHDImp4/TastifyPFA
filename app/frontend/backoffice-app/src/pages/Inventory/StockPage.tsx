@@ -70,23 +70,26 @@ export const StockPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-[1400px] mx-auto animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Gestion du Stock</h1>
-          <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Suivez vos ingrédients et recevez des alertes de réapprovisionnement.</p>
+          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Inventory & Logistics</h1>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Supply Chain & Resource Monitoring</span>
+          </div>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-3 py-2.5 bg-primary text-on-primary rounded-xl font-bold transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-primary/10 shadow-primary/20"
+          className="flex items-center gap-3 px-6 py-3 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] active:translate-y-[2px] active:shadow-none"
         >
-          <Plus className="w-5 h-5"  strokeWidth={2}/>
-          Nouvel ingrédient
+          <Plus className="w-5 h-5"  strokeWidth={2.5}/>
+          <span>NEW STOCK UNIT</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="tonal-card p-4 space-y-4">
+        <div className="bg-surface-container border-2 border-on-surface p-6 space-y-4 shadow-[6px_6px_0px_#301400]">
             <TableRowSkeleton />
             <TableRowSkeleton />
             <TableRowSkeleton />
@@ -94,41 +97,45 @@ export const StockPage: React.FC = () => {
             <TableRowSkeleton />
         </div>
       ) : (
-        <div className="tonal-card overflow-hidden">
+        <div className="bg-surface-container border-2 border-on-surface overflow-hidden shadow-[8px_8px_0px_#301400]">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-surface-container border-b border-outline-variant/30">
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans" style={{ color: '#53443a' }}>Ingrédient</th>
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans text-center" style={{ color: '#53443a' }}>Unité</th>
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans text-center" style={{ color: '#53443a' }}>Stock Actuel</th>
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans text-center" style={{ color: '#53443a' }}>Seuil d'alerte</th>
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans" style={{ color: '#53443a' }}>Statut</th>
-                <th className="px-4 py-2 text-xs font-bold uppercase tracking-widest font-sans text-right" style={{ color: '#53443a' }}>Actions</th>
+              <tr className="bg-on-surface text-background">
+                <th className="px-6 py-3 text-ui-label-bold text-[10px]">RESOURCE IDENTIFIER</th>
+                <th className="px-6 py-3 text-ui-label-bold text-[10px] text-center">METRIC</th>
+                <th className="px-6 py-3 text-ui-label-bold text-[10px] text-center">QUANTITY</th>
+                <th className="px-6 py-3 text-ui-label-bold text-[10px] text-center">THRESHOLD</th>
+                <th className="px-6 py-3 text-ui-label-bold text-[10px]">STATUS</th>
+                <th className="px-6 py-3 text-ui-label-bold text-[10px] text-right">OPERATIONS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/20">
+            <tbody className="divide-y-2 divide-on-surface/5">
               {ingredients.filter(i => i.est_active).map((item) => {
                 const isLow = parseFloat(item.stock_actuel) <= parseFloat(item.seuil_alerte);
                 return (
-                  <tr key={item.id} className="hover:bg-surface-container-low transition-colors group">
-                    <td className="px-4 py-2 font-bold" style={{ color: '#301400' }}>{item.nom}</td>
-                    <td className="px-4 py-2 text-center"><span className="px-2 py-1 bg-surface-container rounded-xl text-xs font-sans font-bold" style={{ color: '#53443a' }}>{item.unite_mesure}</span></td>
-                    <td className="px-4 py-2 text-center font-sans font-bold" style={{ color: '#301400' }}>{item.stock_actuel}</td>
-                    <td className="px-4 py-2 text-center font-sans font-bold" style={{ color: '#53443a' }}>{item.seuil_alerte}</td>
-                    <td className="px-4 py-2">
+                  <tr key={item.id} className="hover:bg-background transition-colors group">
+                    <td className="px-6 py-4 text-ui-label-bold text-sm text-on-surface">{item.nom.toUpperCase()}</td>
+                    <td className="px-6 py-4 text-center">
+                        <span className="px-3 py-1 bg-surface-container-highest border border-on-surface/10 text-ui-data-dense font-black text-on-surface-variant">
+                            {item.unite_mesure.toUpperCase()}
+                        </span>
+                    </td>
+                    <td className="px-6 py-4 text-center text-ui-data-dense font-black text-on-surface text-base">{item.stock_actuel}</td>
+                    <td className="px-6 py-4 text-center text-ui-data-dense font-black text-on-surface-variant opacity-60">{item.seuil_alerte}</td>
+                    <td className="px-6 py-4">
                       {isLow ? (
-                        <div className="flex items-center gap-1.5 text-error font-bold text-xs uppercase tracking-wider font-sans animate-pulse">
-                          <AlertTriangle className="w-3.5 h-3.5"  strokeWidth={2}/>
-                          <span>Réappro</span>
+                        <div className="flex items-center gap-2 text-error font-black text-[10px] uppercase tracking-widest animate-pulse bg-error/10 px-3 py-1 border border-error w-fit">
+                          <AlertTriangle className="w-3.5 h-3.5"  strokeWidth={2.5}/>
+                          <span>CRITICAL LOW</span>
                         </div>
                       ) : (
-                        <span className="text-primary font-bold text-xs uppercase tracking-wider font-sans">OK</span>
+                        <span className="text-secondary font-black text-[10px] uppercase tracking-widest border border-secondary px-3 py-1 w-fit">NOMINAL</span>
                       )}
                     </td>
-                    <td className="px-4 py-2 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleOpenModal(item)} className="p-2 text-primary hover:bg-primary-container/20 rounded-xl transition-colors"><Edit2 className="w-4 h-4"  strokeWidth={2}/></button>
-                        <button className="p-2 text-error hover:bg-error-container/20 rounded-xl transition-colors"><Trash2 className="w-4 h-4"  strokeWidth={2}/></button>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all duration-150">
+                        <button onClick={() => handleOpenModal(item)} className="p-2 border-2 border-transparent hover:border-primary text-primary transition-all"><Edit2 className="w-4 h-4"  strokeWidth={2.5}/></button>
+                        <button className="p-2 border-2 border-transparent hover:border-error text-error transition-all"><Trash2 className="w-4 h-4"  strokeWidth={2.5}/></button>
                       </div>
                     </td>
                   </tr>
@@ -139,32 +146,59 @@ export const StockPage: React.FC = () => {
         </div>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingItem ? 'Modifier le stock' : 'Nouvel ingrédient'}>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold" style={{ color: '#53443a' }}>Nom de l'ingrédient</label>
-            <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }} />
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingItem ? 'EDIT RESOURCE' : 'NEW RESOURCE'}>
+        <form onSubmit={handleSubmit} className="space-y-6 p-2">
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant">RESOURCE NAME</label>
+            <input 
+                type="text" 
+                required 
+                value={nom} 
+                onChange={(e) => setNom(e.target.value)} 
+                className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all uppercase" 
+                placeholder="E.G. ORGANIC SAFFRON"
+            />
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold" style={{ color: '#53443a' }}>Unité</label>
-                <select value={unite} onChange={(e) => setUnite(e.target.value as any)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }}>
-                    <option value="g">Grammes (g)</option>
-                    <option value="ml">Millilitres (ml)</option>
-                    <option value="pcs">Pièces (pcs)</option>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+                <label className="text-ui-label-bold text-[10px] text-on-surface-variant">MEASURE UNIT</label>
+                <select 
+                    value={unite} 
+                    onChange={(e) => setUnite(e.target.value as any)} 
+                    className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all"
+                >
+                    <option value="g">GRAMS (G)</option>
+                    <option value="ml">MILLILITERS (ML)</option>
+                    <option value="pcs">PIECES (PCS)</option>
                 </select>
             </div>
-            <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold" style={{ color: '#53443a' }}>Stock Actuel</label>
-                <input type="number" step="0.01" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }} />
+            <div className="space-y-2">
+                <label className="text-ui-label-bold text-[10px] text-on-surface-variant">CURRENT STOCK</label>
+                <input 
+                    type="number" 
+                    step="0.01" 
+                    value={stock} 
+                    onChange={(e) => setStock(e.target.value)} 
+                    className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all" 
+                />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold" style={{ color: '#53443a' }}>Seuil d'alerte</label>
-            <input type="number" step="0.01" value={seuil} onChange={(e) => setSeuil(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-primary transition-colors" style={{ color: '#301400' }} />
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant">CRITICAL THRESHOLD</label>
+            <input 
+                type="number" 
+                step="0.01" 
+                value={seuil} 
+                onChange={(e) => setSeuil(e.target.value)} 
+                className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all" 
+            />
           </div>
-          <button type="submit" disabled={isSaving} className="w-full py-2 bg-primary text-on-primary rounded-xl font-bold transition-transform active:scale-95 disabled:opacity-50 shadow-lg shadow-primary/10 shadow-primary/20">
-            {isSaving ? <Loader2 className="w-5 h-5 animate-spin mx-auto"  strokeWidth={2}/> : 'Enregistrer'}
+          <button 
+            type="submit" 
+            disabled={isSaving} 
+            className="w-full py-4 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] transition-all active:translate-y-[2px] active:shadow-none mt-4"
+          >
+            {isSaving ? <Loader2 className="w-6 h-6 animate-spin mx-auto"  strokeWidth={2.5}/> : 'COMMIT RESOURCE'}
           </button>
         </form>
       </Modal>

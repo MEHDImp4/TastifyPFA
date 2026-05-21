@@ -68,11 +68,11 @@ export const ReservationsPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'CONFIRMEE': return 'bg-primary/10 text-primary border-primary/20';
-      case 'ANNULEE': return 'bg-error/10 text-error border-error/20';
-      case 'EN_ATTENTE': return 'bg-secondary/10 text-secondary border-secondary/20';
-      case 'TERMINEE': return 'bg-outline-variant/10 text-outline border-outline/20';
-      default: return 'bg-surface-container text-on-surface border-outline-variant/30';
+      case 'CONFIRMEE': return 'bg-primary text-on-primary border-on-surface';
+      case 'ANNULEE': return 'bg-error text-on-error border-on-surface';
+      case 'EN_ATTENTE': return 'bg-secondary text-on-secondary border-on-surface';
+      case 'TERMINEE': return 'bg-surface-container-highest text-on-surface border-on-surface opacity-50';
+      default: return 'bg-surface-container text-on-surface border-on-surface';
     }
   };
 
@@ -87,100 +87,100 @@ export const ReservationsPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+    <div className="max-w-[1400px] mx-auto space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
         <div>
-          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Réservations</h1>
-          <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Gérez les réservations et l'occupation des tables.</p>
+          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Reservations Admin</h1>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Booking Lifecycle Management</span>
+          </div>
         </div>
         
-        <div className="flex items-center gap-3">
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#53443a' }}  strokeWidth={2}/>
+        <div className="flex flex-wrap items-center gap-4">
+            <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors"  strokeWidth={2.5}/>
                 <input 
                     type="text" 
-                    placeholder="Chercher un client..."
+                    placeholder="SEARCH GUEST IDENTITY..."
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="pl-10 pr-4 py-2 bg-surface-container border border-outline-variant/30 rounded-xl text-sm focus:outline-none focus:border-primary transition-colors font-bold"
-                    style={{ color: '#301400' }}
+                    className="pl-12 pr-6 py-3 bg-background border-2 border-on-surface text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
                 />
             </div>
-            <div className="flex bg-surface-container p-1 rounded-xl border border-outline-variant/30">
+            <div className="flex bg-surface-container border-2 border-on-surface p-1 shadow-[4px_4px_0px_#301400]">
                 {['ALL', 'EN_ATTENTE', 'CONFIRMEE', 'ANNULEE'].map(f => (
                     <button
                         key={f}
                         onClick={() => setFilter(f)}
-                        className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${filter === f ? 'bg-primary text-on-primary shadow-lg shadow-primary/10' : 'hover:text-primary'}`}
-                        style={{ color: filter === f ? undefined : '#53443a' }}
+                        className={`px-6 py-2 text-ui-label-bold text-[9px] transition-all ${filter === f ? 'bg-primary text-on-primary font-black' : 'text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'}`}
                     >
-                        {f === 'ALL' ? 'Tout' : f.replace('_', ' ')}
+                        {f === 'ALL' ? 'VIEW ALL' : f.replace('_', ' ')}
                     </button>
                 ))}
             </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-4">
         {filteredReservations.map((res) => (
           <div 
             key={res.id} 
-            className="group flex flex-col md:flex-row items-start md:items-center justify-between p-4 tonal-card hover:border-primary/30 transition-all"
+            className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-surface-container border-2 border-on-surface shadow-[6px_6px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_#301400] transition-all"
           >
-            <div className="flex items-center gap-3 mb-4 md:mb-0">
-              <div className="w-16 h-10 bg-surface-container rounded-xl flex flex-col items-center justify-center text-primary border border-outline-variant/30">
-                  <Calendar className="w-6 h-6 mb-1"  strokeWidth={2}/>
-                  <span className="text-[10px] font-bold uppercase tracking-widest font-sans" style={{ color: '#53443a' }}>
-                      {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
+            <div className="flex items-center gap-6 mb-6 md:mb-0">
+              <div className="w-20 h-14 bg-background border-2 border-on-surface flex flex-col items-center justify-center text-primary shadow-[3px_3px_0px_#301400]">
+                  <Calendar className="w-5 h-5 mb-1"  strokeWidth={2.5}/>
+                  <span className="text-ui-data-dense font-black text-[9px]">
+                      {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).toUpperCase()}
                   </span>
               </div>
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-sm font-bold capitalize" style={{ color: '#301400' }}>{res.user_username || 'Client'}</h3>
-                  <span className={`px-3 py-0.5 rounded-xl text-[9px] font-bold border ${getStatusColor(res.statut)}`}>
-                      {res.statut}
+              <div className="space-y-2">
+                <div className="flex items-center gap-4">
+                  <h3 className="text-ui-label-bold text-base text-on-surface font-black uppercase tracking-tight">{res.user_username || 'ANONYMOUS GUEST'}</h3>
+                  <span className={`px-3 py-0.5 border-2 text-[9px] font-black uppercase tracking-widest ${getStatusColor(res.statut)}`}>
+                      {res.statut.replace('_', ' ')}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-sm">
-                  <div className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-primary"  strokeWidth={2}/>
-                      <span className="font-bold" style={{ color: '#53443a' }}>{res.heure_debut} - {res.heure_fin}</span>
+                <div className="flex flex-wrap items-center gap-6">
+                  <div className="flex items-center gap-2 text-ui-data-dense font-black text-on-surface">
+                      <Clock className="w-4 h-4 text-primary"  strokeWidth={2.5}/>
+                      <span>{res.heure_debut} — {res.heure_fin}</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-primary"  strokeWidth={2}/>
-                      <span className="font-bold" style={{ color: '#53443a' }}>{res.nombre_personnes} couverts</span>
+                  <div className="flex items-center gap-2 text-ui-data-dense font-black text-on-surface">
+                      <Users className="w-4 h-4 text-primary"  strokeWidth={2.5}/>
+                      <span>{res.nombre_personnes} COUVERTS</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-4 h-4 rounded-xl bg-primary/20 flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-xl bg-primary" />
+                  <div className="flex items-center gap-2 text-ui-data-dense font-black text-on-surface">
+                      <div className="w-4 h-4 border-2 border-primary flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 bg-primary" />
                       </div>
-                      <span className="font-bold" style={{ color: '#301400' }}>Table #{res.table_numero || res.table}</span>
+                      <span>UNIT #{res.table_numero || res.table}</span>
                   </div>
                 </div>
                 {res.notes && (
-                    <p className="mt-3 text-xs italic bg-surface-container-low px-3 py-1.5 rounded-xl border border-outline-variant/30" style={{ color: '#53443a' }}>
-                      "{res.notes}"
-                    </p>
+                    <div className="mt-4 p-3 bg-background border-l-4 border-secondary text-ui-data-dense font-black text-on-surface-variant uppercase italic">
+                      “{res.notes}”
+                    </div>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full md:w-auto">
+            <div className="flex items-center gap-3 w-full md:w-auto">
               {res.statut === 'EN_ATTENTE' && (
                 <>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-primary text-on-primary rounded-xl font-bold hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-primary/10 shadow-primary/10"
+                    className="flex-1 md:flex-none flex items-center justify-center gap-3 px-6 py-4 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] transition-all active:translate-y-[2px] active:shadow-none"
                   >
-                    <CheckCircle2 className="w-4 h-4"  strokeWidth={2}/>
-                    Confirmer
+                    <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
+                    CONFIRM
                   </button>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    className="p-3 bg-surface-container-low border border-outline-variant/30 rounded-xl hover:text-error hover:bg-error-container/20 transition-all"
-                    style={{ color: '#53443a' }}
+                    className="p-4 bg-background border-2 border-on-surface text-error hover:bg-error/10 transition-all shadow-[3px_3px_0px_#301400] active:translate-y-[2px] active:shadow-none"
                   >
-                    <XCircle className="w-5 h-5"  strokeWidth={2}/>
+                    <XCircle className="w-5 h-5"  strokeWidth={2.5}/>
                   </button>
                 </>
               )}
@@ -188,24 +188,24 @@ export const ReservationsPage: React.FC = () => {
               {res.statut === 'CONFIRMEE' && (
                  <button 
                   onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-surface-container-low border border-outline-variant/30 rounded-xl font-bold hover:text-error hover:bg-error-container/20 transition-all"
-                  style={{ color: '#53443a' }}
+                  className="flex-1 md:flex-none px-6 py-4 bg-background border-2 border-on-surface text-ui-button font-ui-button text-on-surface-variant hover:text-error hover:border-error transition-all shadow-[4px_4px_0px_#301400] active:translate-y-[2px] active:shadow-none"
                  >
-                   Annuler
+                   CANCEL BOOKING
                  </button>
               )}
 
-              <button className="p-3 hover:text-primary transition-colors" style={{ color: '#53443a' }}>
-                  <MoreVertical className="w-5 h-5"  strokeWidth={2}/>
+              <button className="p-4 text-on-surface-variant hover:text-primary transition-colors">
+                  <MoreVertical className="w-5 h-5"  strokeWidth={2.5}/>
               </button>
             </div>
           </div>
         ))}
 
         {filteredReservations.length === 0 && (
-          <div className="py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-              <Calendar className="w-16 h-10 mb-4"  strokeWidth={2}/>
-              <p className="font-bold">Aucune réservation trouvée.</p>
+          <div className="py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-20">
+              <Calendar className="w-16 h-10 mb-6"  strokeWidth={2.5}/>
+              <p className="text-display-lg text-3xl italic uppercase tracking-tighter">No Bookings Logged</p>
+              <p className="text-ui-label-bold text-[11px] mt-4 tracking-[0.3em]">System clear for selected filter</p>
           </div>
         )}
       </div>

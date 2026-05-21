@@ -1,20 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ArrowRight, 
   Utensils, 
-  Calendar, 
-  Clock, 
-  CheckCircle2, 
-  Star,
   MapPin,
   Phone,
-  Mail
+  ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
 import type { Plat } from '../../api/menu';
-import { Skeleton } from '../../components/ui/Skeleton';
 
 export const PortalHomePage = () => {
   const [topDishes, setTopDishes] = useState<Plat[]>([]);
@@ -35,325 +29,291 @@ export const PortalHomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-[#111111] font-sans selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
+    <div className="min-h-screen bg-background text-on-surface selection:bg-secondary-container selection:text-on-secondary-container overflow-x-hidden">
       
-      {/* Hero Section */}
-      <section className="pt-16 md:pt-24 pb-12 px-6 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="space-y-6"
-          >
-            <h1 className="text-4xl md:text-5xl font-serif italic leading-[1.1] tracking-tight text-left">
-              Une expérience marocaine raffinée, réservée en quelques secondes.
-            </h1>
-            <p className="text-lg text-[#787774] leading-relaxed max-w-lg italic font-serif opacity-80">
-              Découvrez nos plats signatures, réservez votre table instantanément, et profitez d’un parcours fluide jusqu’au paiement.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
-              <Link 
-                to="/reservations" 
-                className="w-full sm:w-auto px-8 py-4 bg-[#111111] text-white rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#333333] transition-all active:scale-95 shadow-xl shadow-black/10"
-              >
-                Réserver une table <ArrowRight className="w-4 h-4 text-[#8d4e1c]" />
-              </Link>
-              <Link 
-                to="/menu" 
-                className="w-full sm:w-auto px-8 py-4 bg-white border border-[#EAEAEA] text-[#111111] rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#F7F6F3] transition-all active:scale-95"
-              >
-                Explorer le Menu
-              </Link>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="relative"
-          >
-            <div className="aspect-[4/3] md:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden border-4 border-[#F7F6F3] shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=1200" 
-                alt="Ambience Tastify" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-2xl border border-[#EAEAEA] hidden md:block max-w-[180px]">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 bg-green-50 rounded-full flex items-center justify-center text-green-600">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-[9px] font-black uppercase tracking-widest">Confirmé</span>
-                </div>
-                <p className="text-[11px] font-bold leading-tight">Table pour 2 personnes ce soir à 20h30.</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Trust Bar */}
-      <section className="bg-[#F7F6F3] py-6 border-y border-[#EAEAEA]">
-        <div className="max-w-7xl mx-auto px-6 overflow-x-auto">
-          <div className="flex justify-between items-center gap-8 min-w-max md:min-w-0 md:justify-around">
-            {[
-              "Cuisine marocaine raffinée",
-              "Réservation instantanée",
-              "Menu interactif",
-              "Paiement sans attente"
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-[#787774]">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                <span className="text-[9px] font-black uppercase tracking-[0.2em]">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-16 md:py-24 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-12 space-y-3">
-            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Pourquoi Tastify</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif italic tracking-tight text-center">Une sérénité totale.</h2>
+      {/* Full-bleed Hero Section */}
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=2000" 
+            alt="Gourmet Dining Experience" 
+            className="w-full h-full object-cover grayscale-[0.2]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#301400]/40 via-[#301400]/10 to-background"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { 
-              title: "Réservez sans appel ni attente", 
-              desc: "Oubliez les attentes téléphoniques. Votre table est sécurisée en 3 clics, avec confirmation immédiate.",
-              icon: <Calendar className="w-5 h-5" />
-            },
-            { 
-              title: "Découvrez le menu avant d'arriver", 
-              desc: "Explorez notre carte interactive haute définition. Choisissez vos envies et préparez votre dégustation.",
-              icon: <Utensils className="w-5 h-5" />
-            },
-            { 
-              title: "Payez sans interrompre la soirée", 
-              desc: "Évitez le geste de l'addition. Réglez directement depuis votre mobile quand vous êtes prêt à partir.",
-              icon: <Clock className="w-5 h-5" />
-            }
-          ].map((benefit, i) => (
+        <div className="relative z-10 text-center px-8 max-w-5xl">
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            className="text-display-lg text-primary mb-6"
+          >
+            The Art of <br className="hidden md:block"/> Conscious Gastronomy
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+            className="text-body-lg text-on-surface max-w-2xl mx-auto mb-12 opacity-90"
+          >
+            Where Michelin-star precision meets the soulful warmth of organic heritage. A culinary journey designed for the discerning palate.
+          </motion.p>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
+            className="flex flex-col md:flex-row gap-8 justify-center"
+          >
+            <Link 
+              to="/menu" 
+              className="px-12 py-5 bg-primary text-on-primary text-ui-button rounded-full border border-[#301400] transition-transform hover:scale-105 active:scale-95 cinematic-shadow"
+            >
+              View The Collection
+            </Link>
+            <Link 
+              to="/reservations" 
+              className="px-12 py-5 border-2 border-primary text-primary text-ui-button rounded-full hover:bg-primary/5 transition-all active:scale-95"
+            >
+              Discover Our Philosophy
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Editorial Section: The Story */}
+      <section className="py-32 bg-background border-y border-on-surface/5">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-20 items-center">
             <motion.div 
-              key={i}
-              whileHover={{ y: -5 }}
-              className="p-8 bg-white border border-[#EAEAEA] rounded-[1.5rem] space-y-4 transition-all hover:shadow-xl hover:shadow-black/[0.02]"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="md:col-span-5 space-y-10"
             >
-              <div className="w-12 h-12 bg-[#F7F6F3] rounded-xl flex items-center justify-center text-[#8d4e1c]">
-                {benefit.icon}
+              <span className="editorial-kicker">OUR HERITAGE</span>
+              <h2 className="text-headline-md text-on-background">A meticulous devotion to the earth’s finest offerings.</h2>
+              <div className="space-y-6">
+                <p className="text-body-lg text-on-surface-variant leading-relaxed">
+                  We believe that true luxury lies in the purity of the ingredient. Every element on our menu is traced back to a specific patch of earth, a particular morning dew, and a farmer who knows the land by name.
+                </p>
+                <p className="text-body-lg text-on-surface-variant leading-relaxed">
+                  Tastify was born from a desire to bridge the gap between tactical kitchen precision and the organic, unpredictable beauty of nature.
+                </p>
               </div>
-              <h3 className="text-lg font-bold leading-tight">{benefit.title}</h3>
-              <p className="text-[#787774] text-xs leading-relaxed italic font-serif">{benefit.desc}</p>
             </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Menu Preview Section */}
-      <section className="py-16 md:py-24 bg-[#F7F6F3] border-y border-[#EAEAEA] px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div className="space-y-3 text-center md:text-left">
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">La Sélection</span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif italic tracking-tight">Nos signatures marocaines</h2>
-            </div>
-            <Link 
-                to="/menu" 
-                className="text-[10px] font-black uppercase tracking-widest border-b-2 border-[#111111] pb-1.5 hover:text-[#8d4e1c] hover:border-[#8d4e1c] transition-all"
-            >
-                Voir le menu complet
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {isLoading ? (
-                [1, 2, 3].map(i => (
-                    <div key={i} className="bg-white rounded-[1.5rem] overflow-hidden border border-[#EAEAEA] h-[320px]">
-                        <Skeleton className="w-full h-48" />
-                        <div className="p-6 space-y-3">
-                            <Skeleton className="w-3/4 h-5" />
-                            <Skeleton className="w-full h-3" />
-                        </div>
-                    </div>
-                ))
-            ) : topDishes.length > 0 ? (
-                topDishes.map((dish, i) => (
-                    <motion.div 
-                        key={dish.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        whileHover={{ y: -6 }}
-                        className="bg-white rounded-[1.5rem] overflow-hidden border border-[#EAEAEA] group shadow-sm transition-all hover:shadow-2xl"
-                    >
-                        <div className="h-56 overflow-hidden relative bg-gray-100">
-                            {dish.image ? (
-                                <img src={dish.image} alt={dish.nom} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[#EAEAEA]">
-                                    <Utensils className="w-10 h-10" />
-                                </div>
-                            )}
-                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full shadow-lg">
-                                <span className="text-[9px] font-black">{dish.prix} MAD</span>
-                            </div>
-                        </div>
-                        <div className="p-6 space-y-2">
-                            <h4 className="text-lg font-bold">{dish.nom}</h4>
-                            <p className="text-[#787774] text-[11px] leading-relaxed line-clamp-2 italic font-serif">{dish.description}</p>
-                        </div>
-                    </motion.div>
-                ))
-            ) : (
-                <div className="col-span-full text-center py-8">
-                    <p className="text-[#787774] font-serif italic text-sm">Découvrez notre menu complet pour voir nos créations.</p>
-                </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* How it Works Section */}
-      <section className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
-        <div className="text-center mb-12 space-y-3">
-            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Le Protocole</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif italic tracking-tight">Comment ça marche ?</h2>
-        </div>
-
-        <div className="space-y-10">
-            {[
-                { step: "01", title: "Choisissez votre créneau", desc: "Sélectionnez la date et l'heure idéale pour votre visite en quelques secondes." },
-                { step: "02", title: "Explorez le menu", desc: "Parcourez notre carte et pré-visualisez vos plats préférés avant d'arriver." },
-                { step: "03", title: "Profitez, puis payez simplement", desc: "Vivez l'instant présent. Réglez votre note d'un geste via l'application." }
-            ].map((item, i) => (
-                <div key={i} className="flex gap-6 items-start group">
-                    <span className="text-4xl md:text-5xl font-serif italic text-[#EAEAEA] group-hover:text-[#8d4e1c] transition-colors">{item.step}</span>
-                    <div className="pt-2 md:pt-3 border-l border-[#EAEAEA] pl-6 space-y-1.5 text-left">
-                        <h4 className="text-lg font-bold">{item.title}</h4>
-                        <p className="text-[#787774] text-sm max-w-md italic font-serif">{item.desc}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-
-        <div className="mt-12 text-center">
-            <Link 
-                to="/reservations" 
-                className="inline-flex items-center gap-3 px-10 py-4 bg-[#111111] text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#333333] transition-all active:scale-95 shadow-xl shadow-black/10"
-            >
-                Réserver maintenant <ArrowRight className="w-4 h-4 text-[#8d4e1c]" />
-            </Link>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 md:py-24 bg-white px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-1 space-y-4 text-center lg:text-left">
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Avis Clients</span>
-                <h2 className="text-3xl md:text-4xl font-serif italic tracking-tight leading-tight">Ils ont vécu l'expérience Tastify.</h2>
-            </div>
             
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                    { name: "Sarah B.", text: "Le parcours est d'une fluidité incroyable. J'ai pu réserver ma table et payer sans jamais sortir mon portefeuille.", rating: 5 },
-                    { name: "Karim L.", text: "La qualité du menu interactif m'a permis de choisir mes plats à l'avance. Une expérience haut de gamme.", rating: 5 }
-                ].map((testimonial, i) => (
-                    <div key={i} className="p-8 bg-[#F7F6F3] rounded-[1.5rem] border border-[#EAEAEA] space-y-4 relative overflow-hidden text-left">
-                        <div className="flex gap-1">
-                            {[...Array(testimonial.rating)].map((_, j) => <Star key={j} className="w-2.5 h-2.5 fill-[#8d4e1c] text-[#8d4e1c]" />)}
-                        </div>
-                        <p className="text-base font-serif italic leading-relaxed text-[#111111]">"{testimonial.text}"</p>
-                        <div className="flex items-center gap-3">
-                            <div className="w-7 h-7 rounded-full bg-[#EAEAEA] flex items-center justify-center text-[9px] font-black">{testimonial.name[0]}</div>
-                            <span className="text-[9px] font-black uppercase tracking-widest">{testimonial.name}</span>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2 }}
+              className="md:col-span-7 relative"
+            >
+              <div className="aspect-[4/5] w-full overflow-hidden border-2 border-[#301400] rounded-xl cinematic-shadow">
+                <img 
+                  src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Chef preparing organic ingredients" 
+                  className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" 
+                />
+              </div>
+              <div className="absolute -bottom-8 -left-8 hidden lg:block bg-surface-container-high p-8 border border-[#301400] w-72 rounded-lg">
+                <p className="text-body-md italic text-primary">"The ingredients speak, we simply listen."</p>
+                <p className="text-ui-data-dense mt-4">— Master Chef Julian Vance</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
+      </section>
+
+      {/* Bento Grid: Featured Experiences */}
+      <section className="py-32 bg-surface-container-low" id="menu">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="text-center mb-24 space-y-4">
+            <h2 className="text-display-lg text-4xl md:text-5xl lg:text-6xl text-on-background">The Season’s Highlights</h2>
+            <p className="text-body-lg text-on-surface-variant">Explore our curated selections for the current equinox.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-8 h-auto md:h-[800px]">
+            {/* Large Feature - Top Dish 1 */}
+            <div className="md:col-span-2 md:row-span-2 relative overflow-hidden group rounded-xl border border-[#301400] cinematic-shadow">
+              {isLoading ? (
+                <div className="w-full h-full bg-surface-container-high animate-pulse" />
+              ) : topDishes[0] ? (
+                <>
+                  <img 
+                    src={topDishes[0].image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=1200"} 
+                    alt={topDishes[0].nom} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[0.3] group-hover:grayscale-0" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/90 via-transparent to-transparent flex flex-col justify-end p-12 text-on-primary">
+                    <span className="editorial-kicker text-secondary-container mb-2">SIGNATURE SELECTION</span>
+                    <h3 className="text-display-lg text-4xl">{topDishes[0].nom}</h3>
+                    <p className="text-body-md mt-4 opacity-80 max-w-sm">{topDishes[0].description}</p>
+                    <Link to="/menu" className="mt-8 flex items-center gap-4 text-ui-button hover:text-secondary-container transition-colors group/btn">
+                      Explore Catalog <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-2" />
+                    </Link>
+                  </div>
+                </>
+              ) : null}
+            </div>
+
+            {/* Vertical Card - Top Dish 2 */}
+            <div className="md:col-span-1 md:row-span-2 relative overflow-hidden group rounded-xl border border-[#301400]">
+              {isLoading ? (
+                <div className="w-full h-full bg-surface-container-high animate-pulse" />
+              ) : topDishes[1] ? (
+                <>
+                  <img 
+                    src={topDishes[1].image || "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&q=80&w=1200"} 
+                    alt={topDishes[1].nom} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#301400]/90 to-transparent flex flex-col justify-end p-8 text-on-primary">
+                    <h3 className="text-headline-md">{topDishes[1].nom}</h3>
+                    <Link to="/menu" className="mt-4 text-ui-button border border-white/30 px-6 py-2 rounded-lg hover:bg-white/10 transition-all text-center">
+                      View Dish
+                    </Link>
+                  </div>
+                </>
+              ) : null}
+            </div>
+
+            {/* Small Square 1 - Editorial */}
+            <div className="md:col-span-1 md:row-span-1 bg-background p-10 flex flex-col justify-center border border-[#301400] rounded-xl text-center hover:bg-surface-container-high transition-colors">
+              <span className="text-primary text-4xl mb-6 flex justify-center"><Utensils className="w-10 h-10" /></span>
+              <h4 className="text-headline-md text-on-background">Private Vault</h4>
+              <p className="text-body-md text-on-surface-variant mt-4 opacity-80">Rare vintages from the world’s quietest valleys.</p>
+            </div>
+
+            {/* Small Square 2 - Action */}
+            <div className="md:col-span-1 md:row-span-1 bg-primary p-10 flex flex-col justify-center rounded-xl text-center cinematic-shadow">
+              <h4 className="text-headline-md text-on-primary">Table 01</h4>
+              <p className="text-body-md text-on-primary/80 mt-4">Book the exclusive Chef's Table for an immersive evening.</p>
+              <Link 
+                to="/reservations" 
+                className="mt-8 text-ui-button bg-on-primary text-primary px-6 py-3 rounded-lg transition-transform hover:scale-105 active:scale-95"
+              >
+                Request Access
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial Section */}
+      <section className="py-48 bg-background flex items-center justify-center border-b border-on-surface/5">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5 }}
+          className="max-w-4xl mx-auto px-8 text-center space-y-12"
+        >
+          <span className="text-primary text-6xl opacity-20 font-serif">“</span>
+          <blockquote className="text-display-lg text-3xl md:text-5xl lg:text-6xl text-on-background italic font-light leading-tight">
+            Tastify isn’t just a dining portal; it’s an invitation to slow down and rediscover the inherent rhythm of the natural world through flavor.
+          </blockquote>
+          <div className="flex flex-col items-center gap-4">
+            <span className="editorial-kicker">Architectural Digest</span>
+            <div className="h-px w-12 bg-primary/20"></div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-16 md:py-24 px-6">
-        <div className="max-w-5xl mx-auto bg-[#111111] rounded-[2rem] p-10 md:p-16 text-center space-y-8 relative overflow-hidden shadow-2xl">
-            <div className="relative z-10 space-y-6">
-                <h2 className="text-3xl md:text-5xl font-serif italic text-white tracking-tight leading-tight">
-                    Prêt à réserver votre table ?
-                </h2>
-                <p className="text-[#787774] text-base max-w-xl mx-auto italic font-serif">
-                    Choisissez votre créneau, découvrez le menu, et profitez d’une expérience fluide dès votre arrivée.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                    <Link 
-                        to="/reservations" 
-                        className="w-full sm:w-auto px-8 py-4 bg-[#8d4e1c] text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#a65d24] transition-all active:scale-95"
-                    >
-                        Réserver une table
-                    </Link>
-                    <Link 
-                        to="/menu" 
-                        className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-white/5 transition-all active:scale-95"
-                    >
-                        Explorer le Menu
-                    </Link>
-                </div>
+      <section className="py-32 px-8 pb-48">
+        <div className="max-w-[1400px] mx-auto bg-[#1d1b1a] rounded-[3rem] p-16 md:p-32 text-center relative overflow-hidden cinematic-shadow">
+          <div className="relative z-10 space-y-12">
+            <motion.h2 
+              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              className="text-display-lg text-4xl md:text-7xl lg:text-8xl text-background italic"
+            >
+              Reserve your <br /> Placement.
+            </motion.h2>
+            
+            <p className="text-background/40 text-xl font-body max-w-xl mx-auto">
+              Select your temporal window, explore the catalog, and enjoy a seamless experience from the moment of intent.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-10 pt-10">
+              <Link 
+                to="/reservations" 
+                className="w-full sm:w-auto px-16 py-6 bg-primary text-on-primary text-ui-button hover:scale-105 transition-all cinematic-shadow"
+              >
+                Initialize Booking
+              </Link>
+              <Link 
+                to="/menu" 
+                className="w-full sm:w-auto text-ui-button text-background/60 hover:text-background transition-all border-b border-background/10 pb-2"
+              >
+                View Catalog
+              </Link>
             </div>
-            <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-[80px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#8d4e1c]/10 blur-[100px] rounded-full pointer-events-none" />
+          </div>
+          
+          {/* Geometric accents */}
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -rotate-12 translate-x-1/4" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 border border-background/5 rounded-full" />
         </div>
       </section>
 
-      {/* Upgraded Footer */}
-      <footer className="pt-12 pb-8 px-6 border-t border-[#EAEAEA]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 text-left">
-          <div className="space-y-6">
-            <Link to="/" className="text-xl font-black tracking-tighter">TASTIFY</Link>
-            <p className="text-[13px] text-[#787774] leading-relaxed max-w-xs italic font-serif">
-                Une hospitalité marocaine d'exception mariée à une orchestration numérique discrète.
+      {/* Editorial Footer */}
+      <footer className="pt-24 pb-12 px-8 border-t border-on-surface/5 bg-surface-container-low">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-20 mb-24">
+          <div className="md:col-span-5 space-y-10">
+            <span className="text-2xl font-serif italic font-bold tracking-tight text-primary">Tastify.</span>
+            <p className="text-base font-body text-on-surface-variant leading-relaxed max-w-sm italic opacity-80">
+              Exceptional Moroccan hospitality orchestrated through discrete digital intelligence.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-[#111111]">Navigation</h4>
-            <ul className="space-y-2">
-                <li><Link to="/menu" className="text-[13px] text-[#787774] hover:text-[#111111] transition-colors">Le Menu</Link></li>
-                <li><Link to="/reservations" className="text-[13px] text-[#787774] hover:text-[#111111] transition-colors">Réservations</Link></li>
-                <li><Link to="/login" className="text-[13px] text-[#787774] hover:text-[#111111] transition-colors">Connexion Client</Link></li>
+          <div className="md:col-span-2 space-y-6">
+            <span className="editorial-kicker">Navigation</span>
+            <ul className="space-y-4">
+              <li><Link to="/menu" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Catalog</Link></li>
+              <li><Link to="/reservations" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Bookings</Link></li>
+              <li><Link to="/account" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Identity</Link></li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-[#111111]">Horaires</h4>
-            <ul className="space-y-2 text-[13px] text-[#787774]">
-                <li className="flex justify-between"><span>Lun - Ven</span> <span>12:00 - 23:00</span></li>
-                <li className="flex justify-between"><span>Sam - Dim</span> <span>11:30 - 00:00</span></li>
+          <div className="md:col-span-2 space-y-6">
+            <span className="editorial-kicker">Temporal</span>
+            <ul className="space-y-4 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60">
+              <li className="flex justify-between"><span>Mon - Fri</span> <span className="text-on-surface">12:00 — 23:00</span></li>
+              <li className="flex justify-between"><span>Sat - Sun</span> <span className="text-on-surface">11:30 — 00:00</span></li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-[#111111]">Contact</h4>
-            <ul className="space-y-2">
-                <li className="flex items-center gap-2.5 text-[13px] text-[#787774]"><MapPin className="w-3.5 h-3.5" /> 123 Avenue Hassan II, Casablanca</li>
-                <li className="flex items-center gap-2.5 text-[13px] text-[#787774]"><Phone className="w-3.5 h-3.5" /> +212 5 22 00 00 00</li>
-                <li className="flex items-center gap-2.5 text-[13px] text-[#787774]"><Mail className="w-3.5 h-3.5" /> contact@tastify.com</li>
+          <div className="md:col-span-3 space-y-6">
+            <span className="editorial-kicker">Coordinate</span>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+                <MapPin className="w-4 h-4 text-primary shrink-0" strokeWidth={1.5} /> 
+                <span>123 Avenue Hassan II <br /> Casablanca, Morocco</span>
+              </li>
+              <li className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+                <Phone className="w-4 h-4 text-primary" strokeWidth={1.5} /> 
+                <span>+212 5 22 00 00 00</span>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto pt-8 border-t border-[#EAEAEA] flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#787774]">© 2026 TASTIFY — TOUS DROITS RÉSERVÉS.</p>
-          <div className="flex gap-6 text-[9px] font-black uppercase tracking-[0.3em] text-[#787774]">
-            <a href="#" className="hover:text-[#111111] transition-colors">Mentions Légales</a>
-            <a href="#" className="hover:text-[#111111] transition-colors">Confidentialité</a>
+        <div className="max-w-[1400px] mx-auto pt-12 border-t border-on-surface/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant/40">© 2026 TASTIFY — CULINARY ARCHITECTURE.</p>
+          <div className="flex gap-10 text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant/40">
+            <Link to="/legal" className="hover:text-primary transition-colors">Legal Manifest</Link>
+            <Link to="/privacy" className="hover:text-primary transition-colors">Privacy Protocol</Link>
           </div>
         </div>
       </footer>
     </div>
   );
 };
+
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { reservationApi } from '../../api/reservations';
 import type { Reservation } from '../../api/reservations';
 import { avisApi } from '../../api/avis';
@@ -6,14 +7,13 @@ import type { Avis } from '../../api/avis';
 import { loyaltyApi } from '../../api/loyalty';
 import type { LoyaltyProfile } from '../../api/loyalty';
 import { api } from '../../api/axios';
+import { useAuthStore } from '../../store/authStore';
 import { 
-  Calendar, 
   MessageSquare, 
   Star, 
   Loader2, 
   User as UserIcon,
   Crown,
-  ShoppingBag,
   PackageCheck,
   ChefHat,
   CheckCircle2,
@@ -23,10 +23,12 @@ import {
   History,
   Settings,
   Bell,
-  CreditCard
+  CreditCard,
+  Users
 } from 'lucide-react';
 
 export const AccountPage: React.FC = () => {
+  const { username } = useAuthStore();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [avis, setAvis] = useState<Avis[]>([]);
   const [commandes, setCommandes] = useState<any[]>([]);
@@ -105,91 +107,91 @@ export const AccountPage: React.FC = () => {
   if (isLoading) return <div className="min-h-[100dvh] flex items-center justify-center bg-[#fff8f5] text-[#8d4e1c]"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   return (
-    <div className="flex-1 bg-[#fff8f5] selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6 xl:px-8 py-6 md:py-8">
+    <div className="flex-1 bg-background selection:bg-primary/10 selection:text-primary">
+      <div className="max-w-[1400px] mx-auto px-8 py-12 md:py-20">
         
         {/* Editorial Header */}
-        <header className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                    <span className="w-6 h-[2px] bg-[#8d4e1c]" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Espace Privé</span>
+        <header className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                    <span className="h-[1px] w-12 bg-primary" />
+                    <span className="editorial-kicker">Private Echelon</span>
                 </div>
-                <h1 className="text-3xl md:text-4xl xl:text-5xl font-serif italic text-[#301400] leading-none tracking-tighter">
-                    Tableau de Bord.
+                <h1 className="text-display-lg text-4xl md:text-6xl lg:text-7xl text-on-surface leading-none">
+                    Registry <br /><span className="italic font-light">Overview.</span>
                 </h1>
-                <p className="max-w-md text-[#53443a] text-sm font-medium leading-relaxed opacity-80 italic">
-                    Gérez vos réservations, suivez vos commandes et consultez vos privilèges exclusifs Tastify.
+                <p className="max-w-xl text-on-surface-variant text-lg font-body leading-relaxed italic opacity-80">
+                    Orchestrate your upcoming sessions, track active culinary Manifests, and monitor your exclusive privileges within the Tastify ecosystem.
                 </p>
             </div>
             
-            <div className="flex items-center gap-3">
-                <button className="w-10 h-10 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
-                    <Bell className="w-4 h-4" />
+            <div className="flex items-center gap-4">
+                <button className="w-14 h-14 rounded-full border border-on-surface/5 bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-all cinematic-shadow">
+                    <Bell className="w-5 h-5" strokeWidth={1.5} />
                 </button>
-                <button className="w-10 h-10 rounded-full border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-white transition-all">
-                    <Settings className="w-4 h-4" />
+                <button className="w-14 h-14 rounded-full border border-on-surface/5 bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-all cinematic-shadow">
+                    <Settings className="w-5 h-5" strokeWidth={1.5} />
                 </button>
             </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             
-            {/* Sidebar Profile */}
-            <aside className="lg:col-span-4 xl:col-span-3 space-y-5">
-                <div className="p-5 bg-white border border-[#d8c2b6] rounded-[1.5rem] shadow-[0_20px_50px_rgba(48,20,0,0.03)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#8d4e1c]/5 blur-3xl -mr-12 -mt-12" />
+            {/* Sidebar Profile - Editorial Card */}
+            <aside className="lg:col-span-4 xl:col-span-3 space-y-8">
+                <div className="editorial-card p-10 relative overflow-hidden cinematic-shadow">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[80px] -mr-16 -mt-16" />
                     
-                    <div className="relative z-10 text-center">
-                        <div className="w-16 h-16 rounded-2xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] mx-auto mb-4 shadow-inner">
-                            <UserIcon className="w-7 h-7" />
+                    <div className="relative z-10 text-center flex flex-col items-center">
+                        <div className="w-24 h-24 rounded-[2rem] bg-surface-container-high border border-on-surface/5 flex items-center justify-center text-primary mb-6 shadow-inner">
+                            <UserIcon className="w-10 h-10" strokeWidth={1} />
                         </div>
-                        <h2 className="text-lg font-bold tracking-tight text-[#301400] mb-0.5">Mehdouch</h2>
-                        <p className="text-[#8d4e1c] text-[8px] font-black uppercase tracking-[0.2em] mb-4">Membre Privilégié</p>
+                        <h2 className="text-2xl font-serif italic text-on-surface mb-1 uppercase tracking-tight">{username}</h2>
+                        <span className="editorial-kicker text-[8px] mb-8 opacity-60">Verified Identity</span>
                         
-                        <div className="space-y-2">
-                            <button className="w-full py-2.5 bg-[#301400] text-white rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#4b2709] transition-all active:scale-95 shadow-lg shadow-black/10">
-                                <CreditCard className="w-3.5 h-3.5" />
-                                Gérer Paiements
+                        <div className="space-y-4 w-full">
+                            <button className="w-full py-4 bg-on-surface text-background text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-primary transition-all active:scale-95 cinematic-shadow">
+                                <CreditCard className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                                Manage Vault
                             </button>
                             <button 
                                 onClick={() => setIsAvisModalOpen(true)}
-                                className="w-full py-2.5 bg-white border border-[#d8c2b6] text-[#301400] rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#fff8f5] transition-all active:scale-95"
+                                className="w-full py-4 bg-background border border-on-surface/10 text-on-surface text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all active:scale-95"
                             >
-                                <MessageSquare className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                                Laisser un Avis
+                                <MessageSquare className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                                Log Feedback
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Loyalty Focus */}
+                {/* Loyalty Tier - Dark Premium */}
                 {loyalty && (
-                    <div className="p-5 bg-[#301400] text-white rounded-[1.5rem] shadow-xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-48 h-48 bg-[#8d4e1c] opacity-20 blur-3xl -mr-24 -mt-24" />
+                    <div className="p-10 bg-on-surface text-background rounded-[3rem] shadow-2xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-20 blur-[100px] -mr-32 -mt-32 transition-transform duration-[2000ms] group-hover:scale-125" />
                         
-                        <div className="relative z-10">
-                            <div className={`w-11 h-11 rounded-xl mb-4 flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
-                                <Crown className="w-5 h-5" />
+                        <div className="relative z-10 space-y-10">
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-1000 group-hover:rotate-12 ${getTierColor(loyalty.tier)}`}>
+                                <Crown className="w-6 h-6" strokeWidth={1.5} />
                             </div>
                             
-                            <div className="space-y-3">
+                            <div className="space-y-6">
                                 <div>
-                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#8d4e1c] mb-1">Club Tastify</p>
-                                    <h3 className="text-2xl font-serif italic tracking-tight">Statut {loyalty.tier_display || loyalty.tier}.</h3>
+                                    <span className="editorial-kicker text-[8px] opacity-40">Privilege Status</span>
+                                    <h3 className="text-3xl md:text-4xl font-serif italic text-background leading-none mt-2">{loyalty.tier_display || loyalty.tier} Tier</h3>
                                 </div>
                                 
-                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl">
-                                    <p className="text-[8px] text-white/40 font-black uppercase tracking-[0.3em] mb-1.5">Points Accumulés</p>
-                                    <div className="flex items-end gap-2">
-                                        <span className="text-4xl font-bold tracking-tighter text-[#8d4e1c] leading-none">{loyalty.points}</span>
-                                        <span className="text-[10px] font-bold text-white/60 mb-1">PTS</span>
+                                <div className="p-8 bg-background/5 rounded-[2rem] border border-white/5 backdrop-blur-3xl">
+                                    <span className="editorial-kicker text-[7px] text-background opacity-20 mb-3 block">Neural Points</span>
+                                    <div className="flex items-end gap-3">
+                                        <span className="text-display-lg text-5xl md:text-6xl text-primary leading-none">{loyalty.points}</span>
+                                        <span className="text-ui-label-bold text-xs text-background opacity-20 mb-2 font-black tracking-widest">METRIC UNITS</span>
                                     </div>
                                 </div>
                                 
-                                <div className="flex items-center gap-2.5 text-white/60">
-                                    <Sparkles className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                                    <p className="text-[9px] font-bold uppercase tracking-widest">Privilèges Actifs</p>
+                                <div className="flex items-center gap-3 text-background opacity-40">
+                                    <Sparkles className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em]">Signature Access Active</p>
                                 </div>
                             </div>
                         </div>
@@ -198,45 +200,42 @@ export const AccountPage: React.FC = () => {
             </aside>
 
             {/* Main Content Hub */}
-            <div className="lg:col-span-8 xl:col-span-9 space-y-7">
+            <div className="lg:col-span-8 xl:col-span-9 space-y-12">
                 
-                {/* Active Session / Order */}
+                {/* Active Session - High Contrast */}
                 {activeOrder && (
-                    <section className="animate-in slide-in-from-bottom-8 duration-1000">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                                <ShoppingBag className="w-4 h-4" />
-                            </div>
-                            <h3 className="text-xl font-bold tracking-tight text-[#301400]">Session Active</h3>
+                    <section className="animate-in slide-in-from-bottom-10 duration-1000">
+                        <div className="flex items-center gap-4 mb-8">
+                            <span className="editorial-kicker">Live Orchestration</span>
                         </div>
                         
-                        <div className="p-5 bg-white border border-[#d8c2b6] rounded-[1.5rem] relative overflow-hidden shadow-sm">
-                            <div className="absolute top-0 right-0 w-80 h-80 bg-[#8d4e1c]/5 blur-3xl -mr-40 -mt-40" />
+                        <div className="editorial-card p-10 relative overflow-hidden cinematic-shadow">
+                            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[120px] -mr-48 -mt-48" />
                             
-                            <div className="flex flex-col md:flex-row items-center gap-5 relative z-10">
-                                <div className="w-20 h-20 rounded-2xl bg-[#fff1ea] border border-[#ffe3d2] flex items-center justify-center text-[#8d4e1c] shrink-0 relative">
-                                    <ChefHat className="w-8 h-8" />
-                                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-lg shadow-md border border-[#d8c2b6] flex items-center justify-center">
-                                        <Loader2 className="w-4 h-4 animate-spin text-[#8d4e1c]" />
+                            <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                                <div className="w-32 h-32 rounded-[2.5rem] bg-surface-container-high border border-on-surface/5 flex items-center justify-center text-primary shrink-0 relative shadow-inner">
+                                    <ChefHat className="w-12 h-12" strokeWidth={1} />
+                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-background rounded-2xl shadow-xl border border-on-surface/5 flex items-center justify-center">
+                                        <Loader2 className="w-5 h-5 animate-spin text-primary" strokeWidth={2.5} />
                                     </div>
                                 </div>
                                 
-                                <div className="flex-1 space-y-3 text-center md:text-left">
-                                    <div className={`inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#fff1ea] border border-[#ffe3d2] ${getOrderStatusUI(activeOrder.statut).color}`}>
-                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-4 h-4" })}
-                                        <span className="text-[10px] font-black uppercase tracking-widest">{getOrderStatusUI(activeOrder.statut).text}</span>
+                                <div className="flex-1 space-y-6 text-center md:text-left">
+                                    <div className={`inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface-container border border-on-surface/5 ${getOrderStatusUI(activeOrder.statut).color}`}>
+                                        {React.createElement(getOrderStatusUI(activeOrder.statut).icon, { className: "w-4 h-4", strokeWidth: 2.5 })}
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em]">{getOrderStatusUI(activeOrder.statut).text.toUpperCase()}</span>
                                     </div>
-                                    <h4 className="text-2xl font-serif italic text-[#301400] leading-none">Votre dégustation est en cours de préparation.</h4>
+                                    <h4 className="text-display-lg text-3xl md:text-4xl text-on-surface leading-tight">Your manifestation is currently <span className="italic font-light">in orchestration.</span></h4>
                                     
-                                    <div className="flex items-center justify-center md:justify-start gap-6 pt-1">
-                                        <div className="space-y-0.5">
-                                            <p className="text-[8px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Valeur Totale</p>
-                                            <p className="text-lg font-bold text-[#301400]">{activeOrder.montant_total} DH</p>
+                                    <div className="flex items-center justify-center md:justify-start gap-12 pt-4">
+                                        <div className="space-y-1">
+                                            <p className="editorial-kicker text-[7px] opacity-40">Session Value</p>
+                                            <p className="text-2xl font-body text-on-surface font-black">{activeOrder.montant_total} <span className="text-xs opacity-40">DH</span></p>
                                         </div>
-                                        <div className="w-[1px] h-8 bg-[#d8c2b6]" />
-                                        <div className="space-y-0.5">
-                                            <p className="text-[8px] font-black text-[#53443a] uppercase tracking-widest opacity-40">Session ID</p>
-                                            <p className="text-lg font-bold text-[#301400]">#{activeOrder.id}</p>
+                                        <div className="w-[1px] h-10 bg-on-surface/5" />
+                                        <div className="space-y-1">
+                                            <p className="editorial-kicker text-[7px] opacity-40">Orchestration ID</p>
+                                            <p className="text-2xl font-body text-on-surface font-black uppercase tracking-tight">#{activeOrder.id}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -245,78 +244,84 @@ export const AccountPage: React.FC = () => {
                     </section>
                 )}
 
-                {/* Reservations List */}
+                {/* Upcoming Bookings - Minimal Editorial Grid */}
                 <section>
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                                <Calendar className="w-4 h-4" />
-                            </div>
-                            <h3 className="text-xl font-bold tracking-tight text-[#301400]">Réservations à Venir</h3>
+                    <div className="flex items-center justify-between mb-8 border-b border-on-surface/5 pb-4">
+                        <div className="flex items-center gap-4">
+                            <span className="editorial-kicker">Temporal Placements</span>
                         </div>
-                        <button className="text-[9px] font-black uppercase tracking-widest text-[#8d4e1c] hover:underline underline-offset-4">Voir Historique</button>
+                        <button className="text-[9px] font-black uppercase tracking-[0.3em] text-primary border-b border-primary/20 pb-1 hover:border-primary transition-all">View Archive</button>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
                         {reservations.length === 0 ? (
-                            <div className="col-span-full p-10 bg-[#fff1ea] rounded-[2rem] border-2 border-dashed border-[#ffe3d2] text-center flex flex-col items-center gap-4">
-                                <History className="w-10 h-10 text-[#8d4e1c] opacity-20" />
-                                <p className="text-xl font-serif italic text-[#301400]/40">Aucune réservation prévue pour le moment.</p>
-                                <button className="px-6 py-2.5 bg-[#301400] text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-[#4b2709] transition-all">Réserver une Table</button>
+                            <div className="col-span-full py-24 editorial-card bg-surface-container-low border-dashed border-2 flex flex-col items-center gap-6 opacity-30">
+                                <History className="w-12 h-12" strokeWidth={1} />
+                                <p className="text-display-lg text-3xl italic">No sessions logged.</p>
+                                <button className="px-10 py-4 bg-on-surface text-background text-[10px] font-black uppercase tracking-[0.3em]">Initialize Booking</button>
                             </div>
                         ) : (
                             reservations.map(res => (
-                                <div key={res.id} className="p-4 bg-white border border-[#d8c2b6] rounded-2xl flex items-center justify-between gap-3 group hover:border-[#8d4e1c] hover:shadow-lg transition-all duration-500">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <div className="w-12 h-12 bg-[#fff1ea] rounded-xl flex flex-col items-center justify-center text-[#301400] border border-[#ffe3d2] group-hover:scale-105 transition-transform shrink-0">
-                                            <span className="text-[8px] font-black text-[#8d4e1c] uppercase tracking-widest leading-none mb-1">
-                                                {new Date(res.date_reservation).toLocaleDateString('fr-FR', { month: 'short' })}
+                                <motion.div 
+                                    key={res.id} 
+                                    whileHover={{ y: -5 }}
+                                    className="p-8 bg-background border border-on-surface/5 rounded-[2rem] flex flex-col justify-between gap-8 group hover:border-primary cinematic-shadow transition-all duration-500"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div className="w-14 h-14 bg-surface-container-high rounded-2xl flex flex-col items-center justify-center text-on-surface border border-on-surface/5 group-hover:scale-105 transition-transform shrink-0 shadow-inner">
+                                            <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] leading-none mb-1">
+                                                {new Date(res.date_reservation).toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}
                                             </span>
-                                            <span className="text-lg font-bold tracking-tighter">
+                                            <span className="text-2xl font-serif italic">
                                                 {new Date(res.date_reservation).getDate()}
                                             </span>
                                         </div>
-                                        <div className="min-w-0">
-                                            <p className="font-bold text-sm text-[#301400]">Table #{res.table}</p>
-                                            <div className="flex items-center gap-2 mt-0.5 text-[#53443a] opacity-60">
-                                                <Clock className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                                                <span className="text-[10px] font-medium truncate">{res.heure_debut} — {res.heure_fin} • {res.nombre_personnes} pers.</span>
+                                        <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.3em] ${res.statut === 'CONFIRMEE' ? 'bg-primary/10 text-primary' : 'bg-surface-container text-on-surface-variant'}`}>
+                                            {res.statut}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-4">
+                                        <h4 className="text-xl font-serif italic text-on-surface uppercase tracking-tight">Table Unit #{res.table}</h4>
+                                        <div className="flex items-center gap-6 text-[9px] font-black text-on-surface-variant uppercase tracking-[0.3em] opacity-40">
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                                                <span>{res.heure_debut} — {res.heure_fin}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Users className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                                                <span>{res.nombre_personnes}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest shrink-0 ${res.statut === 'CONFIRMEE' ? 'bg-[#8d4e1c]/10 text-[#8d4e1c]' : 'bg-[#fff1ea] text-[#53443a]'}`}>
-                                        {res.statut}
-                                    </div>
-                                </div>
+                                </motion.div>
                             ))
                         )}
                     </div>
                 </section>
 
-                {/* Experience Feedback */}
+                {/* Experiences Feedback - Editorial Carousel style */}
                 <section>
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-[#8d4e1c]/10 text-[#8d4e1c] flex items-center justify-center">
-                            <Star className="w-4 h-4" />
-                        </div>
-                        <h3 className="text-xl font-bold tracking-tight text-[#301400]">Mes Expériences</h3>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="editorial-kicker">Culinary Dialogues</span>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {avis.map(a => (
-                            <div key={a.id} className="p-4 bg-white border border-[#d8c2b6] rounded-[1.5rem] group hover:border-[#8d4e1c] transition-all duration-700">
-                                <div className="flex gap-1.5 mb-3">
+                            <div key={a.id} className="p-8 editorial-card group relative overflow-hidden transition-all duration-1000">
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 -rotate-12 translate-x-8 -translate-y-8" />
+                                <div className="flex gap-2 mb-8">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`w-3.5 h-3.5 ${i < a.note ? 'text-[#8d4e1c] fill-[#8d4e1c]' : 'text-[#d8c2b6]'}`} />
+                                        <Star key={i} className={`w-4 h-4 ${i < a.note ? 'text-primary fill-primary' : 'text-on-surface/5'}`} strokeWidth={1.5} />
                                     ))}
                                 </div>
-                                <p className="text-[#301400] text-base font-serif italic leading-snug tracking-tight line-clamp-4">"{a.commentaire}"</p>
-                                <div className="mt-4 pt-4 border-t border-[#fff1ea] flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-2 h-2 rounded-full ${(a.sentiment_score ?? 0) > 0 ? 'bg-[#8d4e1c]' : 'bg-outline-variant'}`} />
-                                        <span className="text-[8px] font-black uppercase tracking-widest text-[#53443a] opacity-40">Vérifié par AI</span>
+                                <p className="text-2xl font-serif italic text-on-surface leading-relaxed tracking-tight line-clamp-3">“{a.commentaire.toUpperCase()}”</p>
+                                <div className="mt-10 pt-8 border-t border-on-surface/5 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-2 h-2 rounded-full ${(a.sentiment_score ?? 0) > 0 ? 'bg-primary animate-pulse' : 'bg-on-surface/20'}`} />
+                                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-40">AI Neural Verified</span>
                                     </div>
-                                    <span className="text-[8px] font-bold text-[#53443a]/40">{new Date().toLocaleDateString()}</span>
+                                    <span className="text-[9px] font-black text-on-surface-variant/20 tracking-widest">{new Date(a.created_at || "").toLocaleDateString('en-US', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
                                 </div>
                             </div>
                         ))}
@@ -325,63 +330,74 @@ export const AccountPage: React.FC = () => {
             </div>
         </div>
 
-        {/* High-End Feedback Modal */}
+        {/* Cinematic Feedback Modal */}
         {isAvisModalOpen && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
-                <div className="absolute inset-0 bg-[#301400]/80 backdrop-blur-2xl" onClick={() => setIsAvisModalOpen(false)} />
-                <div className="relative w-full max-w-lg bg-white rounded-[2.5rem] overflow-hidden shadow-2xl p-6 md:p-8 animate-in zoom-in-95 duration-500">
-                    <div className="text-center mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[10px] font-black uppercase tracking-widest mb-6">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>Analyse d'Expérience</span>
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-8 lg:p-12">
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 bg-on-surface/90 backdrop-blur-3xl" 
+                    onClick={() => setIsAvisModalOpen(false)} 
+                />
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+                    className="relative w-full max-w-2xl bg-background rounded-[3rem] overflow-hidden cinematic-shadow p-12 lg:p-20"
+                >
+                    <div className="text-center mb-16">
+                        <div className="flex items-center justify-center gap-3 mb-8">
+                            <span className="h-[1px] w-8 bg-primary"></span>
+                            <span className="editorial-kicker">Experience Analysis</span>
+                            <span className="h-[1px] w-8 bg-primary"></span>
                         </div>
-                        <h3 className="text-3xl md:text-4xl font-serif italic text-[#301400] mb-3">Votre avis.</h3>
-                        <p className="text-[#53443a] font-medium opacity-60">Aidez-nous à perfectionner l'expérience Tastify.</p>
+                        <h3 className="text-display-lg text-4xl lg:text-6xl text-on-surface mb-4 leading-none">The <br /><span className="italic font-light">Feedback.</span></h3>
+                        <p className="text-lg font-body text-on-surface-variant opacity-60 italic">Your insights refine the neural orchestration of the Tastify experience.</p>
                     </div>
                     
-                    <form onSubmit={handleSubmitAvis} className="space-y-8">
-                        <div className="flex flex-col items-center gap-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40">Évaluation Globale</label>
-                            <div className="flex gap-3">
+                    <form onSubmit={handleSubmitAvis} className="space-y-12">
+                        <div className="flex flex-col items-center gap-6">
+                            <span className="editorial-kicker text-[8px] opacity-40">Global Calibration</span>
+                            <div className="flex gap-4">
                                 {[1, 2, 3, 4, 5].map(s => (
                                     <button 
                                         key={s} 
                                         type="button"
                                         onClick={() => setRating(s)}
-                                        className={`w-12 h-12 flex items-center justify-center rounded-2xl transition-all duration-500 ${rating >= s ? 'bg-[#8d4e1c] text-white scale-110 shadow-xl shadow-[#8d4e1c]/20' : 'bg-[#fff1ea] text-[#d8c2b6] hover:bg-[#ffe3d2]'}`}
+                                        className={`w-16 h-16 flex items-center justify-center rounded-3xl transition-all duration-700 ${rating >= s ? 'bg-on-surface text-background scale-110 cinematic-shadow' : 'bg-surface-container text-on-surface-variant/20 hover:bg-surface-container-high'}`}
                                     >
-                                        <Star className={`w-6 h-6 ${rating >= s ? 'fill-current' : ''}`} />
+                                        <Star className={`w-8 h-8 ${rating >= s ? 'fill-primary text-primary' : ''}`} strokeWidth={1} />
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-[#53443a] opacity-40 ml-1">Commentaire Détaillé</label>
+                        <div className="flex flex-col gap-6">
+                            <label className="editorial-kicker text-[8px] opacity-40 text-center">Detailed Culinary Dialogue</label>
                             <textarea 
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                                 required
                                 rows={4}
-                                className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-[1.5rem] focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-8 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400] text-sm"
-                                placeholder="Décrivez les nuances de votre voyage culinaire..."
+                                className="w-full p-8 bg-surface-container border border-on-surface/5 rounded-[2.5rem] focus:bg-background focus:outline-none focus:border-primary focus:ring-[12px] focus:ring-primary/5 transition-all resize-none font-body text-on-surface text-xl italic text-center cinematic-shadow"
+                                placeholder="DESCRIBE THE NUANCES OF YOUR CULINARY VOYAGE..."
                             />
                         </div>
 
                         <button 
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-4 bg-[#8d4e1c] text-white rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#8d4e1c]/20 active:scale-95 disabled:opacity-50"
+                            className="w-full py-6 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 disabled:opacity-50"
                         >
-                            {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                            {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin text-primary" strokeWidth={2.5} /> : (
                                 <>
-                                    <span>Publier mon Avis</span>
-                                    <ArrowRight className="w-5 h-5" />
+                                    <span>Commit Analysis</span>
+                                    <ArrowRight className="w-5 h-5 text-primary" strokeWidth={2.5} />
                                 </>
                             )}
                         </button>
                     </form>
-                </div>
+                </motion.div>
             </div>
         )}
       </div>

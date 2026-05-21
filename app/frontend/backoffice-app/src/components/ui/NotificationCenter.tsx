@@ -34,32 +34,35 @@ export const NotificationCenter: React.FC = () => {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2.5 hover:text-primary hover:bg-surface-container rounded-xl transition-all relative"
-        style={{ color: '#53443a' }}
+        className="p-2 border-2 border-transparent hover:border-on-surface hover:bg-surface-container transition-all relative"
+        style={{ color: '#301400' }}
       >
-        <Bell className="w-6 h-6"  strokeWidth={2}/>
+        <Bell className="w-5 h-5"  strokeWidth={2.5}/>
         {notifications.length > 0 && (
-            <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-xl animate-pulse" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error border-2 border-on-surface animate-pulse" />
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-4 w-80 bg-surface border border-outline-variant/30 rounded-xl shadow-lg shadow-primary/10 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="p-4 bg-surface-container border-b border-outline-variant/20 flex items-center justify-between">
-            <h4 className="font-bold text-sm uppercase tracking-widest font-sans" style={{ color: '#301400' }}>Alertes de Stock</h4>
-            <button onClick={() => setIsOpen(false)}><X className="w-4 h-4" style={{ color: '#53443a' }}  strokeWidth={2}/></button>
+        <div className="absolute top-full right-0 mt-4 w-96 bg-background border-2 border-on-surface shadow-[8px_8px_0px_#301400] overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="p-4 bg-on-surface text-background flex items-center justify-between">
+            <h4 className="text-ui-label-bold text-[10px] tracking-[0.25em]">OPERATIONAL ALERTS</h4>
+            <button onClick={() => setIsOpen(false)} className="hover:scale-110 transition-transform"><X className="w-4 h-4"  strokeWidth={2.5}/></button>
           </div>
-          <div className="max-h-[300px] overflow-y-auto">
+          <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
             {notifications.length === 0 ? (
-                <div className="p-10 text-center" style={{ color: '#53443a' }}>
-                    <CheckCircle2 className="w-8 h-8 mx-auto mb-2 opacity-20 text-primary"  strokeWidth={2}/>
-                    <p className="text-xs font-bold">Tout est en ordre !</p>
+                <div className="p-12 text-center" style={{ color: '#53443a' }}>
+                    <CheckCircle2 className="w-10 h-10 mx-auto mb-4 opacity-20 text-primary"  strokeWidth={2.5}/>
+                    <p className="text-ui-label-bold text-[11px] opacity-40 uppercase tracking-widest">System Nominal</p>
                 </div>
             ) : (
                 notifications.map((n, i) => (
-                    <div key={i} className="p-4 border-b border-outline-variant/20 hover:bg-surface-container-low transition-colors cursor-pointer bg-error/5">
-                        <p className="text-sm font-bold" style={{ color: '#ba1a1a' }}>{n.message}</p>
-                        <p className="text-[10px] font-bold uppercase mt-1" style={{ color: '#53443a' }}>{n.time}</p>
+                    <div key={i} className="p-5 border-b-2 border-on-surface/5 hover:bg-surface-container transition-colors cursor-pointer bg-error/5 group">
+                        <p className="text-ui-data-dense font-black text-error leading-tight uppercase group-hover:scale-[1.02] transition-transform">{n.message}</p>
+                        <div className="flex items-center justify-between mt-3">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant opacity-50">{n.time.toUpperCase()}</span>
+                            <span className="text-[9px] font-black uppercase bg-error text-on-error px-2 py-0.5">Urgent</span>
+                        </div>
                     </div>
                 ))
             )}

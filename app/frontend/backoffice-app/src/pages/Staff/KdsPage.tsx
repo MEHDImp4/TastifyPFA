@@ -93,67 +93,73 @@ export const KdsPage: React.FC = () => {
     return `${diff}m`;
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={2}/></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={2.5}/></div>;
 
   return (
     <div className="max-w-[1700px] mx-auto animate-in fade-in duration-700">
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 shrink-0">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-on-surface font-sans">Kitchen Command Center</h1>
-          <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Real-time order orchestration and preparation management.</p>
+          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Kitchen Command Center</h1>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Real-time Order Orchestration</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 px-3 py-2.5 bg-surface-container-low rounded-xl border border-surface-container-high">
-          <div className="w-2.5 h-2.5 rounded-xl bg-primary animate-pulse" />
-          <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans font-sans">Live System</span>
+        <div className="flex items-center gap-6 px-6 py-2 bg-surface-container border-2 border-on-surface shadow-[4px_4px_0px_#301400]">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 border-2 border-on-surface bg-secondary animate-pulse" />
+            <span className="text-ui-label-bold text-[10px] text-on-surface">Live Signal</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-ui-data-dense font-black text-primary">{tickets.length} ACTIVE BATCHES</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {tickets.map((ticket) => (
-          <div key={ticket.id} className="double-bezel flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-500 hover:scale-[1.01] transition-transform">
+          <div key={ticket.id} className="bg-surface-container border-2 border-on-surface flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-500 shadow-[6px_6px_0px_#301400] transition-all hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_#301400]">
             {/* Ticket Header */}
-            <div className={`p-4 flex items-center justify-between border-b border-surface-container-high ${ticket.type === 'EMPORTER' ? 'bg-secondary-container/30' : 'bg-primary-container/10'}`}>
+            <div className={`p-5 flex items-center justify-between border-b-2 border-on-surface ${ticket.type === 'EMPORTER' ? 'bg-secondary-container' : 'bg-primary-container'}`}>
               <div>
-                <h3 className="font-bold text-base text-on-surface tracking-tight font-sans">
-                    {ticket.type === 'SUR_PLACE' ? `Table #${ticket.table_numero || '?'}` : `Takeaway: ${ticket.client_nom || 'Client'}`}
+                <h3 className="text-ui-label-bold text-[14px] text-on-secondary-container leading-none">
+                    {ticket.type === 'SUR_PLACE' ? `TABLE #${ticket.table_numero || '?'}` : `CLIENT: ${ticket.client_nom || 'UNKNOWN'}`}
                 </h3>
-                <div className="flex items-center gap-2 text-xs text-on-surface-variant font-bold uppercase tracking-wider font-sans mt-1 opacity-70">
-                    <Clock className="w-3.5 h-3.5"  strokeWidth={2}/>
-                    <span className="font-sans">{new Date(ticket.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="flex items-center gap-2 text-ui-data-dense text-on-secondary-container/70 font-black mt-2">
+                    <Clock className="w-3.5 h-3.5"  strokeWidth={2.5}/>
+                    <span className="uppercase">{new Date(ticket.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
               </div>
-              <div className="glass px-4 py-2 rounded-xl text-xs font-bold text-on-surface uppercase tracking-widest font-sans border border-primary/10">
-                #{ticket.id}
+              <div className="bg-background border-2 border-on-surface px-3 py-1 text-ui-data-dense font-black text-on-surface">
+                ID-{ticket.id}
               </div>
             </div>
 
             {/* Items List */}
             <div className="flex-1 p-4 space-y-4 max-h-[450px] overflow-y-auto scrollbar-hide">
               {ticket.lignes.map((item) => (
-                <div key={item.id} className="relative flex flex-col gap-3 p-5 bg-surface-container-low rounded-xl border border-surface-container-high transition-all">
+                <div key={item.id} className="relative flex flex-col gap-3 p-4 bg-background border-2 border-on-surface shadow-[4px_4px_0px_#301400/10] transition-all">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-base font-bold text-primary leading-none font-sans">x{item.quantite}</span>
-                        <span className={`text-sm font-bold font-sans tracking-tight ${item.statut === 'PRET' ? 'text-on-surface-variant line-through opacity-50' : 'text-on-surface'}`}>
-                          {item.plat_nom}
+                      <div className="flex items-center gap-4">
+                        <span className="text-display-lg text-2xl text-primary leading-none">x{item.quantite}</span>
+                        <span className={`text-ui-label-bold text-[13px] leading-tight ${item.statut === 'PRET' ? 'text-on-surface-variant line-through opacity-30' : 'text-on-surface'}`}>
+                          {item.plat_nom.toUpperCase()}
                         </span>
                       </div>
                       {item.notes && (
-                        <div className="mt-2 text-xs font-bold text-secondary bg-secondary-container/50 px-3 py-1.5 rounded-xl italic font-sans flex items-center gap-2">
-                          <span className="not-italic">“</span>
-                          {item.notes}
-                          <span className="not-italic">”</span>
+                        <div className="mt-3 text-ui-data-dense text-secondary border-l-4 border-secondary pl-3 font-black py-1">
+                          {item.notes.toUpperCase()}
                         </div>
                       )}
                     </div>
                     
-                    <div className="flex flex-col items-end gap-2">
+                    <div className="flex flex-col items-end">
                       <span className={`
-                        px-2 py-1 rounded-xl text-[10px] font-bold uppercase tracking-widest font-sans font-sans
-                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container-highest text-on-surface-variant' : 
-                          item.statut === 'EN_PREPARATION' ? 'bg-primary-container/30 text-primary' : 
-                          'bg-surface-container text-outline'}
+                        px-2 py-0.5 border-2 border-on-surface text-[9px] font-black uppercase tracking-widest
+                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container-highest text-on-surface' : 
+                          item.statut === 'EN_PREPARATION' ? 'bg-primary text-on-primary' : 
+                          'bg-background text-on-surface-variant opacity-40'}
                       `}>
                         {item.statut.replace('_', ' ')}
                       </span>
@@ -165,19 +171,19 @@ export const KdsPage: React.FC = () => {
                     <button 
                       onClick={() => handleUpdateItem(item.id, item.statut)}
                       className={`
-                        w-full py-2 rounded-xl flex items-center justify-center gap-3 font-bold transition-all mt-2 font-sans text-sm tracking-tight
-                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container-highest text-on-surface hover:bg-surface-container-high active:scale-95' : 'bg-primary text-white hover:shadow-lg shadow-primary/10 hover:shadow-primary/20 active:scale-95'}
+                        w-full py-3 border-2 border-on-surface flex items-center justify-center gap-3 transition-all mt-2 text-ui-button font-ui-button shadow-[3px_3px_0px_#301400] active:translate-y-[2px] active:shadow-none
+                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container text-on-surface hover:bg-surface-container-highest' : 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'}
                       `}
                     >
                       {item.statut === 'EN_ATTENTE' ? (
                         <>
-                          <PlayCircle className="w-5 h-5"  strokeWidth={2}/>
-                          <span>Démarrer</span>
+                          <PlayCircle className="w-4 h-4"  strokeWidth={2.5}/>
+                          <span>ENGAGE</span>
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 className="w-5 h-5"  strokeWidth={2}/>
-                          <span>Prêt</span>
+                          <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
+                          <span>COMPLETE</span>
                         </>
                       )}
                     </button>
@@ -187,15 +193,15 @@ export const KdsPage: React.FC = () => {
             </div>
             
             {/* Ticket Footer */}
-            <div className="p-5 bg-surface-container-low/50 border-t border-surface-container-high flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs font-bold text-on-surface-variant uppercase tracking-widest font-sans opacity-60 font-sans">
-                    <Timer className="w-4 h-4"  strokeWidth={2}/>
-                    <span>Active for {getElapsedTime(ticket.created_at)}</span>
+            <div className="p-4 bg-surface-container-high border-t-2 border-on-surface flex items-center justify-between">
+                <div className="flex items-center gap-2 text-ui-data-dense font-black text-on-surface-variant uppercase tracking-widest">
+                    <Timer className="w-4 h-4"  strokeWidth={2.5}/>
+                    <span>ACTIVE: {getElapsedTime(ticket.created_at)}</span>
                 </div>
                 {ticket.lignes.every(l => l.statut === 'PRET') && (
-                    <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-widest font-sans animate-pulse font-sans">
-                        <CheckCircle2 className="w-4 h-4"  strokeWidth={2}/>
-                        <span>Complet</span>
+                    <div className="flex items-center gap-2 text-primary text-ui-label-bold text-[10px] animate-pulse">
+                        <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
+                        <span>READY TO SERVE</span>
                     </div>
                 )}
             </div>
@@ -203,11 +209,12 @@ export const KdsPage: React.FC = () => {
         ))}
         
         {tickets.length === 0 && (
-          <div className="col-span-full py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-40 animate-in zoom-in duration-700">
-            <div className="w-24 h-24 rounded-xl bg-surface-container-high border-2 border-dashed border-outline-variant flex items-center justify-center mb-8">
-                <ChefHat className="w-8 h-8"  strokeWidth={2}/>
+          <div className="col-span-full py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-20">
+            <div className="w-32 h-32 border-4 border-dashed border-on-surface flex items-center justify-center mb-8 rotate-3">
+                <ChefHat className="w-12 h-12"  strokeWidth={2.5}/>
             </div>
-            <p className="text-lg font-display-accent italic">Kitchen is clear. No active orders.</p>
+            <p className="text-display-lg text-4xl italic uppercase tracking-tighter">Kitchen at Rest</p>
+            <p className="text-ui-label-bold text-[11px] mt-4 tracking-[0.3em]">No active batches detected</p>
           </div>
         )}
       </div>

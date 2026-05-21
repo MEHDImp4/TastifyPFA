@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 import { LogOut, ShoppingBag, Menu, X } from 'lucide-react';
@@ -29,43 +30,44 @@ export const PublicLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-white text-[#111111] selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#EAEAEA]">
-        <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-12">
+    <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/10 selection:text-primary overflow-x-hidden">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-surface/5">
+        <div className="max-w-[1400px] mx-auto px-8 h-24 flex items-center justify-between">
+          <div className="flex items-center gap-16">
             <Link 
               to="/" 
               onClick={handleLogoClick}
               className="flex items-center gap-2 group transition-transform active:scale-95 z-50"
             >
-              <BrandWordmark className="text-xl font-bold tracking-tight uppercase" />
+              <BrandWordmark className="text-2xl font-serif italic font-bold tracking-tight text-primary" />
             </Link>
 
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-10">
               {[
-                { to: '/menu', label: 'Menu' },
-                { to: '/reservations', label: 'Réservations' },
-                { to: '/contact', label: 'Contact' },
+                { to: '/menu', label: 'Culinaries' },
+                { to: '/reservations', label: 'Bookings' },
+                { to: '/contact', label: 'Concierge' },
               ].map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className="text-xs font-bold uppercase tracking-[0.2em] text-[#787774] hover:text-[#111111] transition-colors"
+                  className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-all duration-300 relative group/link"
                 >
                   {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover/link:w-full" />
                 </Link>
               ))}
             </nav>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             <Link 
                 to="/checkout" 
-                className="relative w-10 h-10 flex items-center justify-center hover:bg-[#F7F6F3] rounded-lg transition-all active:scale-90"
+                className="relative group p-2 transition-all active:scale-90"
             >
-                <ShoppingBag className="w-5 h-5" strokeWidth={2} />
+                <ShoppingBag className="w-5 h-5 text-on-surface group-hover:text-primary transition-colors" strokeWidth={1.5} />
                 {items.length > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#111111] text-white text-[8px] font-black rounded-full flex items-center justify-center">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-on-primary text-[8px] font-black rounded-full flex items-center justify-center cinematic-shadow">
                         {items.length}
                     </span>
                 )}
@@ -73,14 +75,14 @@ export const PublicLayout: React.FC = () => {
             
             <div className="hidden md:block">
               {isAuthenticated ? (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6 pl-6 border-l border-on-surface/10">
                   <Link to="/account" className="flex flex-col items-end group">
-                    <p className="text-[10px] font-black text-[#111111] uppercase tracking-wider">{username}</p>
-                    <p className="text-[8px] text-[#787774] font-bold uppercase tracking-widest">Espace Client</p>
+                    <p className="text-[11px] font-black text-on-surface uppercase tracking-wider group-hover:text-primary transition-colors">{username}</p>
+                    <p className="text-ui-label-bold text-[8px] text-on-surface-variant/60 tracking-[0.2em]">Guest Profile</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-2 text-[#787774] hover:text-red-600 transition-colors"
+                    className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"
                   >
                     <LogOut className="w-4 h-4" strokeWidth={2.5} />
                   </button>
@@ -88,41 +90,51 @@ export const PublicLayout: React.FC = () => {
               ) : (
                 <Link 
                   to="/reservations"
-                  className="px-5 py-2 bg-[#111111] text-white rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#333333] transition-all active:scale-95 shadow-lg shadow-black/5"
+                  className="px-8 py-3 bg-on-surface text-background text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:bg-primary active:scale-95 cinematic-shadow"
                 >
-                  Réserver
+                  Reserve Now
                 </Link>
               )}
             </div>
 
             <button 
               onClick={toggleMenu}
-              className="md:hidden p-2 hover:bg-[#F7F6F3] rounded-lg transition-all"
+              className="lg:hidden p-3 bg-surface-container-high rounded-full hover:bg-surface-container-highest transition-all"
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5 text-on-surface" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu Overlay */}
-        {isMenuOpen && (
-          <div className="fixed inset-0 bg-white z-40 md:hidden pt-24 px-6 space-y-12">
-            <div className="space-y-6">
-              <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-serif italic">Notre Menu</Link>
-              <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="block text-4xl font-serif italic">Réservations</Link>
-            </div>
-            <div className="pt-12 border-t border-[#EAEAEA] space-y-6">
-              {isAuthenticated ? (
-                <>
-                  <Link to="/account" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold uppercase tracking-widest">Mon Espace Client</Link>
-                  <button onClick={handleLogout} className="block text-xl font-bold uppercase tracking-widest text-red-600">Déconnexion</button>
-                </>
-              ) : (
-                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold uppercase tracking-widest">Se Connecter</Link>
-              )}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-8 flex flex-col justify-between pb-12"
+            >
+              <div className="space-y-12">
+                <div className="flex flex-col gap-8">
+                  <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="text-display-lg text-5xl italic text-on-surface hover:text-primary transition-colors">Our Menu</Link>
+                  <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="text-display-lg text-5xl italic text-on-surface hover:text-primary transition-colors">Bookings</Link>
+                  <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="text-display-lg text-5xl italic text-on-surface hover:text-primary transition-colors">Concierge</Link>
+                </div>
+              </div>
+              <div className="pt-12 border-t border-on-surface/5 space-y-8">
+                {isAuthenticated ? (
+                  <div className="flex flex-col gap-6">
+                    <Link to="/account" onClick={() => setIsMenuOpen(false)} className="text-ui-label-bold text-xl text-on-surface">Guest Profile</Link>
+                    <button onClick={handleLogout} className="text-ui-label-bold text-xl text-error text-left">Terminate Session</button>
+                  </div>
+                ) : (
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="inline-block w-full py-5 bg-on-surface text-background text-center text-ui-label-bold text-base cinematic-shadow">Identify Yourself</Link>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className="flex-1 flex flex-col relative overflow-hidden">

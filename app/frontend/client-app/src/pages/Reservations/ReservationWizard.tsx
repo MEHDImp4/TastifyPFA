@@ -12,8 +12,7 @@ import {
   CheckCircle2, 
   Loader2,
   Table as TableIcon,
-  ArrowLeft,
-  Sparkles
+  ArrowLeft
 } from 'lucide-react';
 
 export const ReservationWizard: React.FC = () => {
@@ -80,42 +79,45 @@ export const ReservationWizard: React.FC = () => {
 
   if (!isAuthenticated && step < 4) {
       return (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 text-center gap-8 py-24 bg-[#fff8f5] animate-in fade-in duration-1000">
-              <div className="w-20 h-20 rounded-full bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] border-2 border-dashed border-[#8d4e1c]/30">
-                <Users className="w-10 h-10" />
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-12 py-32 bg-background animate-in fade-in duration-1000">
+              <div className="relative">
+                  <div className="absolute inset-0 bg-primary opacity-5 blur-[60px] rounded-full scale-150" />
+                  <div className="relative w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center text-primary border-2 border-dashed border-primary/20">
+                    <Users className="w-12 h-12" strokeWidth={1} />
+                  </div>
               </div>
-              <div className="max-w-md space-y-4">
-                <h2 className="text-4xl font-serif italic text-[#301400]">Accès Réservé.</h2>
-                <p className="text-[#53443a] font-medium leading-relaxed text-base">Veuillez vous authentifier pour accéder à notre système de réservation architectural et sécuriser votre expérience gastronomique.</p>
+              <div className="max-w-md space-y-6">
+                <h2 className="text-display-lg text-4xl lg:text-5xl text-on-surface">Reserved Access.</h2>
+                <p className="text-lg font-body text-on-surface-variant leading-relaxed opacity-80">Please identify yourself to access our high-speed reservation matrix and secure your placement.</p>
               </div>
               <button 
                 onClick={() => navigate('/login')}
-                className="px-10 py-3 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-black/20"
+                className="px-12 py-5 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.3em] transition-all hover:bg-primary cinematic-shadow active:scale-95"
               >
-                  Se Connecter
+                  Authenticate Now
               </button>
           </div>
       );
   }
 
   return (
-    <div className="flex-1 bg-[#fff8f5]">
-      <div className="max-w-4xl mx-auto w-full px-4 md:px-6 py-6 md:py-8">
+    <div className="flex-1 bg-background">
+      <div className="max-w-5xl mx-auto w-full px-8 py-12 md:py-20">
         
-        {/* Architectural Stepper */}
-        <div className="mb-7 px-1">
+        {/* Cinematic Stepper */}
+        <div className="mb-20 px-4">
             <div className="flex items-center justify-between relative">
-                <div className="absolute top-[16px] left-0 w-full h-[1px] bg-[#d8c2b6] z-0" />
+                <div className="absolute top-[20px] left-0 w-full h-[1px] bg-on-surface/5 z-0" />
                 {[1, 2, 3, 4].map(s => (
-                    <div key={s} className="relative z-10 flex flex-col items-center gap-1.5">
+                    <div key={s} className="relative z-10 flex flex-col items-center gap-4">
                         <div className={`
-                            w-8 h-8 rounded-lg flex items-center justify-center border-2 transition-all duration-700 font-bold text-[11px]
-                            ${step >= s ? 'bg-[#301400] border-[#301400] text-white shadow-xl shadow-black/20 scale-105' : 'bg-white border-[#d8c2b6] text-[#53443a]/40'}
+                            w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-1000 font-black text-[11px]
+                            ${step >= s ? 'bg-on-surface border-on-surface text-background cinematic-shadow scale-110' : 'bg-background border-on-surface/10 text-on-surface-variant/40'}
                         `}>
-                            {step > s ? <CheckCircle2 className="w-4 h-4" /> : s}
+                            {step > s ? <CheckCircle2 className="w-5 h-5" strokeWidth={2} /> : `0${s}`}
                         </div>
-                        <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-opacity duration-500 ${step === s ? 'opacity-100 text-[#8d4e1c]' : 'opacity-40 text-[#53443a]'}`}>
-                            {s === 1 ? 'Plan' : s === 2 ? 'Placement' : s === 3 ? 'Validation' : 'Sécurisé'}
+                        <span className={`text-[9px] font-black uppercase tracking-[0.3em] transition-all duration-700 ${step === s ? 'opacity-100 text-primary translate-y-0' : 'opacity-30 text-on-surface-variant translate-y-1'}`}>
+                            {s === 1 ? 'Manifest' : s === 2 ? 'Placement' : s === 3 ? 'Validation' : 'Secured'}
                         </span>
                     </div>
                 ))}
@@ -123,43 +125,44 @@ export const ReservationWizard: React.FC = () => {
         </div>
 
         {error && (
-            <div className="mb-8 p-4 bg-[#ffdad6] border border-[#ba1a1a]/20 rounded-xl text-[#ba1a1a] text-xs text-center font-bold animate-in shake duration-500">
-                {error}
+            <div className="mb-12 p-6 bg-error text-on-error border-2 border-on-surface text-[10px] font-black tracking-[0.2em] text-center uppercase cinematic-shadow animate-in shake duration-500">
+                SYSTEM ERROR: {error}
             </div>
         )}
 
         {/* Step 1: Configuration */}
         {step === 1 && (
-            <div className="space-y-6 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center max-w-xl mx-auto space-y-2">
-                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[9px] font-black uppercase tracking-widest mb-2">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Intelligence de Planning</span>
+            <div className="space-y-12 animate-in slide-in-from-bottom-10 duration-1000">
+                <div className="text-center max-w-2xl mx-auto space-y-4">
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                        <span className="h-[1px] w-8 bg-primary"></span>
+                        <span className="editorial-kicker">Planning Intelligence</span>
+                        <span className="h-[1px] w-8 bg-primary"></span>
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-serif italic tracking-tight text-[#301400] leading-tight">Configurez votre Session.</h2>
-                    <p className="text-sm text-[#53443a] font-medium opacity-70 italic font-serif">Définissez les paramètres temporels de votre visite.</p>
+                    <h2 className="text-display-lg text-4xl md:text-6xl text-on-surface leading-tight">Configure your <br /><span className="italic font-light">Session.</span></h2>
+                    <p className="text-lg font-body text-on-surface-variant opacity-60 leading-relaxed">Define the temporal coordinates for your visit.</p>
                 </div>
                 
-                <div className="bg-white border border-[#d8c2b6] rounded-[1.5rem] p-4 md:p-5 grid grid-cols-1 md:grid-cols-2 gap-4 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-[#8d4e1c]/5 blur-3xl -mr-24 -mt-24" />
+                <div className="editorial-card p-10 grid grid-cols-1 md:grid-cols-2 gap-10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32" />
                     
-                    <div className="flex flex-col gap-2 relative z-10">
-                        <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-2.5 opacity-40">
-                            <CalendarIcon className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                            <span>Sélection Date</span>
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-ui-label-bold text-[9px] text-on-surface-variant/40 flex items-center gap-3">
+                            <CalendarIcon className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                            <span>SESSION DATE</span>
                         </label>
                         <input 
                             type="date" 
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full px-6 py-4 bg-surface-container-low border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary transition-all cinematic-shadow"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-2 relative z-10">
-                        <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-2.5 opacity-40">
-                            <Users className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                            <span>Nombre de Convives</span>
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-ui-label-bold text-[9px] text-on-surface-variant/40 flex items-center gap-3">
+                            <Users className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                            <span>GUEST QUOTA</span>
                         </label>
                         <input 
                             type="number" 
@@ -167,33 +170,33 @@ export const ReservationWizard: React.FC = () => {
                             max="20"
                             value={guests}
                             onChange={(e) => setGuests(parseInt(e.target.value))}
-                            className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full px-6 py-4 bg-surface-container-low border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary transition-all cinematic-shadow"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-2 relative z-10">
-                        <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-2.5 opacity-40">
-                            <Clock className="w-3.5 h-3.5 text-[#8d4e1c]" />
-                            <span>Heure d'Arrivée</span>
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-ui-label-bold text-[9px] text-on-surface-variant/40 flex items-center gap-3">
+                            <Clock className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                            <span>ARRIVAL WINDOW</span>
                         </label>
                         <input 
                             type="time" 
                             value={startTime}
                             onChange={(e) => setStartTime(e.target.value)}
-                            className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full px-6 py-4 bg-surface-container-low border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary transition-all cinematic-shadow"
                         />
                     </div>
                     
-                    <div className="flex flex-col gap-2 relative z-10">
-                        <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 flex items-center gap-2.5 opacity-40">
-                            <Clock className="w-3.5 h-3.5 text-[#8d4e1c] opacity-50" />
-                            <span>Fin Estimée</span>
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-ui-label-bold text-[9px] text-on-surface-variant/40 flex items-center gap-3 opacity-60">
+                            <Clock className="w-4 h-4 text-primary/40" strokeWidth={1.5} />
+                            <span>ESTIMATED DURATION</span>
                         </label>
                         <input 
                             type="time" 
                             value={endTime}
                             onChange={(e) => setEndTime(e.target.value)}
-                            className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all"
+                            className="w-full px-6 py-4 bg-surface-container-low border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary transition-all cinematic-shadow"
                         />
                     </div>
                 </div>
@@ -201,12 +204,12 @@ export const ReservationWizard: React.FC = () => {
                 <button 
                     onClick={fetchAvailableTables}
                     disabled={isLoading}
-                    className="w-full py-4 bg-[#301400] text-white rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95 disabled:opacity-50"
+                    className="w-full py-6 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 disabled:opacity-50"
                 >
-                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" strokeWidth={2.5} /> : (
                         <>
-                            <span>Vérifier la Disponibilité</span>
-                            <ChevronRight className="w-6 h-6 text-[#8d4e1c]" />
+                            <span>Analyze Availability</span>
+                            <ChevronRight className="w-6 h-6 text-primary" strokeWidth={2.5} />
                         </>
                     )}
                 </button>
@@ -215,48 +218,49 @@ export const ReservationWizard: React.FC = () => {
 
         {/* Step 2: Placement Mapping */}
         {step === 2 && (
-            <div className="space-y-6 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center space-y-2">
-                    <h2 className="text-3xl md:text-4xl font-serif italic tracking-tight text-[#301400] leading-tight">Sélection de Placement.</h2>
-                    <p className="text-sm text-[#53443a] font-medium opacity-70 italic font-serif">Placement architectural pour une atmosphère optimale.</p>
+            <div className="space-y-12 animate-in slide-in-from-bottom-10 duration-1000">
+                <div className="text-center space-y-4">
+                    <span className="editorial-kicker">Architectural Selection</span>
+                    <h2 className="text-display-lg text-4xl md:text-6xl text-on-surface leading-tight">Secure your <br /><span className="italic font-light">Placement.</span></h2>
+                    <p className="text-lg font-body text-on-surface-variant opacity-60">Select an optimized coordinate for your gastronomic session.</p>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     {availableTables.map(t => (
                         <button
                             key={t.id}
                             onClick={() => setSelectedTable(t.id)}
                             className={`
-                                relative p-4 flex flex-col items-center justify-center gap-2 transition-all duration-700 rounded-2xl border
-                                ${selectedTable === t.id ? 'bg-[#301400] border-[#301400] text-white shadow-xl scale-105 z-10' : 'bg-white border-[#d8c2b6] text-[#53443a] hover:border-[#8d4e1c] group'}
+                                relative p-8 flex flex-col items-center justify-center gap-4 transition-all duration-700 rounded-3xl border-2
+                                ${selectedTable === t.id ? 'bg-on-surface border-on-surface text-background cinematic-shadow scale-105 z-10' : 'bg-background border-on-surface/5 text-on-surface-variant hover:border-primary group'}
                             `}
                         >
-                            <TableIcon className={`w-7 h-7 transition-transform duration-700 ${selectedTable === t.id ? 'scale-110 text-[#8d4e1c]' : 'group-hover:scale-110 opacity-20'}`} />
+                            <TableIcon strokeWidth={1} className={`w-12 h-12 transition-transform duration-1000 ${selectedTable === t.id ? 'scale-110 text-primary' : 'group-hover:scale-110 opacity-10'}`} />
                             <div className="text-center">
-                                <span className="text-base font-bold tracking-tighter block leading-none mb-0.5">Table {t.numero}</span>
-                                <span className={`text-[8px] uppercase font-black tracking-[0.3em] ${selectedTable === t.id ? 'text-[#8d4e1c]' : 'text-[#53443a]/40'}`}>{t.capacite} SIÈGES</span>
+                                <span className="text-2xl font-serif italic block leading-none mb-2">Unit {t.numero}</span>
+                                <span className={`text-[9px] uppercase font-black tracking-[0.3em] ${selectedTable === t.id ? 'text-primary' : 'text-on-surface-variant/30'}`}>{t.capacite} SECTOR QUOTA</span>
                             </div>
                             
                             {selectedTable === t.id && (
-                                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#8d4e1c] rounded-full flex items-center justify-center shadow-lg border-2 border-[#301400]">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                                <div className="absolute -top-3 -right-3 w-8 h-8 bg-primary rounded-full flex items-center justify-center cinematic-shadow border-2 border-on-surface">
+                                    <CheckCircle2 className="w-5 h-5 text-background" strokeWidth={2.5} />
                                 </div>
                             )}
                         </button>
                     ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-3.5 bg-[#fff1ea] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#ffe3d2] transition-all flex items-center justify-center gap-2">
-                        <ArrowLeft className="w-4 h-4" />
-                        Précédent
+                <div className="flex flex-col sm:flex-row gap-6">
+                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-5 bg-surface-container text-on-surface text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3">
+                        <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
+                        Previous Matrix
                     </button>
                     <button 
                         onClick={nextStep} 
-                        className="order-1 sm:order-2 flex-[2] py-3.5 bg-[#301400] text-white rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:scale-[1.02] hover:shadow-xl shadow-black/10 active:scale-95"
+                        className="order-1 sm:order-2 flex-[2] py-5 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95"
                     >
-                        <span>Continuer le Placement</span>
-                        <ChevronRight className="w-6 h-6 text-[#8d4e1c]" />
+                        <span>Confirm Placement</span>
+                        <ChevronRight className="w-6 h-6 text-primary" strokeWidth={2.5} />
                     </button>
                 </div>
             </div>
@@ -264,60 +268,63 @@ export const ReservationWizard: React.FC = () => {
 
         {/* Step 3: Formal Validation */}
         {step === 3 && (
-            <div className="space-y-6 animate-in slide-in-from-right-12 duration-1000">
-                <div className="text-center space-y-2">
-                    <h2 className="text-3xl md:text-4xl font-serif italic tracking-tight text-[#301400] leading-tight">Validation Formelle.</h2>
-                    <p className="text-sm text-[#53443a] font-medium opacity-70 italic font-serif">Confirmation finale des paramètres de session.</p>
+            <div className="space-y-12 animate-in slide-in-from-bottom-10 duration-1000">
+                <div className="text-center space-y-4">
+                    <span className="editorial-kicker">Formal Verification</span>
+                    <h2 className="text-display-lg text-4xl md:text-6xl text-on-surface leading-tight">Formal <br /><span className="italic font-light">Validation.</span></h2>
+                    <p className="text-lg font-body text-on-surface-variant opacity-60">Final confirmation of session parameters before registry commit.</p>
                 </div>
 
-                <div className="bg-white border border-[#d8c2b6] rounded-[1.5rem] p-5 md:p-6 space-y-5 shadow-sm">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pb-5 border-b border-[#fff1ea]">
-                        <div className="space-y-1.5">
-                            <span className="text-[9px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Date de Session</span>
-                            <p className="text-lg font-serif italic text-[#301400] capitalize leading-tight">
-                                {new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                <div className="editorial-card p-10 space-y-10 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 blur-[120px] -ml-48 -mt-48" />
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 pb-10 border-b border-on-surface/5 relative z-10">
+                        <div className="space-y-3">
+                            <span className="editorial-kicker text-[8px] opacity-40">Session Date</span>
+                            <p className="text-2xl font-serif italic text-on-surface capitalize leading-tight">
+                                {new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
                         </div>
-                        <div className="space-y-1.5">
-                            <span className="text-[9px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Fenêtre Temporelle</span>
-                            <p className="text-lg font-serif italic text-[#301400]">{startTime} — {endTime}</p>
+                        <div className="space-y-3">
+                            <span className="editorial-kicker text-[8px] opacity-40">Temporal Window</span>
+                            <p className="text-2xl font-serif italic text-on-surface">{startTime} — {endTime}</p>
                         </div>
-                        <div className="space-y-1.5">
-                            <span className="text-[9px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Placement</span>
-                            <p className="text-lg font-serif italic text-[#301400]">Table #{availableTables.find(t => t.id === selectedTable)?.numero}</p>
+                        <div className="space-y-3">
+                            <span className="editorial-kicker text-[8px] opacity-40">Placement Coordinate</span>
+                            <p className="text-2xl font-serif italic text-on-surface text-primary">Table Unit #{availableTables.find(t => t.id === selectedTable)?.numero}</p>
                         </div>
-                        <div className="space-y-1.5">
-                            <span className="text-[9px] font-black text-[#8d4e1c] uppercase tracking-[0.4em]">Participants</span>
-                            <p className="text-lg font-serif italic text-[#301400]">{guests} Convives</p>
+                        <div className="space-y-3">
+                            <span className="editorial-kicker text-[8px] opacity-40">Guest Count</span>
+                            <p className="text-2xl font-serif italic text-on-surface">{guests} Verified Identities</p>
                         </div>
                     </div>
 
-                    <div className="space-y-3">
-                        <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.4em] ml-1 opacity-40">Exigences Particulières</label>
+                    <div className="space-y-4 relative z-10">
+                        <label className="editorial-kicker text-[8px] opacity-40">Specific Requirements (Optional)</label>
                         <textarea 
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Allergies, célébrations, ou préférences architecturales de placement..."
-                            className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400] text-sm"
+                            placeholder="Allergies, celebrations, or specific architectural placement preferences..."
+                            className="w-full p-6 bg-background border border-on-surface/5 rounded-3xl focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all resize-none font-body text-on-surface text-base italic cinematic-shadow"
                             rows={3}
                         />
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-3.5 bg-[#fff1ea] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#ffe3d2] transition-all flex items-center justify-center gap-2">
-                        <ArrowLeft className="w-4 h-4" />
-                        Précédent
+                <div className="flex flex-col sm:flex-row gap-6">
+                    <button onClick={prevStep} className="order-2 sm:order-1 flex-1 py-5 bg-surface-container text-on-surface text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3">
+                        <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
+                        Return to Placement
                     </button>
                     <button 
                         onClick={handleFinish}
                         disabled={isLoading}
-                        className="order-1 sm:order-2 flex-[2] py-3.5 bg-[#301400] text-white rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:scale-[1.02] hover:shadow-xl shadow-black/10 active:scale-95 disabled:opacity-50"
+                        className="order-1 sm:order-2 flex-[2] py-5 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 disabled:opacity-50"
                     >
-                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin" strokeWidth={2.5} /> : (
                             <>
-                                <span>Confirmer la Réservation</span>
-                                <CheckCircle2 className="w-6 h-6 text-[#8d4e1c]" />
+                                <span>Commit to Registry</span>
+                                <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={2.5} />
                             </>
                         )}
                     </button>
@@ -327,22 +334,22 @@ export const ReservationWizard: React.FC = () => {
 
         {/* Step 4: Security Confirmed */}
         {step === 4 && (
-            <div className="text-center space-y-6 animate-in zoom-in-95 duration-1000 max-w-xl mx-auto py-4">
+            <div className="text-center space-y-12 animate-in zoom-in-95 duration-1000 max-w-2xl mx-auto py-10">
                 <div className="relative inline-flex items-center justify-center">
-                    <div className="absolute inset-0 bg-[#8d4e1c] opacity-10 blur-[80px] rounded-full scale-125" />
-                    <div className="relative w-20 h-20 rounded-[1.5rem] bg-white border border-[#d8c2b6] flex items-center justify-center text-[#8d4e1c] shadow-xl animate-in zoom-in duration-700">
-                        <CheckCircle2 className="w-10 h-10" />
+                    <div className="absolute inset-0 bg-primary opacity-10 blur-[100px] rounded-full scale-150 animate-pulse" />
+                    <div className="relative w-32 h-32 rounded-[2.5rem] bg-background border-2 border-primary/20 flex items-center justify-center text-primary cinematic-shadow animate-in zoom-in duration-1000">
+                        <CheckCircle2 className="w-16 h-16" strokeWidth={1} />
                     </div>
                 </div>
                 
-                <div className="space-y-3">
-                    <h2 className="text-4xl font-serif italic tracking-tight text-[#301400] leading-none">Confirmé.</h2>
-                    <p className="text-lg text-[#53443a] font-medium leading-relaxed italic font-serif opacity-80">Votre table a été sécurisée numériquement. Une expérience gastronomique architecturale vous attend chez {brandName}.</p>
+                <div className="space-y-6">
+                    <h2 className="text-display-lg text-5xl md:text-7xl text-on-surface leading-none">Registry <br /><span className="italic font-light">Secured.</span></h2>
+                    <p className="text-xl font-body text-on-surface-variant leading-relaxed opacity-80">Your placement has been formally committed. An exceptional gastronomic orchestration awaits your presence at {brandName}.</p>
                 </div>
                 
-                <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                    <button onClick={() => navigate('/')} className="flex-1 py-3.5 bg-[#301400] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/10">Retour à l'Accueil</button>
-                    <button className="flex-1 py-3.5 bg-white border border-[#d8c2b6] text-[#301400] rounded-xl font-bold text-xs uppercase tracking-widest transition-all hover:bg-[#fff1ea] active:scale-95">Générer le Pass</button>
+                <div className="pt-10 flex flex-col sm:flex-row gap-6">
+                    <button onClick={() => navigate('/')} className="flex-1 py-5 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-primary active:scale-95 cinematic-shadow">Return Home</button>
+                    <button className="flex-1 py-5 bg-surface-container text-on-surface text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-surface-container-highest active:scale-95 border border-on-surface/5">Download Identity Pass</button>
                 </div>
             </div>
         )}

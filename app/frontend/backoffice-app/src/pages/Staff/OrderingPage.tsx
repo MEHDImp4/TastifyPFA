@@ -140,84 +140,81 @@ export const OrderingPage: React.FC = () => {
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={2}/></div>;
 
   return (
-    <div className="h-[calc(100dvh-6rem)] flex flex-col -m-6 md:-m-8 animate-in fade-in duration-700 bg-background">
+    <div className="h-[calc(100dvh-5rem)] flex flex-col -m-6 md:-m-8 animate-in fade-in duration-700 bg-background overflow-hidden">
       {/* Precision Header */}
-      <header className="bg-surface-container-lowest border-b border-surface-container-high p-4 flex items-center justify-between z-20">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/salle')} className="p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-all active:scale-90 border border-outline-variant/30">
-            <ChevronLeft className="w-6 h-6" style={{ color: '#301400' }}  strokeWidth={2}/>
+      <header className="bg-surface-container-high border-b-2 border-on-surface p-4 px-6 flex items-center justify-between z-20">
+        <div className="flex items-center gap-6">
+          <button onClick={() => navigate('/salle')} className="p-3 bg-background border-2 border-on-surface hover:bg-surface-container-highest transition-all active:translate-y-[2px]">
+            <ChevronLeft className="w-5 h-5 text-on-surface"  strokeWidth={2.5}/>
           </button>
           <div>
-            <h2 className="text-lg font-bold font-sans tracking-tight" style={{ color: '#301400' }}>Station Table #{table?.numero}</h2>
-            <div className="flex items-center gap-2 mt-1">
-                <span className={`w-2.5 h-2.5 rounded-xl ${currentCommande ? 'bg-primary animate-pulse' : 'bg-outline'}`} />
-                <p className="text-[10px] uppercase tracking-widest font-sans font-bold font-sans" style={{ color: '#53443a' }}>
-                    {currentCommande ? `Session Active • #${currentCommande.id}` : 'New Transaction'}
+            <h2 className="text-display-lg text-2xl text-on-surface leading-none">Order Entry Unit</h2>
+            <div className="flex items-center gap-2 mt-2">
+                <span className={`w-2 h-2 rounded-full ${currentCommande ? 'bg-secondary animate-pulse' : 'bg-on-surface/20'}`} />
+                <p className="text-ui-label-bold text-[9px] text-on-surface-variant">
+                    {currentCommande ? `TERMINAL ACTIVE • SESSION ID-${currentCommande.id}` : `NEW TRANSACTION • TABLE UNIT-${table?.numero}`}
                 </p>
             </div>
           </div>
         </div>
         
-        <div className="relative w-80 hidden md:block">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#53443a' }}  strokeWidth={2}/>
+        <div className="relative w-96 hidden md:block group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary"  strokeWidth={2.5}/>
             <input 
                 type="text"
-                placeholder="Lookup culinary data..."
+                placeholder="LOOKUP CULINARY DATA..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-surface-container-low border border-surface-container-high rounded-xl pl-12 pr-4 py-3 text-sm font-bold focus:outline-none focus:border-primary focus:bg-white transition-all font-sans"
-                style={{ color: '#301400' }}
+                className="w-full bg-background border-2 border-on-surface pl-12 pr-6 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
             />
         </div>
       </header>
 
       <div className="flex-1 flex min-h-0">
         {/* Menu Section - Catalog style */}
-        <div className="flex-1 flex flex-col min-w-0 p-5 pt-6 overflow-hidden">
-          {/* Categories bar - Minimalist Glass */}
-          <div className="flex gap-3 overflow-x-auto pb-8 scrollbar-hide shrink-0">
+        <div className="flex-1 flex flex-col min-w-0 p-6 overflow-hidden">
+          {/* Categories bar */}
+          <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-hide shrink-0">
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
                 className={`
-                    px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest font-sans whitespace-nowrap transition-all duration-300 border
-                    ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/10 shadow-primary/20 scale-105' : 'bg-surface-container border-outline-variant/30 hover:bg-surface-container-high hover:border-primary transition-colors'}
+                    px-6 py-2 border-2 text-ui-label-bold text-[9px] whitespace-nowrap transition-all active:translate-y-[2px]
+                    ${activeCat === cat.id ? 'bg-primary text-on-primary border-on-surface shadow-[4px_4px_0px_#301400]' : 'bg-surface-container border-on-surface/20 text-on-surface-variant hover:border-on-surface hover:text-on-surface'}
                 `}
-                style={{ color: activeCat === cat.id ? undefined : '#301400' }}
               >
-                {cat.nom}
+                {cat.nom.toUpperCase()}
               </button>
             ))}
           </div>
 
-          {/* Plats grid - Modern Bento */}
-          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 pb-8 scrollbar-hide">
+          {/* Plats grid - Technical Matrix */}
+          <div className="flex-1 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pb-8 scrollbar-hide">
             {filteredPlats.map(plat => (
               <button
                 key={plat.id}
                 onClick={() => addToCart(plat)}
-                className="group flex flex-col text-left double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.03] hover:shadow-lg shadow-primary/10 hover:shadow-primary/5 active:scale-95 border-outline-variant/30"
+                className="group flex flex-col text-left border-2 border-on-surface bg-surface-container overflow-hidden transition-all hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#301400] active:translate-y-[2px] active:shadow-none"
               >
-                <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-surface-container-low mb-4">
+                <div className="aspect-[4/3] relative border-b-2 border-on-surface bg-background">
                   {plat.image ? (
-                    <img src={plat.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={plat.nom} />
+                    <img src={plat.image} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-300" alt={plat.nom} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-bold text-xl uppercase italic font-display-accent" style={{ color: '#301400', opacity: 0.2 }}>
+                    <div className="w-full h-full flex items-center justify-center font-black text-4xl text-on-surface/5 font-serif italic">
                       {plat.nom.charAt(0)}
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                  <div className="absolute top-3 right-3 w-10 h-10 bg-primary text-on-primary rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-lg shadow-primary/10 flex items-center justify-center">
-                    <Plus className="w-6 h-6"  strokeWidth={2}/>
+                  <div className="absolute top-2 right-2 bg-on-surface text-background px-2 py-0.5 text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                    ADD TO CART
                   </div>
                 </div>
-                <div className="px-1">
-                  <h4 className="font-bold text-sm mb-2 truncate font-sans tracking-tight leading-none group-hover:text-primary transition-colors" style={{ color: '#301400' }}>{plat.nom}</h4>
-                  <div className="flex items-center justify-between">
-                    <span className="text-primary font-bold text-sm font-sans">{plat.prix}DH</span>
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest font-sans" style={{ color: '#53443a' }}>
-                        <Clock className="w-3.5 h-3.5"  strokeWidth={2}/>
+                <div className="p-4 flex flex-col flex-1 justify-between gap-4">
+                  <h4 className="text-ui-label-bold text-[11px] text-on-surface line-clamp-2 leading-tight uppercase">{plat.nom}</h4>
+                  <div className="flex items-center justify-between border-t border-on-surface/10 pt-3">
+                    <span className="text-ui-data-dense font-black text-primary text-base">{plat.prix} DH</span>
+                    <div className="flex items-center gap-1.5 text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
+                        <Clock className="w-3 h-3"  strokeWidth={2.5}/>
                         <span>{plat.temps_preparation}m</span>
                     </div>
                   </div>
@@ -227,75 +224,76 @@ export const OrderingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Cart Section - Operational Sidebar */}
-        <aside className="w-[450px] bg-white border-l border-surface-container-high flex flex-col shadow-[0px_0px_100px_rgba(0,0,0,0.03)] z-10">
-          <div className="p-5 border-b border-surface-container-high flex items-center justify-between bg-surface-container-lowest">
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary-container/20 text-primary flex items-center justify-center">
-                    <ShoppingCart className="w-5 h-5"  strokeWidth={2}/>
-                </div>
-                <h3 className="font-bold font-sans text-sm tracking-tight" style={{ color: '#301400' }}>Operational Cart</h3>
+        {/* Cart Section - Operational Buffer */}
+        <aside className="w-[480px] bg-surface-container border-l-2 border-on-surface flex flex-col z-10 shadow-[-8px_0px_0px_rgba(48,20,0,0.05)]">
+          <div className="p-6 border-b-2 border-on-surface flex items-center justify-between bg-on-surface text-background">
+            <div className="flex items-center gap-4">
+                <ShoppingCart className="w-5 h-5 text-secondary"  strokeWidth={2.5}/>
+                <h3 className="text-ui-label-bold text-[12px] uppercase">Transaction Buffer</h3>
             </div>
-            <div className="px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-widest font-sans border border-outline-variant/30" style={{ color: '#301400' }}>
-                {cart.length} ITEMS
+            <div className="bg-background text-on-surface px-3 py-0.5 text-ui-data-dense font-black">
+                {cart.length} LINE ITEMS
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide">
             {cart.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center gap-3 animate-in zoom-in duration-700" style={{ color: '#53443a', opacity: 0.6 }}>
-                <div className="w-20 h-20 rounded-xl bg-surface-container-low border-2 border-dashed border-outline-variant/30 flex items-center justify-center">
-                    <Plus className="w-8 h-8"  strokeWidth={2}/>
+              <div className="h-full flex flex-col items-center justify-center gap-4 text-on-surface-variant opacity-20">
+                <div className="w-24 h-24 border-2 border-dashed border-on-surface flex items-center justify-center">
+                    <Plus className="w-10 h-10"  strokeWidth={2.5}/>
                 </div>
-                <p className="text-sm font-display-accent italic">Transaction buffer is empty.</p>
+                <p className="text-display-lg text-2xl italic uppercase tracking-tighter">Buffer Empty</p>
               </div>
             ) : (
               cart.map(item => (
-                <div key={item.plat.id} className="p-5 bg-surface-container-low rounded-xl border border-outline-variant/30 group animate-in slide-in-from-right-6 duration-500 transition-all hover:bg-white hover:shadow-lg shadow-primary/10 hover:shadow-primary/5">
-                  <div className="flex justify-between items-start mb-5">
-                    <div>
-                        <h4 className="font-bold text-base font-sans tracking-tight" style={{ color: '#301400' }}>{item.plat.nom}</h4>
-                        <p className="text-xs text-primary font-bold mt-1 uppercase tracking-widest font-sans">{item.plat.prix} DH / UNIT</p>
+                <div key={item.plat.id} className="p-4 bg-background border-2 border-on-surface animate-in slide-in-from-right-6 transition-all hover:shadow-[4px_4px_0px_#301400]">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex-1 pr-4">
+                        <h4 className="text-ui-label-bold text-[13px] text-on-surface leading-tight uppercase">{item.plat.nom}</h4>
+                        <p className="text-ui-data-dense font-black text-primary text-[10px] mt-1 uppercase tracking-widest">{item.plat.prix} DH / UNIT</p>
                     </div>
-                    <button onClick={() => removeFromCart(item.plat.id)} className="p-2 transition-all active:scale-75" style={{ color: '#53443a' }}>
-                        <Trash2 className="w-5 h-5 hover:text-error transition-colors"  strokeWidth={2}/>
+                    <button onClick={() => removeFromCart(item.plat.id)} className="p-2 border-2 border-transparent hover:border-error text-on-surface-variant hover:text-error transition-all active:scale-90">
+                        <Trash2 className="w-4 h-4"  strokeWidth={2.5}/>
                     </button>
                   </div>
                   
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-outline-variant/30 shadow-lg shadow-primary/10">
-                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors" style={{ color: '#53443a' }}><Minus className="w-4 h-4"  strokeWidth={2}/></button>
-                        <span className="font-bold text-sm w-8 text-center font-sans" style={{ color: '#301400' }}>{item.quantite}</span>
-                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors" style={{ color: '#53443a' }}><Plus className="w-4 h-4"  strokeWidth={2}/></button>
+                  <div className="flex items-center justify-between border-t border-on-surface/10 pt-4">
+                    <div className="flex items-center bg-surface-container border-2 border-on-surface overflow-hidden">
+                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-10 h-10 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-r-2 border-on-surface">－</button>
+                        <span className="text-ui-data-dense font-black text-base w-12 text-center text-on-surface">{item.quantite}</span>
+                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-10 h-10 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-l-2 border-on-surface">＋</button>
                     </div>
-                    <div className="font-bold text-sm font-sans" style={{ color: '#301400' }}>{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}DH</div>
+                    <div className="text-ui-label-bold text-lg text-on-surface">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)} DH</div>
                   </div>
                 </div>
               ))
             )}
           </div>
 
-          <div className="p-5 bg-surface-container-low border-t border-surface-container-high">
-            <div className="flex items-center justify-between mb-8">
+          <div className="p-8 bg-background border-t-2 border-on-surface">
+            <div className="flex items-end justify-between mb-8">
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: '#53443a' }}>Estimated Total</span>
-                    <span className="text-sm font-bold opacity-70" style={{ color: '#53443a' }}>Incl. VAT</span>
+                    <span className="text-ui-label-bold text-[10px] text-on-surface-variant uppercase mb-1">AGGREGATED TOTAL</span>
+                    <span className="text-ui-data-dense font-black text-on-surface/40 uppercase tracking-widest text-[9px]">INCL. TAXES & SERVICE</span>
                 </div>
-                <span className="text-2xl font-bold font-sans tracking-tighter" style={{ color: '#301400' }}>{cartTotal.toFixed(2)}DH</span>
+                <div className="text-right">
+                    <span className="text-display-lg text-4xl text-on-surface leading-none">{cartTotal.toFixed(2)}</span>
+                    <span className="text-ui-label-bold text-sm ml-2 text-on-surface">DH</span>
+                </div>
             </div>
             
             <button 
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
                 className={`
-                    w-full py-3 rounded-xl flex items-center justify-center gap-2 font-bold text-sm transition-all duration-300
-                    ${cart.length > 0 && !isSubmitting ? 'bg-primary text-on-primary shadow-lg shadow-primary/10 shadow-primary/20 hover:scale-[1.02] active:scale-95' : 'bg-surface-container text-outline cursor-not-allowed'}
+                    w-full py-5 border-2 border-on-surface flex items-center justify-center gap-4 text-ui-button font-ui-button transition-all
+                    ${cart.length > 0 && !isSubmitting ? 'bg-primary text-on-primary shadow-[6px_6px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_#301400] active:translate-y-[2px] active:shadow-none' : 'bg-surface-container text-on-surface/20 border-on-surface/20 cursor-not-allowed'}
                 `}
             >
-                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={2}/> : (
+                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={2.5}/> : (
                     <>
-                        <span>Push to Kitchen</span>
-                        <ArrowRight className="w-6 h-6"  strokeWidth={2}/>
+                        <span className="uppercase tracking-[0.25em] font-black">Transmit to Kitchen</span>
+                        <ArrowRight className="w-5 h-5"  strokeWidth={2.5}/>
                     </>
                 )}
             </button>

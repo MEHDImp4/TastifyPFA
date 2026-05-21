@@ -1,158 +1,101 @@
----
-name: Tastify
-colors:
-  surface: '#fff8f5'
-  surface-dim: '#ffd1b3'
-  surface-bright: '#fff8f5'
-  surface-container-lowest: '#ffffff'
-  surface-container-low: '#fff1ea'
-  surface-container: '#ffeade'
-  surface-container-high: '#ffe3d2'
-  surface-container-highest: '#ffdcc5'
-  on-surface: '#301400'
-  on-surface-variant: '#53443a'
-  inverse-surface: '#4b2709'
-  inverse-on-surface: '#ffede4'
-  outline: '#867369'
-  outline-variant: '#d8c2b6'
-  surface-tint: '#8d4e1c'
-  primary: '#8d4e1c'
-  on-primary: '#ffffff'
-  primary-container: '#d1854e'
-  on-primary-container: '#4e2400'
-  inverse-primary: '#ffb785'
-  secondary: '#8f4d17'
-  on-secondary: '#ffffff'
-  secondary-container: '#fea86a'
-  on-secondary-container: '#773b03'
-  tertiary: '#775841'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#b49076'
-  on-tertiary-container: '#422a16'
-  error: '#ba1a1a'
-  on-error: '#ffffff'
-  error-container: '#ffdad6'
-  on-error-container: '#93000a'
-  primary-fixed: '#ffdcc6'
-  primary-fixed-dim: '#ffb785'
-  on-primary-fixed: '#301400'
-  on-primary-fixed-variant: '#703704'
-  secondary-fixed: '#ffdcc6'
-  secondary-fixed-dim: '#ffb785'
-  on-secondary-fixed: '#301400'
-  on-secondary-fixed-variant: '#713700'
-  tertiary-fixed: '#ffdcc4'
-  tertiary-fixed-dim: '#e7bfa2'
-  on-tertiary-fixed: '#2b1605'
-  on-tertiary-fixed-variant: '#5d412b'
-  background: '#fff8f5'
-  on-background: '#301400'
-  surface-variant: '#ffdcc5'
-typography:
-  display-accent:
-    fontFamily: Libre Caslon Text
-    fontSize: 48px
-    fontWeight: '400'
-    lineHeight: '1.1'
-    letterSpacing: -0.01em
-  headline-lg:
-    fontFamily: Libre Caslon Text
-    fontSize: 32px
-    fontWeight: '600'
-    lineHeight: '1.2'
-  headline-md:
-    fontFamily: Libre Caslon Text
-    fontSize: 24px
-    fontWeight: '600'
-    lineHeight: '1.3'
-  body-lg:
-    fontFamily: Bodoni Moda
-    fontSize: 18px
-    fontWeight: '400'
-    lineHeight: '1.6'
-  body-md:
-    fontFamily: Bodoni Moda
-    fontSize: 16px
-    fontWeight: '400'
-    lineHeight: '1.6'
-  label-sm:
-    fontFamily: Bricolage Grotesque
-    fontSize: 12px
-    fontWeight: '600'
-    lineHeight: '1'
-    letterSpacing: 0.03em
-rounded:
-  sm: 0.25rem
-  DEFAULT: 0.5rem
-  md: 0.75rem
-  lg: 1rem
-  xl: 1.5rem
-  full: 9999px
-spacing:
-  unit: 4px
-  gutter: 24px
-  margin-desktop: 64px
-  margin-mobile: 20px
-  container-max: 1440px
+# Design System: Tastify PFA
+
+## 1. Visual Theme & Atmosphere
+Tastify PFA is a high-end restaurant OS that balances **Tactical Command** (for staff efficiency) with **Organic Sophistication** (for client elegance). 
+
+- **Atmosphere:** A curated digital concierge. It feels like a well-lit architecture studio or a luxury hotel’s command center. It is clinical yet warm, prioritizing "Absolute Visibility" through high contrast and bold typography.
+- **Density:** 4 (Gallery Airy) for Client Portal; 8 (Cockpit Dense) for Staff Backoffice.
+- **Variance:** 8 (Offset Asymmetric) to avoid the "generic dashboard" look.
+- **Motion:** 6 (Fluid CSS) with weighty spring physics.
+
+## 2. Color Palette & Roles
+The palette is sun-drenched and heritage-inspired.
+
+- **Parchment Canvas** (`#fff8f5`) — Primary background surface. Warm, paper-like.
+- **Roasted Ink** (`#301400`) — Primary text and functional elements. **Must be used for all critical labels.**
+- **Sienna Primary** (`#8d4e1c`) — Brand focus, primary CTAs, active states.
+- **Amber Accent** (`#8f4d17`) — Status differentiation, warnings, and secondary highlights.
+- **Terracotta Container** (`#ffeade`) — Subtle layering for cards and structural zones.
+- **Error Crimson** (`#ba1a1a`) — Critical alerts and destructive actions.
+
+## 3. Typography Rules
+- **Display (Headlines):** `Libre Caslon Text`. Use for brand moments and section headers. High-end, editorial feel.
+- **Body:** `Bodoni Moda`. Used for descriptions and long-form content. 65ch max-width.
+- **Data (Labels/UI):** `Bricolage Grotesque`. Used for all technical UI, buttons, and numbers. **Mandate:** High tracking (`0.25em`) for uppercase labels.
+- **Monospace:** `JetBrains Mono`. Used for technical metadata and code snippets.
+- **Anti-Pattern:** `Inter` is strictly BANNED. Generic serifs are BANNED.
+
+## 4. Component Stylings
+- **Buttons:** Tactile, rounded (8px). Primary buttons in Sienna with Ink or White text. No outer glows.
+- **Cards:** Generously rounded (16px). Use tonal fills (`#ffeade`) instead of shadows for hierarchy. In dense staff views, use 1px dividers in `#867369` instead of cards.
+- **Inputs:** Label above (Bricolage Grotesque, Bold). 1px bottom border in Sienna. No floating labels.
+- **Status Badges:** Softly rounded rectangles. High-contrast text on tonal backgrounds.
+- **Table Map:** Geometric architectural primitives. Tables use tonal spotting (Sienna/Amber/Parchment).
+
+## 5. Layout Principles
+- **No Overlapping:** Every element occupies its own clear spatial zone.
+- **Asymmetric Hero:** Client pages must use offset layouts, never centered.
+- **Staff Density:** Staff pages (KDS, Salle) use a "Cockpit" layout—information is dense but organized by rigid 8px rhythmic units.
+- **Absolute Visibility:** Functional pages (Login, KDS, Dashboard) MUST use bold weights and high-contrast colors (`#301400` on `#fff8f5`).
+
+## 6. Technical Specifications (Tokens)
+
+### 6.1. Typography Scale
+| Token | Font Family | Size | Weight | Line Height | Letter Spacing |
+|-------|-------------|------|--------|-------------|----------------|
+| `display-lg` | Libre Caslon Text | 64px | 700 | 1.1 | -0.02em |
+| `display-lg-mobile` | Libre Caslon Text | 40px | 700 | 1.2 | - |
+| `headline-md` | Libre Caslon Text | 32px | 600 | 1.3 | - |
+| `body-lg` | Bodoni Moda | 18px | 400 | 1.6 | - |
+| `body-md` | Bodoni Moda | 16px | 400 | 1.5 | - |
+| `ui-label-bold` | Bricolage Grotesque | 14px | 800 | 1.2 | 0.25em |
+| `ui-button` | Bricolage Grotesque | 14px | 700 | 1.0 | 0.05em |
+| `ui-data-dense` | Bricolage Grotesque | 13px | 600 | 1.0 | - |
+
+### 6.2. Spacing & Rhythm
+- `unit-xs`: 4px
+- `unit-sm`: 8px
+- `unit-md`: 16px
+- `unit-lg`: 24px
+- `staff-gutter`: 1rem (16px)
+- `staff-margin`: 1.5rem (24px)
+- `client-gutter`: 3rem (48px)
+- `client-margin`: 5vw
+
+### 6.3. Corner Roundness
+- `ROUND_FOUR`: 0.25rem (4px)
+- `ROUND_EIGHT`: 0.5rem (8px) - **Default for Components**
+- `ROUND_TWELVE`: 0.75rem (12px) - **Default for Cards**
+- `ROUND_FULL`: 9999px
+
+## 7. Motion & Interaction
+- **Spring Physics:** Weighty feel (`stiffness: 100, damping: 20`).
+- **Cascade Reveals:** Staggered entry for list items and menu cards.
+- **Micro-Loops:** Real-time indicators (WebSocket pulse) should have a perpetual subtle shimmer.
+- **Performance:** Animate exclusively via `transform` and `opacity`.
+
+## 8. Anti-Patterns (Banned AI "Slop")
+- **No Emojis.**
+- **No `Inter` font.**
+- **No Pure Black (`#000000`).**
+- **No Neon or Outer Glow shadows.**
+- **No Centered Hero sections.**
+- **No AI Copywriting Clichés** ("Elevate", "Seamless", "Unleash").
+- **No Generic Placeholder Names** (Use "Table 12", "Filet Mignon", "Chef Marc").
+- **No Blur Animations** on critical functional content.
+
 ---
 
-## Brand & Style
+## 8. Screen Directives (Stitch Prompting Guide)
 
-This design system embodies **Organic Sophistication** tailored for high-end hospitality environments. The brand personality is warm, heritage-inspired, and deeply editorial, acting as a curated digital concierge that manages complex restaurant operations with grace.
+### 8.1. Staff Backoffice (Tactical Command)
+1. **KDS (Kitchen Display System):** A high-density grid of order cards. Each card shows table number, waiter name, and a list of dishes with checkboxes. A countdown timer (`heure_lancement`) glows amber if over 10 minutes.
+2. **Salle Map:** A clean, architectural top-down view of the restaurant. Tables are circles and squares. Color-code: Sienna (Occupied), Parchment (Free), Amber (Reserved).
+3. **Ordering Page:** Split-screen. Left: Categories & Dishes (Large touch-targets). Right: Current ticket with "FIRE" button.
+4. **Staff Dashboard:** Bento-grid layout with real-time analytics (Revenue, Table Turnover, Top Dishes).
 
-The aesthetic fuses **Classical Typography** with modern tonal harmony. It relies on a rich, sun-drenched color palette, high-contrast serif typefaces, and a "Tonal Spot" architecture to create a sense of grounded luxury. The emotional response should be one of artisanal quality, timeless reliability, and thoughtful attention to detail.
-
-The style leverages **Layered Tonality** for depth, using subtle shifts in warm ambers and soft terracotta tones to define hierarchy, ensuring the UI feels inviting and expensive even when displaying dense operational data.
-
-## Colors
-
-The palette is strictly curated to maintain a warm, high-end hospitality aesthetic, moving toward a more vibrant, sun-baked warmth.
-
-- **Primary:** Burnt Sienna (#d1854e) is used for primary brand moments and essential interactive states, providing a glowing, clay-inspired focal point.
-- **Surface:** The canvas utilizes a range of warm earth neutrals. Surfaces move away from cold whites toward a layered approach of soft tans and parchment-inspired tones.
-- **Accents:** Secondary and tertiary tones provide categorization and subtle status differentiation without the harshness of traditional UI colors.
-- **Typography Colors:** Primary text uses deep roasted neutrals to keep a rich ink-on-paper contrast.
-
-## Typography
-
-The typographic system utilizes a sophisticated trio of fonts to balance classical heritage with modern utility.
-
-- **Libre Caslon Text:** Used for headlines and display moments.
-- **Bodoni Moda:** The primary body typeface for editorial long-form content.
-- **Bricolage Grotesque:** Used for labels, data points, and technical UI elements.
-
-**Scaling:** For mobile devices, `display-accent` should scale down to 32px, and `headline-lg` to 24px.
-
-## Layout & Spacing
-
-This design system employs a **Fixed Grid** philosophy for desktop to maintain an architectural feel, switching to a fluid model for mobile tablets.
-
-- **Grid:** A 12-column grid with generous 24px gutters.
-- **Rhythm:** An 8px linear scale with a 4px sub-unit for fine-tuning.
-- **Padding:** Content containers should use at least 32px internal padding to preserve breathing room.
-
-## Elevation & Depth
-
-Hierarchy is established through a sophisticated layering system:
-
-1. **Base Layer:** Warm parchment and terracotta neutrals.
-2. **Structural Layer:** Use subtle tonal shifts rather than harsh borders.
-3. **Tonal Spotting:** Important elements are elevated using soft fills in primary and secondary hues.
-4. **Shadows:** Rare, soft, and warm when needed.
-
-## Shapes
-
-The shape language is rounded to provide a soft, organic feel that counters the crispness of the serif typography.
-
-- **Primary Containers:** 1rem (16px) corner radius.
-- **Secondary Elements:** 0.5rem (8px) corner radius.
-- **Status Badges:** Softly rounded rectangles rather than digital pills.
-
-## Components
-
-- **Buttons:** Primary buttons use Burnt Sienna with high-contrast text.
-- **Inputs:** Fields are defined by subtle tonal backgrounds and a 1px bottom border, transforming into primary sienna on focus.
-- **Tonal Cards:** Warm neutral backgrounds with soft corners and low-contrast borders.
-- **Selection Controls:** Use primary sienna for active states.
-- **Status Badges:** Use secondary and tertiary palettes with deep-toned text.
-- **The "Floor Plan" Grid:** Uses the same warm tonal aesthetic to map tables and zones with architectural clarity.
+### 8.2. Client Portal (Organic Sophistication)
+1. **Portal Home:** A high-end editorial landing page. Large serif typography, asymmetric layouts, and deep parchment tones.
+2. **Digital Menu:** A visually rich grid of dishes. Large photos, elegant `Bodoni Moda` descriptions, and a minimalist "Add" button.
+3. **Reservation Wizard:** A calm, multi-step flow. Step 1: Date/Time (Grid of chips). Step 2: Party Size. Step 3: Confirmation.
+4. **Payment/Checkout:** A secure, high-contrast summary of the order with "Split Bill" options.

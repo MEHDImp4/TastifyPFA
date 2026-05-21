@@ -99,69 +99,76 @@ export const CategoryPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto animate-in fade-in duration-700 bg-background">
-      <div className="flex items-center justify-between mb-12">
+    <div className="max-w-[1400px] mx-auto animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-on-surface font-sans">Menu Architecture</h1>
-          <p className="text-on-surface-variant mt-1.5 font-sans font-medium">Manage the structural categories of your restaurant's menu.</p>
+          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Menu Architecture</h1>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Structural Sector Configuration</span>
+          </div>
         </div>
         <button 
           data-testid="category-create-button"
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-3 px-4 py-3.5 bg-primary text-white rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-lg shadow-primary/10 hover:shadow-primary/20 active:scale-95 shadow-lg shadow-primary/10 shadow-primary/10"
+          className="flex items-center gap-3 px-6 py-3 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] active:translate-y-[2px] active:shadow-none"
         >
-          <Plus className="w-5 h-5"  strokeWidth={2}/>
-          <span>Define New Category</span>
+          <Plus className="w-5 h-5"  strokeWidth={2.5}/>
+          <span>DEFINE NEW SECTOR</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.filter(c => c.est_active).map((cat) => (
             <div 
               key={cat.id}
               data-testid={`category-card-${cat.id}`}
-              className="group double-bezel bg-white p-3 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg shadow-primary/10 hover:shadow-primary/5"
+              className="group bg-surface-container border-2 border-on-surface p-4 transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400]"
             >
-              <div className="aspect-[16/10] relative rounded-xl overflow-hidden bg-surface-container-low mb-5">
+              <div className="aspect-[16/9] relative border-2 border-on-surface bg-background mb-6 overflow-hidden">
                 {cat.image ? (
-                  <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                  <img src={cat.image} alt={cat.nom} className="w-full h-full object-cover grayscale-[0.4] group-hover:grayscale-0 transition-all duration-500" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-on-surface-variant opacity-20">
-                    <ImageIcon className="w-8 h-8" />
+                  <div className="w-full h-full flex items-center justify-center font-black text-4xl text-on-surface/5 font-serif italic">
+                    {cat.nom.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <div className="absolute top-4 right-4 flex gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
                     data-testid={`category-edit-${cat.id}`}
                     onClick={() => handleOpenModal(cat)}
-                    className="p-3 bg-white/80 backdrop-blur-xl rounded-2xl text-on-surface hover:text-primary shadow-lg shadow-primary/10 transition-all active:scale-90"
+                    className="p-3 bg-background border-2 border-on-surface text-on-surface hover:bg-primary hover:text-on-primary transition-all active:scale-90"
                   >
-                    <Edit2 className="w-4 h-4"  strokeWidth={2}/>
+                    <Edit2 className="w-4 h-4"  strokeWidth={2.5}/>
                   </button>
                   <button 
                     data-testid={`category-delete-${cat.id}`}
                     onClick={() => handleDelete(cat.id)}
-                    className="p-3 bg-white/80 backdrop-blur-xl rounded-2xl text-on-surface hover:text-error shadow-lg shadow-primary/10 transition-all active:scale-90"
+                    className="p-3 bg-background border-2 border-on-surface text-on-surface hover:bg-error hover:text-on-error transition-all active:scale-90"
                   >
-                    <Trash2 className="w-4 h-4"  strokeWidth={2}/>
+                    <Trash2 className="w-4 h-4"  strokeWidth={2.5}/>
                   </button>
                 </div>
-                <div className="absolute bottom-4 left-4 glass px-4 py-2 rounded-xl text-xs font-bold text-on-surface uppercase tracking-widest font-sans border border-primary/10">
-                    Rank: #{cat.ordre_affichage}
+                <div className="absolute bottom-2 left-2 bg-on-surface text-background px-3 py-0.5 text-ui-label-bold text-[9px]">
+                    ARCH-RANK: #{cat.ordre_affichage}
                 </div>
               </div>
-              <div className="px-3 pb-3">
-                <h3 className="text-lg font-bold tracking-tight text-on-surface font-sans mb-3">{cat.nom}</h3>
-                <p className="text-on-surface-variant text-sm font-medium leading-relaxed line-clamp-2 h-10 opacity-70">
-                  {cat.description || 'No description provided for this culinary sector.'}
+              <div className="space-y-4">
+                <h3 className="text-ui-label-bold text-base text-on-surface font-black uppercase tracking-tight">{cat.nom}</h3>
+                <p className="text-ui-data-dense font-black text-on-surface-variant opacity-60 leading-relaxed line-clamp-2 h-10">
+                  {cat.description?.toUpperCase() || 'NO SECTOR CONTEXT LOGGED.'}
                 </p>
+                <div className="pt-4 border-t-2 border-on-surface/5 flex justify-between items-center">
+                    <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Live Status: Active</span>
+                    <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                </div>
               </div>
             </div>
           ))}
@@ -171,13 +178,13 @@ export const CategoryPage: React.FC = () => {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        title={editingCategory ? 'Update Sector' : 'Define Sector'}
+        title={editingCategory ? 'EDIT SECTOR METADATA' : 'ARCHITECT NEW SECTOR'}
       >
-        <form onSubmit={handleSubmit} className="space-y-8 p-2">
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <FileText className="w-3 h-3 text-primary"  strokeWidth={2}/>
-                <span>Identification</span>
+        <form onSubmit={handleSubmit} className="space-y-6 p-2">
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant flex items-center gap-2">
+                <FileText className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
+                <span>IDENTIFICATION</span>
             </label>
             <input 
               type="text" 
@@ -185,44 +192,44 @@ export const CategoryPage: React.FC = () => {
               required
               value={nom}
               onChange={(e) => setNom(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
-              placeholder="Ex: Signature Starters, Traditional Tagines..."
+              className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              placeholder="E.G. TRADITIONAL TAGINES"
             />
           </div>
 
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <ImageIcon className="w-3 h-3 text-primary" />
-                <span>Sector Context</span>
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant flex items-center gap-2">
+                <ImageIcon className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
+                <span>SECTOR CONTEXT</span>
             </label>
             <textarea 
               data-testid="category-description-input"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-on-surface font-semibold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none"
-              placeholder="Describe the culinary intent of this category..."
+              className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all resize-none uppercase placeholder:text-on-surface-variant/30"
+              placeholder="CULINARY INTENT..."
             />
           </div>
 
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <ListOrdered className="w-3 h-3 text-primary"  strokeWidth={2}/>
-                <span>Architectural Rank</span>
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant flex items-center gap-2">
+                <ListOrdered className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
+                <span>PRIORITY RANK</span>
             </label>
             <input 
               type="number" 
               data-testid="category-order-input"
               value={ordre}
               onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-              className="w-full bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 text-on-surface font-bold focus:bg-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all"
+              className="w-full bg-background border-2 border-on-surface px-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all"
             />
           </div>
 
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                <ImageIcon className="w-3 h-3 text-primary" />
-                <span>Visual Asset</span>
+          <div className="space-y-2">
+            <label className="text-ui-label-bold text-[10px] text-on-surface-variant flex items-center gap-2">
+                <ImageIcon className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
+                <span>VISUAL ASSET INJECTION</span>
             </label>
             <div className="relative group">
               <input 
@@ -231,13 +238,13 @@ export const CategoryPage: React.FC = () => {
                 onChange={handleImageChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
-              <div className="w-full h-40 bg-surface-container-low border-2 border-dashed border-surface-container-high rounded-xl flex flex-col items-center justify-center gap-3 transition-all group-hover:border-primary/40 group-hover:bg-primary-container/5">
+              <div className="w-full h-40 bg-surface-container border-2 border-dashed border-on-surface flex flex-col items-center justify-center gap-4 transition-all group-hover:bg-primary/5 group-hover:border-primary">
                 {preview ? (
-                  <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-xl" />
+                  <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <>
                     <ImageIcon className="w-10 h-10 text-on-surface-variant opacity-20" />
-                    <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest font-sans">Inject Visual Data</span>
+                    <span className="text-ui-label-bold text-[9px] text-on-surface-variant opacity-60">SELECT DATA FILE</span>
                   </>
                 )}
               </div>
@@ -248,13 +255,13 @@ export const CategoryPage: React.FC = () => {
             type="submit"
             data-testid="category-save-button"
             disabled={isSaving}
-            className="w-full py-3 mt-4 bg-primary text-white rounded-xl font-bold text-sm transition-all hover:scale-[1.02] hover:shadow-lg shadow-primary/10 hover:shadow-primary/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full py-4 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] transition-all active:translate-y-[2px] active:shadow-none mt-4"
           >
-            {isSaving ? <Loader2 className="w-6 h-6 animate-spin"  strokeWidth={2}/> : (
-                <>
-                    <span>{editingCategory ? 'Update Architecture' : 'Confirm Category'}</span>
-                    <CheckCircle2 className="w-6 h-6"  strokeWidth={2}/>
-                </>
+            {isSaving ? <Loader2 className="w-6 h-6 animate-spin mx-auto"  strokeWidth={2.5}/> : (
+                <div className="flex items-center justify-center gap-3 uppercase tracking-[0.2em] font-black">
+                    <span>{editingCategory ? 'Commit Changes' : 'Architect Sector'}</span>
+                    <CheckCircle2 className="w-5 h-5"  strokeWidth={2.5}/>
+                </div>
             )}
           </button>
         </form>

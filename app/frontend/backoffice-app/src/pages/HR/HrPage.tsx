@@ -26,77 +26,80 @@ export const HrPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-[1400px] mx-auto animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div>
-          <h1 className="text-xl font-bold tracking-tight" style={{ color: '#301400' }}>Gestion du Personnel</h1>
-          <p className="mt-1 font-medium" style={{ color: '#53443a' }}>Gérez votre équipe, les postes et les fiches de paie.</p>
+          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Human Resources</h1>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Workforce Management & Payroll Audit</span>
+          </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-4">
             <button 
                 onClick={() => {
-                    toast.success('Génération du PDF en cours...');
+                    toast.success('GENERATING PAYROLL MANIFEST...');
                 }}
-                className="flex items-center gap-2 px-3 py-2.5 bg-surface-container border border-outline-variant/30 rounded-xl font-bold transition-transform hover:border-primary active:scale-95"
-                style={{ color: '#301400' }}
+                className="flex items-center gap-3 px-6 py-3 bg-background border-2 border-on-surface text-ui-button font-ui-button transition-all hover:bg-surface-container active:translate-y-[2px]"
             >
-                <FileText className="w-4 h-4"  strokeWidth={2}/>
-                Exporter la liste (PDF)
+                <FileText className="w-5 h-5"  strokeWidth={2.5}/>
+                <span>EXPORT MANIFEST</span>
             </button>
-            <button className="flex items-center gap-2 px-3 py-2.5 bg-primary text-on-primary rounded-xl font-bold transition-transform hover:brightness-110 active:scale-95 shadow-lg shadow-primary/10 shadow-primary/20">
-                <Plus className="w-5 h-5"  strokeWidth={2}/>
-                Ajouter un membre
+            <button className="flex items-center gap-3 px-6 py-3 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] active:translate-y-[2px] active:shadow-none">
+                <Plus className="w-5 h-5"  strokeWidth={2.5}/>
+                <span>ADD OPERATOR</span>
             </button>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {employes.map((emp) => (
-            <div key={emp.id} className="p-4 tonal-card group hover:border-primary/30 transition-all">
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary">
-                    <Users className="w-7 h-7"  strokeWidth={2}/>
+            <div key={emp.id} className="bg-surface-container border-2 border-on-surface p-6 transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400]">
+              <div className="flex items-start justify-between mb-8">
+                <div className="w-12 h-12 border-2 border-on-surface bg-background flex items-center justify-center text-primary shadow-[3px_3px_0px_#301400]">
+                    <Users className="w-7 h-7"  strokeWidth={2.5}/>
                 </div>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 bg-surface-container rounded-xl text-primary hover:bg-primary hover:text-on-primary transition-colors"><Edit2 className="w-4 h-4"  strokeWidth={2}/></button>
-                    <button className="p-2 bg-surface-container rounded-xl text-error hover:bg-error hover:text-on-error transition-colors"><Trash2 className="w-4 h-4"  strokeWidth={2}/></button>
+                    <button className="p-2 border-2 border-transparent hover:border-primary text-primary transition-all"><Edit2 className="w-4 h-4"  strokeWidth={2.5}/></button>
+                    <button className="p-2 border-2 border-transparent hover:border-error text-error transition-all"><Trash2 className="w-4 h-4"  strokeWidth={2.5}/></button>
                 </div>
               </div>
               
-              <h3 className="text-base font-bold mb-1" style={{ color: '#301400' }}>{emp.username}</h3>
-              <p className="text-primary font-sans text-xs font-bold uppercase tracking-widest font-sans flex items-center gap-2 mb-4">
-                  <Briefcase className="w-3 h-3"  strokeWidth={2}/>
-                  <span>{emp.poste}</span>
-              </p>
+              <h3 className="text-ui-label-bold text-base text-on-surface font-black uppercase tracking-tight mb-2">{emp.username}</h3>
+              <div className="flex items-center gap-2 bg-on-surface text-background px-3 py-1 w-fit mb-6">
+                  <Briefcase className="w-3 h-3"  strokeWidth={2.5}/>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em]">{emp.poste.toUpperCase()}</span>
+              </div>
               
-              <div className="space-y-3 pt-4 border-t border-outline-variant/30">
-                  <div className="flex justify-between text-sm">
-                      <span className="font-bold" style={{ color: '#53443a' }}>Salaire</span>
-                      <span className="font-bold" style={{ color: '#301400' }}>{emp.salaire} DH</span>
+              <div className="space-y-4 pt-6 border-t-2 border-on-surface/5">
+                  <div className="flex justify-between items-end">
+                      <span className="text-ui-label-bold text-[10px] text-on-surface-variant">MONTHLY REMUNERATION</span>
+                      <span className="text-ui-data-dense font-black text-primary text-base">{emp.salaire} DH</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                      <span className="font-bold" style={{ color: '#53443a' }}>Date d'embauche</span>
-                      <span className="font-bold" style={{ color: '#301400' }}>{new Date(emp.date_embauche).toLocaleDateString()}</span>
+                  <div className="flex justify-between items-end">
+                      <span className="text-ui-label-bold text-[10px] text-on-surface-variant">COMMISSION DATE</span>
+                      <span className="text-ui-data-dense font-black text-on-surface">{new Date(emp.date_embauche).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                      <span className="font-bold" style={{ color: '#53443a' }}>CIN</span>
-                      <span className="font-bold" style={{ color: '#301400' }}>{emp.cin}</span>
+                  <div className="flex justify-between items-end">
+                      <span className="text-ui-label-bold text-[10px] text-on-surface-variant">IDENTITY RECORD (CIN)</span>
+                      <span className="text-ui-data-dense font-black text-on-surface uppercase">{emp.cin}</span>
                   </div>
               </div>
             </div>
           ))}
           
           {employes.length === 0 && (
-            <div className="col-span-full py-20 flex flex-col items-center justify-center" style={{ color: '#53443a', opacity: 0.5 }}>
-                <Users className="w-16 h-10 mb-4"  strokeWidth={2}/>
-                <p className="font-bold">Aucun employé enregistré.</p>
+            <div className="col-span-full py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-20">
+                <Users className="w-16 h-10 mb-6"  strokeWidth={2.5}/>
+                <p className="text-display-lg text-3xl italic uppercase tracking-tighter">No Active Personnel</p>
+                <p className="text-ui-label-bold text-[11px] mt-4 tracking-[0.3em]">Operational roles vacant</p>
             </div>
           )}
         </div>
