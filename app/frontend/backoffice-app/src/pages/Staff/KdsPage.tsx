@@ -1,7 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
-import { Loader2, Clock, CheckCircle2, ChefHat, PlayCircle, Timer } from 'lucide-react';
+import { 
+  Loader2, 
+  Clock, 
+  CheckCircle2, 
+  ChefHat, 
+  PlayCircle, 
+  Timer,
+  AlertTriangle,
+  ChevronRight,
+  MoreVertical,
+  Maximize2
+} from 'lucide-react';
 
 const playDing = () => {
     try {
@@ -10,8 +22,8 @@ const playDing = () => {
         const gainNode = audioCtx.createGain();
 
         oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
-        oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); // Up to A6
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
 
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
@@ -30,6 +42,7 @@ const playDing = () => {
 export const KdsPage: React.FC = () => {
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const previousTicketsRef = useRef<number>(0);
 
   const fetchTickets = async () => {
@@ -62,10 +75,11 @@ export const KdsPage: React.FC = () => {
 
   useEffect(() => {
     fetchTickets();
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
-    // Play sound if new ticket arrived
     if (!isLoading && tickets.length > previousTicketsRef.current) {
         playDing();
     }
@@ -88,136 +102,162 @@ export const KdsPage: React.FC = () => {
 
   const getElapsedTime = (startTime: string) => {
     const start = new Date(startTime).getTime();
-    const now = new Date().getTime();
+    const now = currentTime.getTime();
     const diff = Math.floor((now - start) / 60000);
-    return `${diff}m`;
+    const secs = Math.floor(((now - start) % 60000) / 1000);
+    return `${diff}m ${secs}s`;
   };
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-8 h-8 animate-spin"  strokeWidth={2.5}/></div>;
+  const getTicketStatus = (ticket: any) => {
+    const isCritical = (new Date().getTime() - new Date(ticket.created_at).getTime()) > 15 * 60000;
+    if (isCritical && ticket.statut !== 'PRET') return 'CRITICAL';
+    return ticket.statut;
+  };
+
+  const columns = [
+    { id: 'EN_ATTENTE', label: 'INCOMING', icon: PlayCircle },
+    { id: 'EN_PREPARATION', label: 'IN PROGRESS', icon: Timer },
+    { id: 'PRET', label: 'READY TO PLATE', icon: CheckCircle2 },
+    { id: 'CRITICAL', label: 'CRITICAL', icon: AlertTriangle, color: 'text-secondary' },
+  ];
+
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
 
   return (
-    <div className="max-w-[1700px] mx-auto animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 shrink-0">
+    <div className="h-screen flex flex-col bg-background overflow-hidden -m-staff-margin p-staff-margin selection:bg-primary/10 selection:text-primary">
+      
+      {/* Tactical KDS Header */}
+      <header className="flex justify-between items-end mb-unit-lg border-b-2 border-on-surface pb-unit-sm shrink-0">
         <div>
-          <h1 className="text-display-lg text-[32px] text-on-surface leading-none">Kitchen Command Center</h1>
-          <div className="flex items-center gap-2 mt-2">
-            <div className="w-2 h-2 rounded-full bg-secondary"></div>
-            <span className="text-ui-data-dense uppercase tracking-widest text-on-surface-variant font-bold">Real-time Order Orchestration</span>
+          <h2 className="text-display-lg text-headline-md text-primary tracking-tight uppercase">Kitchen Display System</h2>
+          <div className="flex items-center gap-unit-md mt-unit-xs">
+            <span className="bg-primary text-on-primary px-unit-sm py-0.5 rounded text-[10px] font-black tracking-widest uppercase">Station: Hot Line</span>
+            <span className="text-on-surface-variant font-black text-[10px] uppercase tracking-widest">Orders Active: {tickets.length}</span>
+            <span className="text-on-surface-variant font-black text-[10px] uppercase tracking-widest">Avg Prep: 14m 20s</span>
           </div>
         </div>
-        <div className="flex items-center gap-6 px-6 py-2 bg-surface-container border-2 border-on-surface shadow-[4px_4px_0px_#301400]">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 border-2 border-on-surface bg-secondary animate-pulse" />
-            <span className="text-ui-label-bold text-[10px] text-on-surface">Live Signal</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-ui-data-dense font-black text-primary">{tickets.length} ACTIVE BATCHES</span>
+        <div className="flex gap-unit-md">
+          <div className="bg-surface-container-low border-2 border-on-surface px-6 py-2 rounded-lg flex items-center gap-4 shadow-[4px_4px_0px_#301400]">
+            <Clock className="w-6 h-6 text-secondary" strokeWidth={2.5} />
+            <span className="text-display-lg text-4xl leading-none font-black text-on-surface tabular-nums">
+                {currentTime.toLocaleTimeString('en-GB', { hour12: false })}
+            </span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {tickets.map((ticket) => (
-          <div key={ticket.id} className="bg-surface-container border-2 border-on-surface flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-500 shadow-[6px_6px_0px_#301400] transition-all hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_#301400]">
-            {/* Ticket Header */}
-            <div className={`p-5 flex items-center justify-between border-b-2 border-on-surface ${ticket.type === 'EMPORTER' ? 'bg-secondary-container' : 'bg-primary-container'}`}>
-              <div>
-                <h3 className="text-ui-label-bold text-[14px] text-on-secondary-container leading-none">
-                    {ticket.type === 'SUR_PLACE' ? `TABLE #${ticket.table_numero || '?'}` : `CLIENT: ${ticket.client_nom || 'UNKNOWN'}`}
-                </h3>
-                <div className="flex items-center gap-2 text-ui-data-dense text-on-secondary-container/70 font-black mt-2">
-                    <Clock className="w-3.5 h-3.5"  strokeWidth={2.5}/>
-                    <span className="uppercase">{new Date(ticket.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      {/* Kanban Grid */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-staff-gutter overflow-hidden h-full pb-unit-lg">
+        {columns.map((col) => (
+          <div key={col.id} className={`flex flex-col gap-unit-md h-full min-w-[300px] ${col.id === 'CRITICAL' ? 'bg-secondary/5 rounded-xl border-2 border-secondary/20 p-2' : ''}`}>
+            <div className="flex items-center justify-between px-unit-sm py-2">
+                <div className="flex items-center gap-3">
+                    <col.icon className={`w-5 h-5 ${col.color || 'text-on-surface'}`} strokeWidth={2.5} />
+                    <h3 className={`text-ui-label-bold text-[12px] font-black tracking-[0.2em] uppercase ${col.color || 'text-on-surface'}`}>
+                        {col.label}
+                    </h3>
                 </div>
-              </div>
-              <div className="bg-background border-2 border-on-surface px-3 py-1 text-ui-data-dense font-black text-on-surface">
-                ID-{ticket.id}
-              </div>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${col.id === 'CRITICAL' ? 'bg-secondary text-on-secondary' : 'bg-on-surface text-background'}`}>
+                    {tickets.filter(t => getTicketStatus(t) === col.id).length}
+                </span>
             </div>
 
-            {/* Items List */}
-            <div className="flex-1 p-4 space-y-4 max-h-[450px] overflow-y-auto scrollbar-hide">
-              {ticket.lignes.map((item) => (
-                <div key={item.id} className="relative flex flex-col gap-3 p-4 bg-background border-2 border-on-surface shadow-[4px_4px_0px_#301400/10] transition-all">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4">
-                        <span className="text-display-lg text-2xl text-primary leading-none">x{item.quantite}</span>
-                        <span className={`text-ui-label-bold text-[13px] leading-tight ${item.statut === 'PRET' ? 'text-on-surface-variant line-through opacity-30' : 'text-on-surface'}`}>
-                          {item.plat_nom.toUpperCase()}
-                        </span>
-                      </div>
-                      {item.notes && (
-                        <div className="mt-3 text-ui-data-dense text-secondary border-l-4 border-secondary pl-3 font-black py-1">
-                          {item.notes.toUpperCase()}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex flex-col items-end">
-                      <span className={`
-                        px-2 py-0.5 border-2 border-on-surface text-[9px] font-black uppercase tracking-widest
-                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container-highest text-on-surface' : 
-                          item.statut === 'EN_PREPARATION' ? 'bg-primary text-on-primary' : 
-                          'bg-background text-on-surface-variant opacity-40'}
-                      `}>
-                        {item.statut.replace('_', ' ')}
-                      </span>
-                    </div>
-                  </div>
+            <div className="flex-1 space-y-unit-md overflow-y-auto custom-scrollbar pr-2">
+                <AnimatePresence mode="popLayout">
+                    {tickets.filter(t => getTicketStatus(t) === col.id).map((ticket) => (
+                        <motion.div 
+                            key={ticket.id}
+                            layout
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            className={`
+                                group bg-background border-2 p-unit-md rounded-lg flex flex-col gap-unit-sm transition-all duration-300
+                                ${col.id === 'CRITICAL' ? 'border-secondary shadow-xl shadow-secondary/10' : 'border-on-surface shadow-[4px_4px_0px_#301400/5] hover:shadow-[6px_6px_0px_#301400/10]'}
+                            `}
+                        >
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <span className={`text-[11px] font-black tracking-widest uppercase ${col.id === 'CRITICAL' ? 'text-secondary' : 'text-primary'}`}>
+                                        #ORD-{ticket.id}
+                                    </span>
+                                    <h4 className={`text-lg font-black tracking-tight leading-none mt-1 ${col.id === 'CRITICAL' ? 'text-on-surface' : 'text-on-surface'}`}>
+                                        {ticket.type === 'SUR_PLACE' ? `Table ${ticket.table_numero || '?'}` : `Client ${ticket.client_nom || 'UNK'}`}
+                                    </h4>
+                                </div>
+                                <div className={`
+                                    px-3 py-1 rounded font-black text-xs tabular-nums
+                                    ${col.id === 'CRITICAL' ? 'bg-secondary text-on-secondary animate-pulse' : 'bg-surface-container-high text-on-surface'}
+                                `}>
+                                    {getElapsedTime(ticket.created_at)}
+                                </div>
+                            </div>
 
-                  {/* Action Button */}
-                  {item.statut !== 'PRET' && item.statut !== 'SERVI' && item.statut !== 'ANNULE' && (
-                    <button 
-                      onClick={() => handleUpdateItem(item.id, item.statut)}
-                      className={`
-                        w-full py-3 border-2 border-on-surface flex items-center justify-center gap-3 transition-all mt-2 text-ui-button font-ui-button shadow-[3px_3px_0px_#301400] active:translate-y-[2px] active:shadow-none
-                        ${item.statut === 'EN_ATTENTE' ? 'bg-surface-container text-on-surface hover:bg-surface-container-highest' : 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'}
-                      `}
-                    >
-                      {item.statut === 'EN_ATTENTE' ? (
-                        <>
-                          <PlayCircle className="w-4 h-4"  strokeWidth={2.5}/>
-                          <span>ENGAGE</span>
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
-                          <span>COMPLETE</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            {/* Ticket Footer */}
-            <div className="p-4 bg-surface-container-high border-t-2 border-on-surface flex items-center justify-between">
-                <div className="flex items-center gap-2 text-ui-data-dense font-black text-on-surface-variant uppercase tracking-widest">
-                    <Timer className="w-4 h-4"  strokeWidth={2.5}/>
-                    <span>ACTIVE: {getElapsedTime(ticket.created_at)}</span>
-                </div>
-                {ticket.lignes.every(l => l.statut === 'PRET') && (
-                    <div className="flex items-center gap-2 text-primary text-ui-label-bold text-[10px] animate-pulse">
-                        <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
-                        <span>READY TO SERVE</span>
+                            <div className={`border-t border-dashed my-2 ${col.id === 'CRITICAL' ? 'border-secondary/30' : 'border-on-surface/10'}`} />
+
+                            <ul className="space-y-3">
+                                {ticket.lignes.map((item) => (
+                                    <li key={item.id} className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-3 group/item cursor-pointer" onClick={() => handleUpdateItem(item.id, item.statut)}>
+                                            <div className={`
+                                                w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                                                ${item.statut === 'PRET' ? 'bg-primary border-primary' : 'border-on-surface/20 group-hover/item:border-primary'}
+                                            `}>
+                                                {item.statut === 'PRET' && <CheckCircle2 className="w-3.5 h-3.5 text-on-primary" strokeWidth={3} />}
+                                            </div>
+                                            <span className={`text-sm font-black tracking-tight uppercase ${item.statut === 'PRET' ? 'text-on-surface-variant/40 line-through' : 'text-on-surface'}`}>
+                                                {item.quantite}x {item.plat_nom}
+                                            </span>
+                                        </div>
+                                        {item.notes && (
+                                            <div className="ml-8 text-[9px] font-black text-secondary bg-secondary/5 px-2 py-1 rounded border border-secondary/10 w-max uppercase">
+                                                NOTE: {item.notes}
+                                            </div>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <div className="mt-4 flex items-center justify-between">
+                                {col.id === 'EN_PREPARATION' && (
+                                    <div className="h-1.5 flex-1 bg-surface-container rounded-full overflow-hidden border border-on-surface/10 mr-4">
+                                        <motion.div 
+                                            className="h-full bg-primary" 
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${(ticket.lignes.filter(l => l.statut === 'PRET').length / ticket.lignes.length) * 100}%` }}
+                                        />
+                                    </div>
+                                )}
+                                {ticket.lignes.every(l => l.statut === 'PRET') ? (
+                                    <button 
+                                        className="w-full bg-primary text-on-primary text-[10px] font-black uppercase tracking-[0.3em] py-3 rounded hover:bg-primary-container transition-all"
+                                        onClick={() => {/* Final push logic */}}
+                                    >
+                                        Push to Window
+                                    </button>
+                                ) : (
+                                    <div className="flex justify-end w-full">
+                                         <button className={`text-[9px] font-black uppercase tracking-widest hover:underline ${col.id === 'CRITICAL' ? 'text-secondary' : 'text-on-surface-variant'}`}>
+                                            Expand Orchestration
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+
+                {tickets.filter(t => getTicketStatus(t) === col.id).length === 0 && (
+                    <div className="py-20 flex flex-col items-center justify-center text-on-surface-variant opacity-10 gap-4">
+                        <Maximize2 className="w-8 h-8" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em]">Sector Clear</span>
                     </div>
                 )}
             </div>
           </div>
         ))}
-        
-        {tickets.length === 0 && (
-          <div className="col-span-full py-32 flex flex-col items-center justify-center text-on-surface-variant opacity-20">
-            <div className="w-32 h-32 border-4 border-dashed border-on-surface flex items-center justify-center mb-8 rotate-3">
-                <ChefHat className="w-12 h-12"  strokeWidth={2.5}/>
-            </div>
-            <p className="text-display-lg text-4xl italic uppercase tracking-tighter">Kitchen at Rest</p>
-            <p className="text-ui-label-bold text-[11px] mt-4 tracking-[0.3em]">No active batches detected</p>
-          </div>
-        )}
       </div>
     </div>
   );
 };
+
