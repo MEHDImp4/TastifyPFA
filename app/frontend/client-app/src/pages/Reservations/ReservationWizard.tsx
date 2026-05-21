@@ -147,6 +147,16 @@ export const ReservationWizard: React.FC = () => {
             ))}
         </div>
 
+        {error && (
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-12 p-8 bg-error/5 border-2 border-error text-error text-[10px] font-black tracking-[0.3em] text-center uppercase cinematic-shadow rounded-3xl"
+            >
+                Protocol Breach: {error}
+            </motion.div>
+        )}
+
         {/* Form Canvas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             
