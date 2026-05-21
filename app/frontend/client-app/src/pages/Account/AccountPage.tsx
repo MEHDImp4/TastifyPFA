@@ -13,18 +13,12 @@ import {
   Star, 
   Loader2, 
   User as UserIcon,
-  Crown,
   PackageCheck,
   ChefHat,
   CheckCircle2,
   Clock,
-  Sparkles,
   ArrowRight,
   History,
-  Settings,
-  Bell,
-  CreditCard,
-  Users,
   CreditCard as PaymentsIcon,
   Bell as NotificationsIcon,
   ShoppingBag,
@@ -36,7 +30,6 @@ import {
 export const AccountPage: React.FC = () => {
   const { username } = useAuthStore();
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [avis, setAvis] = useState<Avis[]>([]);
   const [commandes, setCommandes] = useState<any[]>([]);
   const [loyalty, setLoyalty] = useState<LoyaltyProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,18 +38,17 @@ export const AccountPage: React.FC = () => {
   const [isAvisModalOpen, setIsAvisModalOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsLoadingSubmitting] = useState(false);
 
   const fetchData = async () => {
     try {
-      const [resRes, avisRes, loyaltyRes, cmdRes] = await Promise.all([
+      const [resRes, , loyaltyRes, cmdRes] = await Promise.all([
         reservationApi.getMyReservations(),
         avisApi.getAvis(),
         loyaltyApi.getMyStatus().catch(() => ({ data: null })),
         api.get('/commandes/').catch(() => ({ data: [] }))
       ]);
       setReservations(resRes.data);
-      setAvis(avisRes.data);
       if (loyaltyRes.data) {
           setLoyalty(loyaltyRes.data);
       }
