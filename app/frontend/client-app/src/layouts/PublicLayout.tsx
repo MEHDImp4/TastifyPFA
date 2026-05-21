@@ -30,19 +30,19 @@ export const PublicLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background text-on-background selection:bg-primary/10 selection:text-primary overflow-x-hidden">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-surface/5">
-        <div className="max-w-[1400px] mx-auto px-8 h-24 flex items-center justify-between">
-          <div className="flex items-center gap-16">
+    <div className="h-screen flex flex-col bg-background text-on-background selection:bg-primary/10 selection:text-primary overflow-hidden">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-surface/5 shrink-0">
+        <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-10">
             <Link 
               to="/" 
               onClick={handleLogoClick}
               className="flex items-center gap-2 group transition-transform active:scale-95 z-50"
             >
-              <BrandWordmark className="text-2xl font-serif italic font-bold tracking-tight text-primary" />
+              <BrandWordmark className="text-xl font-serif italic font-bold tracking-tight text-primary" />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-8">
               {[
                 { to: '/menu', label: 'Culinaries' },
                 { to: '/reservations', label: 'Bookings' },
@@ -51,7 +51,7 @@ export const PublicLayout: React.FC = () => {
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-all duration-300 relative group/link"
+                  className="text-ui-label-bold text-[9px] text-on-surface-variant hover:text-primary transition-all duration-300 relative group/link uppercase tracking-[0.2em]"
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover/link:w-full" />
@@ -60,14 +60,14 @@ export const PublicLayout: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             <Link 
                 to="/checkout" 
                 className="relative group p-2 transition-all active:scale-90"
             >
-                <ShoppingBag className="w-5 h-5 text-on-surface group-hover:text-primary transition-colors" strokeWidth={1.5} />
+                <ShoppingBag className="w-4 h-4 text-on-surface group-hover:text-primary transition-colors" strokeWidth={1.5} />
                 {items.length > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-on-primary text-[8px] font-black rounded-full flex items-center justify-center cinematic-shadow">
+                    <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-primary text-on-primary text-[7px] font-black rounded-full flex items-center justify-center cinematic-shadow">
                         {items.length}
                     </span>
                 )}
@@ -75,24 +75,24 @@ export const PublicLayout: React.FC = () => {
             
             <div className="hidden md:block">
               {isAuthenticated ? (
-                <div className="flex items-center gap-6 pl-6 border-l border-on-surface/10">
+                <div className="flex items-center gap-4 pl-6 border-l border-on-surface/10">
                   <Link to="/account" className="flex flex-col items-end group">
-                    <p className="text-[11px] font-black text-on-surface uppercase tracking-wider group-hover:text-primary transition-colors">{username}</p>
-                    <p className="text-ui-label-bold text-[8px] text-on-surface-variant/60 tracking-[0.2em]">Guest Profile</p>
+                    <p className="text-[10px] font-black text-on-surface uppercase tracking-wider group-hover:text-primary transition-colors">{username}</p>
+                    <p className="text-ui-label-bold text-[7px] text-on-surface-variant/60 tracking-[0.2em] uppercase">Private</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
                     className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"
                   >
-                    <LogOut className="w-4 h-4" strokeWidth={2.5} />
+                    <LogOut className="w-3.5 h-3.5" strokeWidth={2.5} />
                   </button>
                 </div>
               ) : (
                 <Link 
                   to="/reservations"
-                  className="px-8 py-3 bg-on-surface text-background text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:bg-primary active:scale-95 cinematic-shadow"
+                  className="px-6 py-2 bg-on-surface text-background text-[9px] font-black uppercase tracking-[0.2em] transition-all hover:bg-primary active:scale-95 cinematic-shadow"
                 >
-                  Reserve Now
+                  Reserve
                 </Link>
               )}
             </div>

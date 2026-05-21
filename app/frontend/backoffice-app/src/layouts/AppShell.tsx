@@ -21,20 +21,22 @@ export const AppShell: React.FC = () => {
   };
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-background text-on-background">
+    <div className="h-screen flex overflow-hidden bg-background text-on-background selection:bg-primary/10">
       <Sidebar
         isDesktopCollapsed={isDesktopCollapsed}
         isMobileOpen={isMobileOpen}
         setMobileOpen={setMobileOpen}
       />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <Topbar
           isDesktopCollapsed={isDesktopCollapsed}
           setMobileOpen={setMobileOpen}
           toggleDesktopSidebar={toggleDesktopSidebar}
         />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-background">
+          <div className="max-w-[1700px] mx-auto">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

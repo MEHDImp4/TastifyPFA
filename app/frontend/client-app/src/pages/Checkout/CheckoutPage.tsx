@@ -89,90 +89,78 @@ export const CheckoutPage: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-background selection:bg-primary/10 selection:text-primary">
-      <main className="max-w-[1400px] mx-auto px-8 py-16 lg:py-32">
+    <div className="flex-1 bg-background selection:bg-primary/10 selection:text-primary h-[calc(100vh-4rem)] overflow-hidden">
+      <main className="h-full max-w-[1400px] mx-auto px-6 py-6 flex flex-col overflow-hidden">
         
         {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
-            <div className="flex items-center gap-8">
-                <button onClick={() => navigate('/menu')} className="w-16 h-16 bg-surface-container rounded-full hover:bg-surface-container-high transition-all active:scale-90 border border-on-surface/5 flex items-center justify-center">
-                    <ChevronLeft className="w-6 h-6 text-on-surface" strokeWidth={2} />
-                </button>
-                <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                        <span className="h-[1px] w-8 bg-primary"></span>
-                        <span className="editorial-kicker">Operational Manifest</span>
-                    </div>
-                    <h1 className="text-display-lg text-4xl md:text-6xl text-on-surface leading-none">Review Your <br /><span className="italic font-light">Selection.</span></h1>
+        <div className="flex items-center gap-6 mb-6 shrink-0">
+            <button onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container rounded-full hover:bg-surface-container-high transition-all active:scale-90 border border-on-surface/5 flex items-center justify-center">
+                <ChevronLeft className="w-5 h-5 text-on-surface" strokeWidth={2} />
+            </button>
+            <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                    <span className="h-[1px] w-6 bg-primary"></span>
+                    <span className="editorial-kicker text-[8px]">Manifest</span>
                 </div>
+                <h1 className="text-display-lg text-3xl lg:text-4xl text-on-surface leading-none italic">Review Your Selection.</h1>
             </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start overflow-hidden">
             
-            {/* Left: Summary & Tipping */}
-            <div className="lg:col-span-7 space-y-20">
-                <div className="space-y-8">
+            {/* Left: Summary & Tipping (Scrollable) */}
+            <div className="lg:col-span-7 flex flex-col h-full overflow-hidden">
+                <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-4">
                     <AnimatePresence mode="popLayout">
                         {items.map(item => (
                             <motion.div 
                                 key={item.plat.id} 
                                 layout
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="p-8 editorial-card flex items-center gap-10 transition-all hover:bg-surface-container-low cinematic-shadow group"
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                className="p-4 bg-surface-container-low border border-on-surface/5 rounded-2xl flex items-center gap-6 group"
                             >
-                                <div className="w-32 h-32 rounded-3xl overflow-hidden bg-surface-container-high shrink-0 relative">
+                                <div className="w-20 h-20 rounded-xl overflow-hidden bg-surface-container-high shrink-0">
                                     {item.plat.image ? (
-                                        <img src={item.plat.image} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" alt={item.plat.nom} />
+                                        <img src={item.plat.image} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700" alt={item.plat.nom} />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-on-surface/5 font-serif italic text-4xl">
+                                        <div className="w-full h-full flex items-center justify-center text-on-surface/5 font-serif italic text-2xl">
                                             {item.plat.nom.charAt(0).toUpperCase()}
                                         </div>
                                     )}
                                 </div>
-                                <div className="flex-1 min-w-0 space-y-2">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] font-black text-secondary tracking-widest uppercase">Registry Segment</span>
-                                        <UtensilsCrossed className="w-3 h-3 text-on-surface-variant/20" />
-                                    </div>
-                                    <h3 className="text-3xl font-serif italic text-on-surface truncate tracking-tight mb-2">{item.plat.nom}</h3>
-                                    <p className="text-ui-label-bold text-[10px] text-primary tracking-[0.2em]">{item.plat.prix} DH / UNIT</p>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="text-xl font-serif italic text-on-surface truncate tracking-tight">{item.plat.nom}</h3>
+                                    <p className="text-[10px] text-primary font-black uppercase tracking-wider">{item.plat.prix} DH</p>
                                 </div>
-                                <div className="flex flex-col items-end gap-6">
-                                    <div className="flex items-center bg-background border border-on-surface/5 rounded-full p-2 shadow-inner">
-                                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-75"><Minus className="w-5 h-5" strokeWidth={2.5} /></button>
-                                        <span className="text-ui-data-dense font-black text-lg w-12 text-center text-on-surface">{item.quantite}</span>
-                                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-75"><Plus className="w-5 h-5" strokeWidth={2.5} /></button>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center bg-background border border-on-surface/5 rounded-full p-1">
+                                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-75"><Minus className="w-4 h-4" /></button>
+                                        <span className="text-xs font-black w-8 text-center">{item.quantite}</span>
+                                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-75"><Plus className="w-4 h-4" /></button>
                                     </div>
-                                    <button onClick={() => removeItem(item.plat.id)} className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant/30 hover:text-error transition-colors flex items-center gap-2">
-                                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5} />
-                                        Remove Selection
-                                    </button>
+                                    <button onClick={() => removeItem(item.plat.id)} className="p-2 text-on-surface-variant/20 hover:text-error transition-colors"><Trash2 className="w-4 h-4" /></button>
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
 
-                {/* Tipping Section */}
-                <div className="space-y-10 border-t border-on-surface/5 pt-20">
-                    <div className="space-y-4">
-                        <span className="editorial-kicker">Gratuity calibration</span>
-                        <h2 className="text-3xl font-serif italic text-on-surface">Recognize Orchestration</h2>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {/* Tipping Section (Compact) */}
+                <div className="mt-4 pt-4 border-t border-on-surface/5 shrink-0">
+                    <span className="editorial-kicker text-[8px] opacity-40 mb-3 block uppercase">Recognize Orchestration</span>
+                    <div className="grid grid-cols-4 gap-3">
                         {[10, 15, 20, 25].map(p => (
                             <button 
                                 key={p}
                                 onClick={() => setTipPercent(p)}
                                 className={`
-                                    py-6 px-4 rounded-3xl border-2 transition-all duration-500 font-black text-[12px] tracking-[0.2em]
-                                    ${tipPercent === p ? 'bg-on-surface border-on-surface text-background cinematic-shadow scale-105' : 'bg-surface-container border-transparent text-on-surface-variant/60 hover:border-primary/20'}
+                                    py-3 rounded-xl border-2 transition-all font-black text-[10px] tracking-widest
+                                    ${tipPercent === p ? 'bg-on-surface border-on-surface text-background' : 'bg-surface-container border-transparent text-on-surface-variant/60 hover:border-primary/20'}
                                 `}
                             >
-                                {p}% REWARD
+                                {p}%
                             </button>
                         ))}
                     </div>
@@ -180,76 +168,63 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Right Column: Totals & Action */}
-            <aside className="lg:col-span-5 space-y-12 lg:sticky lg:top-32">
-                <div className="p-12 bg-on-surface text-background rounded-[3rem] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-primary opacity-20 blur-[120px] -mr-48 -mt-48 transition-transform duration-[2000ms] group-hover:scale-110" />
+            <aside className="lg:col-span-5 h-full flex flex-col">
+                <div className="flex-1 p-8 bg-on-surface text-background rounded-[2rem] shadow-2xl relative overflow-hidden group flex flex-col justify-between">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-10 blur-[80px] -mr-32 -mt-32" />
                     
-                    <div className="flex items-center justify-between mb-16 relative z-10">
-                        <div className="flex items-center gap-4">
-                            <CreditCard className="w-6 h-6 text-primary" strokeWidth={1.5} />
-                            <h3 className="text-ui-label-bold text-[11px] tracking-[0.4em]">BILLING PROTOCOL</h3>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-10">
+                            <CreditCard className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.4em]">Settlement</h3>
                         </div>
-                    </div>
 
-                    <div className="space-y-8 mb-20 relative z-10">
-                        <div className="flex justify-between items-center text-background/40 text-[10px] font-black uppercase tracking-[0.3em]">
-                            <span>Catalog Value</span>
-                            <span className="text-background">{subtotal.toFixed(2)} DH</span>
-                        </div>
-                        <div className="flex justify-between items-center text-background/40 text-[10px] font-black uppercase tracking-[0.3em]">
-                            <span>Service Tax (8%)</span>
-                            <span className="text-background">{serviceTax.toFixed(2)} DH</span>
-                        </div>
-                        {tipPercent > 0 && (
-                            <div className="flex justify-between items-center text-background/40 text-[10px] font-black uppercase tracking-[0.3em]">
-                                <span>Calibrated Gratuity</span>
-                                <span className="text-primary">{tipAmount.toFixed(2)} DH</span>
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-40">
+                                <span>Subtotal</span>
+                                <span>{subtotal.toFixed(2)} DH</span>
                             </div>
-                        )}
-                        <div className="pt-12 border-t border-white/5 flex justify-between items-end">
-                            <div className="flex flex-col gap-2">
-                                <span className="text-ui-label-bold text-[8px] text-background/20 tracking-[0.4em]">SETTLEMENT TOTAL</span>
-                                <span className="text-2xl text-background/60 font-body italic">Payable</span>
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-40">
+                                <span>Tax (8%)</span>
+                                <span>{serviceTax.toFixed(2)} DH</span>
                             </div>
-                            <div className="text-right">
-                                <motion.span 
-                                    key={grandTotal}
-                                    initial={{ scale: 1.1, color: '#8d4e1c' }}
-                                    animate={{ scale: 1, color: '#ffceaf' }}
-                                    className="text-display-lg text-5xl md:text-7xl leading-none inline-block"
-                                >
-                                    {grandTotal.toFixed(2)}
-                                </motion.span>
-                                <span className="text-ui-label-bold text-lg ml-4 text-background/20 font-sans font-black">DH</span>
+                            {tipPercent > 0 && (
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-primary">
+                                    <span>Reward</span>
+                                    <span>{tipAmount.toFixed(2)} DH</span>
+                                </div>
+                            )}
+                            <div className="pt-6 border-t border-white/5 flex justify-between items-end">
+                                <span className="text-xl italic font-light text-background/60">Total</span>
+                                <div className="text-right">
+                                    <motion.span 
+                                        key={grandTotal}
+                                        initial={{ scale: 1.05 }}
+                                        animate={{ scale: 1 }}
+                                        className="text-display-lg text-4xl lg:text-5xl leading-none font-black text-primary tabular-nums"
+                                    >
+                                        {grandTotal.toFixed(2)}
+                                    </motion.span>
+                                    <span className="ml-2 text-xs font-black opacity-20">DH</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {error && (
-                        <div className="mb-10 p-6 bg-error text-on-error border-2 border-on-surface text-[10px] font-black tracking-[0.2em] text-center uppercase cinematic-shadow animate-in shake duration-500">
-                            SYSTEM ERROR: {error}
-                        </div>
-                    )}
-
-                    <button 
-                        onClick={handleOrder}
-                        disabled={isSubmitting}
-                        className="w-full py-8 bg-primary text-on-primary text-[13px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-6 transition-all hover:scale-[1.02] cinematic-shadow active:scale-95 disabled:opacity-50 relative z-10 rounded-2xl"
-                    >
-                        {isSubmitting ? <Loader2 className="w-7 h-7 animate-spin" strokeWidth={2.5} /> : (
-                            <>
-                                <span>Authorize Manifest</span>
-                                <ArrowRight className="w-5 h-5 text-background" strokeWidth={2.5} />
-                            </>
-                        )}
-                    </button>
-                    <p className="mt-8 text-center text-[8px] font-black text-background/20 uppercase tracking-[0.4em]">Secure Encrypted Session</p>
-                </div>
-                
-                <div className="px-12 text-center space-y-6">
-                    <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] opacity-40 leading-relaxed italic">
-                        By committing this manifest, you authorize the immediate orchestration of your selection. Final settlement occurs via premium digital channel at retrieval point.
-                    </p>
+                    <div className="relative z-10 mt-8 space-y-4">
+                        <button 
+                            onClick={handleOrder}
+                            disabled={isSubmitting}
+                            className="w-full py-5 bg-primary text-on-primary text-xs font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 rounded-xl cinematic-shadow"
+                        >
+                            {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                                <>
+                                    <span>Authorize Manifest</span>
+                                    <ArrowRight className="w-4 h-4 text-background" strokeWidth={2.5} />
+                                </>
+                            )}
+                        </button>
+                        <p className="text-[8px] font-black text-background/20 text-center uppercase tracking-widest">Protocol 12-X Secured</p>
+                    </div>
                 </div>
             </aside>
         </div>
