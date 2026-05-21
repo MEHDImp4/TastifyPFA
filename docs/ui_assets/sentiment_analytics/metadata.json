@@ -1,0 +1,294 @@
+{
+  "screenshot": {
+    "name": "projects/17980663918667499114/files/95618de0b49249baa3253c26a5c9b235",
+    "downloadUrl": "https://lh3.googleusercontent.com/aida/ADBb0uj9R0pGBPVd6NjExdNVrIZgpJT6oFLkYML0XB9q4m9Hj-6O9cQOQEuOwkuB9tyxabzcS8u8J-rIV6TiF_4uroysNJMe_hFeUMLmQt14WmBqLFd93xhLyuFOECUzku77r64NpFkuxsuz9rjda2DPCHB0TI5R52Yq1U5zobIgPLYACtag6Z8fuPLFmm3Zpr7uGuKC0HMx8FxfhRX9i0qExj2kFucgJQzuSTmn866cdJ7E81EyMuBnHEestUWz"
+  },
+  "htmlCode": {
+    "name": "projects/17980663918667499114/files/d353b9f30e3d4f1ab819fff7a697a81b",
+    "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2Q4YmE1NmYxNDgyNjQzMmI5YmMzY2M0NmE3N2EwNDVmEgsSBxCg7IT2vQcYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzk4MDY2MzkxODY2NzQ5OTExNA&filename=&opi=89354086",
+    "mimeType": "text/html"
+  },
+  "id": "527a5796540f4189bdf55c21582f1e88",
+  "generatedBy": "figaro_agent",
+  "width": "2560",
+  "height": "2048",
+  "title": "Staff OS: Sentiment Analytics",
+  "prompt": "Staff OS Sentiment Analytics page. Feedback dashboard featuring an AI sentiment scoring gauge (Negative to Positive). Keywords extraction cloud. List of recent guest reviews with star ratings and AI-generated summaries. Visual trend charts for service quality. High-density tactical layout.",
+  "name": "projects/17980663918667499114/screens/527a5796540f4189bdf55c21582f1e88",
+  "theme": {
+    "colorMode": "LIGHT",
+    "font": "LIBRE_CASLON_TEXT",
+    "roundness": "ROUND_EIGHT",
+    "customColor": "#8d4e1c",
+    "headlineFont": "LIBRE_CASLON_TEXT",
+    "bodyFont": "BODONI_MODA",
+    "labelFont": "BRICOLAGE_GROTESQUE",
+    "namedColors": {
+      "error_container": "#ffdad6",
+      "surface_container_highest": "#e8e1de",
+      "outline_variant": "#d8c2b6",
+      "on_error_container": "#93000a",
+      "primary": "#703704",
+      "on_error": "#ffffff",
+      "tertiary": "#633e22",
+      "secondary_container": "#fea76a",
+      "on_surface_variant": "#53443a",
+      "on_secondary_fixed_variant": "#723700",
+      "tertiary_container": "#7e5537",
+      "on_tertiary": "#ffffff",
+      "surface": "#fff8f5",
+      "error": "#ba1a1a",
+      "outline": "#867369",
+      "tertiary_fixed_dim": "#f2bb96",
+      "on_tertiary_container": "#ffcfae",
+      "on_primary_fixed": "#301400",
+      "on_secondary_fixed": "#301400",
+      "inverse_on_surface": "#f6efec",
+      "on_background": "#1d1b1a",
+      "surface_dim": "#dfd9d6",
+      "inverse_primary": "#ffb785",
+      "on_primary": "#ffffff",
+      "secondary": "#8f4d17",
+      "on_primary_fixed_variant": "#703705",
+      "surface_variant": "#e8e1de",
+      "primary_fixed_dim": "#ffb785",
+      "on_primary_container": "#ffceaf",
+      "on_secondary": "#ffffff",
+      "on_secondary_container": "#773b03",
+      "primary_container": "#8d4e1c",
+      "surface_container_low": "#f9f2ef",
+      "surface_container": "#f3ecea",
+      "secondary_fixed_dim": "#ffb785",
+      "background": "#fff8f5",
+      "secondary_fixed": "#ffdcc6",
+      "surface_tint": "#8d4e1c",
+      "surface_container_high": "#ede7e4",
+      "surface_container_lowest": "#ffffff",
+      "primary_fixed": "#ffdcc6",
+      "on_surface": "#1d1b1a",
+      "surface_bright": "#fff8f5",
+      "tertiary_fixed": "#ffdcc5",
+      "inverse_surface": "#33302e",
+      "on_tertiary_fixed": "#301400",
+      "on_tertiary_fixed_variant": "#633e22"
+    },
+    "designMd": "---\nname: Tastify\ncolors:\n  surface: '#fff8f5'\n  surface-dim: '#dfd9d6'\n  surface-bright: '#fff8f5'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#f9f2ef'\n  surface-container: '#f3ecea'\n  surface-container-high: '#ede7e4'\n  surface-container-highest: '#e8e1de'\n  on-surface: '#1d1b1a'\n  on-surface-variant: '#53443a'\n  inverse-surface: '#33302e'\n  inverse-on-surface: '#f6efec'\n  outline: '#867369'\n  outline-variant: '#d8c2b6'\n  surface-tint: '#8d4e1c'\n  primary: '#703704'\n  on-primary: '#ffffff'\n  primary-container: '#8d4e1c'\n  on-primary-container: '#ffceaf'\n  inverse-primary: '#ffb785'\n  secondary: '#8f4d17'\n  on-secondary: '#ffffff'\n  secondary-container: '#fea76a'\n  on-secondary-container: '#773b03'\n  tertiary: '#633e22'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#7e5537'\n  on-tertiary-container: '#ffcfae'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#ffdcc6'\n  primary-fixed-dim: '#ffb785'\n  on-primary-fixed: '#301400'\n  on-primary-fixed-variant: '#703705'\n  secondary-fixed: '#ffdcc6'\n  secondary-fixed-dim: '#ffb785'\n  on-secondary-fixed: '#301400'\n  on-secondary-fixed-variant: '#723700'\n  tertiary-fixed: '#ffdcc5'\n  tertiary-fixed-dim: '#f2bb96'\n  on-tertiary-fixed: '#301400'\n  on-tertiary-fixed-variant: '#633e22'\n  background: '#fff8f5'\n  on-background: '#1d1b1a'\n  surface-variant: '#e8e1de'\ntypography:\n  display-lg:\n    fontFamily: Libre Caslon Text\n    fontSize: 64px\n    fontWeight: '700'\n    lineHeight: '1.1'\n    letterSpacing: -0.02em\n  display-lg-mobile:\n    fontFamily: Libre Caslon Text\n    fontSize: 40px\n    fontWeight: '700'\n    lineHeight: '1.2'\n  headline-md:\n    fontFamily: Libre Caslon Text\n    fontSize: 32px\n    fontWeight: '600'\n    lineHeight: '1.3'\n  body-lg:\n    fontFamily: Bodoni Moda\n    fontSize: 18px\n    fontWeight: '400'\n    lineHeight: '1.6'\n  body-md:\n    fontFamily: Bodoni Moda\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: '1.5'\n  ui-label-bold:\n    fontFamily: Bricolage Grotesque\n    fontSize: 14px\n    fontWeight: '800'\n    lineHeight: '1.2'\n    letterSpacing: 0.25em\n  ui-data-dense:\n    fontFamily: Bricolage Grotesque\n    fontSize: 13px\n    fontWeight: '600'\n    lineHeight: '1.0'\n  ui-button:\n    fontFamily: Bricolage Grotesque\n    fontSize: 14px\n    fontWeight: '700'\n    lineHeight: '1.0'\n    letterSpacing: 0.05em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  staff-gutter: 1rem\n  staff-margin: 1.5rem\n  client-gutter: 3rem\n  client-margin: 5vw\n  unit-xs: 4px\n  unit-sm: 8px\n  unit-md: 16px\n  unit-lg: 24px\n---\n\n## Brand & Style\nThe design system for this platform balances two distinct emotional worlds: the **Tactical Command Center** (Staff OS) and **Organic Sophistication** (Client Portal). The brand evokes the prestige of Michelin-star dining combined with the surgical precision of high-end operations.\n\nThe visual style is a fusion of **Minimalism** and **High-Contrast Editorial**. It prioritizes \"Absolute Visibility\"\u2014a philosophy where functional information is never obscured or secondary. The aesthetic avoids digital trends like blurs or glassmorphism in favor of physical metaphors: ink on parchment, heavy lead-type, and architectural structure. The interface should feel like a bespoke leather-bound ledger that has been digitally supercharged.\n\n## Colors\nThe palette is grounded in the organic, warm tones of fine dining materials: aged paper, polished wood, and reduction sauces.\n\n- **Parchment (#fff8f5):** The primary canvas. It provides a softer, more luxurious foundation than pure white, reducing eye strain for staff while feeling premium for guests.\n- **Ink (#301400):** Used for all primary text and structural borders. This high-contrast pairing with Parchment ensures \"Absolute Visibility.\"\n- **Sienna (#8d4e1c) & Amber (#8f4d17):** These earthy tones are used for interactive elements, primary call-to-actions, and branding accents. \n\nMaintain a high contrast ratio (minimum 7:1) for all functional text to ensure accessibility in both dimly lit dining rooms and bright kitchen environments.\n\n## Typography\nTypography is the cornerstone of this design system\u2019s hierarchy. It uses a tri-font strategy:\n\n1.  **Editorial Authority:** `Libre Caslon Text` is used for headlines and titles. It conveys history and luxury.\n2.  **Readable Luxury:** `Bodoni Moda` serves body copy, providing an elegant, high-contrast serif experience for menus and long-form descriptions.\n3.  **Technical Precision:** `Bricolage Grotesque` is reserved for the UI \"machinery\"\u2014buttons, data points, and labels. \n\n**Absolute Visibility Rule:** UI headers using Bricolage Grotesque must be set in **Extra Bold or Black** weights with a **0.25em letter-spacing** to ensure technical clarity and a distinct \"command\" feel.\n\n## Layout & Spacing\nThis design system employs two distinct layout philosophies based on the user's context:\n\n### 1. Staff OS (Tactical Command)\nUses a **12-column fixed grid**. It is designed for high information density. \n- **Gutters:** 16px (1rem).\n- **Margins:** 24px (1.5rem).\n- **Behavior:** Content stays compact to minimize eye travel. Vertical rhythm is tight, utilizing `unit-sm` and `unit-md` for component grouping.\n\n### 2. Client Portal (Organic Sophistication)\nUses a **Fluid grid** with expansive whitespace.\n- **Gutters:** 48px (3rem).\n- **Margins:** 5vw (dynamic).\n- **Behavior:** Content is \"breathable\" and centered. It uses generous vertical padding (`unit-lg` and above) to create a serene, editorial browsing experience.\n\nAll spacing must be increments of 4px to maintain a strict mathematical rhythm.\n\n## Elevation & Depth\nIn adherence to the \"Absolute Visibility\" and \"No Blurs\" requirements, depth is created through **Tonal Layering** and **Hard Outlines** rather than shadows.\n\n- **Surface Tiers:** Use subtle shifts in parchment tone to indicate elevation. A \"raised\" card is simply a container with a slightly lighter background or a 2px solid `Ink` border.\n- **The \"Ink\" Border:** Instead of ambient shadows, use 1px or 2px solid strokes (#301400) to define containers. This reinforces the \"Tactical\" feel.\n- **Zero Transparency:** Do not use backdrop blurs or semi-transparent layers. Content must be 100% opaque to ensure legibility and a sense of \"physical\" permanence.\n- **Staff OS Depth:** Uses recessed (inset) wells for data inputs and flat, bordered panels for primary controls.\n- **Client Depth:** Uses wide margins and large-scale photography to create perceived depth without technical UI tricks.\n\n## Shapes\nThe shape language is structured to differentiate between the \"vessel\" (containers) and the \"tools\" (components).\n\n- **Containers (Cards, Modals, Sections):** Use a 16px (`rounded-lg`) corner radius. This creates a soft, organic frame for the content.\n- **Components (Buttons, Inputs, Chips):** Use an 8px (`rounded-md`) corner radius. This sharper radius feels more precise and mechanical.\n- **Interactive States:** On hover or active states, shapes should not change radius, but may increase border weight from 1px to 2px for explicit feedback.\n\n## Components\n\n### Buttons & Inputs\n- **Staff OS:** High-density buttons with Bricolage Grotesque (Bold). 8px radius. 1px Ink border.\n- **Client Portal:** Larger hit areas, often using Primary Sienna as a solid fill with Parchment text.\n- **Inputs:** Use solid 1px Ink borders. Active states are indicated by a 2px Amber border. No glow effects.\n\n### Icons (Lucide)\n- **Staff OS:** 1.5px stroke width. Small, precise, and purely functional.\n- **Client Portal:** 2.5px stroke width. Larger, more \"illustrative\" and organic in feel.\n\n### Lists & Data\n- **Staff Lists:** Zebra-striping using a 5% opacity shift of Sienna. High density (compact padding).\n- **Client Cards:** Massive whitespace, Bodoni Moda for descriptions, 16px radius.\n\n### Interactions\n- **Spring Transitions:** All state changes (hover, toggle, modal entry) must use a subtle spring: `stiffness: 300, damping: 30`. \n- **State Feedback:** Since blurs and soft shadows are forbidden, use **Explicit Notifications**. Toast messages and inline alerts use the Amber accent color with heavy Bricolage Grotesque type for \"Absolute Visibility.\"",
+    "colorVariant": "FIDELITY",
+    "overridePrimaryColor": "#8d4e1c",
+    "overrideSecondaryColor": "#8f4d17",
+    "overrideTertiaryColor": "#301400",
+    "overrideNeutralColor": "#fff8f5",
+    "spacingScale": 2,
+    "typography": {
+      "display-lg-mobile": {
+        "fontFamily": "Libre Caslon Text",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "lineHeight": "1.2"
+      },
+      "display-lg": {
+        "fontFamily": "Libre Caslon Text",
+        "fontSize": "64px",
+        "fontWeight": "700",
+        "lineHeight": "1.1",
+        "letterSpacing": "-0.02em"
+      },
+      "body-md": {
+        "fontFamily": "Bodoni Moda",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "1.5"
+      },
+      "ui-label-bold": {
+        "fontFamily": "Bricolage Grotesque",
+        "fontSize": "14px",
+        "fontWeight": "800",
+        "lineHeight": "1.2",
+        "letterSpacing": "0.25em"
+      },
+      "ui-button": {
+        "fontFamily": "Bricolage Grotesque",
+        "fontSize": "14px",
+        "fontWeight": "700",
+        "lineHeight": "1.0",
+        "letterSpacing": "0.05em"
+      },
+      "headline-md": {
+        "fontFamily": "Libre Caslon Text",
+        "fontSize": "32px",
+        "fontWeight": "600",
+        "lineHeight": "1.3"
+      },
+      "ui-data-dense": {
+        "fontFamily": "Bricolage Grotesque",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "lineHeight": "1.0"
+      },
+      "body-lg": {
+        "fontFamily": "Bodoni Moda",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "1.6"
+      }
+    },
+    "spacing": {
+      "client-gutter": "3rem",
+      "client-margin": "5vw",
+      "staff-margin": "1.5rem",
+      "unit-lg": "24px",
+      "staff-gutter": "1rem",
+      "unit-md": "16px",
+      "unit-sm": "8px",
+      "unit-xs": "4px"
+    },
+    "headlineFontFamily": "Libre Caslon Text",
+    "bodyFontFamily": "Bodoni Moda",
+    "labelFontFamily": "Bricolage Grotesque"
+  },
+  "deviceType": "DESKTOP",
+  "screenType": "DESIGN",
+  "screenMetadata": {
+    "agentType": "PRO_AGENT",
+    "status": "COMPLETE"
+  },
+  "designSystem": {
+    "name": "assets/c8faa45cacda4da3847c486e15b384bc",
+    "designSystem": {
+      "displayName": "Tastify",
+      "styleGuidelines": "## Brand & Style\nThe design system for this platform balances two distinct emotional worlds: the **Tactical Command Center** (Staff OS) and **Organic Sophistication** (Client Portal). The brand evokes the prestige of Michelin-star dining combined with the surgical precision of high-end operations.\n\nThe visual style is a fusion of **Minimalism** and **High-Contrast Editorial**. It prioritizes \"Absolute Visibility\"\u2014a philosophy where functional information is never obscured or secondary. The aesthetic avoids digital trends like blurs or glassmorphism in favor of physical metaphors: ink on parchment, heavy lead-type, and architectural structure. The interface should feel like a bespoke leather-bound ledger that has been digitally supercharged.\n\n## Layout & Spacing\nThis design system employs two distinct layout philosophies based on the user's context:\n\n### 1. Staff OS (Tactical Command)\nUses a **12-column fixed grid**. It is designed for high information density. \n- **Gutters:** 16px (1rem).\n- **Margins:** 24px (1.5rem).\n- **Behavior:** Content stays compact to minimize eye travel. Vertical rhythm is tight, utilizing `unit-sm` and `unit-md` for component grouping.\n\n### 2. Client Portal (Organic Sophistication)\nUses a **Fluid grid** with expansive whitespace.\n- **Gutters:** 48px (3rem).\n- **Margins:** 5vw (dynamic).\n- **Behavior:** Content is \"breathable\" and centered. It uses generous vertical padding (`unit-lg` and above) to create a serene, editorial browsing experience.\n\nAll spacing must be increments of 4px to maintain a strict mathematical rhythm.\n\n## Elevation & Depth\nIn adherence to the \"Absolute Visibility\" and \"No Blurs\" requirements, depth is created through **Tonal Layering** and **Hard Outlines** rather than shadows.\n\n- **Surface Tiers:** Use subtle shifts in parchment tone to indicate elevation. A \"raised\" card is simply a container with a slightly lighter background or a 2px solid `Ink` border.\n- **The \"Ink\" Border:** Instead of ambient shadows, use 1px or 2px solid strokes (#301400) to define containers. This reinforces the \"Tactical\" feel.\n- **Zero Transparency:** Do not use backdrop blurs or semi-transparent layers. Content must be 100% opaque to ensure legibility and a sense of \"physical\" permanence.\n- **Staff OS Depth:** Uses recessed (inset) wells for data inputs and flat, bordered panels for primary controls.\n- **Client Depth:** Uses wide margins and large-scale photography to create perceived depth without technical UI tricks.\n\n## Components\n\n### Buttons & Inputs\n- **Staff OS:** High-density buttons with Bricolage Grotesque (Bold). 8px radius. 1px Ink border.\n- **Client Portal:** Larger hit areas, often using Primary Sienna as a solid fill with Parchment text.\n- **Inputs:** Use solid 1px Ink borders. Active states are indicated by a 2px Amber border. No glow effects.\n\n### Icons (Lucide)\n- **Staff OS:** 1.5px stroke width. Small, precise, and purely functional.\n- **Client Portal:** 2.5px stroke width. Larger, more \"illustrative\" and organic in feel.\n\n### Lists & Data\n- **Staff Lists:** Zebra-striping using a 5% opacity shift of Sienna. High density (compact padding).\n- **Client Cards:** Massive whitespace, Bodoni Moda for descriptions, 16px radius.\n\n### Interactions\n- **Spring Transitions:** All state changes (hover, toggle, modal entry) must use a subtle spring: `stiffness: 300, damping: 30`. \n- **State Feedback:** Since blurs and soft shadows are forbidden, use **Explicit Notifications**. Toast messages and inline alerts use the Amber accent color with heavy Bricolage Grotesque type for \"Absolute Visibility.\"",
+      "theme": {
+        "colorMode": "LIGHT",
+        "font": "LIBRE_CASLON_TEXT",
+        "roundness": "ROUND_EIGHT",
+        "customColor": "#8d4e1c",
+        "headlineFont": "LIBRE_CASLON_TEXT",
+        "bodyFont": "BODONI_MODA",
+        "labelFont": "BRICOLAGE_GROTESQUE",
+        "namedColors": {
+          "on_primary_fixed_variant": "#703705",
+          "on_primary": "#ffffff",
+          "secondary": "#8f4d17",
+          "inverse_primary": "#ffb785",
+          "on_background": "#1d1b1a",
+          "surface_dim": "#dfd9d6",
+          "on_secondary": "#ffffff",
+          "on_primary_container": "#ffceaf",
+          "primary_fixed_dim": "#ffb785",
+          "surface_variant": "#e8e1de",
+          "surface_container_high": "#ede7e4",
+          "surface_container_lowest": "#ffffff",
+          "background": "#fff8f5",
+          "secondary_fixed": "#ffdcc6",
+          "surface_tint": "#8d4e1c",
+          "secondary_fixed_dim": "#ffb785",
+          "on_secondary_container": "#773b03",
+          "primary_container": "#8d4e1c",
+          "surface_container_low": "#f9f2ef",
+          "surface_container": "#f3ecea",
+          "on_tertiary_fixed": "#301400",
+          "on_tertiary_fixed_variant": "#633e22",
+          "tertiary_fixed": "#ffdcc5",
+          "inverse_surface": "#33302e",
+          "primary_fixed": "#ffdcc6",
+          "on_surface": "#1d1b1a",
+          "surface_bright": "#fff8f5",
+          "on_error_container": "#93000a",
+          "primary": "#703704",
+          "outline_variant": "#d8c2b6",
+          "surface_container_highest": "#e8e1de",
+          "error_container": "#ffdad6",
+          "on_surface_variant": "#53443a",
+          "on_secondary_fixed_variant": "#723700",
+          "tertiary_container": "#7e5537",
+          "tertiary": "#633e22",
+          "secondary_container": "#fea76a",
+          "on_error": "#ffffff",
+          "outline": "#867369",
+          "surface": "#fff8f5",
+          "error": "#ba1a1a",
+          "on_tertiary": "#ffffff",
+          "on_secondary_fixed": "#301400",
+          "inverse_on_surface": "#f6efec",
+          "tertiary_fixed_dim": "#f2bb96",
+          "on_tertiary_container": "#ffcfae",
+          "on_primary_fixed": "#301400"
+        },
+        "designMd": "---\nname: Tastify\ncolors:\n  surface: '#fff8f5'\n  surface-dim: '#dfd9d6'\n  surface-bright: '#fff8f5'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#f9f2ef'\n  surface-container: '#f3ecea'\n  surface-container-high: '#ede7e4'\n  surface-container-highest: '#e8e1de'\n  on-surface: '#1d1b1a'\n  on-surface-variant: '#53443a'\n  inverse-surface: '#33302e'\n  inverse-on-surface: '#f6efec'\n  outline: '#867369'\n  outline-variant: '#d8c2b6'\n  surface-tint: '#8d4e1c'\n  primary: '#703704'\n  on-primary: '#ffffff'\n  primary-container: '#8d4e1c'\n  on-primary-container: '#ffceaf'\n  inverse-primary: '#ffb785'\n  secondary: '#8f4d17'\n  on-secondary: '#ffffff'\n  secondary-container: '#fea76a'\n  on-secondary-container: '#773b03'\n  tertiary: '#633e22'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#7e5537'\n  on-tertiary-container: '#ffcfae'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#ffdcc6'\n  primary-fixed-dim: '#ffb785'\n  on-primary-fixed: '#301400'\n  on-primary-fixed-variant: '#703705'\n  secondary-fixed: '#ffdcc6'\n  secondary-fixed-dim: '#ffb785'\n  on-secondary-fixed: '#301400'\n  on-secondary-fixed-variant: '#723700'\n  tertiary-fixed: '#ffdcc5'\n  tertiary-fixed-dim: '#f2bb96'\n  on-tertiary-fixed: '#301400'\n  on-tertiary-fixed-variant: '#633e22'\n  background: '#fff8f5'\n  on-background: '#1d1b1a'\n  surface-variant: '#e8e1de'\ntypography:\n  display-lg:\n    fontFamily: Libre Caslon Text\n    fontSize: 64px\n    fontWeight: '700'\n    lineHeight: '1.1'\n    letterSpacing: -0.02em\n  display-lg-mobile:\n    fontFamily: Libre Caslon Text\n    fontSize: 40px\n    fontWeight: '700'\n    lineHeight: '1.2'\n  headline-md:\n    fontFamily: Libre Caslon Text\n    fontSize: 32px\n    fontWeight: '600'\n    lineHeight: '1.3'\n  body-lg:\n    fontFamily: Bodoni Moda\n    fontSize: 18px\n    fontWeight: '400'\n    lineHeight: '1.6'\n  body-md:\n    fontFamily: Bodoni Moda\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: '1.5'\n  ui-label-bold:\n    fontFamily: Bricolage Grotesque\n    fontSize: 14px\n    fontWeight: '800'\n    lineHeight: '1.2'\n    letterSpacing: 0.25em\n  ui-data-dense:\n    fontFamily: Bricolage Grotesque\n    fontSize: 13px\n    fontWeight: '600'\n    lineHeight: '1.0'\n  ui-button:\n    fontFamily: Bricolage Grotesque\n    fontSize: 14px\n    fontWeight: '700'\n    lineHeight: '1.0'\n    letterSpacing: 0.05em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  staff-gutter: 1rem\n  staff-margin: 1.5rem\n  client-gutter: 3rem\n  client-margin: 5vw\n  unit-xs: 4px\n  unit-sm: 8px\n  unit-md: 16px\n  unit-lg: 24px\n---\n\n## Brand & Style\nThe design system for this platform balances two distinct emotional worlds: the **Tactical Command Center** (Staff OS) and **Organic Sophistication** (Client Portal). The brand evokes the prestige of Michelin-star dining combined with the surgical precision of high-end operations.\n\nThe visual style is a fusion of **Minimalism** and **High-Contrast Editorial**. It prioritizes \"Absolute Visibility\"\u2014a philosophy where functional information is never obscured or secondary. The aesthetic avoids digital trends like blurs or glassmorphism in favor of physical metaphors: ink on parchment, heavy lead-type, and architectural structure. The interface should feel like a bespoke leather-bound ledger that has been digitally supercharged.\n\n## Colors\nThe palette is grounded in the organic, warm tones of fine dining materials: aged paper, polished wood, and reduction sauces.\n\n- **Parchment (#fff8f5):** The primary canvas. It provides a softer, more luxurious foundation than pure white, reducing eye strain for staff while feeling premium for guests.\n- **Ink (#301400):** Used for all primary text and structural borders. This high-contrast pairing with Parchment ensures \"Absolute Visibility.\"\n- **Sienna (#8d4e1c) & Amber (#8f4d17):** These earthy tones are used for interactive elements, primary call-to-actions, and branding accents. \n\nMaintain a high contrast ratio (minimum 7:1) for all functional text to ensure accessibility in both dimly lit dining rooms and bright kitchen environments.\n\n## Typography\nTypography is the cornerstone of this design system\u2019s hierarchy. It uses a tri-font strategy:\n\n1.  **Editorial Authority:** `Libre Caslon Text` is used for headlines and titles. It conveys history and luxury.\n2.  **Readable Luxury:** `Bodoni Moda` serves body copy, providing an elegant, high-contrast serif experience for menus and long-form descriptions.\n3.  **Technical Precision:** `Bricolage Grotesque` is reserved for the UI \"machinery\"\u2014buttons, data points, and labels. \n\n**Absolute Visibility Rule:** UI headers using Bricolage Grotesque must be set in **Extra Bold or Black** weights with a **0.25em letter-spacing** to ensure technical clarity and a distinct \"command\" feel.\n\n## Layout & Spacing\nThis design system employs two distinct layout philosophies based on the user's context:\n\n### 1. Staff OS (Tactical Command)\nUses a **12-column fixed grid**. It is designed for high information density. \n- **Gutters:** 16px (1rem).\n- **Margins:** 24px (1.5rem).\n- **Behavior:** Content stays compact to minimize eye travel. Vertical rhythm is tight, utilizing `unit-sm` and `unit-md` for component grouping.\n\n### 2. Client Portal (Organic Sophistication)\nUses a **Fluid grid** with expansive whitespace.\n- **Gutters:** 48px (3rem).\n- **Margins:** 5vw (dynamic).\n- **Behavior:** Content is \"breathable\" and centered. It uses generous vertical padding (`unit-lg` and above) to create a serene, editorial browsing experience.\n\nAll spacing must be increments of 4px to maintain a strict mathematical rhythm.\n\n## Elevation & Depth\nIn adherence to the \"Absolute Visibility\" and \"No Blurs\" requirements, depth is created through **Tonal Layering** and **Hard Outlines** rather than shadows.\n\n- **Surface Tiers:** Use subtle shifts in parchment tone to indicate elevation. A \"raised\" card is simply a container with a slightly lighter background or a 2px solid `Ink` border.\n- **The \"Ink\" Border:** Instead of ambient shadows, use 1px or 2px solid strokes (#301400) to define containers. This reinforces the \"Tactical\" feel.\n- **Zero Transparency:** Do not use backdrop blurs or semi-transparent layers. Content must be 100% opaque to ensure legibility and a sense of \"physical\" permanence.\n- **Staff OS Depth:** Uses recessed (inset) wells for data inputs and flat, bordered panels for primary controls.\n- **Client Depth:** Uses wide margins and large-scale photography to create perceived depth without technical UI tricks.\n\n## Shapes\nThe shape language is structured to differentiate between the \"vessel\" (containers) and the \"tools\" (components).\n\n- **Containers (Cards, Modals, Sections):** Use a 16px (`rounded-lg`) corner radius. This creates a soft, organic frame for the content.\n- **Components (Buttons, Inputs, Chips):** Use an 8px (`rounded-md`) corner radius. This sharper radius feels more precise and mechanical.\n- **Interactive States:** On hover or active states, shapes should not change radius, but may increase border weight from 1px to 2px for explicit feedback.\n\n## Components\n\n### Buttons & Inputs\n- **Staff OS:** High-density buttons with Bricolage Grotesque (Bold). 8px radius. 1px Ink border.\n- **Client Portal:** Larger hit areas, often using Primary Sienna as a solid fill with Parchment text.\n- **Inputs:** Use solid 1px Ink borders. Active states are indicated by a 2px Amber border. No glow effects.\n\n### Icons (Lucide)\n- **Staff OS:** 1.5px stroke width. Small, precise, and purely functional.\n- **Client Portal:** 2.5px stroke width. Larger, more \"illustrative\" and organic in feel.\n\n### Lists & Data\n- **Staff Lists:** Zebra-striping using a 5% opacity shift of Sienna. High density (compact padding).\n- **Client Cards:** Massive whitespace, Bodoni Moda for descriptions, 16px radius.\n\n### Interactions\n- **Spring Transitions:** All state changes (hover, toggle, modal entry) must use a subtle spring: `stiffness: 300, damping: 30`. \n- **State Feedback:** Since blurs and soft shadows are forbidden, use **Explicit Notifications**. Toast messages and inline alerts use the Amber accent color with heavy Bricolage Grotesque type for \"Absolute Visibility.\"",
+        "colorVariant": "FIDELITY",
+        "overridePrimaryColor": "#8d4e1c",
+        "overrideSecondaryColor": "#8f4d17",
+        "overrideTertiaryColor": "#301400",
+        "overrideNeutralColor": "#fff8f5",
+        "spacingScale": 2,
+        "typography": {
+          "display-lg-mobile": {
+            "fontFamily": "Libre Caslon Text",
+            "fontSize": "40px",
+            "fontWeight": "700",
+            "lineHeight": "1.2"
+          },
+          "display-lg": {
+            "fontFamily": "Libre Caslon Text",
+            "fontSize": "64px",
+            "fontWeight": "700",
+            "lineHeight": "1.1",
+            "letterSpacing": "-0.02em"
+          },
+          "body-md": {
+            "fontFamily": "Bodoni Moda",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "1.5"
+          },
+          "ui-label-bold": {
+            "fontFamily": "Bricolage Grotesque",
+            "fontSize": "14px",
+            "fontWeight": "800",
+            "lineHeight": "1.2",
+            "letterSpacing": "0.25em"
+          },
+          "body-lg": {
+            "fontFamily": "Bodoni Moda",
+            "fontSize": "18px",
+            "fontWeight": "400",
+            "lineHeight": "1.6"
+          },
+          "ui-button": {
+            "fontFamily": "Bricolage Grotesque",
+            "fontSize": "14px",
+            "fontWeight": "700",
+            "lineHeight": "1.0",
+            "letterSpacing": "0.05em"
+          },
+          "headline-md": {
+            "fontFamily": "Libre Caslon Text",
+            "fontSize": "32px",
+            "fontWeight": "600",
+            "lineHeight": "1.3"
+          },
+          "ui-data-dense": {
+            "fontFamily": "Bricolage Grotesque",
+            "fontSize": "13px",
+            "fontWeight": "600",
+            "lineHeight": "1.0"
+          }
+        },
+        "spacing": {
+          "client-margin": "5vw",
+          "staff-margin": "1.5rem",
+          "client-gutter": "3rem",
+          "unit-lg": "24px",
+          "unit-sm": "8px",
+          "staff-gutter": "1rem",
+          "unit-md": "16px",
+          "unit-xs": "4px"
+        },
+        "headlineFontFamily": "Libre Caslon Text",
+        "bodyFontFamily": "Bodoni Moda",
+        "labelFontFamily": "Bricolage Grotesque"
+      }
+    },
+    "version": "1"
+  }
+}

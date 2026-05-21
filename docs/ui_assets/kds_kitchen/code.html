@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Bodoni+Moda:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e8e1de",
+                        "on-error-container": "#93000a",
+                        "background": "#fff8f5",
+                        "on-primary-fixed-variant": "#703705",
+                        "surface-dim": "#dfd9d6",
+                        "on-primary-container": "#ffceaf",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-surface-variant": "#53443a",
+                        "secondary-container": "#fea76a",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#301400",
+                        "tertiary": "#633e22",
+                        "surface-container-low": "#f9f2ef",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e8e1de",
+                        "on-background": "#1d1b1a",
+                        "on-primary-fixed": "#301400",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fff8f5",
+                        "on-tertiary-fixed-variant": "#633e22",
+                        "outline-variant": "#d8c2b6",
+                        "outline": "#867369",
+                        "primary-fixed-dim": "#ffb785",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f6efec",
+                        "primary-fixed": "#ffdcc6",
+                        "surface-tint": "#8d4e1c",
+                        "on-tertiary-container": "#ffcfae",
+                        "primary": "#703704",
+                        "inverse-primary": "#ffb785",
+                        "tertiary-container": "#7e5537",
+                        "surface-container-high": "#ede7e4",
+                        "surface-container": "#f3ecea",
+                        "surface": "#fff8f5",
+                        "on-secondary-container": "#773b03",
+                        "tertiary-fixed": "#ffdcc5",
+                        "on-secondary-fixed-variant": "#723700",
+                        "primary-container": "#8d4e1c",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#8f4d17",
+                        "on-surface": "#1d1b1a",
+                        "secondary-fixed": "#ffdcc6",
+                        "inverse-surface": "#33302e",
+                        "on-tertiary-fixed": "#301400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-xs": "4px",
+                        "unit-lg": "24px",
+                        "client-margin": "5vw",
+                        "staff-margin": "1.5rem",
+                        "unit-sm": "8px",
+                        "client-gutter": "3rem",
+                        "staff-gutter": "1rem",
+                        "unit-md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Libre Caslon Text"],
+                        "ui-button": ["Bricolage Grotesque"],
+                        "ui-label-bold": ["Bricolage Grotesque"],
+                        "body-md": ["Bodoni Moda"],
+                        "ui-data-dense": ["Bricolage Grotesque"],
+                        "body-lg": ["Bodoni Moda"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .order-card-spring {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .order-card-spring:active {
+            transform: scale(0.96);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d8c2b6;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- Staff OS Layout Shell -->
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-staff-margin bg-surface-container dark:bg-surface-container-high h-screen w-64 border-r-2 border-on-surface z-50">
+<div class="mb-unit-lg">
+<h1 class="font-display-lg text-display-lg-mobile text-primary">Staff OS</h1>
+<p class="font-ui-label-bold text-ui-label-bold text-on-surface-variant tracking-widest uppercase text-[10px]">Command Center</p>
+</div>
+<nav class="flex-1 space-y-unit-sm">
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-ui-label-bold text-ui-label-bold">Dashboard</span>
+</button>
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-ui-label-bold text-ui-label-bold">Map View</span>
+</button>
+<!-- Active Tab: KDS Kanban -->
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-primary-fixed bg-secondary-container rounded-lg font-bold scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="view_column">view_column</span>
+<span class="font-ui-label-bold text-ui-label-bold">KDS Kanban</span>
+</button>
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-ui-label-bold text-ui-label-bold">Inventory</span>
+</button>
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-ui-label-bold text-ui-label-bold">System Status</span>
+</button>
+</nav>
+<div class="mt-auto pt-unit-lg space-y-unit-sm">
+<button class="w-full bg-primary text-on-primary font-ui-button py-unit-md rounded-lg border border-on-surface hover:brightness-110 transition-all flex items-center justify-center gap-unit-sm mb-unit-lg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    New Order
+                </button>
+<div class="flex items-center gap-unit-md p-unit-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center border border-on-surface overflow-hidden">
+<img alt="Staff Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a restaurant kitchen manager wearing a clean white chef coat. The lighting is crisp and tactical, highlighting the organized professional environment of a high-end Michelin-star kitchen in the background. The aesthetic is clean, sharp, and business-focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDluSE470bszcivjo-9kHYRU6qKqi_sUAFZL48fmxYlyqaQ5Ufqv4Y2dkUozcBwNX8K_Vfc-g1rpxVJWFpnSyIuHHFnW0BAfTW4_8j7nnU9eBVmVxBoLGGhbQaoyIZvitAULT1YDlfSks-c8qPn2y82c9z8rjueMSrhUunJENGJgdXzRrkM0ypNJLvayIrHzw2i2cDY9JjHSm5WBKq6at_362tXEWVeofD9ySU6xGe5uLAWp9IZnYaocVrRdRpHkX0cREZeiQKsrK6P"/>
+</div>
+<div class="flex flex-col">
+<span class="font-ui-data-dense text-ui-data-dense">Executive Chef</span>
+<span class="font-ui-label-bold text-[10px] text-on-surface-variant">SHIFT ACTIVE</span>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-unit-sm">
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+<span class="font-ui-label-bold text-ui-label-bold">Sync Status</span>
+</button>
+<button class="w-full flex items-center gap-unit-md p-unit-sm text-error hover:bg-error-container transition-colors duration-200 rounded-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-ui-label-bold text-ui-label-bold">Logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 p-staff-margin flex flex-col h-full bg-background overflow-hidden">
+<!-- Tactical Header -->
+<header class="flex justify-between items-end mb-unit-lg border-b-2 border-on-surface pb-unit-sm">
+<div>
+<h2 class="font-display-lg text-headline-md text-primary tracking-tight">Kitchen Display System</h2>
+<div class="flex items-center gap-unit-md mt-unit-xs">
+<span class="bg-primary text-on-primary px-unit-sm py-0.5 rounded text-[10px] font-ui-label-bold">STATION: HOT LINE</span>
+<span class="text-on-surface-variant font-ui-data-dense text-ui-data-dense">Orders Active: 12</span>
+<span class="text-on-surface-variant font-ui-data-dense text-ui-data-dense">Avg Prep: 14m 20s</span>
+</div>
+</div>
+<div class="flex gap-unit-md">
+<div class="bg-surface-container-low border border-on-surface px-unit-md py-unit-sm rounded-lg flex items-center gap-unit-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="timer">timer</span>
+<span class="font-ui-data-dense text-headline-md leading-none" id="global-clock">19:42:05</span>
+</div>
+</div>
+</header>
+<!-- KDS Kanban Grid -->
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-staff-gutter overflow-hidden h-full pb-unit-lg">
+<!-- Column: Incoming -->
+<div class="flex flex-col gap-unit-md h-full min-w-[280px]">
+<div class="flex items-center justify-between px-unit-sm">
+<h3 class="font-ui-label-bold text-ui-label-bold flex items-center gap-unit-sm">
+                            INCOMING <span class="bg-on-surface text-background px-2 py-0.5 rounded-full text-[10px]">3</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex-1 space-y-unit-md overflow-y-auto custom-scrollbar pr-2">
+<!-- Order Card: Normal -->
+<div class="order-card-spring bg-surface-container-lowest border-2 border-on-surface p-unit-md rounded-lg flex flex-col gap-unit-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-ui-label-bold text-ui-label-bold text-primary">#ORD-4902</span>
+<h4 class="font-ui-data-dense text-lg">Table 14 — Guest 2</h4>
+</div>
+<div class="bg-secondary-container text-on-secondary-fixed px-unit-sm py-1 rounded font-ui-data-dense text-xs">
+                                    02:15
+                                </div>
+</div>
+<div class="border-t border-dashed border-outline-variant my-1"></div>
+<ul class="space-y-unit-sm">
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm">Pan-Seared Scallops (x2)</span>
+</li>
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm">Saffron Risotto</span>
+</li>
+</ul>
+<div class="mt-unit-sm flex justify-end">
+<button class="font-ui-label-bold text-[10px] text-primary-container hover:underline tracking-widest uppercase">Start Preparation</button>
+</div>
+</div>
+<!-- Order Card: Urgent/Sienna -->
+<div class="order-card-spring bg-surface-container-lowest border-2 border-secondary p-unit-md rounded-lg flex flex-col gap-unit-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-12 h-12 bg-secondary/10 -rotate-45 translate-x-6 -translate-y-6"></div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-ui-label-bold text-ui-label-bold text-secondary">#ORD-4899</span>
+<h4 class="font-ui-data-dense text-lg">Table 08 — Guest 4</h4>
+</div>
+<div class="bg-secondary text-on-secondary px-unit-sm py-1 rounded font-ui-data-dense text-xs animate-pulse">
+                                    08:45
+                                </div>
+</div>
+<div class="border-t border-dashed border-secondary/30 my-1"></div>
+<ul class="space-y-unit-sm">
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input class="w-5 h-5 rounded border-2 border-secondary text-secondary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm">Dry-Aged Ribeye (Medium)</span>
+</li>
+<li class="flex flex-col gap-1 pl-7">
+<div class="flex items-center gap-unit-sm">
+<input class="w-5 h-5 rounded border-2 border-secondary text-secondary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm">Truffle Mash</span>
+</div>
+<span class="text-[10px] font-ui-label-bold text-secondary uppercase bg-secondary/10 px-1 w-max rounded">No Chives</span>
+</li>
+</ul>
+<div class="mt-unit-sm flex justify-between items-center">
+<span class="text-[10px] font-ui-label-bold text-secondary uppercase">Delayed</span>
+<button class="font-ui-label-bold text-[10px] text-secondary hover:underline tracking-widest uppercase">Rush Order</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="flex flex-col gap-unit-md h-full min-w-[280px]">
+<div class="flex items-center justify-between px-unit-sm">
+<h3 class="font-ui-label-bold text-ui-label-bold flex items-center gap-unit-sm">
+                            IN PROGRESS <span class="bg-on-surface text-background px-2 py-0.5 rounded-full text-[10px]">2</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="pending">pending</span>
+</div>
+<div class="flex-1 space-y-unit-md overflow-y-auto custom-scrollbar pr-2">
+<div class="order-card-spring bg-surface-container-lowest border-2 border-on-surface p-unit-md rounded-lg flex flex-col gap-unit-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-ui-label-bold text-ui-label-bold text-primary">#ORD-4885</span>
+<h4 class="font-ui-data-dense text-lg">Table 02 — Guest 1</h4>
+</div>
+<div class="bg-on-surface text-background px-unit-sm py-1 rounded font-ui-data-dense text-xs">
+                                    14:22
+                                </div>
+</div>
+<div class="border-t border-dashed border-outline-variant my-1"></div>
+<ul class="space-y-unit-sm">
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input checked="" class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm line-through text-on-surface-variant">Lobster Bisque</span>
+</li>
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm">Wagyu Burger (Well Done)</span>
+</li>
+</ul>
+<div class="h-1.5 w-full bg-surface-container rounded-full mt-unit-sm overflow-hidden border border-on-surface">
+<div class="h-full bg-primary w-[50%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Ready to Plate -->
+<div class="flex flex-col gap-unit-md h-full min-w-[280px]">
+<div class="flex items-center justify-between px-unit-sm">
+<h3 class="font-ui-label-bold text-ui-label-bold flex items-center gap-unit-sm">
+                            READY TO PLATE <span class="bg-on-surface text-background px-2 py-0.5 rounded-full text-[10px]">4</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="restaurant">restaurant</span>
+</div>
+<div class="flex-1 space-y-unit-md overflow-y-auto custom-scrollbar pr-2">
+<div class="order-card-spring bg-surface-container-lowest border-2 border-primary-container p-unit-md rounded-lg flex flex-col gap-unit-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-ui-label-bold text-ui-label-bold text-primary">#ORD-4872</span>
+<h4 class="font-ui-data-dense text-lg">Tasting Menu — B</h4>
+</div>
+<div class="bg-primary-container text-on-primary-container px-unit-sm py-1 rounded font-ui-data-dense text-xs">
+                                    22:10
+                                </div>
+</div>
+<div class="border-t border-dashed border-outline-variant my-1"></div>
+<ul class="space-y-unit-sm">
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input checked="" class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm line-through text-on-surface-variant">Course 3: Halibut</span>
+</li>
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input checked="" class="w-5 h-5 rounded border-2 border-on-surface text-primary focus:ring-0" type="checkbox"/>
+<span class="font-ui-data-dense text-sm line-through text-on-surface-variant">Course 4: Cleanser</span>
+</li>
+</ul>
+<button class="w-full mt-unit-sm bg-primary text-on-primary font-ui-button py-2 rounded-md hover:bg-primary-container transition-colors">
+                                PUSH TO WINDOW
+                            </button>
+</div>
+</div>
+</div>
+<!-- Column: Expired/Alert -->
+<div class="flex flex-col gap-unit-md h-full min-w-[280px] bg-secondary/5 rounded-xl border border-secondary/20 p-2">
+<div class="flex items-center justify-between px-unit-sm">
+<h3 class="font-ui-label-bold text-ui-label-bold text-secondary flex items-center gap-unit-sm">
+                            CRITICAL <span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-full text-[10px]">1</span>
+</h3>
+<span class="material-symbols-outlined text-secondary animate-bounce text-sm" data-icon="warning">warning</span>
+</div>
+<div class="flex-1 space-y-unit-md overflow-y-auto custom-scrollbar pr-2">
+<div class="order-card-spring bg-on-secondary-fixed border-4 border-secondary p-unit-md rounded-lg flex flex-col gap-unit-sm shadow-xl">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-ui-label-bold text-ui-label-bold text-secondary-fixed">#ORD-4850</span>
+<h4 class="font-ui-data-dense text-lg text-white">VIP — Table 01</h4>
+</div>
+<div class="bg-secondary text-on-secondary px-unit-md py-1 rounded font-ui-data-dense text-lg">
+                                    45:12
+                                </div>
+</div>
+<div class="border-t border-dashed border-secondary/50 my-1"></div>
+<ul class="space-y-unit-md">
+<li class="flex items-center gap-unit-sm group cursor-pointer">
+<input class="w-6 h-6 rounded border-2 border-secondary text-secondary focus:ring-0 bg-transparent" type="checkbox"/>
+<span class="font-ui-data-dense text-white text-md">Whole Roasted Duck (A l'Orange)</span>
+</li>
+</ul>
+<div class="bg-secondary/20 p-unit-sm rounded border border-secondary/40">
+<p class="text-[10px] font-ui-label-bold text-secondary uppercase leading-tight">CHEF NOTE: Table waiting on mains for over 30 mins. PRIORITIZE IMMEDIATELY.</p>
+</div>
+<button class="w-full mt-unit-sm bg-secondary text-on-secondary font-ui-button py-3 rounded-md hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs">
+                                MARK AS DELIVERED
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Action Feedback Area -->
+<div class="fixed bottom-unit-lg right-unit-lg z-[100] pointer-events-none" id="toast-container"></div>
+<script>
+        // Update Global Clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-GB', { hour12: false });
+            document.getElementById('global-clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Checkbox interaction feedback
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const label = this.nextElementSibling;
+                if(this.checked) {
+                    label.classList.add('line-through', 'text-on-surface-variant');
+                    showToast("Task completed");
+                } else {
+                    label.classList.remove('line-through', 'text-on-surface-variant');
+                }
+            });
+        });
+
+        // Toast Notification System
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-secondary-container text-on-secondary-fixed border-2 border-on-surface px-unit-lg py-unit-sm rounded-lg font-ui-label-bold mb-unit-sm shadow-xl transition-all duration-300 opacity-0 transform translate-y-4';
+            toast.innerHTML = `<div class="flex items-center gap-unit-sm uppercase tracking-widest text-[11px]">
+                <span class="material-symbols-outlined text-sm">check_circle</span>
+                ${message}
+            </div>`;
+            
+            container.appendChild(toast);
+            
+            // Animation In
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-4');
+            }, 10);
+
+            // Animation Out
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-12');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Simulating some drag and drop vibes with simple hover transitions
+        document.querySelectorAll('.order-card-spring').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('border-primary');
+            });
+            card.addEventListener('mouseleave', () => {
+                if(!card.classList.contains('border-secondary')) {
+                    card.classList.remove('border-primary');
+                }
+            });
+        });
+    </script>
+</body></html>
