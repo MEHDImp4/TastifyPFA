@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Mail,
   Phone,
@@ -9,7 +10,8 @@ import {
   MessageCircle,
   Loader2,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -27,7 +29,7 @@ export const ContactPage: React.FC = () => {
     setIsSubmitting(true);
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Message transmis avec succès. Notre équipe vous répondra sous peu.');
+    toast.success('Message transmitted successfully. Our concierge will respond shortly.');
     setFormData({ name: '', email: '', subject: '', message: '' });
     setIsSubmitting(false);
   };
@@ -37,186 +39,193 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-[#fff8f5] selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6 xl:px-8 py-6 md:py-8">
+    <div className="flex-1 bg-background selection:bg-primary/10 selection:text-primary min-h-screen">
+      <div className="max-w-[1400px] mx-auto px-8 py-16 lg:py-32">
         
         {/* Editorial Header */}
-        <header className="mb-7 space-y-3 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-                <span className="w-10 h-[2px] bg-[#8d4e1c]" />
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Liaison Directe</span>
+        <header className="mb-20 space-y-6">
+            <div className="flex items-center gap-3">
+                <span className="h-[1px] w-8 bg-primary" />
+                <span className="editorial-kicker">Direct Liaison</span>
             </div>
-            <h1 className="text-3xl md:text-4xl xl:text-5xl font-serif italic text-[#301400] leading-none tracking-tighter">
-                Nous Contacter.
+            <h1 className="text-display-lg text-4xl md:text-7xl lg:text-8xl text-on-surface leading-none">
+                Contact <br /><span className="italic font-light opacity-60">Registry.</span>
             </h1>
-            <p className="max-w-xl text-[#53443a] text-sm md:text-base font-medium leading-relaxed opacity-70 italic font-serif mx-auto md:mx-0">
-                Une question, une demande particulière ou un retour d'expérience ? Notre conciergerie digitale est à votre entière disposition.
+            <p className="max-w-xl text-on-surface-variant text-xl font-body leading-relaxed italic opacity-80">
+                A question, a specialized request, or a fragment of feedback? Our digital concierge is at your absolute disposal.
             </p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
             
-            {/* Contact Information */}
-            <aside className="lg:col-span-4 space-y-6">
-                <div className="space-y-6">
-                    <section className="space-y-3">
-                        <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Coordonnées</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-start gap-4 group">
-                                <div className="w-9 h-9 rounded-xl bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] shrink-0 border border-[#ffe3d2] group-hover:bg-[#301400] group-hover:text-white transition-all duration-500">
-                                    <MapPin className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-[#301400] mb-0.5">Localisation</p>
-                                    <p className="text-[#53443a] opacity-60 leading-tight font-serif italic text-sm">123 Boulevard Gastronomique,<br/>Casablanca, Maroc</p>
-                                </div>
+            {/* Contact Information & Coordinates */}
+            <aside className="lg:col-span-4 space-y-16">
+                <section className="space-y-10">
+                    <span className="editorial-kicker opacity-40">Coordinates</span>
+                    <div className="space-y-8">
+                        <div className="flex items-start gap-8 group cursor-default">
+                            <div className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary shrink-0 border border-on-surface/5 group-hover:bg-on-surface group-hover:text-background transition-all duration-700 shadow-inner">
+                                <MapPin className="w-6 h-6" strokeWidth={1.5} />
                             </div>
-                            
-                            <div className="flex items-start gap-4 group">
-                                <div className="w-9 h-9 rounded-xl bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] shrink-0 border border-[#ffe3d2] group-hover:bg-[#301400] group-hover:text-white transition-all duration-500">
-                                    <Phone className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-[#301400] mb-0.5">Assistance</p>
-                                    <p className="text-[#53443a] opacity-60 leading-tight font-serif italic text-sm">+212 5 22 00 00 00</p>
-                                </div>
-                            </div>
-                            
-                            <div className="flex items-start gap-4 group">
-                                <div className="w-9 h-9 rounded-xl bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] shrink-0 border border-[#ffe3d2] group-hover:bg-[#301400] group-hover:text-white transition-all duration-500">
-                                    <Mail className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-[#301400] mb-0.5">Email Privé</p>
-                                    <p className="text-[#53443a] opacity-60 leading-tight font-serif italic text-sm">liaison@tastify.ma</p>
-                                </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Location</p>
+                                <p className="text-2xl font-serif italic text-on-surface leading-tight">123 Gastronomic Blvd, <br/>Casablanca, Morocco</p>
                             </div>
                         </div>
-                    </section>
-
-                    <section className="space-y-3">
-                        <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Disponibilité</h3>
-                        <div className="flex items-start gap-4">
-                            <div className="w-9 h-9 rounded-xl bg-[#fff1ea] flex items-center justify-center text-[#8d4e1c] shrink-0 border border-[#ffe3d2]">
-                                <Clock className="w-4 h-4" />
+                        
+                        <div className="flex items-start gap-8 group cursor-default">
+                            <div className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary shrink-0 border border-on-surface/5 group-hover:bg-on-surface group-hover:text-background transition-all duration-700 shadow-inner">
+                                <Phone className="w-6 h-6" strokeWidth={1.5} />
                             </div>
-                            <div className="grid grid-cols-1 gap-2 w-full">
-                                <div className="flex justify-between items-end border-b border-[#ffe3d2] pb-1.5 gap-3">
-                                    <span className="text-xs font-bold text-[#301400]">Lundi — Vendredi</span>
-                                    <span className="text-[10px] font-medium text-[#53443a]">12:00 — 23:30</span>
-                                </div>
-                                <div className="flex justify-between items-end border-b border-[#ffe3d2] pb-1.5 gap-3">
-                                    <span className="text-xs font-bold text-[#301400]">Samedi — Dimanche</span>
-                                    <span className="text-[10px] font-medium text-[#53443a]">11:00 — 00:30</span>
-                                </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Assistance</p>
+                                <p className="text-2xl font-serif italic text-on-surface leading-tight">+212 5 22 00 00 00</p>
                             </div>
                         </div>
-                    </section>
-                </div>
+                        
+                        <div className="flex items-start gap-8 group cursor-default">
+                            <div className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary shrink-0 border border-on-surface/5 group-hover:bg-on-surface group-hover:text-background transition-all duration-700 shadow-inner">
+                                <Mail className="w-6 h-6" strokeWidth={1.5} />
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Private Email</p>
+                                <p className="text-2xl font-serif italic text-on-surface leading-tight">liaison@tastify.ma</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                <section className="space-y-4">
-                    <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8d4e1c]">Réseaux</h3>
-                    <div className="flex gap-3">
+                <section className="space-y-10">
+                    <span className="editorial-kicker opacity-40">Temporal Window</span>
+                    <div className="flex items-start gap-8">
+                        <div className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary shrink-0 border border-on-surface/5 shadow-inner">
+                            <Clock className="w-6 h-6" strokeWidth={1.5} />
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 w-full">
+                            <div className="flex justify-between items-end border-b border-on-surface/5 pb-3">
+                                <span className="text-sm font-black text-on-surface tracking-tight">Mon — Fri</span>
+                                <span className="text-[11px] font-medium text-on-surface-variant opacity-60">12:00 — 23:30</span>
+                            </div>
+                            <div className="flex justify-between items-end border-b border-on-surface/5 pb-3">
+                                <span className="text-sm font-black text-on-surface tracking-tight">Sat — Sun</span>
+                                <span className="text-[11px] font-medium text-on-surface-variant opacity-60">11:00 — 00:30</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="space-y-6">
+                    <span className="editorial-kicker opacity-40">Identity Links</span>
+                    <div className="flex gap-4">
                         {[Share2, Globe, MessageCircle].map((Icon, i) => (
-                            <button key={i} className="w-10 h-10 rounded-xl border border-[#d8c2b6] flex items-center justify-center text-[#301400] hover:bg-[#301400] hover:text-white transition-all duration-500 hover:-translate-y-1">
-                                <Icon className="w-4 h-4" />
+                            <button key={i} className="w-12 h-12 rounded-2xl border border-on-surface/10 flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-700 hover:-translate-y-1 cinematic-shadow">
+                                <Icon className="w-5 h-5" strokeWidth={1.5} />
                             </button>
                         ))}
                     </div>
                 </section>
             </aside>
 
-            {/* Contact Form */}
+            {/* Contact Liaison Form */}
             <main className="lg:col-span-8">
-                <div className="bg-white border border-[#d8c2b6] rounded-[1.75rem] p-5 md:p-6 xl:p-7 shadow-[0_30px_80px_rgba(48,20,0,0.05)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-80 h-80 bg-[#8d4e1c]/5 blur-[80px] -mr-40 -mt-40" />
+                <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="editorial-card p-10 lg:p-20 relative overflow-hidden cinematic-shadow"
+                >
+                    <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[120px] -mr-48 -mt-48" />
                     
-                    <div className="relative z-10 space-y-6">
-                        <div className="space-y-2">
-                            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#fff1ea] text-[#8d4e1c] text-[9px] font-black uppercase tracking-widest mb-2">
-                                <Sparkles className="w-3.5 h-3.5" />
-                                <span>Protocole de Communication</span>
+                    <div className="relative z-10 space-y-12">
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface-container text-primary border border-primary/10">
+                                <Sparkles className="w-4 h-4" />
+                                <span className="text-ui-label-bold text-[9px] tracking-[0.3em]">Communication Protocol Active</span>
                             </div>
-                            <h2 className="text-2xl md:text-3xl font-serif italic text-[#301400] leading-none">Formulaire de Liaison.</h2>
-                            <p className="text-sm text-[#53443a] font-medium opacity-60 italic font-serif">Veuillez renseigner les champs ci-dessous avec précision.</p>
+                            <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-none italic">Liaison Manifest.</h2>
+                            <p className="text-lg text-on-surface-variant font-body opacity-60 italic max-w-lg">Please populate the registry parameters with absolute precision.</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 opacity-40">Nom Complet</label>
+                        <form onSubmit={handleSubmit} className="space-y-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-4">
+                                    <label className="editorial-kicker text-[8px] opacity-40 ml-2">Full Identity</label>
                                     <input 
                                         type="text" 
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all placeholder:text-[#301400]/20"
-                                        placeholder="Jean Dupont"
+                                        className="w-full px-8 py-5 bg-surface-container border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all cinematic-shadow placeholder:text-on-surface-variant/20 uppercase"
+                                        placeholder="JOHN DOE"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 opacity-40">Email de Contact</label>
+                                <div className="space-y-4">
+                                    <label className="editorial-kicker text-[8px] opacity-40 ml-2">Digital Coordinate</label>
                                     <input 
                                         type="email" 
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all placeholder:text-[#301400]/20"
-                                        placeholder="jean@exemple.com"
+                                        className="w-full px-8 py-5 bg-surface-container border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all cinematic-shadow placeholder:text-on-surface-variant/20 uppercase"
+                                        placeholder="JOHN@EXAMPLE.COM"
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.3em] ml-1 opacity-40">Objet de la Demande</label>
-                                <select 
-                                    name="subject"
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-3.5 py-3 bg-[#fff1ea] border border-[#ffe3d2] rounded-xl text-[#301400] font-bold text-sm focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all appearance-none"
-                                >
-                                    <option value="">Sélectionnez un motif...</option>
-                                    <option value="reservation">Demande de Réservation Spéciale</option>
-                                    <option value="evenement">Organisation d'Évènement</option>
-                                    <option value="partenariat">Proposition de Partenariat</option>
-                                    <option value="autre">Autre Demande</option>
-                                </select>
+                            <div className="space-y-4">
+                                <label className="editorial-kicker text-[8px] opacity-40 ml-2">Subject of Inquiry</label>
+                                <div className="relative group">
+                                    <select 
+                                        name="subject"
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-8 py-5 bg-surface-container border border-on-surface/5 rounded-2xl text-on-surface font-black text-sm focus:bg-background focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all appearance-none cursor-pointer cinematic-shadow"
+                                    >
+                                        <option value="">SELECT PARAMETER...</option>
+                                        <option value="reservation">SPECIAL RESERVATION REQUEST</option>
+                                        <option value="evenement">EVENT ARCHITECTURE</option>
+                                        <option value="partenariat">PARTNERSHIP PROTOCOL</option>
+                                        <option value="autre">OTHER LIAISON</option>
+                                    </select>
+                                    <ChevronRight className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant/40 group-focus-within:rotate-90 transition-transform" />
+                                </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[9px] font-black text-[#53443a] uppercase tracking-[0.4em] ml-1 opacity-40">Message</label>
+                            <div className="space-y-4">
+                                <label className="editorial-kicker text-[8px] opacity-40 ml-2">The Manifestation</label>
                                 <textarea 
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
                                     required
                                     rows={4}
-                                    className="w-full p-4 bg-[#fff1ea] border border-[#ffe3d2] rounded-2xl focus:bg-white focus:outline-none focus:border-[#8d4e1c] focus:ring-4 focus:ring-[#8d4e1c]/5 transition-all resize-none font-semibold text-[#301400] text-sm placeholder:text-[#301400]/20"
-                                    placeholder="Détaillez votre demande ici..."
+                                    className="w-full p-8 bg-surface-container border border-on-surface/5 rounded-[2rem] focus:bg-background focus:outline-none focus:border-primary focus:ring-8 focus:ring-primary/5 transition-all resize-none font-body text-on-surface text-lg italic cinematic-shadow placeholder:text-on-surface-variant/20"
+                                    placeholder="DETAIL THE NUANCES OF YOUR INQUIRY..."
                                 />
                             </div>
 
                             <button 
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-3.5 bg-[#301400] text-white rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all hover:scale-[1.02] hover:shadow-xl shadow-black/20 active:scale-95 disabled:opacity-50"
+                                className="w-full py-6 bg-on-surface text-background text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-6 transition-all hover:bg-primary cinematic-shadow active:scale-95 disabled:opacity-50 rounded-2xl"
                             >
-                                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                                {isSubmitting ? <Loader2 className="w-7 h-7 animate-spin" strokeWidth={2.5} /> : (
                                     <>
-                                        <span>Transmettre la Liaison</span>
-                                        <ArrowRight className="w-5 h-5 text-[#8d4e1c]" />
+                                        <span>Transmit Liaison</span>
+                                        <ArrowRight className="w-6 h-6 text-primary" strokeWidth={2.5} />
                                     </>
                                 )}
                             </button>
                         </form>
                     </div>
-                </div>
+                </motion.div>
             </main>
         </div>
       </div>
     </div>
   );
 };
+
