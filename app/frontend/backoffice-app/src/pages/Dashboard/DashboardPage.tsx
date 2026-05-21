@@ -14,15 +14,6 @@ import {
   Plus
   } from 'lucide-react';
 
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer
-} from 'recharts';
 import { KpiSkeleton, Skeleton } from '../../components/ui/Skeleton';
 
 import { useSocketStore } from '../../store/socketStore';
