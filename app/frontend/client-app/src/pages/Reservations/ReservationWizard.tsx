@@ -6,8 +6,6 @@ import { useAuthStore } from '../../store/authStore';
 import { useConfigStore } from '../../store/configStore';
 import { getBrandName } from '../../components/branding/BrandWordmark';
 import { 
-  Calendar as CalendarIcon, 
-  Clock, 
   Users, 
   ChevronRight, 
   CheckCircle2, 

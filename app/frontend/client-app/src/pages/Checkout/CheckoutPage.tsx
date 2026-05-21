@@ -10,7 +10,6 @@ import {
   Minus, 
   ArrowRight, 
   Loader2, 
-  PackageCheck,
   CreditCard,
   ChevronLeft,
   ShieldCheck,
