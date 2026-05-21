@@ -6,12 +6,9 @@ import {
   Loader2, 
   Clock, 
   CheckCircle2, 
-  ChefHat, 
   PlayCircle, 
   Timer,
   AlertTriangle,
-  ChevronRight,
-  MoreVertical,
   Maximize2
 } from 'lucide-react';
 
