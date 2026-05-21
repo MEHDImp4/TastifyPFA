@@ -11,8 +11,8 @@ import {
   ShoppingCart, 
   Loader2,
   Trash2,
-  Clock,
-  ArrowRight
+  ArrowRight,
+  Minus
 } from 'lucide-react';
 
 const MUTABLE_COMMANDE_PRIORITY: Record<Commande['statut'], number> = {
