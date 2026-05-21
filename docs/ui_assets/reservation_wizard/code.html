@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tastify Portal | Reservations</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&amp;family=Libre+Caslon+Text:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#8d4e1c",
+                        "on-secondary-fixed-variant": "#723700",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#703704",
+                        "on-secondary-fixed": "#301400",
+                        "tertiary-container": "#7e5537",
+                        "surface-bright": "#fff8f5",
+                        "on-primary": "#ffffff",
+                        "background": "#fff8f5",
+                        "on-surface": "#1d1b1a",
+                        "inverse-on-surface": "#f6efec",
+                        "inverse-surface": "#33302e",
+                        "tertiary-fixed": "#ffdcc5",
+                        "primary-fixed-dim": "#ffb785",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "surface-container-high": "#ede7e4",
+                        "primary-fixed": "#ffdcc6",
+                        "outline": "#867369",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffdcc6",
+                        "on-error": "#ffffff",
+                        "surface": "#fff8f5",
+                        "inverse-primary": "#ffb785",
+                        "secondary-fixed-dim": "#ffb785",
+                        "surface-dim": "#dfd9d6",
+                        "on-surface-variant": "#53443a",
+                        "surface-container-highest": "#e8e1de",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#8f4d17",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f3ecea",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#d8c2b6",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#f9f2ef",
+                        "on-background": "#1d1b1a",
+                        "on-primary-container": "#ffceaf",
+                        "on-tertiary-fixed-variant": "#633e22",
+                        "on-tertiary-container": "#ffcfae",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#773b03",
+                        "on-primary-fixed": "#301400",
+                        "primary-container": "#8d4e1c",
+                        "on-primary-fixed-variant": "#703705",
+                        "secondary-container": "#fea76a",
+                        "surface-variant": "#e8e1de",
+                        "tertiary": "#633e22"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-xs": "4px",
+                        "unit-sm": "8px",
+                        "staff-margin": "1.5rem",
+                        "client-gutter": "3rem",
+                        "unit-lg": "24px",
+                        "staff-gutter": "1rem",
+                        "client-margin": "5vw",
+                        "unit-md": "16px"
+                    },
+                    "fontFamily": {
+                        "ui-data-dense": ["Bricolage Grotesque"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "body-lg": ["Bodoni Moda"],
+                        "ui-button": ["Bricolage Grotesque"],
+                        "body-md": ["Bodoni Moda"],
+                        "ui-label-bold": ["Bricolage Grotesque"],
+                        "display-lg": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .step-transition {
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ink-border {
+            border: 1px solid #301400;
+        }
+        .ink-border-focus:focus-within {
+            border: 2px solid #fea76a;
+            outline: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation (Shared Component Integration) -->
+<header class="w-full py-unit-lg bg-background flex justify-between items-center px-client-margin w-full max-w-7xl mx-auto z-50">
+<div class="font-display-lg text-headline-md text-primary select-none">Tastify Portal</div>
+<nav class="hidden md:flex gap-unit-lg items-center">
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Our Story</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Menu</a>
+<a class="font-body-lg text-body-lg text-primary border-b-2 border-primary pb-1" href="#">Reservations</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Private Dining</a>
+</nav>
+<div class="flex items-center gap-unit-md">
+<button class="font-ui-button text-ui-button px-unit-lg py-unit-sm bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors duration-300">Book Now</button>
+<div class="w-10 h-10 rounded-full border border-outline overflow-hidden">
+<img alt="Client Account" class="w-full h-full object-cover" data-alt="A professional studio portrait of a sophisticated man with a warm smile, set against a neutral, high-end gallery background. The lighting is soft and directional, emphasizing the textures of his tailored linen shirt. The overall aesthetic is clean, modern, and aligned with a premium lifestyle brand, using a warm, muted color palette of sienna and cream." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQJAy2_2ECg0kAq1fS4iAV4LRpthYkK3qy0CKbPAR2aVlH16NkI6aV-P-tmP06uaZI31T9Z-J2jFrn3VONZO3XVL_Z_hBCxnSLF5EooogCQauZRrq1l5oWVOOKiAEOLwLS8rwZ_vsTsQriB-AtGBQ8BsLCvcjurFDdizojD8ze16npWwnuoR4H0q-EccBe4Sv_f2Rh7GeCal4nPWQFb1I3jvJrusJSSoyIMvOw4MWWtANtv6_6uhHBVG_vhCjFwrFugIWqAl6fsMGO"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area: Reservation Wizard -->
+<main class="flex-grow flex flex-col items-center justify-center py-unit-lg px-client-margin max-w-6xl mx-auto w-full relative">
+<!-- Header Section -->
+<div class="text-center mb-unit-lg max-w-2xl">
+<span class="font-ui-label-bold text-ui-label-bold text-secondary uppercase tracking-[0.25em] mb-unit-sm block">Reservation Wizard</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-unit-md">Secure Your Table</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant italic">An evening of sensory exploration awaits. Please guide us through your preferences.</p>
+</div>
+<!-- Stepper Indicator -->
+<div class="w-full max-w-md flex justify-between items-center mb-12 relative">
+<div class="absolute top-1/2 left-0 w-full h-[1px] bg-outline-variant -z-10"></div>
+<div class="w-10 h-10 rounded-full flex items-center justify-center ink-border bg-primary text-on-primary font-ui-button transition-all duration-500 scale-110" id="step-indicator-1">1</div>
+<div class="w-10 h-10 rounded-full flex items-center justify-center ink-border bg-surface text-on-surface-variant font-ui-button transition-all duration-500" id="step-indicator-2">2</div>
+<div class="w-10 h-10 rounded-full flex items-center justify-center ink-border bg-surface text-on-surface-variant font-ui-button transition-all duration-500" id="step-indicator-3">3</div>
+</div>
+<!-- Form Canvas -->
+<div class="w-full grid grid-cols-1 md:grid-cols-12 gap-client-gutter items-start">
+<!-- Left: Visual/Mood Anchor (Hidden on small mobile) -->
+<div class="hidden lg:block lg:col-span-4 sticky top-unit-lg">
+<div class="aspect-[3/4] rounded-xl overflow-hidden ink-border">
+<img alt="Atmospheric Dining" class="w-full h-full object-cover transition-opacity duration-700" data-alt="A close-up, atmospheric shot of a single flickering candle on a dark wood table in a Michelin-star restaurant. In the soft-focus background, crystal wine glasses catch the warm amber light. The mood is intimate, quiet, and deeply sophisticated, utilizing a palette of deep mahogany, burnt sienna, and warm candlelight. The overall composition feels like a high-end editorial photography piece." id="mood-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ2q006EAFH35SpYBnC54u2EWWE-ndsceflhsaVEEZ0UbBJ859PZpNWe02klN-MS53Qaob1S_Ycste3YCnWeRO0O_h6ArZpLC5nXCbF3_Yt01hvT60gpOqrKpOufDmyCr24oiMuudGLPgU25LN-O8dBRfo06zwV9FbR5qMSIIk-QQyQMmK7vf5m2Pu9TWPRxQAObsOT55HtsVQ34Ln6DYfJwwbb_VPXpxupBRT5fYU2FTMH9G3pcf-u7a9nx8o6bbh16NMltdDPUjS"/>
+</div>
+<div class="mt-unit-md">
+<p class="font-body-md text-body-md text-on-surface-variant italic text-center" id="mood-caption">"Every ingredient tells a story of the soil."</p>
+</div>
+</div>
+<!-- Right: Interactive Steps -->
+<div class="md:col-span-12 lg:col-span-8 w-full">
+<!-- Step 1: Elegant Calendar -->
+<section class="step-transition opacity-100 translate-x-0" id="step-1">
+<div class="bg-surface-container-low p-unit-lg rounded-xl ink-border">
+<h2 class="font-headline-md text-headline-md text-primary mb-unit-lg">Select a Date</h2>
+<div class="grid grid-cols-7 gap-unit-sm text-center mb-unit-md">
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">MO</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">TU</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">WE</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">TH</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">FR</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">SA</span>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">SU</span>
+<!-- Calendar Logic Simulation -->
+<div class="py-unit-sm text-outline-variant font-ui-data-dense">28</div>
+<div class="py-unit-sm text-outline-variant font-ui-data-dense">29</div>
+<div class="py-unit-sm text-outline-variant font-ui-data-dense">30</div>
+<div class="py-unit-sm text-outline-variant font-ui-data-dense">31</div>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">01</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">02</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">03</button>
+<!-- Current Month -->
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">04</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border bg-primary text-on-primary" onclick="selectDate(this)">05</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">06</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">07</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">08</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">09</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">10</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">11</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">12</button>
+<button class="py-unit-sm font-ui-data-dense hover:bg-secondary-container rounded transition-colors ink-border" onclick="selectDate(this)">13</button>
+</div>
+<div class="flex justify-end mt-unit-lg">
+<button class="group flex items-center gap-unit-sm font-ui-button text-ui-button px-8 py-4 bg-primary text-on-primary rounded-lg hover:bg-on-secondary-container transition-all active:scale-95" onclick="goToStep(2)">
+                                CONTINUE
+                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Step 2: Time Selection (Tonal Sienna Chips) -->
+<section class="step-transition hidden opacity-0 translate-x-12" id="step-2">
+<div class="bg-surface-container-low p-unit-lg rounded-xl ink-border">
+<h2 class="font-headline-md text-headline-md text-primary mb-unit-sm">Arrival Time</h2>
+<p class="font-body-md text-on-surface-variant mb-unit-lg">Dinner service begins at 17:00. Please select your preferred sitting.</p>
+<div class="space-y-unit-lg">
+<div>
+<h3 class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-sm uppercase tracking-widest">Sunset Sitting</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-unit-md">
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">17:00</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">17:30</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">18:00</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">18:15</button>
+</div>
+</div>
+<div>
+<h3 class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-sm uppercase tracking-widest">Main Service</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-unit-md">
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-secondary-container text-on-secondary-fixed font-bold" onclick="selectTime(this)">19:30</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">20:00</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">20:30</button>
+<button class="time-chip font-ui-data-dense p-unit-md ink-border rounded-lg bg-surface hover:bg-secondary-container transition-all" onclick="selectTime(this)">21:00</button>
+</div>
+</div>
+</div>
+<div class="flex justify-between mt-unit-lg">
+<button class="font-ui-button text-ui-button px-8 py-4 text-on-surface-variant hover:text-primary transition-all" onclick="goToStep(1)">BACK</button>
+<button class="group flex items-center gap-unit-sm font-ui-button text-ui-button px-8 py-4 bg-primary text-on-primary rounded-lg hover:bg-on-secondary-container transition-all active:scale-95" onclick="goToStep(3)">
+                                GUEST DETAILS
+                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Step 3: Details -->
+<section class="step-transition hidden opacity-0 translate-x-12" id="step-3">
+<div class="bg-surface-container-low p-unit-lg rounded-xl ink-border">
+<h2 class="font-headline-md text-headline-md text-primary mb-unit-lg">Final Details</h2>
+<div class="space-y-unit-lg">
+<div class="flex flex-col gap-unit-sm">
+<label class="font-ui-label-bold text-ui-label-bold text-secondary uppercase">Guest Count</label>
+<div class="flex items-center gap-unit-md">
+<button class="w-12 h-12 flex items-center justify-center ink-border rounded-lg hover:bg-secondary-container active:scale-90 transition-all" onclick="adjustGuests(-1)">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<span class="font-display-lg text-headline-md text-on-surface w-12 text-center" id="guest-count">2</span>
+<button class="w-12 h-12 flex items-center justify-center ink-border rounded-lg hover:bg-secondary-container active:scale-90 transition-all" onclick="adjustGuests(1)">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-unit-sm">
+<label class="font-ui-label-bold text-ui-label-bold text-secondary uppercase">Special Requests</label>
+<textarea class="w-full bg-surface ink-border p-unit-md font-body-md ink-border-focus rounded-lg resize-none" placeholder="Allergies, anniversaries, or seating preferences..." rows="3"></textarea>
+</div>
+<div class="p-unit-md bg-tertiary-fixed rounded-lg border border-outline-variant flex gap-unit-md items-start">
+<span class="material-symbols-outlined text-tertiary">info</span>
+<p class="font-body-md text-on-tertiary-fixed-variant italic">Reservations are held for 15 minutes. For parties over 6, please contact us directly via Private Dining.</p>
+</div>
+</div>
+<div class="flex justify-between mt-unit-lg">
+<button class="font-ui-button text-ui-button px-8 py-4 text-on-surface-variant hover:text-primary transition-all" onclick="goToStep(2)">BACK</button>
+<button class="group flex items-center gap-unit-sm font-ui-button text-ui-button px-8 py-4 bg-primary text-on-primary rounded-lg hover:bg-on-secondary-container transition-all active:scale-95" onclick="completeBooking()">
+                                CONFIRM RESERVATION
+                                <span class="material-symbols-outlined text-[18px]">verified</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Success State (Hidden) -->
+<section class="step-transition hidden opacity-0 scale-95 text-center py-unit-lg" id="step-success">
+<div class="mb-unit-lg">
+<div class="w-24 h-24 bg-primary text-on-primary rounded-full flex items-center justify-center mx-auto mb-unit-md animate-bounce">
+<span class="material-symbols-outlined text-5xl">check_circle</span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile text-primary">Confirmed.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant italic mt-unit-sm">We look forward to welcoming you on May 5th at 19:30.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-unit-md max-w-md mx-auto">
+<button class="font-ui-button text-ui-button px-unit-lg py-4 ink-border rounded-lg hover:bg-surface-container-high transition-all">ADD TO CALENDAR</button>
+<button class="font-ui-button text-ui-button px-unit-lg py-4 bg-primary text-on-primary rounded-lg hover:bg-on-secondary-container transition-all">VIEW BOOKING</button>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component Integration) -->
+<footer class="w-full border-t border-outline-variant bg-surface-container-low py-unit-lg px-client-margin mt-24">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-unit-lg">
+<div class="font-display-lg text-headline-md text-on-surface">Tastify</div>
+<div class="flex flex-wrap justify-center gap-unit-lg">
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Privacy Policy</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Terms of Service</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Press Kit</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Contact</a>
+</div>
+<div class="font-body-md text-body-md text-tertiary">© 2024 Tastify Ecosystem. All rights reserved.</div>
+</div>
+</footer>
+<script>
+        let currentStep = 1;
+        
+        function goToStep(step) {
+            const currentEl = document.getElementById(`step-${currentStep}`);
+            const nextEl = document.getElementById(`step-${step}`);
+            
+            // Outbound animation
+            currentEl.classList.add('opacity-0', '-translate-x-12');
+            setTimeout(() => {
+                currentEl.classList.add('hidden');
+                
+                // Inbound animation
+                nextEl.classList.remove('hidden');
+                setTimeout(() => {
+                    nextEl.classList.remove('opacity-0', 'translate-x-12');
+                    nextEl.classList.add('opacity-100', 'translate-x-0');
+                }, 50);
+            }, 300);
+
+            // Update indicators
+            updateIndicators(step);
+            updateMoodContent(step);
+            currentStep = step;
+        }
+
+        function updateIndicators(activeStep) {
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`step-indicator-${i}`);
+                if (i < activeStep) {
+                    el.classList.add('bg-primary', 'text-on-primary');
+                    el.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
+                    el.classList.remove('scale-110');
+                } else if (i === activeStep) {
+                    el.classList.add('bg-primary', 'text-on-primary', 'scale-110');
+                    el.classList.remove('bg-surface', 'text-on-surface-variant');
+                    el.innerHTML = i;
+                } else {
+                    el.classList.remove('bg-primary', 'text-on-primary', 'scale-110');
+                    el.classList.add('bg-surface', 'text-on-surface-variant');
+                    el.innerHTML = i;
+                }
+            }
+        }
+
+        function updateMoodContent(step) {
+            const img = document.getElementById('mood-image');
+            const caption = document.getElementById('mood-caption');
+            
+            const content = {
+                1: {
+                    src: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800',
+                    alt: 'A close-up, atmospheric shot of a single flickering candle on a dark wood table in a Michelin-star restaurant. In the soft-focus background, crystal wine glasses catch the warm amber light. The mood is intimate, quiet, and deeply sophisticated, utilizing a palette of deep mahogany, burnt sienna, and warm candlelight.',
+                    text: '"Every ingredient tells a story of the soil."'
+                },
+                2: {
+                    src: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=800',
+                    alt: 'An exquisite pour of aged red wine into a thin-stemmed crystal glass. The scene is lit with warm, low-key lighting that creates deep shadows and brilliant highlights on the wine\'s surface. The background is a blurred library of vintage bottles in a high-end cellar. The overall aesthetic is rich, textured, and evokes a sense of timeless elegance.',
+                    text: '"Time is our most precious ingredient."'
+                },
+                3: {
+                    src: 'https://images.unsplash.com/photo-1550966841-3ee203875323?auto=format&fit=crop&q=80&w=800',
+                    alt: 'A detailed macro shot of a delicate amuse-bouche served on a handcrafted ceramic plate. The plate has a rough, organic texture. The food is vibrant and artfully arranged with micro-greens and a single droplet of oil reflecting the ambient warm light. The color palette centers on earthy browns, muted sienna, and vibrant organic greens.',
+                    text: '"The art of the table is a dialogue of the senses."'
+                }
+            };
+
+            img.classList.add('opacity-0');
+            setTimeout(() => {
+                img.src = content[step].src;
+                img.dataset.alt = content[step].alt;
+                caption.innerText = content[step].text;
+                img.classList.remove('opacity-0');
+            }, 300);
+        }
+
+        function selectDate(btn) {
+            const allBtn = btn.parentNode.querySelectorAll('button');
+            allBtn.forEach(b => {
+                b.classList.remove('bg-primary', 'text-on-primary');
+                b.classList.add('bg-surface', 'text-on-surface');
+            });
+            btn.classList.add('bg-primary', 'text-on-primary');
+        }
+
+        function selectTime(btn) {
+            const allChips = document.querySelectorAll('.time-chip');
+            allChips.forEach(c => {
+                c.classList.remove('bg-secondary-container', 'text-on-secondary-fixed', 'font-bold');
+                c.classList.add('bg-surface', 'text-on-surface-variant');
+            });
+            btn.classList.add('bg-secondary-container', 'text-on-secondary-fixed', 'font-bold');
+        }
+
+        function adjustGuests(delta) {
+            const countEl = document.getElementById('guest-count');
+            let count = parseInt(countEl.innerText);
+            count = Math.max(1, Math.min(6, count + delta));
+            countEl.innerText = count;
+        }
+
+        function completeBooking() {
+            document.getElementById('step-3').classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                document.getElementById('step-3').classList.add('hidden');
+                const success = document.getElementById('step-success');
+                success.classList.remove('hidden');
+                setTimeout(() => {
+                    success.classList.remove('opacity-0', 'scale-95');
+                    success.classList.add('opacity-100', 'scale-100');
+                }, 50);
+            }, 300);
+        }
+    </script>
+</body></html>
