@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
 import type { Table, PlanText } from '../../types/salle';
-import { Loader2, Users, Move, Plus, X, Trash2, Type, Filter, Map } from 'lucide-react';
+import { Loader2, Users, Move, Plus, X, Trash2, Type, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useSocketStore } from '../../store/socketStore';
