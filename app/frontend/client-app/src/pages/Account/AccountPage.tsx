@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { reservationApi } from '../../api/reservations';
 import type { Reservation } from '../../api/reservations';
 import { avisApi } from '../../api/avis';
-import type { Avis } from '../../api/avis';
 import { loyaltyApi } from '../../api/loyalty';
 import type { LoyaltyProfile } from '../../api/loyalty';
 import { api } from '../../api/axios';
@@ -38,7 +37,7 @@ export const AccountPage: React.FC = () => {
   const [isAvisModalOpen, setIsAvisModalOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
-  const [isSubmitting, setIsLoadingSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchData = async () => {
     try {
