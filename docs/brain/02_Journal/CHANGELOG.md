@@ -8,6 +8,9 @@
 - Expanded failure diagnostics for client E2E by dumping backend, database, Redis, and frontend logs together.
 - Updated `README.md` to document the actual CI job layout and trigger modes.
 
+### Commit
+- `cd6dcdb` `Refine GitHub QA workflow`
+
 ## [2026-05-22] - 01:12
 ### Added
 - Added a root `package.json` QA command hub plus `scripts/testing/run-suite.mjs` to orchestrate lint, typecheck, build, unit, integration, E2E, coverage, and Playwright UI runs.
