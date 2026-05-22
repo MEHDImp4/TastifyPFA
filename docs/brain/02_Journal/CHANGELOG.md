@@ -16,6 +16,9 @@
 - `npm run test:unit`
 - `npm run build` completed for both frontend SPAs, then stopped at `docker compose build backend` because Docker Desktop was not running on this machine.
 
+### Commit
+- `aa5b301` `Add pragmatic QA test strategy`
+
 ## [2026-05-19] - 13:30
 ### Changed
 - **Project-Wide UI Overhaul (Tactique Compacte)**: Transitioned from "Cinématographique Large" to "Tactique Compacte" (Staff OS) aesthetic across all interfaces for maximum density and perfect screen adaptation.
