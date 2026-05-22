@@ -211,7 +211,7 @@ export const AvisPage: React.FC = () => {
             {filteredAvis.length === 0 && (
               <div className="py-20 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
                   <MessageSquare className="w-16 h-16 stroke-[1]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">Aucun avis client pour le moment.</p>
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">NO FEEDBACK DATA LOGGED</p>
               </div>
             )}
           </div>

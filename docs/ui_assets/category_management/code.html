@@ -1,0 +1,449 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Category Management - Staff OS</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&amp;family=Public+Sans:wght@400;600;700&amp;family=Rethink+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#f2bb96",
+                      "on-primary-fixed": "#301400",
+                      "surface-bright": "#3f3834",
+                      "on-tertiary-container": "#71492c",
+                      "on-background": "#ece0da",
+                      "surface-container-highest": "#3a332f",
+                      "on-tertiary": "#49280e",
+                      "surface-tint": "#ffb785",
+                      "on-error": "#690005",
+                      "surface-container-low": "#201a17",
+                      "tertiary-fixed-dim": "#f2bb96",
+                      "ink": "#100e0c",
+                      "primary-fixed-dim": "#ffb785",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#362f2b",
+                      "inverse-surface": "#ece0da",
+                      "on-primary-fixed-variant": "#6b3a13",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-secondary-fixed": "#301400",
+                      "surface-container-lowest": "#120d0a",
+                      "secondary-fixed": "#ffdcc6",
+                      "surface-dim": "#18120f",
+                      "on-surface": "#ece0da",
+                      "on-primary-container": "#79461d",
+                      "on-primary": "#502500",
+                      "error": "#ffb4ab",
+                      "aged-paper": "#fff8f5",
+                      "surface-variant": "#3a332f",
+                      "error-container": "#93000a",
+                      "on-secondary-container": "#efa978",
+                      "on-surface-variant": "#d7c3b7",
+                      "surface-container": "#241e1b",
+                      "primary": "#ffdcc6",
+                      "outline": "#9f8d83",
+                      "surface": "#18120f",
+                      "charcoal-bright": "#3c3937",
+                      "secondary-container": "#6e3d15",
+                      "surface-container-high": "#2f2925",
+                      "surface-main": "#151312",
+                      "on-secondary-fixed-variant": "#6b3a13",
+                      "tertiary": "#ffdbc5",
+                      "on-tertiary-fixed": "#301400",
+                      "on-tertiary-fixed-variant": "#643e22",
+                      "amber": "#8f4d17",
+                      "inverse-primary": "#875128",
+                      "primary-fixed": "#ffdcc6",
+                      "outline-variant": "#52443b",
+                      "on-secondary": "#502500",
+                      "secondary": "#ffb785",
+                      "background": "#18120f",
+                      "secondary-fixed-dim": "#ffb785",
+                      "primary-container": "#ffb785"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "client-margin": "5vw",
+                      "client-gutter": "3rem",
+                      "unit-sm": "8px",
+                      "unit-md": "16px",
+                      "unit-xs": "4px",
+                      "staff-gutter": "1rem",
+                      "unit-lg": "24px",
+                      "staff-margin": "1.5rem"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inclusive Sans"],
+                      "headline-md": ["Public Sans"],
+                      "display-lg-mobile": ["Public Sans"],
+                      "display-lg": ["Public Sans"],
+                      "body-md": ["Inclusive Sans"],
+                      "ui-data-dense": ["Rethink Sans"],
+                      "ui-label-bold": ["Rethink Sans"],
+                      "ui-button": ["Rethink Sans"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                      "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                      "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for dense data panels */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a332f; /* surface-variant */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #52443b; /* outline-variant */
+        }
+    </style>
+</head>
+<body class="bg-surface-main text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="docked left-0 h-screen w-64 border-r border-aged-paper dark:border-aged-paper flex flex-col py-staff-margin gap-unit-sm bg-surface-container dark:bg-surface-container shrink-0 z-20">
+<!-- Header -->
+<div class="px-staff-margin mb-unit-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface">Backoffice</h2>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant uppercase mt-unit-xs tracking-widest">Kitchen Command</p>
+</div>
+<!-- Main Tabs -->
+<div class="flex-1 flex flex-col gap-unit-xs px-unit-sm">
+<!-- Active Tab: Inventory (Categories falls under Inventory management) -->
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded bg-secondary-container text-on-secondary-container border-l-4 border-amber hover:bg-surface-container-highest transition-all Active: translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">warehouse</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Inventory</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Kitchen</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Floor</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Staff</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Analytics</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Settings</span>
+</a>
+</div>
+<!-- Footer Tabs -->
+<div class="flex flex-col gap-unit-xs px-unit-sm mt-auto pt-unit-md border-t border-outline-variant mx-unit-sm">
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Support</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-ui-label-bold text-ui-label-bold uppercase">Log Out</span>
+</a>
+<!-- User Profile Snippet -->
+<div class="flex items-center gap-unit-sm mt-unit-md px-unit-md">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline flex items-center justify-center overflow-hidden">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="A close-up, high-contrast portrait of a male chef or manager in a dark, moody environment. The lighting is focused and dramatic, highlighting professional intensity. The image has a sophisticated, after-hours editorial aesthetic suitable for a high-end restaurant backoffice system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3qM0dTVwPfVoBam6fjknpGOVfd2yxyhmja6_2pvZOEqOl240nkkK0tfBPW-mVqcs_XN76f869ZS6MYSTPpWwMhirve50MSFOv2oY0ultqqyMyUrLUeL4AwIW2gzGkv7AT2WMIaWxhXL9rF1bQHvjWlzRaJ-8EeG4XeroTpMckaMsBt_ovLmq7IFQUwqIhi5YQSICLh7xRKWGryEaZU_9RXtuKXIkfNQtLu_efEhKDbdhwaUfDVt6mspu_v-jxTn6zrq0m3ZGZgg">
+</div>
+<div class="flex flex-col">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface">J. Doe</span>
+<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Manager</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 bg-surface-main">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 border-b border-aged-paper dark:border-aged-paper bg-surface dark:bg-surface flex justify-between items-center w-full px-staff-margin h-16 shrink-0 z-10 flat no shadows">
+<!-- Search Bar (Left) -->
+<div class="flex items-center gap-unit-md w-1/3 max-w-md">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary mr-unit-md">Staff OS</span>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-unit-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded py-[6px] pl-8 pr-unit-sm font-ui-data-dense text-ui-data-dense text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-colors" placeholder="Search operations..." type="text">
+</div>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center gap-unit-md">
+<button class="w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors Active: scale-[0.98] duration-100 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-amber rounded-full"></span>
+</button>
+<button class="w-10 h-10 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors Active: scale-[0.98] duration-100">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas (Content Area) -->
+<main class="flex-1 overflow-y-auto p-staff-margin">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-unit-lg">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-unit-xs">Category Management</h1>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">Drag to reorder hierarchy. Select to edit properties.</p>
+</div>
+<div class="flex gap-unit-sm">
+<button class="px-unit-md py-unit-sm border border-outline-variant rounded font-ui-button text-ui-button text-on-surface hover:bg-surface-container-highest transition-colors uppercase flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-[18px]">undo</span>
+                        Discard Changes
+                    </button>
+<button class="px-unit-md py-unit-sm bg-primary text-on-primary rounded font-ui-button text-ui-button hover:bg-primary-container transition-colors uppercase flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Category
+                    </button>
+</div>
+</div>
+<!-- 12-Column Grid Layout -->
+<div class="grid grid-cols-12 gap-unit-md h-[calc(100vh-180px)]">
+<!-- Left Panel: Sortable List (8 cols) -->
+<div class="col-span-8 bg-surface border border-outline-variant rounded flex flex-col overflow-hidden">
+<!-- List Header -->
+<div class="px-unit-md py-unit-sm border-b border-outline-variant bg-surface-container flex items-center shrink-0">
+<div class="w-8"></div> <!-- Drag handle spacer -->
+<div class="w-12"></div> <!-- Image spacer -->
+<div class="flex-1 font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase">Category Name</div>
+<div class="w-24 text-center font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase">Items</div>
+<div class="w-32 text-center font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase">Status</div>
+<div class="w-12 text-right"></div> <!-- Actions spacer -->
+</div>
+<!-- Scrollable List Body -->
+<div class="flex-1 overflow-y-auto p-unit-sm space-y-unit-xs">
+<!-- Category Item 1 (Active) -->
+<div class="group flex items-center gap-unit-sm p-unit-sm border border-transparent hover:border-outline-variant bg-surface hover:bg-surface-container-highest rounded cursor-pointer transition-all">
+<!-- Drag Handle -->
+<div class="text-on-surface-variant cursor-grab active:cursor-grabbing hover:text-on-surface opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<!-- Thumbnail -->
+<div class="w-10 h-10 rounded overflow-hidden bg-surface-variant shrink-0 border border-outline-variant">
+<img alt="Appetizers" class="w-full h-full object-cover" data-alt="A close-up, highly detailed photograph of a gourmet appetizer plate on a dark slate background. The lighting is dramatic and focused, highlighting the textures of the food. The aesthetic is Michelin-star dining, sophisticated, and moody with deep blacks and rich colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDklKOS3x-xqwUbR0Jm_XL3N-TCvtSGbhybcwyqPubXCrOnKuzOH6y_6u3eku-Wh1mncA4bC-nIHWE06I9c1XcyeZI2NMIcE90u00aDHmXlmQ9V3-MRj4yV9SU2orq74r6-0AKpgD0M6eT5OJFr-HnpabEZA_7S_kbZ1oEozOZU6sSCDTQsx5IhGWrpBvOQewhLoBEPEZbXadgwVUMzETuW4SaXQHXcdXz4tbTdN9F3Qt_azXMuie1A7E0UqLS2yoP3Q_cXvs9L4g">
+</div>
+<!-- Details -->
+<div class="flex-1 min-w-0">
+<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface truncate uppercase">Starters &amp; Tapas</h3>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant truncate">Small plates, meant to be shared.</p>
+</div>
+<!-- Count -->
+<div class="w-24 text-center">
+<span class="inline-block px-2 py-1 bg-surface-container-high rounded font-ui-data-dense text-ui-data-dense text-on-surface border border-outline-variant">24 Items</span>
+</div>
+<!-- Status -->
+<div class="w-32 flex justify-center">
+<div class="flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full border border-secondary-container">
+<span class="w-2 h-2 rounded-full bg-amber shadow-[0_0_4px_rgba(143,77,23,0.8)]"></span>
+<span class="font-ui-data-dense text-[11px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="w-12 flex justify-end">
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Category Item 2 -->
+<div class="group flex items-center gap-unit-sm p-unit-sm border border-transparent hover:border-outline-variant bg-surface hover:bg-surface-container-highest rounded cursor-pointer transition-all">
+<div class="text-on-surface-variant cursor-grab active:cursor-grabbing hover:text-on-surface opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<div class="w-10 h-10 rounded overflow-hidden bg-surface-variant shrink-0 border border-outline-variant">
+<img alt="Main Course" class="w-full h-full object-cover" data-alt="A top-down view of a beautifully plated main course featuring premium steak and structural garnish. The dish sits on a dark, matte ceramic plate against a pitch-black background. High-contrast, surgical lighting emphasizes the culinary precision and high-end aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOC5rfb6C5jfgDdA0gBxzKLfxPqT7Iy7v5edWgp9NwEVHaQ9sRDt3hdFog3qBKpUjMCkNwHaKy-yl5P-0Ph80A6g3JyIn37jtG0CFtoa6f02vIYTxQFyHSdT-ICQJEnF1AadJwvZLX54mOGdEWh3hBELMiF43-04N8zffLqNPJdL-8K3UbvJORg1Y6Ignv0QRdckOXJyPKT32nx3yC6Kuh4ZD9JVQy1YmZN2xN_APGWc6O4T8TDusPq4wxA9Esn90SYcHdXDgCrg">
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface truncate uppercase">Main Course</h3>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant truncate">Primary entrees and specials.</p>
+</div>
+<div class="w-24 text-center">
+<span class="inline-block px-2 py-1 bg-surface-container-high rounded font-ui-data-dense text-ui-data-dense text-on-surface border border-outline-variant">42 Items</span>
+</div>
+<div class="w-32 flex justify-center">
+<div class="flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full border border-secondary-container">
+<span class="w-2 h-2 rounded-full bg-amber shadow-[0_0_4px_rgba(143,77,23,0.8)]"></span>
+<span class="font-ui-data-dense text-[11px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<div class="w-12 flex justify-end">
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Category Item 3 (Selected State Simulation) -->
+<div class="group flex items-center gap-unit-sm p-unit-sm border border-amber bg-surface-container-highest rounded cursor-pointer transition-all relative overflow-hidden">
+<!-- Indicator bar for selection -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-amber"></div>
+<div class="text-on-surface-variant cursor-grab active:cursor-grabbing hover:text-on-surface opacity-100 transition-opacity pl-2">
+<span class="material-symbols-outlined text-amber">drag_indicator</span>
+</div>
+<div class="w-10 h-10 rounded overflow-hidden bg-surface-variant shrink-0 border border-outline-variant">
+<img alt="Desserts" class="w-full h-full object-cover" data-alt="An intricate, minimalist dessert masterpiece plated on a dark slate board. The scene is illuminated by tight gallery lighting, casting hard shadows that emphasize the architectural structure of the food. The mood is precise, elegant, and strictly adheres to a dark mode, high-contrast palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd_QkmwJ0uX-PsmyCzu2HN7LzR4ejHvbIc6rthTh_ineh9HQGtlnSiBDHn5MUCqxf2DM_oEWA_HY7NoW45aWZ36SnxPvPEAZLFnXEtGmo_Hs2LdkyJadF-0ltASs6pmi8EhOZcoKZfN8XwJB6QpYlNamDcLhiiPyILqjhyu60L23kdU_XxPg9qsh3BsOoM9i0RD41XYcDrl3GXfRFGXn5IXf1KnW7HTRjwP5WVQX3VKh1SUnPR3cP-kFbPz9WkKeg5eANTBO00kQ">
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface truncate uppercase">Desserts &amp; Pastries</h3>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant truncate">In-house baked goods.</p>
+</div>
+<div class="w-24 text-center">
+<span class="inline-block px-2 py-1 bg-surface-container-high rounded font-ui-data-dense text-ui-data-dense text-on-surface border border-outline-variant">12 Items</span>
+</div>
+<div class="w-32 flex justify-center">
+<div class="flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full border border-secondary-container">
+<span class="w-2 h-2 rounded-full bg-amber shadow-[0_0_4px_rgba(143,77,23,0.8)]"></span>
+<span class="font-ui-data-dense text-[11px] uppercase tracking-wider font-bold">Active</span>
+</div>
+</div>
+<div class="w-12 flex justify-end">
+<button class="text-amber p-1 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Category Item 4 (Inactive) -->
+<div class="group flex items-center gap-unit-sm p-unit-sm border border-transparent hover:border-outline-variant bg-surface hover:bg-surface-container-highest rounded cursor-pointer transition-all opacity-60 hover:opacity-100 grayscale hover:grayscale-0">
+<div class="text-on-surface-variant cursor-grab active:cursor-grabbing hover:text-on-surface opacity-50 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<div class="w-10 h-10 rounded overflow-hidden bg-surface-variant shrink-0 border border-outline-variant">
+<div class="w-full h-full flex items-center justify-center bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined">liquor</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface truncate uppercase line-through decoration-outline-variant">Seasonal Cocktails</h3>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant truncate">Summer menu items.</p>
+</div>
+<div class="w-24 text-center">
+<span class="inline-block px-2 py-1 bg-surface-container-lowest rounded font-ui-data-dense text-ui-data-dense text-on-surface-variant border border-surface-variant">0 Items</span>
+</div>
+<div class="w-32 flex justify-center">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-ui-data-dense text-[11px] uppercase tracking-wider font-bold">Inactive</span>
+</div>
+</div>
+<div class="w-12 flex justify-end">
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer action area -->
+<div class="p-unit-sm border-t border-outline-variant bg-surface-container flex justify-between items-center">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">4 Categories Total</span>
+<button class="px-unit-sm py-1 bg-surface border border-outline-variant rounded font-ui-data-dense text-ui-data-dense text-on-surface hover:text-amber hover:border-amber transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">save</span>
+                            Save Order
+                        </button>
+</div>
+</div>
+<!-- Right Panel: Category Details/Edit (4 cols) Bento Style -->
+<div class="col-span-4 flex flex-col gap-unit-md">
+<!-- Active Item Editor Card -->
+<div class="bg-surface border border-outline-variant rounded p-unit-md flex-1 overflow-y-auto">
+<div class="flex justify-between items-start mb-unit-md">
+<h2 class="font-headline-md text-[20px] text-on-surface leading-tight">Edit Category</h2>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Image Upload Area -->
+<div class="mb-unit-md">
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface-variant mb-unit-xs uppercase">Cover Image</label>
+<div class="relative w-full h-32 rounded border border-dashed border-outline-variant bg-surface-container-highest flex flex-col items-center justify-center group hover:border-amber cursor-pointer transition-colors overflow-hidden">
+<!-- Existing Image Overlay -->
+<img alt="Desserts Banner" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-opacity" data-alt="An intricate, minimalist dessert masterpiece plated on a dark slate board. The scene is illuminated by tight gallery lighting, casting hard shadows that emphasize the architectural structure of the food. The mood is precise, elegant, and strictly adheres to a dark mode, high-contrast palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeOiAu3vs1Vqpus9OrZYXw_St4IEhJDguKUKWxqom70tP4Hdu2XRVmmN9QS4BU6b__sKchLdXMCpdlG828XKccrhQg0-KNEsdj6r87Ol0PHEM7p2oAfi_TxcmgWh6iP_N6_Sqha128-I27aeuYbiEl-l9h9YhsvkG4NQ4XHa2n2Jx-VtjVDPQ3T64zYxtldV4U1CjYz9uHRRG1yYY5LbQBiuvz1PR2pgtP6V18LXj5mk3ojp5OMQRmrGmwkks1E7UmJt_YSPn1HQ">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-amber z-10 text-[32px] mb-1">cloud_upload</span>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant group-hover:text-amber z-10">Replace Image</span>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="space-y-unit-sm">
+<div>
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface-variant mb-unit-xs uppercase">Category Name</label>
+<input class="w-full bg-surface-main border border-outline-variant rounded p-unit-sm font-ui-data-dense text-ui-data-dense text-on-surface focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-colors" type="text" value="Desserts &amp; Pastries">
+</div>
+<div>
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface-variant mb-unit-xs uppercase">Description / Subtext</label>
+<textarea class="w-full bg-surface-main border border-outline-variant rounded p-unit-sm font-ui-data-dense text-ui-data-dense text-on-surface focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-colors resize-none" rows="2">In-house baked goods.</textarea>
+</div>
+<!-- Status Toggle -->
+<div class="pt-unit-sm pb-unit-sm border-y border-outline-variant mt-unit-md mb-unit-md flex items-center justify-between">
+<div>
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface uppercase">Visibility</label>
+<p class="font-ui-data-dense text-[11px] text-on-surface-variant mt-1">Show on POS and Menus</p>
+</div>
+<!-- Custom Toggle (Active State) -->
+<button class="relative w-12 h-6 rounded-full bg-amber transition-colors focus:outline-none border border-outline">
+<div class="absolute right-1 top-1 w-4 h-4 rounded-full bg-surface-main shadow-sm transform transition-transform"></div>
+</button>
+</div>
+<!-- Metadata -->
+<div class="bg-surface-container rounded p-unit-sm border border-outline-variant">
+<div class="flex justify-between items-center mb-1">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">Menu Assignment</span>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface font-bold">All Menus</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">Tax Rate</span>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface font-bold">Standard (8.5%)</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-unit-lg flex gap-unit-sm">
+<button class="flex-1 py-unit-sm border border-outline-variant rounded font-ui-button text-ui-button text-on-surface hover:bg-surface-container-highest transition-colors uppercase">
+                                Cancel
+                            </button>
+<button class="flex-1 py-unit-sm bg-primary text-on-primary rounded font-ui-button text-ui-button hover:bg-primary-container transition-colors uppercase">
+                                Save Changes
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

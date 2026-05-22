@@ -37,7 +37,7 @@ export const DeliveryHubPage: React.FC = () => {
       <header className="flex-none flex items-center justify-between border-b border-outline-variant bg-surface-container px-staff-margin h-16 z-30">
         <div className="flex items-center gap-unit-lg">
           <div className="flex flex-col">
-            <h2 className="font-serif text-xl font-black text-primary uppercase italic leading-none m-0">Delivery Hub</h2>
+            <h2 className="font-serif text-xl font-black text-primary uppercase italic leading-none m-0">DELIVERY HUB</h2>
             <div className="flex items-center gap-2 mt-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
               <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">SYSTEMS NOMINAL • 14 ACTIVE</span>

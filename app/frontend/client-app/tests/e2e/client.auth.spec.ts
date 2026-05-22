@@ -9,22 +9,26 @@ test.beforeEach(async ({ page }) => {
 test.describe('login form — validation', () => {
   test('shows error when both fields are empty', async ({ page }) => {
     await page.goto('/login');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Veuillez remplir tous les champs.')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page.getByTestId('login-username').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
   });
 
   test('shows error when only username is filled', async ({ page }) => {
     await page.goto('/login');
-    await page.getByPlaceholder('USERNAME').fill('testuser');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Veuillez remplir tous les champs.')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page.getByTestId('login-username').fill('testuser');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
   });
 
   test('shows error when only password is filled', async ({ page }) => {
     await page.goto('/login');
-    await page.locator('input[type="password"]').fill('somepass');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Veuillez remplir tous les champs.')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page.getByTestId('login-password').fill('somepass');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
   });
 });
 
@@ -39,10 +43,10 @@ test.describe('login form — API responses', () => {
     });
 
     await page.goto('/login');
-    await page.getByPlaceholder('USERNAME').fill('wronguser');
-    await page.locator('input[type="password"]').fill('wrongpass');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Identifiants incorrects.')).toBeVisible();
+    await page.getByTestId('login-username').fill('wronguser');
+    await page.getByTestId('login-password').fill('wrongpass');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByText('INVALID_PROTOCOL')).toBeVisible();
   });
 
   test('shows error when staff role tries to log in as client', async ({ page }) => {
@@ -58,10 +62,10 @@ test.describe('login form — API responses', () => {
     });
 
     await page.goto('/login');
-    await page.getByPlaceholder('USERNAME').fill('gerant_test');
-    await page.locator('input[type="password"]').fill('password123');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Accès réservé aux clients.')).toBeVisible();
+    await page.getByTestId('login-username').fill('gerant_test');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByText('GUEST_ACCESS_ONLY')).toBeVisible();
     await expect(page).toHaveURL('/login');
   });
 
@@ -75,10 +79,10 @@ test.describe('login form — API responses', () => {
     });
 
     await page.goto('/login');
-    await page.getByPlaceholder('USERNAME').fill('someuser');
-    await page.locator('input[type="password"]').fill('somepass');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
-    await expect(page.getByText('Erreur système. Veuillez réessayer.')).toBeVisible();
+    await page.getByTestId('login-username').fill('someuser');
+    await page.getByTestId('login-password').fill('somepass');
+    await page.getByTestId('login-submit').click();
+    await expect(page.getByText('SYSTEM_BREACH')).toBeVisible();
   });
 
   test('successful CLIENT login navigates to home', async ({ page }) => {
@@ -91,9 +95,9 @@ test.describe('login form — API responses', () => {
     });
 
     await page.goto('/login');
-    await page.getByPlaceholder('USERNAME').fill('client_test');
-    await page.locator('input[type="password"]').fill('password123');
-    await page.getByRole('button', { name: 'Se Connecter' }).click();
+    await page.getByTestId('login-username').fill('client_test');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
     await expect(page).toHaveURL('/');
   });
 });

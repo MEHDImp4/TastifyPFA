@@ -1,375 +1,260 @@
-<!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tastify OS - Order Entry</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Libre+Caslon+Text:wght@400;700&amp;family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .spring-transition {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .active-scale:active {
-            transform: scale(0.95);
-        }
-        /* Custom scrollbar for tactical feel */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #867369; border-radius: 2px; }
-    </style>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@600;700&amp;family=Inclusive+Sans&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "surface-tint": "#8d4e1c",
-                        "on-secondary-fixed-variant": "#723700",
-                        "surface-container-lowest": "#ffffff",
-                        "primary": "#703704",
-                        "on-secondary-fixed": "#301400",
-                        "tertiary-container": "#7e5537",
-                        "surface-bright": "#fff8f5",
-                        "on-primary": "#ffffff",
-                        "background": "#fff8f5",
-                        "on-surface": "#1d1b1a",
-                        "inverse-on-surface": "#f6efec",
-                        "inverse-surface": "#33302e",
-                        "tertiary-fixed": "#ffdcc5",
-                        "primary-fixed-dim": "#ffb785",
-                        "tertiary-fixed-dim": "#f2bb96",
-                        "surface-container-high": "#ede7e4",
+                        "surface-container-lowest": "#120d0a",
+                        "tertiary-fixed": "#ffdcc6",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "inverse-on-surface": "#362f2b",
+                        "on-background": "#ece0da",
                         "primary-fixed": "#ffdcc6",
-                        "outline": "#867369",
-                        "error": "#ba1a1a",
-                        "secondary-fixed": "#ffdcc6",
-                        "on-error": "#ffffff",
-                        "surface": "#fff8f5",
-                        "inverse-primary": "#ffb785",
+                        "on-secondary-container": "#efa978",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#52443b",
+                        "outline": "#9f8d83",
+                        "error-container": "#93000a",
+                        "surface-main": "#151312",
+                        "inverse-surface": "#ece0da",
+                        "surface-container": "#241e1b",
+                        "primary-fixed-dim": "#ffb785",
+                        "surface-tint": "#ffb785",
+                        "surface-container-highest": "#3a332f",
                         "secondary-fixed-dim": "#ffb785",
-                        "surface-dim": "#dfd9d6",
-                        "on-surface-variant": "#53443a",
-                        "surface-container-highest": "#e8e1de",
-                        "on-secondary": "#ffffff",
-                        "secondary": "#8f4d17",
-                        "on-error-container": "#93000a",
-                        "surface-container": "#f3ecea",
-                        "on-tertiary": "#ffffff",
-                        "outline-variant": "#d8c2b6",
+                        "background": "#18120f",
+                        "on-surface-variant": "#d7c3b7",
+                        "secondary-container": "#6e3d15",
+                        "on-secondary": "#502500",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "tertiary": "#ffdbc5",
+                        "on-tertiary": "#49280e",
+                        "tertiary-container": "#f2bb96",
+                        "surface-dim": "#18120f",
+                        "secondary": "#ffb785",
+                        "surface-container-high": "#2f2925",
+                        "surface-container-low": "#201a17",
+                        "on-primary-container": "#79461d",
+                        "amber": "#8f4d17",
+                        "on-tertiary-container": "#71492c",
+                        "surface-variant": "#3a332f",
+                        "on-secondary-fixed": "#301400",
+                        "surface": "#18120f",
+                        "surface-bright": "#3f3834",
+                        "on-error": "#690005",
+                        "primary": "#ffdcc6",
+                        "ink": "#100e0c",
                         "on-tertiary-fixed": "#301400",
-                        "surface-container-low": "#f9f2ef",
-                        "on-background": "#1d1b1a",
-                        "on-primary-container": "#ffceaf",
-                        "on-tertiary-fixed-variant": "#633e22",
-                        "on-tertiary-container": "#ffcfae",
-                        "error-container": "#ffdad6",
-                        "on-secondary-container": "#773b03",
-                        "on-primary-fixed": "#301400",
-                        "primary-container": "#8d4e1c",
-                        "on-primary-fixed-variant": "#703705",
-                        "secondary-container": "#fea76a",
-                        "surface-variant": "#e8e1de",
-                        "tertiary": "#633e22"
+                        "charcoal-bright": "#3c3937",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "inverse-primary": "#875128",
+                        "on-surface": "#ece0da",
+                        "on-primary": "#502500",
+                        "secondary-fixed": "#ffdcc6",
+                        "primary-container": "#ffb785",
+                        "aged-paper": "#fff8f5",
+                        "on-primary-fixed": "#301400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
                     },
                     "spacing": {
-                        "unit-xs": "4px",
                         "unit-sm": "8px",
+                        "unit-xs": "4px",
+                        "staff-gutter": "1rem",
                         "staff-margin": "1.5rem",
+                        "unit-md": "16px",
                         "client-gutter": "3rem",
                         "unit-lg": "24px",
-                        "staff-gutter": "1rem",
-                        "client-margin": "5vw",
-                        "unit-md": "16px"
+                        "client-margin": "5vw"
                     },
                     "fontFamily": {
-                        "ui-data-dense": ["Bricolage Grotesque"],
-                        "display-lg-mobile": ["Libre Caslon Text"],
-                        "headline-md": ["Libre Caslon Text"],
-                        "body-lg": ["Bodoni Moda"],
-                        "ui-button": ["Bricolage Grotesque"],
-                        "body-md": ["Bodoni Moda"],
-                        "ui-label-bold": ["Bricolage Grotesque"],
-                        "display-lg": ["Libre Caslon Text"]
+                        "ui-label-bold": ["Rethink Sans"],
+                        "ui-button": ["Rethink Sans"],
+                        "display-lg": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "body-lg": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"],
+                        "display-lg-mobile": ["Public Sans"]
                     },
                     "fontSize": {
-                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
-                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
-                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
-                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
-                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }]
                     }
                 }
             }
         }
     </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
 </head>
-<body class="bg-surface-container font-body-md text-on-surface overflow-hidden">
-<!-- Staff OS SideNav -->
-<nav class="fixed left-0 top-0 h-full flex flex-col p-staff-margin bg-surface-container dark:bg-surface-container-high h-screen w-64 border-r-2 border-on-surface">
-<div class="mb-unit-lg">
-<h1 class="font-display-lg text-headline-md text-primary leading-none">Staff OS</h1>
-<p class="font-ui-label-bold text-[10px] tracking-widest text-on-surface-variant uppercase mt-1">Command Center</p>
-</div>
-<div class="flex flex-col gap-unit-sm flex-grow">
-<!-- Active: Dashboard (since we are in the order taking context) -->
-<a class="flex items-center gap-3 p-3 text-on-primary-fixed bg-secondary-container rounded-lg font-bold spring-transition active-scale" href="#">
-<span class="material-symbols-outlined">dashboard</span>
-<span class="font-ui-label-bold text-ui-label-bold">Dashboard</span>
-</a>
-<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition active-scale" href="#">
-<span class="material-symbols-outlined">map</span>
-<span class="font-ui-label-bold text-ui-label-bold">Map View</span>
-</a>
-<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition active-scale" href="#">
-<span class="material-symbols-outlined">view_column</span>
-<span class="font-ui-label-bold text-ui-label-bold">KDS Kanban</span>
-</a>
-<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition active-scale" href="#">
-<span class="material-symbols-outlined">inventory_2</span>
-<span class="font-ui-label-bold text-ui-label-bold">Inventory</span>
-</a>
-</div>
-<button class="mt-unit-lg mb-unit-lg w-full py-3 bg-primary text-on-primary rounded-lg font-ui-button text-ui-button active-scale spring-transition border-2 border-on-primary">
-            New Order
-        </button>
-<div class="mt-auto border-t border-outline-variant pt-unit-md flex flex-col gap-2">
-<div class="flex items-center justify-between px-2">
-<div class="flex items-center gap-2">
-<img alt="Staff Profile" class="w-8 h-8 rounded-full border border-on-surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN0098kCKuBpFdjSJX1zRn_lqhftpqMMCchR9SfMLq0rvAmuDpmzdtBUM4b9ZOfQVz_GpbjuBM-L5So9sv8Y6VeFUu2anrikaaErmr6wF2ih2YjoSmt0sVQxYI38A9GVuYowkp045K4CQl5LkRhFNzcNewg9WBIs4iUSSCWldWfNK2VB78XRyf7LAGry3mo7KITVBKYEeYWpCNxTPgD9S5vzPZg9ag7KtIPOpod3KU6PtF04aS5yJ0xHYhtruhTeq28Sqbu33Njb9p"/>
-<span class="font-ui-data-dense text-ui-data-dense">Server #102</span>
-</div>
-<span class="material-symbols-outlined text-primary text-sm">sync</span>
-</div>
-<a class="flex items-center gap-3 p-2 text-on-surface-variant hover:text-error transition-colors" href="#">
-<span class="material-symbols-outlined">logout</span>
-<span class="font-ui-label-bold text-[12px]">Logout</span>
-</a>
-</div>
-</nav>
-<!-- Main Content Area -->
-<main class="ml-64 h-screen grid grid-cols-10 overflow-hidden">
-<!-- Left Section: 70% Product Selection -->
-<section class="col-span-7 bg-surface-bright flex flex-col border-r-2 border-on-surface">
-<!-- Header/Table Info -->
-<header class="p-unit-lg border-b border-outline-variant flex justify-between items-end bg-surface">
-<div>
-<h2 class="font-headline-md text-headline-md text-on-surface">Table #14</h2>
-<div class="flex gap-4 mt-2">
-<span class="font-ui-data-dense text-ui-data-dense px-2 py-1 bg-surface-container rounded border border-outline">4 GUESTS</span>
-<span class="font-ui-data-dense text-ui-data-dense px-2 py-1 bg-surface-container rounded border border-outline">SERVER: MARCUS</span>
-</div>
-</div>
-<div class="flex gap-unit-sm">
-<button class="p-unit-sm border-2 border-on-surface rounded-lg hover:bg-surface-container-highest spring-transition">
-<span class="material-symbols-outlined">search</span>
+<body class="bg-background text-on-surface h-screen w-screen overflow-hidden flex font-body-md">
+<!-- SideNavBar (Suppressed intentionally as per rules for transactional/task-focused flows like Order Entry. Using simplified side panel for menu instead) -->
+<main class="flex-1 flex flex-col h-full w-full bg-surface-main">
+<!-- TopAppBar Contextual Replacement -->
+<header class="sticky top-0 z-40 w-full border-b border-outline-variant bg-surface-main flex items-center justify-between px-staff-gutter py-unit-sm">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-all outline-none focus:ring-2 focus:ring-amber">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
 </button>
-<button class="p-unit-sm border-2 border-on-surface rounded-lg hover:bg-surface-container-highest spring-transition">
-<span class="material-symbols-outlined">filter_list</span>
+<div class="font-headline-md text-headline-md font-black text-on-surface tracking-widest">
+                    Table 42
+                </div>
+<span class="bg-surface-container-high px-2 py-1 rounded text-ui-data-dense font-ui-data-dense text-on-surface-variant ml-2 border border-outline-variant">Party of 4</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-all outline-none focus:ring-2 focus:ring-amber">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
 </button>
 </div>
 </header>
-<!-- Category Tabs -->
-<nav class="flex px-unit-lg py-unit-sm gap-unit-md bg-surface-container-low border-b border-outline-variant overflow-x-auto">
-<button class="font-ui-label-bold text-ui-label-bold px-4 py-2 bg-primary text-on-primary rounded border border-on-surface">Starters</button>
-<button class="font-ui-label-bold text-ui-label-bold px-4 py-2 hover:bg-surface-container-highest transition-colors">Mains</button>
-<button class="font-ui-label-bold text-ui-label-bold px-4 py-2 hover:bg-surface-container-highest transition-colors">Desserts</button>
-<button class="font-ui-label-bold text-ui-label-bold px-4 py-2 hover:bg-surface-container-highest transition-colors">Beverages</button>
-<button class="font-ui-label-bold text-ui-label-bold px-4 py-2 hover:bg-surface-container-highest transition-colors">Specials</button>
-</nav>
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Menu -->
+<section class="w-2/3 h-full border-r border-outline-variant bg-surface-container-lowest flex flex-col">
+<!-- Categories -->
+<div class="flex overflow-x-auto border-b border-outline-variant bg-surface-container py-2 px-staff-gutter gap-2 no-scrollbar">
+<button class="px-4 py-2 rounded-lg bg-secondary-container text-on-secondary-container font-ui-label-bold text-ui-label-bold whitespace-nowrap">Starters</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors font-ui-label-bold text-ui-label-bold whitespace-nowrap">Mains</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors font-ui-label-bold text-ui-label-bold whitespace-nowrap">Sides</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors font-ui-label-bold text-ui-label-bold whitespace-nowrap">Desserts</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors font-ui-label-bold text-ui-label-bold whitespace-nowrap">Beverages</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors font-ui-label-bold text-ui-label-bold whitespace-nowrap">Spirits</button>
+</div>
 <!-- Menu Grid -->
-<div class="flex-grow overflow-y-auto p-unit-lg grid grid-cols-3 gap-unit-md">
-<!-- Dish Tile 1 -->
-<button class="group relative aspect-square bg-surface border border-on-surface rounded-lg overflow-hidden active-scale spring-transition text-left">
-<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A high-angle professional food photograph of pan-seared scallops arranged elegantly on a dark ceramic plate with vibrant green microgreens and a citrus reduction. The lighting is focused and dramatic, highlighting the caramelization on the scallops against the dark, moody background of a high-end Michelin star kitchen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtVMP33y4Z66-lCoxpe4qktRcBigkuJTQNtSYiOaPyElLTXU_-Kwf5OVSFnqVICuqojVh8H5Oz8FbLfokaROhdNyC5YUw9HpfgjgKeHs5DAym1g4joIKDyJ3IKVVB4cxDx2RNqEwpQy5bVZkq7zYNHaty-lc07NynBbcjyD1EQ3YhsX-hOAusBhmWm25m7SwYWwjtRqSza0fcXeMAlwEWwPNFNYFeGhlTjRbVBq__FuxjLs46Dm9o-OQYKGVZgyJa3mtg2PEAJJI84"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-unit-sm w-full">
-<div class="flex justify-between items-end">
-<div>
-<p class="font-ui-label-bold text-white text-[12px] leading-tight">PAN-SEARED</p>
-<p class="font-ui-label-bold text-white text-[16px] leading-tight">SCALLOPS</p>
-</div>
-<span class="font-ui-data-dense text-white text-headline-md">$24</span>
-</div>
-</div>
+<div class="flex-1 overflow-y-auto p-staff-margin grid grid-cols-3 gap-unit-md auto-rows-max">
+<!-- Item -->
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber">
+<span class="font-body-md text-on-surface">Wagyu Tartare</span>
+<span class="font-ui-data-dense text-ui-data-dense text-primary">$28</span>
 </button>
-<!-- Dish Tile 2 -->
-<button class="group relative aspect-square bg-surface border border-on-surface rounded-lg overflow-hidden active-scale spring-transition text-left">
-<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A close-up, high-definition photo of a thick, dry-aged ribeye steak, perfectly grilled with prominent sear marks. The meat is sliced to reveal a perfect medium-rare center, resting on a rustic wooden board seasoned with coarse sea salt and fresh rosemary. The atmosphere is warm and sophisticated, with golden directional lighting typical of a premier steakhouse." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD9-V_G0Z4E8LSmnxi8ryNcpJCia1EVr1c-hn2mguIdy0lhK_sm2sY_1kRCPrbD6hs8DJEs0IFjXg-FxMyQtJxDu0o3GKz1y9LqwQMLzb95bxtR9ZYquDNGerlUuFpsCmOsyQP440xpHOyf0sGixECETWA84H-uy-pt5Iw-MuDsypCCgniCqPbvtkRjnUtFsL0_KozSNAiwKAUL1yLRuGBBMKJD4rf0C6QcQ-_BqUINkUtSy76nef2mwkF3AV4KUxvkxiehkc_3i6-"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-unit-sm w-full">
-<div class="flex justify-between items-end">
-<div>
-<p class="font-ui-label-bold text-white text-[12px] leading-tight">DRY-AGED</p>
-<p class="font-ui-label-bold text-white text-[16px] leading-tight">RIBEYE</p>
-</div>
-<span class="font-ui-data-dense text-white text-headline-md">$68</span>
-</div>
-</div>
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber">
+<span class="font-body-md text-on-surface">Oyster Platter (½ Doz)</span>
+<span class="font-ui-data-dense text-ui-data-dense text-primary">$36</span>
 </button>
-<!-- Dish Tile 3 -->
-<button class="group relative aspect-square bg-surface border border-on-surface rounded-lg overflow-hidden active-scale spring-transition text-left">
-<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A beautiful culinary presentation of a roasted beet salad with whipped goat cheese, candied walnuts, and golden honeycomb. The dish is presented on a minimalist white porcelain plate, set against a background of high-contrast editorial dining aesthetics, featuring natural side lighting that creates soft shadows and highlights the textures of the ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXk6tXrrbmNgv6m81ozk2StxuZaZa9P7Ze3jW_SDNTXXrQZ7i8ZbXpAzO9c806IR97cjKW7HxR-Vx5iDl5FBCgYJ1g4NnZMlwhB90kWcmzXn1ojUEAagIvEIG6XozPhrqpyHPhtIr78mtDy5BRJCfHFsFfBqO2voytmxgjtcwfxqQcIFfgFU8NZFAKF7S_9AYppFAF43CMFd8QKWmK09mzuKC5o_wr7s7Q7_fCSuw0pvRb-_QjWqii5d3tHanORvwzMmwQza4gOElD"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-unit-sm w-full">
-<div class="flex justify-between items-end">
-<div>
-<p class="font-ui-label-bold text-white text-[12px] leading-tight">HEIRLOOM</p>
-<p class="font-ui-label-bold text-white text-[16px] leading-tight">BEET SALAD</p>
-</div>
-<span class="font-ui-data-dense text-white text-headline-md">$18</span>
-</div>
-</div>
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber">
+<span class="font-body-md text-on-surface">Burrata &amp; Heirloom</span>
+<span class="font-ui-data-dense text-ui-data-dense text-primary">$22</span>
 </button>
-<!-- Dish Tile 4 -->
-<button class="group relative aspect-square bg-surface border border-on-surface rounded-lg overflow-hidden active-scale spring-transition text-left">
-<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="Exquisite plate of truffle arancini, golden-brown and crispy, drizzled with a rich truffle-infused aioli and topped with freshly shaved black truffle. The photo uses a shallow depth of field to focus on the intricate texture of the breading, set within a luxurious and tactical dining environment with deep wood accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqVby_yXhKrreka1CljCi7yUFwIZzroByF021WdXx_AZqeeH5qbmf435MwUeZmrPgtlxcTXcgOXRRVURyef6L_ggpoaAwAh5myFAmw4a_CtG5MLcKxjE35rNHEeEd7SM4TX8MIG_PoRNCAshjWz3bQTY7sJ1xLK-iVfsmRgQX24N02DOxtbcmfT6PrKk3HyYNtimT2XJs81F7Y8yfTE4Gcyk-8UpIL4BNTGKKWXcEf35drPYB9O4YZnckOeNY-9Qj2oEWLXepBlbZm"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-unit-sm w-full">
-<div class="flex justify-between items-end">
-<div>
-<p class="font-ui-label-bold text-white text-[12px] leading-tight">TRUFFLE</p>
-<p class="font-ui-label-bold text-white text-[16px] leading-tight">ARANCINI</p>
-</div>
-<span class="font-ui-data-dense text-white text-headline-md">$21</span>
-</div>
-</div>
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber">
+<span class="font-body-md text-on-surface">Bone Marrow</span>
+<span class="font-ui-data-dense text-ui-data-dense text-primary">$26</span>
 </button>
-<!-- Dish Tile 5 -->
-<button class="group relative aspect-square bg-surface border border-on-surface rounded-lg overflow-hidden active-scale spring-transition text-left">
-<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A signature cocktail in a crystal coupe glass, garnished with a dried botanical branch. The drink has a vibrant amber hue, perfectly capturing the light in a sophisticated bar setting. The image is crisp and editorial, focusing on the clarity of the ice and the elegant silhouette of the glassware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo1bgxDXEWstQKlSQ-A9NGWMOXP4wzbQXk1sfMgMH-WS4ESGOqp4bPGYuAIpA761TNoidB2CZDfR2vRcLKQaby2FAzZif2Nv88OrJ_CvpL5dcA4VrcqVNRCjGTb6WwwUjQ7jLUu90_fAKgwoXZl7Y6zU381Y2UcKUGCtRgKzX4OqNQPxhFLNm77G9yjaCgEOwoz79qEkkae8LP-xWqkKTMJrROPYgr8IdsEn9G5PkhTI6gymRqj74Tdetcieqa3CAZCANozNLp5nWO"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-unit-sm w-full">
-<div class="flex justify-between items-end">
-<div>
-<p class="font-ui-label-bold text-white text-[12px] leading-tight">SIGNATURE</p>
-<p class="font-ui-label-bold text-white text-[16px] leading-tight">OLD FASHIONED</p>
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber opacity-50 cursor-not-allowed">
+<div class="flex justify-between items-start w-full">
+<span class="font-body-md text-on-surface-variant">Truffle Arancini</span>
+<span class="text-xs bg-error-container text-on-error-container px-1 py-0.5 rounded font-ui-data-dense">86</span>
 </div>
-<span class="font-ui-data-dense text-white text-headline-md">$19</span>
-</div>
-</div>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">$18</span>
+</button>
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-32 transition-all hover:border-outline focus:outline-none focus:ring-2 focus:ring-amber">
+<span class="font-body-md text-on-surface">Hamachi Crudo</span>
+<span class="font-ui-data-dense text-ui-data-dense text-primary">$24</span>
 </button>
 </div>
 </section>
-<!-- Right Section: 30% Order Sidebar -->
-<aside class="col-span-3 bg-surface-container flex flex-col shadow-[-4px_0_12px_rgba(0,0,0,0.05)]">
-<div class="p-unit-lg border-b border-on-surface bg-surface-container-high">
-<div class="flex items-center justify-between">
-<h3 class="font-ui-label-bold text-ui-label-bold text-primary">CURRENT TICKET</h3>
-<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">ORDER #8842</span>
+<!-- Right Panel: Ticket -->
+<section class="w-1/3 h-full bg-surface-container-lowest flex flex-col">
+<!-- Ticket Header -->
+<div class="px-staff-gutter py-unit-sm border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase tracking-widest">Active Ticket</span>
+<label class="flex items-center cursor-pointer gap-2">
+<span class="font-ui-data-dense text-ui-data-dense text-error">FIRE NOW</span>
+<div class="relative">
+<input class="sr-only" type="checkbox">
+<div class="block bg-surface-container-highest w-10 h-6 rounded-full border border-outline-variant"></div>
+<div class="dot absolute left-1 top-1 bg-on-surface w-4 h-4 rounded-full transition"></div>
+</div>
+</label>
+</div>
+<!-- Ticket Items -->
+<div class="flex-1 overflow-y-auto bg-surface-container-lowest">
+<!-- Item 1 -->
+<div class="p-unit-sm border-b border-outline-variant hover:bg-surface-container transition-colors group">
+<div class="flex justify-between items-start">
+<div class="flex gap-2">
+<span class="font-ui-data-dense text-ui-data-dense text-primary w-4 text-right">1x</span>
+<span class="font-body-md text-on-surface">Wagyu Tartare</span>
+</div>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface">$28.00</span>
+</div>
+<div class="ml-6 mt-1 flex flex-col gap-1">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant">- No quail egg</span>
+<span class="font-ui-data-dense text-ui-data-dense text-amber">+ GF Crostini</span>
+</div>
+<div class="ml-6 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+<button class="bg-surface-variant p-1 rounded hover:bg-surface-bright text-on-surface"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+<button class="bg-surface-variant p-1 rounded hover:bg-error text-on-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
 </div>
 </div>
-<!-- Items List -->
-<div class="flex-grow overflow-y-auto p-unit-md space-y-3">
-<!-- Ticket Item 1 -->
-<div class="p-3 bg-surface border border-on-surface rounded flex justify-between items-start spring-transition hover:border-primary">
-<div class="flex gap-3">
-<span class="font-ui-label-bold text-primary">2x</span>
-<div>
-<p class="font-ui-label-bold text-ui-label-bold text-on-surface">Pan-Seared Scallops</p>
-<p class="font-ui-data-dense text-[11px] text-on-surface-variant">MIDS: NO ONIONS</p>
+<!-- Item 2 -->
+<div class="p-unit-sm border-b border-outline-variant hover:bg-surface-container transition-colors group">
+<div class="flex justify-between items-start">
+<div class="flex gap-2">
+<span class="font-ui-data-dense text-ui-data-dense text-primary w-4 text-right">2x</span>
+<span class="font-body-md text-on-surface">Oyster Platter (½ Doz)</span>
+</div>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface">$72.00</span>
+</div>
+<div class="ml-6 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+<button class="bg-surface-variant p-1 rounded hover:bg-surface-bright text-on-surface"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+<button class="bg-surface-variant p-1 rounded hover:bg-error text-on-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
 </div>
 </div>
-<span class="font-ui-data-dense text-ui-data-dense">$48.00</span>
 </div>
-<!-- Ticket Item 2 -->
-<div class="p-3 bg-surface border border-on-surface rounded flex justify-between items-start spring-transition hover:border-primary">
-<div class="flex gap-3">
-<span class="font-ui-label-bold text-primary">1x</span>
-<div>
-<p class="font-ui-label-bold text-ui-label-bold text-on-surface">Dry-Aged Ribeye</p>
-<p class="font-ui-data-dense text-[11px] text-on-surface-variant">TEMP: MEDIUM RARE</p>
-</div>
-</div>
-<span class="font-ui-data-dense text-ui-data-dense">$68.00</span>
-</div>
-<!-- Ticket Item 3 -->
-<div class="p-3 bg-surface border border-on-surface rounded flex justify-between items-start spring-transition hover:border-primary">
-<div class="flex gap-3">
-<span class="font-ui-label-bold text-primary">1x</span>
-<div>
-<p class="font-ui-label-bold text-ui-label-bold text-on-surface">Heirloom Beet Salad</p>
-</div>
-</div>
-<span class="font-ui-data-dense text-ui-data-dense">$18.00</span>
-</div>
-</div>
-<!-- Totals & Actions -->
-<div class="mt-auto p-unit-lg bg-surface border-t-2 border-on-surface space-y-4">
-<div class="space-y-1">
-<div class="flex justify-between font-ui-data-dense text-ui-data-dense text-on-surface-variant">
+<!-- Ticket Footer -->
+<div class="border-t border-outline-variant bg-surface-container-low p-staff-gutter flex flex-col gap-unit-md">
+<div class="flex justify-between items-center font-ui-data-dense text-ui-data-dense text-on-surface-variant">
 <span>Subtotal</span>
-<span>$134.00</span>
+<span>$100.00</span>
 </div>
-<div class="flex justify-between font-ui-data-dense text-ui-data-dense text-on-surface-variant">
+<div class="flex justify-between items-center font-ui-data-dense text-ui-data-dense text-on-surface-variant">
 <span>Tax (8.5%)</span>
-<span>$11.39</span>
+<span>$8.50</span>
 </div>
-<div class="flex justify-between font-ui-label-bold text-[20px] text-on-surface pt-2 border-t border-outline-variant border-dashed">
-<span>TOTAL</span>
-<span>$145.39</span>
+<div class="flex justify-between items-center font-headline-md text-headline-md text-primary pt-2 border-t border-outline">
+<span>Total</span>
+<span>$108.50</span>
 </div>
-</div>
-<div class="grid grid-cols-2 gap-3">
-<button class="py-3 px-2 border-2 border-on-surface rounded-lg font-ui-button text-ui-button hover:bg-surface-container-highest active-scale spring-transition">
-                        PRINT PREBILL
-                    </button>
-<button class="py-3 px-2 border-2 border-on-surface rounded-lg font-ui-button text-ui-button hover:bg-surface-container-highest active-scale spring-transition">
-                        SPLIT CHECK
+<button class="w-full bg-primary-container text-on-primary-container font-ui-button text-ui-button py-3 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 mt-2">
+<span class="material-symbols-outlined">send</span> Send to Kitchen
                     </button>
 </div>
-<button class="w-full py-5 bg-primary-container text-on-primary-container rounded-lg font-ui-button text-[18px] tracking-widest active-scale spring-transition border-2 border-on-surface shadow-[4px_4px_0_0_#301400]">
-                    FIRE TO KITCHEN
-                </button>
+</section>
 </div>
-</aside>
 </main>
-<!-- Success Toast (Hidden by default) -->
-<div class="fixed top-staff-margin right-staff-margin transform translate-x-full transition-transform duration-300 pointer-events-none" id="toast">
-<div class="bg-secondary-container text-on-secondary-fixed border-2 border-on-surface p-unit-md rounded shadow-lg flex items-center gap-4">
-<span class="material-symbols-outlined text-primary">check_circle</span>
-<div>
-<p class="font-ui-label-bold text-ui-label-bold">TICKET FIRED</p>
-<p class="font-ui-data-dense text-ui-data-dense">Table #14 sent to kitchen</p>
-</div>
-</div>
-</div>
-<script>
-        // Micro-interaction for Fire button
-        const fireBtn = document.querySelector('button.bg-primary-container');
-        const toast = document.getElementById('toast');
-
-        fireBtn.addEventListener('click', () => {
-            // Visual feedback
-            fireBtn.classList.add('bg-secondary');
-            
-            // Show toast
-            toast.classList.remove('translate-x-full');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                fireBtn.classList.remove('bg-secondary');
-            }, 3000);
-        });
-
-        // Add interaction to menu items
-        const menuItems = document.querySelectorAll('button.group');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const price = this.querySelector('.text-headline-md').innerText;
-                const name = this.querySelector('.text-[16px]').innerText;
-                
-                // Add temporary pulse effect
-                this.classList.add('border-primary', 'border-2');
-                setTimeout(() => this.classList.remove('border-primary', 'border-2'), 200);
-            });
-        });
-    </script>
 </body></html>

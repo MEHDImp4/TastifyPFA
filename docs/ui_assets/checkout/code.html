@@ -1,80 +1,74 @@
-<!DOCTYPE html>
-
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Tastify Portal | Checkout</title>
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>L'ESSENCE - Order Confirmed</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&amp;family=Public+Sans:wght@600;700&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .spring-transition {
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .ink-border {
-            border: 1px solid #301400;
-        }
-        .ink-border-heavy {
-            border: 2px solid #301400;
-        }
-    </style>
+<!-- Theme Configuration -->
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "surface-tint": "#8d4e1c",
-                        "on-secondary-fixed-variant": "#723700",
-                        "surface-container-lowest": "#ffffff",
-                        "primary": "#703704",
-                        "on-secondary-fixed": "#301400",
-                        "tertiary-container": "#7e5537",
-                        "surface-bright": "#fff8f5",
-                        "on-primary": "#ffffff",
-                        "background": "#fff8f5",
-                        "on-surface": "#1d1b1a",
-                        "inverse-on-surface": "#f6efec",
-                        "inverse-surface": "#33302e",
-                        "tertiary-fixed": "#ffdcc5",
-                        "primary-fixed-dim": "#ffb785",
-                        "tertiary-fixed-dim": "#f2bb96",
-                        "surface-container-high": "#ede7e4",
+                        "surface-container-lowest": "#120d0a",
+                        "tertiary-fixed": "#ffdcc6",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "inverse-on-surface": "#362f2b",
+                        "on-background": "#ece0da",
                         "primary-fixed": "#ffdcc6",
-                        "outline": "#867369",
-                        "error": "#ba1a1a",
-                        "secondary-fixed": "#ffdcc6",
-                        "on-error": "#ffffff",
-                        "surface": "#fff8f5",
-                        "inverse-primary": "#ffb785",
+                        "on-secondary-container": "#efa978",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#52443b",
+                        "outline": "#9f8d83",
+                        "error-container": "#93000a",
+                        "surface-main": "#151312",
+                        "inverse-surface": "#ece0da",
+                        "surface-container": "#241e1b",
+                        "primary-fixed-dim": "#ffb785",
+                        "surface-tint": "#ffb785",
+                        "surface-container-highest": "#3a332f",
                         "secondary-fixed-dim": "#ffb785",
-                        "surface-dim": "#dfd9d6",
-                        "on-surface-variant": "#53443a",
-                        "surface-container-highest": "#e8e1de",
-                        "on-secondary": "#ffffff",
-                        "secondary": "#8f4d17",
-                        "on-error-container": "#93000a",
-                        "surface-container": "#f3ecea",
-                        "on-tertiary": "#ffffff",
-                        "outline-variant": "#d8c2b6",
+                        "background": "#18120f",
+                        "on-surface-variant": "#d7c3b7",
+                        "secondary-container": "#6e3d15",
+                        "on-secondary": "#502500",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "tertiary": "#ffdbc5",
+                        "on-tertiary": "#49280e",
+                        "tertiary-container": "#f2bb96",
+                        "surface-dim": "#18120f",
+                        "secondary": "#ffb785",
+                        "surface-container-high": "#2f2925",
+                        "surface-container-low": "#201a17",
+                        "on-primary-container": "#79461d",
+                        "amber": "#8f4d17",
+                        "on-tertiary-container": "#71492c",
+                        "surface-variant": "#3a332f",
+                        "on-secondary-fixed": "#301400",
+                        "surface": "#18120f",
+                        "surface-bright": "#3f3834",
+                        "on-error": "#690005",
+                        "primary": "#ffdcc6",
+                        "ink": "#100e0c",
                         "on-tertiary-fixed": "#301400",
-                        "surface-container-low": "#f9f2ef",
-                        "on-background": "#1d1b1a",
-                        "on-primary-container": "#ffceaf",
-                        "on-tertiary-fixed-variant": "#633e22",
-                        "on-tertiary-container": "#ffcfae",
-                        "error-container": "#ffdad6",
-                        "on-secondary-container": "#773b03",
-                        "on-primary-fixed": "#301400",
-                        "primary-container": "#8d4e1c",
-                        "on-primary-fixed-variant": "#703705",
-                        "secondary-container": "#fea76a",
-                        "surface-variant": "#e8e1de",
-                        "tertiary": "#633e22"
+                        "charcoal-bright": "#3c3937",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "inverse-primary": "#875128",
+                        "on-surface": "#ece0da",
+                        "on-primary": "#502500",
+                        "secondary-fixed": "#ffdcc6",
+                        "primary-container": "#ffb785",
+                        "aged-paper": "#fff8f5",
+                        "on-primary-fixed": "#301400"
                     },
                     "borderRadius": {
                         "DEFAULT": "0.25rem",
@@ -83,189 +77,102 @@
                         "full": "9999px"
                     },
                     "spacing": {
-                        "unit-xs": "4px",
                         "unit-sm": "8px",
+                        "unit-xs": "4px",
+                        "staff-gutter": "1rem",
                         "staff-margin": "1.5rem",
+                        "unit-md": "16px",
                         "client-gutter": "3rem",
                         "unit-lg": "24px",
-                        "staff-gutter": "1rem",
-                        "client-margin": "5vw",
-                        "unit-md": "16px"
+                        "client-margin": "5vw"
                     },
                     "fontFamily": {
-                        "ui-data-dense": ["Bricolage Grotesque"],
-                        "display-lg-mobile": ["Libre Caslon Text"],
-                        "headline-md": ["Libre Caslon Text"],
-                        "body-lg": ["Bodoni Moda"],
-                        "ui-button": ["Bricolage Grotesque"],
-                        "body-md": ["Bodoni Moda"],
-                        "ui-label-bold": ["Bricolage Grotesque"],
-                        "display-lg": ["Libre Caslon Text"]
+                        "ui-label-bold": ["Rethink Sans"],
+                        "ui-button": ["Rethink Sans"],
+                        "display-lg": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "body-lg": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"],
+                        "display-lg-mobile": ["Public Sans"]
                     },
                     "fontSize": {
-                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
-                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
-                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
-                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
-                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
-</head>
-<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md">
-<!-- TopNavBar -->
-<header class="w-full py-unit-lg bg-transparent">
-<nav class="flex justify-between items-center px-client-margin w-full max-w-7xl mx-auto">
-<div class="flex items-center gap-unit-md">
-<span class="font-display-lg text-headline-md text-primary tracking-tight">Tastify Portal</span>
-</div>
-<div class="hidden md:flex items-center space-x-unit-lg">
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Our Story</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Menu</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Reservations</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300" href="#">Private Dining</a>
-</div>
-<div class="flex items-center gap-unit-md">
-<button class="hidden md:block font-ui-button text-ui-button text-on-surface-variant hover:text-secondary transition-all">Sign In</button>
-<button class="bg-primary text-on-primary px-unit-lg py-unit-sm rounded-lg font-ui-button text-ui-button hover:bg-primary-container spring-transition">Book Now</button>
-</div>
-</nav>
+<style>
+        /* Custom Keyframes for Subtle Entrance Animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden selection:bg-secondary selection:text-ink">
+<!-- Ambient Texture (Subtle background element instead of blur) -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(circle at 50% 0%, var(--tw-colors-outline) 0%, transparent 70%);"></div>
+<!-- Minimal Brand Anchor - TopAppBar suppressed per rules for Transactional Screens, retaining only centered logo -->
+<header class="absolute top-0 w-full py-unit-md flex justify-center z-10 animate-fade-up">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary">L'ESSENCE</h1>
 </header>
-<!-- Main Content: Checkout Canvas -->
-<main class="flex-grow w-full max-w-5xl mx-auto px-client-margin py-unit-lg">
-<div class="flex flex-col md:grid md:grid-cols-12 gap-client-gutter">
-<!-- Left Column: Summary & Tipping -->
-<div class="md:col-span-7 space-y-unit-lg">
-<section>
-<h1 class="font-display-lg text-display-lg-mobile md:text-headline-md text-on-surface mb-unit-lg">Review Your Order</h1>
-<!-- Order Summary List -->
-<div class="space-y-unit-md">
-<!-- Item 1 -->
-<div class="flex items-center gap-unit-md p-unit-md bg-surface-container-low rounded-xl ink-border group hover:bg-surface-container-high spring-transition">
-<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-<img class="w-full h-full object-cover" data-alt="A high-end, close-up photograph of a gourmet truffle wood-fired pizza on a dark ceramic plate. The lighting is dramatic and moody, emphasizing the textures of the melted cheese and earthy truffles. The scene is shot in a Michelin-star restaurant environment with a warm, sophisticated palette of sienna and ink tones. Professional food photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgd6gfxK0sMRaSDmGYF8aKviMLVKRyPdeghWVLZcQ1qKcb46FopzHJrCwu2sjRnOpJlRvyLBPoqJ6DX50_ubDVEkQ4vQ8m0FcrsS09PxkzK_CVwBYF9cKB8LLlecwf9BqeYj36-lvlP1RM8Ya2XYA5v-rx2GyluZ4x-kzVdo8dPfXPdlfvBZYDsBVzsN40rv8h_jn-8bTfhLEt2WwfNuiEN4-4cdiJXp0M3gzCH-GPR81VHl4MtJYzh1P8gDqJepuCUQgdNfrbhMmm"/>
+<!-- Main Canvas Content -->
+<main class="w-full max-w-2xl px-client-margin flex flex-col items-center text-center z-10 mt-16 md:mt-0">
+<!-- Illustrative Icon -->
+<div class="mb-unit-lg animate-fade-up delay-100 flex items-center justify-center w-24 h-24 rounded-full border border-aged-paper bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary" data-icon="task_alt" style="font-size: 48px; font-weight: 200;">task_alt</span>
 </div>
-<div class="flex-grow">
-<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface">TRUFFLE INFUSED NEAPOLITAN</h3>
-<p class="font-body-md text-on-surface-variant italic">Wild mushrooms, 24-month aged parmesan, white truffle oil</p>
+<!-- Headline -->
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-unit-sm animate-fade-up delay-200 w-full max-w-md">
+            Merci pour votre commande
+        </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-unit-lg animate-fade-up delay-200 max-w-sm">
+            Votre sélection a été transmise à nos cuisines avec succès.
+        </p>
+<!-- Order Details Card (Bento/Minimalist approach with Hard Outlines) -->
+<div class="w-full bg-surface border border-outline-variant rounded-xl p-unit-lg md:p-client-gutter flex flex-col md:flex-row justify-between items-center gap-unit-md mb-unit-lg animate-fade-up delay-300">
+<div class="flex flex-col items-center md:items-start text-center md:text-left w-full md:w-1/2 md:border-r md:border-outline-variant md:pr-unit-md">
+<span class="font-ui-label-bold text-ui-label-bold text-outline uppercase tracking-widest mb-unit-xs">Order Reference</span>
+<span class="font-headline-md text-headline-md text-on-surface">#ORD-8924</span>
 </div>
-<div class="text-right">
-<span class="font-ui-data-dense text-ui-data-dense text-on-secondary-fixed">$32.00</span>
-</div>
-</div>
-<!-- Item 2 -->
-<div class="flex items-center gap-unit-md p-unit-md bg-surface-container-low rounded-xl ink-border group hover:bg-surface-container-high spring-transition">
-<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-<img class="w-full h-full object-cover" data-alt="An elegant crystal glass filled with a deep amber-colored vintage cocktail, garnished with a single clear ice sphere and a twist of orange peel. The background is a dark, sophisticated bar setting with high-contrast editorial lighting. The mood is luxurious and timeless, featuring a palette of rich mahogany, Sienna, and deep Ink blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVCqy8NAZ5pAQ-RfwDXOs6cwyV_x9PkTTB6_LfgdedNovrfkRV4duZ_6ldB3lF2TY3Lii4XyzKNCsep-tZOagCRPbG6w-ZkrSliJz2QIiVU2on4kAZBUCrYeNAhzf3W05oNrOX2663w867WIG8MpYH7MjKaVFM_j67QubADmWvv0uRdWRfHJClVyF0H6ECOJ04Wq8RxLACgehMy9qq4mSPoCzolGmi92waqnXct1LZcFPz8f9AUNCFAzx0tw1rhetacM4eKPKSfhGn"/>
-</div>
-<div class="flex-grow">
-<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface">VINTAGE OLD FASHIONED</h3>
-<p class="font-body-md text-on-surface-variant italic">House-infused bourbon, smoked bitters, maple zest</p>
-</div>
-<div class="text-right">
-<span class="font-ui-data-dense text-ui-data-dense text-on-secondary-fixed">$18.00</span>
+<div class="hidden md:block w-px bg-outline-variant h-16 mx-4"></div>
+<div class="w-full border-t border-outline-variant my-2 md:hidden"></div>
+<div class="flex flex-col items-center md:items-end text-center md:text-right w-full md:w-1/2 md:pl-unit-md">
+<span class="font-ui-label-bold text-ui-label-bold text-outline uppercase tracking-widest mb-unit-xs">Estimated Prep</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-size: 20px;">timer</span>
+<span class="font-headline-md text-headline-md text-secondary">25 mins</span>
 </div>
 </div>
 </div>
-</section>
-<!-- Tipping Section -->
-<section class="py-unit-lg">
-<h2 class="font-ui-label-bold text-ui-label-bold text-on-surface-variant mb-unit-sm uppercase tracking-widest">Add a Gratuity</h2>
-<div class="grid grid-cols-3 gap-unit-md">
-<button class="tip-btn py-unit-md ink-border rounded-lg font-ui-button text-ui-button hover:bg-secondary-container spring-transition bg-surface-container" data-percent="10">10%</button>
-<button class="tip-btn py-unit-md ink-border rounded-lg font-ui-button text-ui-button hover:bg-secondary-container spring-transition bg-surface-container" data-percent="15">15%</button>
-<button class="tip-btn py-unit-md ink-border rounded-lg font-ui-button text-ui-button hover:bg-secondary-container spring-transition bg-surface-container" data-percent="20">20%</button>
-</div>
-</section>
-</div>
-<!-- Right Column: Totals & Action -->
-<div class="md:col-span-5">
-<div class="sticky top-unit-lg p-unit-lg bg-surface-container-lowest ink-border-heavy rounded-xl space-y-unit-lg">
-<h2 class="font-ui-label-bold text-ui-label-bold text-on-secondary-fixed">BILLING DETAILS</h2>
-<div class="space-y-unit-sm">
-<div class="flex justify-between items-center">
-<span class="font-body-md text-on-surface-variant">Subtotal</span>
-<span class="font-ui-data-dense text-ui-data-dense text-on-secondary-fixed">$50.00</span>
-</div>
-<div class="flex justify-between items-center">
-<span class="font-body-md text-on-surface-variant">Service Tax (8%)</span>
-<span class="font-ui-data-dense text-ui-data-dense text-on-secondary-fixed">$4.00</span>
-</div>
-<div class="flex justify-between items-center pb-unit-sm border-b border-outline-variant">
-<span class="font-body-md text-on-surface-variant">Gratuity</span>
-<span class="font-ui-data-dense text-ui-data-dense text-on-secondary-fixed" id="gratuity-amount">$0.00</span>
-</div>
-<div class="flex justify-between items-center pt-unit-md">
-<span class="font-ui-label-bold text-ui-label-bold text-on-secondary-fixed">TOTAL</span>
-<span class="font-ui-label-bold text-headline-md text-on-secondary-fixed" id="grand-total" style="font-size: 24px;">$54.00</span>
-</div>
-</div>
-<div class="pt-unit-lg">
-<button class="w-full bg-primary text-on-primary py-unit-lg rounded-lg font-ui-button text-ui-button uppercase tracking-widest hover:bg-primary-container active:scale-95 spring-transition ink-border">
-                            Proceed to Payment
-                        </button>
-<p class="mt-unit-md text-center text-xs font-ui-label-bold text-on-surface-variant opacity-60">
-                            SECURE ENCRYPTED CHECKOUT
-                        </p>
-</div>
-</div>
-</div>
+<!-- Actions -->
+<div class="flex flex-col w-full sm:flex-row gap-unit-md justify-center animate-fade-up delay-300">
+<button class="bg-secondary text-ink font-ui-button text-ui-button py-unit-md px-client-gutter rounded-lg hover:bg-primary-fixed transition-colors duration-300 w-full sm:w-auto uppercase">
+                Track Order
+            </button>
+<button class="bg-transparent border border-outline text-on-surface font-ui-button text-ui-button py-unit-md px-client-gutter rounded-lg hover:bg-surface-container transition-colors duration-300 w-full sm:w-auto uppercase">
+                Return Home
+            </button>
 </div>
 </main>
-<!-- Footer -->
-<footer class="w-full py-unit-lg px-client-margin flex flex-col md:flex-row justify-between items-center bg-surface-container-low border-t border-outline-variant mt-24">
-<div class="mb-unit-md md:mb-0">
-<span class="font-display-lg text-headline-md text-on-surface">Tastify</span>
-<p class="font-ui-label-bold text-ui-label-bold text-on-surface-variant mt-unit-xs">© 2024 Tastify Ecosystem. All rights reserved.</p>
-</div>
-<div class="flex gap-unit-lg">
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Privacy Policy</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Terms of Service</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Press Kit</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-all" href="#">Contact</a>
-</div>
-</footer>
-<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tipButtons = document.querySelectorAll('.tip-btn');
-            const gratuityEl = document.getElementById('gratuity-amount');
-            const totalEl = document.getElementById('grand-total');
-            
-            const subtotal = 50.00;
-            const tax = 4.00;
-            let currentTip = 0;
-
-            tipButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Visual state
-                    tipButtons.forEach(b => {
-                        b.classList.remove('bg-secondary-container', 'font-bold');
-                        b.classList.add('bg-surface-container');
-                    });
-                    btn.classList.remove('bg-surface-container');
-                    btn.classList.add('bg-secondary-container', 'font-bold');
-
-                    // Calculation
-                    const percent = parseInt(btn.getAttribute('data-percent'));
-                    currentTip = subtotal * (percent / 100);
-                    const grandTotal = subtotal + tax + currentTip;
-
-                    // Update UI
-                    gratuityEl.textContent = `$${currentTip.toFixed(2)}`;
-                    totalEl.textContent = `$${grandTotal.toFixed(2)}`;
-
-                    // Trigger micro-interaction
-                    totalEl.style.transform = 'scale(1.05)';
-                    setTimeout(() => {
-                        totalEl.style.transform = 'scale(1)';
-                    }, 150);
-                });
-            });
-        });
-    </script>
 </body></html>

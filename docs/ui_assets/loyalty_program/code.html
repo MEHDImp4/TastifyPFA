@@ -1,0 +1,410 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tastify | Loyalty &amp; Rewards</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&amp;family=Inclusive+Sans:wght@400&amp;family=Rethink+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#120d0a",
+                      "tertiary-fixed-dim": "#f2bb96",
+                      "on-surface-variant": "#d7c3b7",
+                      "on-tertiary-container": "#71492c",
+                      "on-tertiary": "#49280e",
+                      "on-secondary": "#502500",
+                      "on-background": "#ece0da",
+                      "ink": "#100e0c",
+                      "secondary-fixed-dim": "#ffb785",
+                      "inverse-surface": "#ece0da",
+                      "surface": "#18120f",
+                      "on-secondary-container": "#efa978",
+                      "on-secondary-fixed-variant": "#6b3a13",
+                      "tertiary": "#ffdbc5",
+                      "on-tertiary-fixed": "#301400",
+                      "surface-container-high": "#2f2925",
+                      "primary-container": "#ffb785",
+                      "surface-tint": "#ffb785",
+                      "surface-dim": "#18120f",
+                      "outline": "#9f8d83",
+                      "on-error": "#690005",
+                      "inverse-on-surface": "#362f2b",
+                      "on-primary": "#502500",
+                      "on-primary-fixed-variant": "#6b3a13",
+                      "amber": "#8f4d17",
+                      "surface-container": "#241e1b",
+                      "surface-main": "#151312",
+                      "primary-fixed-dim": "#ffb785",
+                      "error": "#ffb4ab",
+                      "on-error-container": "#ffdad6",
+                      "secondary-container": "#6e3d15",
+                      "primary-fixed": "#ffdcc6",
+                      "surface-bright": "#3f3834",
+                      "outline-variant": "#52443b",
+                      "background": "#18120f",
+                      "on-primary-fixed": "#301400",
+                      "on-surface": "#ece0da",
+                      "charcoal-bright": "#3c3937",
+                      "secondary": "#ffb785",
+                      "error-container": "#93000a",
+                      "tertiary-container": "#f2bb96",
+                      "on-secondary-fixed": "#301400",
+                      "surface-variant": "#3a332f",
+                      "inverse-primary": "#875128",
+                      "primary": "#ffdcc6",
+                      "surface-container-highest": "#3a332f",
+                      "on-tertiary-fixed-variant": "#643e22",
+                      "secondary-fixed": "#ffdcc6",
+                      "surface-container-low": "#201a17",
+                      "aged-paper": "#fff8f5",
+                      "on-primary-container": "#79461d",
+                      "tertiary-fixed": "#ffdcc6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit-xs": "4px",
+                      "client-margin": "5vw",
+                      "unit-sm": "8px",
+                      "unit-md": "16px",
+                      "staff-gutter": "1rem",
+                      "client-gutter": "3rem",
+                      "unit-lg": "24px",
+                      "staff-margin": "1.5rem"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Public Sans"],
+                      "ui-button": ["Rethink Sans"],
+                      "body-md": ["Inclusive Sans"],
+                      "body-lg": ["Inclusive Sans"],
+                      "ui-data-dense": ["Rethink Sans"],
+                      "ui-label-bold": ["Rethink Sans"],
+                      "headline-md": ["Public Sans"],
+                      "display-lg": ["Public Sans"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                      "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .reward-card:hover {
+            border-color: #8f4d17; /* amber */
+            transform: translateY(-2px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #18120f;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #52443b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-amber selection:text-white overflow-x-hidden pb-24 md:pb-0">
+<!-- Top Navigation -->
+<nav class="w-full top-0 sticky bg-surface dark:bg-surface text-primary dark:text-primary border-b-2 border-outline-variant flex justify-between items-center px-staff-margin h-16 z-50">
+<div class="flex items-center gap-unit-md">
+<span class="material-symbols-outlined text-display-lg-mobile" data-icon="restaurant">restaurant</span>
+<span class="font-display-lg text-display-lg-mobile text-primary tracking-tighter">Tastify</span>
+</div>
+<div class="flex items-center gap-unit-md">
+<div class="hidden md:flex gap-unit-lg items-center px-unit-lg">
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-primary transition-colors" href="#">Reserve</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-primary transition-colors" href="#">Menu</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-primary transition-colors" href="#">My Table</a>
+<a class="font-ui-label-bold text-ui-label-bold text-amber font-extrabold" href="#">Profile</a>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline overflow-hidden">
+<img alt="Staff Member Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a refined gentleman in a modern culinary environment. The lighting is sophisticated and moody, using soft warm highlights against a dark charcoal background. The image has a high-contrast editorial feel with sharp focus on the subject, embodying the prestigious atmosphere of a high-end restaurant brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF84OnTYetuPJQa7jIvZ1CsSJoq5jbdKzYnIWxnmQ195QZCnYazAUMIlpuq-tQ01wfpBUN7S7aVln8xsjiCGLgI3e6vDYoJQSoJvtDaWi3yku3IGOP7qFA_djUCjiTItQiPbv-NEABVjxXXr7ZHm0R2IQOxoD9Cx0MB7_UKLoDdiv2sbYD97tLRyp6dUHDaUBUEonY3c7Rq8ASwKTElRwbCBKz86hYfQNX1u0nfxikQhqNdlTbBrVLmMsvgjECslFMWHwQQxy1yg">
+</div>
+</div>
+</nav>
+<main class="max-w-6xl mx-auto px-client-margin py-unit-lg md:py-unit-lg flex flex-col gap-unit-lg">
+<!-- Hero Section: Point Balance & Progress -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-unit-lg items-stretch">
+<div class="lg:col-span-7 bg-surface-container border border-outline-variant rounded-xl p-unit-lg flex flex-col justify-between relative overflow-hidden group">
+<!-- Background Pattern -->
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-[120px]" data-icon="loyalty">loyalty</span>
+</div>
+<div>
+<h2 class="font-ui-label-bold text-ui-label-bold text-secondary-fixed-dim mb-unit-sm">MEMBERSHIP STATUS</h2>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-unit-xs">1,250 <span class="font-headline-md text-headline-md text-on-surface-variant">pts</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">You're closer than ever to the inner circle. Only 250 points until you unlock exclusive Gold Status benefits.</p>
+</div>
+<div class="mt-unit-lg">
+<div class="flex justify-between items-end mb-unit-sm">
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface">Silver Tier</span>
+<span class="font-ui-label-bold text-ui-label-bold text-secondary">Gold Status</span>
+</div>
+<div class="w-full bg-surface-variant h-3 rounded-full overflow-hidden border border-outline-variant">
+<div class="bg-gradient-to-r from-amber to-secondary h-full transition-all duration-1000 ease-out" style="width: 83.33%"></div>
+</div>
+<div class="mt-unit-sm flex items-center gap-unit-sm text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[18px]" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-ui-data-dense text-ui-data-dense uppercase tracking-widest">Next Reward: Priority Table Booking</span>
+</div>
+</div>
+</div>
+<!-- Profile Overview Card -->
+<div class="lg:col-span-5 bg-surface-container-high border border-outline-variant rounded-xl p-unit-lg flex flex-col gap-unit-md justify-center">
+<div class="flex items-center gap-unit-md">
+<div class="w-16 h-16 rounded-lg bg-amber flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[32px]" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Alex Mercer</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Member since October 2023</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-unit-md mt-unit-sm">
+<div class="p-unit-sm border border-outline-variant rounded-lg bg-surface">
+<p class="font-ui-label-bold text-[10px] text-outline uppercase tracking-tighter">TOTAL VISITS</p>
+<p class="font-headline-md text-headline-md text-primary">24</p>
+</div>
+<div class="p-unit-sm border border-outline-variant rounded-lg bg-surface">
+<p class="font-ui-label-bold text-[10px] text-outline uppercase tracking-tighter">REDEEMED</p>
+<p class="font-headline-md text-headline-md text-primary">6</p>
+</div>
+</div>
+<button class="w-full py-unit-md bg-secondary text-on-secondary font-ui-button text-ui-button rounded-lg hover:brightness-110 active:scale-98 transition-all">
+                    VIEW DIGITAL MEMBER CARD
+                </button>
+</div>
+</section>
+<!-- Redeemable Rewards Grid -->
+<section>
+<div class="flex items-center justify-between mb-unit-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface border-l-4 border-amber pl-unit-md">Redeemable Rewards</h2>
+<a class="font-ui-label-bold text-ui-label-bold text-amber hover:underline uppercase tracking-widest text-[12px]" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-unit-md">
+<!-- Reward 1 -->
+<div class="reward-card group relative bg-surface border-2 border-outline-variant rounded-xl p-unit-md transition-all duration-300 flex flex-col gap-unit-md">
+<div class="h-40 rounded-lg overflow-hidden relative">
+<img alt="Free Signature Appetizer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A gourmet appetizer featuring seared scallops with a vibrant pea purée and microgreens, plated on a matte black artisanal ceramic dish. The lighting is cinematic, focusing on the textures of the food against a dark, moody background typical of a luxury Michelin-star dining room. The colors are rich and natural, highlighting the freshness of the ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDWGQMe_KOrAd_kUSLfSHXQpalKk_PVp650evmtnvcMV67g4GBBw_wNnePD9a0HvmvyK8F1DbiotkeJY_EY5C823pRe6zqMdclaEoCkyO9wPo0MEFdqId-vuWtbgXAlDHlBj2q9oqs-M9D2F3NXgfyq_m_Y1ptqEbcgMegyQ6EfVPb9DNziwKd25THWI981XsacOrfjPumljI0iQHNfwzSBTYycuFuozST79dKDynSqqR8k3WYTbynxV-AAo9CI3M4_tYguEfe0g">
+<div class="absolute top-unit-sm right-unit-sm bg-ink/80 text-secondary px-unit-sm py-1 rounded font-ui-data-dense text-ui-data-dense">
+                            400 PTS
+                        </div>
+</div>
+<div>
+<h4 class="font-headline-md text-[20px] text-on-surface mb-1">Free Signature Appetizer</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Choose any appetizer from our seasonal chef's selection menu.</p>
+</div>
+<button class="mt-auto w-full py-unit-sm border-2 border-outline-variant text-on-surface font-ui-button text-ui-button rounded-lg group-hover:bg-amber group-hover:border-amber group-hover:text-white transition-colors">
+                        REDEEM NOW
+                    </button>
+</div>
+<!-- Reward 2 -->
+<div class="reward-card group relative bg-surface border-2 border-outline-variant rounded-xl p-unit-md transition-all duration-300 flex flex-col gap-unit-md">
+<div class="h-40 rounded-lg overflow-hidden relative">
+<img alt="Priority Table Booking" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A dimly lit, exclusive corner booth in a high-end restaurant. The table is elegantly set with heavy silverware, crisp linens, and crystal glassware that catches the glint of a single candle. The atmosphere is intimate and ultra-sophisticated, with dark wood paneling and warm ambient lighting. This visual represents an elite, priority reservation experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQgxjbelcootQAa3GCDRlDJSCYpvzuxLhQwMIed214lR4sxtqV2qEYyK3YmWG9rkPTAg4S-p9CaZ6QspO2NbEDxw1UCSXnzdtb4E8ucoiJJ4hFj2__ObAYZX0sF2Yu9TnvXC5693GL_7kCATPj7HxpgUjws3-ejwibiX0OlPUipchH7YcjYC8HWPTaEkggKo1vYnBDDE3luMsMi_Qf6E-7m9TrB0TOosM8J04dD2tBCkFouaIlyBcXoes2LDZ6egkNkhpAYLoZA">
+<div class="absolute top-unit-sm right-unit-sm bg-ink/80 text-secondary px-unit-sm py-1 rounded font-ui-data-dense text-ui-data-dense">
+                            800 PTS
+                        </div>
+</div>
+<div>
+<h4 class="font-headline-md text-[20px] text-on-surface mb-1">Priority Table Booking</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Access peak-time reservations before they open to the general public.</p>
+</div>
+<button class="mt-auto w-full py-unit-sm border-2 border-outline-variant text-on-surface font-ui-button text-ui-button rounded-lg group-hover:bg-amber group-hover:border-amber group-hover:text-white transition-colors">
+                        REDEEM NOW
+                    </button>
+</div>
+<!-- Reward 3 (Disabled/Locked) -->
+<div class="relative bg-surface border-2 border-outline-variant border-dashed rounded-xl p-unit-md flex flex-col gap-unit-md opacity-60">
+<div class="h-40 rounded-lg bg-surface-container flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[48px] text-outline-variant" data-icon="lock">lock</span>
+<div class="absolute top-unit-sm right-unit-sm bg-surface-variant text-on-surface-variant px-unit-sm py-1 rounded font-ui-data-dense text-ui-data-dense">
+                            2500 PTS
+                        </div>
+</div>
+<div>
+<h4 class="font-headline-md text-[20px] text-on-surface mb-1">Chef's Table Experience</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">An intimate 7-course tasting journey personally hosted by our Executive Chef.</p>
+</div>
+<div class="mt-auto w-full py-unit-sm bg-surface-variant text-outline font-ui-button text-ui-button rounded-lg text-center cursor-not-allowed">
+                        LOCKED
+                    </div>
+</div>
+</div>
+</section>
+<!-- Points History & Recent Activity -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-unit-lg">
+<div class="lg:col-span-2 bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-unit-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-ui-label-bold text-ui-label-bold text-on-surface">RECENT POINT HISTORY</h3>
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="font-ui-data-dense text-ui-data-dense text-outline bg-surface-variant/30">
+<th class="px-unit-md py-unit-sm">DATE</th>
+<th class="px-unit-md py-unit-sm">DESCRIPTION</th>
+<th class="px-unit-md py-unit-sm text-right">POINTS</th>
+</tr>
+</thead>
+<tbody class="font-ui-data-dense text-ui-data-dense divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-variant transition-colors">
+<td class="px-unit-md py-unit-md text-on-surface-variant">MAR 14, 2024</td>
+<td class="px-unit-md py-unit-md">
+<div class="flex flex-col">
+<span class="text-on-surface">Dinner Reservation</span>
+<span class="text-[11px] text-outline uppercase tracking-tight">Receipt #TS-88421</span>
+</div>
+</td>
+<td class="px-unit-md py-unit-md text-right text-secondary-fixed-dim font-bold">+ 145</td>
+</tr>
+<tr class="hover:bg-surface-variant transition-colors">
+<td class="px-unit-md py-unit-md text-on-surface-variant">MAR 02, 2024</td>
+<td class="px-unit-md py-unit-md">
+<div class="flex flex-col">
+<span class="text-on-surface">Weekend Brunch</span>
+<span class="text-[11px] text-outline uppercase tracking-tight">Receipt #TS-88102</span>
+</div>
+</td>
+<td class="px-unit-md py-unit-md text-right text-secondary-fixed-dim font-bold">+ 82</td>
+</tr>
+<tr class="hover:bg-surface-variant transition-colors">
+<td class="px-unit-md py-unit-md text-on-surface-variant">FEB 24, 2024</td>
+<td class="px-unit-md py-unit-md">
+<div class="flex flex-col">
+<span class="text-on-surface">Redemption: Welcome Drink</span>
+<span class="text-[11px] text-outline uppercase tracking-tight">Voucher Used</span>
+</div>
+</td>
+<td class="px-unit-md py-unit-md text-right text-error font-bold">- 150</td>
+</tr>
+<tr class="hover:bg-surface-variant transition-colors">
+<td class="px-unit-md py-unit-md text-on-surface-variant">FEB 18, 2024</td>
+<td class="px-unit-md py-unit-md">
+<div class="flex flex-col">
+<span class="text-on-surface">Late Night Drinks</span>
+<span class="text-[11px] text-outline uppercase tracking-tight">Receipt #TS-87991</span>
+</div>
+</td>
+<td class="px-unit-md py-unit-md text-right text-secondary-fixed-dim font-bold">+ 56</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Tier Perks Side Panel -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-unit-md">
+<h3 class="font-ui-label-bold text-ui-label-bold text-primary mb-unit-md flex items-center gap-unit-sm">
+<span class="material-symbols-outlined" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                    SILVER TIER PERKS
+                </h3>
+<ul class="space-y-unit-md">
+<li class="flex gap-unit-sm items-start">
+<span class="material-symbols-outlined text-amber text-[20px]" data-icon="check_circle">check_circle</span>
+<div>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface">Complimentary Welcome Drink</p>
+<p class="text-[12px] text-on-surface-variant">Valid for every visit on arrival.</p>
+</div>
+</li>
+<li class="flex gap-unit-sm items-start">
+<span class="material-symbols-outlined text-amber text-[20px]" data-icon="check_circle">check_circle</span>
+<div>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface">1.2x Points Multiplier</p>
+<p class="text-[12px] text-on-surface-variant">Earn points faster on every dollar spent.</p>
+</div>
+</li>
+<li class="flex gap-unit-sm items-start">
+<span class="material-symbols-outlined text-amber text-[20px]" data-icon="check_circle">check_circle</span>
+<div>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface">Birthday Surprise</p>
+<p class="text-[12px] text-on-surface-variant">A curated gift from our pastry chef.</p>
+</div>
+</li>
+<li class="flex gap-unit-sm items-start opacity-40">
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="lock">lock</span>
+<div>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface">Valet Parking</p>
+<p class="text-[12px] text-on-surface-variant">Available for Gold Members only.</p>
+</div>
+</li>
+</ul>
+<div class="mt-unit-lg p-unit-sm bg-amber/10 border border-amber/20 rounded-lg">
+<p class="font-ui-data-dense text-ui-data-dense text-center text-secondary-fixed-dim">Next Tier: Gold Status (1,500 pts)</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest border-t-2 border-outline-variant flex justify-around items-center px-client-margin py-unit-sm">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Reserve</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-ui-label-bold text-[10px] mt-1">My Table</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber font-extrabold active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for point counter animation on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const countElement = document.querySelector('h1 span.font-headline-md').previousSibling;
+            let current = 0;
+            const target = 1250;
+            const duration = 1500;
+            const stepTime = Math.abs(Math.floor(duration / target));
+            
+            const timer = setInterval(() => {
+                current += 10;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                countElement.textContent = current.toLocaleString() + ' ';
+            }, 10);
+        });
+
+        // Interactive hover effects for cards
+        const cards = document.querySelectorAll('.reward-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

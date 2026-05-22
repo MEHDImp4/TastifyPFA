@@ -37,7 +37,7 @@ test.describe('unauthenticated page access', () => {
   test('login page renders for guests', async ({ page }) => {
     await page.goto('/login');
     await expect(page).toHaveURL('/login');
-    await expect(page.getByRole('heading', { name: 'Bienvenue.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
   });
 
   test('register page renders for guests', async ({ page }) => {
@@ -45,8 +45,8 @@ test.describe('unauthenticated page access', () => {
     await expect(page).toHaveURL('/register');
   });
 
-  test('unknown routes redirect to home', async ({ page }) => {
+  test('unknown routes render 404 page', async ({ page }) => {
     await page.goto('/this-does-not-exist');
-    await expect(page).toHaveURL('/');
+    await expect(page.getByText('Une Table Introuvable')).toBeVisible();
   });
 });

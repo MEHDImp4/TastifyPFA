@@ -1,0 +1,341 @@
+<!DOCTYPE html><html class="dark" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Staff OS | Réservation Exclusive</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&amp;family=Rethink+Sans:wght@400;600;700;800&amp;family=Inclusive+Sans:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .parchment-stroke {
+            box-shadow: 0 0 0 1px #fff8f5;
+        }
+        .transition-spring {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#71492c",
+                        "surface-tint": "#ffb785",
+                        "on-secondary-fixed": "#301400",
+                        "error-container": "#93000a",
+                        "surface-bright": "#3f3834",
+                        "secondary": "#ffb785",
+                        "on-background": "#ece0da",
+                        "on-surface": "#ece0da",
+                        "on-error": "#690005",
+                        "on-secondary": "#502500",
+                        "surface-container-lowest": "#120d0a",
+                        "tertiary-container": "#f2bb96",
+                        "tertiary": "#ffdbc5",
+                        "primary": "#ffdcc6",
+                        "secondary-fixed": "#ffdcc6",
+                        "amber": "#8f4d17",
+                        "secondary-fixed-dim": "#ffb785",
+                        "ink": "#100e0c",
+                        "surface-main": "#151312",
+                        "on-secondary-container": "#efa978",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "surface-container-highest": "#3a332f",
+                        "primary-fixed-dim": "#ffb785",
+                        "outline": "#9f8d83",
+                        "secondary-container": "#6e3d15",
+                        "error": "#ffb4ab",
+                        "inverse-surface": "#ece0da",
+                        "primary-fixed": "#ffdcc6",
+                        "outline-variant": "#52443b",
+                        "on-primary": "#502500",
+                        "surface-dim": "#18120f",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container": "#241e1b",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#201a17",
+                        "surface-variant": "#3a332f",
+                        "aged-paper": "#fff8f5",
+                        "charcoal-bright": "#3c3937",
+                        "inverse-primary": "#875128",
+                        "on-tertiary": "#49280e",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "background": "#18120f",
+                        "on-surface-variant": "#d7c3b7",
+                        "primary-container": "#ffb785",
+                        "on-primary-container": "#79461d",
+                        "inverse-on-surface": "#362f2b",
+                        "surface-container-high": "#2f2925",
+                        "on-primary-fixed": "#301400",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#18120f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-xs": "4px",
+                        "unit-sm": "8px",
+                        "client-gutter": "3rem",
+                        "unit-md": "16px",
+                        "staff-margin": "1.5rem",
+                        "client-margin": "5vw",
+                        "unit-lg": "24px",
+                        "staff-gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Public Sans"],
+                        "ui-button": ["Rethink Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "headline-md": ["Public Sans"],
+                        "ui-label-bold": ["Rethink Sans"],
+                        "body-lg": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant h-16 flex items-center px-staff-margin justify-between">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary">Staff OS</span>
+<nav class="hidden md:flex gap-unit-lg ml-unit-lg">
+<a class="font-ui-label-bold text-ui-label-bold text-primary transition-colors" href="#">RÉSERVATION</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-primary transition-colors" href="#">MENU</a>
+<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-primary transition-colors" href="#">L'EXPÉRIENCE</a>
+</nav>
+</div>
+<div class="flex items-center gap-unit-md">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</button>
+</div>
+</header>
+<main class="pt-32 pb-24 px-client-margin max-w-7xl mx-auto">
+<!-- Hero & Context -->
+<div class="text-center mb-unit-lg">
+<h1 class="font-display-lg text-display-lg text-primary mb-unit-sm">Une Table d'Exception</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Réservez votre immersion culinaire au cœur de la précision et du raffinement. Chaque détail est orchestré pour une soirée inoubliable.
+            </p>
+</div>
+<!-- Reservation Flow Canvas -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-unit-lg items-start">
+<!-- Side Visual/Info -->
+<div class="lg:col-span-4 space-y-unit-md sticky top-32">
+<div class="rounded-xl overflow-hidden aspect-[4/5] border border-outline-variant relative group">
+<img alt="Restaurant Interior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A cinematic, low-light photograph of a high-end restaurant dining room. The aesthetic is modern and sophisticated with dark charcoal walls and pristine white table linens. Soft, warm pin-lights illuminate individual tables, creating a high-contrast editorial look. The atmosphere is serene and exclusive, featuring refined textures of wood and aged paper accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASckvGvH1lW2ex453Ticm8QiNC6alc2GLl7vyT1bQhEnMf8AEXSx10mM2F0BPNnAi97YuNjqS6BFVk8dREMIYDZdNv6flzLxyvtdefQ5MbrCEzOfiEtGKxQPW5Z1jTqnRz6Xp2c4xhwU8htQbmlsllVZjOuXd0ISqgd3oOX7HZDaB3CWy1oi_p3GH0sJ2StKndl7JJVGYxYIyNrLgPNhLMkZvHbfvXEs8ZSljM1hVwPULArKJiDHLVMKFN5daSX2ukZfVkq1Rcdg">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60"></div>
+<div class="absolute bottom-unit-md left-unit-md right-unit-md">
+<span class="font-ui-label-bold text-ui-label-bold text-secondary uppercase tracking-widest block mb-1">DRESS CODE</span>
+<p class="font-body-md text-body-md text-on-surface">Tenue de soirée élégante exigée pour préserver l'atmosphère du lieu.</p>
+</div>
+</div>
+<div class="bg-surface-container p-unit-md rounded-xl border border-outline-variant">
+<div class="flex items-start gap-unit-sm">
+<span class="material-symbols-outlined text-secondary">info</span>
+<div>
+<p class="font-ui-label-bold text-ui-label-bold text-on-surface mb-1">POLITIQUE D'ANNULATION</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Annulation gratuite jusqu'à 24h avant l'heure de réservation. Au-delà, des frais peuvent s'appliquer.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Form Card -->
+<div class="lg:col-span-8 bg-surface-container border border-outline-variant rounded-xl p-unit-lg shadow-2xl relative overflow-hidden">
+<!-- Subtle Texture Layer -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff8f5 1px, transparent 0); background-size: 24px 24px;"></div>
+<form class="relative z-10 space-y-unit-lg">
+<!-- Section 1: Guests -->
+<section>
+<label class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-md block tracking-widest">NOMBRE DE COUVERTS</label>
+<div class="flex flex-wrap gap-unit-sm">
+<!-- Radio group for guests -->
+<template class="hidden" id="guest-pill">
+<label class="cursor-pointer group">
+<input class="hidden peer" name="guests" type="radio" value="1">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95 duration-150">
+                                        1
+                                    </div>
+</label>
+</template>
+<!-- Hardcoded for speed -->
+<div class="flex gap-unit-sm">
+<label class="cursor-pointer">
+<input class="hidden peer" name="guests" type="radio" value="1">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95">2</div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="hidden peer" name="guests" type="radio" value="2">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95">3</div>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="guests" type="radio" value="3">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95">4</div>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="guests" type="radio" value="4">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95">5</div>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="guests" type="radio" value="5">
+<div class="px-unit-lg py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold peer-checked:bg-secondary-container peer-checked:text-on-secondary-container peer-checked:border-secondary transition-all active:scale-95">6+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section 2: Calendar -->
+<section>
+<div class="flex justify-between items-end mb-unit-md">
+<label class="font-ui-label-bold text-ui-label-bold text-secondary tracking-widest uppercase">CHOISIR UNE DATE</label>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface-variant">NOVEMBRE 2024</span>
+</div>
+<div class="calendar-grid border border-outline-variant bg-surface rounded-xl overflow-hidden">
+<!-- Weekdays Header -->
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Lun</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Mar</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Mer</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Jeu</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Ven</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Sam</div>
+<div class="bg-surface-container-high py-unit-sm text-center font-ui-label-bold text-ui-label-bold text-[10px] text-on-surface-variant uppercase">Dim</div>
+<!-- Empty cells -->
+<div class="h-16 border-b border-r border-outline-variant opacity-20"></div>
+<div class="h-16 border-b border-r border-outline-variant opacity-20"></div>
+<div class="h-16 border-b border-r border-outline-variant opacity-20"></div>
+<div class="h-16 border-b border-r border-outline-variant opacity-20"></div>
+<!-- Days -->
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface transition-colors" type="button">1</button>
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface transition-colors" type="button">2</button>
+<button class="h-16 border-b border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface transition-colors" type="button">3</button>
+<!-- Active/Selectable Days -->
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">4</button>
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">5</button>
+<button class="h-16 border-b border-r border-outline-variant bg-secondary-container text-on-secondary-container flex items-center justify-center font-ui-label-bold text-ui-label-bold border-l-4 border-l-amber" type="button">6</button>
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">7</button>
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">8</button>
+<button class="h-16 border-b border-r border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">9</button>
+<button class="h-16 border-b border-outline-variant hover:bg-surface-container-highest flex items-center justify-center font-ui-label-bold text-ui-label-bold text-on-surface" type="button">10</button>
+</div>
+</section>
+<!-- Section 3: Time Selection -->
+<section>
+<label class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-md block tracking-widest uppercase">DISPONIBILITÉS</label>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-unit-sm">
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">19:00</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">19:30</button>
+<button class="py-unit-md rounded-lg border-2 border-amber bg-secondary-container text-on-secondary-container font-ui-label-bold text-ui-label-bold transition-all" type="button">20:00</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">20:30</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">21:00</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">21:30</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface text-on-surface-variant font-ui-label-bold text-ui-label-bold hover:border-secondary transition-all active:scale-[0.98]" type="button">22:00</button>
+<button class="py-unit-md rounded-lg border border-outline-variant bg-surface opacity-30 text-on-surface-variant font-ui-label-bold text-ui-label-bold cursor-not-allowed italic" type="button">COMPLET</button>
+</div>
+</section>
+<!-- Section 4: Personal Details -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-unit-md">
+<div class="col-span-2">
+<label class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-sm block tracking-widest uppercase">INFORMATIONS PERSONNELLES</label>
+</div>
+<div class="space-y-unit-xs">
+<input class="w-full bg-surface border border-outline-variant rounded-lg p-unit-md text-on-surface font-body-md focus:border-amber focus:ring-0 transition-colors" placeholder="Prénom &amp; Nom" type="text">
+</div>
+<div class="space-y-unit-xs">
+<input class="w-full bg-surface border border-outline-variant rounded-lg p-unit-md text-on-surface font-body-md focus:border-amber focus:ring-0 transition-colors" placeholder="Email de confirmation" type="email">
+</div>
+<div class="col-span-2">
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg p-unit-md text-on-surface font-body-md h-32 focus:border-amber focus:ring-0 transition-colors" placeholder="Demandes particulières (Allergies, anniversaire...)"></textarea>
+</div>
+</section>
+<!-- CTA -->
+<div class="pt-unit-md border-t border-outline-variant flex flex-col items-center gap-unit-md">
+<button class="w-full py-unit-lg bg-secondary text-ink font-ui-button text-ui-button rounded-lg hover:bg-primary transition-spring active:scale-[0.98] shadow-lg shadow-secondary/10 uppercase tracking-widest" type="submit">
+                            CONFIRMER LA RÉSERVATION
+                        </button>
+<p class="font-body-md text-xs text-on-surface-variant text-center opacity-70">
+                            En confirmant, vous acceptez nos conditions générales de service et notre politique de confidentialité.
+                        </p>
+</div>
+</form>
+</div>
+</div>
+<!-- Trust & Footer Section -->
+<section class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-unit-lg text-center">
+<div class="space-y-unit-sm">
+<span class="material-symbols-outlined text-secondary text-4xl">verified</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Haute Gastronomie</h3>
+<p class="font-body-md text-on-surface-variant">Des ingrédients sourcés avec une rigueur absolue auprès de nos producteurs locaux.</p>
+</div>
+<div class="space-y-unit-sm">
+<span class="material-symbols-outlined text-secondary text-4xl">lock</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Paiement Sécurisé</h3>
+<p class="font-body-md text-on-surface-variant">Vos données bancaires sont traitées selon les normes de sécurité les plus strictes.</p>
+</div>
+<div class="space-y-unit-sm">
+<span class="material-symbols-outlined text-secondary text-4xl">event_available</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Service Concierge</h3>
+<p class="font-body-md text-on-surface-variant">Une équipe dédiée pour répondre à chacune de vos exigences particulières.</p>
+</div>
+</section>
+</main>
+<footer class="bg-surface-container border-t border-outline-variant py-unit-lg px-client-margin text-center">
+<p class="font-ui-label-bold text-ui-label-bold text-on-surface-variant opacity-50 tracking-widest">STAFF OS © 2024 — TOUS DROITS RÉSERVÉS</p>
+</footer>
+<!-- Interactive Layer: Feedback on Radio Selection -->
+<script>
+        // Subtle interaction feedback
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if(e.target.checked) {
+                    const label = e.target.closest('label').querySelector('div');
+                    label.classList.add('scale-105');
+                    setTimeout(() => label.classList.remove('scale-105'), 200);
+                }
+            });
+        });
+
+        // Time button selection logic (visual only)
+        const timeButtons = document.querySelectorAll('section:nth-of-type(3) button:not(.opacity-30)');
+        timeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                timeButtons.forEach(b => {
+                    b.classList.remove('border-2', 'border-amber', 'bg-secondary-container', 'text-on-secondary-container');
+                    b.classList.add('border', 'border-outline-variant', 'bg-surface', 'text-on-surface-variant');
+                });
+                btn.classList.remove('border', 'border-outline-variant', 'bg-surface', 'text-on-surface-variant');
+                btn.classList.add('border-2', 'border-amber', 'bg-secondary-container', 'text-on-secondary-container');
+            });
+        });
+    </script>
+</body></html>

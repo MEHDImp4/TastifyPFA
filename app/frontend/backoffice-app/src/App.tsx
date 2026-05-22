@@ -14,6 +14,8 @@ import { StockPage } from './pages/Inventory/StockPage';
 import { HrPage } from './pages/HR/HrPage';
 import { AvisPage } from './pages/Avis/AvisPage';
 import { SettingsPage } from './pages/Settings/SettingsPage';
+import { MaintenancePage } from './pages/System/MaintenancePage';
+import { DeliveryHubPage } from './pages/Staff/DeliveryHubPage';
 import { WebSocketProvider } from './contexts/WebSocketProvider';
 
 import { Toaster } from 'sonner';
@@ -62,8 +64,8 @@ function App() {
   return (
     <AuthBootstrap>
       <WebSocketProvider>
-        <div className="selection:bg-primary-container selection:text-on-primary-container">
-          <Toaster position="top-right" richColors />
+        <div className="selection:bg-primary/20 selection:text-primary">
+          <Toaster position="top-right" richColors theme="dark" />
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={
@@ -131,6 +133,16 @@ function App() {
                 <Route path="settings" element={
                   <RoleRoute allowedRoles={['GERANT']}>
                     <SettingsPage />
+                  </RoleRoute>
+                } />
+                <Route path="maintenance" element={
+                  <RoleRoute allowedRoles={['GERANT']}>
+                    <MaintenancePage />
+                  </RoleRoute>
+                } />
+                <Route path="delivery" element={
+                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                    <DeliveryHubPage />
                   </RoleRoute>
                 } />
               </Route>

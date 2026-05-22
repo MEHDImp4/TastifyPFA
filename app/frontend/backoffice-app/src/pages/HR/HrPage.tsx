@@ -60,8 +60,11 @@ export const HrPage: React.FC = () => {
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Staff roster and credential management</p>
         </div>
         <div className="flex gap-unit-md items-center">
-          <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <Download className="w-3.5 h-3.5" /> Exporter la liste
+          <button 
+            onClick={() => toast.info('GENERATING_EXPORT_STREAM')}
+            className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
+          >
+            <Download className="w-3.5 h-3.5" /> EXPORT ROSTER
           </button>
           <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
             <Plus className="w-4 h-4" /> Add Staff
@@ -204,7 +207,7 @@ export const HrPage: React.FC = () => {
             {filteredEmployes.length === 0 && (
               <div className="flex-1 flex flex-col items-center justify-center p-12 text-on-surface-variant/20">
                 <Users className="w-16 h-16 mb-4 stroke-[1]" />
-                <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em]">Aucun employé enregistré.</p>
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em]">NO STAFF RECORDS FOUND</p>
               </div>
             )}
           </div>

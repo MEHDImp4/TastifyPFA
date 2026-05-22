@@ -22,13 +22,13 @@ export const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
+    
     if (!username || !password) {
       setError('IDENTIFIER_REQUIRED');
       return;
     }
 
+    setError(null);
     setIsLoading(true);
     try {
       const response = await api.post('/users/login/', { username, password });
@@ -83,7 +83,14 @@ export const Login: React.FC = () => {
 
         <AnimatePresence mode="wait">
           {error && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3">
+            <motion.div 
+              key="error-msg"
+              initial={{ opacity: 0, y: -10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -10 }}
+              data-testid="login-error" 
+              className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3"
+            >
               <ShieldAlert className="w-4 h-4 text-error" />
               <p className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</p>
             </motion.div>
@@ -96,7 +103,7 @@ export const Login: React.FC = () => {
               <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
               <div className="relative group">
                 <input
-                  type="text" required value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
+                  type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
                   placeholder="GUEST_ID"
                   data-testid="login-username"
@@ -111,7 +118,7 @@ export const Login: React.FC = () => {
               </div>
               <div className="relative group">
                 <input
-                  type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
+                  type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   placeholder="••••••••"
                   data-testid="login-password"

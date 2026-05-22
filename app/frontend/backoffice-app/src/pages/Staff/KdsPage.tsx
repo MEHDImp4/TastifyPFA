@@ -99,6 +99,20 @@ export const KdsPage: React.FC = () => {
     }
   };
 
+  const handleUpdateCommand = async (commandId: number, currentStatut: string) => {
+    let nextStatut = '';
+    if (currentStatut === 'EN_CUISINE') nextStatut = 'PRETE';
+    else if (currentStatut === 'PRETE') nextStatut = 'PAYEE';
+    else return;
+
+    try {
+      await kdsApi.updateCommandeStatut(commandId, nextStatut);
+      fetchTickets();
+    } catch (err) {
+      console.error('Failed to update command statut', err);
+    }
+  };
+
   const getElapsedTime = (startTime: string) => {
     const start = new Date(startTime).getTime();
     const now = currentTime.getTime();
@@ -115,9 +129,8 @@ export const KdsPage: React.FC = () => {
   };
 
   const columns = [
-    { id: 'EN_ATTENTE', label: 'Incoming', icon: BellRing, color: 'text-on-surface' },
-    { id: 'EN_PREPARATION', label: 'In Progress', icon: Timer, color: 'text-primary' },
-    { id: 'PRET', label: 'Ready for Pickup', icon: CheckCircle2, color: 'text-success' },
+    { id: 'EN_CUISINE', label: 'In Progress', icon: Timer, color: 'text-primary' },
+    { id: 'PRETE', label: 'Ready for Pickup', icon: CheckCircle2, color: 'text-success' },
   ];
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
@@ -156,7 +169,7 @@ export const KdsPage: React.FC = () => {
       </header>
 
       {/* Kanban Grid */}
-      <main className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-3 gap-0 bg-surface-container-lowest">
+      <main className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0 bg-surface-container-lowest">
         {columns.map((col) => (
           <section key={col.id} className="flex flex-col h-full border-r border-outline-variant last:border-r-0">
             <header className="flex-none flex items-center justify-between p-unit-md border-b border-outline-variant bg-surface-container">
@@ -173,6 +186,9 @@ export const KdsPage: React.FC = () => {
               <AnimatePresence mode="popLayout">
                 {tickets.filter(t => t.statut === col.id).map((ticket) => {
                   const critical = isTicketCritical(ticket.created_at) && ticket.statut !== 'PRET';
+                  const isTakeaway = ticket.type === 'EMPORTER';
+                  const allLignesReady = ticket.lignes.every(l => l.statut === 'PRET');
+                  
                   return (
                     <motion.article 
                       key={ticket.id}
@@ -180,8 +196,9 @@ export const KdsPage: React.FC = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
+                      data-testid={`kds-ticket-${ticket.id}`}
                       className={`
-                        double-bezel flex flex-col rounded-lg border overflow-hidden shadow-lg transition-all duration-300
+                        flex flex-col rounded-lg border overflow-hidden shadow-lg transition-all duration-300
                         ${critical ? 'border-error ring-1 ring-error/20 bg-error/5 animate-pulse' : 'border-outline-variant bg-surface-container-low'}
                       `}
                     >
@@ -189,9 +206,10 @@ export const KdsPage: React.FC = () => {
                         <div>
                           <div className="flex items-center gap-unit-xs mb-1">
                             <span className="px-2 py-0.5 rounded-sm bg-surface-bright border border-outline-variant text-on-surface font-sans text-[10px] font-bold uppercase tracking-wider">
-                              {ticket.type === 'SUR_PLACE' ? `TBL ${ticket.table_numero || '??'}` : `TO-GO`}
+                              {isTakeaway ? `TAKEAWAY: ${ticket.client_nom || 'GUEST'}` : `Table #${ticket.table_numero || '??'}`}
                             </span>
                             {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider">RUSH</span>}
+                            {allLignesReady && <span className="px-2 py-0.5 rounded-sm bg-success text-on-success font-sans text-[10px] font-black uppercase tracking-wider">DONE</span>}
                           </div>
                           <h3 className={`font-serif text-lg font-bold leading-none mt-1 ${critical ? 'text-error' : 'text-on-surface'}`}>#{ticket.id}</h3>
                         </div>
@@ -219,24 +237,27 @@ export const KdsPage: React.FC = () => {
                               )}
                             </div>
                             <div className={`size-6 rounded border-2 flex items-center justify-center transition-all ${item.statut === 'PRET' ? 'bg-primary border-primary' : 'border-outline/30 group-hover:border-primary'}`}>
-                              {item.statut === 'PRET' ? <CheckCircle2 className="w-4 h-4 text-on-primary" /> : (item.statut === 'EN_PREPARATION' ? <RotateCcw className="w-3 h-3 text-primary animate-spin-slow" /> : null)}
+                              {item.statut === 'PRET' ? <CheckCircle2 data-testid="ready-icon" className="w-4 h-4 text-on-primary" /> : (item.statut === 'EN_PREPARATION' ? <RotateCcw className="w-3 h-3 text-primary animate-spin-slow" /> : <Play className="w-3 h-3 text-on-surface-variant/30" />)}
                             </div>
                           </li>
                         ))}
                       </ul>
 
                       <div className={`p-unit-sm border-t ${critical ? 'border-error/30 bg-error/5' : 'border-outline-variant bg-surface-container-high'}`}>
-                        {ticket.statut === 'PRET' ? (
-                          <button className="w-full h-12 rounded-md bg-transparent border-2 border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2">
+                        {ticket.statut === 'PRETE' ? (
+                          <button 
+                            onClick={() => handleUpdateCommand(ticket.id, ticket.statut)}
+                            className="w-full h-12 rounded-md bg-transparent border-2 border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                          >
                              Clear Ticket
                           </button>
                         ) : (
                           <button 
-                            aria-label={ticket.statut === 'EN_ATTENTE' ? 'Démarrer' : 'Prêt'}
-                            className={`w-full h-12 rounded-md font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${critical ? 'bg-error text-on-error hover:bg-error/90 shadow-lg shadow-error/20' : 'bg-primary text-on-primary hover:bg-primary/90'}`}
-                            onClick={() => {/* Column advance logic */}}
+                            onClick={() => handleUpdateCommand(ticket.id, ticket.statut)}
+                            disabled={!allLignesReady}
+                            className={`w-full h-12 rounded-md font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${critical ? 'bg-error text-on-error hover:bg-error/90' : (allLignesReady ? 'bg-primary text-on-primary hover:bg-primary/90 shadow-lg shadow-primary/20' : 'bg-surface-container-highest text-on-surface-variant/20 cursor-not-allowed')}`}
                           >
-                            {ticket.statut === 'EN_ATTENTE' ? <><Play className="w-4 h-4" /> Start Order</> : <><CheckCircle2 className="w-4 h-4" /> Ready to Window</>}
+                            {allLignesReady ? <><CheckCircle2 className="w-4 h-4" /> Ready to Window</> : <><Loader2 className="w-4 h-4 animate-spin" /> In Preparation</>}
                           </button>
                         )}
                       </div>

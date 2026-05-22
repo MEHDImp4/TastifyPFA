@@ -81,7 +81,7 @@ export const ReservationsPage: React.FC = () => {
     const normalizedSearch = search.trim().toLowerCase();
     const matchesSearch =
       normalizedSearch === '' ||
-      (res.user_username || 'Client').toLowerCase().includes(normalizedSearch);
+      (res.user_username || 'ANONYMOUS GUEST').toLowerCase().includes(normalizedSearch);
 
     return matchesFilter && matchesSearch;
   });
@@ -171,7 +171,6 @@ export const ReservationsPage: React.FC = () => {
                 <>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                    aria-label="Confirmer"
                     className="flex-1 md:flex-none flex items-center justify-center gap-3 px-6 py-4 bg-primary text-on-primary border-2 border-on-surface text-ui-button font-ui-button shadow-[4px_4px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] transition-all active:translate-y-[2px] active:shadow-none"
                   >
                     <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
@@ -179,7 +178,6 @@ export const ReservationsPage: React.FC = () => {
                   </button>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    aria-label="Annuler"
                     className="p-4 bg-background border-2 border-on-surface text-error hover:bg-error/10 transition-all shadow-[3px_3px_0px_#301400] active:translate-y-[2px] active:shadow-none"
                   >
                     <XCircle className="w-5 h-5"  strokeWidth={2.5}/>
@@ -190,7 +188,6 @@ export const ReservationsPage: React.FC = () => {
               {res.statut === 'CONFIRMEE' && (
                  <button 
                   onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                  aria-label="Annuler"
                   className="flex-1 md:flex-none px-6 py-4 bg-background border-2 border-on-surface text-ui-button font-ui-button text-on-surface-variant hover:text-error hover:border-error transition-all shadow-[4px_4px_0px_#301400] active:translate-y-[2px] active:shadow-none"
                  >
                    CANCEL BOOKING

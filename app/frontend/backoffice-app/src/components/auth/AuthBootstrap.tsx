@@ -40,8 +40,11 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
 
   if (isBootstrapping) {
     return (
-      <div className="min-h-[100dvh] flex items-center justify-center bg-dark-surface text-white">
-        <div className="animate-pulse">Authentification sécurisée...</div>
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background blueprint-grid">
+        <div className="flex flex-col items-center gap-6">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <div className="font-sans text-[10px] font-black text-primary uppercase tracking-[0.4em]">Establishing Uplink</div>
+        </div>
       </div>
     );
   }

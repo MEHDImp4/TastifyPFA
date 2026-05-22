@@ -170,7 +170,7 @@ export const OrderingPage: React.FC = () => {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel: Menu Selection */}
-        <section className="flex-[7] h-full border-r border-outline-variant bg-surface-container-lowest flex flex-col min-w-0">
+        <section data-testid="menu-catalog" className="flex-[7] h-full border-r border-outline-variant bg-surface-container-lowest flex flex-col min-w-0">
           {/* Categories Horizontal Nav */}
           <div className="flex-none flex overflow-x-auto border-b border-outline-variant bg-surface-container py-2 px-staff-gutter gap-2 custom-scrollbar">
             <button
@@ -224,7 +224,7 @@ export const OrderingPage: React.FC = () => {
         </section>
 
         {/* Right Panel: Active Ticket */}
-        <section className="flex-[3] h-full bg-surface-container-lowest flex flex-col min-w-[320px] shadow-2xl z-10">
+        <section data-testid="ordering-cart" className="flex-[3] h-full bg-surface-container-lowest flex flex-col min-w-[320px] shadow-2xl z-10">
           {/* Ticket Header */}
           <div className="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low h-16 shrink-0">
             <span className="font-sans text-[12px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Active Ticket</span>
@@ -237,24 +237,24 @@ export const OrderingPage: React.FC = () => {
           {/* Ticket Items List */}
           <div className="flex-1 overflow-y-auto bg-surface-container-lowest custom-scrollbar">
             {cart.length === 0 ? (
-               <div className="h-full flex flex-col items-center justify-center p-8 opacity-10">
+               <div data-testid="cart-empty" className="h-full flex flex-col items-center justify-center p-8 opacity-10">
                   <Plus className="w-12 h-12 stroke-[0.5]" />
                   <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em] mt-4 text-center">Ticket Buffer Empty</p>
                </div>
             ) : (
               cart.map((item, idx) => (
-                <div key={`${item.plat.id}-${idx}`} className="p-unit-md border-b border-outline-variant hover:bg-surface-container transition-colors group">
+                <div key={`${item.plat.id}-${idx}`} data-testid={`cart-item-${item.plat.id}`} className="p-unit-md border-b border-outline-variant hover:bg-surface-container transition-colors group">
                   <div className="flex justify-between items-start">
                     <div className="flex gap-3 min-w-0 pr-2">
                       <span className="font-sans text-[15px] font-black text-primary w-6 text-right tabular-nums">{item.quantite}x</span>
                       <div className="flex-1 min-w-0">
                         <p className="font-body text-[15px] font-bold text-on-surface truncate leading-tight uppercase tracking-tight">{item.plat.nom}</p>
                         <div className="flex items-center gap-3 mt-2">
-                          <button onClick={() => updateQty(item.plat.id, -1)} className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                          <button onClick={() => updateQty(item.plat.id, -1)} data-testid="qty-minus" className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
                             <Minus className="w-3 h-3" />
                           </button>
                           <span className="font-sans text-xs font-black text-on-surface tabular-nums">{item.quantite}</span>
-                          <button onClick={() => addToCart(item.plat)} className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                          <button onClick={() => addToCart(item.plat)} data-testid="qty-plus" className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
                             <Plus className="w-3 h-3" />
                           </button>
                         </div>
@@ -266,7 +266,7 @@ export const OrderingPage: React.FC = () => {
                         <button className="p-1.5 rounded hover:bg-surface-container-highest text-on-surface-variant">
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => removeFromCart(item.plat.id)} className="p-1.5 rounded hover:bg-error/10 text-error/40 hover:text-error">
+                        <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-1.5 rounded hover:bg-error/10 text-error/40 hover:text-error">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -304,6 +304,7 @@ export const OrderingPage: React.FC = () => {
               onClick={handleSubmitOrder}
               disabled={cart.length === 0 || isSubmitting}
               aria-label="Envoyer"
+              data-testid="order-submit"
               className={`
                 w-full h-14 mt-2 rounded-md font-sans text-xs font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 border-2
                 ${cart.length > 0 && !isSubmitting ? 'bg-primary border-primary text-on-primary shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98]' : 'bg-transparent border-outline-variant text-on-surface-variant/20 cursor-not-allowed'}

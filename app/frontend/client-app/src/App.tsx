@@ -10,6 +10,9 @@ import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { CheckoutPage } from './pages/Checkout/CheckoutPage';
 import { PaymentPortal } from './pages/Payment/PaymentPortal';
+import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
+import { NotFoundPage } from './pages/System/NotFoundPage';
+import { OfflineModePage } from './pages/System/OfflineModePage';
 import { useAuthStore } from './store/authStore';
 
 import { Toaster } from 'sonner';
@@ -33,6 +36,7 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<PortalHomePage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/reservations" element={<ReservationWizard />} />
+        <Route path="/loyalty" element={<LoyaltyPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         
@@ -55,20 +59,24 @@ const AnimatedRoutes = () => {
         } />
 
         <Route path="/pay/:token" element={<PaymentPortal />} />
+        <Route path="/offline" element={<OfflineModePage />} />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
 };
 
+
 function App() {
   return (
     <AuthBootstrap>
-      <Toaster position="top-center" richColors />
-      <BrowserRouter>
-        <AnimatedRoutes />
-      </BrowserRouter>
+      <div className="selection:bg-primary/20 selection:text-primary">
+        <Toaster position="top-center" richColors theme="dark" />
+        <BrowserRouter>
+          <AnimatedRoutes />
+        </BrowserRouter>
+      </div>
     </AuthBootstrap>
   );
 }

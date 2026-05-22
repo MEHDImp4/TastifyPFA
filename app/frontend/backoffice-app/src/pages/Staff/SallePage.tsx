@@ -176,6 +176,7 @@ export const SallePage: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-surface-container-lowest -m-4 overflow-hidden selection:bg-primary/20 selection:text-primary font-body">
+      <h1 className="sr-only">Architectural Floor Plan</h1>
       {/* Legend & Toolbar */}
       <div className="flex items-center justify-between px-staff-margin py-3 border-b border-outline-variant bg-surface-main z-10">
         {/* Legend */}

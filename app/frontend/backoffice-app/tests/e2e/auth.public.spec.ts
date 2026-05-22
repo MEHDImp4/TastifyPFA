@@ -5,14 +5,14 @@ test.describe('public authentication flows', () => {
     for (const path of ['/categories', '/menu', '/salle', '/reservations', '/kds', '/stock', '/hr', '/avis', '/settings', '/ordering/1']) {
       await page.goto(path);
       await expect(page).toHaveURL(/\/login$/);
-      await expect(page.getByRole('heading', { name: 'Authentication' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Tastify Staff OS' })).toBeVisible();
     }
   });
 
   test('blocks empty credential submission', async ({ page }) => {
     await page.goto('/login');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('SAISIE_REQUISE')).toBeVisible();
+    await expect(page.getByText('IDENTIFIER_REQUIRED')).toBeVisible();
   });
 
   test('shows unauthorized error for invalid credentials', async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe('public authentication flows', () => {
     await page.getByTestId('login-username').fill('unknown_user');
     await page.getByTestId('login-password').fill('wrong-password');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('ACCES_REFUSE')).toBeVisible();
+    await expect(page.getByText('ACCESS_DENIED')).toBeVisible();
   });
 
   test('normalizes seeded credentials before authenticating', async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe('public authentication flows', () => {
     await page.getByTestId('login-username').fill('gerant_test');
     await page.getByTestId('login-password').fill('password123');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('ERREUR_SYSTEME')).toBeVisible();
+    await expect(page.getByText('SYSTEM_ERROR')).toBeVisible();
     await expect(page).toHaveURL(/\/login$/);
   });
 });

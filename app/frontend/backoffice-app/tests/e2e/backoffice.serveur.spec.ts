@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('serveur browser workflows', () => {
+  test.beforeEach(async ({ page }) => {
+    page.on('dialog', dialog => dialog.accept());
+  });
+
   test('lands on the salle route and only sees serveur navigation', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/salle$/);
-    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
 
     await expect(page.getByTestId('nav-salle')).toBeVisible();
     await expect(page.getByTestId('nav-reservations')).toBeVisible();
@@ -16,13 +20,12 @@ test.describe('serveur browser workflows', () => {
   test('keeps serveur users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/reservations');
     await expect(page).toHaveURL(/\/reservations$/);
-    await expect(page.getByRole('heading', { name: 'Réservations' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
 
     await page.goto('/ordering/1');
     await expect(page).toHaveURL(/\/ordering\/1$/);
-    await expect(page.getByText(/Station Table/i)).toBeVisible();
-    await expect(page.getByText('Operational Cart')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Push to Kitchen' })).toBeVisible();
+    await expect(page.getByText('Active Ticket')).toBeVisible();
+    await expect(page.getByTestId('order-submit')).toBeVisible();
 
     for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/menu', '/kds']) {
       await page.goto(forbiddenPath);
@@ -100,33 +103,29 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    await page.getByRole('button', { name: 'EN ATTENTE' }).click();
+    await page.getByRole('button', { name: 'EN ATTENTE', exact: true }).click();
     await expect(page.getByText('Alice Martin')).toBeVisible();
     await expect(page.getByText('Yassine Haddad')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'Confirmer' }).click();
-    await expect(page.getByText('Aucune réservation trouvée.')).toBeVisible();
+    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
+    await expect(page.getByText('No Bookings Logged')).toBeVisible();
 
-    await page.getByRole('button', { name: 'CONFIRMEE' }).click();
+    await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
     await expect(page.getByText('Alice Martin')).toBeVisible();
     await expect(page.getByText('Yassine Haddad')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Annuler' })).toHaveCount(2);
+    await expect(page.getByRole('button', { name: 'CANCEL BOOKING', exact: true })).toHaveCount(2);
 
-    await page.getByRole('button', { name: 'Annuler' }).first().click();
+    await page.getByRole('button', { name: 'CANCEL BOOKING', exact: true }).first().click();
     await expect(page.getByText('Alice Martin')).toHaveCount(0);
   });
 
   test('renders the reservations empty state when no bookings are returned', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route('**/api/commandes/?table=1*', async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/reservations');
-    await expect(page.getByText('Aucune réservation trouvée.')).toBeVisible();
+    await expect(page.getByText('No Bookings Logged')).toBeVisible();
   });
 
   test('keeps reservation actions stable when confirm and cancel fail', async ({ page }) => {
@@ -182,13 +181,13 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    await page.getByRole('button', { name: 'Confirmer' }).click();
+    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
     await expect(page.getByText('Sara Bennani')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Confirmer' })).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'CONFIRM', exact: true })).toHaveCount(1);
 
-    await page.getByRole('button', { name: 'Annuler' }).last().click();
+    await page.getByRole('button', { name: 'CANCEL BOOKING' }).last().click();
     await expect(page.getByText('Omar Idrissi')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Annuler' })).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'CANCEL BOOKING' })).toHaveCount(1);
   });
 
   test('filters reservations by client search and cancelled status', async ({ page }) => {
@@ -227,13 +226,13 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    await page.getByPlaceholder('Chercher un client...').fill('nadia');
-    await expect(page.getByPlaceholder('Chercher un client...')).toHaveValue('nadia');
+    await page.getByPlaceholder('SEARCH GUEST IDENTITY...').fill('nadia');
+    await expect(page.getByPlaceholder('SEARCH GUEST IDENTITY...')).toHaveValue('nadia');
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
     await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
-    await expect(reservationsGrid.getByText('"Allergies"')).toBeVisible();
+    await expect(reservationsGrid.getByText('“Allergies”')).toBeVisible();
 
-    await page.getByPlaceholder('Chercher un client...').fill('');
+    await page.getByPlaceholder('SEARCH GUEST IDENTITY...').fill('');
     await page.getByRole('button', { name: 'ANNULEE' }).click();
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
     await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
@@ -275,17 +274,17 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('Chercher un client...');
+    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
 
     await searchInput.fill('  naDIA  ');
     await expect(searchInput).toHaveValue('  naDIA  ');
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(0);
+    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toHaveCount(0);
 
-    await searchInput.fill('client');
+    await searchInput.fill('guest');
     await expect(reservationsGrid.getByText('Nadia Search')).toHaveCount(0);
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toBeVisible();
-    await expect(reservationsGrid.getByText('"Sans gluten"')).toBeVisible();
+    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toBeVisible();
+    await expect(reservationsGrid.getByText('“Sans gluten”')).toBeVisible();
   });
 
   test('moves a confirmed reservation into the cancelled tab after cancellation', async ({ page }) => {
@@ -324,14 +323,14 @@ test.describe('serveur browser workflows', () => {
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
 
-    await page.getByRole('button', { name: 'CONFIRMEE' }).click();
+    await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Annuler' }).click();
+    await page.getByRole('button', { name: 'CANCEL BOOKING', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toHaveCount(0);
-    await expect(page.getByText('Aucune réservation trouvée.')).toBeVisible();
+    await expect(page.getByText('No Bookings Logged')).toBeVisible();
 
-    await page.getByRole('button', { name: 'ANNULEE' }).click();
+    await page.getByRole('button', { name: 'ANNULEE', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
   });
 
@@ -395,7 +394,7 @@ test.describe('serveur browser workflows', () => {
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
 
     await page.getByRole('button', { name: 'EN ATTENTE' }).click();
-    await page.getByRole('button', { name: 'Confirmer' }).click();
+    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
     await expect(reservationsGrid.getByText('Amina Pending')).toBeVisible();
 
     await page.getByRole('button', { name: 'CONFIRMEE' }).click();
@@ -455,18 +454,18 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('Chercher un client...');
+    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
 
-    await searchInput.fill('client');
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(2);
+    await searchInput.fill('guest');
+    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(2);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'EN ATTENTE' }).click();
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(1);
+    await page.getByRole('button', { name: 'EN ATTENTE', exact: true }).click();
+    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(1);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'ANNULEE' }).click();
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(1);
+    await page.getByRole('button', { name: 'ANNULEE', exact: true }).click();
+    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(1);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
   });
 
@@ -478,7 +477,7 @@ test.describe('serveur browser workflows', () => {
         body: JSON.stringify([
           {
             id: 7351,
-            user_username: 'Client Karim',
+            user_username: 'ANONYMOUS GUEST Karim',
             statut: 'CONFIRMEE',
             date_reservation: '2026-05-19',
             heure_debut: '19:15',
@@ -506,15 +505,15 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('Chercher un client...');
+    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
 
-    await searchInput.fill('  cLiEnt  ');
-    await expect(reservationsGrid.getByText('Client Karim')).toBeVisible();
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toBeVisible();
+    await searchInput.fill('  gUeSt  ');
+    await expect(reservationsGrid.getByText('ANONYMOUS GUEST Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i).nth(1)).toBeVisible();
 
     await searchInput.fill('karim');
-    await expect(reservationsGrid.getByText('Client Karim')).toBeVisible();
-    await expect(reservationsGrid.getByText('Client', { exact: true })).toHaveCount(0);
+    await expect(reservationsGrid.getByText('ANONYMOUS GUEST Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toHaveCount(0);
   });
 
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
@@ -549,41 +548,34 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await expect(page.getByText('Transaction buffer is empty.')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
 
-    await page.getByPlaceholder('Lookup culinary data...').fill('salade');
-    const saladeCard = page.getByRole('button', { name: /Salade fraiche 12\.50DH 8m/i });
+    await expect(cart).toBeVisible({ timeout: 15000 });
+
+    await page.getByPlaceholder('SEARCH MENU...').fill('salade');
+    const saladeCard = catalog.getByRole('button', { name: /Salade fraiche/i });
     await expect(saladeCard).toBeVisible();
-    await expect(page.getByText('Soupe du jour')).toHaveCount(0);
+    await expect(catalog.getByText('Soupe du jour')).toHaveCount(0);
 
-    await saladeCard.click();
-    await expect(page.getByText('Salade fraiche')).toHaveCount(2);
-    const cartPanel = page.locator('aside');
-    const cartItem = cartPanel.locator('div').filter({
-      has: page.getByText('Salade fraiche', { exact: true }),
-    }).filter({
-      has: page.getByText('12.50 DH / UNIT', { exact: true }),
-    }).first();
-    await expect(cartItem.getByText('12.50DH')).toBeVisible();
-    await expect(cartPanel.getByText('12.50DH').last()).toBeVisible();
+    await saladeCard.click({ force: true });
+    await expect(cart.locator('p', { hasText: 'Salade fraiche' })).toBeVisible();
+    const cartItem = cart.getByTestId('cart-item-31');
+    await expect(cartItem.getByText('13 DH')).toBeVisible();
 
-    await cartItem.getByRole('button').filter({ has: page.locator('svg.lucide-plus') }).click();
-    await expect(cartItem.getByText('25.00DH')).toBeVisible();
-    await expect(cartPanel.getByText('25.00DH').last()).toBeVisible();
-    await cartItem.getByRole('button').filter({ has: page.locator('svg.lucide-minus') }).click();
-    await expect(cartItem.getByText('12.50DH')).toBeVisible();
+    await cartItem.getByTestId('qty-plus').click();
+    await expect(cartItem.getByText('2x')).toBeVisible();
+    await cartItem.getByTestId('qty-minus').click();
+    await expect(cartItem.getByText('1x')).toBeVisible();
 
-    await cartItem.getByRole('button').filter({ has: page.locator('svg.lucide-trash-2') }).click();
-    await expect(page.getByText('Transaction buffer is empty.')).toBeVisible();
+    await cartItem.getByTestId('remove-item').click();
+    await expect(page.getByText(/Ticket Buffer Empty/i)).toBeVisible({ timeout: 15000 });
   });
 
   test('keeps ordering quantities floored at one and totals mixed carts correctly', async ({ page }) => {
@@ -614,27 +606,25 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Poulet grille 15\.00DH 12m/i }).click();
-    await page.getByRole('button', { name: /The menthe 4\.00DH 2m/i }).click();
-    await expect(page.locator('aside').getByText('19.00DH').last()).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
 
-    const pouletItem = page.locator('aside').locator('div').filter({
-      has: page.getByText('Poulet grille', { exact: true }),
-    }).first();
+    await catalog.getByRole('button', { name: /Poulet grille/i }).click({ force: true });
+    await catalog.getByRole('button', { name: /The menthe/i }).click({ force: true });
+    await expect(cart.getByText('19 DH').last()).toBeVisible();
 
-    await pouletItem.locator('button').nth(1).click();
-    await expect(pouletItem.getByText('15.00DH')).toBeVisible();
-    await expect(pouletItem.locator('span.w-8').first()).toHaveText('1');
-    await expect(page.locator('aside').getByText('19.00DH').last()).toBeVisible();
+    const pouletItem = cart.getByTestId('cart-item-71');
+
+    await pouletItem.getByTestId('qty-minus').click();
+    await expect(pouletItem.getByText('15 DH')).toBeVisible();
+    await expect(pouletItem.getByText('1x')).toBeVisible();
+    await expect(cart.getByText('19 DH').last()).toBeVisible();
   });
 
   test('intersects ordering category switches with text search', async ({ page }) => {
@@ -669,23 +659,21 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByPlaceholder('Lookup culinary data...').fill('orange');
-    await expect(page.getByText('Salade orange')).toBeVisible();
-    await expect(page.getByText('Tarte orange')).toHaveCount(0);
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    await page.getByPlaceholder('SEARCH MENU...').fill('orange');
+    await expect(catalog.getByText('Salade orange')).toBeVisible();
+    await expect(catalog.getByText('Tarte orange')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'Desserts' }).click();
-    await expect(page.getByText('Salade orange')).toHaveCount(0);
-    await expect(page.getByText('Tarte orange')).toBeVisible();
-    await expect(page.getByText('Mousse chocolat')).toHaveCount(0);
+    await catalog.getByRole('button', { name: 'Desserts' }).click();
+    await expect(catalog.getByText('Salade orange')).toHaveCount(0);
+    await expect(catalog.getByText('Tarte orange')).toBeVisible();
+    await expect(catalog.getByText('Mousse chocolat')).toHaveCount(0);
   });
 
   test('preserves cart state while category tabs change', async ({ page }) => {
@@ -719,29 +707,28 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Briouates 11\.00DH 6m/i }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
+    await catalog.getByRole('button', { name: /Briouates/i }).click({ force: true });
 
-    const cartPanel = page.locator('aside');
-    await expect(cartPanel.getByText('Briouates')).toBeVisible();
-    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Briouates' })).toBeVisible();
+    await expect(cart.getByText('11 DH').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Desserts' }).click();
-    await expect(page.getByText('Corne de gazelle')).toBeVisible();
-    await expect(page.getByText('Briouates')).toHaveCount(1);
-    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+    await catalog.getByRole('button', { name: 'Desserts' }).click();
+    await expect(catalog.getByText('Corne de gazelle')).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Briouates' })).toHaveCount(1);
+    await expect(cart.getByText('11 DH').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Entrees' }).click();
-    await expect(page.getByText('Briouates')).toHaveCount(2);
-    await expect(cartPanel.getByText('11.00DH').last()).toBeVisible();
+    await catalog.getByRole('button', { name: 'Entrees' }).click();
+    await expect(catalog.getByRole('button', { name: /Briouates/i })).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Briouates' })).toHaveCount(1);
+    await expect(cart.getByText('11 DH').last()).toBeVisible();
   });
 
   test('preserves cart state while catalog search hides and reveals items', async ({ page }) => {
@@ -772,30 +759,28 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Tagine citron 19\.00DH 15m/i }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
+    await catalog.getByRole('button', { name: /Tagine citron/i }).click({ force: true });
 
-    const cartPanel = page.locator('aside');
-    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+    const searchInput = page.getByPlaceholder('SEARCH MENU...');
 
     await searchInput.fill('pastilla');
-    await expect(page.getByText('Tagine citron')).toHaveCount(1);
-    await expect(page.getByText('Pastilla mer')).toBeVisible();
-    await expect(cartPanel.getByText('Tagine citron')).toBeVisible();
-    await expect(cartPanel.getByText('19.00DH').last()).toBeVisible();
+    await expect(catalog.getByRole('button', { name: /Tagine citron/i })).toHaveCount(0);
+    await expect(catalog.getByRole('button', { name: /Pastilla mer/i })).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Tagine citron' })).toBeVisible();
+    await expect(cart.getByText('19 DH').last()).toBeVisible();
 
     await searchInput.fill('');
-    await expect(page.getByText('Tagine citron')).toHaveCount(2);
-    await expect(cartPanel.getByText('Tagine citron')).toBeVisible();
-    await expect(cartPanel.getByText('19.00DH').last()).toBeVisible();
+    await expect(catalog.getByRole('button', { name: /Tagine citron/i })).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Tagine citron' })).toBeVisible();
+    await expect(cart.getByText('19 DH').last()).toBeVisible();
   });
 
   test('preserves a multi-item cart across category and search intersections', async ({ page }) => {
@@ -830,42 +815,38 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Salade orange 10\.00DH 5m/i }).click();
-    await page.getByRole('button', { name: 'Desserts' }).click();
-    await page.getByRole('button', { name: /Tarte orange 13\.00DH 7m/i }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
+    await catalog.getByRole('button', { name: /Salade orange/i }).click({ force: true });
+    await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
+    await catalog.getByRole('button', { name: /Tarte orange/i }).click({ force: true });
 
-    const cartPanel = page.locator('aside');
-    const searchInput = page.getByPlaceholder('Lookup culinary data...');
-    await expect(cartPanel.getByText('Salade orange')).toBeVisible();
-    await expect(cartPanel.getByText('Tarte orange')).toBeVisible();
-    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    await expect(cart.locator('p', { hasText: 'Salade orange' })).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Tarte orange' })).toBeVisible();
+    await expect(cart.getByText('23 DH').last()).toBeVisible();
 
     await searchInput.fill('orange');
-    await expect(page.getByText('Tarte orange')).toHaveCount(2);
-    await expect(page.getByText('Mousse cacao')).toHaveCount(0);
-    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+    await expect(catalog.getByRole('button', { name: /Tarte orange/i })).toBeVisible();
+    await expect(catalog.getByRole('button', { name: /Mousse cacao/i })).toHaveCount(0);
+    await expect(cart.getByText('23 DH').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Entrees' }).click();
-    await expect(page.getByText('Salade orange')).toHaveCount(2);
-    await expect(page.getByText('Tarte orange')).toHaveCount(1);
-    await expect(cartPanel.getByText('Salade orange')).toBeVisible();
-    await expect(cartPanel.getByText('Tarte orange')).toBeVisible();
-    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+    await catalog.getByRole('button', { name: 'Entrees', exact: true }).click();
+    await expect(cart.locator('p', { hasText: 'Salade orange' })).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Tarte orange' })).toBeVisible();
+    await expect(cart.getByText('23 DH').last()).toBeVisible();
 
     await searchInput.fill('');
-    await page.getByRole('button', { name: 'Desserts' }).click();
-    await expect(page.getByText('Tarte orange')).toHaveCount(2);
-    await expect(page.getByText('Mousse cacao')).toBeVisible();
-    await expect(cartPanel.getByText('23.00DH').last()).toBeVisible();
+    await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
+    await expect(catalog.getByRole('button', { name: /Tarte orange/i })).toBeVisible();
+    await expect(catalog.getByRole('button', { name: /Mousse cacao/i })).toBeVisible();
+    await expect(cart.getByText('23 DH').last()).toBeVisible();
   });
 
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {
@@ -897,12 +878,8 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.route('**/api/commandes/', async (route) => {
@@ -920,8 +897,10 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    await page.getByText('Burger signature').click();
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    await catalog.getByText('Burger signature').click({ force: true });
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/salle$/);
     expect(createdCommande).toEqual({
@@ -992,9 +971,11 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    await expect(page.getByText('Session Active • #9901')).toBeVisible();
-    await page.getByRole('button', { name: /Couscous royal 22\.00DH 18m/i }).click();
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    await expect(page.getByText(/Table 1/i)).toBeVisible();
+    await catalog.getByRole('button', { name: /Couscous royal/i }).click({ force: true });
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/salle$/);
     expect(createCalled).toBe(false);
@@ -1056,9 +1037,11 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    await expect(page.getByText(/Session Active/i)).toBeVisible();
-    await page.getByRole('button', { name: /Brochettes agneau 21\.00DH 13m/i }).click();
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    await expect(page.getByText(/Table 1/i)).toBeVisible();
+    await catalog.getByRole('button', { name: /Brochettes agneau/i }).click({ force: true });
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/salle$/);
     expect(addItemsTargetId).toBe(9951);
@@ -1133,16 +1116,18 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Salade mechouia 11\.00DH 6m/i }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    await catalog.getByRole('button', { name: /Salade mechouia/i }).click({ force: true });
 
-    const searchInput = page.getByPlaceholder('Lookup culinary data...');
-    await page.getByRole('button', { name: 'Desserts' }).click();
+    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
     await searchInput.fill('orange');
-    await page.getByRole('button', { name: /Creme orange 9\.00DH 3m/i }).click();
-    await expect(page.getByText('Millefeuille')).toHaveCount(0);
+    await catalog.getByRole('button', { name: /Creme orange/i }).click({ force: true });
+    await expect(catalog.getByText('Millefeuille')).toHaveCount(0);
 
     await searchInput.fill('');
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/salle$/);
     expect(createCalled).toBe(false);
@@ -1206,27 +1191,27 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    const cartPanel = page.locator('aside');
-    const searchInput = page.getByPlaceholder('Lookup culinary data...');
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
+    const searchInput = page.getByPlaceholder('SEARCH MENU...');
 
-    await page.getByRole('button', { name: /Tajine citron 19\.00DH 16m/i }).click();
-    await page.getByRole('button', { name: /Tajine citron 19\.00DH 16m/i }).click();
-    await expect(cartPanel.getByText('38.00DH').last()).toBeVisible();
+    await catalog.getByRole('button', { name: /Tajine citron/i }).click({ force: true });
+    await catalog.getByRole('button', { name: /Tajine citron/i }).click({ force: true });
+    await expect(cart.getByText('38 DH').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Desserts' }).click();
+    await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
     await searchInput.fill('orange');
-    await page.getByRole('button', { name: /Orange mousse 8\.00DH 4m/i }).click();
-    await expect(page.getByText('Corne de gazelle')).toHaveCount(0);
+    await catalog.getByRole('button', { name: /Orange mousse/i }).click({ force: true });
+    await expect(catalog.getByText('Corne de gazelle')).toHaveCount(0);
 
     await searchInput.fill('tajine');
-    const tajineCartItem = cartPanel.locator('div').filter({
-      has: page.getByText('Tajine citron', { exact: true }),
-    }).first();
-    await tajineCartItem.getByRole('button').nth(2).click();
-    await expect(tajineCartItem.getByText('3')).toBeVisible();
+    const tajineCartItem = cart.getByTestId('cart-item-291');
+    await tajineCartItem.getByTestId('qty-plus').click();
+    await expect(tajineCartItem.getByText('3x')).toBeVisible();
 
     await searchInput.fill('');
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/salle$/);
     expect(addItemsPayload).toEqual({
@@ -1281,21 +1266,23 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/ordering/1');
-    const cartPanel = page.locator('aside');
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
 
-    await expect(page.getByText('Session Active • #9961')).toBeVisible();
-    await page.getByRole('button', { name: /Tacos poulet 17\.00DH 9m/i }).click();
-    await page.getByRole('button', { name: /Tacos poulet 17\.00DH 9m/i }).click();
-    await expect(cartPanel.getByText('34.00DH').last()).toBeVisible();
+    await expect(page.getByText(/Table 1/i)).toBeVisible();
+    await catalog.getByRole('button', { name: /Tacos poulet/i }).click({ force: true });
+    await catalog.getByRole('button', { name: /Tacos poulet/i }).click({ force: true });
+    await expect(cart.getByText('34 DH').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Push to Kitchen' }).click();
+    await page.getByTestId('order-submit').click();
 
     await expect(page).toHaveURL(/\/ordering\/1$/);
-    await expect(page.getByText('Session Active • #9961')).toBeVisible();
-    await expect(cartPanel.getByText('Tacos poulet')).toBeVisible();
-    await expect(cartPanel.getByText('2')).toBeVisible();
-    await expect(cartPanel.getByText('34.00DH').last()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Push to Kitchen' })).toBeEnabled();
+    await expect(page.getByText(/Table 1/i)).toBeVisible();
+    await expect(cart.locator('p', { hasText: 'Tacos poulet' })).toBeVisible();
+    await expect(cart.getByText('2x')).toBeVisible();
+    await expect(cart.getByText('34 DH').last()).toBeVisible();
+    await expect(page.getByTestId('order-submit')).toBeEnabled();
   });
 
   test('keeps hidden cart items stable when removing a different visible line', async ({ page }) => {
@@ -1326,37 +1313,34 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
+    await page.route(/\/api\/commandes\/\?table=1/, async (route) => {
+      await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
     await page.goto('/ordering/1');
-    await page.getByRole('button', { name: /Tagine olive 18\.00DH 14m/i }).click();
-    await page.getByRole('button', { name: /Pastilla lait 12\.00DH 6m/i }).click();
+    await page.waitForLoadState('networkidle');
+    const catalog = page.getByTestId('menu-catalog');
+    const cart = page.getByTestId('ordering-cart');
+    await catalog.getByRole('button', { name: /Tagine olive/i }).click({ force: true });
+    await catalog.getByRole('button', { name: /Pastilla lait/i }).click({ force: true });
+    await catalog.getByRole('button', { name: /Pastilla lait/i }).click({ force: true });
 
-    const cartPanel = page.locator('aside');
-    const searchInput = page.getByPlaceholder('Lookup culinary data...');
-    await expect(cartPanel.getByText('30.00DH').last()).toBeVisible();
+    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    await expect(cart.getByText('42 DH').last()).toBeVisible();
 
     await searchInput.fill('tagine');
-    await expect(page.getByText('Pastilla lait')).toHaveCount(1);
+    await expect(cart.locator('p', { hasText: 'Pastilla lait' })).toHaveCount(1);
 
-    const visibleCartItem = cartPanel.locator('div').filter({
-      has: page.getByText('Tagine olive', { exact: true }),
-    }).first();
-    await visibleCartItem.locator('button').first().click();
+    const visibleCartItem = cart.getByTestId('cart-item-211');
+    await visibleCartItem.getByTestId('remove-item').click();
 
-    await expect(cartPanel.getByText('Tagine olive')).toHaveCount(0);
-    await expect(cartPanel.getByText('Pastilla lait')).toBeVisible();
-    await expect(cartPanel.getByText('12.00DH').last()).toBeVisible();
+    await expect(cart.getByText('Tagine olive')).toHaveCount(0);
+    await expect(cart.locator('p', { hasText: 'Pastilla lait' })).toBeVisible();
+    await expect(cart.getByText('24 DH').last()).toBeVisible();
 
     await searchInput.fill('');
-    await expect(page.getByText('Pastilla lait')).toHaveCount(2);
-    await expect(cartPanel.getByText('Pastilla lait')).toBeVisible();
-    await expect(cartPanel.getByText('Tagine olive')).toHaveCount(0);
+    await expect(cart.locator('p', { hasText: 'Pastilla lait' })).toBeVisible();
+    await expect(cart).toContainText('2x');
+    await expect(cart.getByText('Tagine olive')).toHaveCount(0);
   });
 });

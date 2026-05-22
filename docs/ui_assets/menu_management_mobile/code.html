@@ -1,0 +1,315 @@
+<!DOCTYPE html><html class="dark" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>TASTIFY - Gestion du Menu Tactique</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;family=Rethink+Sans:wght@400;600;700;800&amp;family=Inclusive+Sans&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #151312; /* surface-main */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .active-switch {
+            transform: translateX(20px);
+            background-color: #ffdcc6;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#71492c",
+                        "surface-tint": "#ffb785",
+                        "on-secondary-fixed": "#301400",
+                        "error-container": "#93000a",
+                        "surface-bright": "#3f3834",
+                        "secondary": "#ffb785",
+                        "on-background": "#ece0da",
+                        "on-surface": "#ece0da",
+                        "on-error": "#690005",
+                        "on-secondary": "#502500",
+                        "surface-container-lowest": "#120d0a",
+                        "tertiary-container": "#f2bb96",
+                        "tertiary": "#ffdbc5",
+                        "primary": "#ffdcc6",
+                        "secondary-fixed": "#ffdcc6",
+                        "amber": "#8f4d17",
+                        "secondary-fixed-dim": "#ffb785",
+                        "ink": "#100e0c",
+                        "surface-main": "#151312",
+                        "on-secondary-container": "#efa978",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "surface-container-highest": "#3a332f",
+                        "primary-fixed-dim": "#ffb785",
+                        "outline": "#9f8d83",
+                        "secondary-container": "#6e3d15",
+                        "error": "#ffb4ab",
+                        "inverse-surface": "#ece0da",
+                        "primary-fixed": "#ffdcc6",
+                        "outline-variant": "#52443b",
+                        "on-primary": "#502500",
+                        "surface-dim": "#18120f",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container": "#241e1b",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#201a17",
+                        "surface-variant": "#3a332f",
+                        "aged-paper": "#fff8f5",
+                        "charcoal-bright": "#3c3937",
+                        "inverse-primary": "#875128",
+                        "on-tertiary": "#49280e",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "background": "#18120f",
+                        "on-surface-variant": "#d7c3b7",
+                        "primary-container": "#ffb785",
+                        "on-primary-container": "#79461d",
+                        "inverse-on-surface": "#362f2b",
+                        "surface-container-high": "#2f2925",
+                        "on-primary-fixed": "#301400",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#18120f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-xs": "4px",
+                        "unit-sm": "8px",
+                        "client-gutter": "3rem",
+                        "unit-md": "16px",
+                        "staff-margin": "1.5rem",
+                        "client-margin": "5vw",
+                        "unit-lg": "24px",
+                        "staff-gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Public Sans"],
+                        "ui-button": ["Rethink Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "headline-md": ["Public Sans"],
+                        "display-lg-mobile": ["Public Sans"],
+                        "ui-label-bold": ["Rethink Sans"],
+                        "body-lg": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-on-surface">
+<!-- Top Navigation (Operational Overview) -->
+<header class="flex items-center justify-between w-full h-14 px-staff-margin bg-surface-container-high dark:bg-surface-container-high border-b border-outline-variant fixed top-0 left-0 z-50">
+<div class="flex items-center gap-unit-md">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline">
+<img alt="Staff Profile" class="w-full h-full object-cover" data-alt="A close-up high-contrast studio portrait of a professional head chef in a sharp black uniform, illuminated by dramatic side lighting that emphasizes texture and precision. The background is a dark, out-of-focus professional kitchen with metallic surfaces reflecting warm amber light. The aesthetic is tactical and focused, reflecting a high-pressure, Michelin-star culinary environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXzhD39pUvG8wwIC_1PX4H_302ak0IP2FGP5O8_tfoT5MXUFfXOPmKnNvOA8Bc9jF97p-S7t6zmtylr8HlzGW7JckVxpJN8QEZWvM_uzvoL6LtI1c8gzmxWT24dY_jZPINYSkSfLI0-h7o1hH7S4S1Q24FMhsfxTkcFKFcU924UrzlZDKpMjegd1NdILovbzvrPqu9nAlEP-TKCVEfP1SFHGimM2TsDvfjBYm299rptmxiEewSV6S2Mf_4YgCEwF3NJ7ZYZLvAhw">
+</div>
+<span class="font-ui-label-bold text-ui-label-bold text-on-surface">Operational Overview</span>
+</div>
+<div class="flex gap-unit-md items-center">
+<button class="p-unit-xs hover:bg-surface-bright transition-all rounded text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-bright transition-all rounded text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-staff-margin">
+<!-- Dashboard Summary / Tactical Stats -->
+<section class="mb-unit-lg grid grid-cols-2 gap-unit-md">
+<div class="bg-surface-container p-unit-md border border-outline-variant rounded-lg">
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant uppercase tracking-widest mb-unit-xs">Items Active</p>
+<p class="font-headline-md text-headline-md text-primary">42 <span class="text-[12px] text-outline">/ 48</span></p>
+</div>
+<div class="bg-surface-container p-unit-md border border-outline-variant rounded-lg">
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant uppercase tracking-widest mb-unit-xs">Out of Stock</p>
+<p class="font-headline-md text-headline-md text-error">06</p>
+</div>
+</section>
+<!-- Category Filter (Staff Style) -->
+<section class="mb-unit-lg overflow-x-auto no-scrollbar flex gap-unit-sm">
+<button class="bg-surface-container-highest text-primary border-l-4 border-amber px-unit-md py-unit-sm font-ui-data-dense text-ui-data-dense whitespace-nowrap">
+                ALL ITEMS
+            </button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-unit-md py-unit-sm font-ui-data-dense text-ui-data-dense whitespace-nowrap border border-outline-variant">
+                STARTERS
+            </button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-unit-md py-unit-sm font-ui-data-dense text-ui-data-dense whitespace-nowrap border border-outline-variant">
+                MAINS
+            </button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-unit-md py-unit-sm font-ui-data-dense text-ui-data-dense whitespace-nowrap border border-outline-variant">
+                SIDES
+            </button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-unit-md py-unit-sm font-ui-data-dense text-ui-data-dense whitespace-nowrap border border-outline-variant">
+                DRINKS
+            </button>
+</section>
+<!-- Menu Management List (Compact Tactical Style) -->
+<section class="space-y-unit-sm">
+<!-- Item 1 -->
+<div class="bg-surface-container flex items-center p-unit-sm border border-outline-variant hover:border-outline transition-colors group">
+<div class="w-16 h-16 bg-surface-container-highest flex-shrink-0 border border-outline-variant overflow-hidden">
+<img alt="Tartare" class="w-full h-full object-cover" data-alt="A gourmet wagyu beef tartare served in a minimalist black stoneware bowl. The dish is meticulously plated with tiny emerald-colored herb oils and gold leaf accents. Professional overhead kitchen lighting casts sharp, geometric shadows, emphasizing the surgical precision of the culinary preparation. The color palette is dominated by deep reds, blacks, and subtle gold highlights, reflecting a dark, sophisticated Michelin-star aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSLmTO2zLJnC8WTxFMcVWh2vy4lHAO3zhhxS5x5mhW5K79zidXTpoojV6i8pwC1YWjB7V6s0KvREAvqOaSQpCipz-QbB0-h4O-LWlPpZtGmvsovJlz9m8f48INW60hbrjERXkHFC1ENk389FGOeQ-nbpLVWOIpMuPvklEMGJajLbelH7aeQyul8jf3Y4drx9URYtGkjmoPkR37kbmGyjWnjITpnKnx-H0gsrXxoo3HABWKXvT6vOvO2R9xJHKi12CxDoHKBfumgQ">
+</div>
+<div class="ml-unit-md flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-ui-label-bold text-ui-label-bold leading-tight uppercase">Wagyu Tartare</p>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant mt-1">CAT: STARTER • €24</p>
+</div>
+<div class="flex items-center gap-unit-sm">
+<span class="font-ui-data-dense text-ui-data-dense text-primary">85 IN STOCK</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-unit-sm">
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container-highest px-unit-xs py-[2px] rounded border border-outline-variant uppercase">PLU: 1042</span>
+<div class="flex items-center gap-unit-md">
+<span class="font-ui-data-dense text-ui-data-dense text-primary uppercase">Active</span>
+<!-- Custom Switch -->
+<div class="w-10 h-5 bg-outline-variant rounded-full relative cursor-pointer transition-colors duration-200" onclick="this.querySelector('.toggle-dot').classList.toggle('active-switch'); this.classList.toggle('bg-amber');">
+<div class="toggle-dot active-switch absolute left-0.5 top-0.5 w-4 h-4 bg-on-background rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container flex items-center p-unit-sm border border-outline-variant hover:border-outline transition-colors group">
+<div class="w-16 h-16 bg-surface-container-highest flex-shrink-0 border border-outline-variant overflow-hidden">
+<img alt="Black Cod" class="w-full h-full object-cover" data-alt="A perfectly seared black cod fillet with a miso glaze, presented on a dark textured plate. The fish has a vibrant caramelization, catching the focused spotlight of a high-end restaurant kitchen. Tiny micro-greens provide a pop of organic color against the stark, architectural plating. The overall atmosphere is moody, sharp, and luxurious, focusing on the surgical presentation and high-contrast lighting of a modern gourmet kitchen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALauwgFXHVD4uAckNevA0XEy1vZD95jNLn0QCbByfu8GDDXeC6SRqjcZXCGNPdsU5h8kzLf0KuD-9M1mcJwmHdFfHjs0UadlCWQnV8Eqh9DMlydDr-U1bOmJpV_i2cxdlgBN_8SV0DUDNtBCIzxppWp9MdfDirbB4EEocUP0-5Na-MJBZmIwYFNGBaxBV0Ru7rBLDj_UTVZvxNEIPp0hqciTOB5L5xUnqcp0CL7z-6fVff5FvI0gDo2DrF6IJ1f8TqaodfRnMokg">
+</div>
+<div class="ml-unit-md flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-ui-label-bold text-ui-label-bold leading-tight uppercase">Miso Black Cod</p>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant mt-1">CAT: MAIN • €48</p>
+</div>
+<div class="flex items-center gap-unit-sm">
+<span class="font-ui-data-dense text-ui-data-dense text-error">LOW STOCK: 4</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-unit-sm">
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container-highest px-unit-xs py-[2px] rounded border border-outline-variant uppercase">PLU: 2011</span>
+<div class="flex items-center gap-unit-md">
+<span class="font-ui-data-dense text-ui-data-dense text-primary uppercase">Active</span>
+<div class="w-10 h-5 bg-amber rounded-full relative cursor-pointer transition-colors duration-200" onclick="this.querySelector('.toggle-dot').classList.toggle('active-switch'); this.classList.toggle('bg-amber');">
+<div class="toggle-dot active-switch absolute left-0.5 top-0.5 w-4 h-4 bg-on-background rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3 - Out of Stock -->
+<div class="bg-surface-container flex items-center p-unit-sm border border-outline-variant opacity-70">
+<div class="w-16 h-16 bg-surface-container-highest flex-shrink-0 border border-outline-variant overflow-hidden grayscale">
+<img alt="Fondant" class="w-full h-full object-cover" data-alt="A sophisticated dark chocolate fondant being sliced to reveal a molten center, served on a black slate. The lighting is low and focused, highlighting the rich textures of the cake and the glossy chocolate pour. The background is a minimalist, dark studio setting, creating a high-contrast editorial feel. The aesthetic is ultra-modern and premium, with a palette of deep browns, blacks, and warm sepia tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaceI6ma449AdbTZu46nS7SGK0JSMfTgNPz2n7YnIxjnmdfw1-h-majJvt_zYsZaW3IRqI7PHplQ9qItXZw-YpgpqTWaGHq-SnJ8Yg94APtNxvxObDIrWyZCOhBrWQrSifCqEP-_OlDGN01wuNFhr6F2242bEh9LnLeg0WY-CoqPbSg9MoksSaJOMmdqAmS6ri9RhPXGENru1et4WAPIEo00xmfaX9t5Cqs-ers_zsuH50gSsTY3JdQwF0vN4_xQaYj7u0aXiqnA">
+</div>
+<div class="ml-unit-md flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-ui-label-bold text-ui-label-bold leading-tight uppercase">Noir Fondant</p>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant mt-1">CAT: DESSERT • €18</p>
+</div>
+<div class="flex items-center gap-unit-sm">
+<span class="font-ui-data-dense text-ui-data-dense text-error uppercase">Sold Out</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-unit-sm">
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container-highest px-unit-xs py-[2px] rounded border border-outline-variant uppercase">PLU: 4005</span>
+<div class="flex items-center gap-unit-md">
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant uppercase">Hidden</span>
+<div class="w-10 h-5 bg-outline-variant rounded-full relative cursor-pointer transition-colors duration-200" onclick="this.querySelector('.toggle-dot').classList.toggle('active-switch'); this.classList.toggle('bg-amber');">
+<div class="toggle-dot absolute left-0.5 top-0.5 w-4 h-4 bg-on-background rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="bg-surface-container flex items-center p-unit-sm border border-outline-variant hover:border-outline transition-colors group">
+<div class="w-16 h-16 bg-surface-container-highest flex-shrink-0 border border-outline-variant overflow-hidden">
+<img alt="Cocktail" class="w-full h-full object-cover" data-alt="A vibrant glass of artisanal gin and tonic garnished with a sprig of fresh rosemary and dehydrated citrus wheels. The drink is captured in a high-contrast architectural setting with sharp light beams refracting through the crystal glass. The color palette features cool silver tones, crisp greens, and warm amber reflections from the liquid. The visual style is surgical and precise, echoing a high-end lounge's tactical drink service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkFgWcee3S8VSjQPnkBt_jHoIbetqzTnPnTKz7U7582iZ8PyPnpNpPSwIIrQbuOvxm_Uhaa01KcvVM9wNz0ESLnBbo7R9be8qGcLud3DPMkAyxQw3OItyJVxpMuvKlgg5Nk1T2kfpJQfw41aX7CTuZw9sQHJjO0civtkFyZdSdZ7NAsusIqI-2fjc4cAALYk1_hfo4trdffo5tKLvlsp5a9pUSh-KYdDiezyzXz9rDWbDPvbbtnMF3k7JWOY3IJ_vm-uJMt_Llnw">
+</div>
+<div class="ml-unit-md flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-ui-label-bold text-ui-label-bold leading-tight uppercase">Botanical Gin</p>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant mt-1">CAT: DRINKS • €16</p>
+</div>
+<div class="flex items-center gap-unit-sm">
+<span class="font-ui-data-dense text-ui-data-dense text-primary">AVAILABLE</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-unit-sm">
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container-highest px-unit-xs py-[2px] rounded border border-outline-variant uppercase">PLU: 9002</span>
+<div class="flex items-center gap-unit-md">
+<span class="font-ui-data-dense text-ui-data-dense text-primary uppercase">Active</span>
+<div class="w-10 h-5 bg-amber rounded-full relative cursor-pointer transition-colors duration-200" onclick="this.querySelector('.toggle-dot').classList.toggle('active-switch'); this.classList.toggle('bg-amber');">
+<div class="toggle-dot active-switch absolute left-0.5 top-0.5 w-4 h-4 bg-on-background rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Staff Center) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-surface border-t-2 border-outline-variant flex justify-around items-center h-20 px-4">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-all px-unit-md py-unit-xs">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Inventory</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg px-unit-md py-unit-xs">
+<span class="material-symbols-outlined" data-icon="outdoor_grill">outdoor_grill</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Kitchen</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-all px-unit-md py-unit-xs">
+<span class="material-symbols-outlined" data-icon="Table_Bar">table_bar</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Floor</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-all px-unit-md py-unit-xs">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-ui-label-bold text-[10px] mt-1">Analytics</span>
+</button>
+</nav>
+<!-- Tactical FAB for Quick Add -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-lg flex items-center justify-center shadow-lg active:scale-90 transition-transform z-40 border border-ink">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for tactical feedback
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.opacity = '0.7';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.opacity = '1';
+            });
+        });
+    </script>
+</body></html>

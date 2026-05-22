@@ -1,86 +1,69 @@
-<!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!DOCTYPE html><html class="dark" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tastify - L'Art de la Table, Réinventé</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Bodoni+Moda:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Custom spring transition class */
-        .spring-transition {
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .ink-border {
-            border: 1px solid #301400;
-        }
-        .ink-border-lg {
-            border: 2px solid #301400;
-        }
-        .hero-overlay {
-            background: linear-gradient(to bottom, rgba(48, 20, 0, 0.4) 0%, rgba(48, 20, 0, 0.1) 50%, rgba(255, 248, 245, 1) 100%);
-        }
-    </style>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@400&amp;family=Public+Sans:wght@600;700&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "error-container": "#ffdad6",
-                        "surface-variant": "#e8e1de",
-                        "on-error-container": "#93000a",
-                        "background": "#fff8f5",
-                        "on-primary-fixed-variant": "#703705",
-                        "surface-dim": "#dfd9d6",
-                        "on-primary-container": "#ffceaf",
-                        "secondary-fixed-dim": "#ffb785",
-                        "on-surface-variant": "#53443a",
-                        "secondary-container": "#fea76a",
-                        "error": "#ba1a1a",
+                        "on-tertiary": "#49280e",
                         "on-secondary-fixed": "#301400",
-                        "tertiary": "#633e22",
-                        "surface-container-low": "#f9f2ef",
-                        "on-primary": "#ffffff",
-                        "surface-container-highest": "#e8e1de",
-                        "on-background": "#1d1b1a",
-                        "on-primary-fixed": "#301400",
-                        "tertiary-fixed-dim": "#f2bb96",
-                        "surface-container-lowest": "#ffffff",
-                        "on-error": "#ffffff",
-                        "surface-bright": "#fff8f5",
-                        "on-tertiary-fixed-variant": "#633e22",
-                        "outline-variant": "#d8c2b6",
-                        "outline": "#867369",
-                        "primary-fixed-dim": "#ffb785",
-                        "on-secondary": "#ffffff",
-                        "inverse-on-surface": "#f6efec",
                         "primary-fixed": "#ffdcc6",
-                        "surface-tint": "#8d4e1c",
-                        "on-tertiary-container": "#ffcfae",
-                        "primary": "#703704",
-                        "inverse-primary": "#ffb785",
-                        "tertiary-container": "#7e5537",
-                        "surface-container-high": "#ede7e4",
-                        "surface-container": "#f3ecea",
-                        "surface": "#fff8f5",
-                        "on-secondary-container": "#773b03",
-                        "tertiary-fixed": "#ffdcc5",
-                        "on-secondary-fixed-variant": "#723700",
-                        "primary-container": "#8d4e1c",
-                        "on-tertiary": "#ffffff",
-                        "secondary": "#8f4d17",
-                        "on-surface": "#1d1b1a",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#79461d",
+                        "inverse-primary": "#875128",
+                        "tertiary": "#ffdbc5",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "charcoal-bright": "#3c3937",
                         "secondary-fixed": "#ffdcc6",
-                        "inverse-surface": "#33302e",
-                        "on-tertiary-fixed": "#301400"
+                        "on-primary": "#502500",
+                        "ink": "#100e0c",
+                        "surface-container-high": "#2f2925",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#ece0da",
+                        "on-background": "#ece0da",
+                        "outline": "#9f8d83",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "inverse-surface": "#ece0da",
+                        "surface": "#18120f",
+                        "aged-paper": "#fff8f5",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "primary": "#ffdcc6",
+                        "surface-tint": "#ffb785",
+                        "surface-variant": "#3a332f",
+                        "on-surface-variant": "#d7c3b7",
+                        "outline-variant": "#52443b",
+                        "on-secondary-container": "#efa978",
+                        "on-primary-fixed": "#301400",
+                        "inverse-on-surface": "#362f2b",
+                        "surface-dim": "#18120f",
+                        "on-secondary": "#502500",
+                        "surface-bright": "#3f3834",
+                        "on-tertiary-fixed": "#301400",
+                        "primary-fixed-dim": "#ffb785",
+                        "amber": "#8f4d17",
+                        "secondary": "#ffb785",
+                        "surface-container-low": "#201a17",
+                        "surface-container-lowest": "#120d0a",
+                        "surface-container": "#241e1b",
+                        "surface-container-highest": "#3a332f",
+                        "on-tertiary-container": "#71492c",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "secondary-container": "#6e3d15",
+                        "primary-container": "#ffb785",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "tertiary-container": "#f2bb96",
+                        "secondary-fixed-dim": "#ffb785",
+                        "surface-main": "#151312",
+                        "background": "#18120f",
+                        "tertiary-fixed": "#ffdcc6"
                     },
                     "borderRadius": {
                         "DEFAULT": "0.25rem",
@@ -89,215 +72,162 @@
                         "full": "9999px"
                     },
                     "spacing": {
+                        "unit-md": "16px",
                         "unit-xs": "4px",
-                        "unit-lg": "24px",
-                        "client-margin": "5vw",
-                        "staff-margin": "1.5rem",
                         "unit-sm": "8px",
                         "client-gutter": "3rem",
+                        "staff-margin": "1.5rem",
+                        "unit-lg": "24px",
                         "staff-gutter": "1rem",
-                        "unit-md": "16px"
+                        "client-margin": "5vw"
                     },
                     "fontFamily": {
-                        "display-lg": ["Libre Caslon Text"],
-                        "ui-button": ["Bricolage Grotesque"],
-                        "ui-label-bold": ["Bricolage Grotesque"],
-                        "body-md": ["Bodoni Moda"],
-                        "ui-data-dense": ["Bricolage Grotesque"],
-                        "body-lg": ["Bodoni Moda"],
-                        "display-lg-mobile": ["Libre Caslon Text"],
-                        "headline-md": ["Libre Caslon Text"]
+                        "body-lg": ["Inclusive Sans"],
+                        "ui-label-bold": ["Rethink Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "display-lg-mobile": ["Public Sans"],
+                        "ui-button": ["Rethink Sans"],
+                        "display-lg": ["Public Sans"],
+                        "ui-data-dense": ["Rethink Sans"],
+                        "headline-md": ["Public Sans"]
                     },
                     "fontSize": {
-                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "ui-button": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700"}],
-                        "ui-label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800"}],
-                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                        "ui-data-dense": ["13px", {"lineHeight": "1.0", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
-                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
-</head>
-<body class="bg-background text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
-<!-- TopNavBar -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
-<div class="flex justify-between items-center px-client-margin w-full max-w-7xl mx-auto py-unit-lg">
-<div class="flex items-center gap-unit-md">
-<span class="font-display-lg text-headline-md text-primary tracking-tight">Tastify Portal</span>
-</div>
-<div class="hidden md:flex items-center gap-unit-lg">
-<a class="font-body-lg text-body-lg text-primary border-b-2 border-primary pb-1 spring-transition" href="#">Our Story</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300 spring-transition" href="#">Menu</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300 spring-transition" href="#">Reservations</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-primary transition-opacity duration-300 spring-transition" href="#">Private Dining</a>
-</div>
-<div class="flex items-center gap-unit-md">
-<button class="font-ui-button text-ui-button px-unit-lg py-unit-sm rounded-lg bg-primary text-on-primary hover:opacity-90 spring-transition">Book Now</button>
-<button class="font-ui-button text-ui-button px-unit-lg py-unit-sm rounded-lg border-2 border-primary text-primary hover:bg-primary-container/10 spring-transition">Sign In</button>
-</div>
-</div>
-</nav>
-<!-- Main Content -->
-<main>
-<!-- Full-bleed Hero -->
-<section class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased selection:bg-amber selection:text-ink pb-24 md:pb-0">
+<!-- TopAppBar (Client) -->
+<header class="bg-background dark:bg-background docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-client-margin py-unit-md sticky z-40 hidden md:flex">
+<button class="hover:text-primary transition-colors text-on-surface-variant font-medium flex items-center justify-center p-2 rounded-full hover:bg-surface-variant group">
+<span class="material-symbols-outlined group-active:scale-95 duration-200">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary tracking-tight">TASTIFY</h1>
+<button class="hover:text-primary transition-colors text-on-surface-variant font-medium flex items-center justify-center p-2 rounded-full hover:bg-surface-variant group">
+<span class="material-symbols-outlined mr-2">shopping_cart</span> Cart
+        </button>
+</header>
+<!-- Mobile Header -->
+<header class="bg-background dark:bg-background docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-4 py-4 sticky z-40 md:hidden">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">TASTIFY</h1>
+<button class="text-on-surface-variant p-2">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+</header>
+<main class="flex-grow flex flex-col w-full mx-auto relative z-10">
+<!-- Editorial Hero -->
+<section class="w-full min-h-[707px] flex flex-col justify-center px-client-margin py-unit-lg relative overflow-hidden bg-surface border-b border-outline-variant">
 <div class="absolute inset-0 z-0">
-<img alt="Gourmet Dining Experience" class="w-full h-full object-cover" data-alt="An ultra-premium, high-end fine dining table arrangement featuring hand-crafted ceramic plates, polished silver cutlery, and delicate crystal glassware. The scene is set in a sun-drenched, minimalist architectural space with large windows overlooking a serene garden. The lighting is soft and golden, emphasizing the organic textures of stone and linen. The color palette is dominated by soft parchment tones, warm sienna, and deep ink shadows, creating an atmosphere of quiet luxury and organic sophistication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXXZxt6bRjFVv69U8yfmMDBAQ6YwdifVQw7r5p6NXnfPzUUeF2WrYDTObORKkXCfYqTnbTd_3zA61y5Sr_L7Mjt7CTGAE0GKm4WvL7BxmK7AqUvYiRPwRA5a-DFQeMrbrSkFtEJCVSRPMteJdOtGSGqWdloB42Q3NuUmeeAWnkFBO3LAYTBqf4EyeLhYgq1jGwnVvrgR1trN2fB_w7DqsZsOBxVE_cTrtV4dsXhAjI06Z8VpJeGPinbeMovIBwsgkuu4MDy02lkdrP"/>
-<div class="absolute inset-0 hero-overlay"></div>
+<img class="w-full h-full object-cover opacity-30" data-alt="A sophisticated, high-contrast editorial photograph of a modern fine-dining restaurant interior at night. The lighting is focused, gallery-style illumination highlighting a pristine table setting against deep charcoal and pitch-black shadows. Accents of warm sienna and amber glow subtly from distant architectural features. The overall mood is exclusive, precise, and highly cinematic, completely devoid of blur, with sharp architectural lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLDMLmxHarBOK-EnXDo9hRjR1jh95VKkmmon3MXbPvkXh5PdkMvUtgVeGPUuWzV2pR03NXhMjBnmEgOxRIY5a7o5-_tkCbRvr5TgwFn-DDGy6XoiMTCUvB9KAhjCHINoVmTDRlsmDns0n15Wd8MRAAJYaqQfFVKlpBD9j2t3L4uyfDAfVTG3HQb1P-6WFyTB2KEeAG0NTEbagKoMENlEe9xB3A8d4GyHBORNOWPTeZ_YaGKy4n-AZ8u9XBoVn7m6qUbEmhHeMrkw">
 </div>
-<div class="relative z-10 text-center px-client-margin">
-<h1 class="font-display-lg text-display-lg md:text-display-lg text-primary mb-unit-md opacity-0 translate-y-8 animate-fade-in" style="animation: fadeInUp 1s forwards 0.5s;">
-                    The Art of <br class="hidden md:block"/> Conscious Gastronomy
-                </h1>
-<p class="font-body-lg text-body-lg text-on-surface max-w-2xl mx-auto mb-unit-lg opacity-0 translate-y-8 animate-fade-in" style="animation: fadeInUp 1s forwards 0.8s;">
-                    Where Michelin-star precision meets the soulful warmth of organic heritage. A culinary journey designed for the discerning palate.
+<div class="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-unit-md">
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary mb-4 leading-tight">
+                    L'Art de la Table, <br>Réinventé
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
+                    Une expérience gastronomique où la précision chirurgicale rencontre la sophistication organique. Découvrez une carte conçue avec une vision absolue.
                 </p>
-<div class="flex flex-col md:flex-row gap-unit-md justify-center opacity-0 translate-y-8 animate-fade-in" style="animation: fadeInUp 1s forwards 1.1s;">
-<a class="font-ui-button text-ui-button bg-primary text-on-primary px-10 py-4 rounded-full ink-border hover:scale-105 spring-transition" href="#menu">View The Collection</a>
-<a class="font-ui-button text-ui-button border-2 border-primary text-primary px-10 py-4 rounded-full hover:bg-primary/5 spring-transition" href="#story">Discover Our Philosophy</a>
+<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+<button class="bg-amber text-ink font-ui-button text-ui-button py-4 px-8 rounded-lg hover:bg-surface-tint transition-all active:scale-95 border border-amber">
+                        Découvrir le Menu
+                    </button>
+<button class="bg-transparent text-primary border border-primary font-ui-button text-ui-button py-4 px-8 rounded-lg hover:bg-surface-variant transition-all active:scale-95">
+                        Réserver
+                    </button>
 </div>
 </div>
 </section>
-<!-- Editorial Section: The Story -->
-<section class="py-24 bg-background" id="story">
-<div class="max-w-7xl mx-auto px-client-margin">
-<div class="grid grid-cols-1 md:grid-cols-12 gap-client-gutter items-center">
-<div class="md:col-span-5">
-<span class="font-ui-label-bold text-ui-label-bold text-secondary mb-unit-sm block">OUR HERITAGE</span>
-<h2 class="font-display-lg text-headline-md text-on-background mb-unit-lg">A meticulous devotion to the earth’s finest offerings.</h2>
-<div class="space-y-unit-md">
-<p class="font-body-lg text-body-lg text-on-surface-variant">
-                                We believe that true luxury lies in the purity of the ingredient. Every element on our menu is traced back to a specific patch of earth, a particular morning dew, and a farmer who knows the land by name.
-                            </p>
-<p class="font-body-lg text-body-lg text-on-surface-variant">
-                                Tastify was born from a desire to bridge the gap between tactical kitchen precision and the organic, unpredictable beauty of nature.
-                            </p>
+<!-- Recommended Dishes -->
+<section class="w-full px-client-margin py-20 bg-background border-b border-outline-variant">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-12 border-b border-outline pb-4">
+<h3 class="font-headline-md text-headline-md text-primary">Créations Signature</h3>
+<a class="font-ui-label-bold text-ui-label-bold text-amber hover:text-primary transition-colors uppercase tracking-widest hidden sm:block" href="#">Voir la carte complète</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Dish 1 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:border-amber transition-colors duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="A highly detailed, sharp macro photograph of Homard Thermidor served on an artisanal dark ceramic plate. The lobster meat is glazed perfectly, illuminated by a hard, focused spotlight against a pitch-black background. Deep amber and rich sienna tones highlight the caramelized edges of the dish. The style is modern editorial, evoking precision and high-end gastronomy without any soft focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxlX4y_lqVSYSYYc5cQpF5_FXoIsetI3dJCmmMA9T8YQHE0MjXRe9nyh80lpXyf1FvhRjydgvq5KQGjI3lX8MKw3YKF1PY9BHXQHq90ivtrBsavQTHNXJYRDMj4JiJ8-nmQOYLUMWA21MI9Qgiaz-7BUk9_ju3TX4E4T12WeFfo4SRGFNpzoCBxSLaZDpqCmPeQttxWz88442Nu4GzH-yWalB3Vs79f3s3yDjX-n40zdFnWrAvbcUKHE2HBChcLEL9vlxF0t3aSQ">
+</div>
+<div class="p-6 flex flex-col gap-2 bg-surface">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-headline-md text-primary text-xl">Homard Thermidor</h4>
+<span class="font-ui-data-dense text-ui-data-dense text-amber text-lg">65€</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Cognac, moutarde ancienne, gruyère affiné.</p>
 </div>
 </div>
-<div class="md:col-span-7 relative">
-<div class="aspect-[4/5] w-full overflow-hidden ink-border-lg rounded-xl">
-<img alt="Chef preparing organic ingredients" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" data-alt="A close-up, high-detail photograph of a chef's hands carefully arranging micro-greens on a minimalist stone plate. The background is a clean, professional kitchen with warm amber lighting and copper accents. The overall mood is one of surgical precision and tactical mastery, yet the organic textures of the vegetables provide a soft, natural contrast. The lighting is high-contrast, creating deep shadows and bright highlights that emphasize the textures of the ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4b4DCQL-G5UCOOPZ443i6aEgx6RYFnlsOUDcQ4Pwy8OPAjvk6P2NILJq7gSyIDkHW6tCvoE58b6eKBIV91w7nDLJ6MMljB8Mm-mYqg5aj8YnY0wzH_OhzfsImJMGAn-JpAoPxZfqVkZx92C_3p8WfTAVMPJHVas58lv9wIZ7Y7FBFzu7OQQ41mX4Tsfbt0hN2gStYtHEIONks72F3w48A1NOkbIoj9lXoPe3-OOaX-SldNlx0uS5GWAUC4WgpBlCYZsFQ7kqMn1Oz"/>
+<!-- Dish 2 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:border-amber transition-colors duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="A stark, high-contrast culinary photograph of a perfectly cooked Filet Mignon, resting on a stark charcoal slab. A precise streak of dark red reduction sauce cuts across the plate. The lighting is harsh and direct, emphasizing the texture of the meat and the stark geometry of the presentation. Warm amber highlights contrast with the deep blacks of the setting, creating a sophisticated, serious mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIApusn656l6wz4-R7DBcNUbjJ3pvpCrc0x8OZZdd94mwDwgn2Gt_C6ngFIWqFl2AwjJ8ZUck5VElFkuQumF1ad82UB-qZt4loA0fR7qvp1a8QPeKvC7-h22nIyo1p911d4prq1QCy3oThAVkm7IGf2JMlcPiipIMUpeuapR08b2zz__e68VveeViXUhMqwcAGUDUOgrf-WSqEhqKkQeMA_1sQcbBjfPDV153Lu9RZ0ZSF7bdOjEk0x4ZyIYYXTcGHCSKAf_s6DA">
 </div>
-<div class="absolute -bottom-8 -left-8 hidden lg:block bg-surface-container-high p-unit-lg ink-border w-64 rounded-lg">
-<p class="font-body-md text-body-md italic text-primary">"The ingredients speak, we simply listen."</p>
-<p class="font-ui-data-dense text-ui-data-dense mt-unit-sm">— Master Chef Julian Vance</p>
+<div class="p-6 flex flex-col gap-2 bg-surface">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-headline-md text-primary text-xl">Filet Mignon</h4>
+<span class="font-ui-data-dense text-ui-data-dense text-amber text-lg">48€</span>
 </div>
-</div>
-</div>
-</div>
-</section>
-<!-- Bento Grid: Featured Experiences -->
-<section class="py-24 bg-surface-container-low" id="menu">
-<div class="max-w-7xl mx-auto px-client-margin">
-<div class="text-center mb-16">
-<h2 class="font-display-lg text-headline-md text-on-background mb-unit-sm">The Season’s Highlights</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">Explore our curated selections for the current equinox.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-unit-md h-auto md:h-[800px]">
-<!-- Large Feature -->
-<div class="md:col-span-2 md:row-span-2 relative overflow-hidden group rounded-xl ink-border">
-<img alt="Signature Dish" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="A masterful presentation of a single, slow-roasted heritage carrot on a bed of dark soil-like crumbles, garnished with vibrant edible flowers. The plate is a dark, matte obsidian ceramic that makes the bright orange and purple colors of the vegetables pop. The setting is a moody, dimly lit dining room with a single spotlight illuminating the dish, creating an atmosphere of editorial sophistication. The color palette is grounded in earthy tones, deep blacks, and vibrant natural ambers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQCoH4JwjZKFSf-isTqH3qWTgKABt84-ucic5pd5aOHbPosxVR1tmS_9627I8NLNsqD5qcYqw0RfknJ6uIPHHD-RTT7abZtRX0HweUZRCFSuM6kNOmEqlal51WwXsqYV8m73TwoMnLilb2WaWjOd-mmPgMyhNFuAgqbMgEM7vBC6FlI4HKIVidIYpT6gnNvECCWoxmzVvHd9Mq19660HNBZsvn2jJ1hf29QZ3IENavqJreW3Qj7uyawuz8Bt699BcmqFwikCPJooTk"/>
-<div class="absolute inset-0 bg-gradient-to-t from-on-secondary-fixed/80 to-transparent flex flex-col justify-end p-unit-lg text-on-primary">
-<span class="font-ui-label-bold text-ui-label-bold text-secondary-container mb-unit-xs">SIGNATURE</span>
-<h3 class="font-display-lg text-headline-md">The Terroir Collection</h3>
-<p class="font-body-md text-body-md mt-unit-sm opacity-80">A 12-course exploration of coastal soil and sea salt.</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Jus de veau réduit, truffe noire d'hiver, mousseline.</p>
 </div>
 </div>
-<!-- Vertical Card -->
-<div class="md:col-span-1 md:row-span-2 relative overflow-hidden group rounded-xl ink-border">
-<img alt="Cocktail Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="A sophisticated, crystal-clear cocktail served in a vintage-style coupe glass, garnished with a single, perfectly frozen botanical element. The background is a soft-focus wooden bar with warm, ambient lighting that catches the refractions in the glassware. The atmosphere is quiet, intimate, and refined. The colors are dominated by warm golds, translucent ambers, and deep mahogany browns, reflecting an organic yet tactical precision in mixology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPC2EuxX4MPKpUF8XF8GA4Z3whQ25Z868STGxLiwREtZVbOtKrzVqG2kIUMwHdjbcsMsD1y7OGFyXFgARER-TwY-OYX99CteLAsS2wEQek0lwR2UHZWtqty3O50-qj-R0mL1NwB3ulCztSsoo89mlIyJu8mCbkD_3ShSQhz6U58KMu13M5XHANh8gNMNuyFtg0hf3pm8hR2giMQIjx7r6iUTY69Ng9CItzYzNFLqFMu6VO3k6paxIZUY4ES2fFmvvq4MM-mDLlSAHk"/>
-<div class="absolute inset-0 bg-gradient-to-t from-on-secondary-fixed/80 to-transparent flex flex-col justify-end p-unit-lg text-on-primary">
-<h3 class="font-headline-md text-headline-md">Botanical spirits</h3>
-<button class="font-ui-button text-ui-button mt-unit-md border border-white/30 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors">Explore Library</button>
+<!-- Dish 3 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:border-amber transition-colors duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="A pristine editorial shot of a modern Mille-Feuille dessert, presented with architectural precision on a matte black plate. The delicate layers of pastry are separated by perfect spheres of vanilla cream. The lighting is focused and theatrical, creating deep shadows and highlighting the golden brown textures of the pastry and warm sienna accents. The image is hyper-sharp, with no background blur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBalpQl9DmXzvbODKuORcRKOTgnQWbxQ417ymjISfmUMNoVBF-6z3YVg2269VCuJR3-aVnqyIdbJc0aRG8dGm1ZqfrVwKJW7ZMrzfix8B9DpiGvNxoMG_jPfzBQsFvHkTrE4Eog2R2Pp_zHWwv__Vc88DQ2Ke3G902lUaMaA2cvTB72cXdvyEmrh30NKDfI4tV9DvYm9too78XBmjCNTaeECuQeoLCIgkieoSBSNm45xJkJoTHFiwAGbf3FVM373DAGGOMMB-IW4A">
 </div>
+<div class="p-6 flex flex-col gap-2 bg-surface">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-headline-md text-primary text-xl">Mille-Feuille Structuré</h4>
+<span class="font-ui-data-dense text-ui-data-dense text-amber text-lg">18€</span>
 </div>
-<!-- Small Square 1 -->
-<div class="md:col-span-1 md:row-span-1 bg-background p-unit-lg flex flex-col justify-center ink-border rounded-xl text-center">
-<span class="material-symbols-outlined text-primary text-4xl mb-unit-md">wine_bar</span>
-<h4 class="font-headline-md text-headline-md text-on-background">Private Vault</h4>
-<p class="font-body-md text-body-md text-on-surface-variant mt-unit-sm">Rare vintages from the world’s quietest valleys.</p>
-</div>
-<!-- Small Square 2 -->
-<div class="md:col-span-1 md:row-span-1 bg-primary p-unit-lg flex flex-col justify-center rounded-xl text-center">
-<h4 class="font-headline-md text-headline-md text-on-primary">Table 01</h4>
-<p class="font-body-md text-body-md text-on-primary/80 mt-unit-sm">Book the exclusive Chef's Table for an immersive evening.</p>
-<button class="font-ui-button text-ui-button mt-unit-md bg-on-primary text-primary px-4 py-2 rounded-lg spring-transition">Request Access</button>
+<p class="font-body-md text-body-md text-on-surface-variant">Vanille de Madagascar, caramel beurre salé.</p>
 </div>
 </div>
 </div>
-</section>
-<!-- Testimonial/Quote -->
-<section class="py-32 bg-background flex items-center justify-center">
-<div class="max-w-4xl mx-auto px-client-margin text-center">
-<span class="material-symbols-outlined text-primary text-5xl mb-unit-lg" style="font-variation-settings: 'FILL' 1;">format_quote</span>
-<blockquote class="font-display-lg text-headline-md md:text-display-lg-mobile text-on-background italic mb-unit-lg">
-                    "Tastify isn’t just a dining portal; it’s an invitation to slow down and rediscover the inherent rhythm of the natural world through flavor."
-                </blockquote>
-<cite class="font-ui-label-bold text-ui-label-bold text-secondary not-italic uppercase tracking-widest">Architectural Digest</cite>
 </div>
 </section>
 </main>
-<!-- Footer -->
-<footer class="w-full border-t border-outline-variant bg-surface-container-low dark:bg-surface-container-lowest">
-<div class="w-full py-unit-lg px-client-margin flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto">
-<div class="mb-unit-md md:mb-0">
-<span class="font-display-lg text-headline-md text-on-surface">Tastify</span>
-</div>
-<div class="flex flex-wrap justify-center gap-unit-lg mb-unit-md md:mb-0">
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-colors duration-300" href="#">Privacy Policy</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-colors duration-300" href="#">Terms of Service</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-colors duration-300" href="#">Press Kit</a>
-<a class="font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-secondary underline decoration-1 transition-colors duration-300" href="#">Contact</a>
-</div>
-<div class="text-right">
-<p class="font-body-md text-body-md text-tertiary">© 2024 Tastify Ecosystem. All rights reserved.</p>
-</div>
-</div>
-</footer>
-<script>
-        // Simple fadeInUp animation utility
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Custom animation keyframes injected via style tag would be cleaner, 
-        // but we'll use a CSS-in-JS approach for a few custom effects
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateY(30px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .animate-fade-in {
-                animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Interaction for Nav Scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-sm', 'bg-background/95');
-                nav.classList.remove('bg-background/90');
-            } else {
-                nav.classList.remove('shadow-sm', 'bg-background/95');
-                nav.classList.add('bg-background/90');
-            }
-        });
-    </script>
+<!-- BottomNavBar (Client Mobile) -->
+<nav class="bg-surface dark:bg-surface text-primary dark:text-primary font-ui-label-bold text-ui-label-bold fixed bottom-0 w-full z-50 rounded-t-xl border-t-2 border-outline-variant flat no shadows fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-4 md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">restaurant_menu</span>
+<span class="text-[10px] uppercase tracking-widest">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">calendar_month</span>
+<span class="text-[10px] uppercase tracking-widest">Book</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg px-unit-md py-unit-xs hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="text-[10px] uppercase tracking-widest">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="text-[10px] uppercase tracking-widest">Profile</span>
+</a>
+</nav>
 </body></html>

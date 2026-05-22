@@ -21,8 +21,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
 };
 
 export const CardSkeleton: React.FC = () => (
-  <div className="bg-white rounded-2xl border-2 border-surface-container-low ring-1 ring-surface-container-high overflow-hidden shadow-sm p-4">
-    <Skeleton className="aspect-[4/3] w-full rounded-xl" />
+  <div className="bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-xl p-4">
+    <Skeleton className="aspect-[4/3] w-full rounded-2xl" />
     <div className="p-6 space-y-6">
       <div className="space-y-3">
         <Skeleton className="w-3/4 h-8" />

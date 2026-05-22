@@ -16,6 +16,7 @@ export interface Plat {
   prix: string;
   image: string | null;
   temps_preparation: number;
+  est_disponible: boolean;
 }
 
 export const menuApi = {

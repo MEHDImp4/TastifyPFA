@@ -44,78 +44,30 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [ ] **Phase 36: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi).
 - [ ] **Phase 37: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique).       
 - [ ] **Phase 38: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances.
-- [ ] **Phase 39: Load Testing & Optimization** - Locust scripts, Nginx proxy fine-tuning.
+- [ ] **Phase 43: Stabilization & Regression Fixes** - Fix TypeScript errors and unit test regressions from the tactical overhaul.
+- [ ] **Phase 44: E2E Suite Modernization** - Rewrite the Playwright E2E suite to align with the "Tactical Command" architecture and semantic locators.
 
 ## Phase Details
 
-### Phase 31: Back-Office Dashboard KPIs
-**Requirements:** [KPI-01, KPI-02, KPI-03]
-**Goal**: Implement a real-time analytics dashboard in the Back-Office for operational insights.
-**Depends on**: Phase 13, Phase 27
-**Success Criteria**: 1. Today's Revenue, Active Tables, Pending Orders, and Avg Prep Time visible. 2. Historical revenue and top dishes visualized. 3. Real-time updates wired.
-
-**Plans:** 2 plans
-- [x] 31-01-PLAN.md - Backend Aggregations & Signals
-- [x] 31-02-PLAN.md - Frontend Dashboard & Recharts
-
-### Phase 32: Loyalty Program
-**Goal**: Implement a points-based loyalty program with tiers and reward management.
-**Depends on**: Phase 2, Phase 10, Phase 27
-**Requirements**: [LOY-01, LOY-02, LOY-03, LOY-04, LOY-05]
-**Success Criteria**: 1. Points awarded automatically on payment. 2. Client can see balance and history. 3. Manager can manage rewards.
-
-**Plans:** 2 plans
-- [x] 32-01-PLAN.md - Backend Foundation & API
-- [x] 32-02-PLAN.md - Frontend Integration
+### Phase 44: E2E Suite Modernization
+**Goal**: Align the E2E test suite with the modern UI architecture and remove legacy hacks.
+**Depends on**: Phase 43
+**Success Criteria**: 1. 100% E2E pass rate across both apps. 2. Semantic locators used everywhere. 3. New features (Delivery Hub, Avis) covered.
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 39
+Phases execute in numeric order: 1 → 44
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Project Skeleton | 3/3 | Completed | 2026-04-26 |
-| 2. User Model & RBAC | 3/3 | Completed | 2026-04-27 |
-| 3. Auth API & Login Page | 3/3 | Completed | 2026-04-28 |
-| 4. Categories Model & API | 2/2 | Completed | 2026-04-28 |
-| 5. Categories Frontend | 2/2 | Completed | 2026-04-28 |
-| 6. Plats Model & API | 3/3 | Completed | 2026-04-28 |
-| 7. Plats Frontend | 3/3 | Completed | 2026-04-28 |
-| 8. Tables Model & API | 3/3 | Complete    | 2026-04-28 |
-| 9. Tables Map Frontend | 2/2 | Complete | 2026-04-28 |
-| 10. Commandes Model | 3/3 | Complete | 2026-04-29 |
-| 11. Commandes REST API | 3/3 | Complete | 2026-04-30 |
-| 12. Order Taking Frontend | 3/3 | Complete | 2026-04-30 |
-| 13. WebSocket Infrastructure | 3/3 | Completed | 2026-05-01 |
-| 14. KDS Base Frontend | 3/3 | Complete | 2026-05-01 |
-| 15. KDS Orchestrator Logic | 3/3 | Completed | 2026-05-03 |
-| 16. Order Push to KDS | 8/8 | Completed | 2026-05-04 |
-| 17. Order Status Updates | 1/1 | Completed | 2026-05-04 |
-| 18. Ingredients & Stock Model | 4/4 | Complete | 2026-05-05 |
-| 19. Stock Management Frontend | 4/4 | Complete | 2026-05-05 |
-| 20. Automated Deductions | 1/1 | Complete | 2026-05-05 |
-| 21. Employees (HR) Model & API | 1/1 | Completed | 2026-05-05 |
-| 22. HR Frontend | 1/1 | Completed | 2026-05-05 |
-| 23. Reservations Model & API | 3/3 | Completed | 2026-05-06 |
-| 24. Reservations Client UI | 3/3 | Completed | 2026-05-06 |
-| 25. Reservations Admin UI | 3/3 | Completed | 2026-05-06 |
-| 26. QR Payment & Split Bill Logic | 2/2 | Completed | 2026-05-06 |
-| 27. Encaissement UI | 3/3 | Completed | 2026-05-07 |
-| 28. Celery Infrastructure | 1/1 | Completed | 2026-05-07 |
-| 29. AI Recommender System | 3/3 | Completed | 2026-05-08 |
-| 30. AI Sentiment Analysis | 3/3 | Completed | 2026-05-08 |
-| 31. Back-Office Dashboard KPIs | 2/2 | Complete | 2026-05-08 |
-| 32. Loyalty Program | 2/2 | Complete | 2026-05-08 |
-| 33. PWA Offline Capabilities | 2/2 | Complete | 2026-05-09 |
-| 34. KDS Advanced Operations | 2/2 | Complete | 2026-05-09 |
-| 35. Click & Collect E-commerce | 2/2 | Complete | 2026-05-09 |
-| 36. Staff Scheduling & Recruitment | 2/2 | Complete | 2026-05-09 |
-| 37. AI Weather-Aware Stock Forecasting | 2/2 | Complete | 2026-05-09 |
-| 38. Multilingual BERT Expansion | 1/1 | Complete | 2026-05-09 |
-| 39. Load Testing & Optimization | 1/1 | Complete | 2026-05-09 |
-| Total | 39/39 | Complete | 2026-05-09 |
- faire | — |
+| 1-39 | 96/96 | Complete | 2026-05-09 |
+| 40. Frontend Completion | 1/1 | Complete | 2026-05-12 |
+| 41. Premium Portal Refinement | 1/1 | Complete | 2026-05-14 |
+| 42. Tactical Compact Overhaul | 1/1 | Complete | 2026-05-14 |
+| 43. Stabilization & Fixes | 1/1 | Complete | 2026-05-22 |
+| 44. E2E Modernization | 0/1 | In Progress | — |
+| Total | 100/101 | 99% | 2026-05-22 | faire | — |
 /1 | à faire | — |
  faire | — |
  faire | — |

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { useConfigStore } from '../../store/configStore';
 import { api } from '../../api/axios';
-import { BrandWordmark } from '../branding/BrandWordmark';
 
 // One promise shared across all effect invocations (StrictMode, re-renders, etc.)
 // so the network request fires exactly once per page load.
@@ -54,11 +53,17 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
 
   if (isBootstrapping) {
     return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#fff8f5] p-6">
-        <div className="animate-in fade-in zoom-in duration-500 flex flex-col items-center">
-            <BrandWordmark className="mb-8 font-sans text-5xl font-bold tracking-tighter" style={{ color: '#8d4e1c' }} />
-            <div className="font-black tracking-[0.3em] text-[11px] uppercase" style={{ color: '#301400' }}>Initializing Gateway</div>
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 font-body">
+        <div className="animate-in fade-in zoom-in duration-1000 flex flex-col items-center">
+            <h1 className="font-serif text-5xl font-black text-primary italic tracking-tighter mb-8 leading-none">Tastify.</h1>
+            <div className="flex items-center gap-3">
+               <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+               <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Initializing Core</span>
+            </div>
         </div>
+        
+        {/* Structural noise texture */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")' }} />
       </div>
     );
   }

@@ -362,7 +362,7 @@ export const PlatPage: React.FC = () => {
                   <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">{editingPlat ? 'Edit Creation' : 'New Creation'}</h2>
                   <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mt-1">Culinary Record Registry</p>
                 </div>
-                <button onClick={() => setIsEditorOpen(false)} className="p-2 rounded hover:bg-surface-container-high transition-colors">
+                <button onClick={() => setIsEditorOpen(false)} data-testid="close-editor" className="p-2 rounded hover:bg-surface-container-high transition-colors">
                   <X className="w-6 h-6" />
                 </button>
               </div>

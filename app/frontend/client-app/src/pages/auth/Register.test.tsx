@@ -49,10 +49,10 @@ describe('Register page', () => {
     );
 
     const user = userEvent.setup();
-    await user.type(screen.getByPlaceholderText('USERNAME'), 'fresh_client');
-    await user.type(screen.getByPlaceholderText('EMAIL_ADDRESS'), 'fresh@tastify.ma');
+    await user.type(screen.getByPlaceholderText('NOM_DE_PLUME'), 'fresh_client');
+    await user.type(screen.getByPlaceholderText('GUEST@DOMAIN.COM'), 'fresh@tastify.ma');
     await user.type(screen.getByPlaceholderText('••••••••'), 'password123');
-    await user.click(screen.getByRole('button', { name: /Créer mon Compte/i }));
+    await user.click(screen.getByRole('button', { name: /Commit Registry/i }));
 
     await waitFor(() => {
       expect(postMock).toHaveBeenNthCalledWith(1, '/users/register/', {
@@ -86,10 +86,10 @@ describe('Register page', () => {
     );
 
     const user = userEvent.setup();
-    await user.type(screen.getByPlaceholderText('USERNAME'), 'duplicate');
-    await user.type(screen.getByPlaceholderText('EMAIL_ADDRESS'), 'duplicate@tastify.ma');
+    await user.type(screen.getByPlaceholderText('NOM_DE_PLUME'), 'duplicate');
+    await user.type(screen.getByPlaceholderText('GUEST@DOMAIN.COM'), 'duplicate@tastify.ma');
     await user.type(screen.getByPlaceholderText('••••••••'), 'password123');
-    await user.click(screen.getByRole('button', { name: /Créer mon Compte/i }));
+    await user.click(screen.getByRole('button', { name: /Commit Registry/i }));
 
     await waitFor(() => {
       expect(screen.getByText('Nom d’utilisateur déjà pris.')).toBeInTheDocument();

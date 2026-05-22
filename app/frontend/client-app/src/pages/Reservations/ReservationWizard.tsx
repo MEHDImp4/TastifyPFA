@@ -27,7 +27,7 @@ export const ReservationWizard: React.FC = () => {
   // Form state
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('19:00');
-  const [endTime, setEndTime] = useState('21:00');
+  const [endTime] = useState('21:00');
   const [guests, setGuests] = useState(2);
   const [availableTables, setAvailableTables] = useState<any[]>([]);
   const [selectedTable, setSelectedTable] = useState<number | null>(null);

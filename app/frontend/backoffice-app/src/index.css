@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Libre+Caslon+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;1,400&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap");
 @import "tailwindcss";
 
 @keyframes shimmer {
@@ -7,42 +7,43 @@
 }
 
 @theme {
-  /* Surface colors from DESIGN.md */
-  --color-background: #fff8f5;
-  --color-on-background: #301400;
-  --color-surface: #fff8f5;
-  --color-on-surface: #301400;
-  --color-on-surface-variant: #53443a;
-  --color-surface-dim: #dfd9d6;
-  --color-surface-bright: #fff8f5;
-  --color-surface-container: #f3ecea;
-  --color-surface-container-low: #f9f2ef;
-  --color-surface-container-high: #ede7e4;
-  --color-surface-container-highest: #e8e1de;
-  --color-surface-container-lowest: #ffffff;
-  --color-outline: #867369;
-  --color-outline-variant: #d8c2b6;
+  /* Dark Surface colors from new Stitch Design System */
+  --color-background: #151312;
+  --color-on-background: #e8e1de;
+  --color-surface: #151312;
+  --color-on-surface: #e8e1de;
+  --color-on-surface-variant: #d8c2b6;
+  --color-surface-dim: #151312;
+  --color-surface-bright: #3c3937;
+  --color-surface-container: #221f1e;
+  --color-surface-container-low: #1d1b1a;
+  --color-surface-container-high: #2c2928;
+  --color-surface-container-highest: #373432;
+  --color-surface-container-lowest: #100e0c;
+  --color-outline: #a08d81;
+  --color-outline-variant: #53443a;
 
-  --color-primary: #703704;
-  --color-on-primary: #ffffff;
+  /* Tactical Primary (Amber/Sienna) */
+  --color-primary: #ffb785;
+  --color-on-primary: #502400;
   --color-primary-container: #8d4e1c;
   --color-on-primary-container: #ffceaf;
 
-  --color-secondary: #8f4d17;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #fea76a;
-  --color-on-secondary-container: #773b03;
+  --color-secondary: #ffb785;
+  --color-on-secondary: #502400;
+  --color-secondary-container: #753901;
+  --color-on-secondary-container: #faa467;
 
   /* Status colors */
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
 
-  /* Typography fonts */
-  --font-sans: "Bricolage Grotesque", sans-serif;
-  --font-serif: "Libre Caslon Text", serif;
-  --font-body: "Bodoni Moda", serif;
+  /* Typography fonts - Updated */
+  --font-sans: "Rethink Sans", sans-serif;
+  --font-serif: "Public Sans", sans-serif;
+  --font-body: "Inclusive Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   /* Spacing Tokens */
@@ -69,12 +70,27 @@
   body {
     font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh];
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    /* Dark noise texture */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    @apply tracking-tight;
+    @apply tracking-tight font-bold;
+  }
+
+  /* Absolute Visibility Mandate: Hard Outlines and 100% Opacity */
+  .tonal-card {
+    @apply rounded-xl border border-outline-variant/30 bg-surface-container-low shadow-none;
+  }
+
+  .double-bezel {
+    @apply rounded-xl border border-outline/20 bg-surface-container relative overflow-hidden;
+  }
+
+  .double-bezel::before {
+    content: '';
+    @apply absolute inset-0 rounded-[inherit] border border-white/5 pointer-events-none z-0;
   }
 
   /* Typography scale utility-like classes */
@@ -134,31 +150,37 @@
 }
 
 @layer components {
-  /* Restored organic rounded cards but keeping them dense */
-  .tonal-card {
-    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest;
-    box-shadow: 0 12px 30px rgba(141, 78, 28, 0.05);
-  }
-
-  .double-bezel {
-    @apply rounded-2xl border border-outline-variant/70 bg-surface-container-lowest relative overflow-hidden;
-    box-shadow: 0 12px 30px rgba(141, 78, 28, 0.05);
-  }
-
-  .double-bezel::before {
-    content: '';
-    @apply absolute inset-0 rounded-[inherit] border border-white/40 pointer-events-none z-0;
-  }
-
+  /* Tactical Staff OS components */
   .glass {
-    @apply bg-surface-container-lowest/82 backdrop-blur-xl border border-outline-variant/60;
+    /* Absolute Visibility Rule: No blurs on critical surfaces. 
+       Switching to solid tonal layering. */
+    @apply bg-surface-container-high border border-outline/30;
   }
 
   .tonal-spot {
-    @apply bg-primary-container/20 text-on-primary-container;
+    @apply bg-primary/10 text-primary font-bold;
   }
 
   .editorial-kicker {
-    @apply font-sans text-[10px] font-semibold uppercase tracking-[0.15em] text-primary;
+    @apply font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-primary;
+  }
+
+  /* Blueprint Grid Pattern for Salle Map */
+  .blueprint-grid {
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(160, 141, 129, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(160, 141, 129, 0.1) 1px, transparent 1px);
+  }
+
+  @keyframes pulse-border-error {
+    0%, 100% { border-color: #ffb4ab; box-shadow: 0 0 0 0 rgba(255, 180, 171, 0.2); }
+    50% { border-color: #93000a; box-shadow: 0 0 0 8px rgba(255, 180, 171, 0); }
+  }
+
+  .animate-pulse-error {
+    animation: pulse-border-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
+
+

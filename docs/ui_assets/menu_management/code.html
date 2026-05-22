@@ -1,0 +1,311 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Staff OS - Menu Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@400&amp;family=Public+Sans:wght@600;700&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#f2bb96",
+                        "on-primary-fixed": "#301400",
+                        "surface-bright": "#3f3834",
+                        "on-tertiary-container": "#71492c",
+                        "on-background": "#ece0da",
+                        "surface-container-highest": "#3a332f",
+                        "on-tertiary": "#49280e",
+                        "surface-tint": "#ffb785",
+                        "on-error": "#690005",
+                        "surface-container-low": "#201a17",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "ink": "#100e0c",
+                        "primary-fixed-dim": "#ffb785",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#362f2b",
+                        "inverse-surface": "#ece0da",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary-fixed": "#301400",
+                        "surface-container-lowest": "#120d0a",
+                        "secondary-fixed": "#ffdcc6",
+                        "surface-dim": "#18120f",
+                        "on-surface": "#ece0da",
+                        "on-primary-container": "#79461d",
+                        "on-primary": "#502500",
+                        "error": "#ffb4ab",
+                        "aged-paper": "#fff8f5",
+                        "surface-variant": "#3a332f",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#efa978",
+                        "on-surface-variant": "#d7c3b7",
+                        "surface-container": "#241e1b",
+                        "primary": "#ffdcc6",
+                        "outline": "#9f8d83",
+                        "surface": "#18120f",
+                        "charcoal-bright": "#3c3937",
+                        "secondary-container": "#6e3d15",
+                        "surface-container-high": "#2f2925",
+                        "surface-main": "#151312",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "tertiary": "#ffdbc5",
+                        "on-tertiary-fixed": "#301400",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "amber": "#8f4d17",
+                        "inverse-primary": "#875128",
+                        "primary-fixed": "#ffdcc6",
+                        "outline-variant": "#52443b",
+                        "on-secondary": "#502500",
+                        "secondary": "#ffb785",
+                        "background": "#18120f",
+                        "secondary-fixed-dim": "#ffb785",
+                        "primary-container": "#ffb785"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "client-margin": "5vw",
+                        "client-gutter": "3rem",
+                        "unit-sm": "8px",
+                        "unit-md": "16px",
+                        "unit-xs": "4px",
+                        "staff-gutter": "1rem",
+                        "unit-lg": "24px",
+                        "staff-margin": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inclusive Sans"],
+                        "headline-md": ["Public Sans"],
+                        "display-lg-mobile": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"],
+                        "ui-label-bold": ["Rethink Sans"],
+                        "ui-button": ["Rethink Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-stroke-staff { font-variation-settings: 'wght' 300; } /* Simulating 1.5px stroke for Staff OS */
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden selection:bg-amber selection:text-on-primary-fixed">
+<!-- SideNavBar (JSON Component) -->
+<aside class="hidden md:flex flex-col h-full py-staff-margin gap-unit-sm bg-surface-container border-r border-aged-paper w-64 shrink-0 z-20">
+<div class="px-staff-margin mb-unit-lg flex items-center gap-unit-md">
+<div class="w-10 h-10 rounded bg-surface-bright border border-outline flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface icon-stroke-staff">person</span>
+</div>
+<div>
+<div class="font-ui-label-bold text-ui-label-bold text-on-surface">Backoffice</div>
+<div class="font-ui-data-dense text-ui-data-dense text-on-surface-variant opacity-70">Kitchen Command</div>
+</div>
+</div>
+<nav class="flex-1 px-unit-sm flex flex-col gap-unit-xs">
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="warehouse">warehouse</span>
+<span>Inventory</span>
+</a>
+<!-- Active State Navigation based on intent (Dishes/Menu matches Kitchen context closely) -->
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold bg-secondary-container text-on-secondary-container border-l-4 border-amber transition-all scale-[0.98] duration-100" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="restaurant">restaurant</span>
+<span>Kitchen</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="layers">layers</span>
+<span>Floor</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="group">group</span>
+<span>Staff</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="analytics">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="px-unit-sm mt-auto flex flex-col gap-unit-xs">
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded font-ui-label-bold text-ui-label-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="logout">logout</span>
+<span>Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- TopAppBar (JSON Component) -->
+<header class="flex justify-between items-center w-full px-staff-margin h-16 bg-surface border-b border-aged-paper shrink-0 z-10">
+<div class="flex items-center gap-staff-gutter">
+<!-- Search Bar on left -->
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-unit-sm top-1/2 -translate-y-1/2 text-on-surface-variant icon-stroke-staff text-sm">search</span>
+<input class="w-full bg-surface-container-highest border border-outline-variant rounded pl-8 pr-unit-sm py-unit-xs font-ui-data-dense text-ui-data-dense text-on-surface focus:outline-none focus:border-amber transition-colors placeholder:text-on-surface-variant/50" placeholder="Command Search..." type="text">
+</div>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-primary absolute left-1/2 -translate-x-1/2">
+                Staff OS
+            </div>
+<div class="flex items-center gap-unit-sm">
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined icon-stroke-staff" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas Area -->
+<main class="flex-1 overflow-y-auto bg-surface-main p-staff-margin flex flex-col gap-staff-margin">
+<!-- Page Header & Actions -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-unit-md">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">Menu Ledger</h1>
+<p class="font-ui-data-dense text-ui-data-dense text-on-surface-variant mt-1">Manage active dishes, pricing, and availability status.</p>
+</div>
+<div class="flex gap-unit-sm">
+<button class="flex items-center gap-unit-xs px-unit-md py-2 rounded bg-surface-bright border border-outline text-on-surface font-ui-button text-ui-button hover:bg-surface-container-highest transition-all shadow-[0_0_0_1px_rgba(255,248,245,0.05)_inset]">
+<span class="material-symbols-outlined icon-stroke-staff text-sm">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center gap-unit-xs px-unit-md py-2 rounded bg-amber text-on-primary-fixed font-ui-button text-ui-button hover:brightness-110 transition-all shadow-[0_0_0_1px_rgba(255,248,245,0.2)_inset]">
+<span class="material-symbols-outlined icon-stroke-staff text-sm">add</span>
+                        Add Dish
+                    </button>
+</div>
+</div>
+<!-- Tactical Data Grid (Bento Style) -->
+<div class="bg-surface border border-aged-paper rounded-lg overflow-hidden flex flex-col shadow-sm">
+<!-- Toolbar / Active Filters -->
+<div class="px-unit-md py-unit-sm border-b border-surface-container-highest bg-surface-container-low flex items-center gap-unit-sm">
+<div class="flex items-center gap-2 bg-surface-container-highest px-2 py-1 rounded text-on-surface font-ui-data-dense text-[11px] border border-outline-variant">
+<span>Category: Mains</span>
+<button class="hover:text-amber"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-highest px-2 py-1 rounded text-on-surface font-ui-data-dense text-[11px] border border-outline-variant">
+<span>Status: Available</span>
+<button class="hover:text-amber"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</div>
+<span class="font-ui-data-dense text-ui-data-dense text-on-surface-variant ml-auto text-xs">Showing 24 items</span>
+</div>
+<!-- Header Row -->
+<div class="grid grid-cols-[60px_2fr_1fr_1fr_100px_80px] gap-unit-md px-unit-md py-unit-sm bg-surface-container-lowest border-b border-surface-container-highest font-ui-label-bold text-[11px] text-on-surface-variant uppercase tracking-wider items-center">
+<div>Ref</div>
+<div>Dish &amp; Details</div>
+<div>Category</div>
+<div class="text-right">Price</div>
+<div class="text-center">Status</div>
+<div class="text-right">Action</div>
+</div>
+<!-- Data Rows -->
+<div class="flex flex-col divide-y divide-surface-container-highest">
+<!-- Row 1 -->
+<div class="grid grid-cols-[60px_2fr_1fr_1fr_100px_80px] gap-unit-md px-unit-md py-unit-sm hover:bg-surface-container-highest transition-colors items-center group cursor-pointer">
+<div class="w-10 h-10 bg-surface-container border border-outline-variant rounded overflow-hidden relative">
+<!-- Placeholder image using generated pattern instead of data URI -->
+<div class="absolute inset-0 bg-gradient-to-br from-surface-variant to-surface-container opacity-50"></div>
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant/30">image</span>
+</div>
+<div>
+<div class="font-ui-data-dense text-ui-data-dense text-on-surface">Wagyu Ribeye 8oz</div>
+<div class="font-ui-data-dense text-[11px] text-on-surface-variant mt-0.5 truncate max-w-xs">Truffle butter, charred asparagus, bone marrow jus.</div>
+</div>
+<div>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-surface-bright text-on-surface border border-outline-variant font-ui-data-dense text-[10px] uppercase">Mains</span>
+</div>
+<div class="text-right font-ui-data-dense text-ui-data-dense text-on-surface tracking-widest">$85.00</div>
+<div class="flex justify-center">
+<!-- Toggle Switch -->
+<button aria-label="Toggle availability" class="w-8 h-4 bg-amber rounded-full relative transition-colors focus:outline-none">
+<div class="w-3 h-3 bg-on-primary-fixed rounded-full absolute top-0.5 right-0.5 transition-transform"></div>
+</button>
+</div>
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 rounded text-on-surface-variant hover:text-amber hover:bg-surface-bright transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px] icon-stroke-staff">edit</span>
+</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-[60px_2fr_1fr_1fr_100px_80px] gap-unit-md px-unit-md py-unit-sm hover:bg-surface-container-highest transition-colors items-center group cursor-pointer">
+<div class="w-10 h-10 bg-surface-container border border-outline-variant rounded overflow-hidden relative">
+<div class="absolute inset-0 bg-gradient-to-bl from-surface-variant to-surface-container opacity-50"></div>
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant/30">image</span>
+</div>
+<div>
+<div class="font-ui-data-dense text-ui-data-dense text-on-surface">Pan-Seared Scallops</div>
+<div class="font-ui-data-dense text-[11px] text-on-surface-variant mt-0.5 truncate max-w-xs">Cauliflower purée, caper raisin emulsion, crispy pancetta.</div>
+</div>
+<div>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-surface-bright text-on-surface border border-outline-variant font-ui-data-dense text-[10px] uppercase">Mains</span>
+</div>
+<div class="text-right font-ui-data-dense text-ui-data-dense text-on-surface tracking-widest">$42.00</div>
+<div class="flex justify-center">
+<button aria-label="Toggle availability" class="w-8 h-4 bg-surface-container-high border border-outline-variant rounded-full relative transition-colors focus:outline-none">
+<div class="w-3 h-3 bg-on-surface-variant rounded-full absolute top-0.5 left-0.5 transition-transform"></div>
+</button>
+</div>
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 rounded text-on-surface-variant hover:text-amber hover:bg-surface-bright transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px] icon-stroke-staff">edit</span>
+</button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-[60px_2fr_1fr_1fr_100px_80px] gap-unit-md px-unit-md py-unit-sm hover:bg-surface-container-highest transition-colors items-center group cursor-pointer">
+<div class="w-10 h-10 bg-surface-container border border-outline-variant rounded overflow-hidden relative">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-variant to-surface-container opacity-50"></div>
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant/30">image</span>
+</div>
+<div>
+<div class="font-ui-data-dense text-ui-data-dense text-on-surface">Truffle Pappardelle</div>
+<div class="font-ui-data-dense text-[11px] text-on-surface-variant mt-0.5 truncate max-w-xs">Hand-cut pasta, wild mushroom ragù, shaved black truffle.</div>
+</div>
+<div>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-surface-bright text-on-surface border border-outline-variant font-ui-data-dense text-[10px] uppercase">Mains</span>
+</div>
+<div class="text-right font-ui-data-dense text-ui-data-dense text-on-surface tracking-widest">$36.00</div>
+<div class="flex justify-center">
+<button aria-label="Toggle availability" class="w-8 h-4 bg-amber rounded-full relative transition-colors focus:outline-none">
+<div class="w-3 h-3 bg-on-primary-fixed rounded-full absolute top-0.5 right-0.5 transition-transform"></div>
+</button>
+</div>
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 rounded text-on-surface-variant hover:text-amber hover:bg-surface-bright transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px] icon-stroke-staff">edit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

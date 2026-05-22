@@ -1,0 +1,181 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>L'ESSENCE - Client Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&amp;family=Public+Sans:wght@600;700&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#f2bb96",
+                        "on-primary-fixed": "#301400",
+                        "surface-bright": "#3f3834",
+                        "on-tertiary-container": "#71492c",
+                        "on-background": "#ece0da",
+                        "surface-container-highest": "#3a332f",
+                        "on-tertiary": "#49280e",
+                        "surface-tint": "#ffb785",
+                        "on-error": "#690005",
+                        "surface-container-low": "#201a17",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "ink": "#100e0c",
+                        "primary-fixed-dim": "#ffb785",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#362f2b",
+                        "inverse-surface": "#ece0da",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary-fixed": "#301400",
+                        "surface-container-lowest": "#120d0a",
+                        "secondary-fixed": "#ffdcc6",
+                        "surface-dim": "#18120f",
+                        "on-surface": "#ece0da",
+                        "on-primary-container": "#79461d",
+                        "on-primary": "#502500",
+                        "error": "#ffb4ab",
+                        "aged-paper": "#fff8f5",
+                        "surface-variant": "#3a332f",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#efa978",
+                        "on-surface-variant": "#d7c3b7",
+                        "surface-container": "#241e1b",
+                        "primary": "#ffdcc6",
+                        "outline": "#9f8d83",
+                        "surface": "#18120f",
+                        "charcoal-bright": "#3c3937",
+                        "secondary-container": "#6e3d15",
+                        "surface-container-high": "#2f2925",
+                        "surface-main": "#151312",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "tertiary": "#ffdbc5",
+                        "on-tertiary-fixed": "#301400",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "amber": "#8f4d17",
+                        "inverse-primary": "#875128",
+                        "primary-fixed": "#ffdcc6",
+                        "outline-variant": "#52443b",
+                        "on-secondary": "#502500",
+                        "secondary": "#ffb785",
+                        "background": "#18120f",
+                        "secondary-fixed-dim": "#ffb785",
+                        "primary-container": "#ffb785"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "client-margin": "5vw",
+                        "client-gutter": "3rem",
+                        "unit-sm": "8px",
+                        "unit-md": "16px",
+                        "unit-xs": "4px",
+                        "staff-gutter": "1rem",
+                        "unit-lg": "24px",
+                        "staff-margin": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inclusive Sans"],
+                        "headline-md": ["Public Sans"],
+                        "display-lg-mobile": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "body-md": ["Inclusive Sans"],
+                        "ui-data-dense": ["Rethink Sans"],
+                        "ui-label-bold": ["Rethink Sans"],
+                        "ui-button": ["Rethink Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--color-amber) !important;
+            box-shadow: none !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row antialiased">
+<!-- Left/Top Image Area -->
+<div class="relative w-full md:w-1/2 h-[353px] md:h-screen hidden md:block">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A macro, editorial shot of a finely plated Michelin-star dish resting on a textured slate surface. The lighting is moody and focused, highlighting the intricate details and vibrant colors of the micro-greens and sauces. The background is engulfed in deep, velvety darkness, creating an atmosphere of exclusivity and culinary perfection. The overall aesthetic perfectly matches a premium, high-contrast dark mode UI style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1X5px5O6rOvCXmfb_K0zXCZ0CS8kUM73kAG74RrAPtH85zEd2rV0YOPoS68_hsWQX4xFsO26O1x8F64tT1vHzx_9JqnJlm3dfK4w4jvTaH_6OuvaoWhnNZtNfTXVTLUaBZazmx5HgcISfCaXQID0wopQzEiJFVlCkEKoAOLjabB0jFBNPlbI-2aMeSs5AcfV9Li6OdKP5QPIxCLcrL1Eya1W-Y0ksBplNO2Sra6l-n3Ip2djNdFAzKiP2Lut8mS6HQJBrcu-liQ')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent md:bg-gradient-to-r md:from-transparent md:via-background/50 md:to-background"></div>
+<div class="absolute top-client-margin left-client-margin">
+<h1 class="font-headline-md text-headline-md tracking-tighter text-primary">L'ESSENCE</h1>
+</div>
+</div>
+<!-- Right/Bottom Content Area (Login Form) -->
+<div class="w-full md:w-1/2 flex flex-col justify-center px-client-margin py-unit-lg md:py-0 min-h-screen md:min-h-0 relative z-10 bg-background">
+<!-- Mobile Header -->
+<div class="md:hidden mb-unit-lg text-center">
+<h1 class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary">L'ESSENCE</h1>
+</div>
+<div class="max-w-md w-full mx-auto space-y-unit-lg">
+<div class="space-y-unit-sm text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-on-background">Welcome Back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Please authenticate to access your reservations and bespoke menus.</p>
+</div>
+<form class="space-y-unit-md mt-unit-lg">
+<div class="space-y-unit-sm">
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase tracking-widest" for="email">Email Address</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-none py-3 pl-10 pr-4 text-on-background font-body-md text-body-md placeholder-on-surface-variant/50 transition-colors duration-300" id="email" name="email" placeholder="client@example.com" required="" type="email">
+</div>
+</div>
+<div class="space-y-unit-sm">
+<div class="flex justify-between items-center">
+<label class="block font-ui-label-bold text-ui-label-bold text-on-surface-variant uppercase tracking-widest" for="password">Password</label>
+<a class="font-ui-button text-ui-button text-secondary hover:text-primary transition-colors duration-200" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-none py-3 pl-10 pr-4 text-on-background font-body-md text-body-md placeholder-on-surface-variant/50 transition-colors duration-300" id="password" name="password" placeholder="••••••••" required="" type="password">
+</div>
+</div>
+<div class="pt-unit-sm">
+<button class="w-full bg-primary text-ink font-ui-button text-ui-button py-4 px-6 uppercase tracking-widest hover:bg-secondary transition-all duration-300 transform active:scale-[0.98] border border-transparent" type="submit">
+                        Sign In
+                    </button>
+</div>
+</form>
+<div class="text-center pt-unit-md">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    Don't have an account? 
+                    <a class="text-primary font-ui-button text-ui-button uppercase hover:text-secondary transition-colors duration-200 ml-2" href="#">Sign up</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

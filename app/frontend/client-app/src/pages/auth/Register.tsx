@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
-import { Loader2, ArrowRight, UserPlus, Mail, Lock, ShieldAlert, ChevronLeft } from 'lucide-react';
+import { Loader2, ArrowRight, ShieldAlert, ChevronLeft, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -24,121 +25,114 @@ export const Register: React.FC = () => {
       const loginRes = await api.post('/users/login/', { username, password });
       const { access, role, username: resUsername } = loginRes.data;
       setAuth(access, role, resUsername);
+      toast.success('PROFILE_CREATED');
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Erreur lors de l’inscription.');
+      setError(err.response?.data?.detail || 'REGISTRATION_FAILURE');
+      toast.error('PROTOCOL_BREACH');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#111111] font-sans flex flex-col items-center justify-center p-6 selection:bg-[#8d4e1c]/10 selection:text-[#8d4e1c]">
+    <div className="min-h-[100dvh] bg-background font-body selection:bg-primary/20 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      
+      {/* Background Ambience */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1550966841-3ee5ad6ee1b7?auto=format&fit=crop&q=80&w=2000')] opacity-5 grayscale" />
+         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      </div>
+
       <Link 
         to="/" 
-        className="fixed top-6 left-6 group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#787774] hover:text-[#111111] transition-colors"
+        className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
-        <ChevronLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
-        Retour
+        <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
+        Return
       </Link>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-sm space-y-8"
+        initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+        className="relative z-10 w-full max-w-xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 md:p-16 shadow-2xl flex flex-col items-center gap-12"
       >
-        <div className="text-center space-y-3">
-          <h1 className="text-3xl font-serif italic tracking-tight">Inscription.</h1>
-          <p className="text-[10px] font-black text-[#787774] uppercase tracking-widest">Rejoignez-nous en quelques secondes.</p>
+        <div className="text-center space-y-4">
+          <div className="flex justify-center mb-6">
+             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary border border-primary/20">
+                <Sparkles className="w-6 h-6" strokeWidth={1.5} />
+             </div>
+          </div>
+          <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Join the Echelon.</h1>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] opacity-60 leading-relaxed">Initialize your gastronomic identity</p>
         </div>
 
         <AnimatePresence mode="wait">
           {error && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="p-3 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3"
-            >
-              <ShieldAlert className="w-4 h-4 text-red-500" strokeWidth={2.5} />
-              <p className="text-[10px] font-black text-red-600 uppercase tracking-wide">{error}</p>
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3">
+              <ShieldAlert className="w-4 h-4 text-error" />
+              <p className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-3">
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#787774] ml-1">Identifiant</label>
-              <div className="relative">
-                <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#787774]" />
+        <form onSubmit={handleSubmit} className="w-full space-y-10">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
+              <div className="relative group">
                 <input
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-[#F7F6F3] border border-transparent rounded-xl font-bold text-sm focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
-                  placeholder="USERNAME"
-                  disabled={isLoading}
+                  type="text" required value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
+                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
+                  placeholder="NOM_DE_PLUME"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#787774] ml-1">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#787774]" />
+            <div className="space-y-2">
+              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Registry Email</label>
+              <div className="relative group">
                 <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-[#F7F6F3] border border-transparent rounded-xl font-bold text-sm focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
-                  placeholder="EMAIL_ADDRESS"
-                  disabled={isLoading}
+                  type="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading}
+                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
+                  placeholder="GUEST@DOMAIN.COM"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#787774] ml-1">Mot de Passe</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#787774]" />
+            <div className="space-y-2">
+              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Session Passkey</label>
+              <div className="relative group">
                 <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-[#F7F6F3] border border-transparent rounded-xl font-bold text-sm focus:bg-white focus:border-[#EAEAEA] outline-none transition-all"
+                  type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
+                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   placeholder="••••••••"
-                  disabled={isLoading}
                 />
               </div>
             </div>
           </div>
 
           <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-4 bg-[#111111] text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#333333] transition-all active:scale-95 disabled:opacity-50"
+            type="submit" disabled={isLoading}
+            className="w-full h-20 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary relative overflow-hidden group"
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
-                <span>Créer mon Compte</span>
-                <ArrowRight className="w-4 h-4" strokeWidth={3} />
+                <span>Commit Registry</span>
+                <ArrowRight className="w-5 h-5 text-on-primary/60 group-hover:text-on-primary transition-colors" />
               </>
             )}
           </button>
         </form>
 
-        <div className="pt-6 border-t border-[#EAEAEA] text-center">
-          <p className="text-[10px] font-black text-[#787774] uppercase tracking-widest">
-            Déjà membre ? {' '}
-            <Link to="/login" className="text-[#111111] hover:underline ml-2">Se connecter</Link>
+        <div className="pt-6 border-t border-outline-variant/30 w-full text-center">
+          <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
+            Already a member? {' '}
+            <Link to="/login" className="text-primary hover:text-on-surface ml-2 transition-colors">Authenticate</Link>
           </p>
         </div>
       </motion.div>
     </div>
   );
 };
+

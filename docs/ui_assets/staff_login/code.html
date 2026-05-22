@@ -1,0 +1,173 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tastify Staff OS - Command Center Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&amp;family=Public+Sans:wght@400;600;700&amp;family=Rethink+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc6",
+                        "on-background": "#ece0da",
+                        "background": "#18120f",
+                        "tertiary-container": "#f2bb96",
+                        "surface-container-low": "#201a17",
+                        "on-tertiary-fixed-variant": "#643e22",
+                        "on-secondary-container": "#efa978",
+                        "inverse-primary": "#875128",
+                        "on-primary": "#502500",
+                        "on-tertiary": "#49280e",
+                        "on-surface-variant": "#d7c3b7",
+                        "outline": "#9f8d83",
+                        "on-tertiary-container": "#71492c",
+                        "on-secondary-fixed-variant": "#6b3a13",
+                        "surface-container-lowest": "#120d0a",
+                        "on-surface": "#ece0da",
+                        "on-secondary": "#502500",
+                        "surface-container-highest": "#3a332f",
+                        "charcoal-bright": "#3c3937",
+                        "surface-tint": "#ffb785",
+                        "surface-container-high": "#2f2925",
+                        "surface-bright": "#3f3834",
+                        "outline-variant": "#52443b",
+                        "surface-variant": "#3a332f",
+                        "aged-paper": "#fff8f5",
+                        "secondary": "#ffb785",
+                        "surface": "#18120f",
+                        "primary-fixed-dim": "#ffb785",
+                        "tertiary": "#ffdbc5",
+                        "ink": "#100e0c",
+                        "surface-dim": "#18120f",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#362f2b",
+                        "on-error-container": "#ffdad6",
+                        "amber": "#8f4d17",
+                        "on-error": "#690005",
+                        "on-primary-container": "#79461d",
+                        "primary-fixed": "#ffdcc6",
+                        "primary-container": "#ffb785",
+                        "tertiary-fixed-dim": "#f2bb96",
+                        "on-tertiary-fixed": "#301400",
+                        "secondary-fixed-dim": "#ffb785",
+                        "inverse-surface": "#ece0da",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-main": "#151312",
+                        "on-primary-fixed": "#301400",
+                        "secondary-container": "#6e3d15",
+                        "on-secondary-fixed": "#301400",
+                        "primary": "#ffdcc6",
+                        "on-primary-fixed-variant": "#6b3a13",
+                        "error": "#ffb4ab",
+                        "surface-container": "#241e1b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-lg": "24px",
+                        "unit-sm": "8px",
+                        "staff-margin": "1.5rem",
+                        "client-gutter": "3rem",
+                        "staff-gutter": "1rem",
+                        "unit-md": "16px",
+                        "client-margin": "5vw",
+                        "unit-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inclusive Sans", "sans-serif"],
+                        "headline-md": ["Public Sans", "sans-serif"],
+                        "ui-label-bold": ["Rethink Sans", "sans-serif"],
+                        "display-lg-mobile": ["Public Sans", "sans-serif"],
+                        "display-lg": ["Public Sans", "sans-serif"],
+                        "ui-button": ["Rethink Sans", "sans-serif"],
+                        "ui-data-dense": ["Rethink Sans", "sans-serif"],
+                        "body-md": ["Inclusive Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "ui-label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.25em", "fontWeight": "800" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "ui-button": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "ui-data-dense": ["13px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Tactical grid background effect */
+        .bg-tactical-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+        
+        /* Spring animation simulation for active states */
+        .active-spring:active {
+            transform: scale(0.98);
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col items-center justify-center bg-tactical-grid">
+<!-- Shared Component: HeadlineText (Adapted to Theme, Structure Preserved) -->
+<div class="relative flex w-full max-w-[480px] flex-col p-staff-margin">
+<div class="layout-container flex h-full grow flex-col bg-surface-container-low border border-outline-variant rounded-lg p-unit-lg shadow-2xl relative overflow-hidden">
+<!-- Subtle accent top bar -->
+<div class="absolute top-0 left-0 w-full h-1 bg-amber"></div>
+<div class="flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col w-full flex-1">
+<div class="flex justify-center mb-4">
+<span class="material-symbols-outlined text-amber text-4xl" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+</div>
+<h1 class="text-on-surface font-headline-md text-headline-md px-4 text-center pb-3">Tastify Staff OS</h1>
+<p class="text-on-surface-variant font-body-md text-body-md pb-6 pt-1 px-4 text-center border-b border-surface-container-high mb-6">Secure Command Center Login</p>
+<div class="flex w-full flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-on-surface font-ui-label-bold text-ui-label-bold pb-2 uppercase text-left">Email Address</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-on-surface focus:outline-none focus:ring-0 border border-outline-variant bg-surface-container-highest focus:border-amber h-12 placeholder:text-outline p-[15px] font-body-md text-body-md transition-colors duration-200" placeholder="staff@tastify.com" value="">
+</label>
+</div>
+<div class="flex w-full flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-on-surface font-ui-label-bold text-ui-label-bold pb-2 uppercase text-left">Password</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg group">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg rounded-r-none text-on-surface focus:outline-none focus:ring-0 border border-r-0 border-outline-variant bg-surface-container-highest focus:border-amber focus:border-r-[1px] h-12 placeholder:text-outline p-[15px] font-body-md text-body-md transition-colors duration-200" placeholder="••••••••" type="password" value="">
+<div class="text-outline flex border border-l-0 border-outline-variant bg-surface-container-highest items-center justify-center px-[15px] rounded-r-lg group-focus-within:border-amber transition-colors duration-200 cursor-pointer hover:text-on-surface" data-icon="EyeSlash" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">folder_eye</span>
+</div>
+</div>
+</label>
+</div>
+<div class="flex px-4 py-6 mt-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-amber text-aged-paper font-ui-button text-ui-button hover:bg-inverse-primary border border-transparent hover:border-aged-paper transition-all duration-300 active-spring shadow-[0_0_15px_rgba(143,77,23,0.3)]">
+<span class="truncate uppercase tracking-widest">Authenticate</span>
+<span class="material-symbols-outlined ml-2 text-sm">login</span>
+</button>
+</div>
+<div class="px-4 text-center mt-2">
+<a class="text-outline font-ui-data-dense text-ui-data-dense hover:text-amber transition-colors duration-200" href="#">System Recovery / Forgot Credentials?</a>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 text-center text-outline-variant font-ui-data-dense text-[11px] uppercase tracking-widest">
+<p>Authorized Personnel Only • End-to-End Encrypted</p>
+<p class="mt-1">Tastify Node v4.2.1</p>
+</div>
+</div>
+</body></html>
