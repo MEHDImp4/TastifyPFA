@@ -2395,6 +2395,19 @@ and this project adheres to semantic tracking for development.
 - Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.
 - Added `app/frontend/client-app/src/components/branding/BrandWordmark.tsx` as the single fallback source of truth, defaulting to `Tastify` when the establishment has not set a custom name.
 
+## [2026-05-23] - 00:22
+### Changed
+- Hardened `scripts/testing/run-suite.mjs` so Docker-driven E2E runs wait for the exposed frontend URL to answer before launching Playwright, with per-request timeouts to avoid hanging on half-open startup attempts.
+- Added explicit async error reporting in the suite entrypoint so future runner failures surface the real exception instead of stopping after `docker compose up`.
+
+### Validation
+- Reproduced the original failure mode where `client-app` Playwright exited because `http://127.0.0.1:3003` was not reachable immediately after Docker startup.
+- Verified the new readiness probe against `client-app` by bringing the Docker stack up, waiting for `http://127.0.0.1:3003`, and running `npm run test:e2e` successfully in `app/frontend/client-app`.
+- Verified the same readiness probe against `backoffice-app` by bringing the Docker stack up, waiting for `http://127.0.0.1:3000/login`, and running `npm run test:e2e` successfully in `app/frontend/backoffice-app`.
+
+### Commit
+- `pending`
+
 ### Validation
 - `npm run build` passed in `app/frontend/client-app`.
 
