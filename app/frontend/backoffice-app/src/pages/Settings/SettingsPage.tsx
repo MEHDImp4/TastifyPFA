@@ -77,7 +77,8 @@ export const SettingsPage: React.FC = () => {
       {/* Dynamic Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">System Configuration</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">System Settings</h1>
+          <h2 className="sr-only">Configuration</h2>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Global parameters and defaults</p>
         </div>
         <div className="flex gap-unit-md items-center">

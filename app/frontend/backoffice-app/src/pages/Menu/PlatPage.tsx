@@ -226,7 +226,8 @@ export const PlatPage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Menu Ledger</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Menu Operations</h1>
+          <h2 className="sr-only">Plats</h2>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Operational registry for active creations</p>
         </div>
         <div className="flex gap-unit-md items-center">

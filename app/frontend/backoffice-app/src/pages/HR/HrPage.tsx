@@ -56,7 +56,8 @@ export const HrPage: React.FC = () => {
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main sticky top-0 z-30 backdrop-blur-md bg-surface-main/90">
         <div>
           <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Human Resources</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Workforce management and operational status</p>
+          <h2 className="sr-only">Employés</h2>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Staff roster and credential management</p>
         </div>
         <div className="flex gap-unit-md items-center">
           <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">

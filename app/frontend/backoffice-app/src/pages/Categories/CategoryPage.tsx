@@ -126,6 +126,7 @@ export const CategoryPage: React.FC = () => {
       <div className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
           <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Category Management</h1>
+          <h2 className="sr-only">Catégories</h2>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Hierarchical menu structure configuration</p>
         </div>
         <div className="flex gap-unit-md items-center">

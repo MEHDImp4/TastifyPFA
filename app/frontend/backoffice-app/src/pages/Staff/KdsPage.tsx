@@ -133,6 +133,7 @@ export const KdsPage: React.FC = () => {
           </button>
           <div>
             <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Kitchen Display System</h1>
+            <h2 className="sr-only">Cuisine</h2>
             <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Evening Service • {currentTime.toLocaleTimeString('en-GB', { hour12: false })}</p>
           </div>
         </div>
@@ -180,7 +181,7 @@ export const KdsPage: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       className={`
-                        flex flex-col rounded-lg border overflow-hidden shadow-lg transition-all duration-300
+                        double-bezel flex flex-col rounded-lg border overflow-hidden shadow-lg transition-all duration-300
                         ${critical ? 'border-error ring-1 ring-error/20 bg-error/5 animate-pulse' : 'border-outline-variant bg-surface-container-low'}
                       `}
                     >
