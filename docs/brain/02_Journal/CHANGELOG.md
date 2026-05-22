@@ -1,3 +1,13 @@
+## [2026-05-22] - 01:44
+### Added
+- Enabled manual `workflow_dispatch` on `.github/workflows/backoffice-ci.yml` so the QA pipeline can be launched on demand from GitHub.
+
+### Changed
+- Decoupled the `frontend-quality` job from the root Docker-backed build by running SPA lint, typecheck, build, and unit steps directly in each frontend.
+- Fixed the client Playwright CI stack so it now boots `db`, `redis`, `backend`, and `client-app` together before running browser tests.
+- Expanded failure diagnostics for client E2E by dumping backend, database, Redis, and frontend logs together.
+- Updated `README.md` to document the actual CI job layout and trigger modes.
+
 ## [2026-05-22] - 01:12
 ### Added
 - Added a root `package.json` QA command hub plus `scripts/testing/run-suite.mjs` to orchestrate lint, typecheck, build, unit, integration, E2E, coverage, and Playwright UI runs.

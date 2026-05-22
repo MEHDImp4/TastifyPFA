@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - master
+  workflow_dispatch:
 
 concurrency:
   group: qa-ci-${{ github.workflow }}-${{ github.ref }}
@@ -42,16 +43,24 @@ jobs:
         run: npm ci
 
       - name: Lint both frontends
-        run: npm run lint
+        run: |
+          npm --prefix app/frontend/backoffice-app run lint
+          npm --prefix app/frontend/client-app run lint
 
       - name: Typecheck both frontends
-        run: npm run typecheck
+        run: |
+          npm --prefix app/frontend/backoffice-app run typecheck
+          npm --prefix app/frontend/client-app run typecheck
 
       - name: Build both frontends
-        run: npm run build
+        run: |
+          npm --prefix app/frontend/backoffice-app run build
+          npm --prefix app/frontend/client-app run build
 
       - name: Run frontend unit tests
-        run: npm run test:unit
+        run: |
+          npm --prefix app/frontend/backoffice-app run test:unit
+          npm --prefix app/frontend/client-app run test:unit
 
   backend-critical:
     name: Backend critical tests
@@ -115,8 +124,11 @@ jobs:
       - name: Create .env for CI
         run: cp .env.example .env
 
-      - name: Start client app
-        run: docker compose up -d --build client-app
+      - name: Start Docker services for client E2E
+        run: docker compose up -d --build db redis backend client-app
+
+      - name: Verify backend before browser flows
+        run: docker compose exec -T backend python manage.py check
 
       - name: Run Playwright suite
         working-directory: app/frontend/client-app
@@ -143,7 +155,7 @@ jobs:
 
       - name: Dump Docker logs on failure
         if: failure()
-        run: docker compose logs client-app
+        run: docker compose logs backend client-app db redis
 
       - name: Stop Docker services
         if: always()
