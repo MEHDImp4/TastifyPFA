@@ -134,6 +134,15 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 space-y-unit-xs">
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Restaurant Description</label>
+                  <textarea 
+                    name="description" value={config.description || ''} onChange={handleInputChange}
+                    className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="col-span-2 space-y-unit-xs">
                   <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Physical Address</label>
                   <textarea 
                     name="adresse" value={config.adresse || ''} onChange={handleInputChange}

@@ -248,6 +248,7 @@ export const PlatPage: React.FC = () => {
           </button>
           <button 
             onClick={() => handleOpenEditor()}
+            data-testid="plat-create-button"
             className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
           >
             <Plus className="w-4 h-4" /> Add Dish
@@ -279,6 +280,7 @@ export const PlatPage: React.FC = () => {
                   layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
+                  data-testid={`plat-card-${plat.id}`}
                   className="grid grid-cols-[64px_2fr_1fr_1fr_100px_80px] gap-unit-md px-6 py-4 items-center group hover:bg-surface-container-low transition-colors"
                 >
                   {/* Image/Ref */}
@@ -320,10 +322,10 @@ export const PlatPage: React.FC = () => {
 
                   {/* Actions */}
                   <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                    <button onClick={() => handleOpenEditor(plat)} className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
+                    <button data-testid={`plat-edit-${plat.id}`} onClick={() => handleOpenEditor(plat)} className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
                       <Edit2 className="w-4 h-4" />
                     </button>
-                    <button onClick={() => handleDelete(plat.id)} className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
+                    <button data-testid={`plat-delete-${plat.id}`} onClick={() => handleDelete(plat.id)} className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -370,6 +372,7 @@ export const PlatPage: React.FC = () => {
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Dish Nomenclature</label>
                       <input 
                         type="text" required value={nom} onChange={(e) => setNom(e.target.value)}
+                        data-testid="plat-name-input"
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase"
                       />
                    </div>
@@ -388,6 +391,7 @@ export const PlatPage: React.FC = () => {
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Value (DH)</label>
                       <input 
                         type="text" required value={prix} onChange={(e) => setPrix(e.target.value)}
+                        data-testid="plat-price-input"
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all tabular-nums"
                       />
                    </div>
@@ -397,6 +401,7 @@ export const PlatPage: React.FC = () => {
                   <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Culinary Narrative / Memo</label>
                   <textarea 
                     rows={3} value={description} onChange={(e) => setDescription(e.target.value)}
+                    data-testid="plat-description-input"
                     className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
                   />
                 </div>
@@ -408,6 +413,7 @@ export const PlatPage: React.FC = () => {
                         <Timer className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/30" />
                         <input 
                           type="number" value={temps} onChange={(e) => setTemps(parseInt(e.target.value) || 15)}
+                          data-testid="plat-time-input"
                           className="w-full h-12 pl-10 pr-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-primary outline-none transition-all"
                         />
                       </div>
@@ -460,6 +466,7 @@ export const PlatPage: React.FC = () => {
                 <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Cancel</button>
                 <button 
                   onClick={handleSubmit} disabled={isSaving}
+                  data-testid="plat-save-button"
                   className="flex-[2] h-14 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 border border-primary"
                 >
                   {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Commit Record</span></>}
