@@ -6,16 +6,15 @@ import { useAuthStore } from '../../store/authStore';
 import { useConfigStore } from '../../store/configStore';
 import { getBrandName } from '../../components/branding/brandName';
 import { 
-  Users, 
   ChevronRight, 
-  CheckCircle2, 
   Loader2,
   Table as TableIcon,
   ArrowLeft,
-  Info,
   ShieldCheck,
-  Plus
+  Plus,
+  Minus
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const ReservationWizard: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
@@ -24,7 +23,6 @@ export const ReservationWizard: React.FC = () => {
   const brandName = getBrandName(config?.nom);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Form state
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -40,7 +38,6 @@ export const ReservationWizard: React.FC = () => {
 
   const fetchAvailableTables = async () => {
     setIsLoading(true);
-    setError(null);
     try {
       const res = await reservationApi.getAvailableTables({
         date,
@@ -53,7 +50,7 @@ export const ReservationWizard: React.FC = () => {
       if (filtered.length > 0) setSelectedTable(filtered[0].id);
       nextStep();
     } catch (err) {
-      setError('Impossible de vérifier la disponibilité. Veuillez vérifier les horaires.');
+      toast.error('Availability check failed');
     } finally {
       setIsLoading(false);
     }
@@ -73,331 +70,177 @@ export const ReservationWizard: React.FC = () => {
       });
       nextStep();
     } catch (err: any) {
-        setError(err.response?.data?.detail || "Une erreur est survenue lors de la réservation.");
+        toast.error(err.response?.data?.detail || "Une erreur est survenue lors de la réservation.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const moodContent = {
-    1: {
-        src: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800',
-        text: '"Every ingredient tells a story of the soil."'
-    },
-    2: {
-        src: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=800',
-        text: '"Time is our most precious ingredient."'
-    },
-    3: {
-        src: 'https://images.unsplash.com/photo-1550966841-3ee5ad6ee1b7?auto=format&fit=crop&q=80&w=800',
-        text: '"The art of the table is a dialogue of the senses."'
-    },
-    4: {
-        src: 'https://images.unsplash.com/photo-1550966841-3ee5ad6ee1b7?auto=format&fit=crop&q=80&w=800',
-        text: '"Success in every orchestration."'
-    }
-  };
-
   if (!isAuthenticated && step < 4) {
       return (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-12 py-32 bg-background animate-in fade-in duration-1000">
-              <div className="relative">
-                  <div className="absolute inset-0 bg-primary opacity-5 blur-[60px] rounded-full scale-150" />
-                  <div className="relative w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center text-primary border-2 border-dashed border-primary/20">
-                    <Users className="w-12 h-12" strokeWidth={1} />
-                  </div>
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-12 py-32 bg-background font-body animate-in fade-in duration-1000">
+              <div className="max-w-md space-y-8">
+                <h2 className="text-display-lg text-4xl lg:text-6xl text-primary leading-tight italic">Reserved Access.</h2>
+                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed opacity-60">Authentication required to secure a placement in our high-speed reservation matrix.</p>
+                <button 
+                  onClick={() => navigate('/login')}
+                  className="px-16 py-6 bg-primary text-on-primary rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20"
+                >
+                    Authenticate
+                </button>
               </div>
-              <div className="max-w-md space-y-6">
-                <h2 className="text-display-lg text-4xl lg:text-5xl text-on-surface">Reserved Access.</h2>
-                <p className="text-lg font-body text-on-surface-variant leading-relaxed opacity-80">Please identify yourself to access our high-speed reservation matrix and secure your placement.</p>
-              </div>
-              <button 
-                onClick={() => navigate('/login')}
-                className="px-12 py-5 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.3em] transition-all hover:bg-primary cinematic-shadow active:scale-95"
-              >
-                  Authenticate Now
-              </button>
           </div>
       );
   }
 
   return (
-    <div className="flex-1 bg-background selection:bg-primary/10 selection:text-primary min-h-screen">
-      <main className="max-w-[1400px] mx-auto px-8 py-12 lg:py-24">
+    <div className="flex-1 bg-background font-body selection:bg-primary/20 overflow-y-auto custom-scrollbar">
+      <main className="max-w-4xl mx-auto px-6 py-12 md:py-24">
         
-        {/* Header Section */}
-        <div className="text-center mb-20 max-w-2xl mx-auto space-y-6">
-            <span className="editorial-kicker text-secondary">Reservation Wizard</span>
-            <h1 className="text-display-lg text-4xl md:text-7xl text-on-surface leading-none">Secure Your Table</h1>
-            <p className="text-xl font-body text-on-surface-variant italic opacity-60">An evening of sensory exploration awaits. Please guide us through your preferences.</p>
-        </div>
+        {/* Parchment Reservation Card */}
+        <div className="w-full bg-surface-container border border-outline-variant rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative">
+          
+          {/* Visual Header */}
+          <div className="h-48 w-full relative border-b border-outline-variant bg-surface-container-high overflow-hidden">
+             <img src="https://images.unsplash.com/photo-1550966841-3ee5ad6ee1b7?auto=format&fit=crop&q=80&w=1200" className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale" alt="Interior" />
+             <div className="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent opacity-80" />
+             <div className="absolute bottom-10 left-10">
+                <h2 className="font-serif text-3xl md:text-5xl font-black text-primary italic leading-none m-0">Book a Table</h2>
+                <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3">Reserve your culinary session</p>
+             </div>
+          </div>
 
-        {/* Stepper Indicator */}
-        <div className="w-full max-w-lg mx-auto flex justify-between items-center mb-24 relative">
-            <div className="absolute top-1/2 left-0 w-full h-[1px] bg-on-surface/5 -z-10"></div>
-            {[1, 2, 3].map(s => (
-                <div key={s} className="relative flex flex-col items-center gap-4">
-                    <div className={`
-                        w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-1000 font-black text-[12px]
-                        ${step >= s ? 'bg-on-surface border-on-surface text-background cinematic-shadow scale-110' : 'bg-background border-on-surface/10 text-on-surface-variant/40'}
-                    `}>
-                        {step > s ? <CheckCircle2 className="w-6 h-6" strokeWidth={2} /> : `0${s}`}
+          {/* Stepper Integration */}
+          <div className="px-10 py-6 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
+             <div className="flex items-center gap-4">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 1 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>1</div>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 1 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Session</span>
+             </div>
+             <div className="h-px w-12 bg-outline-variant/30" />
+             <div className="flex items-center gap-4">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 2 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>2</div>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 2 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Placement</span>
+             </div>
+             <div className="h-px w-12 bg-outline-variant/30" />
+             <div className="flex items-center gap-4">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 3 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>3</div>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 3 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Commit</span>
+             </div>
+          </div>
+
+          {/* Step Content */}
+          <div className="p-8 md:p-12">
+            <AnimatePresence mode="wait">
+              {step === 1 && (
+                <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12">
+                   {/* Guests */}
+                   <div className="p-8 bg-surface-container-lowest border border-outline-variant rounded-2xl flex items-center justify-between group hover:border-primary transition-all">
+                      <div>
+                         <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] mb-1">Identity Quota</h3>
+                         <p className="font-body text-[14px] text-on-surface-variant italic opacity-60">Verified guests for this placement</p>
+                      </div>
+                      <div className="flex items-center gap-6">
+                         <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Minus className="w-4 h-4" /></button>
+                         <span className="font-serif text-3xl font-black text-primary italic w-10 text-center">{guests}</span>
+                         <button onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Plus className="w-4 h-4" /></button>
+                      </div>
+                   </div>
+
+                   {/* Date & Time Grid */}
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Temporal Window</label>
+                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all uppercase" />
+                      </div>
+                      <div className="space-y-4">
+                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Arrival Pivot</label>
+                         <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
+                      </div>
+                   </div>
+
+                   <button 
+                     onClick={fetchAvailableTables} disabled={isLoading}
+                     className="w-full h-16 mt-8 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4"
+                   >
+                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Analyze Availability</span><ChevronRight className="w-5 h-5" /></>}
+                   </button>
+                </motion.div>
+              )}
+
+              {step === 2 && (
+                <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-10">
+                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                      {availableTables.map(t => (
+                        <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`p-8 rounded-3xl border-2 flex flex-col items-center gap-4 transition-all duration-500 ${selectedTable === t.id ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-lowest border-outline-variant/30 text-on-surface hover:border-primary'}`}>
+                           <TableIcon className={`w-8 h-8 ${selectedTable === t.id ? 'text-on-primary' : 'text-primary opacity-20'}`} />
+                           <div className="text-center">
+                              <span className="block font-serif text-xl font-black italic">Unit {t.numero}</span>
+                              <span className={`font-sans text-[9px] font-black uppercase tracking-widest ${selectedTable === t.id ? 'text-on-primary opacity-60' : 'opacity-40'}`}>{t.capacite} CAP</span>
+                           </div>
+                        </button>
+                      ))}
+                   </div>
+                   <div className="flex gap-4 pt-6">
+                      <button onClick={prevStep} className="flex-1 h-16 border border-outline-variant rounded-2xl font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
+                      <button onClick={nextStep} className="flex-[2] h-16 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">Confirm Placement</button>
+                   </div>
+                </motion.div>
+              )}
+
+              {step === 3 && (
+                <motion.div key="s3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-10">
+                   <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 space-y-8">
+                      <div className="grid grid-cols-2 gap-8 border-b border-outline-variant/20 pb-8">
+                         <div>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Temporal</p>
+                            <p className="font-serif text-xl text-on-surface italic">{new Date(date).toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'short' })} • {startTime}</p>
+                         </div>
+                         <div className="text-right">
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Covers</p>
+                            <p className="font-serif text-xl text-on-surface italic">{guests} Verified Identities</p>
+                         </div>
+                      </div>
+                      <div className="space-y-4">
+                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Specific Manifest Requirements</label>
+                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, architectural preferences..." className="w-full p-6 bg-surface-container border border-outline-variant rounded-xl font-body text-base italic text-on-surface focus:border-primary outline-none transition-all resize-none" rows={3} />
+                      </div>
+                   </div>
+                   <div className="flex gap-4 pt-6">
+                      <button onClick={prevStep} className="flex-1 h-16 border border-outline-variant rounded-2xl font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
+                      <button 
+                        onClick={handleFinish} disabled={isLoading}
+                        className="flex-[2] h-16 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4"
+                      >
+                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Commit to Registry</span><ShieldCheck className="w-5 h-5" /></>}
+                      </button>
+                   </div>
+                </motion.div>
+              )}
+
+              {step === 4 && (
+                 <motion.div key="s4" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12 space-y-10">
+                    <div className="relative inline-flex items-center justify-center">
+                       <div className="absolute inset-0 bg-primary/10 blur-[80px] rounded-full scale-150 animate-pulse" />
+                       <div className="relative w-32 h-32 rounded-3xl bg-surface-container-high border-2 border-primary/20 flex items-center justify-center text-primary shadow-2xl shadow-primary/10">
+                          <ShieldCheck className="w-16 h-16" strokeWidth={1} />
+                       </div>
                     </div>
-                </div>
-            ))}
-        </div>
-
-        {error && (
-            <motion.div 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-12 p-8 bg-error/5 border-2 border-error text-error text-[10px] font-black tracking-[0.3em] text-center uppercase cinematic-shadow rounded-3xl"
-            >
-                Protocol Breach: {error}
-            </motion.div>
-        )}
-
-        {/* Form Canvas */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            
-            {/* Left: Mood Anchor */}
-            <aside className="hidden lg:block lg:col-span-4 sticky top-32">
-                <AnimatePresence mode="wait">
-                    <motion.div 
-                        key={step}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.05 }}
-                        transition={{ duration: 0.8 }}
-                        className="space-y-10"
-                    >
-                        <div className="aspect-[3/4] rounded-3xl overflow-hidden border border-on-surface/5 cinematic-shadow grayscale-[0.2] hover:grayscale-0 transition-all duration-1000">
-                            <img src={moodContent[step as keyof typeof moodContent].src} className="w-full h-full object-cover" alt="Atmospheric" />
-                        </div>
-                        <p className="text-center font-body text-lg italic text-on-surface-variant opacity-60">{moodContent[step as keyof typeof moodContent].text}</p>
-                    </motion.div>
-                </AnimatePresence>
-            </aside>
-
-            {/* Right: Interactive Steps */}
-            <div className="lg:col-span-8 w-full">
-                <AnimatePresence mode="wait">
-                    {step === 1 && (
-                        <motion.section 
-                            key="step1"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="space-y-12"
-                        >
-                            <div className="editorial-card p-10 lg:p-16 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 blur-[100px] -mr-40 -mt-40" />
-                                
-                                <h2 className="text-display-lg text-3xl lg:text-5xl text-primary mb-12">Temporal Selection</h2>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-                                    <div className="space-y-4">
-                                        <label className="editorial-kicker opacity-40">Session Date</label>
-                                        <input 
-                                            type="date" 
-                                            value={date}
-                                            onChange={(e) => setDate(e.target.value)}
-                                            className="w-full px-8 py-6 bg-surface-container border border-on-surface/5 rounded-3xl text-on-surface font-black text-sm focus:outline-none focus:border-primary transition-all cinematic-shadow"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className="editorial-kicker opacity-40">Arrival Window</label>
-                                        <input 
-                                            type="time" 
-                                            value={startTime}
-                                            onChange={(e) => setStartTime(e.target.value)}
-                                            className="w-full px-8 py-6 bg-surface-container border border-on-surface/5 rounded-3xl text-on-surface font-black text-sm focus:outline-none focus:border-primary transition-all cinematic-shadow"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className="editorial-kicker opacity-40">Verified Identity Quota</label>
-                                        <div className="flex items-center gap-6 p-2 bg-surface-container rounded-3xl border border-on-surface/5">
-                                            <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-14 h-14 rounded-2xl bg-background border border-on-surface/5 flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
-                                                <Users className="w-5 h-5" strokeWidth={1.5} />
-                                            </button>
-                                            <span className="flex-1 text-center text-2xl font-serif italic text-on-surface">{guests}</span>
-                                            <button onClick={() => setGuests(Math.min(20, guests + 1))} className="w-14 h-14 rounded-2xl bg-background border border-on-surface/5 flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
-                                                <Plus className="w-5 h-5" strokeWidth={1.5} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className="editorial-kicker opacity-40">Estimated Duration</label>
-                                        <input 
-                                            type="time" 
-                                            value={endTime}
-                                            onChange={(e) => setEndTime(e.target.value)}
-                                            className="w-full px-8 py-6 bg-surface-container border border-on-surface/5 rounded-3xl text-on-surface font-black text-sm focus:outline-none focus:border-primary transition-all cinematic-shadow opacity-40"
-                                        />
-                                    </div>
-                                </div>
-
-                                <button 
-                                    onClick={fetchAvailableTables}
-                                    disabled={isLoading}
-                                    className="w-full py-7 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 disabled:opacity-50"
-                                >
-                                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-                                        <>
-                                            <span>Analyze Availability</span>
-                                            <ChevronRight className="w-6 h-6 text-primary" strokeWidth={2.5} />
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </motion.section>
-                    )}
-
-                    {step === 2 && (
-                        <motion.section 
-                            key="step2"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="space-y-12"
-                        >
-                            <div className="editorial-card p-10 lg:p-16 relative overflow-hidden">
-                                <h2 className="text-display-lg text-3xl lg:text-5xl text-primary mb-12 italic">Architectural Placement</h2>
-                                
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-12">
-                                    {availableTables.map(t => (
-                                        <button
-                                            key={t.id}
-                                            onClick={() => setSelectedTable(t.id)}
-                                            className={`
-                                                relative p-8 flex flex-col items-center justify-center gap-4 transition-all duration-700 rounded-[2rem] border-2
-                                                ${selectedTable === t.id ? 'bg-on-surface border-on-surface text-background cinematic-shadow scale-105 z-10' : 'bg-background border-on-surface/5 text-on-surface-variant hover:border-primary group'}
-                                            `}
-                                        >
-                                            <TableIcon strokeWidth={1} className={`w-10 h-10 transition-transform duration-1000 ${selectedTable === t.id ? 'scale-110 text-primary' : 'group-hover:scale-110 opacity-10'}`} />
-                                            <div className="text-center">
-                                                <span className="text-2xl font-serif italic block mb-1">Unit {t.numero}</span>
-                                                <span className={`text-[8px] uppercase font-black tracking-[0.3em] ${selectedTable === t.id ? 'text-primary' : 'opacity-30'}`}>{t.capacite} CAP</span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                <div className="flex gap-6">
-                                    <button onClick={prevStep} className="flex-1 py-6 bg-surface-container text-on-surface text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 rounded-2xl">
-                                        <ArrowLeft className="w-4 h-4" /> BACK
-                                    </button>
-                                    <button 
-                                        onClick={nextStep} 
-                                        className="flex-[2] py-6 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 rounded-2xl"
-                                    >
-                                        <span>Confirm Placement</span>
-                                        <ChevronRight className="w-6 h-6 text-primary" strokeWidth={2.5} />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.section>
-                    )}
-
-                    {step === 3 && (
-                        <motion.section 
-                            key="step3"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="space-y-12"
-                        >
-                            <div className="editorial-card p-10 lg:p-16 relative overflow-hidden">
-                                <h2 className="text-display-lg text-3xl lg:text-5xl text-primary mb-12">Final Validation</h2>
-                                
-                                <div className="space-y-12 mb-12">
-                                    <div className="grid grid-cols-2 gap-12 pb-12 border-b border-on-surface/5">
-                                        <div className="space-y-2">
-                                            <span className="editorial-kicker text-[8px] opacity-40">Date</span>
-                                            <p className="text-2xl font-serif italic">{new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <span className="editorial-kicker text-[8px] opacity-40">Window</span>
-                                            <p className="text-2xl font-serif italic">{startTime} — {endTime}</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <span className="editorial-kicker text-[8px] opacity-40">Coordinate</span>
-                                            <p className="text-2xl font-serif italic text-primary">Table Unit #{availableTables.find(t => t.id === selectedTable)?.numero}</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <span className="editorial-kicker text-[8px] opacity-40">Quotas</span>
-                                            <p className="text-2xl font-serif italic">{guests} Identities</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <label className="editorial-kicker text-[8px] opacity-40">Specific Manifest Requirements</label>
-                                        <textarea 
-                                            value={notes}
-                                            onChange={(e) => setNotes(e.target.value)}
-                                            placeholder="Allergies, anniversaries, or specific architectural placement preferences..."
-                                            className="w-full p-8 bg-surface-container border border-on-surface/5 rounded-[2rem] focus:outline-none focus:border-primary transition-all resize-none font-body text-lg italic cinematic-shadow"
-                                            rows={3}
-                                        />
-                                    </div>
-
-                                    <div className="p-8 bg-primary/5 rounded-3xl border border-primary/10 flex gap-6 items-start">
-                                        <Info className="w-6 h-6 text-primary shrink-0" />
-                                        <p className="text-[11px] font-body text-on-surface-variant italic leading-relaxed">Reservations are held for 15 minutes post-window arrival. For parties exceeding the verified identity quota, contact Private Dining directly.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-6">
-                                    <button onClick={prevStep} className="flex-1 py-6 bg-surface-container text-on-surface text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 rounded-2xl">
-                                        <ArrowLeft className="w-4 h-4" /> BACK
-                                    </button>
-                                    <button 
-                                        onClick={handleFinish}
-                                        disabled={isLoading}
-                                        className="flex-[2] py-6 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all hover:bg-primary cinematic-shadow active:scale-95 rounded-2xl"
-                                    >
-                                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-                                            <>
-                                                <span>Commit to Registry</span>
-                                                <ShieldCheck className="w-6 h-6 text-primary" strokeWidth={2} />
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.section>
-                    )}
-
-                    {step === 4 && (
-                        <motion.section 
-                            key="step4"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="text-center space-y-12 py-20"
-                        >
-                            <div className="relative inline-flex items-center justify-center">
-                                <div className="absolute inset-0 bg-primary opacity-10 blur-[100px] rounded-full scale-150 animate-pulse" />
-                                <div className="relative w-40 h-40 rounded-[3rem] bg-background border-2 border-primary/20 flex items-center justify-center text-primary cinematic-shadow">
-                                    <ShieldCheck className="w-20 h-20" strokeWidth={1} />
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-6">
-                                <h2 className="text-display-lg text-5xl md:text-8xl text-on-surface leading-none italic">Secured.</h2>
-                                <p className="text-2xl font-body text-on-surface-variant italic opacity-60 leading-relaxed max-w-xl mx-auto">Your placement at {brandName} has been formally committed. An exceptional gastronomic orchestration awaits.</p>
-                            </div>
-                            
-                            <div className="pt-10 flex flex-col sm:flex-row gap-6 justify-center">
-                                <button onClick={() => navigate('/')} className="px-16 py-6 bg-on-surface text-background text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-primary active:scale-95 cinematic-shadow rounded-2xl">Return Home</button>
-                                <button onClick={() => navigate('/account')} className="px-16 py-6 bg-surface-container text-on-surface text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-surface-container-highest active:scale-95 rounded-2xl border border-on-surface/5">View Echelon Pass</button>
-                            </div>
-                        </motion.section>
-                    )}
-                </AnimatePresence>
-            </div>
+                    <div className="space-y-4">
+                       <h2 className="font-serif text-4xl md:text-6xl font-black text-on-surface italic leading-none">Secured.</h2>
+                       <p className="font-body text-lg text-on-surface-variant italic opacity-60 max-w-lg mx-auto">Your placement at {brandName} has been formally committed. An exceptional gastronomic orchestration awaits.</p>
+                    </div>
+                    <div className="pt-8 flex flex-col sm:flex-row gap-6 justify-center">
+                       <button onClick={() => navigate('/')} className="px-12 py-5 bg-on-surface text-background rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-primary shadow-2xl">Return Home</button>
+                       <button onClick={() => navigate('/orders')} className="px-12 py-5 border border-outline-variant text-on-surface-variant rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-surface-container-highest">View Registry</button>
+                    </div>
+                 </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </main>
     </div>
   );
 };
+
 
