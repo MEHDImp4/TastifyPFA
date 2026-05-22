@@ -2406,7 +2406,7 @@ and this project adheres to semantic tracking for development.
 - Verified the same readiness probe against `backoffice-app` by bringing the Docker stack up, waiting for `http://127.0.0.1:3000/login`, and running `npm run test:e2e` successfully in `app/frontend/backoffice-app`.
 
 ### Commit
-- `pending`
+- `184d80b` `Stabilize Docker e2e suite readiness`
 
 ### Validation
 - `npm run build` passed in `app/frontend/client-app`.
