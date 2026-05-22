@@ -231,6 +231,7 @@ export const KdsPage: React.FC = () => {
                           </button>
                         ) : (
                           <button 
+                            aria-label={ticket.statut === 'EN_ATTENTE' ? 'Démarrer' : 'Prêt'}
                             className={`w-full h-12 rounded-md font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${critical ? 'bg-error text-on-error hover:bg-error/90 shadow-lg shadow-error/20' : 'bg-primary text-on-primary hover:bg-primary/90'}`}
                             onClick={() => {/* Column advance logic */}}
                           >
@@ -247,6 +248,7 @@ export const KdsPage: React.FC = () => {
                 <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant/10 py-20">
                   <PlayCircle className="w-16 h-16 stroke-[1]" />
                   <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4">Sector Clear</p>
+                  <span className="sr-only">Cuisine vide.</span>
                 </div>
               )}
             </div>

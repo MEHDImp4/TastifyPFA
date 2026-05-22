@@ -282,6 +282,7 @@ export const SallePage: React.FC = () => {
                           key={`table-${table.id}`}
                           onPointerDown={(e) => handlePointerDown(e, 'table', table.id)}
                           onClick={() => handleTableClick(table)}
+                          aria-label={`Table ${table.numero}`}
                           style={{
                               left: `${table.pos_x || 50}%`,
                               top: `${table.pos_y || 50}%`,
@@ -295,7 +296,9 @@ export const SallePage: React.FC = () => {
                               ${isBooth ? 'w-36 h-20 rounded' : isRound ? 'w-20 h-20 rounded-full' : 'w-24 h-24 rounded-lg'}
                           `}
                       >
-                          <span className={`font-sans text-lg font-black tracking-tighter ${isBooth ? 'text-2xl' : ''}`}>{table.numero}</span>
+                          <span className={`font-sans text-lg font-black tracking-tighter ${isBooth ? 'text-2xl' : ''}`}>
+                             <span className="sr-only">Table </span>{table.numero}
+                          </span>
                           {isEditMode && (
                               <div className="flex items-center gap-1 mt-0.5 opacity-60">
                                   <Users className="w-3 h-3" />

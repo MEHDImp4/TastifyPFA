@@ -5,14 +5,14 @@ import { salleApi } from '../../api/salle';
 import type { Categorie, Plat } from '../../types/menu';
 import type { Commande, Table } from '../../types/salle';
 import { 
-  ChevronLeft, 
+  ArrowLeft,
   Search, 
   Plus, 
-  ShoppingCart, 
   Loader2,
   Trash2,
-  ArrowRight,
-  Minus
+  Send,
+  Minus,
+  Edit2
 } from 'lucide-react';
 
 const MUTABLE_COMMANDE_PRIORITY: Record<Commande['statut'], number> = {
@@ -139,185 +139,188 @@ export const OrderingPage: React.FC = () => {
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
 
   return (
-    <div className="h-full flex flex-col -m-4 bg-background overflow-hidden selection:bg-primary/10 selection:text-primary">
-      {/* Precision Header */}
-      <header className="bg-surface border-b-2 border-on-surface p-4 px-6 flex items-end justify-between shrink-0">
-        <div className="flex items-center gap-6">
-          <button onClick={() => navigate('/salle')} className="w-12 h-12 flex items-center justify-center bg-surface-container border-2 border-on-surface hover:bg-on-surface hover:text-background transition-all active:scale-95">
-            <ChevronLeft className="w-6 h-6" strokeWidth={2.5}/>
+    <div className="h-screen w-screen flex flex-col bg-surface-main -m-staff-margin p-0 selection:bg-primary/20 selection:text-primary font-body overflow-hidden">
+      
+      {/* Contextual Top Bar */}
+      <header className="flex-none flex items-center justify-between border-b border-outline-variant bg-surface-main px-staff-margin py-unit-sm h-16">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate('/salle')} className="p-2 rounded hover:bg-surface-container-high transition-all text-on-surface-variant">
+            <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-display-lg text-3xl text-on-surface leading-none uppercase tracking-tight">Table #{table?.numero}</h2>
-            <div className="flex items-center gap-2 mt-2">
-                <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest border ${currentCommande ? 'bg-secondary text-on-secondary border-secondary animate-pulse' : 'bg-surface-container text-on-surface-variant border-on-surface/20'}`}>
-                    {currentCommande ? `ORDER ID-${currentCommande.id}` : 'NEW TRANSACTION'}
-                </span>
-                <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest px-2 py-0.5 bg-surface-container rounded border border-on-surface/10">{table?.capacite} SEATS</span>
-            </div>
+          <div className="font-serif text-xl font-black text-on-surface tracking-widest uppercase">
+             Table {table?.numero || '??'}
           </div>
+          <span className="bg-surface-container-high px-2 py-0.5 rounded font-sans text-[10px] font-black text-on-surface-variant ml-2 border border-outline-variant uppercase tracking-widest">
+            Party of {table?.capacite || 0}
+          </span>
         </div>
-        
-        <div className="flex gap-4">
-            <div className="relative w-80 group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary" strokeWidth={2.5}/>
-                <input 
-                    type="text"
-                    placeholder="LOOKUP DATA..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full bg-surface-container border-2 border-on-surface pl-12 pr-4 py-3 text-ui-data-dense font-black focus:shadow-[4px_4px_0px_#301400] outline-none transition-all placeholder:text-on-surface-variant/40 uppercase"
-                />
-            </div>
+        <div className="flex items-center gap-4">
+          <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary" />
+            <input 
+              type="text"
+              placeholder="SEARCH MENU..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-64 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/40"
+            />
+          </div>
         </div>
       </header>
 
-      <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* Left Section: 70% Product Selection */}
-        <section className="flex-[7] bg-background flex flex-col min-w-0 border-r-2 border-on-surface overflow-hidden">
-          
-          {/* Category Tabs */}
-          <nav className="flex px-6 py-4 gap-4 bg-surface-container-low border-b-2 border-on-surface overflow-x-auto custom-scrollbar shrink-0">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Panel: Menu Selection */}
+        <section className="flex-[7] h-full border-r border-outline-variant bg-surface-container-lowest flex flex-col min-w-0">
+          {/* Categories Horizontal Nav */}
+          <div className="flex-none flex overflow-x-auto border-b border-outline-variant bg-surface-container py-2 px-staff-gutter gap-2 custom-scrollbar">
             <button
                 onClick={() => setActiveCat(null)}
-                className={`
-                    px-6 py-2 border-2 text-ui-label-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-all active:scale-95
-                    ${activeCat === null ? 'bg-primary text-on-primary border-on-surface shadow-[4px_4px_0px_#301400]' : 'bg-surface-container border-transparent text-on-surface-variant hover:border-on-surface/20 hover:text-on-surface'}
-                `}
+                className={`px-4 py-2 rounded font-sans text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${activeCat === null ? 'bg-primary text-on-primary shadow-lg shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant hover:text-on-surface'}`}
             >
-                ALL CATEGORIES
+              All Items
             </button>
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`
-                    px-6 py-2 border-2 text-ui-label-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-all active:scale-95
-                    ${activeCat === cat.id ? 'bg-primary text-on-primary border-on-surface shadow-[4px_4px_0px_#301400]' : 'bg-surface-container border-transparent text-on-surface-variant hover:border-on-surface/20 hover:text-on-surface'}
-                `}
+                className={`px-4 py-2 rounded font-sans text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${activeCat === cat.id ? 'bg-primary text-on-primary shadow-lg shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant hover:text-on-surface'}`}
               >
                 {cat.nom}
               </button>
             ))}
-          </nav>
+          </div>
 
-          {/* Menu Grid */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-12">
+          {/* Menu Items Grid */}
+          <div className="flex-1 overflow-y-auto p-staff-margin grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-unit-md auto-rows-max custom-scrollbar">
             {filteredPlats.map(plat => (
               <button
                 key={plat.id}
                 onClick={() => addToCart(plat)}
-                className="group relative aspect-square bg-surface border-2 border-on-surface flex flex-col overflow-hidden transition-all hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#301400] active:translate-y-[2px] active:shadow-none text-left"
+                className={`
+                  group bg-surface-container border border-outline-variant rounded-lg p-unit-md text-left flex flex-col justify-between h-36 transition-all relative overflow-hidden
+                  hover:border-primary hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary active:scale-[0.98]
+                  ${!plat.est_disponible ? 'opacity-40 grayscale cursor-not-allowed' : ''}
+                `}
+                disabled={!plat.est_disponible}
               >
-                <div className="flex-1 w-full bg-surface-container relative">
-                    {plat.image ? (
-                        <img src={plat.image} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 opacity-90 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105" alt={plat.nom} />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center font-black text-6xl text-on-surface/10 font-serif italic">
-                        {plat.nom.charAt(0)}
-                        </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-body text-[15px] font-bold text-on-surface leading-tight line-clamp-2">{plat.nom}</span>
+                  <span className="font-sans text-[10px] font-black text-on-surface-variant/60 uppercase tracking-widest">
+                    {categories.find(c => c.id === plat.categorie)?.nom}
+                  </span>
                 </div>
-                <div className="absolute bottom-0 left-0 w-full p-4 flex justify-between items-end">
-                    <div className="flex-1 pr-2">
-                        <p className="font-ui-label-bold text-white text-[14px] leading-tight uppercase tracking-tight line-clamp-2">{plat.nom}</p>
-                    </div>
-                    <span className="font-ui-data-dense text-primary text-xl font-black">{plat.prix}</span>
+                <div className="flex items-end justify-between">
+                  <span className="font-sans text-[16px] font-black text-primary">{parseFloat(plat.prix).toFixed(0)} DH</span>
+                  <div className="size-6 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+                    <Plus className="w-3 h-3 text-on-surface group-hover:text-on-primary" />
+                  </div>
                 </div>
+                {!plat.est_disponible && (
+                   <span className="absolute top-2 right-2 px-2 py-0.5 bg-error text-on-error font-sans text-[9px] font-black uppercase tracking-tighter rounded">SOLD OUT</span>
+                )}
               </button>
             ))}
           </div>
         </section>
 
-        {/* Right Section: 30% Order Sidebar */}
-        <aside className="flex-[3] bg-surface flex flex-col min-w-[320px] shadow-[-8px_0_16px_rgba(0,0,0,0.05)] overflow-hidden">
-          <div className="p-6 border-b-2 border-on-surface bg-surface-container-high shrink-0">
-            <div className="flex items-center justify-between">
-                <h3 className="font-ui-label-bold text-[12px] font-black tracking-widest text-primary uppercase flex items-center gap-2">
-                    <ShoppingCart className="w-4 h-4" strokeWidth={2.5}/> CURRENT TICKET
-                </h3>
-                <span className="bg-background text-on-surface px-3 py-1 text-ui-data-dense font-black text-[10px] border border-on-surface/10 uppercase tracking-widest">
-                    {cart.length} ITEMS
-                </span>
+        {/* Right Panel: Active Ticket */}
+        <section className="flex-[3] h-full bg-surface-container-lowest flex flex-col min-w-[320px] shadow-2xl z-10">
+          {/* Ticket Header */}
+          <div className="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low h-16 shrink-0">
+            <span className="font-sans text-[12px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Active Ticket</span>
+            <div className="flex items-center gap-2 px-3 py-1 rounded bg-background border border-outline-variant/30">
+               <span className="font-sans text-[11px] font-bold text-primary tabular-nums">{cart.length}</span>
+               <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Items</span>
             </div>
           </div>
 
-          {/* Items List */}
-          <div className="flex-grow overflow-y-auto custom-scrollbar p-4 space-y-3">
+          {/* Ticket Items List */}
+          <div className="flex-1 overflow-y-auto bg-surface-container-lowest custom-scrollbar">
             {cart.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center gap-4 text-on-surface-variant opacity-20">
-                <div className="w-20 h-20 border-4 border-dashed border-on-surface flex items-center justify-center">
-                    <Plus className="w-8 h-8" strokeWidth={3}/>
-                </div>
-                <p className="text-ui-label-bold text-[11px] uppercase tracking-[0.3em] text-center px-8">Buffer Empty. Awaiting input.</p>
-              </div>
+               <div className="h-full flex flex-col items-center justify-center p-8 opacity-10">
+                  <Plus className="w-12 h-12 stroke-[0.5]" />
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em] mt-4 text-center">Ticket Buffer Empty</p>
+               </div>
             ) : (
-              cart.map(item => (
-                <div key={item.plat.id} className="p-3 bg-background border-2 border-on-surface flex flex-col gap-2 transition-all hover:shadow-[4px_4px_0px_#301400/20] animate-in slide-in-from-right-4">
+              cart.map((item, idx) => (
+                <div key={`${item.plat.id}-${idx}`} className="p-unit-md border-b border-outline-variant hover:bg-surface-container transition-colors group">
                   <div className="flex justify-between items-start">
-                    <div className="flex gap-3 flex-1 min-w-0 pr-2">
-                      <span className="font-ui-label-bold text-primary text-sm font-black">{item.quantite}x</span>
+                    <div className="flex gap-3 min-w-0 pr-2">
+                      <span className="font-sans text-[15px] font-black text-primary w-6 text-right tabular-nums">{item.quantite}x</span>
                       <div className="flex-1 min-w-0">
-                          <p className="font-ui-label-bold text-[12px] text-on-surface uppercase tracking-tight truncate">{item.plat.nom}</p>
-                          <p className="font-ui-data-dense text-[9px] text-on-surface-variant opacity-60 uppercase tracking-widest mt-0.5">{item.plat.prix} DH / EA</p>
+                        <p className="font-body text-[15px] font-bold text-on-surface truncate leading-tight uppercase tracking-tight">{item.plat.nom}</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <button onClick={() => updateQty(item.plat.id, -1)} className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="font-sans text-xs font-black text-on-surface tabular-nums">{item.quantite}</span>
+                          <button onClick={() => addToCart(item.plat)} className="p-1 rounded bg-surface-container-high border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2 shrink-0">
-                      <span className="font-ui-data-dense text-ui-data-dense font-black">{(parseFloat(item.plat.prix) * item.quantite).toFixed(2)}</span>
-                      <button onClick={() => removeFromCart(item.plat.id)} className="text-on-surface-variant/40 hover:text-error transition-colors p-1">
-                          <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5}/>
-                      </button>
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <span className="font-sans text-[14px] font-black text-on-surface tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="p-1.5 rounded hover:bg-surface-container-highest text-on-surface-variant">
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => removeFromCart(item.plat.id)} className="p-1.5 rounded hover:bg-error/10 text-error/40 hover:text-error">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center justify-between border-t border-on-surface/10 pt-2">
-                    <div className="flex items-center bg-surface-container border border-on-surface overflow-hidden">
-                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-8 h-8 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-r border-on-surface"><Minus className="w-3 h-3" /></button>
-                        <span className="text-ui-data-dense font-black text-sm w-10 text-center text-on-surface">{item.quantite}</span>
-                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-8 h-8 flex items-center justify-center hover:bg-on-surface hover:text-background transition-colors text-on-surface font-black border-l border-on-surface"><Plus className="w-3 h-3" /></button>
+                  {item.notes && (
+                    <div className="ml-9 mt-1.5 p-2 bg-primary/5 border-l-2 border-primary rounded-r">
+                      <p className="font-sans text-[10px] font-black text-primary uppercase tracking-widest leading-none">NOTE: {item.notes}</p>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))
             )}
           </div>
 
-          {/* Totals & Actions */}
-          <div className="p-6 bg-surface border-t-2 border-on-surface space-y-4 shrink-0">
+          {/* Ticket Footer / Summary */}
+          <div className="flex-none border-t border-outline-variant bg-surface-container-low p-6 flex flex-col gap-unit-md shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
             <div className="space-y-1">
-                <div className="flex justify-between font-ui-data-dense text-[11px] text-on-surface-variant uppercase tracking-widest font-black">
-                    <span>Subtotal</span>
-                    <span>{cartTotal.toFixed(2)} DH</span>
-                </div>
-                <div className="flex justify-between font-ui-data-dense text-[11px] text-on-surface-variant uppercase tracking-widest font-black opacity-60">
-                    <span>Tax & Svc</span>
-                    <span>INCL.</span>
-                </div>
-                <div className="flex justify-between font-ui-label-bold text-2xl text-on-surface pt-3 border-t-2 border-on-surface border-dashed mt-2">
-                    <span className="italic">TOTAL</span>
-                    <span className="font-black text-primary">{cartTotal.toFixed(2)}</span>
-                </div>
+              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">
+                <span>Subtotal</span>
+                <span className="tabular-nums">{cartTotal.toFixed(0)} DH</span>
+              </div>
+              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">
+                <span>Tax & Service</span>
+                <span>INCL.</span>
+              </div>
+            </div>
+            
+            <div className="flex justify-between items-center pt-3 border-t border-outline-variant border-dashed">
+              <span className="font-serif text-xl font-black text-on-surface italic tracking-tight">TOTAL</span>
+              <span className="font-sans text-2xl font-black text-primary tabular-nums">{cartTotal.toFixed(0)} DH</span>
             </div>
 
             <button 
-                onClick={handleSubmitOrder}
-                disabled={cart.length === 0 || isSubmitting}
-                className={`
-                    w-full py-5 text-[14px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-3 transition-all border-2 border-on-surface
-                    ${cart.length > 0 && !isSubmitting ? 'bg-primary-container text-on-primary-container shadow-[4px_4px_0px_#301400] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#301400] active:translate-y-[2px] active:shadow-none' : 'bg-surface-container text-on-surface/20 cursor-not-allowed'}
-                `}
+              onClick={handleSubmitOrder}
+              disabled={cart.length === 0 || isSubmitting}
+              aria-label="Envoyer"
+              className={`
+                w-full h-14 mt-2 rounded-md font-sans text-xs font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 border-2
+                ${cart.length > 0 && !isSubmitting ? 'bg-primary border-primary text-on-primary shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98]' : 'bg-transparent border-outline-variant text-on-surface-variant/20 cursor-not-allowed'}
+              `}
             >
-                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" strokeWidth={3}/> : (
-                    <>
-                        <span>Fire to Kitchen</span>
-                        <ArrowRight className="w-5 h-5" strokeWidth={2.5}/>
-                    </>
-                )}
+              {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" strokeWidth={3}/> : (
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>Send to Kitchen</span>
+                </>
+              )}
             </button>
           </div>
-        </aside>
+        </section>
       </div>
     </div>
   );
 };
+
 
