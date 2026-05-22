@@ -5,8 +5,6 @@ import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
 import { Loader2, ShieldAlert, ArrowRight, Compass, Activity, ShieldCheck, Lock } from 'lucide-react';
 
-import logoStaff from '../../assets/logo-staff.svg';
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -174,7 +172,7 @@ export const Login: React.FC = () => {
                       type="password"
                       data-testid="login-password"
                       value={password}
-                      onChange={(e) => setUsername(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       disabled={isLoading}
                       className="w-full bg-background px-4 py-3.5 text-ui-data-dense font-black text-on-surface outline-none border-2 border-on-surface focus:bg-white focus:shadow-[4px_4px_0px_#301400] transition-all duration-150 disabled:opacity-50 placeholder:text-on-surface-variant/30"

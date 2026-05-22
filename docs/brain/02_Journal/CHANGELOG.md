@@ -1,3 +1,21 @@
+## [2026-05-22] - 01:12
+### Added
+- Added a root `package.json` QA command hub plus `scripts/testing/run-suite.mjs` to orchestrate lint, typecheck, build, unit, integration, E2E, coverage, and Playwright UI runs.
+- Added targeted backend coverage for registration role hardening and establishment settings permissions/upload flows in `app/backend/apps/users/tests/test_register.py` and `app/backend/apps/configuration/tests/test_settings_api.py`.
+- Added focused frontend coverage with `Vitest` tests for client registration and backoffice configuration serialization, plus Playwright responsive/accessibility smoke checks for both SPAs.
+- Added `TESTING.md` to document the critical-path strategy, local commands, Docker-backed test database flow, and remaining gaps.
+
+### Changed
+- Expanded `.github/workflows/backoffice-ci.yml` into a repo-wide QA pipeline that runs frontend quality gates, backend critical tests, and both Playwright suites on pull requests.
+- Updated `README.md` and `docs/brain/00_Meta/FILE_MAP.md` to expose the new testing entrypoints and CI surface.
+- Hardened frontend validation by fixing pre-existing type/lint issues uncovered during test setup, including a broken backoffice login password binding and client branding/test typing regressions.
+
+### Validation
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test:unit`
+- `npm run build` completed for both frontend SPAs, then stopped at `docker compose build backend` because Docker Desktop was not running on this machine.
+
 ## [2026-05-19] - 13:30
 ### Changed
 - **Project-Wide UI Overhaul (Tactique Compacte)**: Transitioned from "Cinématographique Large" to "Tactique Compacte" (Staff OS) aesthetic across all interfaces for maximum density and perfect screen adaptation.

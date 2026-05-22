@@ -36,7 +36,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
     })();
 
     return () => { active = false; };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, logoutLocally, setAuth]);
 
   if (isBootstrapping) {
     return (

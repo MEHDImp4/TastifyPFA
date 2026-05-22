@@ -1,12 +1,6 @@
 import React from 'react';
 import { useConfigStore } from '../../store/configStore';
-
-export const DEFAULT_BRAND_NAME = 'Tastify';
-
-export const getBrandName = (name?: string | null) => {
-  const trimmed = name?.trim();
-  return trimmed || DEFAULT_BRAND_NAME;
-};
+import { getBrandName } from './brandName';
 
 interface BrandWordmarkProps {
   className?: string;

@@ -1,4 +1,4 @@
-name: Backoffice CI
+name: QA CI
 
 on:
   pull_request:
@@ -8,15 +8,53 @@ on:
       - master
 
 concurrency:
-  group: backoffice-ci-${{ github.workflow }}-${{ github.ref }}
+  group: qa-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  backend-smoke:
-    name: Backend smoke
+  frontend-quality:
+    name: Frontend quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Install backoffice dependencies
+        working-directory: app/frontend/backoffice-app
+        run: npm ci
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Lint both frontends
+        run: npm run lint
+
+      - name: Typecheck both frontends
+        run: npm run typecheck
+
+      - name: Build both frontends
+        run: npm run build
+
+      - name: Run frontend unit tests
+        run: npm run test:unit
+
+  backend-critical:
+    name: Backend critical tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -36,6 +74,9 @@ jobs:
       - name: Verify committed migrations
         run: docker compose exec -T backend python manage.py makemigrations --check --dry-run
 
+      - name: Run critical backend tests
+        run: docker compose exec -T backend python -m pytest apps/users/tests/test_auth.py apps/users/tests/test_register.py apps/configuration/tests/test_settings_api.py apps/paiements/tests/test_api.py
+
       - name: Dump backend logs on failure
         if: failure()
         run: docker compose logs backend
@@ -44,85 +85,13 @@ jobs:
         if: always()
         run: docker compose down --volumes --remove-orphans
 
-  backoffice-build:
-    name: Backoffice build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: app/frontend/backoffice-app/package-lock.json
-
-      - name: Install backoffice dependencies
-        working-directory: app/frontend/backoffice-app
-        run: npm ci
-
-      - name: Build backoffice
-        working-directory: app/frontend/backoffice-app
-        run: npm run build
-
-  backoffice-unit:
-    name: Backoffice unit tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: app/frontend/backoffice-app/package-lock.json
-
-      - name: Install backoffice dependencies
-        working-directory: app/frontend/backoffice-app
-        run: npm ci
-
-      - name: Run unit tests
-        working-directory: app/frontend/backoffice-app
-        run: npm run test:unit
-
-  client-build:
-    name: Client build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: app/frontend/client-app/package-lock.json
-
-      - name: Install client dependencies
-        working-directory: app/frontend/client-app
-        run: npm ci
-
-      - name: Build client
-        working-directory: app/frontend/client-app
-        run: npm run build
-
   client-e2e:
     name: Client Playwright E2E
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs:
-      - backend-smoke
-      - client-build
+      - frontend-quality
+      - backend-critical
 
     steps:
       - name: Checkout repository
@@ -185,8 +154,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs:
-      - backend-smoke
-      - backoffice-build
+      - frontend-quality
+      - backend-critical
 
     steps:
       - name: Checkout repository

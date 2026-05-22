@@ -14,8 +14,6 @@ import {
   Settings
 } from 'lucide-react';
 
-import logoStaff from '../assets/logo-staff.svg';
-
 interface SidebarProps {
   isDesktopCollapsed: boolean;
   isMobileOpen: boolean;

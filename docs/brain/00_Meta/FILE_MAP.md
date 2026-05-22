@@ -8,7 +8,7 @@
 tastify-pfa/
 ├── .github/
 │   └── workflows/
-│       └── backoffice-ci.yml      # PR/push CI: backend smoke, backoffice build, Playwright E2E
+│       └── backoffice-ci.yml      # PR/push CI: frontend quality, backend critical tests, Playwright E2E
 ├── app/
 │   ├── backend/                    # Django + Daphne + Channels
 │   │   ├── media/                  # User-uploaded content (images)
@@ -67,6 +67,8 @@ tastify-pfa/
 ├── scripts/
 │   ├── update_dashboard.py        # Dashboard synchronizer after every state shift
 │   └── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
+├── package.json                   # Root QA command hub (lint, typecheck, build, unit, integration, E2E)
+├── TESTING.md                     # Pragmatic test strategy, commands, and coverage map
 ├── docker-compose.yml             # Single root Compose configuration
 └── dashboard.html                 # Live project health dashboard
 ```

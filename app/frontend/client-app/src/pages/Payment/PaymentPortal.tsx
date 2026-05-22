@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useConfigStore } from '../../store/configStore';
-import { BrandWordmark, getBrandName } from '../../components/branding/BrandWordmark';
+import { BrandWordmark } from '../../components/branding/BrandWordmark';
+import { getBrandName } from '../../components/branding/brandName';
 import { 
   CreditCard, 
   Smartphone, 
