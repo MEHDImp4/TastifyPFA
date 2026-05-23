@@ -2395,6 +2395,17 @@ and this project adheres to semantic tracking for development.
 - Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.
 - Added `app/frontend/client-app/src/components/branding/BrandWordmark.tsx` as the single fallback source of truth, defaulting to `Tastify` when the establishment has not set a custom name.
 
+## [2026-05-23] - 01:21
+### Changed
+- Expanded `app/frontend/backoffice-app/tests/e2e/auth.public.spec.ts` with staff-role routing checks for seeded `SERVEUR` and `CUISINIER` accounts after login.
+- Added a backoffice login interaction scenario that verifies the password visibility toggle preserves the typed passkey state.
+
+### Validation
+- `npx playwright test tests/e2e/auth.public.spec.ts` passed in `app/frontend/backoffice-app` after starting the Docker stack and waiting for `http://127.0.0.1:3000/login`.
+
+### Commit
+- `pending`
+
 ## [2026-05-23] - 01:12
 ### Changed
 - Added new client e2e registration coverage in `app/frontend/client-app/tests/e2e/client.auth.spec.ts` for failed signup detail handling and successful register-then-login redirects.

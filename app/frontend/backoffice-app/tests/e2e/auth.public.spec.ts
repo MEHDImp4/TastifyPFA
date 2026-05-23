@@ -48,4 +48,41 @@ test.describe('public authentication flows', () => {
     await expect(page.getByText('SYSTEM_ERROR')).toBeVisible();
     await expect(page).toHaveURL(/\/login$/);
   });
+
+  test('routes seeded serveur users to the salle workspace after login', async ({ page }) => {
+    await page.goto('/login');
+    await page.getByTestId('login-username').fill('serveur_test');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    await expect(page.getByTestId('nav-salle')).toBeVisible();
+  });
+
+  test('routes seeded cuisinier users to the kds workspace after login', async ({ page }) => {
+    await page.goto('/login');
+    await page.getByTestId('login-username').fill('cuisinier_test');
+    await page.getByTestId('login-password').fill('password123');
+    await page.getByTestId('login-submit').click();
+
+    await expect(page).toHaveURL(/\/kds$/);
+    await expect(page.getByTestId('nav-kds')).toBeVisible();
+  });
+
+  test('toggles password visibility without losing the typed passkey', async ({ page }) => {
+    await page.goto('/login');
+    const passwordInput = page.getByTestId('login-password');
+    const toggleButton = page.locator('button[type="button"]').first();
+
+    await passwordInput.fill('password123');
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+
+    await toggleButton.click();
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+    await expect(passwordInput).toHaveValue('password123');
+
+    await toggleButton.click();
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+    await expect(passwordInput).toHaveValue('password123');
+  });
 });
