@@ -1,3 +1,15 @@
+## [2026-05-23] - 22:44
+### Fixed
+- Hardened `scripts/testing/run-suite.mjs` so the root Docker runners print actionable compose diagnostics on failure, preserve explicit frontend readiness checks, and run the backend critical pytest subset with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` instead of inheriting the dev MySQL settings from the backend container.
+- Restored backend critical-path API expectations by requiring authentication on `LogoutView`, resolving the singleton restaurant configuration through the detail route, and allowing the payment-session resolve endpoint to accept the token-backed POST shape already exercised by the critical suite.
+- Cleared the remaining root client E2E blocker by raising the login and registration submit CTA contrast on the public auth screens, which eliminates the last serious axe violation on `tests/e2e/client.a11y.spec.ts`.
+
+### Validation
+- `npm run test:integration`
+- `npm run test:e2e`
+- `npm run build` in `app/frontend/client-app`
+- `npm run build` in `app/frontend/backoffice-app`
+
 ## [2026-05-23] - 14:49
 ### Added
 - Added multipart menu media contract coverage in `app/backend/apps/menu/tests/test_api.py` and `app/backend/apps/menu/tests/test_plats_api.py` for category and plat image creation, replacement, clearing, permission enforcement, and serializer path normalization.

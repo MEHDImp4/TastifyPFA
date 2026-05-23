@@ -20,6 +20,9 @@ class RestaurantConfigurationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
+    def get_object(self):
+        return RestaurantConfiguration.get_solo()
+
     @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
     def public(self, request):
         instance = RestaurantConfiguration.get_solo()

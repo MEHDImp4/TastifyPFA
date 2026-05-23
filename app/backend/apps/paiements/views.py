@@ -36,9 +36,10 @@ class PaiementViewSet(viewsets.ModelViewSet):
             return [AllowAny()]  # Token check is done via HasValidPaymentToken or inside the action
         return [IsAuthenticated()]
 
-    @action(detail=False, methods=['get'], url_path='session/resolve')
+    @action(detail=False, methods=['get', 'post'], url_path='session/resolve')
     def resolve(self, request):
-        serializer = TokenResolveSerializer(data=request.query_params)
+        payload_source = request.query_params if request.method == 'GET' else request.data
+        serializer = TokenResolveSerializer(data=payload_source)
         serializer.is_valid(raise_exception=True)
         token = serializer.validated_data['token']
 

@@ -37,8 +37,8 @@ npm run test
 
 Notes:
 
-- `npm run test:integration` démarre `db`, `redis`, `backend`, exécute `manage.py check`, `makemigrations --check --dry-run`, puis le sous-ensemble `pytest` critique.
-- `npm run test:e2e` lance successivement les suites Playwright backoffice puis client avec la stack Docker nécessaire.
+- `npm run test:integration` démarre `db`, `redis`, `backend`, exécute `manage.py check`, `makemigrations --check --dry-run`, puis le sous-ensemble `pytest` critique en forçant `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` dans le conteneur backend.
+- `npm run test:e2e` lance successivement les suites Playwright backoffice puis client avec la stack Docker nécessaire, attend les URLs exposées, puis imprime `docker compose ps` et les logs des services concernés si une suite échoue.
 - `npm run test:e2e:ui` ouvre Playwright UI pour le backoffice par défaut. Pour le portail client: `PLAYWRIGHT_APP=client npm run test:e2e:ui`.
 - `npm run build`, `npm run test:integration`, `npm run test:e2e` et `npm run test` exigent Docker Desktop démarré, car le backend et la DB de test sont conteneurisés.
 
@@ -74,7 +74,7 @@ npm run test:coverage
 docker compose up -d --build db redis backend
 docker compose exec -T backend python manage.py check
 docker compose exec -T backend python manage.py makemigrations --check --dry-run
-docker compose exec -T backend python -m pytest apps/users/tests/test_auth.py apps/users/tests/test_register.py apps/configuration/tests/test_settings_api.py apps/paiements/tests/test_api.py
+docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest apps/users/tests/test_auth.py apps/users/tests/test_register.py apps/configuration/tests/test_settings_api.py apps/paiements/tests/test_api.py
 docker compose down --remove-orphans
 ```
 
@@ -82,6 +82,7 @@ docker compose down --remove-orphans
 
 - Le backend de test tourne dans Docker contre MySQL du `docker-compose.yml`.
 - `pytest.ini` utilise `tastify_backend.settings.test`.
+- Le conteneur backend démarre normalement sur les settings de dev; les commandes de test Docker qui doivent rester isolées du runtime MySQL forcent donc explicitement `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test`.
 - Les tests backend retenus pour la CI réutilisent la DB de test (`--reuse-db`) afin d’éviter des temps morts inutiles.
 - Si vous modifiez un modèle Django, exécutez aussi:
 
@@ -125,18 +126,15 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 
 ## Validation effectuée pour cette mise en place
 
-- `npm run lint` a passe depuis la racine
-- `npm run typecheck` a passe depuis la racine
-- `npm run test:unit` a passe depuis la racine
-- `npm run build` a valide les deux builds frontend, puis a ete bloque sur le build backend car Docker Desktop etait arrete sur cette machine
-- Les suites Docker-dependantes (`test:integration`, `test:e2e`) sont configurees et pretes pour CI/local avec Docker actif, mais n'ont pas pu etre executees dans cette session pour la meme raison
+- `npm run test:integration` a passe depuis la racine
+- `npm run test:e2e` a passe depuis la racine
+- `npm run build` a passe dans `app/frontend/client-app`
+- `npm run build` a passe dans `app/frontend/backoffice-app`
 
 ## Workflows restant à couvrir ou à renforcer
 
 - Reset password: non implémenté côté produit actuellement
 - Emails / notifications: aucune chaîne transactionnelle exploitable détectée
 - Dashboard analytics: quelques tests backend existent, mais il manque encore un smoke E2E dédié aux KPI
-- Upload média menu/catégories: la configuration/logo est couverte, pas encore les uploads catalogue
-- Paiement E2E complet depuis le portail public: le backend est couvert, pas encore le flux navigateur intégral
-- Responsive avancé des écrans staff denses: seulement un smoke public pour l’instant
+- Responsive avancé des écrans staff denses: seulement un smoke ciblé par rôle pour l’instant
 - Régression complète de tout `pytest`: le monorepo contient encore des modules legacy cassés hors périmètre de cette stratégie

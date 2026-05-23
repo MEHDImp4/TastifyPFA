@@ -136,7 +136,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         return response
 
 class LogoutView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = AuthMessageSerializer
 
     @extend_schema(responses={200: AuthMessageSerializer})

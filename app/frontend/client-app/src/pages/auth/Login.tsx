@@ -135,13 +135,13 @@ export const Login: React.FC = () => {
           <button
             type="submit" disabled={isLoading}
             data-testid="login-submit"
-            className="w-full h-20 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary relative overflow-hidden group"
+            className="w-full h-20 bg-primary-container text-on-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary-container relative overflow-hidden group"
           >
              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
                 <span>Secure Entry</span>
-                <Fingerprint className="w-5 h-5 text-on-primary group-hover:text-on-primary transition-colors" />
+                <Fingerprint className="w-5 h-5 text-on-background group-hover:text-on-background transition-colors" />
               </>
             )}
           </button>

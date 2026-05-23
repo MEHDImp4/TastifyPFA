@@ -25,6 +25,10 @@ function run(command, args, options = {}) {
   }
 }
 
+function dockerCompose(args, options = {}) {
+  run('docker', ['compose', ...args], options);
+}
+
 function npmPrefix(prefix, script, extraArgs = []) {
   run('npm', ['run', script, ...extraArgs], { cwd: path.resolve(repoRoot, prefix) });
 }
@@ -61,6 +65,7 @@ async function waitForHttp(url, options = {}) {
   const requestInit = options.requestInit ?? { redirect: 'manual' };
   const deadline = Date.now() + timeoutMs;
   let lastError = 'No response received yet.';
+  let lastStatus = null;
 
   console.log(`Waiting for ${url}...`);
 
@@ -74,6 +79,7 @@ async function waitForHttp(url, options = {}) {
         console.log(`Ready: ${url} (${response.status})`);
         return;
       }
+      lastStatus = response.status;
       lastError = `Unexpected status ${response.status}`;
     } catch (error) {
       lastError = error instanceof Error ? error.message : String(error);
@@ -82,16 +88,35 @@ async function waitForHttp(url, options = {}) {
     await sleep(intervalMs);
   }
 
-  throw new Error(`Timed out waiting for ${url}. Last error: ${lastError}`);
+  const statusSummary = lastStatus === null ? 'no HTTP status observed' : `last status ${lastStatus}`;
+  throw new Error(`Timed out waiting for ${url}. Observed ${statusSummary}. Last error: ${lastError}`);
+}
+
+function printDockerDiagnostics(services = []) {
+  try {
+    dockerCompose(['ps']);
+  } catch {}
+
+  if (services.length === 0) {
+    return;
+  }
+
+  try {
+    dockerCompose(['logs', '--tail=200', ...services]);
+  } catch {}
 }
 
 async function withDockerStack(services, callback) {
   ensureDockerAvailable();
-  run('docker', ['compose', 'up', '-d', '--build', ...services]);
+  dockerCompose(['up', '-d', '--build', ...services]);
   try {
     await callback();
+  } catch (error) {
+    console.error(`Docker stack callback failed for services: ${services.join(', ')}`);
+    printDockerDiagnostics(services);
+    throw error;
   } finally {
-    run('docker', ['compose', 'down', '--remove-orphans']);
+    dockerCompose(['down', '--remove-orphans']);
   }
 }
 
@@ -123,9 +148,19 @@ const suites = {
   },
   async integration() {
     await withDockerStack(['db', 'redis', 'backend'], async () => {
-      run('docker', ['compose', 'exec', '-T', 'backend', 'python', 'manage.py', 'check']);
-      run('docker', ['compose', 'exec', '-T', 'backend', 'python', 'manage.py', 'makemigrations', '--check', '--dry-run']);
-      run('docker', ['compose', 'exec', '-T', 'backend', 'python', '-m', 'pytest', ...backendCriticalTests]);
+      dockerCompose(['exec', '-T', 'backend', 'python', 'manage.py', 'check']);
+      dockerCompose(['exec', '-T', 'backend', 'python', 'manage.py', 'makemigrations', '--check', '--dry-run']);
+      dockerCompose([
+        'exec',
+        '-T',
+        '-e',
+        'DJANGO_SETTINGS_MODULE=tastify_backend.settings.test',
+        'backend',
+        'python',
+        '-m',
+        'pytest',
+        ...backendCriticalTests,
+      ]);
     });
   },
   async e2e() {
