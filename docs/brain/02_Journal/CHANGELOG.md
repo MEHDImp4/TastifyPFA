@@ -1,3 +1,25 @@
+## [2026-05-23] - 14:49
+### Added
+- Added multipart menu media contract coverage in `app/backend/apps/menu/tests/test_api.py` and `app/backend/apps/menu/tests/test_plats_api.py` for category and plat image creation, replacement, clearing, permission enforcement, and serializer path normalization.
+- Added manager Playwright coverage in `app/frontend/backoffice-app/tests/e2e/backoffice.gerant.spec.ts` for category and plat image uploads, image replacement, and failure-path draft recovery.
+- Added client catalog rendering coverage in `app/frontend/client-app/tests/e2e/client.menu.spec.ts` to verify image-backed dishes render safely in both the menu grid and the detail modal.
+
+### Changed
+- Exposed stable upload and preview hooks in `app/frontend/backoffice-app/src/pages/Categories/CategoryPage.tsx` and `app/frontend/backoffice-app/src/pages/Menu/PlatPage.tsx` so media-specific Playwright assertions can validate saved and draft image state without relying on brittle selectors.
+
+### Validation
+- `docker compose exec -T backend python -m pytest apps/menu/tests/test_api.py apps/menu/tests/test_plats_api.py` is currently blocked by the Docker test database bootstrap: MySQL rejects creation of `test_tastify_db` for `tastify_user` with `Access denied for user 'tastify_user'@'%' to database 'test_tastify_db'`.
+- `npm run test:e2e -- --project=gerant-chromium tests/e2e/backoffice.gerant.spec.ts -g "uploaded image|stale thumbnail|image draft"` passed in `app/frontend/backoffice-app`.
+- `npm run test:e2e -- --project=gerant-chromium tests/e2e/backoffice.gerant.spec.ts -g "replaces an existing plat image"` passed in `app/frontend/backoffice-app`.
+- `npm run test:e2e -- --project=chromium tests/e2e/client.menu.spec.ts -g "image-backed dishes safely"` passed in `app/frontend/client-app`.
+- `npm run build` passed in `app/frontend/backoffice-app`.
+- `npm run build` passed in `app/frontend/client-app`.
+- `docker compose exec -T backend python manage.py makemigrations --check --dry-run` passed with `No changes detected`.
+- Root `npm run test:e2e` still exits during the Docker runner readiness phase after `Waiting for http://127.0.0.1:3000/login...`, even though the backoffice container serves that URL immediately afterward; the new menu media scenarios themselves pass in targeted runs.
+
+### Commit
+- `b2a3096` `Add menu media contract coverage`
+
 ## [2026-05-23] - 14:24
 ### Added
 - Added `backoffice.quality.spec.ts` as a dedicated authenticated quality layer for manager, serveur, and cuisinier accessibility, responsive-shell, and workflow-resilience coverage.

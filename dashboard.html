@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 14:26:38<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 14:50:10<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1151,6 +1151,71 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added multipart menu media contract coverage in `app/backend/apps/menu/tests/test_api.py` and `app/backend/apps/menu/tests/test_plats_api.py` for category and plat image creation, replacement, clearing, permission enforcement, and serializer path normalization.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added manager Playwright coverage in `app/frontend/backoffice-app/tests/e2e/backoffice.gerant.spec.ts` for category and plat image uploads, image replacement, and failure-path draft recovery.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added client catalog rendering coverage in `app/frontend/client-app/tests/e2e/client.menu.spec.ts` to verify image-backed dishes render safely in both the menu grid and the detail modal.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Exposed stable upload and preview hooks in `app/frontend/backoffice-app/src/pages/Categories/CategoryPage.tsx` and `app/frontend/backoffice-app/src/pages/Menu/PlatPage.tsx` so media-specific Playwright assertions can validate saved and draft image state without relying on brittle selectors.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python -m pytest apps/menu/tests/test_api.py apps/menu/tests/test_plats_api.py` is currently blocked by the Docker test database bootstrap: MySQL rejects creation of `test_tastify_db` for `tastify_user` with `Access denied for user 'tastify_user'@'%' to database 'test_tastify_db'`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium tests/e2e/backoffice.gerant.spec.ts -g "uploaded image|stale thumbnail|image draft"` passed in `app/frontend/backoffice-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium tests/e2e/backoffice.gerant.spec.ts -g "replaces an existing plat image"` passed in `app/frontend/backoffice-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=chromium tests/e2e/client.menu.spec.ts -g "image-backed dishes safely"` passed in `app/frontend/client-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/backoffice-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` passed in `app/frontend/client-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker compose exec -T backend python manage.py makemigrations --check --dry-run` passed with `No changes detected`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Root `npm run test:e2e` still exits during the Docker runner readiness phase after `Waiting for http://127.0.0.1:3000/login...`, even though the backoffice container serves that URL immediately afterward; the new menu media scenarios themselves pass in targeted runs.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:49</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `b2a3096` `Add menu media contract coverage`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `backoffice.quality.spec.ts` as a dedicated authenticated quality layer for manager, serveur, and cuisinier accessibility, responsive-shell, and workflow-resilience coverage.</p>
                             </li>
@@ -1158,71 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Wired the backoffice Playwright projects to execute the shared quality spec alongside the role-specific suites.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Improved backoffice shell and page accessibility with explicit logout labeling, labeled settings controls, stronger low-contrast helper text, and accessible reservation action buttons.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Tightened an existing serveur reservation-failure assertion so it remains stable with the newly labeled cancel actions instead of relying on a brittle substring count.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium --project=serveur-chromium tests/e2e/backoffice.quality.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium tests/e2e/backoffice.quality.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "keeps reservation actions stable when confirm and cancel fail"`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `6bcbbe4` `Add backoffice quality e2e coverage`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `client.quality.spec.ts` to cover client accessibility, narrow-viewport usability, guest shell navigation, offline recovery, and 404/system-page behavior.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Hardened client accessibility semantics across auth, checkout, account, loyalty, menu, reservations, payment, and public-shell surfaces with stable labels for icon controls, form fields, and mobile navigation.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Stabilized client cart persistence on refresh by seeding the cart store from persisted browser state so checkout remains usable after hard reloads.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Tightened existing client Playwright selectors to align with the improved accessible names for logout and payment split controls.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=chromium tests/e2e/client.quality.spec.ts`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
