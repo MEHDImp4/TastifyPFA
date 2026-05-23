@@ -35,7 +35,7 @@ export default defineConfig({
     {
       name: 'gerant-chromium',
       dependencies: ['setup'],
-      testMatch: /.*\.gerant\.spec\.ts/,
+      testMatch: [/.*\.gerant\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
         storageState: './tests/e2e/.auth/gerant.json',
@@ -44,7 +44,7 @@ export default defineConfig({
     {
       name: 'serveur-chromium',
       dependencies: ['setup'],
-      testMatch: /.*\.serveur\.spec\.ts/,
+      testMatch: [/.*\.serveur\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
         storageState: './tests/e2e/.auth/serveur.json',
@@ -53,7 +53,7 @@ export default defineConfig({
     {
       name: 'cuisinier-chromium',
       dependencies: ['setup'],
-      testMatch: /.*\.cuisinier\.spec\.ts/,
+      testMatch: [/.*\.cuisinier\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
         storageState: './tests/e2e/.auth/cuisinier.json',

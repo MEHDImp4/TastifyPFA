@@ -414,9 +414,13 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByText('Sara Bennani')).toBeVisible();
     await expect(page.getByRole('button', { name: 'CONFIRM', exact: true })).toHaveCount(1);
 
-    await page.getByRole('button', { name: 'CANCEL BOOKING' }).last().click();
+    const confirmedBookingCancelButton = page.getByRole('button', {
+      name: /^CANCEL BOOKING$/,
+    });
+
+    await confirmedBookingCancelButton.click();
     await expect(page.getByText('Omar Idrissi')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'CANCEL BOOKING' })).toHaveCount(1);
+    await expect(confirmedBookingCancelButton).toHaveCount(1);
   });
 
   test('filters reservations by client search and cancelled status', async ({ page }) => {

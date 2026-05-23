@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 13:46:09<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 14:25:13<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1151,6 +1151,51 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `backoffice.quality.spec.ts` as a dedicated authenticated quality layer for manager, serveur, and cuisinier accessibility, responsive-shell, and workflow-resilience coverage.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Wired the backoffice Playwright projects to execute the shared quality spec alongside the role-specific suites.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Improved backoffice shell and page accessibility with explicit logout labeling, labeled settings controls, stronger low-contrast helper text, and accessible reservation action buttons.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Tightened an existing serveur reservation-failure assertion so it remains stable with the newly labeled cancel actions instead of relying on a brittle substring count.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium --project=serveur-chromium tests/e2e/backoffice.quality.spec.ts`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=cuisinier-chromium tests/e2e/backoffice.quality.spec.ts`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "keeps reservation actions stable when confirm and cancel fail"`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 14:24</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `client.quality.spec.ts` to cover client accessibility, narrow-viewport usability, guest shell navigation, offline recovery, and 404/system-page behavior.</p>
                             </li>
@@ -1178,51 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=chromium tests/e2e/client.account-loyalty.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=chromium tests/e2e/client.contact-payment.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 13:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded cross-app Playwright reliability coverage across the client and backoffice suites with request-payload assertions, refresh persistence checks, and stale-session fallback scenarios.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added reusable client authenticated storage-state variants for valid, stale, and partial session bootstrapping in the E2E fixture layer.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added deterministic client reliability scenarios for reservation retry recovery, exact checkout payload submission, duplicate-submit protection, and payment-mode contract assertions across full, split, and itemized flows.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added backoffice reliability scenarios for stale and partial auth fallback, ordering refresh stability, reservation filter persistence after mutation, and settings reload consistency.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=chromium tests/e2e/client.reservations.spec.ts tests/e2e/client.checkout.spec.ts tests/e2e/client.contact-payment.spec.ts tests/e2e/client.account-loyalty.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 19:33</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium --project=serveur-chromium tests/e2e/backoffice.gerant.spec.ts tests/e2e/backoffice.serveur.spec.ts`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

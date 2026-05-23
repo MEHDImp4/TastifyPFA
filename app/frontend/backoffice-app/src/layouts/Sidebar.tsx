@@ -136,12 +136,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></div>
                 <span className="font-sans text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant">System Online</span>
               </div>
-              <span className="font-mono text-[9px] text-on-surface-variant/40">v1.4.2</span>
+              <span className="font-mono text-[9px] text-on-surface-variant/80">v1.4.2</span>
             </div>
           )}
           <button
             onClick={() => logout()}
             data-testid="logout-button"
+            aria-label="Logout"
+            title="Logout"
             className={`flex items-center gap-3 border border-outline-variant/30 transition-all duration-150 text-on-surface-variant hover:text-error hover:border-error/50 hover:bg-error/5 active:scale-[0.97] group ${
               isDesktopCollapsed ? 'justify-center p-2 w-10 h-10 mx-auto rounded' : 'px-4 py-2.5 w-full text-left rounded-md'
             }`}

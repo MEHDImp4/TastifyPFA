@@ -178,6 +178,8 @@ export const ReservationsPage: React.FC = () => {
                   </button>
                   <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
+                    aria-label={`Cancel booking for ${res.user_username || 'anonymous guest'}`}
+                    title={`Cancel booking for ${res.user_username || 'anonymous guest'}`}
                     className="p-4 bg-background border-2 border-on-surface text-error hover:bg-error/10 transition-all shadow-[3px_3px_0px_#301400] active:translate-y-[2px] active:shadow-none"
                   >
                     <XCircle className="w-5 h-5"  strokeWidth={2.5}/>
@@ -194,7 +196,11 @@ export const ReservationsPage: React.FC = () => {
                  </button>
               )}
 
-              <button className="p-4 text-on-surface-variant hover:text-primary transition-colors">
+              <button
+                  aria-label={`Open actions for ${res.user_username || 'anonymous guest'}`}
+                  title={`Open actions for ${res.user_username || 'anonymous guest'}`}
+                  className="p-4 text-on-surface-variant hover:text-primary transition-colors"
+              >
                   <MoreVertical className="w-5 h-5"  strokeWidth={2.5}/>
               </button>
             </div>

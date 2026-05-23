@@ -111,42 +111,42 @@ export const SettingsPage: React.FC = () => {
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="col-span-2 space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Trading Name</label>
+                  <label htmlFor="settings-nom" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Trading Name</label>
                   <input 
-                    type="text" name="nom" value={config.nom} onChange={handleInputChange}
+                    id="settings-nom" type="text" name="nom" value={config.nom} onChange={handleInputChange}
                     className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase"
                   />
                 </div>
 
                 <div className="col-span-2 md:col-span-1 space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Registration No.</label>
+                  <label htmlFor="settings-registration" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Registration No.</label>
                   <input 
-                    type="text" value="REG-8839-AB" disabled
-                    className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant/40 outline-none"
+                    id="settings-registration" type="text" value="REG-8839-AB" disabled
+                    className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant outline-none"
                   />
                 </div>
 
                 <div className="col-span-2 md:col-span-1 space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Primary Contact</label>
+                  <label htmlFor="settings-telephone" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Primary Contact</label>
                   <input 
-                    type="text" name="telephone" value={config.telephone || ''} onChange={handleInputChange}
+                    id="settings-telephone" type="text" name="telephone" value={config.telephone || ''} onChange={handleInputChange}
                     className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   />
                 </div>
 
                 <div className="col-span-2 space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Restaurant Description</label>
+                  <label htmlFor="settings-description" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Restaurant Description</label>
                   <textarea 
-                    name="description" value={config.description || ''} onChange={handleInputChange}
+                    id="settings-description" name="description" value={config.description || ''} onChange={handleInputChange}
                     className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
                     rows={2}
                   />
                 </div>
 
                 <div className="col-span-2 space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Physical Address</label>
+                  <label htmlFor="settings-adresse" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Physical Address</label>
                   <textarea 
-                    name="adresse" value={config.adresse || ''} onChange={handleInputChange}
+                    id="settings-adresse" name="adresse" value={config.adresse || ''} onChange={handleInputChange}
                     className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
                     rows={2}
                   />
@@ -163,33 +163,33 @@ export const SettingsPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                  <div className="space-y-unit-xs">
-                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">State Tax (%)</label>
+                    <label htmlFor="settings-tax" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">State Tax (%)</label>
                     <div className="relative">
                       <input 
-                        type="number" step="0.001" value="8.875" disabled
-                        className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant/40 text-right"
+                        id="settings-tax" type="number" step="0.001" value="8.875" disabled
+                        className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant text-right"
                       />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-20 font-bold">%</span>
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 font-bold">%</span>
                     </div>
                  </div>
                  <div className="space-y-unit-xs">
-                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Auto-Gratuity Threshold</label>
+                    <label htmlFor="settings-gratuity-threshold" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Auto-Gratuity Threshold</label>
                     <div className="relative">
-                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-20 font-bold">PAX</span>
+                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 font-bold">PAX</span>
                        <input 
-                        type="number" value="6" disabled
-                        className="w-full h-12 pl-12 pr-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant/40 text-right"
+                        id="settings-gratuity-threshold" type="number" value="6" disabled
+                        className="w-full h-12 pl-12 pr-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant text-right"
                       />
                     </div>
                  </div>
                  <div className="space-y-unit-xs">
-                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Default Gratuity (%)</label>
+                    <label htmlFor="settings-default-gratuity" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Default Gratuity (%)</label>
                     <div className="relative">
                       <input 
-                        type="number" value="20" disabled
-                        className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant/40 text-right"
+                        id="settings-default-gratuity" type="number" value="20" disabled
+                        className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant text-right"
                       />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-20 font-bold">%</span>
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 font-bold">%</span>
                     </div>
                  </div>
               </div>
@@ -210,20 +210,20 @@ export const SettingsPage: React.FC = () => {
               <div className="space-y-8 relative z-10">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Avg Prep Target</label>
+                    <label htmlFor="settings-prep-target" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Avg Prep Target</label>
                     <span className="font-sans text-[12px] font-black text-primary uppercase">18 Minutes</span>
                   </div>
-                  <input type="range" min="5" max="45" value="18" className="w-full accent-primary h-1 bg-surface-container-highest rounded-full cursor-pointer" />
-                  <div className="flex justify-between font-mono text-[9px] text-on-surface-variant opacity-40">
+                  <input id="settings-prep-target" aria-describedby="settings-prep-target-range" aria-label="Average preparation target" title="Average preparation target" type="range" min="5" max="45" value="18" className="w-full accent-primary h-1 bg-surface-container-highest rounded-full cursor-pointer" />
+                  <div id="settings-prep-target-range" className="flex justify-between font-mono text-[9px] text-on-surface-variant/90">
                     <span>5M</span>
                     <span>45M</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-surface-main border border-outline-variant rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-surface-main border border-outline-variant rounded-lg" role="switch" aria-checked="true" aria-label="Course auto-fire">
                   <div>
                     <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-tight">Course Auto-Fire</p>
-                    <p className="font-sans text-[9px] text-on-surface-variant uppercase mt-1 opacity-60">Fire mains when apps cleared</p>
+                    <p className="font-sans text-[9px] text-on-surface-variant/90 uppercase mt-1">Fire mains when apps cleared</p>
                   </div>
                   <div className="w-10 h-5 bg-primary rounded-full relative border border-primary">
                     <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-white rounded-full" />
@@ -241,7 +241,7 @@ export const SettingsPage: React.FC = () => {
 
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Guest Receipt Logo</label>
+                  <label htmlFor="settings-logo" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Guest Receipt Logo</label>
                   <div className="relative group aspect-video bg-surface-main border-2 border-dashed border-outline-variant rounded flex flex-col items-center justify-center transition-all hover:border-primary overflow-hidden">
                     {logoPreview ? (
                       <>
@@ -251,10 +251,10 @@ export const SettingsPage: React.FC = () => {
                     ) : (
                        <>
                         <CloudUpload className="w-8 h-8 text-on-surface-variant/20 mb-2" />
-                        <span className="font-sans text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Select Monochrome PNG</span>
+                        <span className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Select Monochrome PNG</span>
                        </>
                     )}
-                    <input type="file" onChange={handleLogoChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
+                    <input id="settings-logo" aria-label="Upload guest receipt logo" title="Upload guest receipt logo" type="file" onChange={handleLogoChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                   </div>
                 </div>
 

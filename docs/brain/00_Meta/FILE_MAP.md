@@ -38,7 +38,7 @@ tastify-pfa/
 │       ├── backoffice-app/        # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── src/api/           # API wrappers (including configuration.ts)
 │       │   ├── src/layouts/       # AppShell, Sidebar, Topbar
-│       │   ├── tests/e2e/         # Playwright auth bootstrap + multi-role, CRUD, ordering/KDS, and failure-state browser flows
+│       │   ├── tests/e2e/         # Playwright auth bootstrap + multi-role, CRUD, quality, ordering/KDS, and failure-state browser flows
 │       │   ├── playwright.config.ts # Role-scoped E2E projects and storage-state setup
 │       │   └── src/pages/
 │       │       ├── Dashboard/     # Strategic Intelligence (High-End Motion)

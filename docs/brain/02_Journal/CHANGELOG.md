@@ -1,3 +1,19 @@
+## [2026-05-23] - 14:24
+### Added
+- Added `backoffice.quality.spec.ts` as a dedicated authenticated quality layer for manager, serveur, and cuisinier accessibility, responsive-shell, and workflow-resilience coverage.
+
+### Changed
+- Wired the backoffice Playwright projects to execute the shared quality spec alongside the role-specific suites.
+- Improved backoffice shell and page accessibility with explicit logout labeling, labeled settings controls, stronger low-contrast helper text, and accessible reservation action buttons.
+- Tightened an existing serveur reservation-failure assertion so it remains stable with the newly labeled cancel actions instead of relying on a brittle substring count.
+
+### Validation
+- `npm run test:e2e -- --project=gerant-chromium --project=serveur-chromium tests/e2e/backoffice.quality.spec.ts`
+- `npm run test:e2e -- --project=cuisinier-chromium tests/e2e/backoffice.quality.spec.ts`
+- `npm run test:e2e -- --project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "keeps reservation actions stable when confirm and cancel fail"`
+- `npm run test:e2e`
+- `npm run build`
+
 ## [2026-05-23] - 13:45
 ### Added
 - Added `client.quality.spec.ts` to cover client accessibility, narrow-viewport usability, guest shell navigation, offline recovery, and 404/system-page behavior.
