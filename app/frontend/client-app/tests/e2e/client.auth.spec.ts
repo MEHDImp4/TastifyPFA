@@ -102,6 +102,52 @@ test.describe('login form — API responses', () => {
   });
 });
 
+test.describe('register form — API responses', () => {
+  test('shows backend detail and stays on register when registration fails', async ({ page }) => {
+    await page.route('**/api/users/register/', async (route) => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'USERNAME_ALREADY_EXISTS' }),
+      });
+    });
+
+    await page.goto('/register');
+    await page.getByPlaceholder('NOM_DE_PLUME').fill('taken_user');
+    await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('taken@example.com');
+    await page.locator('input[type="password"]').fill('password123');
+    await page.getByRole('button', { name: /Commit Registry/i }).click();
+
+    await expect(page).toHaveURL('/register');
+    await expect(page.getByText('USERNAME_ALREADY_EXISTS')).toBeVisible();
+  });
+
+  test('registers a client account then logs in and redirects home', async ({ page }) => {
+    await page.route('**/api/users/register/', async (route) => {
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 91, username: 'fresh_guest' }),
+      });
+    });
+    await page.route('**/api/users/login/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'fresh-token', role: 'CLIENT', username: 'fresh_guest' }),
+      });
+    });
+
+    await page.goto('/register');
+    await page.getByPlaceholder('NOM_DE_PLUME').fill('fresh_guest');
+    await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('fresh@example.com');
+    await page.locator('input[type="password"]').fill('password123');
+    await page.getByRole('button', { name: /Commit Registry/i }).click();
+
+    await expect(page).toHaveURL('/');
+  });
+});
+
 test.describe('authenticated user — route guards', () => {
   test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
 

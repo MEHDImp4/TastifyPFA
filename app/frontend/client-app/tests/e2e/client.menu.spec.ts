@@ -71,6 +71,14 @@ test.describe('menu catalog', () => {
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
   });
 
+  test('search matches dish descriptions as well as names', async ({ page }) => {
+    await page.goto('/menu');
+    await page.getByRole('button', { name: /All Selections/i }).click();
+    await page.getByPlaceholder('FIND A CREATION...').fill('olives');
+    await expect(page.getByText('Tagine Poulet')).toBeVisible();
+    await expect(page.getByText('Soupe Harira')).toHaveCount(0);
+  });
+
   test('shows empty state when no dish matches search', async ({ page }) => {
     await page.goto('/menu');
     await page.getByRole('button', { name: /All Selections/i }).click();
@@ -86,5 +94,35 @@ test.describe('menu catalog', () => {
     await searchInput.fill('');
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Briouates')).toBeVisible();
+  });
+
+  test('opens the dish detail modal and closes it without changing the route', async ({ page }) => {
+    await page.goto('/menu');
+    await page.getByText('Soupe Harira').click();
+
+    await expect(page.getByText('GASTRONOMIC RECORD')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Add to Selection/i })).toBeVisible();
+
+    await page.mouse.click(16, 16);
+    await expect(page.getByText('GASTRONOMIC RECORD')).toHaveCount(0);
+    await expect(page).toHaveURL('/menu');
+  });
+
+  test('keeps unavailable dishes non-interactive in the catalog', async ({ page }) => {
+    const unavailablePlats = plats.map((plat) =>
+      plat.id === 12 ? { ...plat, est_disponible: false } : plat,
+    );
+
+    await page.unroute('**/api/plats/');
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(unavailablePlats) });
+    });
+
+    await page.goto('/menu');
+    await expect(page.getByText('Briouates')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Add to cart/i })).toHaveCount(1);
+
+    await page.getByText('Briouates').click();
+    await expect(page.getByText('GASTRONOMIC RECORD')).toHaveCount(0);
   });
 });

@@ -2395,6 +2395,18 @@ and this project adheres to semantic tracking for development.
 - Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.
 - Added `app/frontend/client-app/src/components/branding/BrandWordmark.tsx` as the single fallback source of truth, defaulting to `Tastify` when the establishment has not set a custom name.
 
+## [2026-05-23] - 01:12
+### Changed
+- Added new client e2e registration coverage in `app/frontend/client-app/tests/e2e/client.auth.spec.ts` for failed signup detail handling and successful register-then-login redirects.
+- Expanded `app/frontend/client-app/tests/e2e/client.menu.spec.ts` with description-based search coverage, menu detail modal open/close behavior, and unavailable dish non-interactivity checks.
+
+### Validation
+- `npx playwright test tests/e2e/client.auth.spec.ts tests/e2e/client.menu.spec.ts` passed in `app/frontend/client-app` after starting the Docker stack and waiting for `http://127.0.0.1:3003`.
+- `npm run test:e2e` in `app/frontend/client-app` still reports an existing accessibility failure in `tests/e2e/client.a11y.spec.ts` on the login page (`color-contrast` and `link-name` axe violations), separate from the new scenarios.
+
+### Commit
+- `pending`
+
 ## [2026-05-23] - 00:22
 ### Changed
 - Hardened `scripts/testing/run-suite.mjs` so Docker-driven E2E runs wait for the exposed frontend URL to answer before launching Playwright, with per-request timeouts to avoid hanging on half-open startup attempts.
