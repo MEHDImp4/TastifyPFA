@@ -115,7 +115,7 @@ test.describe('register form — API responses', () => {
     await page.goto('/register');
     await page.getByPlaceholder('NOM_DE_PLUME').fill('taken_user');
     await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('taken@example.com');
-    await page.locator('input[type="password"]').fill('password123');
+    await page.getByLabel('Session Passkey').fill('password123');
     await page.getByRole('button', { name: /Commit Registry/i }).click();
 
     await expect(page).toHaveURL('/register');
@@ -141,7 +141,7 @@ test.describe('register form — API responses', () => {
     await page.goto('/register');
     await page.getByPlaceholder('NOM_DE_PLUME').fill('fresh_guest');
     await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('fresh@example.com');
-    await page.locator('input[type="password"]').fill('password123');
+    await page.getByLabel('Session Passkey').fill('password123');
     await page.getByRole('button', { name: /Commit Registry/i }).click();
 
     await expect(page).toHaveURL('/');

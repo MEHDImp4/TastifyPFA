@@ -1,4 +1,14 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+
+const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
+  const results = await new AxeBuilder({ page }).include('main').analyze();
+  const blockingViolations = results.violations.filter(({ impact }) =>
+    impact === 'critical' || impact === 'serious',
+  );
+
+  expect(blockingViolations).toEqual([]);
+};
 
 const installMockStaffWebSocket = async (page: Parameters<typeof test>[0]['page']) => {
   await page.addInitScript(() => {
@@ -98,6 +108,15 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByTestId('nav-dashboard')).toHaveCount(0);
   });
 
+  test('keeps the menu nav active after a direct route load', async ({ page }) => {
+    await mockKitchenMenuCatalog(page, []);
+    await page.goto('/menu');
+
+    await expect(page).toHaveURL(/\/menu$/);
+    await expect(page.getByTestId('nav-menu')).toHaveClass(/border-primary/);
+    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+  });
+
   test('keeps cuisinier users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/menu');
     await expect(page).toHaveURL(/\/menu$/);
@@ -114,6 +133,31 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page).toHaveURL(/\/kds$/);
   });
 
+  test('keeps cuisinier logout working after visiting a secondary route', async ({ page }) => {
+    await mockKitchenMenuCatalog(page, []);
+    await page.goto('/menu');
+    await expect(page).toHaveURL(/\/menu$/);
+
+    await page.getByTestId('logout-button').click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('keeps cuisinier users on the same allowed route after a hard refresh', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/kds');
+    await page.reload();
+
+    await expect(page).toHaveURL(/\/kds$/);
+    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+  });
+
   test('lets cuisinier users search and filter the menu registry', async ({ page }) => {
     await mockKitchenMenuCatalog(page, [
       { id: 701, nom: 'Tagine Safran', prix: '96.00', description: 'Slow finish', temps_preparation: 22, categorie: 1, image: null, est_active: true, est_disponible: true },
@@ -122,18 +166,18 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/menu');
 
-    await expect(page.getByText('Tagine Safran')).toBeVisible();
-    await expect(page.getByText('Tarte Orange')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
 
     const searchInput = page.getByPlaceholder('SEARCH CATALOG...');
     await searchInput.fill('orange');
-    await expect(page.getByText('Tarte Orange')).toBeVisible();
-    await expect(page.getByText('Tagine Safran')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toHaveCount(0);
 
     await searchInput.fill('');
     await page.getByRole('button', { name: /Filter/i }).click();
-    await expect(page.getByText('Tagine Safran')).toBeVisible();
-    await expect(page.getByText('Tarte Orange')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
   });
 
   test('shows the menu empty state shell when no dishes are returned', async ({ page }) => {
@@ -145,6 +189,17 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByRole('button', { name: /Add Dish/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Filter/i })).toBeVisible();
     await expect(page.getByText('Signature Dish')).toBeVisible();
+  });
+
+  test('has no critical or serious axe violations on the menu registry', async ({ page }) => {
+    await mockKitchenMenuCatalog(page, [
+      { id: 731, nom: 'Briouate Signature', prix: '26.00', description: 'Crisp line', temps_preparation: 9, categorie: 1, image: null, est_active: true, est_disponible: true },
+    ]);
+
+    await page.goto('/menu');
+
+    await expect(page.getByRole('heading', { name: 'Briouate Signature' })).toBeVisible();
+    await expectNoBlockingViolations(page);
   });
 
   test('renders the KDS empty state when no active kitchen tickets exist', async ({ page }) => {
@@ -159,6 +214,42 @@ test.describe('cuisinier browser workflows', () => {
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Sector Clear').first()).toBeVisible();
+  });
+
+  test('has no critical or serious axe violations on the KDS page', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/kds');
+    await page.waitForLoadState('networkidle');
+
+    await expect(page.getByText('Sector Clear').first()).toBeVisible();
+    await expectNoBlockingViolations(page);
+  });
+
+  test('keeps the KDS page usable on a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/kds');
+    await page.waitForLoadState('networkidle');
+
+    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
+    await menuButton.click();
+
+    await expect(page.getByTestId('nav-kds')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
   });
 
   test('advances a kitchen ticket from waiting to preparation and ready', async ({ page }) => {
@@ -202,11 +293,11 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByText('Risotto safran')).toBeVisible();
     await expect(page.getByText('Sans parmesan')).toBeVisible();
 
-    await page.getByText('Risotto safran').click(); // Clicking the line advances it
-    await expect(page.locator('svg.lucide-rotate-ccw')).toBeVisible(); // Spin icon
+    const ticket = page.getByTestId('kds-ticket-9201');
+    await page.getByText('Risotto safran').click();
+    await expect(ticket.getByText('In Preparation')).toBeVisible();
 
     await page.getByText('Risotto safran').click();
-    const ticket = page.getByTestId('kds-ticket-9201');
     await expect(ticket.getByText('DONE')).toBeVisible();
     await expect(page.getByText('Ready to Window')).toBeVisible();
   });

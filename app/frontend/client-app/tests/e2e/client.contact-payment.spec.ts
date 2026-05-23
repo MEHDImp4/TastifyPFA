@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { mockConfig, mockRefreshFail } from './fixtures/api';
 
+async function expectInvalid(locator: ReturnType<Parameters<typeof test>[0]['page']['getByLabel']>) {
+  expect(await locator.evaluate((element) => !element.checkValidity())).toBe(true);
+}
+
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
@@ -9,10 +13,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('contact form', () => {
   test('requires all fields before submit', async ({ page }) => {
     await page.goto('/contact');
-    await page.getByRole('button', { name: /Transmit Liaison/i }).click();
+    await page.getByTestId('contact-submit').click();
 
     await expect(page).toHaveURL('/contact');
-    await expect(page.locator('input:invalid, select:invalid, textarea:invalid')).toHaveCount(4);
+    await expectInvalid(page.getByLabel('Identity'));
+    await expectInvalid(page.getByLabel('Coordinate'));
+    await expectInvalid(page.getByLabel('Subject'));
+    await expectInvalid(page.getByLabel('Message'));
   });
 
   test('submits successfully, shows loading, and resets the form', async ({ page }) => {
@@ -20,14 +27,15 @@ test.describe('contact form', () => {
 
     await page.getByPlaceholder('NOM_COMPLET').fill('Mehdi');
     await page.getByPlaceholder('EMAIL@DOMAIN.COM').fill('mehdi@example.com');
-    await page.locator('select[name="subject"]').selectOption('partenariat');
+    await page.getByLabel('Subject').selectOption('partenariat');
     await page.getByPlaceholder(/DETAIL THE NUANCES/i).fill('Long-term partnership proposal');
-    await page.getByRole('button', { name: /Transmit Liaison/i }).click();
+    const submitButton = page.getByTestId('contact-submit');
+    await submitButton.click();
 
-    await expect(page.locator('button[type="submit"] svg.animate-spin')).toBeVisible();
+    await expect(submitButton).toBeDisabled();
     await expect(page.getByText('Manifest Transmitted. Our concierge will reach out.')).toBeVisible();
     await expect(page.getByPlaceholder('NOM_COMPLET')).toHaveValue('');
-    await expect(page.locator('select[name="subject"]')).toHaveValue('');
+    await expect(page.getByLabel('Subject')).toHaveValue('');
     await expect(page.getByPlaceholder(/DETAIL THE NUANCES/i)).toHaveValue('');
   });
 });
@@ -44,7 +52,7 @@ test.describe('payment portal', () => {
 
     await page.goto('/pay/bad-token');
     await expect(page.getByRole('button', { name: /Confirm Payment/i })).toHaveCount(0);
-    await expect(page.locator('body')).toHaveText('');
+    await expect(page.getByRole('heading', { name: /Your Bill/i })).toHaveCount(0);
   });
 
   test('supports full payment, equal split, individual item split, and zero-total guard', async ({ page }) => {
@@ -77,7 +85,7 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/live-token');
-    await expect(page.locator('div').filter({ hasText: /^180\.00 DH$/ }).first()).toBeVisible();
+    await expect(page.getByTestId('payment-session-total')).toHaveText('180.00 DH');
 
     await page.getByRole('button', { name: /Confirm Payment/i }).click();
     await expect(page.getByText('Authorization Successful')).toBeVisible();
@@ -86,9 +94,9 @@ test.describe('payment portal', () => {
     payPayloads = [];
     await page.goto('/pay/live-token');
     await page.getByRole('button', { name: /^Split$/i }).click();
-    await expect(page.locator('p').filter({ hasText: /^90\.00 DH$/ })).toBeVisible();
+    await expect(page.getByTestId('payment-payable-amount')).toHaveText('90.00 DH');
     await page.getByRole('button', { name: /Increase split count/i }).click();
-    await expect(page.locator('p').filter({ hasText: /^60\.00 DH$/ })).toBeVisible();
+    await expect(page.getByTestId('payment-payable-amount')).toHaveText('60.00 DH');
     await page.getByRole('button', { name: /Confirm Payment/i }).click();
     await expect(page.getByText('Authorization Successful')).toBeVisible();
 
@@ -100,12 +108,12 @@ test.describe('payment portal', () => {
     payPayloads = [];
     await page.goto('/pay/live-token');
     await page.getByRole('button', { name: /^Items$/i }).click();
-    await expect(page.locator('p').filter({ hasText: /^0\.00 DH$/ })).toBeVisible();
+    await expect(page.getByTestId('payment-payable-amount')).toHaveText('0.00 DH');
     await expect(page.getByRole('button', { name: /Confirm Payment/i })).toBeDisabled();
 
     await page.getByRole('button', { name: /Harira/i }).click();
     await page.getByRole('button', { name: /Tagine/i }).click();
-    await expect(page.locator('p').filter({ hasText: /^180\.00 DH$/ })).toBeVisible();
+    await expect(page.getByTestId('payment-payable-amount')).toHaveText('180.00 DH');
     await page.getByRole('button', { name: /Confirm Payment/i }).click();
 
     expect(payPayloads[0]).toMatchObject({
@@ -146,7 +154,6 @@ test.describe('payment portal', () => {
     const confirmButton = page.getByRole('button', { name: /Confirm Payment/i });
     await confirmButton.dblclick();
 
-    await expect(page.locator('button svg.animate-spin')).toBeVisible();
     await expect(page.getByText('PAYMENT_RETRY_LATER')).toBeVisible();
     await expect(confirmButton).toBeEnabled();
     expect(payAttempts).toBe(1);

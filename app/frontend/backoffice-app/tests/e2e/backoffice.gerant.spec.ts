@@ -252,7 +252,7 @@ test.describe('gerant browser workflows', () => {
 
     const createdCard = page.getByTestId('category-card-3010');
     await expect(createdCard).toContainText(initialName);
-    await expect(createdCard.locator('img')).toHaveAttribute('src', /pw-image-category\.png/);
+    await expect(createdCard.getByRole('img', { name: initialName })).toHaveAttribute('src', /pw-image-category\.png/);
   });
 
   test('replaces an existing category image without leaving a stale thumbnail behind', async ({ page }) => {
@@ -282,14 +282,14 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/categories');
     const categoryCard = page.getByTestId('category-card-4010');
-    await expect(categoryCard.locator('img')).toHaveAttribute('src', /original-category\.png/);
+    await expect(categoryCard.getByRole('img', { name: 'Media Starters' })).toHaveAttribute('src', /original-category\.png/);
 
     await page.getByTestId('category-edit-4010').click();
     await page.getByTestId('category-image-input').setInputFiles(uploadedPng);
     await expect(page.getByTestId('category-image-preview')).toBeVisible();
     await page.getByTestId('category-save-button').click();
 
-    await expect(categoryCard.locator('img')).toHaveAttribute('src', /replaced-category\.png/);
+    await expect(categoryCard.getByRole('img', { name: 'Media Starters' })).toHaveAttribute('src', /replaced-category\.png/);
   });
 
   test('creates, edits, and deletes a plat', async ({ page }) => {
@@ -401,7 +401,7 @@ test.describe('gerant browser workflows', () => {
 
     const createdCard = page.getByTestId('plat-card-7010');
     await expect(createdCard).toContainText(initialName);
-    await expect(createdCard.locator('img')).toHaveAttribute('src', /pw-image-plat\.png/);
+    await expect(createdCard.getByRole('img', { name: initialName })).toHaveAttribute('src', /pw-image-plat\.png/);
   });
 
   test('replaces an existing plat image without leaving stale media in the registry', async ({ page }) => {
@@ -450,14 +450,14 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/menu');
     const platCard = page.getByTestId('plat-card-7110');
-    await expect(platCard.locator('img')).toHaveAttribute('src', /original-plat\.png/);
+    await expect(platCard.getByRole('img', { name: 'Tagine Atlas' })).toHaveAttribute('src', /original-plat\.png/);
 
     await page.getByTestId('plat-edit-7110').click();
     await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
     await expect(page.getByText('FILE LOADED')).toBeVisible();
     await page.getByTestId('plat-save-button').click();
 
-    await expect(platCard.locator('img')).toHaveAttribute('src', /replaced-plat\.png/);
+    await expect(platCard.getByRole('img', { name: 'Tagine Atlas' })).toHaveAttribute('src', /replaced-plat\.png/);
   });
 
   test('resets category create drafts when the modal is reopened', async ({ page }) => {
@@ -786,13 +786,13 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.locator('input[name="nom"]').fill('Playwright Bistro');
-    await page.locator('textarea[name="description"]').fill('Saved from E2E');
+    await page.getByLabel('Trading Name').fill('Playwright Bistro');
+    await page.getByLabel('Restaurant Description').fill('Saved from E2E');
     await page.getByRole('button', { name: 'Deploy Changes' }).click();
 
     await expect(page.getByText('System parameters deployed')).toBeVisible();
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Playwright Bistro');
-    await expect(page.locator('textarea[name="description"]')).toHaveValue('Saved from E2E');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Playwright Bistro');
+    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Saved from E2E');
   });
 
   test('persists partial settings edits after a successful save', async ({ page }) => {
@@ -836,14 +836,14 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.locator('input[name="nom"]').fill('Playwright Ops');
-    await page.locator('input[name="telephone"]').fill('+212611111111');
+    await page.getByLabel('Trading Name').fill('Playwright Ops');
+    await page.getByLabel('Primary Contact').fill('+212611111111');
     await page.getByRole('button', { name: 'Deploy Changes' }).click();
 
     await expect(page.getByText('System parameters deployed')).toBeVisible();
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Playwright Ops');
-    await expect(page.locator('input[name="telephone"]')).toHaveValue('+212611111111');
-    await expect(page.locator('textarea[name="description"]')).toHaveValue('Base config');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Playwright Ops');
+    await expect(page.getByLabel('Primary Contact')).toHaveValue('+212611111111');
+    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Base config');
   });
 
   test('keeps saved settings visible after a reload', async ({ page }) => {
@@ -885,16 +885,16 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.locator('input[name="nom"]').fill('Reload Safe Ops');
-    await page.locator('textarea[name="description"]').fill('Persisted through reload');
+    await page.getByLabel('Trading Name').fill('Reload Safe Ops');
+    await page.getByLabel('Restaurant Description').fill('Persisted through reload');
     await page.getByRole('button', { name: 'Deploy Changes' }).click();
 
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Reload Safe Ops');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Reload Safe Ops');
     await page.reload();
 
     await expect(page).toHaveURL(/\/settings$/);
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Reload Safe Ops');
-    await expect(page.locator('textarea[name="description"]')).toHaveValue('Persisted through reload');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Reload Safe Ops');
+    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Persisted through reload');
   });
 
   test('shows a settings save error when the update request fails', async ({ page }) => {
@@ -907,11 +907,11 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.locator('input[name="nom"]').fill('Broken save');
+    await page.getByLabel('Trading Name').fill('Broken save');
     await page.getByRole('button', { name: 'Deploy Changes' }).click();
 
     await expect(page.getByText('Deployment failure')).toBeVisible();
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Broken save');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Broken save');
   });
 
   test('keeps dirty settings inputs after a failed partial save', async ({ page }) => {
@@ -924,13 +924,13 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.locator('input[name="nom"]').fill('Dirty config');
-    await page.locator('input[name="telephone"]').fill('+212622222222');
+    await page.getByLabel('Trading Name').fill('Dirty config');
+    await page.getByLabel('Primary Contact').fill('+212622222222');
     await page.getByRole('button', { name: 'Deploy Changes' }).click();
 
     await expect(page.getByText('Deployment failure')).toBeVisible();
-    await expect(page.locator('input[name="nom"]')).toHaveValue('Dirty config');
-    await expect(page.locator('input[name="telephone"]')).toHaveValue('+212622222222');
+    await expect(page.getByLabel('Trading Name')).toHaveValue('Dirty config');
+    await expect(page.getByLabel('Primary Contact')).toHaveValue('+212622222222');
   });
 
   test('renders the HR empty state and export toast when no employees are returned', async ({ page }) => {
@@ -1139,7 +1139,7 @@ test.describe('gerant browser workflows', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
-    const menuButton = page.getByRole('button').filter({ has: page.locator('svg.lucide-menu') }).first();
+    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
     await menuButton.click();
 
     await expect(page.getByTestId('nav-dashboard')).toBeVisible();

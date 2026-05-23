@@ -144,7 +144,7 @@ test.describe('menu catalog', () => {
     await page.goto('/menu');
     await page.getByRole('button', { name: /All Selections/i }).click();
 
-    const tagineCard = page.getByText('Tagine Poulet').locator('..').locator('..');
+    const tagineCard = page.getByTestId('menu-card-21');
     await expect(page.getByRole('img', { name: 'Tagine Poulet' }).first()).toHaveAttribute(
       'src',
       /tagine-poulet-hero\.png/,

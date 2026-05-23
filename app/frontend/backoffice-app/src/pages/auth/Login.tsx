@@ -112,7 +112,11 @@ export const Login: React.FC = () => {
                   className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
                 />
                 <button 
-                  type="button" onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide access passkey' : 'Show access passkey'}
+                  title={showPassword ? 'Hide access passkey' : 'Show access passkey'}
+                  data-testid="login-password-visibility"
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/40 hover:text-primary transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

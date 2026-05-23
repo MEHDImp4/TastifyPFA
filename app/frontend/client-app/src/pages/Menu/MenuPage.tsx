@@ -106,12 +106,13 @@ export const MenuPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
+                  data-testid={`menu-card-${plat.id}`}
                   className={`group flex flex-col bg-surface-container-low rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary hover:bg-surface-container-high shadow-sm hover:shadow-2xl hover:shadow-black/40'}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-highest">
                     {plat.image ? (
-                       <img src={plat.image} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt={plat.nom} />
+                       <img src={plat.image} data-testid={`menu-card-image-${plat.id}`} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt={plat.nom} />
                     ) : (
                        <div className="w-full h-full flex items-center justify-center font-serif italic text-6xl text-on-surface-variant/10">{plat.nom.charAt(0)}</div>
                     )}
@@ -175,7 +176,7 @@ export const MenuPage: React.FC = () => {
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
                    {selectedPlat.image ? (
-                      <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover" alt={selectedPlat.nom} />
+                      <img src={selectedPlat.image} data-testid={`menu-detail-image-${selectedPlat.id}`} className="absolute inset-0 w-full h-full object-cover" alt={selectedPlat.nom} />
                    ) : (
                       <div className="absolute inset-0 flex items-center justify-center font-serif italic text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
                    )}

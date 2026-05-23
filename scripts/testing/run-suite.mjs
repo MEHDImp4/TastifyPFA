@@ -1,4 +1,6 @@
 import { spawnSync } from 'node:child_process';
+import http from 'node:http';
+import https from 'node:https';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import process from 'node:process';
@@ -57,12 +59,37 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function requestHttpStatus(url, options = {}) {
+  const timeoutMs = options.timeoutMs ?? 5_000;
+  const parsedUrl = new URL(url);
+  const transport = parsedUrl.protocol === 'https:' ? https : http;
+
+  return new Promise((resolve, reject) => {
+    const request = transport.request(
+      parsedUrl,
+      {
+        method: options.method ?? 'GET',
+        headers: options.headers ?? {},
+      },
+      (response) => {
+        response.resume();
+        resolve(response.statusCode ?? 0);
+      },
+    );
+
+    request.on('error', reject);
+    request.setTimeout(timeoutMs, () => {
+      request.destroy(new Error(`Request timed out after ${timeoutMs}ms`));
+    });
+    request.end();
+  });
+}
+
 async function waitForHttp(url, options = {}) {
   const timeoutMs = options.timeoutMs ?? 120_000;
   const intervalMs = options.intervalMs ?? 2_000;
   const requestTimeoutMs = options.requestTimeoutMs ?? 5_000;
   const allowedStatuses = new Set(options.allowedStatuses ?? [200, 304]);
-  const requestInit = options.requestInit ?? { redirect: 'manual' };
   const deadline = Date.now() + timeoutMs;
   let lastError = 'No response received yet.';
   let lastStatus = null;
@@ -71,16 +98,17 @@ async function waitForHttp(url, options = {}) {
 
   while (Date.now() < deadline) {
     try {
-      const response = await fetch(url, {
-        ...requestInit,
-        signal: AbortSignal.timeout(requestTimeoutMs),
+      const status = await requestHttpStatus(url, {
+        timeoutMs: requestTimeoutMs,
+        method: options.method,
+        headers: options.headers,
       });
-      if (allowedStatuses.has(response.status)) {
-        console.log(`Ready: ${url} (${response.status})`);
+      if (allowedStatuses.has(status)) {
+        console.log(`Ready: ${url} (${status})`);
         return;
       }
-      lastStatus = response.status;
-      lastError = `Unexpected status ${response.status}`;
+      lastStatus = status;
+      lastError = `Unexpected status ${status}`;
     } catch (error) {
       lastError = error instanceof Error ? error.message : String(error);
     }

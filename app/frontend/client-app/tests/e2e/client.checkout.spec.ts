@@ -48,7 +48,7 @@ async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['pa
   await page.getByRole('button', { name: /Plats/i }).click();
   await page.getByRole('button', { name: /Add to cart/i }).click();
 
-  await page.locator('a[href="/checkout"]').click();
+  await page.getByRole('link', { name: /checkout/i }).click();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -77,13 +77,11 @@ test.describe('checkout journey', () => {
       await page.getByRole('button', { name: '10%' }).click();
       await expect(page.getByText(/^100$/)).toBeVisible();
 
-      const tagineCard = page.getByText('Tagine').locator('..').locator('..');
-      await tagineCard.getByRole('button').last().click();
+      await page.getByRole('button', { name: 'Remove Tagine from cart' }).click();
       await expect(page.getByText('Tagine')).toHaveCount(0);
       await expect(page.getByText(/^35$/)).toBeVisible();
 
-      const hariraCard = page.getByText('Harira').locator('..').locator('..');
-      await hariraCard.locator('div.flex.items-center.bg-background').getByRole('button').last().click();
+      await page.getByRole('button', { name: 'Increase quantity for Harira' }).click();
       await expect(page.getByText(/^53$/)).toBeVisible();
     });
 

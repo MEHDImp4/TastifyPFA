@@ -115,17 +115,19 @@ export const ContactPage: React.FC = () => {
                         <form onSubmit={handleSubmit} className="space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Identity</label>
+                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Identity</label>
                                     <input 
-                                        type="text" name="name" value={formData.name} onChange={handleChange} required
+                                        id="contact-name-input" type="text" name="name" value={formData.name} onChange={handleChange} required
+                                        aria-label="Identity"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20"
                                         placeholder="NOM_COMPLET"
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Coordinate</label>
+                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Coordinate</label>
                                     <input 
-                                        type="email" name="email" value={formData.email} onChange={handleChange} required
+                                        id="contact-email-input" type="email" name="email" value={formData.email} onChange={handleChange} required
+                                        aria-label="Coordinate"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
                                         placeholder="EMAIL@DOMAIN.COM"
                                     />
@@ -133,9 +135,10 @@ export const ContactPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Subject</label>
+                                <label htmlFor="contact-subject-select" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Subject</label>
                                 <select 
-                                    name="subject" value={formData.subject} onChange={handleChange} required
+                                    id="contact-subject-select" name="subject" value={formData.subject} onChange={handleChange} required
+                                    aria-label="Subject"
                                     className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="">SELECT PARAMETER...</option>
@@ -146,9 +149,10 @@ export const ContactPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Message</label>
+                                <label htmlFor="contact-message-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Message</label>
                                 <textarea 
-                                    name="message" value={formData.message} onChange={handleChange} required rows={4}
+                                    id="contact-message-input" name="message" value={formData.message} onChange={handleChange} required rows={4}
+                                    aria-label="Message"
                                     className="w-full p-8 bg-surface-container-lowest border border-outline-variant rounded-[2rem] focus:border-primary outline-none transition-all resize-none font-body text-lg italic text-on-surface uppercase placeholder:text-on-surface-variant/20"
                                     placeholder="DETAIL THE NUANCES..."
                                 />
@@ -156,6 +160,7 @@ export const ContactPage: React.FC = () => {
 
                             <button 
                                 type="submit" disabled={isSubmitting}
+                                data-testid="contact-submit"
                                 className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-6"
                             >
                                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Transmit Liaison</span><Send className="w-5 h-5 text-on-primary/60" /></>}

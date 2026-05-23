@@ -72,7 +72,7 @@ test.describe('public authentication flows', () => {
   test('toggles password visibility without losing the typed passkey', async ({ page }) => {
     await page.goto('/login');
     const passwordInput = page.getByTestId('login-password');
-    const toggleButton = page.locator('button[type="button"]').first();
+    const toggleButton = page.getByTestId('login-password-visibility');
 
     await passwordInput.fill('password123');
     await expect(passwordInput).toHaveAttribute('type', 'password');

@@ -2585,6 +2585,22 @@ and this project adheres to semantic tracking for development.
 ### Commit
 - `a5389a1` `Unify client branding around configurable wordmark`
 
+## [2026-05-23] - 23:58
+### Changed
+- Modernized the remaining Phase 44 Playwright seams across both frontends by replacing brittle selector patterns with semantic locators or minimal test hooks in the targeted auth, menu, checkout, contact, payment, cuisinier, and gerant suites.
+- Added explicit accessibility hooks for unlabeled controls in the backoffice login page and client contact, menu, and payment surfaces so the E2E layer can target stable UI contracts without relying on DOM shape.
+- Hardened the root Docker E2E runner in `scripts/testing/run-suite.mjs` by replacing the flaky `fetch` readiness probe with a direct `node:http`/`node:https` status check, which restores reliable progression into the backoffice and client Playwright runs on this Windows Docker setup.
+
+### Validation
+- `npm run test:e2e -- --project=gerant-chromium --project=cuisinier-chromium --project=serveur-chromium tests/e2e/auth.public.spec.ts tests/e2e/backoffice.cuisinier.spec.ts tests/e2e/backoffice.gerant.spec.ts tests/e2e/backoffice.quality.spec.ts` passed with `69 passed`, `14 skipped`.
+- `npm run test:e2e -- --project=chromium tests/e2e/client.auth.spec.ts tests/e2e/client.menu.spec.ts tests/e2e/client.account-loyalty.spec.ts tests/e2e/client.contact-payment.spec.ts tests/e2e/client.checkout.spec.ts tests/e2e/client.quality.spec.ts` passed with `52 passed`.
+- `npm run test:e2e` passed from the repo root, including `111 passed`, `14 skipped` for backoffice and `65 passed` for client.
+- `npm run build` passed in `app/frontend/client-app`.
+- `npm run build` passed in `app/frontend/backoffice-app`.
+
+### Commit
+- Pending
+
 ## [2026-05-13] - 21:13
 ### Changed
 - Reduced client portal rendering overhead by removing the global fixed noise overlay, dropping route-level slide transitions from `PublicLayout`, lowering shared blur intensity in `index.css`, and simplifying the homepage hero card/image effects in `PortalHomePage.tsx`.

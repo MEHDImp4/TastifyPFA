@@ -120,7 +120,12 @@ export const PaymentPortal: React.FC = () => {
             <div className="text-center space-y-4">
                 <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Table {session.table_numero || '00'} • Settlement</span>
                 <h1 className="font-serif text-4xl md:text-6xl font-black text-on-surface italic leading-none m-0">Your Bill</h1>
-                <div className="text-5xl md:text-7xl font-sans font-black text-primary tracking-tighter tabular-nums mt-6">{session.montant_restant} DH</div>
+                <div
+                  className="text-5xl md:text-7xl font-sans font-black text-primary tracking-tighter tabular-nums mt-6"
+                  data-testid="payment-session-total"
+                >
+                  {session.montant_restant} DH
+                </div>
                 <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Includes automated service fees</p>
             </div>
 
@@ -182,7 +187,7 @@ export const PaymentPortal: React.FC = () => {
             <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-10 flex flex-col items-center gap-8 shadow-sm">
                 <div className="text-center space-y-2">
                    <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Authorize Individual Allocation</p>
-                   <p className="font-sans text-3xl font-black text-on-surface tabular-nums">{payableAmount} DH</p>
+                   <p className="font-sans text-3xl font-black text-on-surface tabular-nums" data-testid="payment-payable-amount">{payableAmount} DH</p>
                 </div>
                 
                 <div className="p-6 bg-primary/5 rounded-3xl border-2 border-primary/20 shadow-inner group cursor-pointer hover:border-primary transition-all">
