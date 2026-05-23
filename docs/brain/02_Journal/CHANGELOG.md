@@ -14,6 +14,9 @@
 - `npm run test:e2e`
 - `npm run build`
 
+### Commit
+- `6bcbbe4` `Add backoffice quality e2e coverage`
+
 ## [2026-05-23] - 13:45
 ### Added
 - Added `client.quality.spec.ts` to cover client accessibility, narrow-viewport usability, guest shell navigation, offline recovery, and 404/system-page behavior.
