@@ -106,7 +106,7 @@ export const PaymentPortal: React.FC = () => {
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[80px] -mr-24 -mt-24" />
             <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-10" strokeWidth={1} />
             <h2 className="font-serif text-4xl font-black text-on-surface italic mb-4 leading-none lowercase">Payment Secured.</h2>
-            <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed opacity-60 mb-12">Thank you for your visit at {brandName}. Your session has been successfully settled.</p>
+            <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed mb-12">Thank you for your visit at {brandName}. Your session has been successfully settled.</p>
             <button onClick={() => navigate('/')} className="px-16 py-6 bg-on-surface text-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-primary cinematic-shadow">Return Home</button>
         </div>
     </div>
@@ -118,10 +118,10 @@ export const PaymentPortal: React.FC = () => {
             
             {/* Header Section */}
             <div className="text-center space-y-4">
-                <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] opacity-60">Table {session.table_numero || '00'} • Settlement</span>
+                <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Table {session.table_numero || '00'} • Settlement</span>
                 <h1 className="font-serif text-4xl md:text-6xl font-black text-on-surface italic leading-none m-0">Your Bill</h1>
                 <div className="text-5xl md:text-7xl font-sans font-black text-primary tracking-tighter tabular-nums mt-6">{session.montant_restant} DH</div>
-                <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Includes automated service fees</p>
+                <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Includes automated service fees</p>
             </div>
 
             {/* Split Options Bento */}
@@ -143,7 +143,7 @@ export const PaymentPortal: React.FC = () => {
             <AnimatePresence mode="wait">
                 {splitMode === 'INDIVIDUAL' && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="bg-surface-container border border-outline-variant rounded-[2rem] p-8 space-y-6">
-                        <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Itemized Breakdown</label>
+                        <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Itemized Breakdown</label>
                         <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                            {session.lignes.map((l: any) => (
                                <button 
@@ -152,7 +152,7 @@ export const PaymentPortal: React.FC = () => {
                                >
                                   <div className="text-left">
                                      <span className="font-sans text-[13px] font-black uppercase block tracking-tight">{l.plat_nom}</span>
-                                     <span className="font-mono text-[10px] opacity-60 uppercase">Qty {l.quantite}</span>
+                                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">Qty {l.quantite}</span>
                                   </div>
                                   <span className="font-sans font-bold text-primary">{l.montant_restant} DH</span>
                                </button>
@@ -162,11 +162,17 @@ export const PaymentPortal: React.FC = () => {
                 )}
                 {splitMode === 'EQUAL' && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="bg-surface-container border border-outline-variant rounded-[2rem] p-10 flex flex-col items-center gap-6">
-                       <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Partition Count</label>
+                       <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Partition Count</label>
                        <div className="flex items-center gap-12 bg-surface-container-lowest rounded-full p-3 border border-outline-variant/30">
-                          <button onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">—</button>
+                          <button aria-label="Decrease split count" onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
+                            <span aria-hidden="true">—</span>
+                            <span className="sr-only">Decrease split count</span>
+                          </button>
                           <span className="font-serif text-5xl font-black italic text-on-surface">{splitCount}</span>
-                          <button onClick={() => setSplitCount(splitCount + 1)} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">+</button>
+                          <button aria-label="Increase split count" onClick={() => setSplitCount(splitCount + 1)} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
+                            <span aria-hidden="true">+</span>
+                            <span className="sr-only">Increase split count</span>
+                          </button>
                        </div>
                     </motion.div>
                 )}
@@ -175,7 +181,7 @@ export const PaymentPortal: React.FC = () => {
             {/* Action / QR Section */}
             <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-10 flex flex-col items-center gap-8 shadow-sm">
                 <div className="text-center space-y-2">
-                   <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Authorize Individual Allocation</p>
+                   <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Authorize Individual Allocation</p>
                    <p className="font-sans text-3xl font-black text-on-surface tabular-nums">{payableAmount} DH</p>
                 </div>
                 
@@ -183,7 +189,7 @@ export const PaymentPortal: React.FC = () => {
                    <QrCode className="w-40 h-40 text-primary stroke-[1] group-hover:scale-105 transition-all duration-700" />
                 </div>
                 
-                <p className="font-body text-[14px] text-on-surface-variant italic opacity-60 max-w-xs text-center uppercase tracking-tight">Scan for secure biometric authorization via Apple Pay or Google Pay</p>
+                <p className="font-body text-[14px] text-on-surface-variant italic max-w-xs text-center uppercase tracking-tight">Scan for secure biometric authorization via Apple Pay or Google Pay</p>
                 
                 <div className="w-full space-y-4">
                     <button 

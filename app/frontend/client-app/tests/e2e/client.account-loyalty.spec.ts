@@ -45,7 +45,7 @@ test.describe('account journey', () => {
       await expect(page.getByText('980 PTS')).toBeVisible();
       await expect(page.getByText(/Recent Sessions/i)).toBeVisible();
 
-      await page.getByRole('button', { name: /Sign Out/i }).click();
+      await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
       await expect(page).toHaveURL('/login');
       await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
     });
@@ -75,7 +75,7 @@ test.describe('account journey', () => {
       await expect(page).toHaveURL('/account');
       await expect(page.getByText('120 PTS')).toBeVisible();
 
-      await page.getByRole('button', { name: /Sign Out/i }).click();
+      await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
       await expect(page).toHaveURL('/login');
     });
 

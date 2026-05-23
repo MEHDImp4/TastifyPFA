@@ -71,11 +71,11 @@ export const CheckoutPage: React.FC = () => {
 
                 <div className="w-full grid grid-cols-2 gap-8 py-10 border-y border-outline-variant/30">
                     <div className="text-center space-y-2">
-                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Order Ref</span>
+                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Order Ref</span>
                         <p className="font-serif text-2xl text-on-surface italic">#ORD-8924</p>
                     </div>
                     <div className="text-center space-y-2 border-l border-outline-variant/30">
-                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Estimated Prep</span>
+                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Estimated Prep</span>
                         <div className="flex items-center justify-center gap-2 text-primary font-serif text-2xl italic">
                            <Timer className="w-5 h-5" />
                            <span>25 mins</span>
@@ -99,8 +99,8 @@ export const CheckoutPage: React.FC = () => {
                 <ShoppingBag className="w-10 h-10" />
             </div>
             <div className="space-y-6">
-                <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight italic">Your palette <br /><span className="opacity-40">is waiting.</span></h2>
-                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed opacity-60">Add signature creations from our catalog to begin your journey.</p>
+                <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight italic">Your palette <br /><span className="text-on-surface-variant">is waiting.</span></h2>
+                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed">Add signature creations from our catalog to begin your journey.</p>
             </div>
             <button 
               onClick={() => navigate('/menu')} 
@@ -118,7 +118,7 @@ export const CheckoutPage: React.FC = () => {
         
         {/* Page Header */}
         <div className="flex items-center gap-6 mb-16 border-b border-outline-variant pb-10">
-            <button onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface"><ChevronLeft className="w-5 h-5" /></button>
+            <button aria-label="Return to menu" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface"><ChevronLeft className="w-5 h-5" /></button>
             <div>
                <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase italic m-0">Review Your Selection</h1>
                <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3">Final validation protocol</p>
@@ -149,11 +149,11 @@ export const CheckoutPage: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <div className="flex items-center bg-background border border-outline-variant/30 rounded-xl p-1.5">
-                                        <button onClick={() => updateQty(item.plat.id, -1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Minus className="w-4 h-4" /></button>
+                                        <button aria-label={`Decrease quantity for ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, -1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Minus className="w-4 h-4" /></button>
                                         <span className="font-sans text-sm font-black w-10 text-center tabular-nums">{item.quantite}</span>
-                                        <button onClick={() => updateQty(item.plat.id, 1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Plus className="w-4 h-4" /></button>
+                                        <button aria-label={`Increase quantity for ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, 1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Plus className="w-4 h-4" /></button>
                                     </div>
-                                    <button onClick={() => removeItem(item.plat.id)} className="p-3 text-on-surface-variant hover:text-error transition-all active:scale-75"><Trash2 className="w-5 h-5" /></button>
+                                    <button aria-label={`Remove ${item.plat.nom} from cart`} onClick={() => removeItem(item.plat.id)} className="p-3 text-on-surface-variant hover:text-error transition-all active:scale-75"><Trash2 className="w-5 h-5" /></button>
                                 </div>
                             </motion.div>
                         ))}
@@ -164,7 +164,7 @@ export const CheckoutPage: React.FC = () => {
                 <div className="p-8 bg-surface-container-low border border-outline-variant rounded-[2.5rem] space-y-8">
                     <div>
                         <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Recognize Orchestration</h3>
-                        <p className="font-body text-[14px] text-on-surface-variant italic opacity-60 mt-1">Gratuity for the culinary and service leads</p>
+                        <p className="font-body text-[14px] text-on-surface-variant italic mt-1">Gratuity for the culinary and service leads</p>
                     </div>
                     <div className="grid grid-cols-4 gap-4">
                         {[10, 15, 20, 25].map(p => (
@@ -191,15 +191,15 @@ export const CheckoutPage: React.FC = () => {
                         </div>
 
                         <div className="space-y-4 font-sans text-[11px] font-black uppercase tracking-widest">
-                            <div className="flex justify-between text-on-surface-variant opacity-60"><span>Subtotal</span><span>{subtotal.toFixed(0)} DH</span></div>
-                            <div className="flex justify-between text-on-surface-variant opacity-60"><span>Tax & Svc (8%)</span><span>{serviceTax.toFixed(0)} DH</span></div>
+                            <div className="flex justify-between text-on-surface-variant"><span>Subtotal</span><span>{subtotal.toFixed(0)} DH</span></div>
+                            <div className="flex justify-between text-on-surface-variant"><span>Tax & Svc (8%)</span><span>{serviceTax.toFixed(0)} DH</span></div>
                             {tipPercent > 0 && <div className="flex justify-between text-primary"><span>Reward</span><span>{tipAmount.toFixed(0)} DH</span></div>}
                             
                             <div className="pt-8 border-t border-outline-variant/30 flex justify-between items-end">
                                 <span className="font-serif text-2xl text-on-surface italic m-0 lowercase">Total</span>
                                 <div className="text-right">
                                     <span className="font-serif text-4xl font-black text-primary italic leading-none tabular-nums">{grandTotal.toFixed(0)}</span>
-                                    <span className="ml-2 text-xs font-black text-on-surface opacity-30">DH</span>
+                                    <span className="ml-2 text-xs font-black text-on-surface-variant">DH</span>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +212,7 @@ export const CheckoutPage: React.FC = () => {
                         >
                             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Authorize Manifest</span><ArrowRight className="w-4 h-4" /></>}
                         </button>
-                        <p className="text-[8px] font-black text-on-surface-variant/20 text-center uppercase tracking-widest">Protocol 12-X Encrypted</p>
+                        <p className="text-[8px] font-black text-on-surface-variant text-center uppercase tracking-widest">Protocol 12-X Encrypted</p>
                     </div>
                 </div>
             </aside>

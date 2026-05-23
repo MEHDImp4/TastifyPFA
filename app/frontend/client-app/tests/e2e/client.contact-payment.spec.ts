@@ -87,7 +87,7 @@ test.describe('payment portal', () => {
     await page.goto('/pay/live-token');
     await page.getByRole('button', { name: /^Split$/i }).click();
     await expect(page.locator('p').filter({ hasText: /^90\.00 DH$/ })).toBeVisible();
-    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: /Increase split count/i }).click();
     await expect(page.locator('p').filter({ hasText: /^60\.00 DH$/ })).toBeVisible();
     await page.getByRole('button', { name: /Confirm Payment/i }).click();
     await expect(page.getByText('Authorization Successful')).toBeVisible();

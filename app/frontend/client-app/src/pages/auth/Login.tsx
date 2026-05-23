@@ -61,6 +61,7 @@ export const Login: React.FC = () => {
 
       <Link 
         to="/" 
+        aria-label="Return home"
         className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
@@ -78,7 +79,7 @@ export const Login: React.FC = () => {
              </div>
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Welcome Back.</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] opacity-60 leading-relaxed">Secure Guest Authentication</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">Secure Guest Authentication</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -100,9 +101,11 @@ export const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="w-full space-y-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
+              <label htmlFor="login-username-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
               <div className="relative group">
                 <input
+                  id="login-username-input"
+                  aria-label="Username"
                   type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
                   placeholder="GUEST_ID"
@@ -113,11 +116,13 @@ export const Login: React.FC = () => {
 
             <div className="space-y-2">
               <div className="flex justify-between items-center px-2">
-                 <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Passkey</label>
-                 <Link to="#" className="font-sans text-[9px] font-black text-on-surface-variant/40 hover:text-primary transition-colors uppercase tracking-widest">Recovery?</Link>
+                 <label htmlFor="login-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Passkey</label>
+                 <Link to="#" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Recovery?</Link>
               </div>
               <div className="relative group">
                 <input
+                  id="login-password-input"
+                  aria-label="Passkey"
                   type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   placeholder="••••••••"
@@ -136,7 +141,7 @@ export const Login: React.FC = () => {
             {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
                 <span>Secure Entry</span>
-                <Fingerprint className="w-5 h-5 text-on-primary/60 group-hover:text-on-primary transition-colors" />
+                <Fingerprint className="w-5 h-5 text-on-primary group-hover:text-on-primary transition-colors" />
               </>
             )}
           </button>

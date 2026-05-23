@@ -76,7 +76,7 @@ export const LoyaltyPage: React.FC = () => {
                        {profile?.points.toLocaleString() || 0} <span className="font-sans text-xl md:text-3xl text-on-surface-variant non-italic">PTS</span>
                     </h1>
                  </div>
-                 <p className="text-lg md:text-xl text-on-surface-variant italic opacity-60 max-w-md uppercase tracking-tight">
+                 <p className="text-lg md:text-xl text-on-surface-variant italic max-w-md uppercase tracking-tight">
                     You are approaching the next echelon. Only {nextTierPoints - (profile?.points || 0)} points until you unlock exclusive Gold privileges.
                  </p>
               </div>
@@ -112,11 +112,11 @@ export const LoyaltyPage: React.FC = () => {
               
               <div className="grid grid-cols-2 gap-4 relative z-10">
                  <div className="p-4 bg-background border border-outline-variant rounded-2xl">
-                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-40">Total Visits</p>
+                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Total Visits</p>
                     <p className="font-serif text-3xl font-black text-on-surface italic">24</p>
                  </div>
                  <div className="p-4 bg-background border border-outline-variant rounded-2xl">
-                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-40">Redeemed</p>
+                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Redeemed</p>
                     <p className="font-serif text-3xl font-black text-on-surface italic">06</p>
                  </div>
               </div>
@@ -143,7 +143,7 @@ export const LoyaltyPage: React.FC = () => {
                 return (
                   <motion.div 
                     key={reward.id} whileHover={{ y: -5 }}
-                    className={`bg-surface-container-low border-2 rounded-[2rem] p-4 flex flex-col gap-6 transition-all duration-700 ${isLocked ? 'border-outline-variant/10 opacity-60 grayscale' : 'border-outline-variant hover:border-primary shadow-lg'}`}
+                    className={`bg-surface-container-low border-2 rounded-[2rem] p-4 flex flex-col gap-6 transition-all duration-700 ${isLocked ? 'border-outline-variant/30 grayscale' : 'border-outline-variant hover:border-primary shadow-lg'}`}
                   >
                      <div className="relative aspect-video rounded-2xl overflow-hidden bg-surface-container-highest border border-outline-variant/30">
                         {reward.image ? (
@@ -154,18 +154,18 @@ export const LoyaltyPage: React.FC = () => {
                         <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-md border border-outline-variant/30 px-3 py-1 rounded-lg font-sans text-[11px] font-black text-primary tabular-nums">
                            {reward.points_requis} PTS
                         </div>
-                        {isLocked && <div className="absolute inset-0 bg-background/40 flex items-center justify-center"><Lock className="w-8 h-8 text-on-surface-variant/40" /></div>}
+                        {isLocked && <div className="absolute inset-0 bg-background/40 flex items-center justify-center"><Lock className="w-8 h-8 text-on-surface-variant" /></div>}
                      </div>
 
                      <div className="px-2 flex-1 flex flex-col gap-2">
                         <h4 className="font-serif text-xl font-black text-on-surface uppercase tracking-tight m-0">{reward.nom}</h4>
-                        <p className="font-body text-sm text-on-surface-variant italic opacity-60 uppercase tracking-tight">{reward.description || 'Exclusive culinary experience available for distinguished members.'}</p>
+                        <p className="font-body text-sm text-on-surface-variant italic uppercase tracking-tight">{reward.description || 'Exclusive culinary experience available for distinguished members.'}</p>
                      </div>
 
                      <button 
                        onClick={() => handleRedeem(reward.id)}
                        disabled={isLocked || isRedeeming === reward.id}
-                       className={`w-full py-5 rounded-2xl font-sans text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 ${isLocked ? 'bg-surface-container-highest text-on-surface-variant/30' : 'bg-surface-container border border-outline-variant text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary shadow-xl shadow-black/20'}`}
+                       className={`w-full py-5 rounded-2xl font-sans text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 ${isLocked ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-surface-container border border-outline-variant text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary shadow-xl shadow-black/20'}`}
                      >
                         {isRedeeming === reward.id ? <Loader2 className="w-4 h-4 animate-spin" /> : isLocked ? 'LOCKED' : <><span>Redeem Now</span><ArrowRight className="w-4 h-4" /></>}
                      </button>
@@ -180,7 +180,7 @@ export const LoyaltyPage: React.FC = () => {
            <div className="lg:col-span-2 bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-sm flex flex-col">
               <div className="p-8 border-b border-outline-variant/30 bg-surface-container-high flex justify-between items-center">
                  <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.3em]">Recent Point History</h3>
-                 <History className="w-4 h-4 text-on-surface-variant opacity-40" />
+                 <History className="w-4 h-4 text-on-surface-variant" />
               </div>
               <div className="flex-1 overflow-x-auto p-4">
                  <table className="w-full text-left border-collapse">
@@ -194,10 +194,10 @@ export const LoyaltyPage: React.FC = () => {
                     <tbody className="divide-y divide-outline-variant/10 font-sans text-[11px] font-bold text-on-surface">
                        {[1, 2, 3].map((_, i) => (
                          <tr key={i} className="hover:bg-surface-container-low transition-colors">
-                            <td className="p-4 uppercase opacity-40">MAR 14, 2024</td>
+                            <td className="p-4 uppercase text-on-surface-variant">MAR 14, 2024</td>
                             <td className="p-4">
                                <span className="uppercase block">Dinner Reservation</span>
-                               <span className="font-mono text-[8px] opacity-20 uppercase">Session #TS-88421</span>
+                               <span className="font-mono text-[8px] text-on-surface-variant uppercase">Session #TS-88421</span>
                             </td>
                             <td className="p-4 text-right text-primary">+ 145</td>
                          </tr>
@@ -221,11 +221,11 @@ export const LoyaltyPage: React.FC = () => {
                        <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                        <div>
                           <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-tight">{p.label}</p>
-                          <p className="font-body text-[13px] text-on-surface-variant italic opacity-60 leading-none mt-1">{p.desc}</p>
+                          <p className="font-body text-[13px] text-on-surface-variant italic leading-none mt-1">{p.desc}</p>
                        </div>
                     </li>
                  ))}
-                 <li className="flex gap-4 items-start opacity-20">
+                 <li className="flex gap-4 items-start text-on-surface-variant">
                     <Lock className="w-5 h-5 text-on-surface-variant shrink-0" />
                     <div>
                        <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-tight">Valet Access</p>

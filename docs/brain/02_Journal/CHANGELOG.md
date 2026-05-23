@@ -1,3 +1,19 @@
+## [2026-05-23] - 13:45
+### Added
+- Added `client.quality.spec.ts` to cover client accessibility, narrow-viewport usability, guest shell navigation, offline recovery, and 404/system-page behavior.
+
+### Changed
+- Hardened client accessibility semantics across auth, checkout, account, loyalty, menu, reservations, payment, and public-shell surfaces with stable labels for icon controls, form fields, and mobile navigation.
+- Stabilized client cart persistence on refresh by seeding the cart store from persisted browser state so checkout remains usable after hard reloads.
+- Tightened existing client Playwright selectors to align with the improved accessible names for logout and payment split controls.
+
+### Validation
+- `npm run test:e2e -- --project=chromium tests/e2e/client.quality.spec.ts`
+- `npm run test:e2e -- --project=chromium tests/e2e/client.account-loyalty.spec.ts`
+- `npm run test:e2e -- --project=chromium tests/e2e/client.contact-payment.spec.ts`
+- `npm run test:e2e`
+- `npm run build`
+
 ## [2026-05-23] - 19:33
 ### Added
 - Expanded cross-app Playwright reliability coverage across the client and backoffice suites with request-payload assertions, refresh persistence checks, and stale-session fallback scenarios.

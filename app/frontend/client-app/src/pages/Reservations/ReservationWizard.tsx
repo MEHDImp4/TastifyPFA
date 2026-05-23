@@ -81,7 +81,7 @@ export const ReservationWizard: React.FC = () => {
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-12 py-32 bg-background font-body animate-in fade-in duration-1000">
               <div className="max-w-md space-y-8">
                 <h2 className="text-display-lg text-4xl lg:text-6xl text-primary leading-tight italic">Reserved Access.</h2>
-                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed opacity-60">Authentication required to secure a placement in our high-speed reservation matrix.</p>
+                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed">Authentication required to secure a placement in our high-speed reservation matrix.</p>
                 <button 
                   onClick={() => navigate('/login')}
                   className="px-16 py-6 bg-primary text-on-primary rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20"
@@ -114,17 +114,17 @@ export const ReservationWizard: React.FC = () => {
           <div className="px-10 py-6 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
              <div className="flex items-center gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 1 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>1</div>
-                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 1 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Session</span>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 1 ? 'text-on-surface' : 'text-on-surface-variant'}`}>Session</span>
              </div>
              <div className="h-px w-12 bg-outline-variant/30" />
              <div className="flex items-center gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 2 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>2</div>
-                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 2 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Placement</span>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 2 ? 'text-on-surface' : 'text-on-surface-variant'}`}>Placement</span>
              </div>
              <div className="h-px w-12 bg-outline-variant/30" />
              <div className="flex items-center gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-sans text-xs font-black transition-all ${step >= 3 ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'}`}>3</div>
-                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 3 ? 'text-on-surface' : 'text-on-surface-variant opacity-40'}`}>Commit</span>
+                <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${step >= 3 ? 'text-on-surface' : 'text-on-surface-variant'}`}>Commit</span>
              </div>
           </div>
 
@@ -137,24 +137,24 @@ export const ReservationWizard: React.FC = () => {
                    <div className="p-8 bg-surface-container-lowest border border-outline-variant rounded-2xl flex items-center justify-between group hover:border-primary transition-all">
                       <div>
                          <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] mb-1">Identity Quota</h3>
-                         <p className="font-body text-[14px] text-on-surface-variant italic opacity-60">Verified guests for this placement</p>
+                         <p className="font-body text-[14px] text-on-surface-variant italic">Verified guests for this placement</p>
                       </div>
                       <div className="flex items-center gap-6">
-                         <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Minus className="w-4 h-4" /></button>
+                         <button aria-label="Decrease guest count" onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Minus className="w-4 h-4" /></button>
                          <span className="font-serif text-3xl font-black text-primary italic w-10 text-center">{guests}</span>
-                         <button onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Plus className="w-4 h-4" /></button>
+                         <button aria-label="Increase guest count" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all"><Plus className="w-4 h-4" /></button>
                       </div>
                    </div>
 
                    {/* Date & Time Grid */}
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-4">
-                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Temporal Window</label>
-                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all uppercase" />
+                         <label htmlFor="reservation-date-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Temporal Window</label>
+                         <input id="reservation-date-input" aria-label="Temporal Window" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all uppercase" />
                       </div>
                       <div className="space-y-4">
-                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Arrival Pivot</label>
-                         <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
+                         <label htmlFor="reservation-time-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Arrival Pivot</label>
+                         <input id="reservation-time-input" aria-label="Arrival Pivot" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-16 px-6 bg-surface-container-lowest border border-outline-variant rounded-2xl font-sans font-bold text-on-surface focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all" />
                       </div>
                    </div>
 
@@ -175,7 +175,7 @@ export const ReservationWizard: React.FC = () => {
                            <TableIcon className={`w-8 h-8 ${selectedTable === t.id ? 'text-on-primary' : 'text-primary opacity-20'}`} />
                            <div className="text-center">
                               <span className="block font-serif text-xl font-black italic">Unit {t.numero}</span>
-                              <span className={`font-sans text-[9px] font-black uppercase tracking-widest ${selectedTable === t.id ? 'text-on-primary opacity-60' : 'opacity-40'}`}>{t.capacite} CAP</span>
+                              <span className={`font-sans text-[9px] font-black uppercase tracking-widest ${selectedTable === t.id ? 'text-on-primary' : 'text-on-surface-variant'}`}>{t.capacite} CAP</span>
                            </div>
                         </button>
                       ))}
@@ -192,17 +192,17 @@ export const ReservationWizard: React.FC = () => {
                    <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 space-y-8">
                       <div className="grid grid-cols-2 gap-8 border-b border-outline-variant/20 pb-8">
                          <div>
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Temporal</p>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Temporal</p>
                             <p className="font-serif text-xl text-on-surface italic">{new Date(date).toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'short' })} • {startTime}</p>
                          </div>
                          <div className="text-right">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Covers</p>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Covers</p>
                             <p className="font-serif text-xl text-on-surface italic">{guests} Verified Identities</p>
                          </div>
                       </div>
                       <div className="space-y-4">
-                         <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Specific Manifest Requirements</label>
-                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, architectural preferences..." className="w-full p-6 bg-surface-container border border-outline-variant rounded-xl font-body text-base italic text-on-surface focus:border-primary outline-none transition-all resize-none" rows={3} />
+                         <label htmlFor="reservation-notes-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Specific Manifest Requirements</label>
+                         <textarea id="reservation-notes-input" aria-label="Specific Manifest Requirements" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, architectural preferences..." className="w-full p-6 bg-surface-container border border-outline-variant rounded-xl font-body text-base italic text-on-surface focus:border-primary outline-none transition-all resize-none" rows={3} />
                       </div>
                    </div>
                    <div className="flex gap-4 pt-6">
@@ -227,7 +227,7 @@ export const ReservationWizard: React.FC = () => {
                     </div>
                     <div className="space-y-4">
                        <h2 className="font-serif text-4xl md:text-6xl font-black text-on-surface italic leading-none">Secured.</h2>
-                       <p className="font-body text-lg text-on-surface-variant italic opacity-60 max-w-lg mx-auto">Your placement at {brandName} has been formally committed. An exceptional gastronomic orchestration awaits.</p>
+                       <p className="font-body text-lg text-on-surface-variant italic max-w-lg mx-auto">Your placement at {brandName} has been formally committed. An exceptional gastronomic orchestration awaits.</p>
                     </div>
                     <div className="pt-8 flex flex-col sm:flex-row gap-6 justify-center">
                        <button onClick={() => navigate('/')} className="px-12 py-5 bg-on-surface text-background rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-primary shadow-2xl">Return Home</button>

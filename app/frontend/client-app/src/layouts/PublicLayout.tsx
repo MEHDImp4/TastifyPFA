@@ -64,8 +64,10 @@ export const PublicLayout: React.FC = () => {
           <div className="flex items-center gap-8">
             <Link 
                 to="/checkout" 
+                aria-label={`Open checkout with ${items.length} item${items.length === 1 ? '' : 's'}`}
                 className="relative group p-2 transition-all active:scale-90"
             >
+                <span className="sr-only">{`Open checkout with ${items.length} item${items.length === 1 ? '' : 's'}`}</span>
                 <ShoppingBag className="w-5 h-5 text-on-surface group-hover:text-primary transition-colors" strokeWidth={1.5} />
                 {items.length > 0 && (
                     <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-on-primary text-[8px] font-black rounded-full flex items-center justify-center shadow-lg">
@@ -79,12 +81,14 @@ export const PublicLayout: React.FC = () => {
                 <div className="flex items-center gap-5 pl-8 border-l border-outline-variant/30">
                   <Link to="/account" className="flex flex-col items-end group leading-none">
                     <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-wider group-hover:text-primary transition-colors">{username}</p>
-                    <p className="font-sans text-[8px] font-bold text-on-surface-variant/40 tracking-[0.2em] uppercase mt-1">Echelon Pass</p>
+                    <p className="font-sans text-[8px] font-bold text-on-surface-variant tracking-[0.2em] uppercase mt-1">Echelon Pass</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-2 text-on-surface-variant/40 hover:text-error transition-colors active:scale-75"
+                    aria-label="Sign out"
+                    className="p-2 text-on-surface-variant hover:text-error transition-colors active:scale-75"
                   >
+                    <span className="sr-only">Sign out</span>
                     <LogOut className="w-4 h-4" strokeWidth={2.5} />
                   </button>
                 </div>
@@ -100,8 +104,12 @@ export const PublicLayout: React.FC = () => {
 
             <button 
               onClick={toggleMenu}
+              aria-controls="mobile-navigation"
+              aria-expanded={isMenuOpen}
+              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               className="lg:hidden p-3 bg-surface-container-high border border-outline-variant rounded-xl hover:bg-surface-container-highest transition-all"
             >
+              <span className="sr-only">{isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}</span>
               {isMenuOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5 text-on-surface" />}
             </button>
           </div>
@@ -114,6 +122,7 @@ export const PublicLayout: React.FC = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
+              id="mobile-navigation"
               className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-client-margin flex flex-col justify-between pb-12 overflow-hidden"
             >
               {/* Background structural detail */}

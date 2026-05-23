@@ -60,8 +60,11 @@ export const MenuPage: React.FC = () => {
            </div>
            <div className="relative group w-full md:w-96">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
+              <label htmlFor="menu-search-input" className="sr-only">Search menu</label>
               <input 
+                id="menu-search-input"
                 type="text"
+                aria-label="Search menu"
                 placeholder="FIND A CREATION..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -168,7 +171,7 @@ export const MenuPage: React.FC = () => {
                exit={{ opacity: 0, scale: 0.95, y: 20 }}
                className="relative w-full max-w-4xl bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
+                <button aria-label="Close dish details" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
                    {selectedPlat.image ? (

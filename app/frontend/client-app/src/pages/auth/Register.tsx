@@ -46,6 +46,7 @@ export const Register: React.FC = () => {
 
       <Link 
         to="/" 
+        aria-label="Return home"
         className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
@@ -63,7 +64,7 @@ export const Register: React.FC = () => {
              </div>
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Join the Echelon.</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] opacity-60 leading-relaxed">Initialize your gastronomic identity</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">Initialize your gastronomic identity</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -78,9 +79,11 @@ export const Register: React.FC = () => {
         <form onSubmit={handleSubmit} className="w-full space-y-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
+              <label htmlFor="register-username-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
               <div className="relative group">
                 <input
+                  id="register-username-input"
+                  aria-label="Username"
                   type="text" required value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
                   placeholder="NOM_DE_PLUME"
@@ -89,9 +92,11 @@ export const Register: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Registry Email</label>
+              <label htmlFor="register-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Registry Email</label>
               <div className="relative group">
                 <input
+                  id="register-email-input"
+                  aria-label="Registry Email"
                   type="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
                   placeholder="GUEST@DOMAIN.COM"
@@ -100,9 +105,11 @@ export const Register: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Session Passkey</label>
+              <label htmlFor="register-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Session Passkey</label>
               <div className="relative group">
                 <input
+                  id="register-password-input"
+                  aria-label="Session Passkey"
                   type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   placeholder="••••••••"
@@ -119,7 +126,7 @@ export const Register: React.FC = () => {
             {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
                 <span>Commit Registry</span>
-                <ArrowRight className="w-5 h-5 text-on-primary/60 group-hover:text-on-primary transition-colors" />
+                <ArrowRight className="w-5 h-5 text-on-primary group-hover:text-on-primary transition-colors" />
               </>
             )}
           </button>

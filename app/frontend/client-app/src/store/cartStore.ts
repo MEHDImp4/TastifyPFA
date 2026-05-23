@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Plat } from '../api/menu';
 
+const CART_STORAGE_KEY = 'tastify-client-cart';
+
 interface CartItem {
   plat: Plat;
   quantite: number;
@@ -16,10 +18,29 @@ interface CartState {
   total: number;
 }
 
+const readInitialCartItems = (): CartItem[] => {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  try {
+    const persistedValue = window.localStorage.getItem(CART_STORAGE_KEY);
+
+    if (!persistedValue) {
+      return [];
+    }
+
+    const parsedValue = JSON.parse(persistedValue);
+    return Array.isArray(parsedValue?.state?.items) ? parsedValue.state.items : [];
+  } catch {
+    return [];
+  }
+};
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
-      items: [],
+      items: readInitialCartItems(),
       addItem: (plat) => {
         const items = get().items;
         const existing = items.find(i => i.plat.id === plat.id);
@@ -38,6 +59,9 @@ export const useCartStore = create<CartState>()(
         return get().items.reduce((sum, item) => sum + (parseFloat(item.plat.prix) * item.quantite), 0);
       }
     }),
-    { name: 'tastify-client-cart' }
+    {
+      name: CART_STORAGE_KEY,
+      partialize: (state) => ({ items: state.items }),
+    }
   )
 );

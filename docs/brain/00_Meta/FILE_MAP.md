@@ -53,7 +53,7 @@ tastify-pfa/
 │           ├── src/store/         # Zustand stores (including configStore.ts)
 │           ├── src/components/    # Shared UI/auth/branding primitives
 │           ├── src/layouts/       # PublicLayout (Dynamic branding)
-│           ├── tests/e2e/         # Playwright coverage for auth, catalog, reservations, checkout, account, loyalty, contact, and payment journeys
+│           ├── tests/e2e/         # Playwright coverage for auth, catalog, reservations, checkout, account, loyalty, contact, payment, quality, accessibility, and responsive journeys
 │           └── src/pages/
 │               ├── Home/          # Bento-Command Landing (Horizontal Scroll)
 │               ├── Menu/          # Cinematic Catalog
