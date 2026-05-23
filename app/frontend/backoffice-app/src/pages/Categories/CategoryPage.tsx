@@ -238,10 +238,23 @@ export const CategoryPage: React.FC = () => {
 
                   {/* Actions */}
                   <div className="w-10 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity gap-2">
-                    <button data-testid={`category-edit-${cat.id}`} className="p-1 hover:text-primary transition-colors">
+                    <button
+                      type="button"
+                      data-testid={`category-edit-${cat.id}`}
+                      aria-label={`Edit category ${cat.nom}`}
+                      title={`Edit category ${cat.nom}`}
+                      className="p-1 hover:text-primary transition-colors"
+                    >
                       <Edit2 className="w-4 h-4" />
                     </button>
-                    <button data-testid={`category-delete-${cat.id}`} onClick={(e) => { e.stopPropagation(); handleDelete(cat.id); }} className="p-1 hover:text-error transition-colors">
+                    <button
+                      type="button"
+                      data-testid={`category-delete-${cat.id}`}
+                      aria-label={`Delete category ${cat.nom}`}
+                      title={`Delete category ${cat.nom}`}
+                      onClick={(e) => { e.stopPropagation(); handleDelete(cat.id); }}
+                      className="p-1 hover:text-error transition-colors"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -269,7 +282,14 @@ export const CategoryPage: React.FC = () => {
                     </h2>
                     <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Metadata Configuration</p>
                   </div>
-                  <button onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} data-testid="close-editor" className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant">
+                  <button
+                    type="button"
+                    onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }}
+                    data-testid="close-editor"
+                    aria-label="Close category editor"
+                    title="Close category editor"
+                    className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant"
+                  >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
@@ -281,7 +301,12 @@ export const CategoryPage: React.FC = () => {
                     <div className="relative group aspect-video rounded border-2 border-dashed border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center overflow-hidden transition-all hover:border-primary">
                       {preview ? (
                          <>
-                          <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="Preview" />
+                         <img
+                           src={preview}
+                           data-testid="category-image-preview"
+                           className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700"
+                           alt="Preview"
+                         />
                           <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-background/40">
                              <CloudUpload className="w-8 h-8 text-primary mb-2" />
                              <span className="font-sans text-[10px] font-black text-white uppercase tracking-widest">Replace File</span>
@@ -293,7 +318,12 @@ export const CategoryPage: React.FC = () => {
                           <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Upload Asset</span>
                         </div>
                       )}
-                      <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                      <input
+                        type="file"
+                        data-testid="category-image-input"
+                        onChange={handleImageChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                      />
                     </div>
                   </div>
 
@@ -344,6 +374,8 @@ export const CategoryPage: React.FC = () => {
                     <button 
                       type="button"
                       onClick={() => setEditingCategory(prev => prev ? { ...prev, est_active: !prev.est_active } : null)}
+                      aria-label={`Toggle category visibility ${editingCategory?.est_active ?? true ? 'off' : 'on'}`}
+                      aria-pressed={editingCategory?.est_active ?? true}
                       className={`w-12 h-6 rounded-full relative transition-all border ${editingCategory?.est_active ?? true ? 'bg-primary border-primary' : 'bg-surface-container-highest border-outline-variant'}`}
                     >
                       <div className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-white transition-all ${editingCategory?.est_active ?? true ? 'right-1' : 'left-1'}`} />

@@ -10,6 +10,15 @@ const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page
   expect(blockingViolations).toEqual([]);
 };
 
+const uploadedPng = {
+  name: 'menu-media.png',
+  mimeType: 'image/png',
+  buffer: Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAukB9p6m6wAAAABJRU5ErkJggg==',
+    'base64',
+  ),
+};
+
 test.describe('gerant browser workflows', () => {
   test.beforeEach(async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
@@ -204,6 +213,85 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('category-card-3000')).toBeHidden();
   });
 
+  test('creates a category with an uploaded image and renders the saved thumbnail', async ({ page }) => {
+    const initialName = `PW Image Category ${Date.now()}`;
+    let categories = [];
+
+    await page.route('**/api/categories/', async (route) => {
+      const method = route.request().method();
+      if (method === 'POST') {
+        const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
+        expect(payload).toContain('name="image"');
+        expect(payload).toContain(`filename="${uploadedPng.name}"`);
+
+        const newCategory = {
+          id: 3010,
+          nom: initialName,
+          description: 'Image-backed category',
+          ordre_affichage: 12,
+          est_active: true,
+          image: '/media/categories/pw-image-category.png',
+        };
+        categories = [newCategory];
+        await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(newCategory) });
+        return;
+      }
+
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories) });
+    });
+
+    await page.goto('/categories');
+    await page.getByTestId('category-create-button').click();
+    await page.getByTestId('category-name-input').fill(initialName);
+    await page.getByTestId('category-description-input').fill('Category with uploaded media coverage.');
+    await page.getByTestId('category-order-input').fill('12');
+    await page.getByTestId('category-image-input').setInputFiles(uploadedPng);
+
+    await expect(page.getByTestId('category-image-preview')).toBeVisible();
+    await page.getByTestId('category-save-button').click();
+
+    const createdCard = page.getByTestId('category-card-3010');
+    await expect(createdCard).toContainText(initialName);
+    await expect(createdCard.locator('img')).toHaveAttribute('src', /pw-image-category\.png/);
+  });
+
+  test('replaces an existing category image without leaving a stale thumbnail behind', async ({ page }) => {
+    let categories = [
+      {
+        id: 4010,
+        nom: 'Media Starters',
+        description: 'Initial category art',
+        ordre_affichage: 4,
+        est_active: true,
+        image: '/media/categories/original-category.png',
+      },
+    ];
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories) });
+    });
+
+    await page.route('**/api/categories/4010/', async (route) => {
+      const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
+      expect(payload).toContain('name="image"');
+      expect(payload).toContain(`filename="${uploadedPng.name}"`);
+
+      categories = [{ ...categories[0], image: '/media/categories/replaced-category.png' }];
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories[0]) });
+    });
+
+    await page.goto('/categories');
+    const categoryCard = page.getByTestId('category-card-4010');
+    await expect(categoryCard.locator('img')).toHaveAttribute('src', /original-category\.png/);
+
+    await page.getByTestId('category-edit-4010').click();
+    await page.getByTestId('category-image-input').setInputFiles(uploadedPng);
+    await expect(page.getByTestId('category-image-preview')).toBeVisible();
+    await page.getByTestId('category-save-button').click();
+
+    await expect(categoryCard.locator('img')).toHaveAttribute('src', /replaced-category\.png/);
+  });
+
   test('creates, edits, and deletes a plat', async ({ page }) => {
     const unique = Date.now();
     const initialName = `PW Plat ${unique}`;
@@ -256,6 +344,122 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('plat-card-7000')).toBeHidden();
   });
 
+  test('creates a plat with an uploaded image and refreshes the registry card', async ({ page }) => {
+    const initialName = `PW Image Plat ${Date.now()}`;
+    let plats = [];
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      const method = route.request().method();
+      if (method === 'POST') {
+        const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
+        expect(payload).toContain('name="image"');
+        expect(payload).toContain(`filename="${uploadedPng.name}"`);
+
+        const newPlat = {
+          id: 7010,
+          nom: initialName,
+          description: 'Image-backed plat',
+          prix: '61.00',
+          temps_preparation: 18,
+          categorie: 1,
+          image: '/media/plats/pw-image-plat.png',
+          est_active: true,
+          est_disponible: true,
+        };
+        plats = [newPlat];
+        await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(newPlat) });
+        return;
+      }
+
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
+    });
+
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.goto('/menu');
+    await page.getByTestId('plat-create-button').click();
+    await page.getByTestId('plat-name-input').fill(initialName);
+    await page.getByTestId('plat-price-input').fill('61.00');
+    await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
+
+    await expect(page.getByText('FILE LOADED')).toBeVisible();
+    await page.getByTestId('plat-save-button').click();
+
+    const createdCard = page.getByTestId('plat-card-7010');
+    await expect(createdCard).toContainText(initialName);
+    await expect(createdCard.locator('img')).toHaveAttribute('src', /pw-image-plat\.png/);
+  });
+
+  test('replaces an existing plat image without leaving stale media in the registry', async ({ page }) => {
+    let plats = [
+      {
+        id: 7110,
+        nom: 'Tagine Atlas',
+        description: 'Original art',
+        prix: '88.00',
+        temps_preparation: 25,
+        categorie: 1,
+        image: '/media/plats/original-plat.png',
+        est_active: true,
+        est_disponible: true,
+      },
+    ];
+
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
+    });
+
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/plats/7110/', async (route) => {
+      const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
+      expect(payload).toContain('name="image"');
+      expect(payload).toContain(`filename="${uploadedPng.name}"`);
+
+      plats = [{ ...plats[0], image: '/media/plats/replaced-plat.png' }];
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats[0]) });
+    });
+
+    await page.goto('/menu');
+    const platCard = page.getByTestId('plat-card-7110');
+    await expect(platCard.locator('img')).toHaveAttribute('src', /original-plat\.png/);
+
+    await page.getByTestId('plat-edit-7110').click();
+    await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
+    await expect(page.getByText('FILE LOADED')).toBeVisible();
+    await page.getByTestId('plat-save-button').click();
+
+    await expect(platCard.locator('img')).toHaveAttribute('src', /replaced-plat\.png/);
+  });
+
   test('resets category create drafts when the modal is reopened', async ({ page }) => {
     await page.goto('/categories');
     await page.getByTestId('category-create-button').click();
@@ -296,6 +500,32 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('category-name-input')).toHaveValue('Broken category draft');
     await expect(page.getByTestId('category-description-input')).toHaveValue('The modal should stay open after the API failure.');
     await expect(page.getByTestId('category-order-input')).toHaveValue('7');
+  });
+
+  test('keeps the category image draft recoverable when the upload save fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      if (route.request().method() === 'POST') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'category image write failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/categories');
+    await page.getByTestId('category-create-button').click();
+    await page.getByTestId('category-name-input').fill('Broken image category');
+    await page.getByTestId('category-order-input').fill('14');
+    await page.getByTestId('category-image-input').setInputFiles(uploadedPng);
+    await page.getByTestId('category-save-button').click();
+
+    await expect(page.getByText('Failed to save category')).toBeVisible();
+    await expect(page.getByTestId('category-name-input')).toHaveValue('Broken image category');
+    await expect(page.getByTestId('category-image-preview')).toBeVisible();
   });
 
   test('keeps the category editor state intact when an edit request fails', async ({ page }) => {
@@ -361,6 +591,48 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken plat draft');
     await expect(page.getByTestId('plat-price-input')).toHaveValue('31.50');
     await expect(page.getByTestId('plat-description-input')).toHaveValue('This draft should survive a failing save.');
+  });
+
+  test('keeps the plat image draft recoverable when the upload save fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      if (route.request().method() === 'POST') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'plat image write failed' }),
+        });
+        return;
+      }
+
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.goto('/menu');
+    await page.getByTestId('plat-create-button').click();
+    await page.getByTestId('plat-name-input').fill('Broken image plat');
+    await page.getByTestId('plat-price-input').fill('43.00');
+    await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
+    await page.getByTestId('plat-save-button').click();
+
+    await expect(page.getByText('Commit failed')).toBeVisible();
+    await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken image plat');
+    await expect(page.getByText('FILE LOADED')).toBeVisible();
   });
 
   test('keeps plat edits visible when an update request fails', async ({ page }) => {

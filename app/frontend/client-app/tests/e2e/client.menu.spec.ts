@@ -12,6 +12,11 @@ const plats = [
   { id: 21, nom: 'Tagine Poulet', prix: '55.00', description: 'Tagine de poulet aux olives', temps_preparation: 30, categorie: 2, image: null, est_active: true, est_disponible: true },
 ];
 
+const imageBackedPlat = {
+  ...plats[2],
+  image: '/media/plats/tagine-poulet-hero.png',
+};
+
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
@@ -124,5 +129,32 @@ test.describe('menu catalog', () => {
 
     await page.getByText('Briouates').click();
     await expect(page.getByText('GASTRONOMIC RECORD')).toHaveCount(0);
+  });
+
+  test('renders image-backed dishes safely in both the catalog and detail modal', async ({ page }) => {
+    await page.unroute('**/api/plats/');
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([plats[0], plats[1], imageBackedPlat]),
+      });
+    });
+
+    await page.goto('/menu');
+    await page.getByRole('button', { name: /All Selections/i }).click();
+
+    const tagineCard = page.getByText('Tagine Poulet').locator('..').locator('..');
+    await expect(page.getByRole('img', { name: 'Tagine Poulet' }).first()).toHaveAttribute(
+      'src',
+      /tagine-poulet-hero\.png/,
+    );
+
+    await tagineCard.click();
+    await expect(page.getByText('GASTRONOMIC RECORD')).toBeVisible();
+    await expect(page.getByRole('img', { name: 'Tagine Poulet' }).last()).toHaveAttribute(
+      'src',
+      /tagine-poulet-hero\.png/,
+    );
   });
 });

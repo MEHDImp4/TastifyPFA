@@ -314,20 +314,43 @@ export const PlatPage: React.FC = () => {
                   {/* Availability Toggle */}
                   <div className="flex justify-center">
                     <button 
+                      type="button"
                       onClick={() => toggleAvailability(plat)}
+                      aria-label={`${plat.est_disponible ? 'Disable' : 'Enable'} availability for ${plat.nom}`}
+                      aria-pressed={plat.est_disponible}
+                      title={`${plat.est_disponible ? 'Disable' : 'Enable'} availability for ${plat.nom}`}
                       className={`w-10 h-5 rounded-full relative transition-all border ${plat.est_disponible ? 'bg-primary border-primary' : 'bg-surface-container-highest border-outline-variant'}`}
                     >
                       <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white transition-all ${plat.est_disponible ? 'right-0.5' : 'left-0.5'}`} />
+                      <span className="sr-only">
+                        {plat.est_disponible ? 'Available' : 'Unavailable'}: {plat.nom}
+                      </span>
                     </button>
                   </div>
 
                   {/* Actions */}
                   <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                    <button data-testid={`plat-edit-${plat.id}`} onClick={() => handleOpenEditor(plat)} className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
+                    <button
+                      type="button"
+                      data-testid={`plat-edit-${plat.id}`}
+                      onClick={() => handleOpenEditor(plat)}
+                      aria-label={`Edit dish ${plat.nom}`}
+                      title={`Edit dish ${plat.nom}`}
+                      className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75"
+                    >
                       <Edit2 className="w-4 h-4" />
+                      <span className="sr-only">Edit {plat.nom}</span>
                     </button>
-                    <button data-testid={`plat-delete-${plat.id}`} onClick={() => handleDelete(plat.id)} className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
+                    <button
+                      type="button"
+                      data-testid={`plat-delete-${plat.id}`}
+                      onClick={() => handleDelete(plat.id)}
+                      aria-label={`Delete dish ${plat.nom}`}
+                      title={`Delete dish ${plat.nom}`}
+                      className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75"
+                    >
                       <Trash2 className="w-4 h-4" />
+                      <span className="sr-only">Delete {plat.nom}</span>
                     </button>
                   </div>
                 </motion.div>
@@ -362,7 +385,14 @@ export const PlatPage: React.FC = () => {
                   <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">{editingPlat ? 'Edit Creation' : 'New Creation'}</h2>
                   <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mt-1">Culinary Record Registry</p>
                 </div>
-                <button onClick={() => setIsEditorOpen(false)} data-testid="close-editor" className="p-2 rounded hover:bg-surface-container-high transition-colors">
+                <button
+                  type="button"
+                  onClick={() => setIsEditorOpen(false)}
+                  data-testid="close-editor"
+                  aria-label="Close dish editor"
+                  title="Close dish editor"
+                  className="p-2 rounded hover:bg-surface-container-high transition-colors"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -423,7 +453,12 @@ export const PlatPage: React.FC = () => {
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Visual Asset</label>
                       <div className="relative group h-12 bg-surface-main border border-dashed border-outline-variant rounded flex items-center justify-center overflow-hidden transition-all hover:border-primary cursor-pointer">
                         {preview ? <span className="font-sans text-[10px] font-black text-primary">FILE LOADED</span> : <span className="font-sans text-[10px] font-bold text-on-surface-variant/40">INJECT IMAGE</span>}
-                        <input type="file" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                        <input
+                          type="file"
+                          data-testid="plat-image-input"
+                          onChange={handleImageChange}
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
                       </div>
                    </div>
                 </div>
