@@ -26,6 +26,16 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Issue**: Standard proxying often fails for HMR or live sockets.
 - **Fix**: Use `ws: true` and `changeOrigin: true` with an `http` target in the Vite proxy config.
 
+### 6. Client Checkout Cart Hydrates Reliably Only Through SPA Navigation
+- **Issue**: Seeding `tastify-client-cart` in localStorage and hard-loading `/checkout` can still render the empty-cart state even when the stored items are present.
+- **Quirk**: The checkout page currently reflects cart contents reliably when items are added through the menu flow and the user reaches `/checkout` through the in-app link, not a cold route load.
+- **Fix**: Keep E2E coverage deterministic by building cart state through `/menu` interactions and then navigating to `/checkout` with the existing SPA control.
+
+### 7. Invalid Client Payment Tokens Collapse the Portal
+- **Issue**: When `/api/paiements/session/resolve/:token` returns a failing response, `PaymentPortal` currently falls through to a blank body instead of rendering a recovery panel or toast.
+- **Quirk**: The shipped UI has no stable invalid-link screen yet, so browser coverage must assert the current crash-like state rather than invent a fallback.
+- **Fix**: Preserve this as an explicit test assertion until the product gets a dedicated error state, then update both the UI and the tests together.
+
 ## Backend (Django / Docker)
 
 ### 1. CRLF vs LF (entrypoint.sh)

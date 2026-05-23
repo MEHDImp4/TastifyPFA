@@ -2390,6 +2390,18 @@ and this project adheres to semantic tracking for development.
 # Changelog
 
 ## [2026-05-13] - 21:31
+## [2026-05-23] - 01:54
+### Changed
+- Added `app/frontend/client-app/tests/e2e/client.reservations.spec.ts` to cover the client booking gate, happy path, availability failure, reservation failure, and the current `/orders` post-success navigation quirk.
+- Added `app/frontend/client-app/tests/e2e/client.checkout.spec.ts` to cover empty-cart recovery, quantity and tip recalculation, item removal, successful order submission, and failed checkout submission without cart loss.
+- Added `app/frontend/client-app/tests/e2e/client.account-loyalty.spec.ts` to cover account route protection, empty and active account states, feedback success and failure handling, loyalty rendering, locked rewards, successful redemption, and redemption failure feedback.
+- Added `app/frontend/client-app/tests/e2e/client.contact-payment.spec.ts` to cover contact form validation and reset behavior plus secure payment token resolution, full payment, equal split, itemized settlement, zero-total guardrails, and payment confirmation.
+
+### Validation
+- `npm run test:e2e -- --project=chromium tests/e2e/client.reservations.spec.ts tests/e2e/client.checkout.spec.ts tests/e2e/client.account-loyalty.spec.ts tests/e2e/client.contact-payment.spec.ts` passed in `app/frontend/client-app`.
+- `npm run build` passed in `app/frontend/client-app`.
+- The new invalid-payment-token assertion intentionally reflects the current shipped behavior where the payment portal collapses instead of rendering a dedicated recovery state.
+
 ### Changed
 - Unified the public client branding around a shared configurable wordmark so the restaurant name replaces the default Tastify mark in the same slot instead of rendering beside it.
 - Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.
