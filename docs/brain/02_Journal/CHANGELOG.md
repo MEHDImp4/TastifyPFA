@@ -1,3 +1,21 @@
+## [2026-05-23] - 19:33
+### Added
+- Expanded cross-app Playwright reliability coverage across the client and backoffice suites with request-payload assertions, refresh persistence checks, and stale-session fallback scenarios.
+- Added reusable client authenticated storage-state variants for valid, stale, and partial session bootstrapping in the E2E fixture layer.
+- Added deterministic client reliability scenarios for reservation retry recovery, exact checkout payload submission, duplicate-submit protection, and payment-mode contract assertions across full, split, and itemized flows.
+- Added backoffice reliability scenarios for stale and partial auth fallback, ordering refresh stability, reservation filter persistence after mutation, and settings reload consistency.
+
+### Validation
+- `npm run test:e2e -- --project=chromium tests/e2e/client.reservations.spec.ts tests/e2e/client.checkout.spec.ts tests/e2e/client.contact-payment.spec.ts tests/e2e/client.account-loyalty.spec.ts`
+- `npm run test:e2e -- --project=gerant-chromium --project=serveur-chromium tests/e2e/backoffice.gerant.spec.ts tests/e2e/backoffice.serveur.spec.ts`
+- `npm run test:e2e` in `app/frontend/client-app` still reports the pre-existing `tests/e2e/client.a11y.spec.ts` login-page `color-contrast` and `link-name` axe failures.
+- `npm run test:e2e` in `app/frontend/backoffice-app`
+- `npm run build` in `app/frontend/client-app`
+- `npm run build` in `app/frontend/backoffice-app`
+
+### Commit
+- `COMMIT_HASH_PENDING` `Add cross-app reliability e2e coverage`
+
 ## [2026-05-23] - 02:13
 ### Added
 - Expanded backoffice Playwright coverage for manager, serveur, and cuisinier workflows across dashboard analytics, maintenance, delivery hub, salle navigation, and kitchen menu behavior.
@@ -2419,6 +2437,20 @@ and this project adheres to semantic tracking for development.
 - `npm run test:e2e -- --project=chromium tests/e2e/client.reservations.spec.ts tests/e2e/client.checkout.spec.ts tests/e2e/client.account-loyalty.spec.ts tests/e2e/client.contact-payment.spec.ts` passed in `app/frontend/client-app`.
 - `npm run build` passed in `app/frontend/client-app`.
 - The new invalid-payment-token assertion intentionally reflects the current shipped behavior where the payment portal collapses instead of rendering a dedicated recovery state.
+
+## [2026-05-23] - 02:45
+### Changed
+- Expanded the backoffice Playwright quality-gap coverage across `backoffice.gerant.spec.ts`, `backoffice.serveur.spec.ts`, and `backoffice.cuisinier.spec.ts` with manager workflow depth, authenticated accessibility checks, responsive smoke coverage, and cross-role shell persistence assertions.
+- Hardened backoffice accessibility in shared shells and operational pages by labeling icon-only controls, improving low-contrast copy, and making scrollable regions keyboard-focusable in `AppShell`, `Topbar`, `NotificationCenter`, `DashboardPage`, `SallePage`, `KdsPage`, `CategoryPage`, and `PlatPage`.
+- Tightened menu-related Playwright locators to target dish headings explicitly after the new accessibility labels introduced additional matching text nodes for screen readers.
+
+### Validation
+- `npm run test:e2e -- --project=gerant-chromium --project=serveur-chromium --project=cuisinier-chromium -g "has no critical or serious axe violations"` passed in `app/frontend/backoffice-app` after restarting the Docker `backoffice-app` container to refresh Vite inside Docker on Windows.
+- `npm run test:e2e` passed in `app/frontend/backoffice-app`.
+- `npm run build` passed in `app/frontend/backoffice-app`.
+
+### Commit
+- `COMMIT_HASH_PENDING` `Expand backoffice quality-gap e2e coverage`
 
 ### Changed
 - Unified the public client branding around a shared configurable wordmark so the restaurant name replaces the default Tastify mark in the same slot instead of rendering beside it.

@@ -89,7 +89,16 @@ test.describe('payment portal', () => {
     await expect(page.locator('p').filter({ hasText: /^90\.00 DH$/ })).toBeVisible();
     await page.getByRole('button', { name: '+' }).click();
     await expect(page.locator('p').filter({ hasText: /^60\.00 DH$/ })).toBeVisible();
+    await page.getByRole('button', { name: /Confirm Payment/i }).click();
+    await expect(page.getByText('Authorization Successful')).toBeVisible();
 
+    expect(payPayloads[0]).toMatchObject({
+      token: 'live-token',
+      montant: '60.00',
+    });
+
+    payPayloads = [];
+    await page.goto('/pay/live-token');
     await page.getByRole('button', { name: /^Items$/i }).click();
     await expect(page.locator('p').filter({ hasText: /^0\.00 DH$/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Confirm Payment/i })).toBeDisabled();
@@ -107,6 +116,40 @@ test.describe('payment portal', () => {
         { ligne_id: 2, montant: '140.00' },
       ],
     });
+  });
+
+  test('keeps payment submission single-shot when the first attempt fails slowly', async ({ page }) => {
+    let payAttempts = 0;
+
+    await page.route('**/api/paiements/session/resolve/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          table_numero: '7',
+          montant_restant: '42.00',
+          lignes: [{ id: 1, plat_nom: 'Mocktail', quantite: 1, montant_restant: '42.00' }],
+        }),
+      });
+    });
+    await page.route('**/api/paiements/session/pay/', async (route) => {
+      payAttempts += 1;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'PAYMENT_RETRY_LATER' }),
+      });
+    });
+
+    await page.goto('/pay/retry-token');
+    const confirmButton = page.getByRole('button', { name: /Confirm Payment/i });
+    await confirmButton.dblclick();
+
+    await expect(page.locator('button svg.animate-spin')).toBeVisible();
+    await expect(page.getByText('PAYMENT_RETRY_LATER')).toBeVisible();
+    await expect(confirmButton).toBeEnabled();
+    expect(payAttempts).toBe(1);
   });
 
   test('shows successful payment confirmation screen', async ({ page }) => {

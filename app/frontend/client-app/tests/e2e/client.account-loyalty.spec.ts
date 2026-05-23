@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { AUTHENTICATED_STORAGE_STATE, mockConfig, mockRefreshFail } from './fixtures/api';
+import {
+  AUTHENTICATED_STORAGE_STATE,
+  PARTIAL_SESSION_STORAGE_STATE,
+  STALE_SESSION_STORAGE_STATE,
+  mockConfig,
+  mockRefreshFail,
+} from './fixtures/api';
 
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
@@ -42,6 +48,35 @@ test.describe('account journey', () => {
       await page.getByRole('button', { name: /Sign Out/i }).click();
       await expect(page).toHaveURL('/login');
       await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
+    });
+
+    test('keeps a valid stored session through refresh before logout', async ({ page }) => {
+      await page.route('**/api/reservations/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+      await page.route('**/api/loyalty/my_status/', async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ points: 120, tier: 'BRONZE', tier_display: 'Bronze Member' }),
+        });
+      });
+      await page.route('**/api/commandes/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+      await page.route('**/api/users/logout/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({}) });
+      });
+
+      await page.goto('/account');
+      await expect(page.getByText('120 PTS')).toBeVisible();
+
+      await page.reload();
+      await expect(page).toHaveURL('/account');
+      await expect(page.getByText('120 PTS')).toBeVisible();
+
+      await page.getByRole('button', { name: /Sign Out/i }).click();
+      await expect(page).toHaveURL('/login');
     });
 
     test('shows active order settlement CTA and completes feedback submission', async ({ page }) => {
@@ -174,6 +209,29 @@ test.describe('account journey', () => {
 
       await page.getByRole('button', { name: /Redeem Now/i }).nth(1).click();
       await expect(page.getByText('REWARD_EXHAUSTED')).toBeVisible();
+    });
+  });
+
+  test.describe('stale and partial session fallbacks', () => {
+    test.use({ storageState: STALE_SESSION_STORAGE_STATE });
+
+    test('sends stale client session state back to login safely', async ({ page }) => {
+      await page.goto('/account');
+      await expect(page).toHaveURL('/login');
+      await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
+    });
+  });
+
+  test.describe('partial client session state', () => {
+    test.use({ storageState: PARTIAL_SESSION_STORAGE_STATE });
+
+    test('treats partial client storage as logged out state', async ({ page }) => {
+      await page.goto('/account');
+      await expect(page).toHaveURL('/login');
+
+      await page.goto('/login');
+      await expect(page).toHaveURL('/login');
+      await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
     });
   });
 });

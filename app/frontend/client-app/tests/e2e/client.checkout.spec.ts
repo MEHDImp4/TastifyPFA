@@ -112,10 +112,12 @@ test.describe('checkout journey', () => {
       });
 
       await buildCheckoutCart(page);
+      await page.getByRole('button', { name: '10%' }).click();
+      await expect(page.getByText(/^100$/)).toBeVisible();
       await page.getByRole('button', { name: /Authorize Manifest/i }).click();
 
       await expect(page.getByRole('heading', { name: /Merci pour votre commande/i })).toBeVisible();
-      await expect(orderPayload).toMatchObject({
+      await expect(orderPayload).toEqual({
         type: 'EMPORTER',
         lignes: [
           { plat: 11, quantite: 2, notes: '' },
@@ -146,6 +148,28 @@ test.describe('checkout journey', () => {
       await expect(page.getByText('Harira')).toBeVisible();
       await expect(page.getByText('Tagine')).toBeVisible();
       await expect(page.getByRole('button', { name: /Authorize Manifest/i })).toBeVisible();
+    });
+
+    test('prevents duplicate order submission while checkout is in flight', async ({ page }) => {
+      let submitCount = 0;
+
+      await seedAuthenticatedUser(page);
+      await page.route('**/api/commandes/', async (route) => {
+        submitCount += 1;
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        await route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({ id: 902 }),
+        });
+      });
+
+      await buildCheckoutCart(page);
+      const submitButton = page.getByRole('button', { name: /Authorize Manifest/i });
+      await submitButton.dblclick();
+
+      await expect(page.getByRole('heading', { name: /Merci pour votre commande/i })).toBeVisible();
+      expect(submitCount).toBe(1);
     });
   });
 });

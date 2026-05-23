@@ -57,7 +57,7 @@ test.describe('reservation journey', () => {
       await page.getByRole('button', { name: /Commit to Registry/i }).click();
 
       await expect(page.getByRole('heading', { name: /Secured\./i })).toBeVisible();
-      await expect(reservationPayload).toMatchObject({
+      await expect(reservationPayload).toEqual({
         table: 12,
         date_reservation: '2026-06-05',
         heure_debut: '20:30',
@@ -73,11 +73,22 @@ test.describe('reservation journey', () => {
     });
 
     test('shows an error and stays in the flow when availability lookup fails', async ({ page }) => {
+      let firstAttempt = true;
       await page.route('**/api/reservations/available_tables/**', async (route) => {
+        if (firstAttempt) {
+          firstAttempt = false;
+          await route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify({ detail: 'boom' }),
+          });
+          return;
+        }
+
         await route.fulfill({
-          status: 500,
+          status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ detail: 'boom' }),
+          body: JSON.stringify([{ id: 41, numero: 'D3', capacite: 2, est_disponible: true }]),
         });
       });
 
@@ -87,6 +98,9 @@ test.describe('reservation journey', () => {
       await expect(page.getByText('Availability check failed')).toBeVisible();
       await expect(page.getByRole('button', { name: /Analyze Availability/i })).toBeVisible();
       await expect(page.getByRole('button', { name: /Confirm Placement/i })).toHaveCount(0);
+
+      await page.getByRole('button', { name: /Analyze Availability/i }).click();
+      await expect(page.getByRole('button', { name: /Confirm Placement/i })).toBeVisible();
     });
 
     test('shows backend reservation failure and preserves the confirmation step', async ({ page }) => {

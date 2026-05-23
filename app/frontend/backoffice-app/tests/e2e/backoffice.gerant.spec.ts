@@ -1,4 +1,14 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+
+const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
+  const results = await new AxeBuilder({ page }).include('main').analyze();
+  const blockingViolations = results.violations.filter(({ impact }) =>
+    impact === 'critical' || impact === 'serious',
+  );
+
+  expect(blockingViolations).toEqual([]);
+};
 
 test.describe('gerant browser workflows', () => {
   test.beforeEach(async ({ page }) => {
@@ -16,6 +26,75 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('nav-settings')).toBeVisible();
 
     await page.getByTestId('logout-button').click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('keeps the dashboard nav active after a direct route load', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByTestId('nav-dashboard')).toHaveClass(/border-primary/);
+    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
+  });
+
+  test('keeps gerant logout working after visiting a secondary route', async ({ page }) => {
+    await page.goto('/settings');
+    await expect(page).toHaveURL(/\/settings$/);
+
+    await page.getByTestId('logout-button').click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('keeps gerant users on the same allowed route after a hard refresh', async ({ page }) => {
+    await page.goto('/settings');
+    await expect(page).toHaveURL(/\/settings$/);
+
+    await page.reload();
+
+    await expect(page).toHaveURL(/\/settings$/);
+    await expect(page.getByRole('button', { name: 'Deploy Changes' })).toBeVisible();
+  });
+
+  test('sends stale gerant session storage back to login safely', async ({ page }) => {
+    await page.context().clearCookies();
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'backoffice-auth-storage',
+        JSON.stringify({
+          state: {
+            accessToken: null,
+            role: null,
+            username: null,
+            isAuthenticated: false,
+            hasSession: true,
+          },
+          version: 0,
+        }),
+      );
+    });
+
+    await page.goto('/settings');
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('treats partial gerant storage as logged out state', async ({ page }) => {
+    await page.context().clearCookies();
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'backoffice-auth-storage',
+        JSON.stringify({
+          state: {
+            accessToken: 'stale-access-token',
+            role: 'GERANT',
+            username: 'partial_gerant',
+            isAuthenticated: false,
+            hasSession: false,
+          },
+          version: 0,
+        }),
+      );
+    });
+
+    await page.goto('/settings');
     await expect(page).toHaveURL(/\/login$/);
   });
 
@@ -219,6 +298,43 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('category-order-input')).toHaveValue('7');
   });
 
+  test('keeps the category editor state intact when an edit request fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 4001, nom: 'Starters', description: 'Opening line', ordre_affichage: 1, est_active: true, image: null },
+        ]),
+      });
+    });
+
+    await page.route('**/api/categories/4001/', async (route) => {
+      if (route.request().method() === 'PATCH') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'category update failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/categories');
+    await page.getByTestId('category-edit-4001').click();
+    await page.getByTestId('category-name-input').fill('Renamed starters');
+    await page.getByTestId('category-description-input').fill('Updated draft that should remain visible.');
+    await page.getByTestId('category-order-input').fill('8');
+    await page.getByTestId('category-save-button').click();
+
+    await expect(page.getByText('Failed to save category')).toBeVisible();
+    await expect(page.getByTestId('category-name-input')).toHaveValue('Renamed starters');
+    await expect(page.getByTestId('category-description-input')).toHaveValue('Updated draft that should remain visible.');
+    await expect(page.getByTestId('category-order-input')).toHaveValue('8');
+  });
+
   test('shows a save error and keeps the plat draft after a failed create', async ({ page }) => {
     await page.route('**/api/plats/', async (route) => {
       if (route.request().method() === 'POST') {
@@ -245,6 +361,106 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken plat draft');
     await expect(page.getByTestId('plat-price-input')).toHaveValue('31.50');
     await expect(page.getByTestId('plat-description-input')).toHaveValue('This draft should survive a failing save.');
+  });
+
+  test('keeps plat edits visible when an update request fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 7101, nom: 'Tagine Royal', description: 'Existing dish', prix: '88.00', temps_preparation: 18, categorie: 1, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/plats/7101/', async (route) => {
+      if (route.request().method() === 'PATCH') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'plat update failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/menu');
+    await page.getByTestId('plat-edit-7101').click();
+    await page.getByTestId('plat-name-input').fill('Tagine Royal Deluxe');
+    await page.getByTestId('plat-price-input').fill('92.00');
+    await page.getByTestId('plat-save-button').click();
+
+    await expect(page.getByText('Commit failed')).toBeVisible();
+    await expect(page.getByTestId('plat-name-input')).toHaveValue('Tagine Royal Deluxe');
+    await expect(page.getByTestId('plat-price-input')).toHaveValue('92.00');
+  });
+
+  test('does not remove a plat card when delete fails', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 7201, nom: 'Rfissa Maison', description: 'Stable row', prix: '74.00', temps_preparation: 20, categorie: 1, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.route('**/api/plats/7201/', async (route) => {
+      if (route.request().method() === 'DELETE') {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: 'delete failed' }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/menu');
+    await page.getByTestId('plat-card-7201').hover();
+    await page.getByTestId('plat-delete-7201').click();
+
+    await expect(page.getByText('Deletion error')).toBeVisible();
+    await expect(page.getByTestId('plat-card-7201')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rfissa Maison' })).toBeVisible();
   });
 
   test('renders the settings fallback state when configuration loading fails', async ({ page }) => {
@@ -307,6 +523,108 @@ test.describe('gerant browser workflows', () => {
     await expect(page.locator('textarea[name="description"]')).toHaveValue('Saved from E2E');
   });
 
+  test('persists partial settings edits after a successful save', async ({ page }) => {
+    const settingsPayload = {
+      id: 1,
+      nom: 'Tastify Test House',
+      description: 'Base config',
+      adresse: 'Casablanca',
+      email: 'ops@tastify.test',
+      telephone: '+212600000000',
+      logo: null,
+      facebook: null,
+      instagram: null,
+      twitter: null,
+      horaires: {},
+      devise: 'DH',
+      updated_at: '2026-05-19T00:00:00Z',
+    };
+
+    await page.route('**/api/settings/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(settingsPayload),
+      });
+    });
+
+    await page.route('**/api/settings/1/', async (route) => {
+      const body = route.request().postDataJSON();
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          ...settingsPayload,
+          nom: body.nom,
+          telephone: body.telephone,
+          description: settingsPayload.description,
+          adresse: settingsPayload.adresse,
+        }),
+      });
+    });
+
+    await page.goto('/settings');
+    await page.locator('input[name="nom"]').fill('Playwright Ops');
+    await page.locator('input[name="telephone"]').fill('+212611111111');
+    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+
+    await expect(page.getByText('System parameters deployed')).toBeVisible();
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Playwright Ops');
+    await expect(page.locator('input[name="telephone"]')).toHaveValue('+212611111111');
+    await expect(page.locator('textarea[name="description"]')).toHaveValue('Base config');
+  });
+
+  test('keeps saved settings visible after a reload', async ({ page }) => {
+    let settingsPayload = {
+      id: 1,
+      nom: 'Tastify Test House',
+      description: 'Base config',
+      adresse: 'Casablanca',
+      email: 'ops@tastify.test',
+      telephone: '+212600000000',
+      logo: null,
+      facebook: null,
+      instagram: null,
+      twitter: null,
+      horaires: {},
+      devise: 'DH',
+      updated_at: '2026-05-19T00:00:00Z',
+    };
+
+    await page.route('**/api/settings/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(settingsPayload),
+      });
+    });
+
+    await page.route('**/api/settings/1/', async (route) => {
+      settingsPayload = {
+        ...settingsPayload,
+        nom: 'Reload Safe Ops',
+        description: 'Persisted through reload',
+      };
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(settingsPayload),
+      });
+    });
+
+    await page.goto('/settings');
+    await page.locator('input[name="nom"]').fill('Reload Safe Ops');
+    await page.locator('textarea[name="description"]').fill('Persisted through reload');
+    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Reload Safe Ops');
+    await page.reload();
+
+    await expect(page).toHaveURL(/\/settings$/);
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Reload Safe Ops');
+    await expect(page.locator('textarea[name="description"]')).toHaveValue('Persisted through reload');
+  });
+
   test('shows a settings save error when the update request fails', async ({ page }) => {
     await page.route('**/api/settings/1/', async (route) => {
       await route.fulfill({
@@ -322,6 +640,25 @@ test.describe('gerant browser workflows', () => {
 
     await expect(page.getByText('Deployment failure')).toBeVisible();
     await expect(page.locator('input[name="nom"]')).toHaveValue('Broken save');
+  });
+
+  test('keeps dirty settings inputs after a failed partial save', async ({ page }) => {
+    await page.route('**/api/settings/1/', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'settings write failed' }),
+      });
+    });
+
+    await page.goto('/settings');
+    await page.locator('input[name="nom"]').fill('Dirty config');
+    await page.locator('input[name="telephone"]').fill('+212622222222');
+    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+
+    await expect(page.getByText('Deployment failure')).toBeVisible();
+    await expect(page.locator('input[name="nom"]')).toHaveValue('Dirty config');
+    await expect(page.locator('input[name="telephone"]')).toHaveValue('+212622222222');
   });
 
   test('renders the HR empty state and export toast when no employees are returned', async ({ page }) => {
@@ -373,6 +710,84 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/stock');
     await expect(page.getByText('Safran test')).toBeVisible();
     await expect(page.getByText('CRITICAL DEPLETION', { exact: true })).toBeVisible();
+  });
+
+  test('renders populated stock data and keeps search plus editor interactions stable', async ({ page }) => {
+    await page.route('**/api/stock/ingredients/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 9101, nom: 'Safran Atlas', unite_mesure: 'g', stock_actuel: '4.00', seuil_alerte: '6.00', est_active: true },
+          { id: 9102, nom: 'Huile Olive', unite_mesure: 'ml', stock_actuel: '22.00', seuil_alerte: '5.00', est_active: true },
+        ]),
+      });
+    });
+
+    await page.goto('/stock');
+    await expect(page.getByText('Safran Atlas')).toBeVisible();
+    await expect(page.getByText('Huile Olive')).toBeVisible();
+
+    const searchInput = page.getByPlaceholder('RESOURCE LOOKUP...');
+    await searchInput.fill('huile');
+    await expect(page.getByText('Huile Olive')).toBeVisible();
+    await expect(page.getByText('Safran Atlas')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'Add Item' }).click();
+    await expect(page.getByRole('heading', { name: 'New Resource' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Commit Record' })).toBeVisible();
+  });
+
+  test('renders populated hr data and filters by search plus role tab', async ({ page }) => {
+    await page.route('**/api/employes/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 1, username: 'amina', poste: 'SERVEUR' },
+          { id: 2, username: 'youssef', poste: 'CUISINIER' },
+          { id: 3, username: 'nadia', poste: 'GERANT' },
+        ]),
+      });
+    });
+
+    await page.goto('/hr');
+    await expect(page.getByRole('heading', { name: 'amina' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'youssef' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'CUISINIER' }).click();
+    await expect(page.getByRole('heading', { name: 'youssef' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'amina' })).toHaveCount(0);
+
+    await page.getByPlaceholder('SEARCH BY NAME, ROLE, OR ID...').fill('nadia');
+    await page.getByRole('button', { name: 'GERANT' }).click();
+    await expect(page.getByRole('heading', { name: 'nadia' })).toBeVisible();
+  });
+
+  test('renders populated avis data and filters by guest identity and comment text', async ({ page }) => {
+    await page.route('**/api/avis/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 101, note: 5, commentaire: 'Excellent service and timing', user_username: 'samira', sentiment_score: 22, created_at: '2026-05-22T10:00:00Z' },
+          { id: 102, note: 2, commentaire: 'Dessert arrived cold', user_username: 'mehdi', sentiment_score: -14, created_at: '2026-05-21T10:00:00Z' },
+        ]),
+      });
+    });
+
+    await page.goto('/avis');
+    await expect(page.getByText('samira')).toBeVisible();
+    await expect(page.getByText('mehdi')).toBeVisible();
+
+    const searchInput = page.getByPlaceholder('FILTER ENTRIES...');
+    await searchInput.fill('cold');
+    await expect(page.getByText('Dessert arrived cold')).toBeVisible();
+    await expect(page.getByText('Excellent service and timing')).toHaveCount(0);
+
+    await searchInput.fill('samira');
+    await expect(page.getByText('Excellent service and timing')).toBeVisible();
+    await expect(page.getByText('Dessert arrived cold')).toHaveCount(0);
   });
 
   test('renders manager dashboard KPIs from deterministic analytics data', async ({ page }) => {
@@ -439,5 +854,23 @@ test.describe('gerant browser workflows', () => {
 
     await page.getByRole('button', { name: 'All Active (14)' }).click();
     await expect(page.getByText('Audit Dispatch Log')).toBeVisible();
+  });
+
+  test('has no critical or serious axe violations on the manager dashboard', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
+    await expectNoBlockingViolations(page);
+  });
+
+  test('keeps the dashboard usable on a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+
+    const menuButton = page.getByRole('button').filter({ has: page.locator('svg.lucide-menu') }).first();
+    await menuButton.click();
+
+    await expect(page.getByTestId('nav-dashboard')).toBeVisible();
+    await expect(page.getByTestId('nav-settings')).toBeVisible();
   });
 });

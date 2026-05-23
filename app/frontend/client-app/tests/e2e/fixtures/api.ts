@@ -36,7 +36,21 @@ export async function mockRefreshFail(page: Page) {
   });
 }
 
-export const AUTHENTICATED_STORAGE_STATE = {
+type ClientAuthState = {
+  accessToken: string | null;
+  role: string | null;
+  username: string | null;
+  isAuthenticated: boolean;
+  hasSession: boolean;
+};
+
+export const buildClientStorageState = ({
+  accessToken,
+  role,
+  username,
+  isAuthenticated,
+  hasSession,
+}: ClientAuthState) => ({
   cookies: [] as never[],
   origins: [
     {
@@ -46,11 +60,11 @@ export const AUTHENTICATED_STORAGE_STATE = {
           name: 'client-auth-storage',
           value: JSON.stringify({
             state: {
-              accessToken: 'mock-access-token',
-              role: 'CLIENT',
-              username: 'client_test',
-              isAuthenticated: true,
-              hasSession: true,
+              accessToken,
+              role,
+              username,
+              isAuthenticated,
+              hasSession,
             },
             version: 0,
           }),
@@ -58,4 +72,28 @@ export const AUTHENTICATED_STORAGE_STATE = {
       ],
     },
   ],
-};
+});
+
+export const AUTHENTICATED_STORAGE_STATE = buildClientStorageState({
+  accessToken: 'mock-access-token',
+  role: 'CLIENT',
+  username: 'client_test',
+  isAuthenticated: true,
+  hasSession: true,
+});
+
+export const STALE_SESSION_STORAGE_STATE = buildClientStorageState({
+  accessToken: null,
+  role: null,
+  username: null,
+  isAuthenticated: false,
+  hasSession: true,
+});
+
+export const PARTIAL_SESSION_STORAGE_STATE = buildClientStorageState({
+  accessToken: 'stale-access-token',
+  role: 'CLIENT',
+  username: 'partial_client',
+  isAuthenticated: false,
+  hasSession: false,
+});

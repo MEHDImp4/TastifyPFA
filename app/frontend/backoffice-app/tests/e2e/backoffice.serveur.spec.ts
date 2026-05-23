@@ -1,4 +1,14 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+
+const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
+  const results = await new AxeBuilder({ page }).include('main').analyze();
+  const blockingViolations = results.violations.filter(({ impact }) =>
+    impact === 'critical' || impact === 'serious',
+  );
+
+  expect(blockingViolations).toEqual([]);
+};
 
 test.describe('serveur browser workflows', () => {
   test.beforeEach(async ({ page }) => {
@@ -15,6 +25,14 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByTestId('nav-dashboard')).toHaveCount(0);
     await expect(page.getByTestId('nav-categories')).toHaveCount(0);
     await expect(page.getByTestId('nav-kds')).toHaveCount(0);
+  });
+
+  test('keeps the reservations nav active after a direct route load', async ({ page }) => {
+    await page.goto('/reservations');
+
+    await expect(page).toHaveURL(/\/reservations$/);
+    await expect(page.getByTestId('nav-reservations')).toHaveClass(/border-primary/);
+    await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
   });
 
   test('renders mocked salle table states and opens ordering from a free table', async ({ page }) => {
@@ -83,6 +101,71 @@ test.describe('serveur browser workflows', () => {
     await expect(page).toHaveURL(/\/salle$/);
   });
 
+  test('keeps serveur logout working after visiting a secondary route', async ({ page }) => {
+    await page.goto('/delivery');
+    await expect(page).toHaveURL(/\/delivery$/);
+
+    await page.getByTestId('logout-button').click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('keeps serveur users on the same allowed route after a hard refresh', async ({ page }) => {
+    await page.goto('/salle');
+    await page.reload();
+
+    await expect(page).toHaveURL(/\/salle$/);
+    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
+  });
+
+  test('keeps an ordering handoff stable after a hard refresh', async ({ page }) => {
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 81, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
+      });
+    });
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 82, nom: 'Couscous Maison', prix: '18.00', temps_preparation: 12, categorie: 81, image: null, est_active: true, est_disponible: true },
+        ]),
+      });
+    });
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 41, numero: 11, capacite: 4, statut: 'LIBRE', est_active: true }]),
+      });
+    });
+    await page.route(/\/api\/commandes\/\?table=41/, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 981, statut: 'EN_COURS' }]),
+      });
+    });
+    await page.route('**/api/commandes/981/add_items/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
+    });
+
+    await page.goto('/ordering/41');
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Active Ticket')).toBeVisible();
+
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(/\/ordering\/41$/);
+
+    await page.getByTestId('menu-catalog').getByRole('button', { name: /Couscous Maison/i }).click({ force: true });
+    await expect(page.getByTestId('cart-item-82')).toBeVisible();
+    await page.getByTestId('order-submit').click();
+    await expect(page).toHaveURL(/\/salle$/);
+  });
+
   test('renders the delivery hub surface for serveur users and keeps interactions stable', async ({ page }) => {
     await page.goto('/delivery');
 
@@ -99,6 +182,24 @@ test.describe('serveur browser workflows', () => {
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await expect(page).toHaveURL(/\/delivery$/);
     await expect(page.getByText('Audit Dispatch Log')).toBeVisible();
+  });
+
+  test('has no critical or serious axe violations on the salle page', async ({ page }) => {
+    await page.goto('/salle');
+
+    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
+    await expectNoBlockingViolations(page);
+  });
+
+  test('keeps the salle page usable on a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/salle');
+
+    const menuButton = page.getByRole('button').filter({ has: page.locator('svg.lucide-menu') }).first();
+    await menuButton.click();
+
+    await expect(page.getByTestId('nav-salle')).toBeVisible();
+    await expect(page.getByText(/Table/i).first()).toBeVisible();
   });
 
   test('filters reservations and applies confirm then cancel transitions', async ({ page }) => {
@@ -180,6 +281,71 @@ test.describe('serveur browser workflows', () => {
 
     await page.getByRole('button', { name: 'CANCEL BOOKING', exact: true }).first().click();
     await expect(page.getByText('Alice Martin')).toHaveCount(0);
+  });
+
+  test('keeps reservation search and status filter stable after a refreshing status mutation', async ({ page }) => {
+    const reservations = [
+      {
+        id: 7401,
+        user_username: 'Amina Refresh',
+        statut: 'EN_ATTENTE',
+        date_reservation: '2026-05-19',
+        heure_debut: '19:30',
+        heure_fin: '21:00',
+        nombre_personnes: 2,
+        table: 3,
+        table_numero: 3,
+        notes: 'Birthday',
+      },
+      {
+        id: 7402,
+        user_username: 'Amina Confirmed',
+        statut: 'CONFIRMEE',
+        date_reservation: '2026-05-19',
+        heure_debut: '20:00',
+        heure_fin: '21:00',
+        nombre_personnes: 4,
+        table: 4,
+        table_numero: 4,
+        notes: '',
+      },
+    ];
+
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations),
+      });
+    });
+
+    await page.route('**/api/reservations/*/confirmer/', async (route) => {
+      reservations[0].statut = 'CONFIRMEE';
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(reservations[0]),
+      });
+    });
+
+    await page.goto('/reservations');
+    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
+    const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
+
+    await searchInput.fill('amina');
+    await page.getByRole('button', { name: 'EN ATTENTE', exact: true }).click();
+    await expect(reservationsGrid.getByText('Amina Refresh')).toBeVisible();
+    await expect(reservationsGrid.getByText('Amina Confirmed')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
+    await expect(searchInput).toHaveValue('amina');
+    await expect(reservationsGrid.getByText('Amina Refresh')).toHaveCount(0);
+    await expect(page.getByText('No Bookings Logged')).toBeVisible();
+
+    await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
+    await expect(searchInput).toHaveValue('amina');
+    await expect(reservationsGrid.getByText('Amina Refresh')).toBeVisible();
+    await expect(reservationsGrid.getByText('Amina Confirmed')).toBeVisible();
   });
 
   test('renders the reservations empty state when no bookings are returned', async ({ page }) => {
