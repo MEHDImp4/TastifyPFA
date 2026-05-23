@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 01:56:56<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-23 02:13:35<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1150,6 +1150,51 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Expanded backoffice Playwright coverage for manager, serveur, and cuisinier workflows across dashboard analytics, maintenance, delivery hub, salle navigation, and kitchen menu behavior.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added deterministic assertions for manager dashboard KPI success and analytics failure fallback states.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added serveur floor-map and delivery-hub scenarios that verify mocked table states, ordering handoff, and role-safe route access.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added cuisinier menu search, filter, and empty-shell coverage to complement the existing KDS-focused suite.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Removed an unused `BellRing` import from `KdsPage.tsx` so the backoffice production TypeScript build passes again.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e ---project=gerant-chromium --project=serveur-chromium --project=cuisinier-chromium tests/e2e/backoffice.gerant.spec.ts tests/e2e/backoffice.serveur.spec.ts tests/e2e/backoffice.cuisinier.spec.ts`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-23 02:13</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `90fee20` `Expand backoffice e2e coverage`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-22 05:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Micro-Theme Synchronization**: Unified subtle UI details across both apps, including configuring **Sonner** to dark mode and standardizing selection colors.</p>
@@ -1178,51 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-22 04:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Absolute Visibility Compliance**: Fixed invisible text in backoffice Modals and removed all backdrop blurs from critical UI surfaces (Modals, Hero sections).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Refined Authentication**: Refactored the Client Login page and both apps' `AuthBootstrap` loading screens to achieve 100% thematic alignment with the new Tastify identity.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Project-Wide Frontend Refactor**: Executed a comprehensive overhaul of all frontend pages in `backoffice-app` and `client-app` to align with the new Tastify Design System.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Theme Transformation**: Applied DARK mode globally with the sienna-based palette (#ffb785, #151312). Switched typography to Public Sans (Display), Inclusive Sans (Body), and Rethink Sans (UI).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Absolute Visibility Integration**: Enforced bold typography, high-contrast surfaces, and hard outlines across all functional modules (KDS, Ordering, Ledger, etc.).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Module Redesign**:</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Backoffice**: Transitioned to high-density tactical grids and split-panel management layouts.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Client Portal**: Implemented premium editorial hero sections, cinematic cards, and fluid bento grids.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 04:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **System States**: Implemented high-fidelity NotFound, System Health (Maintenance), and Offline Mode interfaces.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-22 03:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Asset Synchronization Finalized**: Successfully retrieved and synced the remaining 3 screens (Maintenance, Offline Mode, 404) and the core Design System.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

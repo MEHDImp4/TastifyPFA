@@ -1,3 +1,21 @@
+## [2026-05-23] - 02:13
+### Added
+- Expanded backoffice Playwright coverage for manager, serveur, and cuisinier workflows across dashboard analytics, maintenance, delivery hub, salle navigation, and kitchen menu behavior.
+- Added deterministic assertions for manager dashboard KPI success and analytics failure fallback states.
+- Added serveur floor-map and delivery-hub scenarios that verify mocked table states, ordering handoff, and role-safe route access.
+- Added cuisinier menu search, filter, and empty-shell coverage to complement the existing KDS-focused suite.
+
+### Fixed
+- Removed an unused `BellRing` import from `KdsPage.tsx` so the backoffice production TypeScript build passes again.
+
+### Validation
+- `npm run test:e2e -- --project=gerant-chromium --project=serveur-chromium --project=cuisinier-chromium tests/e2e/backoffice.gerant.spec.ts tests/e2e/backoffice.serveur.spec.ts tests/e2e/backoffice.cuisinier.spec.ts`
+- `npm run test:e2e`
+- `npm run build`
+
+### Commit
+- `90fee20` `Expand backoffice e2e coverage`
+
 ## [2026-05-22] - 05:00
 ### Fixed
 - **Micro-Theme Synchronization**: Unified subtle UI details across both apps, including configuring **Sonner** to dark mode and standardizing selection colors.
