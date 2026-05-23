@@ -10,8 +10,7 @@ import {
   Timer,
   CheckCircle2,
   Play,
-  RotateCcw,
-  BellRing
+  RotateCcw
 } from 'lucide-react';
 
 const playDing = () => {

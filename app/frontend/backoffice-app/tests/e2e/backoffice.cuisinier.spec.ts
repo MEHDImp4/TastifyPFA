@@ -56,6 +56,35 @@ const emitStaffSocketMessage = async (page: Parameters<typeof test>[0]['page'], 
   }, payload);
 };
 
+const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page'], plats: unknown[]) => {
+  await page.route('**/api/categories/', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        { id: 1, nom: 'Plats', ordre_affichage: 1, est_active: true },
+        { id: 2, nom: 'Desserts', ordre_affichage: 2, est_active: true },
+      ]),
+    });
+  });
+
+  await page.route('**/api/plats/', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(plats),
+    });
+  });
+
+  await page.route('**/api/stock/ingredients/', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+  });
+
+  await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+  });
+};
+
 test.describe('cuisinier browser workflows', () => {
   test('lands on the kds route and only sees kitchen navigation', async ({ page }) => {
     await page.goto('/');
@@ -83,6 +112,39 @@ test.describe('cuisinier browser workflows', () => {
   test('redirects an authenticated cuisinier away from login', async ({ page }) => {
     await page.goto('/login');
     await expect(page).toHaveURL(/\/kds$/);
+  });
+
+  test('lets cuisinier users search and filter the menu registry', async ({ page }) => {
+    await mockKitchenMenuCatalog(page, [
+      { id: 701, nom: 'Tagine Safran', prix: '96.00', description: 'Slow finish', temps_preparation: 22, categorie: 1, image: null, est_active: true, est_disponible: true },
+      { id: 702, nom: 'Tarte Orange', prix: '28.00', description: 'Citrus finish', temps_preparation: 8, categorie: 2, image: null, est_active: true, est_disponible: true },
+    ]);
+
+    await page.goto('/menu');
+
+    await expect(page.getByText('Tagine Safran')).toBeVisible();
+    await expect(page.getByText('Tarte Orange')).toBeVisible();
+
+    const searchInput = page.getByPlaceholder('SEARCH CATALOG...');
+    await searchInput.fill('orange');
+    await expect(page.getByText('Tarte Orange')).toBeVisible();
+    await expect(page.getByText('Tagine Safran')).toHaveCount(0);
+
+    await searchInput.fill('');
+    await page.getByRole('button', { name: /Filter/i }).click();
+    await expect(page.getByText('Tagine Safran')).toBeVisible();
+    await expect(page.getByText('Tarte Orange')).toBeVisible();
+  });
+
+  test('shows the menu empty state shell when no dishes are returned', async ({ page }) => {
+    await mockKitchenMenuCatalog(page, []);
+
+    await page.goto('/menu');
+
+    await expect(page.getByText('Active Record Count: 0')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Add Dish/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Filter/i })).toBeVisible();
+    await expect(page.getByText('Signature Dish')).toBeVisible();
   });
 
   test('renders the KDS empty state when no active kitchen tickets exist', async ({ page }) => {

@@ -17,6 +17,51 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByTestId('nav-kds')).toHaveCount(0);
   });
 
+  test('renders mocked salle table states and opens ordering from a free table', async ({ page }) => {
+    await page.route('**/api/tables/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 41, numero: 11, capacite: 4, statut: 'LIBRE', pos_x: 25, pos_y: 25, est_active: true },
+          { id: 42, numero: 12, capacite: 6, statut: 'OCCUPEE', pos_x: 55, pos_y: 40, est_active: true },
+          { id: 43, numero: 14, capacite: 2, statut: 'RESERVEE', pos_x: 75, pos_y: 55, est_active: true },
+        ]),
+      });
+    });
+    await page.route('**/api/plan-texts/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/commandes/?table=41&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/categories/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/plats/', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
+    await page.goto('/salle');
+
+    const freeTable = page.getByLabel('Table 11');
+    const occupiedTable = page.getByLabel('Table 12');
+    const reservedTable = page.getByLabel('Table 14');
+
+    await expect(freeTable).toBeVisible();
+    await expect(occupiedTable).toBeVisible();
+    await expect(reservedTable).toBeVisible();
+    await expect(freeTable).toContainText('11');
+    await expect(occupiedTable).toContainText('12');
+    await expect(reservedTable).toContainText('14');
+    await expect(occupiedTable).toHaveClass(/bg-amber/);
+    await expect(reservedTable).toHaveClass(/bg-aged-paper/);
+
+    await freeTable.click();
+    await expect(page).toHaveURL(/\/ordering\/41$/);
+    await expect(page.getByText('Active Ticket')).toBeVisible();
+  });
+
   test('keeps serveur users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/reservations');
     await expect(page).toHaveURL(/\/reservations$/);
@@ -36,6 +81,24 @@ test.describe('serveur browser workflows', () => {
   test('redirects an authenticated serveur away from login', async ({ page }) => {
     await page.goto('/login');
     await expect(page).toHaveURL(/\/salle$/);
+  });
+
+  test('renders the delivery hub surface for serveur users and keeps interactions stable', async ({ page }) => {
+    await page.goto('/delivery');
+
+    await expect(page.getByRole('heading', { name: 'DELIVERY HUB' })).toBeVisible();
+    await expect(page.getByText('DRIVER SATISFACTION')).toBeVisible();
+    await expect(page.getByText('#GLV-0492')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Manage' })).toHaveCount(3);
+
+    const searchInput = page.getByPlaceholder('Search orders...');
+    await searchInput.fill('UBR');
+    await expect(searchInput).toHaveValue('UBR');
+
+    await page.getByRole('button', { name: 'All Active (14)' }).click();
+    await page.getByRole('button', { name: 'Manage' }).first().click();
+    await expect(page).toHaveURL(/\/delivery$/);
+    await expect(page.getByText('Audit Dispatch Log')).toBeVisible();
   });
 
   test('filters reservations and applies confirm then cancel transitions', async ({ page }) => {
