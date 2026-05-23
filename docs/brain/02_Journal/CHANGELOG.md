@@ -2405,7 +2405,7 @@ and this project adheres to semantic tracking for development.
 - `npm run test:e2e` in `app/frontend/client-app` still reports an existing accessibility failure in `tests/e2e/client.a11y.spec.ts` on the login page (`color-contrast` and `link-name` axe violations), separate from the new scenarios.
 
 ### Commit
-- `pending`
+- `5cfce9d` `Add client e2e coverage scenarios`
 
 ## [2026-05-23] - 00:22
 ### Changed
