@@ -8,7 +8,7 @@
 tastify-pfa/
 ├── .github/
 │   └── workflows/
-│       └── backoffice-ci.yml      # PR/push CI: frontend quality, backend critical tests, Playwright E2E
+│       └── backoffice-ci.yml      # PR/push CI: frontend quality, full backend pytest, Playwright E2E
 ├── app/
 │   ├── backend/                    # Django + Daphne + Channels
 │   │   ├── media/                  # User-uploaded content (images)
@@ -25,7 +25,7 @@ tastify-pfa/
 │   │   │   ├── reservations/      # Reservation domain
 │   │   │   ├── commandes/         # Orders, order lines, total signals, and KDS orchestration
 │   │   │   ├── paiements/         # Payment domain, payable-session services
-│   │   │   ├── stock/             # Ingredients inventory
+│   │   │   ├── stock/             # Ingredients inventory + async deduction tasks
 │   │   │   ├── hr/                # Employees (HR) domain
 │   │   │   ├── analytics/         # Dashboard KPIs, aggregation logic
 │   │   │   ├── avis/              # Customer reviews & sentiment analysis

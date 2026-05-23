@@ -27,17 +27,20 @@ class KDSPermissionsTestCase(APITestCase):
         self.cmd_serveur = Commande.objects.create(
             serveur=self.serveur, 
             table=self.table1,
-            statut=Commande.Statut.EN_COURS
+            statut=Commande.Statut.EN_COURS,
+            montant_total='18.00',
         )
         self.cmd_kitchen = Commande.objects.create(
             serveur=self.serveur, 
             table=self.table2,
-            statut=Commande.Statut.EN_CUISINE
+            statut=Commande.Statut.EN_CUISINE,
+            montant_total='24.00',
         )
         self.cmd_paid = Commande.objects.create(
             serveur=self.serveur,
             table=self.table1,
             statut=Commande.Statut.PAYEE,
+            montant_total='18.00',
         )
         
         self.url = reverse('commande-list')
@@ -66,6 +69,7 @@ class KDSPermissionsTestCase(APITestCase):
             serveur=self.serveur,
             table=table_p,
             statut=Commande.Statut.PRETE,
+            montant_total='12.00',
         )
 
         self.client.force_authenticate(user=self.cuisinier)
@@ -83,6 +87,7 @@ class KDSPermissionsTestCase(APITestCase):
             serveur=self.serveur,
             table=table_p,
             statut=Commande.Statut.PRETE,
+            montant_total='15.00',
         )
 
         self.client.force_authenticate(user=self.gerant)
@@ -127,17 +132,20 @@ class KDSPermissionsTestCase(APITestCase):
         Commande.objects.create(
             serveur=serveur2,
             table=table3,
-            statut=Commande.Statut.EN_CUISINE
+            statut=Commande.Statut.EN_CUISINE,
+            montant_total='21.00',
         )
         
         self.client.force_authenticate(user=self.serveur)
         response = self.client.get(self.url)
         
-        # Should see 2 orders (cmd_serveur, cmd_kitchen) but NOT the one from serveur2
-        self.assertEqual(len(response.data), 2)
+        # Serveur should see all of their own orders, including paid history,
+        # but never another serveur's ticket.
+        self.assertEqual(len(response.data), 3)
         ids = [item['id'] for item in response.data]
         self.assertIn(self.cmd_serveur.id, ids)
         self.assertIn(self.cmd_kitchen.id, ids)
+        self.assertIn(self.cmd_paid.id, ids)
 
     def test_cuisinier_sees_all_kitchen_orders(self):
         # Create an order for another server that is EN_CUISINE
@@ -148,7 +156,8 @@ class KDSPermissionsTestCase(APITestCase):
         cmd_other_kitchen = Commande.objects.create(
             serveur=serveur2,
             table=table3,
-            statut=Commande.Statut.EN_CUISINE
+            statut=Commande.Statut.EN_CUISINE,
+            montant_total='19.00',
         )
         
         self.client.force_authenticate(user=self.cuisinier)

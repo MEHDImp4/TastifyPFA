@@ -46,10 +46,9 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Issue**: `post_save` signals trigger Celery tasks that might run *before* the database transaction commits, causing the task to fail with `DoesNotExist`.
 - **Fix**: Use `transaction.on_commit()` to enqueue Celery tasks or broadcast WebSocket events.
 
-### 3. Pytest Database Creation (1044)
-- **Issue**: Pytest fails to create `test_tastify` database due to `Access denied for user 'tastify'@'%'`.
-- **Fix**: Run `GRANT ALL PRIVILEGES ON test_% TO 'tastify'@'%';` on the MySQL instance.
-- **Workaround**: Until the container grant is corrected, Docker validation can be run with `MYSQL_USER=root` and `MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD` injected into the one-off `manage.py test` command.
+### 3. Docker Pytest Must Force Test Settings
+- **Issue**: Running backend `pytest` inside the dev backend container without overriding settings can fall back to the live MySQL runtime configuration, which reintroduces legacy test-database privilege problems and makes local/CI behavior diverge.
+- **Fix**: Always execute Dockerized backend `pytest` with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test`, as wired in `scripts/testing/run-suite.mjs` and `.github/workflows/backoffice-ci.yml`.
 
 ### 4. Static Files (WhiteNoise)
 - **Issue**: Django admin or media files return 404 in Docker because `DEBUG=False` or lack of a dedicated file server.
@@ -96,6 +95,10 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 7. DRF Multipart Omits Boolean Defaults on Category/Plat Forms
 - **Issue**: Category and plat creation forms submit `multipart/form-data`. If the frontend omits boolean flags like `est_active` or `est_disponible`, Django REST Framework persists them as `false`, so newly created records vanish immediately from UI lists filtered on active records.
 - **Fix**: Explicitly append boolean fields into `FormData` during create/update flows, even when the UI does not expose a visible toggle.
+
+### 8. Vite-in-Docker Can Miss Host File Changes on Windows
+- **Issue**: The `backoffice-app` service runs `npm run dev` inside Docker with the project bind-mounted from Windows. In practice, Vite sometimes keeps serving a stale bundle even after local source edits land on disk, which makes Playwright exercise outdated DOM and accessibility attributes.
+- **Fix**: When the rendered UI does not reflect recent frontend changes during Docker-based validation, restart the affected frontend container with `docker compose restart backoffice-app` before re-running Playwright.
 ## GitHub Actions CI Scope
-- The current repo-wide backend `pytest` command is not CI-safe yet because unrelated import failures still exist in untouched modules such as `apps.avis.tests` and stock task imports.
-- Until those legacy blockers are fixed, the GitHub Actions pipeline should gate backend integrity through Dockerized `python manage.py check` and `makemigrations --check --dry-run`, while Playwright provides full-stack browser coverage against the live backend.
+- The supported backend CI gate now runs the full Dockerized repo `pytest` suite under `tastify_backend.settings.test`, alongside `manage.py check` and `makemigrations --check --dry-run`.
+- If a future backend test starts failing only in CI, check first that the workflow command and local Docker command still both force the same Django test settings.

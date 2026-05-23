@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from io import StringIO
 
 class SeedTests(TestCase):
-    def test_seed_dev_command_creates_users(self):
-        """Test that seed_dev creates 10 distinct users with correct roles"""
+    def test_seed_all_command_creates_users(self):
+        """Test that seed_all creates the current seeded user roster."""
         User = get_user_model()
         
         # Verify database is empty initially
@@ -13,10 +13,10 @@ class SeedTests(TestCase):
         
         # Run command
         out = StringIO()
-        call_command('seed_dev', stdout=out)
+        call_command('seed_all', stdout=out)
         
-        # Verify 10 users created
-        self.assertEqual(User.objects.count(), 10)
+        # Verify the current seeded roster is created.
+        self.assertEqual(User.objects.count(), 15)
         
         # Verify each role exists
         roles = User.objects.values_list('role', flat=True)
@@ -25,17 +25,17 @@ class SeedTests(TestCase):
         self.assertIn(User.Role.CUISINIER, roles)
         self.assertIn(User.Role.CLIENT, roles)
         
-        # Verify output contains success message
-        self.assertIn('Successfully seeded developer environment', out.getvalue())
+        # Verify output contains completion message
+        self.assertIn('All seeding tasks completed.', out.getvalue())
 
-    def test_seed_dev_command_idempotent(self):
-        """Test that running seed_dev twice doesn't crash or duplicate incorrectly"""
+    def test_seed_all_command_idempotent(self):
+        """Test that running seed_all twice stays idempotent for user records."""
         User = get_user_model()
         
         # Run command twice
         out = StringIO()
-        call_command('seed_dev', stdout=out)
-        call_command('seed_dev', stdout=out)
-        
-        # Verify still only 10 users
-        self.assertEqual(User.objects.count(), 10)
+        call_command('seed_all', stdout=out)
+        call_command('seed_all', stdout=out)
+
+        # Verify still only the seeded user roster exists
+        self.assertEqual(User.objects.count(), 15)

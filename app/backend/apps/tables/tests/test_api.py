@@ -1,4 +1,5 @@
 from decimal import Decimal
+from urllib.parse import quote
 
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -113,7 +114,10 @@ class TableAPITest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['commande_id'], commande.id)
         self.assertIn('token', response.data)
-        self.assertEqual(response.data['payment_url'], f"/pay/{response.data['token']}")
+        self.assertEqual(
+            response.data['payment_url'],
+            f"/pay/{quote(response.data['token'], safe='')}",
+        )
 
     def test_qr_returns_409_when_multiple_payable_orders_exist(self):
         categorie = Categorie.objects.create(nom='Table QR multi', ordre_affichage=9)

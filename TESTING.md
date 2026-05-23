@@ -37,7 +37,7 @@ npm run test
 
 Notes:
 
-- `npm run test:integration` démarre `db`, `redis`, `backend`, exécute `manage.py check`, `makemigrations --check --dry-run`, puis le sous-ensemble `pytest` critique en forçant `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` dans le conteneur backend.
+- `npm run test:integration` démarre `db`, `redis`, `backend`, exécute `manage.py check`, `makemigrations --check --dry-run`, puis la suite backend `pytest` complète en forçant `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` dans le conteneur backend.
 - `npm run test:e2e` lance successivement les suites Playwright backoffice puis client avec la stack Docker nécessaire, attend les URLs exposées, puis imprime `docker compose ps` et les logs des services concernés si une suite échoue.
 - `npm run test:e2e:ui` ouvre Playwright UI pour le backoffice par défaut. Pour le portail client: `PLAYWRIGHT_APP=client npm run test:e2e:ui`.
 - `npm run build`, `npm run test:integration`, `npm run test:e2e` et `npm run test` exigent Docker Desktop démarré, car le backend et la DB de test sont conteneurisés.
@@ -74,7 +74,7 @@ npm run test:coverage
 docker compose up -d --build db redis backend
 docker compose exec -T backend python manage.py check
 docker compose exec -T backend python manage.py makemigrations --check --dry-run
-docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest apps/users/tests/test_auth.py apps/users/tests/test_register.py apps/configuration/tests/test_settings_api.py apps/paiements/tests/test_api.py
+docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q
 docker compose down --remove-orphans
 ```
 
@@ -83,7 +83,7 @@ docker compose down --remove-orphans
 - Le backend de test tourne dans Docker contre MySQL du `docker-compose.yml`.
 - `pytest.ini` utilise `tastify_backend.settings.test`.
 - Le conteneur backend démarre normalement sur les settings de dev; les commandes de test Docker qui doivent rester isolées du runtime MySQL forcent donc explicitement `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test`.
-- Les tests backend retenus pour la CI réutilisent la DB de test (`--reuse-db`) afin d’éviter des temps morts inutiles.
+- La commande backend supportée en CI et en local passe désormais par `tastify_backend.settings.test`, ce qui isole `pytest-django` du runtime MySQL de développement tout en gardant l’exécution Dockerisée.
 - Si vous modifiez un modèle Django, exécutez aussi:
 
 ```bash
@@ -137,4 +137,4 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 - Emails / notifications: aucune chaîne transactionnelle exploitable détectée
 - Dashboard analytics: quelques tests backend existent, mais il manque encore un smoke E2E dédié aux KPI
 - Responsive avancé des écrans staff denses: seulement un smoke ciblé par rôle pour l’instant
-- Régression complète de tout `pytest`: le monorepo contient encore des modules legacy cassés hors périmètre de cette stratégie
+- Warnings DRF historiques (`min_value should be a Decimal instance`) encore présents dans plusieurs domaines backend; ils n’empêchent plus `pytest`, mais méritent un nettoyage ciblé

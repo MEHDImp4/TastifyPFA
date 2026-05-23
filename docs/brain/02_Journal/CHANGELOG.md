@@ -2521,6 +2521,23 @@ and this project adheres to semantic tracking for development.
 ### Commit
 - `COMMIT_HASH_PENDING` `Expand backoffice quality-gap e2e coverage`
 
+## [2026-05-23] - 23:12
+### Changed
+- Rehabilitated legacy backend pytest coverage in `app/backend/apps/avis/tests.py`, `app/backend/apps/commandes/tests/test_kds_permissions.py`, `app/backend/apps/hr/tests.py`, `app/backend/apps/menu/tests/test_rbac.py`, `app/backend/apps/reservations/tests/test_api.py`, `app/backend/apps/tables/tests/test_api.py`, and `app/backend/apps/users/tests/test_commands.py` so the repo-wide Docker pytest suite matches the shipped domains instead of stale fixtures and imports.
+- Added `app/backend/apps/stock/tasks.py` and `StockService.queue_deduction()` to restore the async stock deduction contract expected by backend tests and order flows.
+- Promoted the supported backend integration gate from a small critical subset to the full Dockerized `pytest -q` suite in `scripts/testing/run-suite.mjs` and `.github/workflows/backoffice-ci.yml`.
+- Updated `TESTING.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `docs/brain/03_Architecture/QUIRKS.md` to reflect the broader backend CI contract and the required Django test-settings override.
+
+### Validation
+- `docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest apps/avis/tests.py apps/stock/tests/test_tasks.py apps/commandes/tests/test_stock_integration.py -q` passed.
+- `docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest apps/reservations/tests/test_api.py -q` passed.
+- `docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q` passed with `310 passed, 1 skipped`.
+- `docker compose exec -T backend python manage.py check` passed.
+- `docker compose exec -T backend python manage.py makemigrations --check --dry-run` passed.
+- `npm run test:integration` passed from the repo root with the promoted full backend pytest gate.
+- `npm run test:e2e` passed from the repo root for both backoffice and client Playwright suites.
+- `npm run build` passed in `app/frontend/client-app` and `app/frontend/backoffice-app`.
+
 ### Changed
 - Unified the public client branding around a shared configurable wordmark so the restaurant name replaces the default Tastify mark in the same slot instead of rendering beside it.
 - Propagated the resolved restaurant name through the public header, footer, auth screens, bootstrap loader, homepage editorial copy, reservation confirmation, menu identity copy, and payment portal messaging.

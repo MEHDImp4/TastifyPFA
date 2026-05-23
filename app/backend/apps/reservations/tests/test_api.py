@@ -2,6 +2,7 @@ import datetime
 import threading
 
 import pytest
+from django.db import connection
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -350,6 +351,9 @@ class TestConcurrentCreateConflict:
     def test_concurrent_conflicting_creates_result_in_exactly_one_success(
         self, client_user, other_client
     ):
+        if connection.vendor == "sqlite":
+            pytest.skip("Concurrent reservation conflict coverage requires a database with row-level locking.")
+
         table = Table.objects.create(numero=85, capacite=4)
         results = []
         errors = []
@@ -396,16 +400,13 @@ class TestTableDerivedStatus:
     def test_table_with_active_reservation_exposes_derived_reserved_status(
         self, api_client, gerant_user, client_user, table
     ):
-        now = datetime.datetime.now()
-        today = now.date()
-        start = (now - datetime.timedelta(minutes=5)).time().replace(second=0, microsecond=0)
-        end = (now + datetime.timedelta(hours=1)).time().replace(second=0, microsecond=0)
+        today = datetime.date.today()
 
         make_reservation(
             client_user, table,
             date_reservation=today,
-            heure_debut=start,
-            heure_fin=end,
+            heure_debut=datetime.time(0, 0),
+            heure_fin=datetime.time(23, 59),
         )
         api_client.force_authenticate(user=gerant_user)
 
@@ -418,10 +419,9 @@ class TestTableDerivedStatus:
     def test_stored_table_statut_unchanged_by_reservation(
         self, api_client, gerant_user, client_user, table
     ):
-        now = datetime.datetime.now()
-        today = now.date()
-        start = (now - datetime.timedelta(minutes=5)).time().replace(second=0, microsecond=0)
-        end = (now + datetime.timedelta(hours=1)).time().replace(second=0, microsecond=0)
+        today = datetime.date.today()
+        start = datetime.time(12, 0)
+        end = datetime.time(13, 0)
 
         make_reservation(
             client_user, table,

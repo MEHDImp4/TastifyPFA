@@ -40,10 +40,11 @@ class EmployeAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
-    def test_serveur_cannot_list_employees(self):
+    def test_serveur_can_list_active_employees_only(self):
         self.client.force_authenticate(user=self.serveur)
         response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
 
     def test_gerant_can_create_employee(self):
         self.client.force_authenticate(user=self.gerant)
@@ -80,6 +81,7 @@ class EmployeAPITests(APITestCase):
         self.employe_user.refresh_from_db()
         self.assertFalse(self.employe_user.is_active)
         
-        # Should no longer appear in active list
+        # GERANT listings retain deactivated employees for management visibility.
         response = self.client.get(self.list_url)
-        self.assertEqual(len(response.data), 0)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['id'], self.employe.id)

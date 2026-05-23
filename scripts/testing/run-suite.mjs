@@ -120,13 +120,6 @@ async function withDockerStack(services, callback) {
   }
 }
 
-const backendCriticalTests = [
-  'apps/users/tests/test_auth.py',
-  'apps/users/tests/test_register.py',
-  'apps/configuration/tests/test_settings_api.py',
-  'apps/paiements/tests/test_api.py',
-];
-
 const suites = {
   async lint() {
     npmPrefix('app/frontend/backoffice-app', 'lint');
@@ -159,7 +152,7 @@ const suites = {
         'python',
         '-m',
         'pytest',
-        ...backendCriticalTests,
+        '-q',
       ]);
     });
   },

@@ -57,3 +57,9 @@ class StockService:
                     ingredient.stock_actuel -= total_deduction
 
             Ingredient.objects.bulk_update(list(ingredients_dict.values()), ['stock_actuel'])
+
+    @staticmethod
+    def queue_deduction(plat, quantity):
+        from apps.stock.tasks import deduct_stock_async
+
+        deduct_stock_async.delay(plat.id, quantity)

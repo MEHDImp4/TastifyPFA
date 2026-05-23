@@ -62,8 +62,8 @@ jobs:
           npm --prefix app/frontend/backoffice-app run test:unit
           npm --prefix app/frontend/client-app run test:unit
 
-  backend-critical:
-    name: Backend critical tests
+  backend-pytest:
+    name: Backend pytest
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -83,8 +83,8 @@ jobs:
       - name: Verify committed migrations
         run: docker compose exec -T backend python manage.py makemigrations --check --dry-run
 
-      - name: Run critical backend tests
-        run: docker compose exec -T backend python -m pytest apps/users/tests/test_auth.py apps/users/tests/test_register.py apps/configuration/tests/test_settings_api.py apps/paiements/tests/test_api.py
+      - name: Run backend pytest suite
+        run: docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q
 
       - name: Dump backend logs on failure
         if: failure()
@@ -100,7 +100,7 @@ jobs:
     timeout-minutes: 30
     needs:
       - frontend-quality
-      - backend-critical
+      - backend-pytest
 
     steps:
       - name: Checkout repository
@@ -167,7 +167,7 @@ jobs:
     timeout-minutes: 30
     needs:
       - frontend-quality
-      - backend-critical
+      - backend-pytest
 
     steps:
       - name: Checkout repository

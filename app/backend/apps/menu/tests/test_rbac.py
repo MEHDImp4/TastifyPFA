@@ -53,8 +53,9 @@ class RBACTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_unauthenticated_cannot_access(self):
+    def test_unauthenticated_can_read_categories(self):
         self.api_client.force_authenticate(user=None)
         self.api_client.credentials()
         response = self.api_client.get('/api/categories/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
