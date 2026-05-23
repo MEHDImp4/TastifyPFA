@@ -2404,7 +2404,7 @@ and this project adheres to semantic tracking for development.
 - `npx playwright test tests/e2e/auth.public.spec.ts` passed in `app/frontend/backoffice-app` after starting the Docker stack and waiting for `http://127.0.0.1:3000/login`.
 
 ### Commit
-- `pending`
+- `d6d6ae7` `Add backoffice auth e2e coverage`
 
 ## [2026-05-23] - 01:12
 ### Changed
