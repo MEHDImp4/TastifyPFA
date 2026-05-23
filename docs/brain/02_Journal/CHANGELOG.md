@@ -14,7 +14,7 @@
 - `npm run build` in `app/frontend/backoffice-app`
 
 ### Commit
-- `COMMIT_HASH_PENDING` `Add cross-app reliability e2e coverage`
+- `886b839` `Add cross-app reliability e2e coverage`
 
 ## [2026-05-23] - 02:13
 ### Added
