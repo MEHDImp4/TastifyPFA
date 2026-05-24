@@ -2691,3 +2691,20 @@ and this project adheres to semantic tracking for development.
 
 ### Commit
 - `407e75b` `Refresh frontend theme for new Tastify design system`
+
+## [2026-05-24] - 15:19
+### Changed
+- Improved the first frontend UX remediation wave by making the public client shell less navigation-fragile on mobile, adding a visible login shortcut for guests, and allowing the mobile menu overlay to scroll instead of trapping the viewport.
+- Added a real fallback state for the client homepage recommendation rail so recommendation outages now surface a clear message and recovery CTA to the full catalog instead of silently degrading.
+- Tightened the staff floor-plan experience by reducing the mandatory minimum canvas size for smaller workstations, adding adaptive guidance around panning, and removing blur-heavy modal backdrops that conflicted with the tactical design language.
+- Extended the client accessibility smoke test to assert the new homepage fallback and mobile guest entry path.
+
+### Validation
+- `npm --prefix app/frontend/client-app run build`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `docker compose up -d --build backend client-app backoffice-app`
+- `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.a11y.spec.ts tests/e2e/client.quality.spec.ts`
+- `npm --prefix app/frontend/backoffice-app run test:e2e -- --project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "renders mocked salle table states and opens ordering from a free table|keeps serveur users on the same allowed route after a hard refresh"`
+
+### Commit
+- `c751950` `Improve frontend wave 1 ux flow`
