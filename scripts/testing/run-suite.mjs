@@ -67,13 +67,19 @@ function requestHttpStatus(url, options = {}) {
   const timeoutMs = options.timeoutMs ?? 5_000;
   const parsedUrl = new URL(url);
   const transport = parsedUrl.protocol === 'https:' ? https : http;
+  const body = options.body ?? null;
+  const headers = { ...(options.headers ?? {}) };
+
+  if (body !== null && !Object.keys(headers).some((header) => header.toLowerCase() === 'content-length')) {
+    headers['Content-Length'] = Buffer.byteLength(body);
+  }
 
   return new Promise((resolve, reject) => {
     const request = transport.request(
       parsedUrl,
       {
         method: options.method ?? 'GET',
-        headers: options.headers ?? {},
+        headers,
       },
       (response) => {
         response.resume();
@@ -85,6 +91,9 @@ function requestHttpStatus(url, options = {}) {
     request.setTimeout(timeoutMs, () => {
       request.destroy(new Error(`Request timed out after ${timeoutMs}ms`));
     });
+    if (body !== null) {
+      request.write(body);
+    }
     request.end();
   });
 }
@@ -160,19 +169,30 @@ async function runE2EForTarget(target, options = {}) {
     target === 'client'
       ? {
           services: ['db', 'redis', 'backend', 'client-app'],
-          url: 'http://127.0.0.1:3003',
+          readinessChecks: [{ url: 'http://127.0.0.1:3003' }],
           prefix: 'app/frontend/client-app',
         }
       : {
           services: ['db', 'redis', 'backend', 'backoffice-app'],
-          url: 'http://127.0.0.1:3000/login',
+          readinessChecks: [
+            { url: 'http://127.0.0.1:3000/login' },
+            {
+              url: 'http://127.0.0.1:3000/api/users/login/',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username: 'healthcheck', password: 'healthcheck' }),
+              allowedStatuses: [200, 400, 401],
+            },
+          ],
           prefix: 'app/frontend/backoffice-app',
         };
 
   await withDockerStack(
     config.services,
     async () => {
-      await waitForHttp(config.url);
+      for (const readinessCheck of config.readinessChecks) {
+        await waitForHttp(readinessCheck.url, readinessCheck);
+      }
       npmPrefix(config.prefix, 'test:e2e', options.npmArgs ?? []);
     },
     { files: options.files },
@@ -247,6 +267,16 @@ const suites = {
   async 'e2e:client'() {
     await runE2EForTarget('client');
   },
+  async 'e2e:real-devices'() {
+    const provider = process.env.PLAYWRIGHT_REAL_DEVICE_PROVIDER;
+    if (!provider) {
+      console.log('Skipping real-device matrix: no PLAYWRIGHT_REAL_DEVICE_PROVIDER configured.');
+      return;
+    }
+
+    console.log(`Running device-lab-ready smoke with provider profile: ${provider}`);
+    await suites['e2e:matrix']();
+  },
   async 'e2e:ui'() {
     const target = process.env.PLAYWRIGHT_APP === 'client' ? 'client-app' : 'backoffice-app';
     const prefix = target === 'client-app' ? 'app/frontend/client-app' : 'app/frontend/backoffice-app';
@@ -258,18 +288,46 @@ const suites = {
     });
   },
   async load() {
+    const loadContainerName = 'tastifypfa-load-tester-runner';
+
     await withDockerStack(
       ['db', 'redis', 'backend'],
       async () => {
         await waitForHttp('http://127.0.0.1:8000/api/users/login/', {
           allowedStatuses: [405],
         });
-        dockerCompose(['run', '--rm', 'load-tester'], {
-          files: ['docker-compose.yml', 'docker-compose.ci.yml'],
+
+        try {
+          run('docker', ['rm', '-f', loadContainerName], { stdio: 'ignore' });
+        } catch {}
+
+        try {
+          dockerCompose(['run', '--name', loadContainerName, 'load-tester'], {
+            files: ['docker-compose.yml', 'docker-compose.ci.yml'],
+            env: {
+              LOCUST_USERS: process.env.LOCUST_USERS ?? '15',
+              LOCUST_SPAWN_RATE: process.env.LOCUST_SPAWN_RATE ?? '3',
+              LOCUST_RUN_TIME: process.env.LOCUST_RUN_TIME ?? '45s',
+            },
+          });
+        } finally {
+          try {
+            run('docker', ['cp', `${loadContainerName}:/workspace/artifacts/load-tests/.`, 'artifacts/load-tests'], {
+              stdio: 'inherit',
+            });
+          } catch {}
+
+          try {
+            run('docker', ['rm', '-f', loadContainerName], { stdio: 'ignore' });
+          } catch {}
+        }
+
+        run('node', ['scripts/testing/check-load-report.mjs', 'artifacts/load-tests'], {
           env: {
-            LOCUST_USERS: process.env.LOCUST_USERS ?? '15',
-            LOCUST_SPAWN_RATE: process.env.LOCUST_SPAWN_RATE ?? '3',
-            LOCUST_RUN_TIME: process.env.LOCUST_RUN_TIME ?? '45s',
+            LOAD_MAX_P95_MS: process.env.LOAD_MAX_P95_MS ?? '1500',
+            LOAD_MAX_AVG_MS: process.env.LOAD_MAX_AVG_MS ?? '800',
+            LOAD_MAX_FAIL_RATIO: process.env.LOAD_MAX_FAIL_RATIO ?? '0.02',
+            LOAD_MIN_REQUESTS: process.env.LOAD_MIN_REQUESTS ?? '40',
           },
         });
       },

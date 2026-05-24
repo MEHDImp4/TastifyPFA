@@ -1,0 +1,27 @@
+[
+  {
+    "id": "PYSEC-2025-47",
+    "package": "django",
+    "reason": "Project is still pinned to the unsupported Django 5.0 line. No in-series security fix exists; full remediation requires a framework minor upgrade batch."
+  },
+  {
+    "id": "CVE-2025-57833",
+    "package": "django",
+    "reason": "Project is still pinned to the unsupported Django 5.0 line. No in-series security fix exists; full remediation requires a framework minor upgrade batch."
+  },
+  {
+    "id": "CVE-2025-64458",
+    "package": "django",
+    "reason": "Project is still pinned to the unsupported Django 5.0 line. No in-series security fix exists; full remediation requires a framework minor upgrade batch."
+  },
+  {
+    "id": "CVE-2025-64459",
+    "package": "django",
+    "reason": "Project is still pinned to the unsupported Django 5.0 line. No in-series security fix exists; full remediation requires a framework minor upgrade batch."
+  },
+  {
+    "id": "CVE-2025-45768",
+    "package": "pyjwt",
+    "reason": "The upstream issue is disputed and has no published fix version. The stronger actionable crit-header fix is handled by pinning PyJWT 2.12.0."
+  }
+]

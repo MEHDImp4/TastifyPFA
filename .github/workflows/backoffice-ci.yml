@@ -242,8 +242,16 @@ jobs:
         run: python -m pip install --upgrade pip pip-audit
 
       - name: Run Python dependency audit
-        continue-on-error: true
-        run: python -m pip_audit -r app/backend/requirements.txt --format json -o pip-audit.json
+        run: |
+          set +e
+          python -m pip_audit -r app/backend/requirements.txt --format json -o pip-audit.json
+          audit_status=$?
+          set -e
+          if [[ ! -f pip-audit.json ]]; then
+            echo "pip-audit did not produce pip-audit.json"
+            exit $audit_status
+          fi
+          node scripts/testing/check-pip-audit.mjs pip-audit.json scripts/testing/pip-audit-allowlist.json
 
       - name: Upload Python dependency audit
         if: always()
@@ -484,7 +492,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: changes
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || needs.changes.outputs.full_run == 'true'
+    continue-on-error: true
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.full_run == 'true'
 
     steps:
       - name: Checkout repository
@@ -509,6 +518,10 @@ jobs:
           LOCUST_USERS: "20"
           LOCUST_SPAWN_RATE: "4"
           LOCUST_RUN_TIME: "60s"
+          LOAD_MAX_P95_MS: "1500"
+          LOAD_MAX_AVG_MS: "800"
+          LOAD_MAX_FAIL_RATIO: "0.02"
+          LOAD_MIN_REQUESTS: "40"
         run: node scripts/testing/run-suite.mjs load
 
       - name: Upload load test artifacts
@@ -517,4 +530,116 @@ jobs:
         with:
           name: load-test-artifacts
           path: artifacts/load-tests
+          if-no-files-found: ignore
+
+  load-tests-nightly:
+    name: Load tests nightly
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: changes
+    if: github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Prepare load test artifact directory
+        run: |
+          rm -rf artifacts/load-tests
+          mkdir -p artifacts/load-tests
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Run nightly load test stack
+        env:
+          CI: "true"
+          LOCUST_USERS: "30"
+          LOCUST_SPAWN_RATE: "5"
+          LOCUST_RUN_TIME: "180s"
+          LOAD_MAX_P95_MS: "1800"
+          LOAD_MAX_AVG_MS: "1000"
+          LOAD_MAX_FAIL_RATIO: "0.02"
+          LOAD_MIN_REQUESTS: "80"
+        run: node scripts/testing/run-suite.mjs load
+
+      - name: Upload nightly load test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-load-test-artifacts
+          path: artifacts/load-tests
+          if-no-files-found: ignore
+
+  real-device-matrix:
+    name: Device-lab-ready matrix preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    continue-on-error: true
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || needs.changes.outputs.full_run == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Install backoffice dependencies
+        working-directory: app/frontend/backoffice-app
+        run: npm ci
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Install expanded Playwright browsers
+        run: |
+          npm --prefix app/frontend/backoffice-app run test:e2e:install
+          npm --prefix app/frontend/client-app run test:e2e:install
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Detect remote device credentials
+        id: device_lab
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+        run: |
+          if [[ -n "$BROWSERSTACK_USERNAME" && -n "$BROWSERSTACK_ACCESS_KEY" ]]; then
+            echo "provider=browserstack" >> "$GITHUB_OUTPUT"
+          else
+            echo "provider=preflight" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run device-lab-ready preflight
+        env:
+          CI: "true"
+          PLAYWRIGHT_REAL_DEVICE_PROVIDER: ${{ steps.device_lab.outputs.provider }}
+          PLAYWRIGHT_EXPANDED_MATRIX: "true"
+          BACKOFFICE_BASE_URL: http://127.0.0.1:3000
+          CLIENT_BASE_URL: http://127.0.0.1:3003
+        run: node scripts/testing/run-suite.mjs e2e:real-devices
+
+      - name: Upload device-lab preflight reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: device-lab-preflight-reports
+          path: |
+            app/frontend/backoffice-app/playwright-report
+            app/frontend/client-app/playwright-report
           if-no-files-found: ignore

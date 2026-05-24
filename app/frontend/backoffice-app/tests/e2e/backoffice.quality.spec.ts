@@ -75,6 +75,20 @@ const openNavigation = async (page: Parameters<typeof test>[0]['page']) => {
   await page.getByRole('button', { name: /open navigation menu/i }).click();
 };
 
+const expectNoUnexpectedHorizontalOverflow = async (page: Parameters<typeof test>[0]['page']) => {
+  const hasOverflow = await page.evaluate(() => {
+    const root = document.documentElement;
+    const body = document.body;
+
+    return (
+      root.scrollWidth > root.clientWidth + 1 ||
+      body.scrollWidth > body.clientWidth + 1
+    );
+  });
+
+  expect(hasOverflow).toBe(false);
+};
+
 const expectVisibleLogoutControl = async (page: Parameters<typeof test>[0]['page']) => {
   const logoutButton = page.getByTestId('logout-button');
   await logoutButton.scrollIntoViewIfNeeded();
@@ -256,6 +270,32 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expect(page.getByRole('button', { name: /manual sync/i })).toBeVisible();
       await expect(page.getByRole('button', { name: /export logs/i })).toBeVisible();
     });
+
+    test('keeps dense manager screens readable across reduced laptop and tablet widths', async ({ page }) => {
+      await mockManagerSettings(page);
+      await mockManagerStock(page);
+      await mockManagerHr(page);
+      await mockManagerAvis(page);
+
+      await page.setViewportSize({ width: 1180, height: 820 });
+      await page.goto('/stock');
+      await expect(page.getByRole('button', { name: /add item/i })).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/hr');
+      await expect(page.getByRole('button', { name: 'GERANT' })).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.setViewportSize({ width: 820, height: 1180 });
+      await page.goto('/avis');
+      await expect(page.getByRole('button', { name: /dispatch response/i }).first()).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.goto('/settings');
+      await expect(page.getByRole('button', { name: 'Deploy Changes' })).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+    });
   });
 
   test.describe('serveur', () => {
@@ -289,6 +329,28 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expect(page.getByTestId('nav-salle')).toHaveClass(/border-primary/);
       await expectVisibleLogoutControl(page);
     });
+
+    test('keeps dense serveur surfaces usable at laptop, tablet, and mobile widths', async ({ page }) => {
+      await mockSalle(page);
+      await mockReservations(page);
+
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('/salle');
+      await expect(page.getByText('Main Dining Area')).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/reservations');
+      await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+      await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.setViewportSize({ width: 430, height: 932 });
+      await page.goto('/delivery');
+      await expect(page.getByRole('heading', { name: 'DELIVERY HUB' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Manage' }).first()).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+    });
   });
 
   test.describe('cuisinier', () => {
@@ -301,7 +363,6 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockKitchenMenuCatalog(page);
 
       await page.goto('/kds');
-      await page.waitForLoadState('networkidle');
       await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
       await expectNoBlockingViolations(page);
 
@@ -315,7 +376,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockKds(page);
 
       await page.goto('/kds');
-      await page.waitForLoadState('networkidle');
+      await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
       await page.reload();
       await expect(page).toHaveURL(/\/kds$/);
 
@@ -323,6 +384,22 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expect(page.getByTestId('nav-kds')).toBeVisible();
       await expect(page.getByTestId('nav-kds')).toHaveClass(/border-primary/);
       await expectVisibleLogoutControl(page);
+    });
+
+    test('keeps kitchen flows readable on tablet and large mobile viewports', async ({ page }) => {
+      await mockKds(page);
+      await mockKitchenMenuCatalog(page);
+
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/kds');
+      await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
+
+      await page.setViewportSize({ width: 430, height: 932 });
+      await page.goto('/menu');
+      await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+      await expect(page.getByTestId('plat-card-8101')).toBeVisible();
+      await expectNoUnexpectedHorizontalOverflow(page);
     });
   });
 });

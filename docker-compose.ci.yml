@@ -2,23 +2,25 @@ services:
   load-tester:
     image: python:3.12-slim
     working_dir: /workspace
-    entrypoint: ["sh", "-lc"]
-    command: >
-      python -m pip install --no-cache-dir locust==2.37.10 &&
-      mkdir -p /workspace/artifacts &&
-      locust
-      -f /workspace/scripts/locustfile.py
-      --headless
-      --users ${LOCUST_USERS:-15}
-      --spawn-rate ${LOCUST_SPAWN_RATE:-3}
-      --run-time ${LOCUST_RUN_TIME:-45s}
-      --stop-timeout 30
-      --host http://backend:8000
-      --html /workspace/artifacts/locust-report.html
-      --csv /workspace/artifacts/locust
+    command:
+      - sh
+      - -lc
+      - >
+        python -m pip install --no-cache-dir locust==2.37.10 &&
+        mkdir -p /workspace/artifacts/load-tests &&
+        locust
+        -f /workspace/scripts/locustfile.py
+        --headless
+        --users ${LOCUST_USERS:-15}
+        --spawn-rate ${LOCUST_SPAWN_RATE:-3}
+        --run-time ${LOCUST_RUN_TIME:-45s}
+        --stop-timeout 30
+        --host http://backend:8000
+        --html /workspace/artifacts/load-tests/locust-report.html
+        --csv /workspace/artifacts/load-tests/locust
     volumes:
       - ./scripts:/workspace/scripts:ro
-      - ./artifacts/load-tests:/workspace/artifacts
+      - ./artifacts:/workspace/artifacts
     depends_on:
       db:
         condition: service_healthy

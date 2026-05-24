@@ -54,7 +54,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('client expanded browser matrix smoke', () => {
   test('keeps the guest route shell stable across core public pages', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('link', { name: /The Catalog/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /Voir la carte/i }).first()).toBeVisible();
 
     await page.goto('/menu');
     await expect(page.getByRole('button', { name: /All Selections/i })).toBeVisible();

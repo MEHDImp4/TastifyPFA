@@ -19,7 +19,7 @@ const projects = [
   {
     name: 'gerant-chromium',
     dependencies: ['setup'],
-    testMatch: [/.*\.gerant\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
+    testMatch: [/.*\.gerant\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/, /.*backoffice\.dashboard\.spec\.ts/],
     use: {
       ...devices['Desktop Chrome'],
       storageState: './tests/e2e/.auth/gerant.json',
@@ -58,7 +58,7 @@ if (includeExpandedMatrix) {
     {
       name: 'gerant-mobile-smoke',
       dependencies: ['setup'],
-      testMatch: /.*backoffice\.quality\.spec\.ts/,
+      testMatch: [/.*backoffice\.quality\.spec\.ts/, /.*backoffice\.dashboard\.spec\.ts/],
       use: {
         ...devices['iPhone 13'],
         storageState: './tests/e2e/.auth/gerant.json',

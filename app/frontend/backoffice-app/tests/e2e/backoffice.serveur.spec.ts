@@ -349,8 +349,12 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('renders the reservations empty state when no bookings are returned', async ({ page }) => {
-    await page.route('**/api/commandes/?table=1*', async (route) => {
-      await route.fulfill({ status: 200, body: JSON.stringify([]) });
+    await page.route('**/api/reservations/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
     });
 
     await page.goto('/reservations');

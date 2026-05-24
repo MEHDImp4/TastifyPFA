@@ -296,7 +296,7 @@ export const PlatPage: React.FC = () => {
                   {/* Name & Details */}
                   <div className="min-w-0 pr-4">
                     <h3 className="font-sans text-[14px] font-black text-on-surface uppercase tracking-tight truncate group-hover:text-primary transition-colors">{plat.nom}</h3>
-                    <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1 opacity-60 line-clamp-1">{plat.description || 'NO CONTEXT'}</p>
+                    <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1 line-clamp-1">{plat.description || 'NO CONTEXT'}</p>
                   </div>
 
                   {/* Category */}
