@@ -2739,3 +2739,22 @@ and this project adheres to semantic tracking for development.
 
 ### Commit
 - `d4de238` `Improve frontend wave 3 portal voice`
+
+## [2026-05-25] - 00:00
+### Changed
+- Closed the remaining coverage-gap infrastructure slice by adding a dedicated backoffice dashboard analytics Playwright spec, extending backoffice responsive quality coverage, and hardening the root E2E runner so Dockerized backoffice runs wait for both `/login` and `/api/users/login/` before auth bootstrap begins.
+- Strengthened the CI quality gates with a blocking backend `pip-audit` allowlist checker, a threshold-based Locust verifier, richer load scenarios for auth, recommendations, reservations, payments, and dashboard analytics, and refreshed browser-matrix coverage to keep the stabilized public CTA flow aligned with the current client shell.
+- Fixed the last suite-level regressions uncovered by the new gates: KDS quality coverage now waits on semantic readiness instead of fragile `networkidle`, reservation empty-state coverage mocks the correct endpoint, and the manager menu registry contrast now clears the blocking axe threshold on the plat description row.
+- Resynchronized the testing documentation and repo map to reflect the now-green root gates, the remaining true gaps, and the current non-blocking status of real-device and long-duration performance expansion work.
+
+### Validation
+- `npm run test:integration`
+- `npm run test:load`
+- `node scripts/testing/run-suite.mjs e2e:client`
+- `node scripts/testing/run-suite.mjs e2e:backoffice`
+- `npm run test:e2e`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `npm --prefix app/frontend/client-app run build`
+
+### Commit
+- `52d6d3a` `Harden remaining QA coverage gaps`

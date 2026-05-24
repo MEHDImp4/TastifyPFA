@@ -38,7 +38,7 @@ tastify-pfa/
 │       ├── backoffice-app/        # Staff — Vite :3000 — GERANT/SERVEUR/CUISINIER
 │       │   ├── src/api/           # API wrappers (including configuration.ts)
 │       │   ├── src/layouts/       # AppShell, Sidebar, Topbar
-│       │   ├── tests/e2e/         # Playwright auth bootstrap + multi-role, CRUD, quality, ordering/KDS, and failure-state browser flows
+│       │   ├── tests/e2e/         # Playwright auth bootstrap + multi-role, dashboard analytics, CRUD, quality, ordering/KDS, and failure-state browser flows
 │       │   ├── playwright.config.ts # Role-scoped E2E projects and storage-state setup
 │       │   └── src/pages/
 │       │       ├── Dashboard/     # Strategic Intelligence (High-End Motion)
@@ -53,7 +53,7 @@ tastify-pfa/
 │           ├── src/store/         # Zustand stores (including configStore.ts)
 │           ├── src/components/    # Shared UI/auth/branding primitives
 │           ├── src/layouts/       # PublicLayout (Dynamic branding)
-│           ├── tests/e2e/         # Playwright coverage for auth, catalog, reservations, checkout, account, loyalty, contact, payment, quality, accessibility, and responsive journeys
+│           ├── tests/e2e/         # Playwright coverage for auth, catalog, reservations, checkout, account, loyalty, contact, payment, quality, accessibility, responsive, and browser-matrix journeys
 │           └── src/pages/
 │               ├── Home/          # Bento-Command Landing (Horizontal Scroll)
 │               ├── Menu/          # Cinematic Catalog
@@ -67,13 +67,19 @@ tastify-pfa/
 │   └── phases/                    # Phase-specific files
 ├── scripts/
 │   ├── update_dashboard.py        # Dashboard synchronizer after every state shift
-│   └── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
+│   ├── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
+│   ├── locustfile.py              # Locust scenarios for auth, recommendations, reservations, payments, and analytics load checks
+│   └── testing/
+│       ├── run-suite.mjs          # Root QA orchestrator for lint/build/unit/integration/E2E/load/preview flows
+│       ├── check-load-report.mjs  # Validates Locust p95/avg/error-rate/request-count thresholds
+│       ├── check-pip-audit.mjs    # Fails CI when pip-audit findings exceed the approved allowlist
+│       └── pip-audit-allowlist.json # Temporary backend Python CVE exceptions with explicit scope
 ├── artifacts/
 │   └── load-tests/                # Locust smoke reports archived by CI/manual load runs
 ├── package.json                   # Root QA command hub (lint, typecheck, build, unit, integration, E2E)
 ├── TESTING.md                     # Pragmatic test strategy, commands, and coverage map
 ├── docker-compose.yml             # Default dev/test Compose stack
-├── docker-compose.ci.yml          # QA add-ons (Locust load tester)
+├── docker-compose.ci.yml          # QA add-ons (Locust load tester + CI-only load harness)
 ├── docker-compose.preview.yml     # Preview-stack overrides for vite preview smoke
 └── dashboard.html                 # Live project health dashboard
 ```

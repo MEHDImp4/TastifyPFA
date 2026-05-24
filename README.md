@@ -106,18 +106,19 @@ docker compose up -d --build backend
 
 For the curated, student-friendly QA entrypoint introduced for this repo, see `TESTING.md`.
 
-The PowerShell runner rebuilds `db`, `redis`, `backend`, and `backoffice-app`, then executes backend `pytest` followed by Playwright browser flows. Right now, the Playwright campaign is green for public auth, unauthenticated route protection, login normalization, auth transport failures, multi-role redirects, role-based URL guards, logout, direct manager route access, reservation filtering plus confirm/cancel transitions, reservation empty/failure states, reservation client-search normalization plus fallback-name rendering, confirmed-to-cancelled tab handoff, reservation action isolation across tabs, fallback-identity filtering by status, fallback-vs-real-name search collisions, ordering access, ordering search/cart manipulation, mixed-cart quantity flooring, category/search intersections, cart persistence across category switches, cart persistence while search hides catalog items, multi-item cart persistence across category/search intersections, hidden-line stability after removing a different cart item, fresh order submission, existing-order `add_items` submission, mutable existing-order selection when several active orders are returned, filtered existing-order `add_items` payload retention, edited existing-order quantity retention under filter/search churn, existing-order failure pinning on `/ordering/:tableId`, KDS empty states, KDS ticket progression, KDS backend failure handling, multi-ticket completion behavior, mutation-driven single-ticket completion isolation, sibling-ticket isolation on failed KDS mutation, same-action KDS button isolation across neighboring tickets, takeaway fallback ticket identity rendering, category CRUD, plat CRUD, modal draft reset, failed-save draft persistence, settings success and failure flows, HR empty/export behavior, avis empty states, and low-stock indicators. The current full backoffice browser suite passes at `55/55`. Backend `pytest` is still partially blocked by pre-existing import issues in untouched modules such as `apps.avis.tests` and `apps.stock.tasks`.
+The root QA runner now waits for both the backoffice shell and the proxied auth API before starting Playwright, which keeps Docker startup races from turning into false-negative browser runs. The supported automation surface is green for full backend `pytest`, full backoffice Playwright, full client Playwright, the expanded browser matrix smoke, preview smoke, and the Dockerized Locust campaign with threshold checks on p95, average latency, failure ratio, and minimum request volume.
 
 ## GitHub Actions
 - `.github/workflows/backoffice-ci.yml` runs on pull requests, pushes to `main`/`master`, nightly schedule, and manual `workflow_dispatch`.
 - The workflow first detects impacted surfaces so docs-only or planning-only pushes do not burn the full QA budget.
 - `frontend-quality` installs both SPAs, then runs lint, typecheck, build, and unit tests.
 - `backend-pytest` brings up `db`, `redis`, and `backend` with Docker Compose, then runs `python manage.py check`, `makemigrations --check --dry-run`, and the full Dockerized backend `pytest` suite.
-- `dependency-review` blocks risky dependency additions on pull requests, while `dependency-security-audits` runs `npm audit` on both frontends and publishes a backend `pip-audit` report artifact.
+- `dependency-review` blocks risky dependency additions on pull requests, while `dependency-security-audits` runs `npm audit` on both frontends and enforces backend `pip-audit` through an explicit allowlist gate.
 - `client-e2e` and `backoffice-e2e` reuse the root Docker runners so CI and local readiness logic stay aligned.
 - `expanded-browser-smoke` widens coverage with Firefox, WebKit, and mobile Chromium/browser projects.
 - `preview-smoke` validates the preview stack with `vite preview`.
-- `load-tests` runs Locust smoke tests on nightly/manual/full-run executions and stores the results under `artifacts/load-tests`.
+- `load-tests` runs the Locust campaign on nightly/manual/full-run executions, validates the generated metrics, and stores the results under `artifacts/load-tests`.
+- `real-device-matrix` remains a non-blocking preflight until a real provider profile is configured.
 
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.

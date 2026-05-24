@@ -41,10 +41,10 @@ npm run test
 Notes:
 
 - `npm run test:integration` démarre `db`, `redis`, `backend`, exécute `manage.py check`, `makemigrations --check --dry-run`, puis la suite backend `pytest` complète en forçant `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` dans le conteneur backend.
-- `npm run test:e2e` lance successivement les suites Playwright backoffice puis client avec la stack Docker nécessaire, attend les URLs exposées, puis imprime `docker compose ps` et les logs des services concernés si une suite échoue.
-- `npm run test:e2e:matrix` lance un smoke élargi multi-browser et mobile réel via Firefox, WebKit et Chromium mobile, en s'appuyant sur une petite sélection de specs stables plutôt que sur toute la suite métier.
+- `npm run test:e2e` lance successivement les suites Playwright backoffice puis client avec la stack Docker nécessaire. Le runner attend maintenant à la fois le shell backoffice (`/login`) et l'API d'auth proxifiée (`/api/users/login/`) avant de démarrer Playwright, puis imprime `docker compose ps` et les logs des services concernés si une suite échoue.
+- `npm run test:e2e:matrix` lance un smoke élargi multi-browser et mobile émulé via Firefox, WebKit et Chromium mobile, en s'appuyant sur une petite sélection de specs stables plutôt que sur toute la suite métier.
 - `npm run test:preview` démarre une stack Compose de preview avec `vite preview` pour les deux frontends et valide que backend, backoffice et client répondent bien comme en environnement pré-prod.
-- `npm run test:load` lance un smoke Locust Dockerisé contre l'API backend. Les variables `LOCUST_USERS`, `LOCUST_SPAWN_RATE` et `LOCUST_RUN_TIME` permettent de régler la campagne.
+- `npm run test:load` lance une campagne Locust Dockerisée "light but meaningful" contre les endpoints critiques backend. Les variables `LOCUST_USERS`, `LOCUST_SPAWN_RATE`, `LOCUST_RUN_TIME`, `LOAD_MAX_P95_MS`, `LOAD_MAX_AVG_MS`, `LOAD_MAX_FAIL_RATIO` et `LOAD_MIN_REQUESTS` permettent de régler les seuils et la charge.
 - `npm run test:e2e:ui` ouvre Playwright UI pour le backoffice par défaut. Pour le portail client: `PLAYWRIGHT_APP=client npm run test:e2e:ui`.
 - `npm run build`, `npm run test:integration`, `npm run test:e2e` et `npm run test` exigent Docker Desktop démarré, car le backend et la DB de test sont conteneurisés.
 
@@ -125,7 +125,9 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 - Rôles/permissions: auth backend existante + settings manager-only
 - Configuration / admin branding: lecture publique + patch manager + upload logo
 - Paiement QR / payable session / split / paiement manuel: backend API
-- Responsive basique: pages publiques login/home en viewport mobile
+- Dashboard analytics manager: loading, succès, état vide, fallback erreur et refresh stale couvert en Playwright dédié
+- Responsive avancé backoffice: `salle`, `kds`, `delivery`, `stock`, `hr`, `avis`, `settings` couverts par une couche qualité multi-largeurs
+- Responsive public/client: login, home, menu, checkout, account, loyalty et payment portal en viewport réduit
 - Accessibilité basique: login client et staff sans violations `critical`/`serious`
 - Build frontend: backoffice + client
 - Build backend: `docker compose build backend`
@@ -148,10 +150,11 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 - `workflow_dispatch` expose l’option `full_run` pour forcer une exécution complète même si l’analyse des chemins aurait sauté certains jobs.
 - Les jobs Playwright GitHub réutilisent maintenant le runner racine `node scripts/testing/run-suite.mjs e2e:client` et `node scripts/testing/run-suite.mjs e2e:backoffice`, ce qui aligne la CI avec les mêmes probes de readiness Docker qu’en local.
 - `Dependency review` bloque les pull requests qui introduisent une dépendance GitHub signalée en gravité `high`.
-- `Dependency security audits` exécute `npm audit --omit=dev --audit-level=high` sur les deux frontends et publie aussi un rapport `pip-audit` backend en artefact.
+- `Dependency security audits` exécute `npm audit --omit=dev --audit-level=high` sur les deux frontends et fait aussi tourner `pip-audit` backend avec un contrôle bloquant piloté par `scripts/testing/check-pip-audit.mjs` et `scripts/testing/pip-audit-allowlist.json`.
 - `Expanded browser smoke` valide la matrice Firefox + WebKit + mobile Chromium côté client, ainsi qu’un smoke Firefox + mobile staff côté backoffice.
 - `Preview smoke` reconstruit les deux SPAs en mode preview et vérifie leurs endpoints publics.
-- `Load tests` s’exécute en manuel, en nightly, ou lors d’un `full_run` forcé, puis archive les rapports Locust sous `artifacts/load-tests`.
+- `Load tests` s’exécute en manuel, en nightly, ou lors d’un `full_run` forcé, archive les rapports Locust sous `artifacts/load-tests`, puis valide p95, moyenne, taux d’erreur et volume minimum via `scripts/testing/check-load-report.mjs`.
+- `Real-device matrix` reste un préflight non bloquant tant qu’aucun provider réel (`PLAYWRIGHT_REAL_DEVICE_PROVIDER`) n’est configuré.
 
 ## Validation effectuée pour cette mise en place
 
@@ -160,14 +163,17 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 - `npm run test:e2e:matrix` a passe depuis la racine
 - `npm run test:preview` a passe depuis la racine
 - `LOCUST_USERS=8 LOCUST_SPAWN_RATE=2 LOCUST_RUN_TIME=20s npm run test:load` a passe depuis la racine
+- `npm --prefix app/frontend/backoffice-app run build` a passe
 - `npm run build` a passe dans `app/frontend/client-app`
-- `npm run build` a passe dans `app/frontend/backoffice-app`
+- `npm run test:e2e` passe apres l’ajout des probes de readiness auth backoffice
 
 ## Workflows restant à couvrir ou à renforcer
 
 - Reset password: non implémenté côté produit actuellement
 - Emails / notifications: aucune chaîne transactionnelle exploitable détectée
-- Dashboard analytics: quelques tests backend existent, mais il manque encore un smoke E2E dédié aux KPI
-- Responsive avancé des écrans staff denses: seulement un smoke ciblé par rôle pour l’instant, pas une campagne complète sur tous les parcours
-- `pip-audit` backend remonte encore des vulnérabilités upstream dans certaines dépendances Python, donc le rapport est actuellement publié en artefact CI au lieu de bloquer tout le workflow
+- Vrais appareils mobiles: la matrice actuelle reste émulée tant qu’aucun device farm n’est branché
+- Multi-browser complet: le smoke étendu couvre un sous-ensemble stable, pas toute la suite métier
+- `pip-audit` backend garde une allowlist temporaire pour les vulnérabilités upstream restantes; le gate est désormais bloquant pour toute nouvelle dérive hors allowlist
+- Performance/capacité longue durée: la campagne Locust est plus significative qu’un smoke pur, mais reste volontairement courte hors nightly
+- Cross-app realism faiblement mocké: encore à ajouter pour quelques scénarios Docker quasi-réels
 - Warnings DRF historiques (`min_value should be a Decimal instance`) encore présents dans plusieurs domaines backend; ils n’empêchent plus `pytest`, mais méritent un nettoyage ciblé

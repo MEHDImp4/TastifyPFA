@@ -90,7 +90,7 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 
 ### 6. Playwright Can Reach `/login` Before Auth API Is Warm
 - **Issue**: Right after `docker compose up -d --build backend backoffice-app`, the Vite front can already serve `/login` while the proxied backend auth endpoint is still warming up. Browser tests then fail with `ERREUR_SYSTEME` even though credentials and selectors are correct.
-- **Fix**: In Playwright `globalSetup`, poll both `/login` and `/api/users/login/` before starting auth bootstrap or role-based browser projects.
+- **Fix**: Both Playwright `globalSetup` and the root runner `scripts/testing/run-suite.mjs` must poll `/login` and `/api/users/login/` before starting auth bootstrap or role-based browser projects. Waiting only on the HTML shell is not sufficient in Docker.
 
 ### 7. DRF Multipart Omits Boolean Defaults on Category/Plat Forms
 - **Issue**: Category and plat creation forms submit `multipart/form-data`. If the frontend omits boolean flags like `est_active` or `est_disponible`, Django REST Framework persists them as `false`, so newly created records vanish immediately from UI lists filtered on active records.
@@ -100,9 +100,13 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Issue**: The `backoffice-app` service runs `npm run dev` inside Docker with the project bind-mounted from Windows. In practice, Vite sometimes keeps serving a stale bundle even after local source edits land on disk, which makes Playwright exercise outdated DOM and accessibility attributes.
 - **Fix**: When the rendered UI does not reflect recent frontend changes during Docker-based validation, restart the affected frontend container with `docker compose restart backoffice-app` before re-running Playwright.
 
-### 9. Backend `pip-audit` Is Informational Until Upstream Pins Move
-- **Issue**: The current Python dependency graph still reports upstream CVEs through `pip-audit` for packages coming from the backend runtime requirements.
-- **Fix**: Keep `pip-audit` running in CI and publish its JSON artifact for visibility, but do not fail the whole workflow until the dependency upgrade plan is executed and validated against Dockerized backend tests.
+### 9. Backend `pip-audit` Uses a Temporary Allowlist
+- **Issue**: The backend Python dependency graph can still inherit upstream CVEs that are not immediately remediable without a larger dependency move.
+- **Fix**: CI now runs `pip-audit` as a blocking gate through `scripts/testing/check-pip-audit.mjs`, but only findings listed in `scripts/testing/pip-audit-allowlist.json` are tolerated temporarily. Any new advisory outside that allowlist must fail the workflow.
+
+### 10. KDS Browser Tests Must Avoid `networkidle`
+- **Issue**: The staff KDS view keeps live websocket and poll-style activity going, so Playwright's `page.waitForLoadState('networkidle')` can hang even when the screen is already ready for assertions.
+- **Fix**: Prefer semantic readiness checks on stable headings, controls, or data cards for KDS flows instead of `networkidle`.
 ## GitHub Actions CI Scope
 - The supported backend CI gate now runs the full Dockerized repo `pytest` suite under `tastify_backend.settings.test`, alongside `manage.py check` and `makemigrations --check --dry-run`.
 - If a future backend test starts failing only in CI, check first that the workflow command and local Docker command still both force the same Django test settings.
