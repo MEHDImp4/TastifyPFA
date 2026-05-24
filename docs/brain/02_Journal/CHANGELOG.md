@@ -2758,3 +2758,11 @@ and this project adheres to semantic tracking for development.
 
 ### Commit
 - `52d6d3a` `Harden remaining QA coverage gaps`
+
+## [2026-05-25] - 00:01
+### Changed
+- Synchronized `README.md`, `TESTING.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `docs/brain/03_Architecture/QUIRKS.md` with the hardened QA reality: dashboard analytics E2E now exists, advanced backoffice responsive coverage is in place, the root runner waits for backoffice auth readiness, the Python audit gate is blocking behind an explicit allowlist, and the remaining true gaps are now limited to real devices, low-mock cross-app realism, reset password, and transactional notifications.
+- Regenerated `dashboard.html` after the documentation and changelog updates so the project health view reflects the latest QA state and commit history.
+
+### Commit
+- `014b7ae` `Sync QA documentation and dashboard`
