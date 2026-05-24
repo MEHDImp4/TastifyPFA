@@ -1,6 +1,39 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
+const includeExpandedMatrix = process.env.PLAYWRIGHT_EXPANDED_MATRIX === 'true';
+
+const projects = [
+  {
+    name: 'setup',
+    testMatch: /.*\.setup\.ts/,
+  },
+  {
+    name: 'chromium',
+    dependencies: ['setup'],
+    use: { ...devices['Desktop Chrome'] },
+  },
+];
+
+if (includeExpandedMatrix) {
+  projects.push(
+    {
+      name: 'firefox-smoke',
+      dependencies: ['setup'],
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit-smoke',
+      dependencies: ['setup'],
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'mobile-chrome-smoke',
+      dependencies: ['setup'],
+      use: { ...devices['Pixel 5'] },
+    },
+  );
+}
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -19,15 +52,5 @@ export default defineConfig({
     video: 'retain-on-failure',
     serviceWorkers: 'block',
   },
-  projects: [
-    {
-      name: 'setup',
-      testMatch: /.*\.setup\.ts/,
-    },
-    {
-      name: 'chromium',
-      dependencies: ['setup'],
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
+  projects,
 });

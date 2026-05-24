@@ -10,6 +10,8 @@ on:
       - ".planning/**"
       - "docs/brain/**"
       - "dashboard.html"
+  schedule:
+    - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
       full_run:
@@ -24,6 +26,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -115,16 +118,16 @@ jobs:
           if match_any '^(app/frontend/|package\.json|package-lock\.json|scripts/testing/run-suite\.mjs|docker-compose\.yml|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             frontend=true
           fi
-          if match_any '^(app/backend/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^(app/backend/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             backend=true
           fi
-          if match_any '^(app/frontend/client-app/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^(app/frontend/client-app/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             client=true
           fi
-          if match_any '^(app/frontend/backoffice-app/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^(app/frontend/backoffice-app/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             backoffice=true
           fi
-          if match_any '^(\.github/workflows/|scripts/testing/run-suite\.mjs|package\.json|package-lock\.json|docker-compose\.yml|TESTING\.md)$'; then
+          if match_any '^(\.github/workflows/|scripts/testing/run-suite\.mjs|package\.json|package-lock\.json|docker-compose(\.ci|\.preview)?\.yml|TESTING\.md)$'; then
             ci=true
           fi
 
@@ -184,6 +187,71 @@ jobs:
         run: |
           npm --prefix app/frontend/backoffice-app run test:unit
           npm --prefix app/frontend/client-app run test:unit
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    needs: changes
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  dependency-security-audits:
+    name: Dependency and security audits
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install frontend dependencies
+        run: |
+          npm --prefix app/frontend/backoffice-app ci
+          npm --prefix app/frontend/client-app ci
+
+      - name: Run npm production audits
+        run: |
+          npm --prefix app/frontend/backoffice-app audit --omit=dev --audit-level=high
+          npm --prefix app/frontend/client-app audit --omit=dev --audit-level=high
+
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip pip-audit
+
+      - name: Run Python dependency audit
+        continue-on-error: true
+        run: python -m pip_audit -r app/backend/requirements.txt --format json -o pip-audit.json
+
+      - name: Upload Python dependency audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-pip-audit
+          path: pip-audit.json
+          if-no-files-found: ignore
 
   backend-pytest:
     name: Backend pytest
@@ -282,6 +350,60 @@ jobs:
           path: app/frontend/client-app/test-results
           if-no-files-found: ignore
 
+  expanded-browser-smoke:
+    name: Expanded browser and mobile smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Install backoffice dependencies
+        working-directory: app/frontend/backoffice-app
+        run: npm ci
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Install expanded Playwright browsers
+        run: |
+          npm --prefix app/frontend/backoffice-app run test:e2e:install
+          npm --prefix app/frontend/client-app run test:e2e:install
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Run expanded browser and mobile smoke
+        env:
+          CI: "true"
+          PLAYWRIGHT_EXPANDED_MATRIX: "true"
+          BACKOFFICE_BASE_URL: http://127.0.0.1:3000
+          CLIENT_BASE_URL: http://127.0.0.1:3003
+        run: node scripts/testing/run-suite.mjs e2e:matrix
+
+      - name: Upload matrix Playwright reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: expanded-browser-playwright-reports
+          path: |
+            app/frontend/backoffice-app/playwright-report
+            app/frontend/client-app/playwright-report
+          if-no-files-found: ignore
+
   backoffice-e2e:
     name: Backoffice Playwright E2E
     runs-on: ubuntu-latest
@@ -331,4 +453,68 @@ jobs:
         with:
           name: backoffice-playwright-test-results
           path: app/frontend/backoffice-app/test-results
+          if-no-files-found: ignore
+
+  preview-smoke:
+    name: Preview environment smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Run preview smoke stack
+        env:
+          CI: "true"
+        run: node scripts/testing/run-suite.mjs preview:smoke
+
+  load-tests:
+    name: Load tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || needs.changes.outputs.full_run == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Prepare load test artifact directory
+        run: |
+          rm -rf artifacts/load-tests
+          mkdir -p artifacts/load-tests
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Run load test stack
+        env:
+          CI: "true"
+          LOCUST_USERS: "20"
+          LOCUST_SPAWN_RATE: "4"
+          LOCUST_RUN_TIME: "60s"
+        run: node scripts/testing/run-suite.mjs load
+
+      - name: Upload load test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-artifacts
+          path: artifacts/load-tests
           if-no-files-found: ignore

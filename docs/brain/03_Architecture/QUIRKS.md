@@ -99,6 +99,10 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ### 8. Vite-in-Docker Can Miss Host File Changes on Windows
 - **Issue**: The `backoffice-app` service runs `npm run dev` inside Docker with the project bind-mounted from Windows. In practice, Vite sometimes keeps serving a stale bundle even after local source edits land on disk, which makes Playwright exercise outdated DOM and accessibility attributes.
 - **Fix**: When the rendered UI does not reflect recent frontend changes during Docker-based validation, restart the affected frontend container with `docker compose restart backoffice-app` before re-running Playwright.
+
+### 9. Backend `pip-audit` Is Informational Until Upstream Pins Move
+- **Issue**: The current Python dependency graph still reports upstream CVEs through `pip-audit` for packages coming from the backend runtime requirements.
+- **Fix**: Keep `pip-audit` running in CI and publish its JSON artifact for visibility, but do not fail the whole workflow until the dependency upgrade plan is executed and validated against Dockerized backend tests.
 ## GitHub Actions CI Scope
 - The supported backend CI gate now runs the full Dockerized repo `pytest` suite under `tastify_backend.settings.test`, alongside `manage.py check` and `makemigrations --check --dry-run`.
 - If a future backend test starts failing only in CI, check first that the workflow command and local Docker command still both force the same Django test settings.

@@ -68,9 +68,13 @@ tastify-pfa/
 ├── scripts/
 │   ├── update_dashboard.py        # Dashboard synchronizer after every state shift
 │   └── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
+├── artifacts/
+│   └── load-tests/                # Locust smoke reports archived by CI/manual load runs
 ├── package.json                   # Root QA command hub (lint, typecheck, build, unit, integration, E2E)
 ├── TESTING.md                     # Pragmatic test strategy, commands, and coverage map
-├── docker-compose.yml             # Single root Compose configuration
+├── docker-compose.yml             # Default dev/test Compose stack
+├── docker-compose.ci.yml          # QA add-ons (Locust load tester)
+├── docker-compose.preview.yml     # Preview-stack overrides for vite preview smoke
 └── dashboard.html                 # Live project health dashboard
 ```
 

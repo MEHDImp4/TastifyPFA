@@ -1,3 +1,30 @@
+## [2026-05-24] - 15:03
+### Added
+- Added `docker-compose.ci.yml` with a Dockerized Locust `load-tester` service and `docker-compose.preview.yml` to validate both SPAs through `vite preview` instead of only dev servers.
+- Added `client.browser-matrix.spec.ts` as a stable client smoke slice for Firefox, WebKit, and mobile Chromium coverage in CI.
+
+### Changed
+- Extended the root QA hub in `package.json` with `test:e2e:matrix`, `test:preview`, and `test:load`.
+- Upgraded both frontend Playwright installs and configs to support Firefox, WebKit, and mobile projects behind `PLAYWRIGHT_EXPANDED_MATRIX`.
+- Hardened `scripts/testing/run-suite.mjs` to support multi-compose runs, preview smoke orchestration, load-test execution, and broader E2E matrix targets.
+- Improved `.github/workflows/backoffice-ci.yml` with dependency review, frontend/backend dependency audits, expanded browser/mobile smoke, preview smoke, nightly/manual load tests, and scheduled execution.
+- Switched both frontend Dockerfiles to `npm ci --no-audit --no-fund` so QA/preview image builds stay reproducible and stop flaking on install-time drift.
+- Updated `README.md`, `TESTING.md`, `FILE_MAP.md`, and `QUIRKS.md` so the documented CI/CD contract matches the new security, dependency, performance, preview, and browser-matrix coverage.
+
+### Validation
+- `npm --prefix app/frontend/backoffice-app audit --omit=dev --audit-level=high`
+- `npm --prefix app/frontend/client-app audit --omit=dev --audit-level=high`
+- `npm --prefix app/frontend/backoffice-app run test:e2e:install`
+- `npm --prefix app/frontend/client-app run test:e2e:install`
+- `npm run test:preview`
+- `LOCUST_USERS=8 LOCUST_SPAWN_RATE=2 LOCUST_RUN_TIME=20s npm run test:load`
+- `npm run test:e2e:matrix`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `npm --prefix app/frontend/client-app run build`
+
+### Commit
+- Pending
+
 ## [2026-05-24] - 14:10
 ### Changed
 - Improved `.github/workflows/backoffice-ci.yml` with path-aware CI job gating so docs/planning-only pushes no longer consume the full GitHub Actions pipeline and backend/client/backoffice jobs now run only when their impacted surface changes.

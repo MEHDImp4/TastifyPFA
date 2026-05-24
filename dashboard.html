@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-24 13:51:04<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-24 15:04:29<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1150,79 +1150,79 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Improved `.github/workflows/backoffice-ci.yml` with path-aware CI job gating so docs/planning-only pushes no longer consume the full GitHub Actions pipeline and backend/client/backoffice jobs now run only when their impacted surface changes.</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `docker-compose.ci.yml` with a Dockerized Locust `load-tester` service and `docker-compose.preview.yml` to validate both SPAs through `vite preview` instead of only dev servers.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `client.browser-matrix.spec.ts` as a stable client smoke slice for Firefox, WebKit, and mobile Chromium coverage in CI.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added a manual `workflow_dispatch` `full_run` override and aligned the Playwright GitHub jobs with the root Docker readiness runner by routing them through `node scripts/testing/run-suite.mjs e2e:client` and `e2e:backoffice`.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Extended the root QA hub in `package.json` with `test:e2e:matrix`, `test:preview`, and `test:load`.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Extended `scripts/testing/run-suite.mjs` with dedicated single-app E2E targets so CI and local debugging reuse the same Docker orchestration and HTTP readiness checks.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Upgraded both frontend Playwright installs and configs to support Firefox, WebKit, and mobile projects behind `PLAYWRIGHT_EXPANDED_MATRIX`.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `TESTING.md` to document the new selective CI behavior and the manual full-run escape hatch.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Hardened `scripts/testing/run-suite.mjs` to support multi-compose runs, preview smoke orchestration, load-test execution, and broader E2E matrix targets.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Improved `.github/workflows/backoffice-ci.yml` with dependency review, frontend/backend dependency audits, expanded browser/mobile smoke, preview smoke, nightly/manual load tests, and scheduled execution.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Switched both frontend Dockerfiles to `npm ci --no-audit --no-fund` so QA/preview image builds stay reproducible and stop flaking on install-time drift.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Updated `README.md`, `TESTING.md`, `FILE_MAP.md`, and `QUIRKS.md` so the documented CI/CD contract matches the new security, dependency, performance, preview, and browser-matrix coverage.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `node scripts/testing/run-suite.mjs e2e:backoffice`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app audit --omit=dev --audit-level=high`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `node scripts/testing/run-suite.mjs e2e:client`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/client-app audit --omit=dev --audit-level=high`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app run build`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app run test:e2e:install`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/client-app run build`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/client-app run test:e2e:install`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-24 14:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `53690bf` `Improve QA CI pipeline targeting`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Hardened `scripts/testing/run-suite.mjs` so the root Docker runners print actionable compose diagnostics on failure, preserve explicit frontend readiness checks, and run the backend critical pytest subset with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` instead of inheriting the dev MySQL settings from the backend container.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Restored backend critical-path API expectations by requiring authentication on `LogoutView`, resolving the singleton restaurant configuration through the detail route, and allowing the payment-session resolve endpoint to accept the token-backed POST shape already exercised by the critical suite.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Cleared the remaining root client E2E blocker by raising the login and registration submit CTA contrast on the public auth screens, which eliminates the last serious axe violation on `tests/e2e/client.a11y.spec.ts`.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:preview`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:integration`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `LOCUST_USERS=8 LOCUST_SPAWN_RATE=2 LOCUST_RUN_TIME=20s npm run test:load`</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-23 22:44</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run build` in `app/frontend/client-app`</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-24 15:03</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm run test:e2e:matrix`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

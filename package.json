@@ -8,10 +8,16 @@
     "test:unit": "node scripts/testing/run-suite.mjs unit",
     "test:integration": "node scripts/testing/run-suite.mjs integration",
     "test:e2e": "node scripts/testing/run-suite.mjs e2e",
+    "test:e2e:matrix": "node scripts/testing/run-suite.mjs e2e:matrix",
     "test:e2e:ui": "node scripts/testing/run-suite.mjs e2e:ui",
+    "test:load": "node scripts/testing/run-suite.mjs load",
+    "test:preview": "node scripts/testing/run-suite.mjs preview:smoke",
     "test:coverage": "node scripts/testing/run-suite.mjs coverage",
     "lint": "node scripts/testing/run-suite.mjs lint",
     "typecheck": "node scripts/testing/run-suite.mjs typecheck",
     "build": "node scripts/testing/run-suite.mjs build"
+  },
+  "dependencies": {
+    "playwright": "^1.60.0"
   }
 }

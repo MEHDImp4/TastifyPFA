@@ -8,6 +8,10 @@ import process from 'node:process';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const isWindows = process.platform === 'win32';
 
+function getComposeArgs(files = ['docker-compose.yml']) {
+  return ['compose', ...files.flatMap((file) => ['-f', file])];
+}
+
 function run(command, args, options = {}) {
   const pretty = [command, ...args].join(' ');
   console.log(`\n> ${pretty}`);
@@ -28,7 +32,7 @@ function run(command, args, options = {}) {
 }
 
 function dockerCompose(args, options = {}) {
-  run('docker', ['compose', ...args], options);
+  run('docker', [...getComposeArgs(options.files), ...args], options);
 }
 
 function npmPrefix(prefix, script, extraArgs = []) {
@@ -120,9 +124,26 @@ async function waitForHttp(url, options = {}) {
   throw new Error(`Timed out waiting for ${url}. Observed ${statusSummary}. Last error: ${lastError}`);
 }
 
-function printDockerDiagnostics(services = []) {
+async function withDockerStack(services, callback, options = {}) {
+  ensureDockerAvailable();
   try {
-    dockerCompose(['ps']);
+    dockerCompose(['down', '--remove-orphans'], options);
+  } catch {}
+  dockerCompose(['up', '-d', '--build', ...services], options);
+  try {
+    await callback();
+  } catch (error) {
+    console.error(`Docker stack callback failed for services: ${services.join(', ')}`);
+    printDockerDiagnostics(services, options);
+    throw error;
+  } finally {
+    dockerCompose(['down', '--remove-orphans'], options);
+  }
+}
+
+function printDockerDiagnostics(services = [], options = {}) {
+  try {
+    dockerCompose(['ps'], options);
   } catch {}
 
   if (services.length === 0) {
@@ -130,25 +151,11 @@ function printDockerDiagnostics(services = []) {
   }
 
   try {
-    dockerCompose(['logs', '--tail=200', ...services]);
+    dockerCompose(['logs', '--tail=200', ...services], options);
   } catch {}
 }
 
-async function withDockerStack(services, callback) {
-  ensureDockerAvailable();
-  dockerCompose(['up', '-d', '--build', ...services]);
-  try {
-    await callback();
-  } catch (error) {
-    console.error(`Docker stack callback failed for services: ${services.join(', ')}`);
-    printDockerDiagnostics(services);
-    throw error;
-  } finally {
-    dockerCompose(['down', '--remove-orphans']);
-  }
-}
-
-async function runE2EForTarget(target) {
+async function runE2EForTarget(target, options = {}) {
   const config =
     target === 'client'
       ? {
@@ -162,10 +169,14 @@ async function runE2EForTarget(target) {
           prefix: 'app/frontend/backoffice-app',
         };
 
-  await withDockerStack(config.services, async () => {
-    await waitForHttp(config.url);
-    npmPrefix(config.prefix, 'test:e2e');
-  });
+  await withDockerStack(
+    config.services,
+    async () => {
+      await waitForHttp(config.url);
+      npmPrefix(config.prefix, 'test:e2e', options.npmArgs ?? []);
+    },
+    { files: options.files },
+  );
 }
 
 const suites = {
@@ -208,6 +219,28 @@ const suites = {
     await runE2EForTarget('backoffice');
     await runE2EForTarget('client');
   },
+  async 'e2e:matrix'() {
+    await runE2EForTarget('backoffice', {
+      npmArgs: [
+        '--',
+        '--project=guest-firefox-smoke',
+        '--project=gerant-mobile-smoke',
+        'tests/e2e/auth.public.spec.ts',
+        'tests/e2e/backoffice.quality.spec.ts',
+      ],
+      files: ['docker-compose.yml'],
+    });
+    await runE2EForTarget('client', {
+      npmArgs: [
+        '--',
+        '--project=firefox-smoke',
+        '--project=webkit-smoke',
+        '--project=mobile-chrome-smoke',
+        'tests/e2e/client.browser-matrix.spec.ts',
+      ],
+      files: ['docker-compose.yml'],
+    });
+  },
   async 'e2e:backoffice'() {
     await runE2EForTarget('backoffice');
   },
@@ -223,6 +256,36 @@ const suites = {
       await waitForHttp(url);
       npmPrefix(prefix, 'test:e2e:ui');
     });
+  },
+  async load() {
+    await withDockerStack(
+      ['db', 'redis', 'backend'],
+      async () => {
+        await waitForHttp('http://127.0.0.1:8000/api/users/login/', {
+          allowedStatuses: [405],
+        });
+        dockerCompose(['run', '--rm', 'load-tester'], {
+          files: ['docker-compose.yml', 'docker-compose.ci.yml'],
+          env: {
+            LOCUST_USERS: process.env.LOCUST_USERS ?? '15',
+            LOCUST_SPAWN_RATE: process.env.LOCUST_SPAWN_RATE ?? '3',
+            LOCUST_RUN_TIME: process.env.LOCUST_RUN_TIME ?? '45s',
+          },
+        });
+      },
+      { files: ['docker-compose.yml', 'docker-compose.ci.yml'] },
+    );
+  },
+  async 'preview:smoke'() {
+    await withDockerStack(
+      ['db', 'redis', 'backend', 'backoffice-app', 'client-app'],
+      async () => {
+        await waitForHttp('http://127.0.0.1:8000/api/schema/');
+        await waitForHttp('http://127.0.0.1:3000/');
+        await waitForHttp('http://127.0.0.1:3003/');
+      },
+      { files: ['docker-compose.yml', 'docker-compose.preview.yml'] },
+    );
   },
   async coverage() {
     npmPrefix('app/frontend/backoffice-app', 'test:coverage');
