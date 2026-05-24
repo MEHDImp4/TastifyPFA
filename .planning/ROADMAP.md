@@ -38,14 +38,18 @@ Tastify is an AI-powered ERP for Moroccan restaurants. This roadmap breaks down 
 - [x] **Phase 30: AI Sentiment Analysis** - HuggingFace BERT integration for reviews. (completed 2026-05-08)
 - [x] **Phase 31: Back-Office Dashboard KPIs** - Real-time stats and Recharts integration. (completed 2026-05-08)
 - [x] **Phase 32: Loyalty Program** - Points logic, Bronze/Silver/Gold tiers in Client UI. (completed 2026-05-08)
-- [ ] **Phase 33: PWA Offline Capabilities** - Service Workers for Salle & KDS.
-- [ ] **Phase 34: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate).
-- [ ] **Phase 35: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait).
-- [ ] **Phase 36: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi).
-- [ ] **Phase 37: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique).       
-- [ ] **Phase 38: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances.
-- [ ] **Phase 43: Stabilization & Regression Fixes** - Fix TypeScript errors and unit test regressions from the tactical overhaul.
-- [ ] **Phase 44: E2E Suite Modernization** - Rewrite the Playwright E2E suite to align with the "Tactical Command" architecture and semantic locators.
+- [x] **Phase 33: PWA Offline Capabilities** - Service Workers for Salle & KDS. (completed 2026-05-09)
+- [x] **Phase 34: KDS Advanced Operations** - UC19 (Modification rapide) and UC20_bis (Signalement rupture immédiate). (completed 2026-05-09)
+- [x] **Phase 35: Click & Collect E-commerce** - UC24 (Commande en ligne, panier, validation retrait). (completed 2026-05-09)
+- [x] **Phase 36: Staff Scheduling & Recruitment** - UC05 (Plannings horaires, gestion des offres d'emploi). (completed 2026-05-09)
+- [x] **Phase 37: AI Weather-Aware Stock Forecasting** - UC29 (Integration API Météo + Modèle de prédiction historique). (completed 2026-05-09)
+- [x] **Phase 38: Multilingual BERT Expansion** - UC38 optimization for Arabic/French sentiment nuances. (completed 2026-05-09)
+- [x] **Phase 39: Load Testing & Optimization** - Daphne production ASGI, Locust load suite, and scaling prep. (completed 2026-05-09)
+- [x] **Phase 40: Frontend Completion** - Complete the polished frontend delivery pass. (completed 2026-05-12)
+- [x] **Phase 41: Premium Portal Refinement** - Refine the premium client portal experience. (completed 2026-05-14)
+- [x] **Phase 42: Tactical Compact Overhaul** - Compact staff UX overhaul and dense Tactical Command layout. (completed 2026-05-14)
+- [x] **Phase 43: Stabilization & Regression Fixes** - Fix TypeScript errors and unit test regressions from the tactical overhaul. (completed 2026-05-22)
+- [x] **Phase 44: E2E Suite Modernization** - Rewrite the Playwright E2E suite to align with the "Tactical Command" architecture and semantic locators. (completed 2026-05-23)
 
 ## Phase Details
 
@@ -66,9 +70,5 @@ Phases execute in numeric order: 1 → 44
 | 41. Premium Portal Refinement | 1/1 | Complete | 2026-05-14 |
 | 42. Tactical Compact Overhaul | 1/1 | Complete | 2026-05-14 |
 | 43. Stabilization & Fixes | 1/1 | Complete | 2026-05-22 |
-| 44. E2E Modernization | 0/1 | In Progress | — |
-| Total | 100/101 | 99% | 2026-05-22 | faire | — |
-/1 | à faire | — |
- faire | — |
- faire | — |
- faire | — |
+| 44. E2E Modernization | 1/1 | Complete | 2026-05-23 |
+| Total | 101/101 | Complete | 2026-05-23 |
