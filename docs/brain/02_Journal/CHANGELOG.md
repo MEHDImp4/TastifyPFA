@@ -12,7 +12,7 @@
 - `npm --prefix app/frontend/client-app run build`
 
 ### Commit
-- Pending
+- `53690bf` `Improve QA CI pipeline targeting`
 
 ## [2026-05-23] - 22:44
 ### Fixed
