@@ -16,9 +16,10 @@ test.describe('client public accessibility and responsiveness', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
-    await expect(page.getByRole('link', { name: /view catalog/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /voir la carte/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /réserver/i }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: /log in/i })).toBeVisible();
-    await expect(page.getByText(/Curated service temporarily unavailable/i)).toBeVisible();
+    await expect(page.getByText(/Sélection indisponible pour le moment/i)).toBeVisible();
     await expect(page.getByText(/Tastify/i).first()).toBeVisible();
   });
 

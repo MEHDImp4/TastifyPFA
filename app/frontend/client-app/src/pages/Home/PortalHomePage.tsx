@@ -36,7 +36,7 @@ export const PortalHomePage = () => {
     <div className="h-full bg-background text-on-surface selection:bg-primary/20 overflow-y-auto custom-scrollbar font-body">
       
       {/* Editorial Hero */}
-      <section className="relative min-h-[85vh] w-full flex flex-col justify-center overflow-hidden shrink-0 border-b border-outline-variant bg-surface-main">
+      <section className="relative min-h-[72vh] w-full flex flex-col justify-center overflow-hidden shrink-0 border-b border-outline-variant bg-surface-main">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=2000" 
@@ -55,8 +55,8 @@ export const PortalHomePage = () => {
             <h1 className="text-display-lg-mobile md:text-display-lg text-primary mb-6 leading-[1.1] tracking-tighter">
               L’Art de la Table, <br className="hidden md:block"/> Réinventé
             </h1>
-            <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto uppercase tracking-[0.1em] font-medium leading-relaxed">
-              Une expérience gastronomique où la précision chirurgicale rencontre la sophistication organique.
+            <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium leading-relaxed">
+              Une table marocaine contemporaine, pensée pour celles et ceux qui veulent réserver vite, choisir juste et profiter d’un service soigné.
             </p>
           </motion.div>
           
@@ -70,13 +70,13 @@ export const PortalHomePage = () => {
               to="/menu" 
               className="px-12 py-5 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.3em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20 border border-primary"
             >
-              The Catalog
+              Voir la carte
             </Link>
             <Link 
               to="/reservations" 
               className="px-12 py-5 border-2 border-primary text-primary rounded font-sans text-xs font-black uppercase tracking-[0.3em] transition-all hover:bg-primary/5 active:scale-95"
             >
-              Bookings
+              Réserver
             </Link>
           </motion.div>
         </div>
@@ -91,11 +91,11 @@ export const PortalHomePage = () => {
         <div className="max-w-7xl mx-auto px-client-margin">
           <div className="flex justify-between items-end mb-16 border-b border-outline-variant pb-6">
             <div>
-              <span className="editorial-kicker mb-2">CURATED SELECTIONS</span>
+              <span className="editorial-kicker mb-2">SELECTION DU MOMENT</span>
               <h3 className="font-serif text-3xl md:text-4xl text-primary font-black uppercase tracking-tight">Créations Signature</h3>
             </div>
             <Link to="/menu" className="font-sans text-[11px] font-black text-primary hover:text-on-surface transition-colors uppercase tracking-[0.3em] inline-flex items-center gap-2">
-              View Catalog <ArrowRight className="w-4 h-4" />
+              Voir la carte <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -104,23 +104,23 @@ export const PortalHomePage = () => {
                <div key={i} className="aspect-[4/5] bg-surface-container animate-pulse rounded-2xl" />
             )) : hasRecommendationError ? (
               <div className="md:col-span-3 rounded-[2rem] border border-outline-variant bg-surface-container-lowest px-8 py-12 text-center">
-                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">Curated service temporarily unavailable</p>
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">Sélection indisponible pour le moment</p>
                 <p className="mx-auto mt-4 max-w-2xl text-body-base text-on-surface-variant leading-relaxed">
-                  The live recommendations feed is offline for the moment. The full catalog is still available, and reservations continue normally.
+                  Notre sélection dynamique est momentanément hors ligne. La carte complète reste disponible et les réservations continuent normalement.
                 </p>
                 <Link
                   to="/menu"
                   className="mt-8 inline-flex items-center gap-3 rounded-full border border-primary px-8 py-4 font-sans text-[11px] font-black uppercase tracking-[0.3em] text-primary transition-colors hover:bg-primary/5"
                 >
-                  Explore Full Catalog
+                  Voir toute la carte
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             ) : topDishes.length === 0 ? (
               <div className="md:col-span-3 rounded-[2rem] border border-outline-variant bg-surface-container-lowest px-8 py-12 text-center">
-                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">New signatures incoming</p>
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">Nouvelles signatures en préparation</p>
                 <p className="mx-auto mt-4 max-w-2xl text-body-base text-on-surface-variant leading-relaxed">
-                  Our featured selections are being refreshed. Browse the menu for the complete service in the meantime.
+                  Nos recommandations sont en cours de mise à jour. Parcourez la carte complète pour découvrir tout le service.
                 </p>
               </div>
             ) : topDishes.map((dish, idx) => (
@@ -149,7 +149,7 @@ export const PortalHomePage = () => {
                 </div>
                 <div className="space-y-2">
                    <h4 className="font-serif text-xl font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">{dish.nom}</h4>
-                   <p className="font-body text-[15px] text-on-surface-variant leading-relaxed opacity-60 line-clamp-2 italic">{dish.description || 'A masterpiece of seasonal ingredients and culinary precision.'}</p>
+                   <p className="font-body text-[15px] text-on-surface-variant leading-relaxed opacity-70 line-clamp-2 italic">{dish.description || 'Une composition de saison pensée pour un service précis et généreux.'}</p>
                 </div>
               </motion.div>
             ))}
@@ -170,23 +170,20 @@ export const PortalHomePage = () => {
           </motion.blockquote>
           <div className="flex flex-col items-center gap-4">
              <div className="w-12 h-px bg-primary/40" />
-             <span className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary">Architectural Digest</span>
+             <span className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary">Journal des Tables</span>
           </div>
         </div>
-        
-        {/* Abstract background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
       </section>
 
       {/* CTA Reservation */}
-      <section className="py-24 px-6">
+      <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto bg-[#1a1614] rounded-[3rem] p-16 md:p-24 text-center relative overflow-hidden border border-outline-variant shadow-2xl">
           <div className="relative z-10 space-y-10">
-            <h2 className="text-display-lg-mobile md:text-display-lg text-background italic leading-none">Initialize your <br/> placement.</h2>
-            <p className="text-background/40 font-body text-lg max-w-xl mx-auto uppercase tracking-widest leading-relaxed">Select your temporal window and explore the catalog.</p>
+            <h2 className="text-display-lg-mobile md:text-display-lg text-background italic leading-none">Réservez votre <br/> prochaine table.</h2>
+            <p className="text-background/50 font-body text-lg max-w-xl mx-auto leading-relaxed">Choisissez votre créneau, découvrez la carte et laissez le service s’occuper du reste.</p>
             <div className="pt-6">
               <Link to="/reservations" className="inline-flex items-center gap-4 px-12 py-6 bg-primary text-on-primary rounded-full font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/40">
-                Book a Table <ArrowRight className="w-4 h-4" />
+                Réserver une table <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -200,19 +197,19 @@ export const PortalHomePage = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
             <h1 className="font-serif text-3xl font-black text-primary italic tracking-tighter leading-none m-0">Tastify.</h1>
-            <p className="text-sm font-body text-on-surface-variant leading-relaxed italic opacity-60 uppercase tracking-tight">Exceptional Moroccan hospitality orchestrated through digital intelligence.</p>
+            <p className="text-sm font-body text-on-surface-variant leading-relaxed italic opacity-70">Une hospitalité marocaine contemporaine, servie avec précision et simplicité.</p>
           </div>
 
           <div className="space-y-6">
-            <span className="editorial-kicker">COLLECTIONS</span>
+            <span className="editorial-kicker">PARCOURS</span>
             <ul className="space-y-3">
-              <li><Link to="/menu" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Digital Menu</Link></li>
-              <li><Link to="/reservations" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Booking Portal</Link></li>
+              <li><Link to="/menu" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Carte digitale</Link></li>
+              <li><Link to="/reservations" className="text-ui-label-bold text-[10px] text-on-surface-variant hover:text-primary transition-colors">Réservations</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <span className="editorial-kicker">TEMPORAL</span>
+            <span className="editorial-kicker">HORAIRES</span>
             <div className="space-y-3 font-sans text-[10px] font-black uppercase tracking-[0.1em] text-on-surface-variant/60">
               <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>MON-FRI</span> <span className="text-on-surface">12h — 23h</span></div>
               <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>SAT-SUN</span> <span className="text-on-surface">11h — 00h</span></div>
@@ -220,10 +217,10 @@ export const PortalHomePage = () => {
           </div>
 
           <div className="space-y-6">
-            <span className="editorial-kicker">COORDINATE</span>
+            <span className="editorial-kicker">ADRESSE</span>
             <div className="flex items-start gap-4">
               <MapPin className="w-4 h-4 text-primary shrink-0" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">1200 Commerce St, Suite 400<br/>Metropolis, NY 10001</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Boulevard d'Anfa, Quartier Racine<br/>Casablanca 20250</p>
             </div>
           </div>
         </div>
