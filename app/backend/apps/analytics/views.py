@@ -11,6 +11,7 @@ from rest_framework import serializers
 from apps.paiements.models import Paiement
 from apps.tables.models import Table
 from apps.commandes.models import Commande, CommandeLigne
+from apps.avis.models import AnalyseSentiment
 from apps.users.permissions import IsGerant  # Assuming there's a custom permission
 
 
@@ -31,6 +32,13 @@ class LiveFeedItemSerializer(serializers.Serializer):
     time = serializers.DateTimeField()
 
 
+class SentimentStatsSerializer(serializers.Serializer):
+    total = serializers.IntegerField()
+    positif_pct = serializers.FloatField()
+    negatif_pct = serializers.FloatField()
+    neutre_pct = serializers.FloatField()
+
+
 class DashboardResponseSerializer(serializers.Serializer):
     todayRevenue = serializers.FloatField()
     activeTables = serializers.IntegerField()
@@ -39,6 +47,7 @@ class DashboardResponseSerializer(serializers.Serializer):
     revenue7Days = RevenuePointSerializer(many=True)
     topDishes = TopDishSerializer(many=True)
     liveFeed = LiveFeedItemSerializer(many=True)
+    sentimentStats = SentimentStatsSerializer()
 
 class DashboardAPIView(APIView):
     # Only authenticated users with the GERANT role should access this
@@ -143,6 +152,18 @@ class DashboardAPIView(APIView):
         live_feed.sort(key=lambda x: x['time'], reverse=True)
         live_feed = live_feed[:10]
 
+        # 8. Sentiment stats (from analysed reviews)
+        total_analysed = AnalyseSentiment.objects.count()
+        pos_count = AnalyseSentiment.objects.filter(label=AnalyseSentiment.Label.POSITIF).count()
+        neg_count = AnalyseSentiment.objects.filter(label=AnalyseSentiment.Label.NEGATIF).count()
+        neu_count = AnalyseSentiment.objects.filter(label=AnalyseSentiment.Label.NEUTRE).count()
+        sentiment_stats = {
+            'total': total_analysed,
+            'positif_pct': round((pos_count / total_analysed * 100) if total_analysed else 0.0, 1),
+            'negatif_pct': round((neg_count / total_analysed * 100) if total_analysed else 0.0, 1),
+            'neutre_pct':  round((neu_count / total_analysed * 100) if total_analysed else 0.0, 1),
+        }
+
         data = {
             'todayRevenue': float(today_revenue),
             'activeTables': active_tables,
@@ -151,6 +172,7 @@ class DashboardAPIView(APIView):
             'revenue7Days': revenue_7_days,
             'topDishes': top_dishes,
             'liveFeed': live_feed,
+            'sentimentStats': sentiment_stats,
         }
 
         return Response(data)

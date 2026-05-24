@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { analyticsApi } from '../../api/analytics';
 import type { DashboardData } from '../../api/analytics';
-import { 
-  TrendingUp, 
-  Users, 
-  ShoppingBag, 
+import {
+  TrendingUp,
+  Users,
+  ShoppingBag,
   Timer,
   ChevronRight,
   BellRing,
@@ -13,7 +13,10 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  Loader2
+  Loader2,
+  Smile,
+  Meh,
+  Frown
 } from 'lucide-react';
 import { useSocketStore } from '../../store/socketStore';
 
@@ -59,12 +62,42 @@ export const DashboardPage: React.FC = () => {
               <kpi.icon className={`w-4.5 h-4.5 ${kpi.color}`} />
             </div>
             <div className="font-serif text-3xl font-black text-on-surface tabular-nums">{kpi.value}</div>
-            <div className={`font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1 ${kpi.trend.includes('+') ? 'text-primary' : 'text-on-surface-variant opacity-60'}`}>
+            <div className={`font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1 ${kpi.trend.includes('+') ? 'text-primary' : 'text-on-surface-variant opacity-80'}`}>
               <Activity className="w-3 h-3" /> {kpi.trend}
             </div>
           </div>
         ))}
       </section>
+
+      {/* Sentiment Analysis KPI */}
+      {data.sentimentStats && data.sentimentStats.total > 0 && (
+        <section className="bg-surface-container border border-outline-variant rounded-lg p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Client Sentiment Analysis</h3>
+              <p className="font-sans text-[10px] text-on-surface-variant mt-0.5 uppercase tracking-widest opacity-60">{data.sentimentStats.total} reviews analysed by NLP pipeline</p>
+            </div>
+            <Activity className="w-5 h-5 text-on-surface-variant/30" />
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
+              <Smile className="w-6 h-6 text-primary" />
+              <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.positif_pct}%</span>
+              <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">Positive</span>
+            </div>
+            <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
+              <Meh className="w-6 h-6 text-on-surface-variant/50" />
+              <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.neutre_pct}%</span>
+              <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Neutral</span>
+            </div>
+            <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
+              <Frown className="w-6 h-6 text-error" />
+              <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.negatif_pct}%</span>
+              <span className="font-sans text-[9px] font-black text-error uppercase tracking-widest">Negative</span>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Main Dashboard Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-staff-gutter flex-1">
@@ -78,7 +111,11 @@ export const DashboardPage: React.FC = () => {
               <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Live Feed Alerts</h3>
               <div className="w-2 h-2 rounded-full bg-error animate-pulse"></div>
             </div>
-            <div className="p-unit-sm flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+            <div
+              className="p-unit-sm flex flex-col gap-2 overflow-y-auto custom-scrollbar"
+              tabIndex={0}
+              aria-label="Operational alerts feed"
+            >
               {[
                 { type: 'error', label: 'Check Requested', desc: 'Table 4 • 2m ago', icon: BellRing },
                 { type: 'warning', label: 'Order Delayed', desc: 'Order #8542 • 5m over target', icon: Clock },
@@ -89,7 +126,7 @@ export const DashboardPage: React.FC = () => {
                    <alert.icon className={`w-4 h-4 mt-0.5 ${alert.type === 'error' ? 'text-error' : 'text-primary'}`} />
                    <div>
                       <p className="font-sans text-[12px] font-black text-on-surface uppercase tracking-tight leading-none">{alert.label}</p>
-                      <p className="font-sans text-[10px] text-on-surface-variant mt-1.5 uppercase tracking-widest opacity-60">{alert.desc}</p>
+                      <p className="font-sans text-[10px] text-on-surface-variant mt-1.5 uppercase tracking-widest">{alert.desc}</p>
                    </div>
                 </div>
               ))}
@@ -100,7 +137,15 @@ export const DashboardPage: React.FC = () => {
           <div className="bg-surface-container border border-outline-variant rounded-lg flex flex-col h-[280px] shadow-sm">
             <div className="p-4 border-b border-outline-variant bg-surface-container-high flex justify-between items-center rounded-t-lg">
               <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Floor Plan Preview</h3>
-              <button className="text-on-surface-variant hover:text-primary transition-colors"><Maximize2 className="w-4 h-4" /></button>
+              <button
+                type="button"
+                aria-label="Expand floor plan preview"
+                title="Expand floor plan preview"
+                className="text-on-surface-variant hover:text-primary transition-colors"
+              >
+                <Maximize2 className="w-4 h-4" />
+                <span className="sr-only">Expand floor plan preview</span>
+              </button>
             </div>
             <div className="flex-1 p-4 bg-surface-main relative flex items-center justify-center overflow-hidden rounded-b-lg blueprint-grid">
               <div className="w-full h-full border border-dashed border-outline-variant/30 relative p-4 opacity-40">
@@ -124,7 +169,12 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           
-          <div className="flex-1 p-4 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-x-auto custom-scrollbar">
+          <div
+            className="flex-1 p-4 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-x-auto custom-scrollbar"
+            tabIndex={0}
+            aria-label="Live orchestration columns"
+            role="region"
+          >
             {/* Kanban Columns */}
             {[
               { id: 'prep', label: 'Preparing', count: 4, color: 'text-on-surface-variant' },
@@ -171,7 +221,7 @@ export const DashboardPage: React.FC = () => {
                     </div>
                   )}
                   {col.id === 'ready' && (
-                    <div className="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-3 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
+                    <div className="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-3 opacity-80 grayscale hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
                       <div className="flex justify-between items-center">
                         <span className="font-sans text-xs font-black text-on-surface line-through">#ORD-8540</span>
                         <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-black border border-outline-variant/50">TBL 05</span>
