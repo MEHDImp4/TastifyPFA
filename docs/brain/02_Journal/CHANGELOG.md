@@ -2723,4 +2723,4 @@ and this project adheres to semantic tracking for development.
 - `npm --prefix app/frontend/backoffice-app run test:e2e -- --project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "filters reservations and applies confirm then cancel transitions|keeps reservation search and status filter stable after a refreshing status mutation|renders the reservations empty state when no bookings are returned|keeps reservation actions stable when confirm and cancel fail|keeps the reservations nav active after a direct route load"`
 
 ### Commit
-- `PENDING` `Improve frontend wave 2 ux flow`
+- `84d52b2` `Improve frontend wave 2 ux flow`
