@@ -124,6 +124,24 @@ docker compose exec -T backend python manage.py makemigrations --check --dry-run
 - Build frontend: backoffice + client
 - Build backend: `docker compose build backend`
 
+## CI/CD GitHub Actions
+
+- Le workflow principal est [C:\Users\mehdi\Documents\GitHub\TastifyPFA\.github\workflows\backoffice-ci.yml](/C:/Users/mehdi/Documents/GitHub/TastifyPFA/.github/workflows/backoffice-ci.yml).
+- Les pushes qui ne touchent que `.planning/`, `docs/brain/` ou `dashboard.html` ne déclenchent plus la pipeline GitHub.
+- Un job `Detect impacted surfaces` calcule ensuite quelles surfaces sont réellement touchées:
+  - frontend global
+  - backend
+  - client
+  - backoffice
+  - tooling CI
+- Les jobs lourds ne tournent que si leur surface a changé, avec cette logique:
+  - `Frontend quality` pour changements frontend ou CI
+  - `Backend pytest` pour changements backend ou CI
+  - `Client Playwright E2E` pour changements client, backend ou CI
+  - `Backoffice Playwright E2E` pour changements backoffice, backend ou CI
+- `workflow_dispatch` expose l’option `full_run` pour forcer une exécution complète même si l’analyse des chemins aurait sauté certains jobs.
+- Les jobs Playwright GitHub réutilisent maintenant le runner racine `node scripts/testing/run-suite.mjs e2e:client` et `node scripts/testing/run-suite.mjs e2e:backoffice`, ce qui aligne la CI avec les mêmes probes de readiness Docker qu’en local.
+
 ## Validation effectuée pour cette mise en place
 
 - `npm run test:integration` a passe depuis la racine

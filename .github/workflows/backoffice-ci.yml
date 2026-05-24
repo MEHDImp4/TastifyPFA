@@ -6,20 +6,143 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - ".planning/**"
+      - "docs/brain/**"
+      - "dashboard.html"
   workflow_dispatch:
+    inputs:
+      full_run:
+        description: Force the full QA pipeline even if path analysis would skip jobs.
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: qa-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
+  changes:
+    name: Detect impacted surfaces
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.detect.outputs.frontend }}
+      backend: ${{ steps.detect.outputs.backend }}
+      client: ${{ steps.detect.outputs.client }}
+      backoffice: ${{ steps.detect.outputs.backoffice }}
+      ci: ${{ steps.detect.outputs.ci }}
+      full_run: ${{ steps.detect.outputs.full_run }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed paths
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_BEFORE: ${{ github.event.before }}
+          EVENT_SHA: ${{ github.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          INPUT_FULL_RUN: ${{ github.event.inputs.full_run || 'false' }}
+        run: |
+          set -euo pipefail
+
+          full_run=false
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$INPUT_FULL_RUN" == "true" ]]; then
+            full_run=true
+          fi
+
+          if [[ "$full_run" == "true" ]]; then
+            {
+              echo "frontend=true"
+              echo "backend=true"
+              echo "client=true"
+              echo "backoffice=true"
+              echo "ci=true"
+              echo "full_run=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            base_sha="$PR_BASE_SHA"
+            head_sha="$PR_HEAD_SHA"
+          elif [[ -n "$EVENT_BEFORE" && "$EVENT_BEFORE" != "0000000000000000000000000000000000000000" ]]; then
+            base_sha="$EVENT_BEFORE"
+            head_sha="$EVENT_SHA"
+          else
+            {
+              echo "frontend=true"
+              echo "backend=true"
+              echo "client=true"
+              echo "backoffice=true"
+              echo "ci=true"
+              echo "full_run=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(git diff --name-only "$base_sha" "$head_sha")"
+          echo "Changed files:"
+          echo "$changed_files"
+
+          match_any() {
+            local pattern="$1"
+            echo "$changed_files" | grep -E -q "$pattern"
+          }
+
+          frontend=false
+          backend=false
+          client=false
+          backoffice=false
+          ci=false
+
+          if match_any '^(app/frontend/|package\.json|package-lock\.json|scripts/testing/run-suite\.mjs|docker-compose\.yml|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+            frontend=true
+          fi
+          if match_any '^(app/backend/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+            backend=true
+          fi
+          if match_any '^(app/frontend/client-app/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+            client=true
+          fi
+          if match_any '^(app/frontend/backoffice-app/|docker-compose\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+            backoffice=true
+          fi
+          if match_any '^(\.github/workflows/|scripts/testing/run-suite\.mjs|package\.json|package-lock\.json|docker-compose\.yml|TESTING\.md)$'; then
+            ci=true
+          fi
+
+          {
+            echo "frontend=$frontend"
+            echo "backend=$backend"
+            echo "client=$client"
+            echo "backoffice=$backoffice"
+            echo "ci=$ci"
+            echo "full_run=false"
+          } >> "$GITHUB_OUTPUT"
+
   frontend-quality:
     name: Frontend quality
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.ci == 'true'
 
     steps:
       - name: Checkout repository
@@ -66,6 +189,8 @@ jobs:
     name: Backend pytest
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: changes
+    if: needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
 
     steps:
       - name: Checkout repository
@@ -88,7 +213,19 @@ jobs:
 
       - name: Dump backend logs on failure
         if: failure()
-        run: docker compose logs backend
+        run: docker compose logs backend db redis
+
+      - name: Capture backend logs for artifact upload
+        if: failure()
+        run: docker compose logs backend db redis > backend-docker.log
+
+      - name: Upload backend logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-docker-logs
+          path: backend-docker.log
+          if-no-files-found: ignore
 
       - name: Stop Docker services
         if: always()
@@ -98,9 +235,8 @@ jobs:
     name: Client Playwright E2E
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    needs:
-      - frontend-quality
-      - backend-pytest
+    needs: changes
+    if: needs.changes.outputs.client == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
 
     steps:
       - name: Checkout repository
@@ -124,18 +260,11 @@ jobs:
       - name: Create .env for CI
         run: cp .env.example .env
 
-      - name: Start Docker services for client E2E
-        run: docker compose up -d --build db redis backend client-app
-
-      - name: Verify backend before browser flows
-        run: docker compose exec -T backend python manage.py check
-
-      - name: Run Playwright suite
-        working-directory: app/frontend/client-app
+      - name: Run client E2E stack
         env:
           CI: "true"
           CLIENT_BASE_URL: http://127.0.0.1:3003
-        run: npm run test:e2e
+        run: node scripts/testing/run-suite.mjs e2e:client
 
       - name: Upload Playwright report
         if: always()
@@ -153,21 +282,12 @@ jobs:
           path: app/frontend/client-app/test-results
           if-no-files-found: ignore
 
-      - name: Dump Docker logs on failure
-        if: failure()
-        run: docker compose logs backend client-app db redis
-
-      - name: Stop Docker services
-        if: always()
-        run: docker compose down --volumes --remove-orphans
-
   backoffice-e2e:
     name: Backoffice Playwright E2E
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    needs:
-      - frontend-quality
-      - backend-pytest
+    needs: changes
+    if: needs.changes.outputs.backoffice == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true'
 
     steps:
       - name: Checkout repository
@@ -191,24 +311,17 @@ jobs:
       - name: Create .env for CI
         run: cp .env.example .env
 
-      - name: Start Docker services for E2E
-        run: docker compose up -d --build db redis backend backoffice-app
-
-      - name: Verify backend before browser flows
-        run: docker compose exec -T backend python manage.py check
-
-      - name: Run Playwright suite
-        working-directory: app/frontend/backoffice-app
+      - name: Run backoffice E2E stack
         env:
           CI: "true"
           BACKOFFICE_BASE_URL: http://127.0.0.1:3000
-        run: npm run test:e2e
+        run: node scripts/testing/run-suite.mjs e2e:backoffice
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: backoffice-playwright-report
           path: app/frontend/backoffice-app/playwright-report
           if-no-files-found: ignore
 
@@ -216,14 +329,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results
+          name: backoffice-playwright-test-results
           path: app/frontend/backoffice-app/test-results
           if-no-files-found: ignore
-
-      - name: Dump Docker logs on failure
-        if: failure()
-        run: docker compose logs backend backoffice-app db redis
-
-      - name: Stop Docker services
-        if: always()
-        run: docker compose down --volumes --remove-orphans

@@ -148,6 +148,26 @@ async function withDockerStack(services, callback) {
   }
 }
 
+async function runE2EForTarget(target) {
+  const config =
+    target === 'client'
+      ? {
+          services: ['db', 'redis', 'backend', 'client-app'],
+          url: 'http://127.0.0.1:3003',
+          prefix: 'app/frontend/client-app',
+        }
+      : {
+          services: ['db', 'redis', 'backend', 'backoffice-app'],
+          url: 'http://127.0.0.1:3000/login',
+          prefix: 'app/frontend/backoffice-app',
+        };
+
+  await withDockerStack(config.services, async () => {
+    await waitForHttp(config.url);
+    npmPrefix(config.prefix, 'test:e2e');
+  });
+}
+
 const suites = {
   async lint() {
     npmPrefix('app/frontend/backoffice-app', 'lint');
@@ -185,15 +205,14 @@ const suites = {
     });
   },
   async e2e() {
-    await withDockerStack(['db', 'redis', 'backend', 'backoffice-app'], async () => {
-      await waitForHttp('http://127.0.0.1:3000/login');
-      npmPrefix('app/frontend/backoffice-app', 'test:e2e');
-    });
-
-    await withDockerStack(['db', 'redis', 'backend', 'client-app'], async () => {
-      await waitForHttp('http://127.0.0.1:3003');
-      npmPrefix('app/frontend/client-app', 'test:e2e');
-    });
+    await runE2EForTarget('backoffice');
+    await runE2EForTarget('client');
+  },
+  async 'e2e:backoffice'() {
+    await runE2EForTarget('backoffice');
+  },
+  async 'e2e:client'() {
+    await runE2EForTarget('client');
   },
   async 'e2e:ui'() {
     const target = process.env.PLAYWRIGHT_APP === 'client' ? 'client-app' : 'backoffice-app';

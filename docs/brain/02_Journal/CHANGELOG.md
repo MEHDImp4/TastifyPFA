@@ -1,3 +1,19 @@
+## [2026-05-24] - 14:10
+### Changed
+- Improved `.github/workflows/backoffice-ci.yml` with path-aware CI job gating so docs/planning-only pushes no longer consume the full GitHub Actions pipeline and backend/client/backoffice jobs now run only when their impacted surface changes.
+- Added a manual `workflow_dispatch` `full_run` override and aligned the Playwright GitHub jobs with the root Docker readiness runner by routing them through `node scripts/testing/run-suite.mjs e2e:client` and `e2e:backoffice`.
+- Extended `scripts/testing/run-suite.mjs` with dedicated single-app E2E targets so CI and local debugging reuse the same Docker orchestration and HTTP readiness checks.
+- Updated `TESTING.md` to document the new selective CI behavior and the manual full-run escape hatch.
+
+### Validation
+- `node scripts/testing/run-suite.mjs e2e:backoffice`
+- `node scripts/testing/run-suite.mjs e2e:client`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `npm --prefix app/frontend/client-app run build`
+
+### Commit
+- Pending
+
 ## [2026-05-23] - 22:44
 ### Fixed
 - Hardened `scripts/testing/run-suite.mjs` so the root Docker runners print actionable compose diagnostics on failure, preserve explicit frontend readiness checks, and run the backend critical pytest subset with `DJANGO_SETTINGS_MODULE=tastify_backend.settings.test` instead of inheriting the dev MySQL settings from the backend container.
