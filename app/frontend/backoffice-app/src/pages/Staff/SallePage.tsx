@@ -178,9 +178,9 @@ export const SallePage: React.FC = () => {
     <div className="h-full flex flex-col bg-surface-container-lowest -m-4 overflow-hidden selection:bg-primary/20 selection:text-primary font-body">
       <h1 className="sr-only">Architectural Floor Plan</h1>
       {/* Legend & Toolbar */}
-      <div className="flex items-center justify-between px-staff-margin py-3 border-b border-outline-variant bg-surface-main z-10">
+      <div className="flex flex-col gap-4 px-staff-margin py-3 border-b border-outline-variant bg-surface-main z-10 xl:flex-row xl:items-center xl:justify-between">
         {/* Legend */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-4 xl:gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3.5 h-3.5 border-2 border-outline-variant bg-surface-container-lowest rounded-sm"></div>
             <span className="font-sans text-[10px] font-black uppercase tracking-[0.1em] text-on-surface-variant">Available</span>
@@ -200,7 +200,7 @@ export const SallePage: React.FC = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {role === 'GERANT' && isEditMode && (
             <>
               <button
@@ -238,11 +238,27 @@ export const SallePage: React.FC = () => {
           <div 
               ref={mapContainerRef}
               className="h-full w-full border border-outline-variant bg-[#15110e] relative blueprint-grid overflow-auto custom-scrollbar"
+              tabIndex={0}
+              aria-label="Dining room floor plan canvas"
+              role="region"
               onPointerDown={handlePointerDownMap}
           >
+              <div className="sticky left-0 top-0 z-20 flex w-full flex-col gap-2 border-b border-outline-variant/70 bg-[#15110e] px-4 py-3 md:flex-row md:items-center md:justify-between">
+                  <div>
+                      <p className="font-sans text-[10px] font-black uppercase tracking-[0.22em] text-primary">Adaptive floor view</p>
+                      <p className="mt-1 text-[11px] font-bold text-on-surface-variant">
+                          The plan compresses for smaller workstations before panning takes over.
+                      </p>
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-on-surface-variant md:max-w-[18rem] md:text-right">
+                      Drag to pan only when the full room no longer fits.
+                  </p>
+              </div>
               <div 
                   ref={mapRef}
-                  className={`min-w-[1500px] min-h-[1000px] w-full h-full relative transition-colors duration-500 ${isEditMode ? 'bg-primary/5 cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
+                  className={`min-w-[900px] min-h-[620px] sm:min-w-[1040px] sm:min-h-[700px] lg:min-w-[1220px] lg:min-h-[820px] xl:min-w-[1400px] xl:min-h-[920px] w-full h-full relative transition-colors duration-500 ${isEditMode ? 'bg-primary/5 cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
+                  tabIndex={0}
+                  aria-label="Dining room layout area"
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
                   onPointerLeave={handlePointerUp}
@@ -269,7 +285,7 @@ export const SallePage: React.FC = () => {
                               ${draggingItem?.type === 'text' && draggingItem.id === textObj.id ? 'z-50 border-primary-container bg-surface-container shadow-2xl' : 'z-0'}
                           `}
                       >
-                          <span className="font-serif text-2xl text-on-surface-variant select-none tracking-widest opacity-60 uppercase">{textObj.texte}</span>
+                          <span className="font-serif text-2xl text-on-surface-variant select-none tracking-widest opacity-80 uppercase">{textObj.texte}</span>
                       </div>
                   ))}
 
@@ -307,8 +323,6 @@ export const SallePage: React.FC = () => {
                               </div>
                           )}
                           
-                          {/* Structural rim lighting for absolute visibility */}
-                          <div className="absolute inset-0 rounded-[inherit] border border-white/5 pointer-events-none"></div>
                       </div>
                   )})}
               </div>
@@ -318,7 +332,7 @@ export const SallePage: React.FC = () => {
 
       {/* Modals */}
       {(selectedTableForEdit || isAddingTable) && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface-container border border-outline-variant p-8 max-w-sm w-full rounded-xl shadow-2xl">
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface">Unit Configuration</h2>
@@ -403,7 +417,7 @@ export const SallePage: React.FC = () => {
       )}
 
       {(selectedTextForEdit || isAddingText) && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface-container border border-outline-variant p-8 max-w-sm w-full rounded-xl shadow-2xl">
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface">Label Editor</h2>

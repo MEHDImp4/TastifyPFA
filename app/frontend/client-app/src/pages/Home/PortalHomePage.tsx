@@ -13,14 +13,18 @@ import type { Plat } from '../../api/menu';
 export const PortalHomePage = () => {
   const [topDishes, setTopDishes] = useState<Plat[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasRecommendationError, setHasRecommendationError] = useState(false);
 
   useEffect(() => {
     const fetchTopDishes = async () => {
       try {
         const res = await menuApi.getTopRecommendations();
         setTopDishes(res.data.slice(0, 3));
+        setHasRecommendationError(false);
       } catch (err) {
         console.error('Failed to fetch top dishes', err);
+        setTopDishes([]);
+        setHasRecommendationError(true);
       } finally {
         setIsLoading(false);
       }
@@ -90,7 +94,7 @@ export const PortalHomePage = () => {
               <span className="editorial-kicker mb-2">CURATED SELECTIONS</span>
               <h3 className="font-serif text-3xl md:text-4xl text-primary font-black uppercase tracking-tight">Créations Signature</h3>
             </div>
-            <Link to="/menu" className="font-sans text-[11px] font-black text-primary hover:text-on-surface transition-colors uppercase tracking-[0.3em] hidden sm:flex items-center gap-2">
+            <Link to="/menu" className="font-sans text-[11px] font-black text-primary hover:text-on-surface transition-colors uppercase tracking-[0.3em] inline-flex items-center gap-2">
               View Catalog <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -98,7 +102,28 @@ export const PortalHomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {isLoading ? [1, 2, 3].map(i => (
                <div key={i} className="aspect-[4/5] bg-surface-container animate-pulse rounded-2xl" />
-            )) : topDishes.map((dish, idx) => (
+            )) : hasRecommendationError ? (
+              <div className="md:col-span-3 rounded-[2rem] border border-outline-variant bg-surface-container-lowest px-8 py-12 text-center">
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">Curated service temporarily unavailable</p>
+                <p className="mx-auto mt-4 max-w-2xl text-body-base text-on-surface-variant leading-relaxed">
+                  The live recommendations feed is offline for the moment. The full catalog is still available, and reservations continue normally.
+                </p>
+                <Link
+                  to="/menu"
+                  className="mt-8 inline-flex items-center gap-3 rounded-full border border-primary px-8 py-4 font-sans text-[11px] font-black uppercase tracking-[0.3em] text-primary transition-colors hover:bg-primary/5"
+                >
+                  Explore Full Catalog
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            ) : topDishes.length === 0 ? (
+              <div className="md:col-span-3 rounded-[2rem] border border-outline-variant bg-surface-container-lowest px-8 py-12 text-center">
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.35em] text-primary">New signatures incoming</p>
+                <p className="mx-auto mt-4 max-w-2xl text-body-base text-on-surface-variant leading-relaxed">
+                  Our featured selections are being refreshed. Browse the menu for the complete service in the meantime.
+                </p>
+              </div>
+            ) : topDishes.map((dish, idx) => (
               <motion.div 
                 key={dish.id}
                 initial={{ opacity: 0, y: 20 }}

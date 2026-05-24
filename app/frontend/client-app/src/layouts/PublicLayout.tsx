@@ -30,7 +30,7 @@ export const PublicLayout: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary overflow-hidden font-body">
+    <div className="min-h-screen flex flex-col bg-background text-on-background selection:bg-primary/20 selection:text-primary overflow-x-hidden font-body">
       <header className="sticky top-0 z-50 bg-surface-main border-b border-outline-variant shrink-0 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-client-margin h-16 flex items-center justify-between">
           <div className="flex items-center gap-12">
@@ -62,6 +62,15 @@ export const PublicLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-8">
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                className="inline-flex md:hidden rounded-full border border-outline-variant px-4 py-2 font-sans text-[9px] font-black uppercase tracking-[0.25em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+              >
+                Log In
+              </Link>
+            )}
+
             <Link 
                 to="/checkout" 
                 aria-label={`Open checkout with ${items.length} item${items.length === 1 ? '' : 's'}`}
@@ -123,7 +132,7 @@ export const PublicLayout: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               id="mobile-navigation"
-              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-client-margin flex flex-col justify-between pb-12 overflow-hidden"
+              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-client-margin flex flex-col justify-between pb-12 overflow-y-auto"
             >
               {/* Background structural detail */}
               <div className="absolute inset-0 opacity-[0.02] pointer-events-none blueprint-grid" />
@@ -151,7 +160,7 @@ export const PublicLayout: React.FC = () => {
         </AnimatePresence>
       </header>
 
-      <main className="flex-1 flex flex-col relative overflow-hidden">
+      <main className="flex-1 min-h-0 flex flex-col relative">
         <div key={location.pathname} className="flex-1 flex flex-col">
           <Outlet />
         </div>
