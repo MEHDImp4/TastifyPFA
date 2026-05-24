@@ -61,14 +61,22 @@ export const PublicLayout: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-3 md:gap-8">
             {!isAuthenticated && (
-              <Link
-                to="/login"
-                className="inline-flex md:hidden rounded-full border border-outline-variant px-4 py-2 font-sans text-[9px] font-black uppercase tracking-[0.25em] text-on-surface transition-colors hover:border-primary hover:text-primary"
-              >
-                Log In
-              </Link>
+              <div className="flex items-center gap-2 md:hidden">
+                <Link
+                  to="/menu"
+                  className="inline-flex rounded-full border border-outline-variant px-3 py-2 font-sans text-[9px] font-black uppercase tracking-[0.2em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                >
+                  Menu
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex rounded-full border border-outline-variant px-4 py-2 font-sans text-[9px] font-black uppercase tracking-[0.25em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                >
+                  Log In
+                </Link>
+              </div>
             )}
 
             <Link 
@@ -132,27 +140,70 @@ export const PublicLayout: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               id="mobile-navigation"
-              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-client-margin flex flex-col justify-between pb-12 overflow-y-auto"
+              className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-6 flex flex-col justify-between pb-10 overflow-y-auto"
             >
               {/* Background structural detail */}
               <div className="absolute inset-0 opacity-[0.02] pointer-events-none blueprint-grid" />
               
-              <div className="space-y-12 relative z-10">
-                <div className="flex flex-col gap-8">
-                  <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="font-serif text-5xl font-black italic text-on-surface hover:text-primary transition-colors uppercase tracking-tighter">The Catalog</Link>
-                  <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="font-serif text-5xl font-black italic text-on-surface hover:text-primary transition-colors uppercase tracking-tighter">Bookings</Link>
-                  <Link to="/loyalty" onClick={() => setIsMenuOpen(false)} className="font-serif text-5xl font-black italic text-on-surface hover:text-primary transition-colors uppercase tracking-tighter">The Echelon</Link>
-                  <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="font-serif text-5xl font-black italic text-on-surface hover:text-primary transition-colors uppercase tracking-tighter">Concierge</Link>
+              <div className="space-y-10 relative z-10">
+                <div className="rounded-2xl border border-outline-variant bg-surface-container p-4">
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.28em] text-on-surface-variant">
+                    Guest navigation
+                  </p>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <Link
+                      to="/menu"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                    >
+                      Menu
+                    </Link>
+                    <Link
+                      to="/reservations"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                    >
+                      Book
+                    </Link>
+                    <Link
+                      to="/loyalty"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                    >
+                      Loyalty
+                    </Link>
+                    <Link
+                      to="/contact"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
+                    >
+                      Contact
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-5">
+                  <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">The Catalog</Link>
+                  <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Bookings</Link>
+                  <Link to="/loyalty" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">The Echelon</Link>
+                  <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Concierge</Link>
                 </div>
               </div>
-              <div className="pt-12 border-t border-outline-variant/30 space-y-8 relative z-10">
+              <div className="pt-8 border-t border-outline-variant/30 space-y-6 relative z-10">
                 {isAuthenticated ? (
                   <div className="flex flex-col gap-6">
                     <Link to="/account" onClick={() => setIsMenuOpen(false)} className="font-sans text-xl font-black text-on-surface uppercase tracking-widest">Guest Profile</Link>
                     <button onClick={handleLogout} className="font-sans text-xl font-black text-error text-left uppercase tracking-widest">Terminate Session</button>
                   </div>
                 ) : (
-                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="inline-block w-full py-6 bg-primary text-on-primary text-center font-sans text-xs font-black uppercase tracking-[0.4em] rounded-2xl shadow-2xl">Authenticate</Link>
+                  <div className="space-y-3">
+                    <p className="font-sans text-[10px] font-black uppercase tracking-[0.28em] text-on-surface-variant">
+                      Account access
+                    </p>
+                    <Link to="/login" onClick={() => setIsMenuOpen(false)} className="inline-block w-full py-5 bg-primary text-on-primary text-center font-sans text-xs font-black uppercase tracking-[0.35em] rounded-2xl shadow-2xl">
+                      Authenticate
+                    </Link>
+                  </div>
                 )}
               </div>
             </motion.div>

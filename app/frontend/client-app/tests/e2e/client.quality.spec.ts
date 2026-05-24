@@ -194,6 +194,22 @@ test.describe('client public quality', () => {
     await page.getByRole('button', { name: /Close dish details/i }).click();
     await expect(page.getByRole('button', { name: /Close dish details/i })).toHaveCount(0);
   });
+
+  test('keeps guest mobile navigation direct and scroll-safe', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    await page.goto('/');
+    await expect(page.getByRole('link', { name: /^Log In$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Open navigation menu/i })).toBeVisible();
+
+    await page.getByRole('button', { name: /Open navigation menu/i }).click();
+    const mobileNavigation = page.locator('#mobile-navigation');
+    await expect(mobileNavigation.getByText('Guest navigation')).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /^Menu$/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /^Book$/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /^Contact$/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /^Authenticate$/i })).toBeVisible();
+  });
 });
 
 test.describe('client authenticated quality', () => {

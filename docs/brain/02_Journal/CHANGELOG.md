@@ -2708,3 +2708,19 @@ and this project adheres to semantic tracking for development.
 
 ### Commit
 - `c751950` `Improve frontend wave 1 ux flow`
+
+## [2026-05-24] - 15:34
+### Changed
+- Improved the second frontend UX remediation wave by simplifying the client mobile guest shell with a direct menu shortcut, a compact quick-navigation block in the mobile overlay, and tighter spacing that makes the public entry flow easier to scan on narrow screens.
+- Rebalanced the backoffice reservations surface to reduce visual density, replacing heavy shadows and thick borders with lighter tactical cards, clearer metadata chips, and more readable action groupings while preserving existing operational controls.
+- Added targeted Playwright coverage for the new mobile guest navigation behavior and validated the refreshed reservations workflows against the updated UI.
+
+### Validation
+- `npm --prefix app/frontend/client-app run build`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `docker compose up -d --build client-app backoffice-app`
+- `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.quality.spec.ts`
+- `npm --prefix app/frontend/backoffice-app run test:e2e -- --project=serveur-chromium tests/e2e/backoffice.serveur.spec.ts -g "filters reservations and applies confirm then cancel transitions|keeps reservation search and status filter stable after a refreshing status mutation|renders the reservations empty state when no bookings are returned|keeps reservation actions stable when confirm and cancel fail|keeps the reservations nav active after a direct route load"`
+
+### Commit
+- `PENDING` `Improve frontend wave 2 ux flow`
