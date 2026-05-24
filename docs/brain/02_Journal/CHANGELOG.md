@@ -2724,3 +2724,18 @@ and this project adheres to semantic tracking for development.
 
 ### Commit
 - `84d52b2` `Improve frontend wave 2 ux flow`
+
+## [2026-05-24] - 15:49
+### Changed
+- Improved the third frontend UX remediation wave by simplifying the client portal voice, replacing mixed English/French luxury copy with clearer French-first messaging across the hero, featured rail, reservation CTA, and footer navigation.
+- Reduced visual heaviness on the public home by shortening the hero footprint, removing an unnecessary blurred philosophy glow treatment, and making the recommendation fallback states feel like part of the product instead of editorial leftovers.
+- Updated the client accessibility smoke to assert the new narrow-viewport homepage labels and the refreshed recommendation-outage fallback language.
+
+### Validation
+- `npm --prefix app/frontend/client-app run build`
+- `docker compose up -d --build client-app`
+- `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.a11y.spec.ts`
+- `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.quality.spec.ts`
+
+### Commit
+- `d4de238` `Improve frontend wave 3 portal voice`
