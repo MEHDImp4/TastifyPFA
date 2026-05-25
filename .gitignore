@@ -100,3 +100,6 @@ docker-compose.override.yml
 
 # Playwright auth state
 app/frontend/backoffice-app/tests/e2e/.auth/
+
+# Large binary/archive files
+*.zip
