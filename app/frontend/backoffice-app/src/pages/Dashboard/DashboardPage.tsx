@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { analyticsApi } from '../../api/analytics';
+import { kdsApi } from '../../api/kds';
 import type { DashboardData } from '../../api/analytics';
+import type { Commande } from '../../types/salle';
 import {
   TrendingUp,
   Users,
@@ -12,23 +14,31 @@ import {
   Maximize2,
   AlertTriangle,
   CheckCircle2,
-  Clock,
   Loader2,
   Smile,
   Meh,
-  Frown
+  Frown,
+  CreditCard,
+  ChefHat
 } from 'lucide-react';
 import { useSocketStore } from '../../store/socketStore';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [activeTickets, setActiveTickets] = useState<Commande[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const lastUpdate = useSocketStore(state => state.lastUpdate);
 
-  const fetchDashboard = async () => {
+  const fetchData = async () => {
     try {
-      const res = await analyticsApi.getDashboardData();
-      setData(res.data);
+      const [dashRes, ticketsRes] = await Promise.all([
+        analyticsApi.getDashboardData(),
+        kdsApi.getActiveTickets()
+      ]);
+      setData(dashRes.data);
+      setActiveTickets(ticketsRes.data);
     } catch (err) {
       console.error('Failed to fetch dashboard data', err);
     } finally {
@@ -37,18 +47,33 @@ export const DashboardPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchDashboard();
+    fetchData();
+    
+    // Auto-refresh every 30s to update "elapsed time" counters and as a backup to WebSockets
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, [lastUpdate]);
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
-  if (!data) return <div className="text-center py-20 text-on-surface-variant font-sans font-bold uppercase text-[10px]">Data registry offline.</div>;
+  if (!data) return <div className="text-center py-20 text-on-surface-variant font-sans font-bold uppercase text-[10px]">Registre de données hors ligne.</div>;
 
   const kpis = [
-    { label: "Revenue", value: `${data.todayRevenue.toFixed(0)} DH`, icon: TrendingUp, trend: "+8.4%", color: "text-primary" },
-    { label: "Occupancy", value: `${Math.round((data.activeTables / 28) * 100)}%`, icon: Users, trend: "24/28 Tbl", color: "text-primary" },
-    { label: "Pending Orders", value: data.pendingOrders, icon: ShoppingBag, trend: "3 Priority", color: "text-primary", border: "border-l-4 border-l-primary" },
-    { label: "Avg Prep Time", value: `${data.avgPrepTime}m`, icon: Timer, trend: "+2m delay", color: "text-error" },
+    { label: "Chiffre d'Affaires", value: `${data.todayRevenue.toFixed(0)} DH`, icon: TrendingUp, trend: "+8.4%", color: "text-primary" },
+    { label: "Taux d'Occupation", value: `${Math.round((data.activeTables / 28) * 100)}%`, icon: Users, trend: "24/28 Tables", color: "text-primary" },
+    { label: "Commandes en Attente", value: data.pendingOrders, icon: ShoppingBag, trend: "3 Priorités", color: "text-primary", border: "border-l-4 border-l-primary" },
+    { label: "Temps de Prép. Moyen", value: `${data.avgPrepTime}m`, icon: Timer, trend: "+2m retard", color: "text-error" },
   ];
+
+  // Logic for Kanban grouping
+  const groupedTickets = {
+    prep: activeTickets.filter(t => t.statut === 'EN_CUISINE'),
+    ready: activeTickets.filter(t => t.statut === 'PRETE'),
+    late: activeTickets.filter(t => {
+        if (t.statut !== 'EN_CUISINE') return false;
+        const elapsed = (Date.now() - new Date(t.created_at).getTime()) / 60000;
+        return elapsed > 20; // Hardcoded threshold for late
+    })
+  };
 
   return (
     <div className="space-y-staff-margin font-body -m-staff-margin p-staff-margin bg-surface-container-lowest min-h-screen selection:bg-primary/20">
@@ -74,8 +99,8 @@ export const DashboardPage: React.FC = () => {
         <section className="bg-surface-container border border-outline-variant rounded-lg p-6 shadow-sm">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Client Sentiment Analysis</h3>
-              <p className="font-sans text-[10px] text-on-surface-variant mt-0.5 uppercase tracking-widest opacity-60">{data.sentimentStats.total} reviews analysed by NLP pipeline</p>
+              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Analyse de Sentiment Client</h3>
+              <p className="font-sans text-[10px] text-on-surface-variant mt-0.5 uppercase tracking-widest opacity-60">{data.sentimentStats.total} avis analysés par l'IA</p>
             </div>
             <Activity className="w-5 h-5 text-on-surface-variant/30" />
           </div>
@@ -83,17 +108,17 @@ export const DashboardPage: React.FC = () => {
             <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
               <Smile className="w-6 h-6 text-primary" />
               <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.positif_pct}%</span>
-              <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">Positive</span>
+              <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">Positif</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
               <Meh className="w-6 h-6 text-on-surface-variant/50" />
               <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.neutre_pct}%</span>
-              <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Neutral</span>
+              <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Neutre</span>
             </div>
             <div className="flex flex-col items-center gap-2 p-4 bg-surface-main rounded-lg border border-outline-variant">
               <Frown className="w-6 h-6 text-error" />
               <span className="font-serif text-2xl font-black text-on-surface tabular-nums">{data.sentimentStats.negatif_pct}%</span>
-              <span className="font-sans text-[9px] font-black text-error uppercase tracking-widest">Negative</span>
+              <span className="font-sans text-[9px] font-black text-error uppercase tracking-widest">Négatif</span>
             </div>
           </div>
         </section>
@@ -108,7 +133,7 @@ export const DashboardPage: React.FC = () => {
           {/* Live Feed Alerts */}
           <div className="bg-surface-container border border-outline-variant rounded-lg flex flex-col flex-1 min-h-[350px] shadow-sm">
             <div className="p-4 border-b border-outline-variant bg-surface-container-high flex justify-between items-center rounded-t-lg">
-              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Live Feed Alerts</h3>
+              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Flux d'Alertes Direct</h3>
               <div className="w-2 h-2 rounded-full bg-error animate-pulse"></div>
             </div>
             <div
@@ -116,35 +141,37 @@ export const DashboardPage: React.FC = () => {
               tabIndex={0}
               aria-label="Operational alerts feed"
             >
-              {[
-                { type: 'error', label: 'Check Requested', desc: 'Table 4 • 2m ago', icon: BellRing },
-                { type: 'warning', label: 'Order Delayed', desc: 'Order #8542 • 5m over target', icon: Clock },
-                { type: 'primary', label: 'Low Stock', desc: 'Wagyu A5 • 3 portions left', icon: ShoppingBag },
-                { type: 'success', label: 'Table Clear', desc: 'Table 12 reset complete', icon: CheckCircle2 }
-              ].map((alert, idx) => (
-                <div key={idx} className={`p-4 border-l-4 rounded bg-surface-main flex items-start gap-4 transition-all hover:translate-x-1 ${alert.type === 'error' ? 'border-error' : alert.type === 'warning' ? 'border-primary' : 'border-primary-container'}`}>
-                   <alert.icon className={`w-4 h-4 mt-0.5 ${alert.type === 'error' ? 'text-error' : 'text-primary'}`} />
+              {data.liveFeed && data.liveFeed.length > 0 ? data.liveFeed.map((item) => (
+                <div key={item.id} className={`p-4 border-l-4 rounded bg-surface-main flex items-start gap-4 transition-all hover:translate-x-1 ${item.type === 'ORDER' ? 'border-primary' : item.type === 'ALERT' ? 'border-error' : 'border-success'}`}>
+                   {item.type === 'ORDER' ? <BellRing className="w-4 h-4 mt-0.5 text-primary" /> : item.type === 'ALERT' ? <AlertTriangle className="w-4 h-4 mt-0.5 text-error" /> : <CreditCard className="w-4 h-4 mt-0.5 text-success" />}
                    <div>
-                      <p className="font-sans text-[12px] font-black text-on-surface uppercase tracking-tight leading-none">{alert.label}</p>
-                      <p className="font-sans text-[10px] text-on-surface-variant mt-1.5 uppercase tracking-widest">{alert.desc}</p>
+                      <p className="font-sans text-[12px] font-black text-on-surface uppercase tracking-tight leading-none">{item.message}</p>
+                      <p className="font-sans text-[10px] text-on-surface-variant mt-1.5 uppercase tracking-widest">
+                         {formatDistanceToNow(new Date(item.time), { addSuffix: true, locale: fr })}
+                      </p>
                    </div>
                 </div>
-              ))}
+              )) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant/20 p-10">
+                   <Activity className="w-12 h-12 mb-2" />
+                   <p className="font-sans text-[10px] font-black uppercase">Aucune activité récente</p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Floor Plan Preview */}
           <div className="bg-surface-container border border-outline-variant rounded-lg flex flex-col h-[280px] shadow-sm">
             <div className="p-4 border-b border-outline-variant bg-surface-container-high flex justify-between items-center rounded-t-lg">
-              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Floor Plan Preview</h3>
+              <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Aperçu Plan de Salle</h3>
               <button
                 type="button"
-                aria-label="Expand floor plan preview"
-                title="Expand floor plan preview"
+                aria-label="Agrandir aperçu plan de salle"
+                title="Agrandir aperçu plan de salle"
                 className="text-on-surface-variant hover:text-primary transition-colors"
               >
                 <Maximize2 className="w-4 h-4" />
-                <span className="sr-only">Expand floor plan preview</span>
+                <span className="sr-only">Agrandir aperçu plan de salle</span>
               </button>
             </div>
             <div className="flex-1 p-4 bg-surface-main relative flex items-center justify-center overflow-hidden rounded-b-lg blueprint-grid">
@@ -153,7 +180,7 @@ export const DashboardPage: React.FC = () => {
                 <div className="absolute top-4 right-4 w-10 h-10 rounded border-2 border-primary bg-primary/10" />
                 <div className="absolute bottom-4 left-4 w-16 h-10 rounded-full border-2 border-outline-variant bg-surface-container-highest" />
                 <div className="absolute bottom-4 right-4 w-12 h-12 rounded border-2 border-outline-variant bg-surface-container-highest" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant font-sans text-[9px] font-black uppercase tracking-[0.4em] text-center">Dining Zone Alpha</div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant font-sans text-[9px] font-black uppercase tracking-[0.4em] text-center">Zone Alpha</div>
               </div>
             </div>
           </div>
@@ -162,10 +189,10 @@ export const DashboardPage: React.FC = () => {
         {/* Right Column: Active Tickets Kanban (8 cols) */}
         <div className="lg:col-span-8 bg-surface-container border border-outline-variant rounded-lg flex flex-col min-h-[650px] shadow-2xl">
           <div className="p-4 border-b border-outline-variant bg-surface-container-high flex justify-between items-center rounded-t-lg">
-            <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Live Orchestration Feed</h3>
+            <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Flux d'Orchestration en Direct</h3>
             <div className="flex gap-2">
-              <button className="px-3 py-1.5 border border-outline-variant rounded font-sans text-[10px] font-black uppercase tracking-widest hover:bg-surface-container-highest">Filter</button>
-              <button className="px-4 py-1.5 bg-primary text-on-primary rounded font-sans text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">New Ticket</button>
+              <button className="px-3 py-1.5 border border-outline-variant rounded font-sans text-[10px] font-black uppercase tracking-widest hover:bg-surface-container-highest">Filtrer</button>
+              <button className="px-4 py-1.5 bg-primary text-on-primary rounded font-sans text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Nouveau Ticket</button>
             </div>
           </div>
           
@@ -177,59 +204,38 @@ export const DashboardPage: React.FC = () => {
           >
             {/* Kanban Columns */}
             {[
-              { id: 'prep', label: 'Preparing', count: 4, color: 'text-on-surface-variant' },
-              { id: 'late', label: 'Delayed', count: 1, color: 'text-primary' },
-              { id: 'ready', label: 'Ready', count: 2, color: 'text-on-surface-variant' }
+              { id: 'prep', label: 'En Préparation', data: groupedTickets.prep, color: 'text-on-surface-variant' },
+              { id: 'late', label: 'En Retard', data: groupedTickets.late, color: 'text-error' },
+              { id: 'ready', label: 'Prêt', data: groupedTickets.ready, color: 'text-primary' }
             ].map(col => (
               <div key={col.id} className="bg-surface-main/50 border border-outline-variant rounded flex flex-col p-3 min-w-[240px]">
                 <h4 className={`font-sans text-[11px] font-black uppercase tracking-widest mb-4 px-1 flex justify-between items-center ${col.color}`}>
                   {col.label}
-                  <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[10px] border border-outline-variant/30">{col.count}</span>
+                  <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[10px] border border-outline-variant/30">{col.data.length}</span>
                 </h4>
                 <div className="flex flex-col gap-3">
-                  {col.id === 'prep' && (
-                    <>
-                      <div className="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-3 shadow-sm hover:border-primary transition-all cursor-pointer">
-                        <div className="flex justify-between items-center">
-                          <span className="font-sans text-xs font-black text-on-surface uppercase tracking-tight">#ORD-8543</span>
-                          <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-black border border-outline-variant/50">TBL 12</span>
-                        </div>
-                        <ul className="font-sans text-[11px] font-bold text-on-surface-variant space-y-1 opacity-80 uppercase tracking-tight">
-                          <li>• 2x Truffle Risotto</li>
-                          <li>• 1x Wagyu A5 Ribeye</li>
-                        </ul>
-                        <div className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-1.5 pt-2 border-t border-outline-variant/20">
-                          <Timer className="w-3.5 h-3.5" /> 4m elapsed
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  {col.id === 'late' && (
-                    <div className="bg-surface-container border border-primary p-4 rounded flex flex-col gap-3 shadow-xl shadow-primary/5 relative overflow-hidden">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
-                      <div className="flex justify-between items-center pl-2">
-                        <span className="font-sans text-xs font-black text-on-surface uppercase tracking-tight">#ORD-8542</span>
-                        <span className="bg-primary text-on-primary px-2 py-0.5 rounded text-[9px] font-black uppercase">TBL 02</span>
-                      </div>
-                      <ul className="font-sans text-[11px] font-bold text-on-surface-variant space-y-1 pl-2 uppercase tracking-tight">
-                        <li>• 1x Tasting Menu</li>
-                        <li className="text-primary">• 1x Wine Pairing (WAIT)</li>
-                      </ul>
-                      <div className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-1.5 pt-2 border-t border-primary/20 pl-2">
-                        <AlertTriangle className="w-3.5 h-3.5 animate-pulse" /> 18m elapsed
-                      </div>
-                    </div>
-                  )}
-                  {col.id === 'ready' && (
-                    <div className="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-3 opacity-80 grayscale hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
+                  {col.data.map(ticket => (
+                    <div key={ticket.id} className={`bg-surface-container border p-4 rounded flex flex-col gap-3 shadow-sm transition-all cursor-pointer ${col.id === 'late' ? 'border-error shadow-error/5' : 'border-outline-variant hover:border-primary'}`}>
                       <div className="flex justify-between items-center">
-                        <span className="font-sans text-xs font-black text-on-surface line-through">#ORD-8540</span>
-                        <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-black border border-outline-variant/50">TBL 05</span>
+                        <span className="font-sans text-xs font-black text-on-surface uppercase tracking-tight">#CMD-{ticket.id}</span>
+                        <span className="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-black border border-outline-variant/50">TBL {ticket.table || '??'}</span>
                       </div>
-                      <div className="text-[10px] text-success font-black uppercase tracking-widest flex items-center gap-1.5 pt-2 border-t border-outline-variant/20">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Waiting for pickup
+                      <ul className="font-sans text-[11px] font-bold text-on-surface-variant space-y-1 opacity-80 uppercase tracking-tight">
+                        {ticket.lignes.map((l, i) => (
+                           <li key={i}>• {l.quantite}x {l.plat_nom}</li>
+                        ))}
+                      </ul>
+                      <div className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 pt-2 border-t border-outline-variant/20 ${col.id === 'late' ? 'text-error' : 'text-primary'}`}>
+                        {col.id === 'ready' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Timer className="w-3.5 h-3.5" />}
+                        {col.id === 'ready' ? 'En attente de retrait' : `${Math.floor((Date.now() - new Date(ticket.created_at).getTime()) / 60000)}m écoulées`}
                       </div>
                     </div>
+                  ))}
+                  {col.data.length === 0 && (
+                     <div className="py-20 flex flex-col items-center justify-center text-on-surface-variant/10">
+                        <ChefHat className="w-8 h-8 mb-2" />
+                        <span className="font-sans text-[9px] font-black uppercase tracking-widest">Vide</span>
+                     </div>
                   )}
                 </div>
               </div>
@@ -237,7 +243,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div className="p-4 border-t border-outline-variant bg-surface-container-high flex justify-center rounded-b-lg">
              <button className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary hover:text-on-surface transition-all flex items-center gap-2">
-                Access Full Command Interface <ChevronRight className="w-4 h-4" />
+                Accéder à l'Interface de Commande Complète <ChevronRight className="w-4 h-4" />
              </button>
           </div>
         </div>
@@ -245,5 +251,3 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 };
-
-
