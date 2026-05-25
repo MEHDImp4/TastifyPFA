@@ -26,7 +26,9 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
+# Gestion de l'Inscription (Register)
 class RegisterView(APIView):
+    # Tout le monde peut s'inscrire (AllowAny)
     permission_classes = [AllowAny]
     serializer_class = UserRegisterSerializer
 
@@ -35,53 +37,68 @@ class RegisterView(APIView):
         responses={201: RegisterResponseSerializer, 400: UserRegisterSerializer},
     )
     def post(self, request):
+        # On utilise un Serializer pour valider les données reçues (format de l'email, force du mot de passe)
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
+            # Si les données sont correctes, on crée l'utilisateur
             user = serializer.save()
             return Response({
-                "message": "Compte cree avec succes",
+                "message": "Compte créé avec succès",
                 "username": user.username
             }, status=status.HTTP_201_CREATED)
+        # Si erreur (ex: email déjà pris), on renvoie les détails à l'étudiant/frontend
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# --- GESTION DES COOKIES DE SÉCURITÉ ---
+# Pour éviter que des pirates ne volent les tokens, on les stocke dans des "HTTP-Only Cookies"
+# Ce sont des boîtes scellées que le JavaScript du navigateur ne peut pas lire.
+
 AUTH_PORTAL_COOKIE_NAMES = {
-    'staff': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_staff",
-    'client': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_client",
+    'staff': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_staff", # Cookie pour les employés
+    'client': f"{settings.SIMPLE_JWT['AUTH_COOKIE']}_client", # Cookie pour les clients
 }
 
 
 def get_auth_portal(request):
+    # On vérifie si la requête vient de l'app Client ou de l'app Staff
     portal = request.headers.get('X-Tastify-Portal', 'staff').lower()
     return portal if portal in AUTH_PORTAL_COOKIE_NAMES else 'staff'
 
 
 def get_auth_cookie_name(request):
+    # Donne le nom du cookie correspondant au portail
     return AUTH_PORTAL_COOKIE_NAMES[get_auth_portal(request)]
 
 
 def set_refresh_cookie(response, request, refresh_token):
+    # Enregistre le badge de sécurité (token) dans le navigateur de l'utilisateur
     response.set_cookie(
         key=get_auth_cookie_name(request),
         value=refresh_token,
         expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
-        secure=not settings.DEBUG,
-        httponly=True,
+        secure=not settings.DEBUG, # HTTPS uniquement en production
+        httponly=True, # Sécurité maximale : invisible pour le JS
         samesite='Lax'
     )
 
 
 def clear_refresh_cookie(response, request):
+    # Supprime le cookie lors de la déconnexion
     response.delete_cookie(get_auth_cookie_name(request))
 
+# Vue de Connexion (Login)
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
+        # La méthode de base génère les tokens Access et Refresh
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
+            # On récupère le Refresh Token pour le mettre dans un cookie sécurisé
             refresh_token = response.data.get('refresh')
             set_refresh_cookie(response, request, refresh_token)
+            # On le retire de la réponse JSON pour ne pas l'exposer
             del response.data['refresh']
         return response
 

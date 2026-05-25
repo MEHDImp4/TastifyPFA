@@ -8,41 +8,57 @@ from apps.users.reset_tokens import is_valid_password_reset_token, resolve_passw
 
 User = get_user_model()
 
+# Un Serializer est un "Traducteur"
+# Il transforme les objets Python (de la base de données) en JSON (pour le frontend)
+# Et inversement : il valide le JSON reçu pour le transformer en objet Python.
+
 class UserRegisterSerializer(serializers.ModelSerializer):
+    # On précise que le mot de passe ne doit être utilisé que pour l'écriture (pas renvoyé au client)
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
+        # Champs que l'on accepte lors de l'inscription
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
     def create(self, validated_data):
+        # Cette méthode est appelée quand on fait serializer.save()
+        # On utilise create_user pour que Django hash (chiffre) le mot de passe automatiquement
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
             password=validated_data['password'],
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', ''),
-            role=User.Role.CLIENT # Force role to CLIENT
+            role=User.Role.CLIENT # Par sécurité, on force le rôle CLIENT lors de l'inscription publique
         )
         return user
 
 
+# Personnalisation du badge de sécurité (Token JWT)
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
+        # On ajoute des informations personnalisées à l'intérieur du token (le "payload")
         token = super().get_token(user)
         token['username'] = user.username
         token['role'] = user.role
         return token
 
     def validate(self, attrs):
+        # Cette méthode est appelée lors de la tentative de connexion (Login)
+        # On normalise le nom d'utilisateur (ignorer la casse : Admin == admin)
         submitted_username = attrs.get('username')
         if isinstance(submitted_username, str):
             normalized_username = submitted_username.strip()
             matched_user = User.objects.filter(username__iexact=normalized_username).only('username').first()
             attrs['username'] = matched_user.username if matched_user else normalized_username
 
+        # On appelle la validation de base de Django REST Framework
         data = super().validate(attrs)
+        
+        # On ajoute le rôle et le nom d'utilisateur dans la réponse JSON finale
+        # pour que le frontend sache quel menu afficher immédiatement
         data['role'] = self.user.role
         data['username'] = self.user.username
         return data
