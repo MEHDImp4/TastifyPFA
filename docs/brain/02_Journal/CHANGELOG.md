@@ -1,3 +1,13 @@
+## [2026-05-25] - 18:25
+### Fixed
+- Resolved syntax error in `ReservationsPage.tsx` caused by duplicated component closing tags (`  ); };`) at the end of the file, restoring build stability for the backoffice application.
+
+### Validation
+- `npm --prefix app/frontend/backoffice-app run typecheck`
+
+### Commit
+- `[COMMIT_HASH]` `Fix(backoffice): resolve syntax error in ReservationsPage.tsx`
+
 ## [2026-05-25] - 18:15
 ### Fixed
 - Resolved "date-fns" import resolution failure in `backoffice-app` by installing the package and updating `package.json`.
