@@ -19,6 +19,9 @@ def get_table_day_reservations(*, table_id, date_reservation, exclude_reservatio
     return queryset
 
 
+# Ce fichier contient la logique "métier" des réservations (Services)
+
+# Vérifie si une table est libre sur un créneau horaire précis
 def is_table_available(
     *,
     table_id,
@@ -27,6 +30,7 @@ def is_table_available(
     heure_fin,
     exclude_reservation_id=None,
 ):
+    # On crée une "fausse" réservation pour tester si elle entre en conflit avec les vraies
     probe = Reservation(
         table_id=table_id,
         date_reservation=date_reservation,
@@ -36,9 +40,12 @@ def is_table_available(
     )
     if exclude_reservation_id is not None:
         probe.pk = exclude_reservation_id
+    
+    # has_active_conflict() est une méthode interne qui compare les heures
     return not probe.has_active_conflict()
 
 
+# Crée une nouvelle réservation en s'assurant que personne d'autre ne prend la table en même temps
 def create_reservation(
     *,
     client,
@@ -50,8 +57,13 @@ def create_reservation(
     statut=Reservation.Statut.CONFIRMEE,
     notes='',
 ):
+    # transaction.atomic() : "Tout ou rien". Si une erreur arrive au milieu, 
+    # la base de données revient à l'état initial.
     with transaction.atomic():
+        # select_for_update() : On "verrouille" la ligne de la table dans la base.
+        # Personne d'autre ne peut modifier CETTE table tant qu'on n'a pas fini (on évite les doublons).
         locked_table = Table.objects.select_for_update().get(pk=table.pk)
+        
         reservation = Reservation(
             client=client,
             table=locked_table,

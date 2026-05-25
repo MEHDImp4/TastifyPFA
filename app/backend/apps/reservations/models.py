@@ -34,12 +34,16 @@ class ReservationManager(models.Manager):
         )
 
 
+# Gestion des Réservations clients
+# Ce module permet aux clients de bloquer une table à une heure précise.
+
 class Reservation(models.Model):
+    # Le cycle de vie d'une réservation
     class Statut(models.TextChoices):
-        CONFIRMEE = 'CONFIRMEE', 'Confirmee'
-        ANNULEE = 'ANNULEE', 'Annulee'
-        PRESENTE = 'PRESENTE', 'Presente'
-        ABSENTE = 'ABSENTE', 'Absente'
+        CONFIRMEE = 'CONFIRMEE', 'Confirmée' # Réservation valide
+        ANNULEE = 'ANNULEE', 'Annulée'       # Le client a annulé
+        PRESENTE = 'PRESENTE', 'Présente'     # Le client est arrivé au restaurant
+        ABSENTE = 'ABSENTE', 'Absente'       # "No-show" : le client n'est pas venu
 
     client = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -51,24 +55,28 @@ class Reservation(models.Model):
         on_delete=models.PROTECT,
         related_name='reservations',
     )
-    date_reservation = models.DateField()
-    heure_debut = models.TimeField()
-    heure_fin = models.TimeField()
+    
+    # Informations de temps
+    date_reservation = models.DateField() # Jour (ex: 2026-05-25)
+    heure_debut = models.TimeField()      # Heure d'arrivée (ex: 12:30)
+    heure_fin = models.TimeField()        # Heure de départ prévue (ex: 14:00)
+    
     nombre_personnes = models.PositiveIntegerField()
     statut = models.CharField(
         max_length=20,
         choices=Statut.choices,
         default=Statut.CONFIRMEE,
     )
-    notes = models.TextField(blank=True)
+    notes = models.TextField(blank=True) # Ex: "Besoin d'une chaise haute"
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = ReservationManager()
 
     class Meta:
-        verbose_name = 'Reservation'
-        verbose_name_plural = 'Reservations'
+        verbose_name = 'Réservation'
+        verbose_name_plural = 'Réservations'
         ordering = ['date_reservation', 'heure_debut', 'id']
         indexes = [
             models.Index(

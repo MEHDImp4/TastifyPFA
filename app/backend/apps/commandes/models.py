@@ -15,18 +15,23 @@ class CommandeManager(models.Manager):
         return self.get_queryset().active()
 
 
+# Ce fichier est le plus important pour la logique du restaurant.
+# Il gère les Commandes (le ticket global) et les Lignes (chaque plat sur le ticket).
+
 class Commande(models.Model):
+    # Les différentes étapes de vie d'une commande
     class Statut(models.TextChoices):
-        EN_COURS = 'EN_COURS', 'En cours'
-        EN_CUISINE = 'EN_CUISINE', 'En cuisine'
-        PRETE = 'PRETE', 'Prete'
-        PAYEE = 'PAYEE', 'Payee'
-        ANNULEE = 'ANNULEE', 'Annulee'
+        EN_COURS = 'EN_COURS', 'En cours'     # Le serveur est en train de prendre la commande
+        EN_CUISINE = 'EN_CUISINE', 'En cuisine' # Envoyée aux cuisiniers
+        PRETE = 'PRETE', 'Prête'             # Les plats sont prêts à être servis
+        PAYEE = 'PAYEE', 'Payée'             # La commande est terminée et encaissée
+        ANNULEE = 'ANNULEE', 'Annulée'
 
     class Type(models.TextChoices):
         SUR_PLACE = 'SUR_PLACE', 'Sur place'
-        EMPORTER = 'EMPORTER', 'A emporter'
+        EMPORTER = 'EMPORTER', 'À emporter'
 
+    # Liaison avec la table (si c'est sur place)
     table = models.ForeignKey(
         'tables.Table',
         on_delete=models.PROTECT,
@@ -34,6 +39,7 @@ class Commande(models.Model):
         null=True,
         blank=True,
     )
+    # Liaison avec l'employé qui a pris la commande
     serveur = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -52,7 +58,9 @@ class Commande(models.Model):
         choices=Statut.choices,
         default=Statut.EN_COURS,
     )
+    # Montant total calculé automatiquement à partir des lignes
     montant_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
     est_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -63,12 +71,9 @@ class Commande(models.Model):
         verbose_name = 'Commande'
         verbose_name_plural = 'Commandes'
         ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['statut', 'created_at']),
-            models.Index(fields=['table']),
-        ]
 
     def __str__(self):
+        # Affiche un résumé simple pour l'étudiant/admin
         type_label = "Emporter" if self.type == self.Type.EMPORTER else "Table"
         target = self.client_nom if self.type == self.Type.EMPORTER else self.table_id
         return f'Commande #{self.pk} - {type_label} {target}'
@@ -78,14 +83,17 @@ class Commande(models.Model):
         self.save(update_fields=['est_active', 'updated_at'])
 
 
+# Une CommandeLigne représente UN plat spécifique dans une commande
+# Exemple : "2 Pizzas Margherita" est UNE ligne de la commande #123
 class CommandeLigne(models.Model):
     class Statut(models.TextChoices):
         EN_ATTENTE = 'EN_ATTENTE', 'En attente'
-        EN_PREPARATION = 'EN_PREPARATION', 'En preparation'
-        PRET = 'PRET', 'Pret'
+        EN_PREPARATION = 'EN_PREPARATION', 'En préparation'
+        PRET = 'PRET', 'Prêt'
         SERVI = 'SERVI', 'Servi'
-        ANNULE = 'ANNULE', 'Annule'
+        ANNULE = 'ANNULE', 'Annulé'
 
+    # Liaison forte : si on supprime la commande, on supprime ses lignes
     commande = models.ForeignKey(
         Commande,
         on_delete=models.CASCADE,
@@ -97,6 +105,7 @@ class CommandeLigne(models.Model):
         related_name='lignes_commande',
     )
     quantite = models.PositiveIntegerField(default=1)
+    # On stocke le prix au moment de la commande (si le prix du menu change plus tard, le ticket reste correct)
     prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     statut = models.CharField(
         max_length=20,
