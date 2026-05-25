@@ -1,55 +1,68 @@
-from pathlib import Path
+# Paramètres de base de Django pour le projet Tastify
+# Ce fichier contient la configuration partagée entre le développement et la production
 
+from pathlib import Path
 from decouple import config
 
+# BASE_DIR est le chemin vers le dossier racine du projet backend
+# Cela permet d'utiliser des chemins relatifs pour les fichiers (images, dossiers, etc.)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Paramètres de sécurité récupérés depuis le fichier .env
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
+# Liste des applications installées dans le projet
+# On y trouve les applications natives de Django, les librairies externes et NOS applications
 INSTALLED_APPS = [
-    'daphne',
+    'daphne', # Gère les connexions en temps réel (WebSockets)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'drf_spectacular',
-    'corsheaders',
-    'rest_framework_simplejwt',
+    
+    # Librairies tierces
+    'rest_framework', # Framework pour créer des APIs (DRF)
+    'drf_spectacular', # Pour la documentation Swagger
+    'corsheaders', # Autorise le frontend à appeler le backend
+    'rest_framework_simplejwt', # Authentification par Token JWT
     'rest_framework_simplejwt.token_blacklist',
-    'channels',
-    'django_celery_beat',
+    'channels', # Infrastructure WebSockets
+    'django_celery_beat', # Tâches planifiées (ex: envoyer un rapport chaque matin)
     'django_celery_results',
-    'core',
-    'apps.users',
-    'apps.menu',
-    'apps.tables',
-    'apps.commandes',
-    'apps.stock',
-    'apps.hr',
-    'apps.reservations',
-    'apps.paiements.apps.PaiementsConfig',
-    'apps.avis',
-    'apps.analytics',
-    'apps.loyalty.apps.LoyaltyConfig',
-    'apps.configuration',
-    'django_cleanup',
+    
+    # Nos applications (le cœur du projet)
+    'core', # Utilitaires partagés
+    'apps.users', # Utilisateurs et rôles
+    'apps.menu', # Carte du restaurant
+    'apps.tables', # Plan de salle
+    'apps.commandes', # Prise de commande et cuisine
+    'apps.stock', # Gestion des stocks d'ingrédients
+    'apps.hr', # Ressources Humaines (employés)
+    'apps.reservations', # Réservations clients
+    'apps.paiements.apps.PaiementsConfig', # Encaissement
+    'apps.avis', # Commentaires clients
+    'apps.analytics', # Statistiques et KPIs
+    'apps.loyalty.apps.LoyaltyConfig', # Programme de fidélité
+    'apps.configuration', # Réglages du restaurant
+    'django_cleanup', # Supprime automatiquement les images orphelines
 ]
 
+# Configuration de Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # Utilise JWT pour s'authentifier
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated', # Par défaut, il faut être connecté pour accéder aux APIs
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+# Paramètres pour la documentation de l'API
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Tastify API',
     'DESCRIPTION': "Documentation OpenAPI de l'API Tastify.",
@@ -58,10 +71,11 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': r'/api',
 }
 
+# Configuration des Tokens de sécurité (JWT)
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15), # Le token expire après 15 min pour plus de sécurité
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # Le refresh token permet d'en obtenir un nouveau pendant 24h
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,
@@ -72,6 +86,7 @@ SIMPLE_JWT = {
     'AUTH_COOKIE': 'refresh_token',
 }
 
+# Headers autorisés pour les requêtes CORS
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -85,13 +100,14 @@ CORS_ALLOW_HEADERS = [
     'x-tastify-portal',
 ]
 
+# Middlewares : des petits programmes qui s'exécutent à chaque requête/réponse
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Gère la sécurité des domaines frontend/backend
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Aide à servir les fichiers statiques efficacement
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', # Protection contre les attaques CSRF
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -99,6 +115,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tastify_backend.urls'
 
+# Configuration des templates (utilisés principalement pour l'admin Django)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -116,8 +133,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tastify_backend.wsgi.application'
-ASGI_APPLICATION = 'tastify_backend.asgi.application'
+ASGI_APPLICATION = 'tastify_backend.asgi.application' # Requis pour WebSockets (Channels)
 
+# Configuration de la base de données (MySQL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -133,6 +151,7 @@ DATABASES = {
     }
 }
 
+# Configuration de Redis (pour les messages en temps réel et les tâches de fond)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -142,6 +161,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Validateurs de mots de passe pour forcer les utilisateurs à avoir des mots de passe robustes
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -149,11 +169,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Paramètres de langue et fuseau horaire
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Africa/Casablanca'
 USE_I18N = True
 USE_TZ = True
 
+# Chemins pour les fichiers statiques (CSS, JS) et média (Images des plats)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -162,22 +184,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# On définit notre modèle d'utilisateur personnalisé
 AUTH_USER_MODEL = 'users.Utilisateur'
 PASSWORD_RESET_TIMEOUT = config('PASSWORD_RESET_TIMEOUT', cast=int, default=3600)
 
 FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3003')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@tastify.local')
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = config('EMAIL_HOST', default='localhost')
-EMAIL_PORT = config('EMAIL_PORT', cast=int, default=25)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=False)
-EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool, default=False)
 
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+# Configuration de Celery (Gestion des tâches asynchrones en arrière-plan)
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://redis:6379/1')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='django-db')
 CELERY_ACCEPT_CONTENT = ['json']
