@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-25 19:01:24<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-25 19:12:31<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1150,6 +1150,31 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved "date-fns" import resolution failure in `backoffice-app` by installing the package and updating `package.json`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Cleaned up `DashboardPage.tsx` by removing unused `Clock` import and `idx` parameter in the live feed map function to ensure a green production build.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker-compose exec -T backoffice-app npm run typecheck`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker-compose exec -T backoffice-app npm run build`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `ce3ef55` `Fix(dashboard): add missing date-fns dependency and cleanup unused code`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Integrated the remaining safe UI polish changes across the shared backoffice shell and the client home surface, keeping the lot focused on accessibility, usability, and dev-environment stability rather than introducing new product scope.</p>
@@ -1198,31 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
                                 <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/client-app run test:e2e ---project=chromium tests/e2e/client.quality.spec.ts tests/e2e/client.a11y.spec.ts`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `ccbe0b6` `Integrate remaining UI shell polish`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 16:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added a full client password-reset product slice with signed short-lived reset tokens, dedicated request/validation/confirmation endpoints, new `ForgotPassword` and `ResetPassword` portal screens, and deterministic backend + Playwright coverage for invalid, expired, reused, and successful reset flows.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 16:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added centralized transactional notification dispatch in `app/backend/core/notifications.py` plus backend tests for reset-password, reservation-confirmation, and payment-confirmation email contracts using local in-memory or console mail backends.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 16:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Added `client.cross-app.spec.ts` and shared cross-app browser fixtures so Dockerized low-mock realism now covers live reservation propagation from client to backoffice and QR payment settlement reflected on the staff side.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 16:42</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Extended the root QA runner and GitHub Actions workflow with a dedicated `npm run test:e2e:cross-app` slice and a provider-agnostic real-device preflight driven by `PLAYWRIGHT_REAL_DEVICE_PROVIDER`, `REAL_DEVICE_USERNAME`, `REAL_DEVICE_ACCESS_KEY`, `REAL_DEVICE_PROJECT`, and `REAL_DEVICE_BUILD`.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

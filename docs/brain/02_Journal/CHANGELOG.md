@@ -1,3 +1,15 @@
+## [2026-05-25] - 18:15
+### Fixed
+- Resolved "date-fns" import resolution failure in `backoffice-app` by installing the package and updating `package.json`.
+- Cleaned up `DashboardPage.tsx` by removing unused `Clock` import and `idx` parameter in the live feed map function to ensure a green production build.
+
+### Validation
+- `docker-compose exec -T backoffice-app npm run typecheck`
+- `docker-compose exec -T backoffice-app npm run build`
+
+### Commit
+- `ce3ef55` `Fix(dashboard): add missing date-fns dependency and cleanup unused code`
+
 ## [2026-05-25] - 18:04
 ### Changed
 - Integrated the remaining safe UI polish changes across the shared backoffice shell and the client home surface, keeping the lot focused on accessibility, usability, and dev-environment stability rather than introducing new product scope.
