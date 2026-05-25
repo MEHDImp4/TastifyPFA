@@ -49,37 +49,43 @@ class DashboardResponseSerializer(serializers.Serializer):
     liveFeed = LiveFeedItemSerializer(many=True)
     sentimentStats = SentimentStatsSerializer()
 
+# Vue du Tableau de Bord (Dashboard)
+# C'est ici que l'on calcule tous les chiffres importants pour le gérant.
+
 class DashboardAPIView(APIView):
-    # Only authenticated users with the GERANT role should access this
+    # Seuls les Gérants connectés peuvent voir ces statistiques sensibles
     permission_classes = [IsAuthenticated, IsGerant]
     serializer_class = DashboardResponseSerializer
 
     @extend_schema(responses={200: DashboardResponseSerializer})
     def get(self, request, *args, **kwargs):
+        # On récupère la date d'aujourd'hui pour filtrer les données
         today = timezone.now().date()
         
-        # 1. Today's Revenue
-        # Paiement completed today
+        # 1. Revenu du jour
+        # On utilise aggregate(Sum(...)) pour additionner tous les montants payés aujourd'hui
         today_payments = Paiement.objects.completed().filter(
             updated_at__date=today
         )
         today_revenue = today_payments.aggregate(total=Sum('montant'))['total'] or 0.0
 
-        # 2. Active Tables
+        # 2. Tables Actives
+        # On compte simplement le nombre de tables occupées
         active_tables = Table.objects.active().filter(statut=Table.Statut.OCCUPEE).count()
 
-        # 3. Pending Orders
+        # 3. Commandes en attente
+        # Commandes qui sont soit en cours de saisie, soit déjà en cuisine
         pending_orders = Commande.objects.active().filter(
             statut__in=[Commande.Statut.EN_COURS, Commande.Statut.EN_CUISINE]
         ).count()
 
-        # 4. Average Prep Time (for items served today)
+        # 4. Temps moyen de préparation
+        # On calcule la différence entre l'heure de sortie et l'heure de lancement
         served_lines = CommandeLigne.objects.filter(
             statut=CommandeLigne.Statut.SERVI,
             updated_at__date=today,
             heure_lancement__isnull=False
         )
-        # avg duration = avg(updated_at - heure_lancement)
         avg_prep_duration = served_lines.aggregate(
             avg_duration=Avg(F('updated_at') - F('heure_lancement'))
         )['avg_duration']
@@ -88,8 +94,9 @@ class DashboardAPIView(APIView):
         if avg_prep_duration:
             avg_prep_time_minutes = int(avg_prep_duration.total_seconds() / 60)
 
-        # 5. Revenue last 7 days
+        # 5. Revenu des 7 derniers jours (Graphique)
         seven_days_ago = today - timedelta(days=6)
+        # TruncDate permet de regrouper les paiements par jour précis
         daily_revenue_qs = Paiement.objects.completed().filter(
             updated_at__date__gte=seven_days_ago
         ).annotate(
@@ -128,29 +135,47 @@ class DashboardAPIView(APIView):
             for item in top_dishes_qs
         ]
 
-        # 7. Live Activity Feed (last 10 orders/payments)
-        recent_orders = Commande.objects.order_by('-created_at')[:10]
+        # 7. Live Activity Feed (last 10 orders/payments + critical alerts)
         live_feed = []
+
+        # Orders
+        recent_orders = Commande.objects.order_by('-created_at')[:10]
         for o in recent_orders:
             live_feed.append({
                 'id': f"cmd_{o.id}",
                 'type': 'ORDER',
                 'message': f"Nouvelle commande #{o.id} ({o.get_statut_display()})",
-                'time': o.created_at.isoformat()
+                'time': o.created_at
             })
             
+        # Payments
         recent_payments = Paiement.objects.order_by('-created_at')[:10]
         for p in recent_payments:
             live_feed.append({
                 'id': f"pay_{p.id}",
                 'type': 'PAYMENT',
                 'message': f"Paiement de {p.montant} DH reçu ({p.get_methode_display()})",
-                'time': p.created_at.isoformat()
+                'time': p.created_at
             })
-            
+
+        # Critical: Bill Requested (Tables in ENCAISSEMENT status)
+        requested_bills = Table.objects.filter(statut='ENCAISSEMENT', est_active=True)
+        for t in requested_bills:
+            live_feed.append({
+                'id': f"bill_{t.id}",
+                'type': 'ALERT',
+                'message': f"Addition demandée - Table {t.numero}",
+                'time': timezone.now() # Approximate or use update timestamp if available
+            })
+
         # sort by time descending and take top 10
         live_feed.sort(key=lambda x: x['time'], reverse=True)
-        live_feed = live_feed[:10]
+        # Convert datetime to string for response
+        for item in live_feed:
+            if not isinstance(item['time'], str):
+                item['time'] = item['time'].isoformat()
+        
+        live_feed = live_feed[:12]
 
         # 8. Sentiment stats (from analysed reviews)
         total_analysed = AnalyseSentiment.objects.count()
