@@ -14,7 +14,7 @@
 - `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.quality.spec.ts tests/e2e/client.a11y.spec.ts`
 
 ### Commit
-- `COMMIT_HASH_PENDING` `Integrate remaining UI shell polish`
+- `ccbe0b6` `Integrate remaining UI shell polish`
 
 ## [2026-05-25] - 16:42
 ### Added
