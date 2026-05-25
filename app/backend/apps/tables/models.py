@@ -14,24 +14,30 @@ class TableManager(models.Manager):
         return self.get_queryset().active()
 
 
+# Gestion du Plan de Salle et des Tables
+# Ce module permet de positionner graphiquement les tables dans le restaurant.
+
 class Table(models.Model):
-
+    # Les différents états d'une table pendant le service
     class Statut(models.TextChoices):
-        LIBRE        = 'LIBRE',        'Libre'
-        OCCUPEE      = 'OCCUPEE',      'Occupée'
-        RESERVEE     = 'RESERVEE',     'Réservée'
-        ENCAISSEMENT = 'ENCAISSEMENT', 'Encaissement'
+        LIBRE        = 'LIBRE',        'Libre'        # Prête pour de nouveaux clients
+        OCCUPEE      = 'OCCUPEE',      'Occupée'      # Des clients sont en train de manger
+        RESERVEE     = 'RESERVEE',     'Réservée'     # Bloquée pour une réservation future
+        ENCAISSEMENT = 'ENCAISSEMENT', 'Encaissement' # En attente du paiement final
 
-    numero    = models.PositiveIntegerField(unique=True)
-    capacite  = models.PositiveIntegerField()
+    numero    = models.PositiveIntegerField(unique=True) # Numéro unique (ex: Table 12)
+    capacite  = models.PositiveIntegerField() # Nombre de places (ex: Table de 4 personnes)
     statut    = models.CharField(
         max_length=20,
         choices=Statut.choices,
         default=Statut.LIBRE,
     )
+    
+    # Coordonnées (x, y) pour l'affichage visuel sur le plan de salle interactif
     pos_x     = models.FloatField(default=0.0)
     pos_y     = models.FloatField(default=0.0)
-    est_active = models.BooleanField(default=True)
+    
+    est_active = models.BooleanField(default=True) # Soft delete
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
