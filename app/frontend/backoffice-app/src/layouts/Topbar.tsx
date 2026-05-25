@@ -23,6 +23,7 @@ export const Topbar: React.FC<TopbarProps> = ({
       <div className="flex items-center gap-6">
         <button 
           onClick={() => setMobileOpen(true)}
+          aria-label="Open navigation menu"
           className="flex h-10 w-10 items-center justify-center border border-outline-variant text-on-surface transition-colors hover:bg-surface-container-high md:hidden rounded"
         >
           <Menu strokeWidth={2.5} className="w-5 h-5" />
@@ -47,7 +48,12 @@ export const Topbar: React.FC<TopbarProps> = ({
              <SocketIndicator />
           </div>
           <NotificationCenter />
-          <button className="text-on-surface-variant hover:text-on-surface p-2 rounded hover:bg-surface-container-high transition-all">
+          <button
+            type="button"
+            aria-label="Security status"
+            title="Security status"
+            className="text-on-surface-variant hover:text-on-surface p-2 rounded hover:bg-surface-container-high transition-all"
+          >
             <ShieldCheck className="w-4.5 h-4.5" />
           </button>
         </div>

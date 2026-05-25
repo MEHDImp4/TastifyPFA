@@ -1,3 +1,21 @@
+## [2026-05-25] - 18:04
+### Changed
+- Integrated the remaining safe UI polish changes across the shared backoffice shell and the client home surface, keeping the lot focused on accessibility, usability, and dev-environment stability rather than introducing new product scope.
+- Added explicit accessible labels to the staff notification bell, mobile shell controls, and security affordance in `NotificationCenter.tsx` and `Topbar.tsx`, while making the main workspace container keyboard-focusable in `AppShell.tsx`.
+- Completed the pending KDS header polish by wiring the back button to real navigation and making the empty-state contrast stronger instead of fading the entire sector-clear panel into near invisibility.
+- Simplified the public client home by removing the extra philosophy block from `PortalHomePage.tsx`, keeping the page closer to the faster reservation/menu-first flow already established in the previous UX waves.
+- Disabled `vite-plugin-pwa` dev-mode registration in `app/frontend/client-app/vite.config.ts` so local frontend work stops regenerating service-worker side effects during routine development.
+
+### Validation
+- `npm --prefix app/frontend/backoffice-app run build`
+- `npm --prefix app/frontend/client-app run build`
+- `docker compose up -d --build backend backoffice-app client-app`
+- `npm --prefix app/frontend/backoffice-app run test:e2e -- --project=cuisinier-chromium tests/e2e/backoffice.quality.spec.ts`
+- `npm --prefix app/frontend/client-app run test:e2e -- --project=chromium tests/e2e/client.quality.spec.ts tests/e2e/client.a11y.spec.ts`
+
+### Commit
+- `COMMIT_HASH_PENDING` `Integrate remaining UI shell polish`
+
 ## [2026-05-25] - 16:42
 ### Added
 - Added a full client password-reset product slice with signed short-lived reset tokens, dedicated request/validation/confirmation endpoints, new `ForgotPassword` and `ResetPassword` portal screens, and deterministic backend + Playwright coverage for invalid, expired, reused, and successful reset flows.

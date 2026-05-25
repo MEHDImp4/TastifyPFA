@@ -34,6 +34,8 @@ export const NotificationCenter: React.FC = () => {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? 'Close operational alerts' : 'Open operational alerts'}
+        title={isOpen ? 'Close operational alerts' : 'Open operational alerts'}
         className="p-2 border-2 border-transparent hover:border-on-surface hover:bg-surface-container transition-all relative"
         style={{ color: '#301400' }}
       >
@@ -47,7 +49,15 @@ export const NotificationCenter: React.FC = () => {
         <div className="absolute top-full right-0 mt-4 w-96 bg-background border-2 border-on-surface shadow-[8px_8px_0px_#301400] overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="p-4 bg-on-surface text-background flex items-center justify-between">
             <h4 className="text-ui-label-bold text-[10px] tracking-[0.25em]">OPERATIONAL ALERTS</h4>
-            <button onClick={() => setIsOpen(false)} className="hover:scale-110 transition-transform"><X className="w-4 h-4"  strokeWidth={2.5}/></button>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Dismiss operational alerts"
+              title="Dismiss operational alerts"
+              className="hover:scale-110 transition-transform"
+            >
+              <X className="w-4 h-4"  strokeWidth={2.5}/>
+            </button>
           </div>
           <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
             {notifications.length === 0 ? (

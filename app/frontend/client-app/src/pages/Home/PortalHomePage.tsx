@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   MapPin,
   ArrowRight,
-  ChevronRight,
-  Quote
+  ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
@@ -153,24 +152,6 @@ export const PortalHomePage = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Philosophy Section */}
-      <section className="py-32 bg-surface-container-lowest relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-12">
-          <Quote className="w-12 h-12 text-primary mx-auto opacity-20" />
-          <motion.blockquote 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="font-serif text-2xl md:text-4xl text-on-surface italic leading-tight font-light"
-          >
-            "Tastify n’est pas seulement un portail de restauration ; c’est une invitation à ralentir et à redécouvrir le rythme inhérent du monde naturel."
-          </motion.blockquote>
-          <div className="flex flex-col items-center gap-4">
-             <div className="w-12 h-px bg-primary/40" />
-             <span className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary">Journal des Tables</span>
           </div>
         </div>
       </section>

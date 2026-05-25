@@ -33,8 +33,16 @@ export const AppShell: React.FC = () => {
           setMobileOpen={setMobileOpen}
           toggleDesktopSidebar={toggleDesktopSidebar}
         />
-        <main className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-background">
-          <div className="max-w-[1700px] mx-auto">
+        <main
+          className="flex-1 overflow-y-auto p-4 custom-scrollbar bg-background"
+          tabIndex={0}
+          aria-label="Workspace content"
+        >
+          <div
+            className="max-w-[1700px] mx-auto"
+            tabIndex={0}
+            aria-label="Workspace page content"
+          >
             <Outlet />
           </div>
         </main>

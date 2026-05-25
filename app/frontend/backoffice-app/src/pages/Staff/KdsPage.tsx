@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
 import { 
@@ -38,6 +39,7 @@ const playDing = () => {
 };
 
 export const KdsPage: React.FC = () => {
+  const navigate = useNavigate();
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -140,8 +142,15 @@ export const KdsPage: React.FC = () => {
       {/* Tactical KDS Header */}
       <header className="flex-none flex items-center justify-between border-b border-outline-variant bg-surface-container-low px-staff-margin py-unit-md">
         <div className="flex items-center gap-unit-md">
-          <button className="flex items-center justify-center size-10 rounded-md border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Return to previous screen"
+            title="Return to previous screen"
+            className="flex items-center justify-center size-10 rounded-md border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors"
+          >
             <ArrowLeft className="w-5 h-5" />
+            <span className="sr-only">Return to previous screen</span>
           </button>
           <div>
             <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Kitchen Display System</h1>
@@ -266,9 +275,9 @@ export const KdsPage: React.FC = () => {
               </AnimatePresence>
 
               {tickets.filter(t => t.statut === col.id).length === 0 && (
-                <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant/10 py-20">
-                  <PlayCircle className="w-16 h-16 stroke-[1]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4">Sector Clear</p>
+                <div className="flex-1 flex flex-col items-center justify-center py-20">
+                  <PlayCircle className="w-16 h-16 stroke-[1] text-on-surface-variant/40" />
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4 text-on-surface-variant">Sector Clear</p>
                   <span className="sr-only">Cuisine vide.</span>
                 </div>
               )}
