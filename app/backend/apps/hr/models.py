@@ -1,18 +1,25 @@
 from django.db import models
 from django.conf import settings
 
+# Gestion des Ressources Humaines (RH)
+# Ce module permet de gérer les contrats des employés et leurs plannings (Shifts).
+
 class Employe(models.Model):
+    # Relation "Un-à-Un" : Un compte utilisateur = Un profil employé.
+    # C'est comme si on ajoutait des champs supplémentaires à l'Utilisateur 
+    # mais uniquement pour ceux qui travaillent dans le restaurant.
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='profil_employe'
     )
-    poste = models.CharField(max_length=100)
+    poste = models.CharField(max_length=100) # Ex: Cuisinier, Chef de rang
     salaire = models.DecimalField(max_digits=10, decimal_places=2)
     date_embauche = models.DateField()
     telephone = models.CharField(max_length=20, blank=True)
     adresse = models.TextField(blank=True)
     cin = models.CharField(max_length=20, unique=True, blank=True, default='')
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -25,6 +32,8 @@ class Employe(models.Model):
         return f"{self.user.get_full_name() or self.user.username} - {self.poste}"
 
 
+# Un Shift représente une plage horaire de travail pour un employé
+# Exemple : Mehdi travaille lundi de 08:00 à 16:00
 class Shift(models.Model):
     employe = models.ForeignKey(Employe, on_delete=models.CASCADE, related_name='shifts')
     jour = models.DateField()
@@ -35,6 +44,7 @@ class Shift(models.Model):
 
     class Meta:
         ordering = ['jour', 'heure_debut']
+        # Contrainte : un employé ne peut pas avoir deux shifts qui commencent à la même heure le même jour
         unique_together = ['employe', 'jour', 'heure_debut']
 
     def __str__(self):
