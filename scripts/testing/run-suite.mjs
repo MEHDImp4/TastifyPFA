@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
 import http from 'node:http';
 import https from 'node:https';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import process from 'node:process';
@@ -8,8 +10,8 @@ import process from 'node:process';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const isWindows = process.platform === 'win32';
 
-function getComposeArgs(files = ['docker-compose.yml']) {
-  return ['compose', ...files.flatMap((file) => ['-f', file])];
+function getComposeArgs(files = ['docker-compose.yml'], envFile = null) {
+  return ['compose', ...(envFile ? ['--env-file', envFile] : []), ...files.flatMap((file) => ['-f', file])];
 }
 
 function run(command, args, options = {}) {
@@ -32,7 +34,7 @@ function run(command, args, options = {}) {
 }
 
 function dockerCompose(args, options = {}) {
-  run('docker', [...getComposeArgs(options.files), ...args], options);
+  run('docker', [...getComposeArgs(options.files, options.envFile), ...args], options);
 }
 
 function npmPrefix(prefix, script, extraArgs = []) {
@@ -150,6 +152,45 @@ async function withDockerStack(services, callback, options = {}) {
   }
 }
 
+function buildTestEnvFile(overrides = {}) {
+  const sourcePath = fs.existsSync(path.resolve(repoRoot, '.env'))
+    ? path.resolve(repoRoot, '.env')
+    : path.resolve(repoRoot, 'app/backend/.env.example');
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tastify-runner-'));
+  const tempEnvPath = path.join(tempDir, '.env');
+  let content = fs.readFileSync(sourcePath, 'utf8');
+
+  for (const [key, value] of Object.entries(overrides)) {
+    const pattern = new RegExp(`^${key}=.*$`, 'm');
+    const line = `${key}=${value}`;
+    content = pattern.test(content) ? content.replace(pattern, line) : `${content.trimEnd()}\n${line}\n`;
+  }
+
+  fs.writeFileSync(tempEnvPath, content, 'utf8');
+  return {
+    envFile: tempEnvPath,
+    cleanup() {
+      try {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      } catch {}
+    },
+  };
+}
+
+function buildComposeOverrideFile(content) {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tastify-compose-'));
+  const overridePath = path.join(tempDir, 'docker-compose.override.yml');
+  fs.writeFileSync(overridePath, content, 'utf8');
+  return {
+    file: overridePath,
+    cleanup() {
+      try {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      } catch {}
+    },
+  };
+}
+
 function printDockerDiagnostics(services = [], options = {}) {
   try {
     dockerCompose(['ps'], options);
@@ -165,16 +206,24 @@ function printDockerDiagnostics(services = [], options = {}) {
 }
 
 async function runE2EForTarget(target, options = {}) {
+  const backendReadiness = {
+    url: 'http://127.0.0.1:8000/api/users/login/',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: 'healthcheck', password: 'healthcheck' }),
+    allowedStatuses: [200, 400, 401, 405],
+  };
   const config =
     target === 'client'
       ? {
           services: ['db', 'redis', 'backend', 'client-app'],
-          readinessChecks: [{ url: 'http://127.0.0.1:3003' }],
+          readinessChecks: [backendReadiness, { url: 'http://127.0.0.1:3003' }],
           prefix: 'app/frontend/client-app',
         }
       : {
           services: ['db', 'redis', 'backend', 'backoffice-app'],
           readinessChecks: [
+            backendReadiness,
             { url: 'http://127.0.0.1:3000/login' },
             {
               url: 'http://127.0.0.1:3000/api/users/login/',
@@ -187,16 +236,42 @@ async function runE2EForTarget(target, options = {}) {
           prefix: 'app/frontend/backoffice-app',
         };
 
-  await withDockerStack(
-    config.services,
-    async () => {
-      for (const readinessCheck of config.readinessChecks) {
-        await waitForHttp(readinessCheck.url, readinessCheck);
-      }
-      npmPrefix(config.prefix, 'test:e2e', options.npmArgs ?? []);
-    },
-    { files: options.files },
-  );
+  const emailOverride =
+    target === 'client'
+      ? buildComposeOverrideFile(`services:
+  backend:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+  celery-worker:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+  celery-beat:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+`)
+      : null;
+
+  try {
+    await withDockerStack(
+      config.services,
+      async () => {
+        for (const readinessCheck of config.readinessChecks) {
+          await waitForHttp(readinessCheck.url, readinessCheck);
+        }
+        run('npm', ['run', 'test:e2e', ...(options.npmArgs ?? [])], {
+          cwd: path.resolve(repoRoot, config.prefix),
+          env: options.env,
+        });
+      },
+      {
+        files: emailOverride
+          ? [...(options.files ?? ['docker-compose.yml']), emailOverride.file]
+          : options.files,
+      },
+    );
+  } finally {
+    emailOverride?.cleanup();
+  }
 }
 
 const suites = {
@@ -266,6 +341,48 @@ const suites = {
   },
   async 'e2e:client'() {
     await runE2EForTarget('client');
+  },
+  async 'e2e:cross-app'() {
+    const composeOverride = buildComposeOverrideFile(`services:
+  backend:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+  celery-worker:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+  celery-beat:
+    environment:
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+`);
+
+    try {
+      await withDockerStack(
+        ['db', 'redis', 'backend', 'backoffice-app', 'client-app'],
+        async () => {
+          await waitForHttp('http://127.0.0.1:3000/login');
+          await waitForHttp('http://127.0.0.1:3000/api/users/login/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: 'healthcheck', password: 'healthcheck' }),
+            allowedStatuses: [200, 400, 401],
+          });
+          await waitForHttp('http://127.0.0.1:3003');
+          run('npm', ['run', 'test:e2e',
+            '--',
+            '--project=chromium',
+            'tests/e2e/client.cross-app.spec.ts',
+          ], {
+            cwd: path.resolve(repoRoot, 'app/frontend/client-app'),
+            env: {
+              PLAYWRIGHT_INCLUDE_CROSS_APP: 'true',
+            },
+          });
+        },
+        { files: ['docker-compose.yml', composeOverride.file] },
+      );
+    } finally {
+      composeOverride.cleanup();
+    }
   },
   async 'e2e:real-devices'() {
     const provider = process.env.PLAYWRIGHT_REAL_DEVICE_PROVIDER;

@@ -117,7 +117,7 @@ export const Login: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center px-2">
                  <label htmlFor="login-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Passkey</label>
-                 <Link to="#" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Recovery?</Link>
+                 <Link to="/forgot-password" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Recovery?</Link>
               </div>
               <div className="relative group">
                 <input

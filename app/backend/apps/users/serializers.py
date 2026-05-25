@@ -1,6 +1,10 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from apps.users.reset_tokens import is_valid_password_reset_token, resolve_password_reset_user
 
 User = get_user_model()
 
@@ -50,3 +54,35 @@ class AuthMessageSerializer(serializers.Serializer):
 
 class RegisterResponseSerializer(AuthMessageSerializer):
     username = serializers.CharField()
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class PasswordResetTokenSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+
+    def validate(self, attrs):
+        user = resolve_password_reset_user(attrs['uid'])
+        if not is_valid_password_reset_token(user=user, token=attrs['token']):
+            raise serializers.ValidationError({'token': 'RESET_TOKEN_INVALID'})
+        attrs['user'] = user
+        return attrs
+
+
+class PasswordResetConfirmSerializer(PasswordResetTokenSerializer):
+    password = serializers.CharField(write_only=True)
+    password_confirm = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if attrs['password'] != attrs['password_confirm']:
+            raise serializers.ValidationError({'password_confirm': 'PASSWORD_CONFIRM_MISMATCH'})
+
+        try:
+            validate_password(attrs['password'], user=attrs['user'])
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError({'password': exc.messages or ['PASSWORD_TOO_WEAK']}) from exc
+        return attrs

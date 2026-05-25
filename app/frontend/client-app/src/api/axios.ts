@@ -36,9 +36,15 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const isAuthBypassEndpoint =
+      originalRequest.url?.includes('/users/login/') ||
+      originalRequest.url?.includes('/users/refresh/') ||
+      originalRequest.url?.includes('/users/request-reset/') ||
+      originalRequest.url?.includes('/users/validate-reset-token/') ||
+      originalRequest.url?.includes('/users/confirm-reset/');
 
     // Do not intercept login or refresh failures to prevent infinite loops
-    if (originalRequest.url?.includes('/users/login/') || originalRequest.url?.includes('/users/refresh/')) {
+    if (isAuthBypassEndpoint) {
         return Promise.reject(error);
     }
 

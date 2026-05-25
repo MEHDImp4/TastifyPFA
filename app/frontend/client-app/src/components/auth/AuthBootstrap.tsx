@@ -30,15 +30,24 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
       
       // Fetch public configuration in parallel
       const configPromise = fetchConfig();
-      const hasSession = useAuthStore.getState().hasSession;
+      const persistedAuth = useAuthStore.getState();
+      const hasPersistedToken =
+        Boolean(persistedAuth.accessToken) &&
+        Boolean(persistedAuth.role) &&
+        Boolean(persistedAuth.username);
+      const hasSession = persistedAuth.hasSession;
       
-      if (!isAuthenticated && hasSession) {
-        const data = await attemptRefresh();
-        if (!active) return;
-        if (data) {
-          setAuth(data.access, data.role, data.username);
-        } else {
-          logoutLocally();
+      if (!isAuthenticated) {
+        if (hasPersistedToken && persistedAuth.accessToken && persistedAuth.role && persistedAuth.username) {
+          setAuth(persistedAuth.accessToken, persistedAuth.role, persistedAuth.username);
+        } else if (hasSession) {
+          const data = await attemptRefresh();
+          if (!active) return;
+          if (data) {
+            setAuth(data.access, data.role, data.username);
+          } else {
+            logoutLocally();
+          }
         }
       }
       

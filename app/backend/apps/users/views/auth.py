@@ -1,18 +1,29 @@
+import logging
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from core.notifications import send_password_reset_requested_email
 from ..serializers import (
     AuthMessageSerializer,
     CustomTokenObtainPairSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetTokenSerializer,
     RegisterResponseSerializer,
     UserRegisterSerializer,
 )
+
+logger = logging.getLogger(__name__)
+User = get_user_model()
 
 
 class RegisterView(APIView):
@@ -65,25 +76,18 @@ def clear_refresh_cookie(response, request):
 
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-    
+
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             refresh_token = response.data.get('refresh')
-            # Configuration du cookie HttpOnly pour le token de rafraîchissement
             set_refresh_cookie(response, request, refresh_token)
-            # Retrait du refresh token de la réponse JSON pour limiter l'exposition XSS
             del response.data['refresh']
         return response
 
-import logging
-
-logger = logging.getLogger(__name__)
 
 class CookieTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
-        # Some parsers expose immutable request.data objects; build a mutable payload
-        # instead of mutating request.data directly.
         request_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
         cookie_name = get_auth_cookie_name(request)
         refresh_token = request.COOKIES.get(cookie_name)
@@ -129,7 +133,6 @@ class CookieTokenRefreshView(TokenRefreshView):
 
             if 'refresh' in response.data:
                 new_refresh_token = response.data.get('refresh')
-                # Mise à jour du cookie sécurisé suite à la rotation du token
                 set_refresh_cookie(response, request, new_refresh_token)
                 del response.data['refresh']
             
@@ -144,3 +147,49 @@ class LogoutView(APIView):
         response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
         clear_refresh_cookie(response, request)
         return response
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetRequestSerializer
+
+    @extend_schema(request=PasswordResetRequestSerializer, responses={200: AuthMessageSerializer})
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email'].strip().lower()
+
+        user = User.objects.filter(email__iexact=email, is_active=True).first()
+        if user is not None and user.has_usable_password():
+            send_password_reset_requested_email(user=user)
+            logger.info("Password reset requested for user_id=%s", user.pk)
+        else:
+            logger.info("Password reset requested for unknown_or_inactive_email")
+
+        return Response({"message": "RESET_REQUEST_ACCEPTED"}, status=status.HTTP_200_OK)
+
+
+class PasswordResetValidateView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetTokenSerializer
+
+    @extend_schema(request=PasswordResetTokenSerializer, responses={200: AuthMessageSerializer, 400: PasswordResetTokenSerializer})
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({"message": "RESET_TOKEN_VALID"}, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetConfirmSerializer
+
+    @extend_schema(request=PasswordResetConfirmSerializer, responses={200: AuthMessageSerializer, 400: PasswordResetConfirmSerializer})
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        user.set_password(serializer.validated_data['password'])
+        user.save(update_fields=['password'])
+        logger.info("Password reset completed for user_id=%s", user.pk)
+        return Response({"message": "RESET_PASSWORD_UPDATED"}, status=status.HTTP_200_OK)

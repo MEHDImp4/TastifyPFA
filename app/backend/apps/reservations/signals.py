@@ -3,6 +3,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from core.realtime import broadcast_staff_event
+from core.notifications import send_reservation_confirmation_email
 from apps.reservations.models import Reservation
 from apps.reservations.serializers import ReservationSerializer
 
@@ -14,6 +15,8 @@ def broadcast_reservation_save(sender, instance, created, **kwargs):
     def _broadcast():
         serializer = ReservationSerializer(instance)
         broadcast_staff_event(event_type, serializer.data)
+        if created:
+            send_reservation_confirmation_email(reservation=instance)
 
     transaction.on_commit(_broadcast)
 

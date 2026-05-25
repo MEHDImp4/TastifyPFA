@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
 const includeExpandedMatrix = process.env.PLAYWRIGHT_EXPANDED_MATRIX === 'true';
+const includeCrossApp = process.env.PLAYWRIGHT_INCLUDE_CROSS_APP === 'true';
 
 const projects = [
   {
@@ -37,6 +38,7 @@ if (includeExpandedMatrix) {
 
 export default defineConfig({
   testDir: './tests/e2e',
+  testIgnore: includeCrossApp ? [] : [/.*client\.cross-app\.spec\.ts/],
   fullyParallel: false,
   retries: process.env.CI ? 2 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],

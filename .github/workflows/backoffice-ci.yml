@@ -576,6 +576,47 @@ jobs:
           path: artifacts/load-tests
           if-no-files-found: ignore
 
+  cross-app-realism:
+    name: Cross-app realism
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    continue-on-error: true
+    needs: changes
+    if: needs.changes.outputs.client == 'true' || needs.changes.outputs.backoffice == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true' || needs.changes.outputs.full_run == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: Create .env for CI
+        run: cp .env.example .env
+
+      - name: Run cross-app realism suite
+        env:
+          CI: "true"
+        run: node scripts/testing/run-suite.mjs e2e:cross-app
+
+      - name: Upload cross-app realism report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-app-realism-report
+          path: app/frontend/client-app/playwright-report
+          if-no-files-found: ignore
+
   real-device-matrix:
     name: Device-lab-ready matrix preflight
     runs-on: ubuntu-latest
@@ -616,11 +657,12 @@ jobs:
       - name: Detect remote device credentials
         id: device_lab
         env:
-          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          PLAYWRIGHT_REAL_DEVICE_PROVIDER: ${{ vars.PLAYWRIGHT_REAL_DEVICE_PROVIDER }}
+          REAL_DEVICE_USERNAME: ${{ secrets.REAL_DEVICE_USERNAME }}
+          REAL_DEVICE_ACCESS_KEY: ${{ secrets.REAL_DEVICE_ACCESS_KEY }}
         run: |
-          if [[ -n "$BROWSERSTACK_USERNAME" && -n "$BROWSERSTACK_ACCESS_KEY" ]]; then
-            echo "provider=browserstack" >> "$GITHUB_OUTPUT"
+          if [[ -n "$PLAYWRIGHT_REAL_DEVICE_PROVIDER" && -n "$REAL_DEVICE_USERNAME" && -n "$REAL_DEVICE_ACCESS_KEY" ]]; then
+            echo "provider=$PLAYWRIGHT_REAL_DEVICE_PROVIDER" >> "$GITHUB_OUTPUT"
           else
             echo "provider=preflight" >> "$GITHUB_OUTPUT"
           fi
@@ -629,6 +671,10 @@ jobs:
         env:
           CI: "true"
           PLAYWRIGHT_REAL_DEVICE_PROVIDER: ${{ steps.device_lab.outputs.provider }}
+          REAL_DEVICE_USERNAME: ${{ secrets.REAL_DEVICE_USERNAME }}
+          REAL_DEVICE_ACCESS_KEY: ${{ secrets.REAL_DEVICE_ACCESS_KEY }}
+          REAL_DEVICE_PROJECT: ${{ vars.REAL_DEVICE_PROJECT }}
+          REAL_DEVICE_BUILD: ${{ github.run_id }}
           PLAYWRIGHT_EXPANDED_MATRIX: "true"
           BACKOFFICE_BASE_URL: http://127.0.0.1:3000
           CLIENT_BASE_URL: http://127.0.0.1:3003

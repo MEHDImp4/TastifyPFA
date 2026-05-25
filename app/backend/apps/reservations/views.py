@@ -79,3 +79,27 @@ class ReservationViewSet(viewsets.ModelViewSet):
                 table_data['statut_effectif'] = Table.Statut.RESERVEE
 
         return Response(serialized_tables)
+
+    @action(detail=True, methods=['patch'], url_path='confirmer')
+    def confirmer(self, request, pk=None):
+        reservation = self.get_object()
+        serializer = self.get_serializer(
+            reservation,
+            data={'statut': Reservation.Statut.CONFIRMEE},
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['patch'], url_path='annuler')
+    def annuler(self, request, pk=None):
+        reservation = self.get_object()
+        serializer = self.get_serializer(
+            reservation,
+            data={'statut': Reservation.Statut.ANNULEE},
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

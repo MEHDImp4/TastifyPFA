@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from apps.paiements.models import Paiement
 from apps.paiements.services import reconcile_commande_payment_status
+from core.notifications import send_payment_confirmation_email
 from core.realtime import broadcast_staff_event
 
 
@@ -24,5 +25,6 @@ def handle_payment_completion(sender, instance, **kwargs):
                 "mode": instance.methode,
                 "methode": instance.methode,
             })
-        
+            send_payment_confirmation_email(paiement=instance)
+
         transaction.on_commit(broadcast)

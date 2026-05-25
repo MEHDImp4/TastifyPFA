@@ -21,3 +21,6 @@ CELERY_BROKER_URL = 'memory://'
 CELERY_RESULT_BACKEND = 'cache+memory://'
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+FRONTEND_BASE_URL = 'http://127.0.0.1:3003'

@@ -148,6 +148,99 @@ test.describe('register form — API responses', () => {
   });
 });
 
+test.describe('password reset flow — API responses', () => {
+  test('submits forgot-password request and shows the confirmation state', async ({ page }) => {
+    await page.route('**/api/users/request-reset/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'RESET_REQUEST_ACCEPTED' }),
+      });
+    });
+
+    await page.goto('/forgot-password');
+    await page.getByLabel('Registry Email').fill('client_test@tastify.ma');
+    await page.getByRole('button', { name: /Send Recovery Link/i }).click();
+
+    await expect(page.getByText('Reset instructions sent if the address is registered.')).toBeVisible();
+  });
+
+  test('shows invalid state when the reset token cannot be validated', async ({ page }) => {
+    await page.route('**/api/users/validate-reset-token/', async (route) => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ token: ['RESET_TOKEN_INVALID'] }),
+      });
+    });
+
+    await page.goto('/reset-password?uid=abc&token=broken-token');
+    await expect(page.getByText('This reset link is invalid or expired.')).toBeVisible();
+  });
+
+  test('completes the reset flow with a valid token', async ({ page }) => {
+    await page.route('**/api/users/validate-reset-token/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'RESET_TOKEN_VALID' }),
+      });
+    });
+    await page.route('**/api/users/confirm-reset/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'RESET_PASSWORD_UPDATED' }),
+      });
+    });
+
+    await page.goto('/reset-password?uid=valid-uid&token=valid-token');
+    await page.getByLabel('New Passkey').fill('newpassword123');
+    await page.getByLabel('Confirm Passkey').fill('newpassword123');
+    await page.getByRole('button', { name: /Update Passkey/i }).click();
+
+    await expect(page.getByText('Your password has been updated.')).toBeVisible();
+  });
+
+  test('surfaces password mismatch and token replay errors during confirmation', async ({ page }) => {
+    await page.route('**/api/users/validate-reset-token/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'RESET_TOKEN_VALID' }),
+      });
+    });
+    let attempts = 0;
+    await page.route('**/api/users/confirm-reset/', async (route) => {
+      attempts += 1;
+      if (attempts === 1) {
+        await route.fulfill({
+          status: 400,
+          contentType: 'application/json',
+          body: JSON.stringify({ password_confirm: ['PASSWORD_CONFIRM_MISMATCH'] }),
+        });
+        return;
+      }
+
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ token: ['RESET_TOKEN_INVALID'] }),
+      });
+    });
+
+    await page.goto('/reset-password?uid=valid-uid&token=valid-token');
+    await page.getByLabel('New Passkey').fill('newpassword123');
+    await page.getByLabel('Confirm Passkey').fill('differentpassword123');
+    await page.getByRole('button', { name: /Update Passkey/i }).click();
+    await expect(page.getByText('PASSWORD_CONFIRM_MISMATCH')).toBeVisible();
+
+    await page.getByLabel('Confirm Passkey').fill('newpassword123');
+    await page.getByRole('button', { name: /Update Passkey/i }).click();
+    await expect(page.getByText('This reset link is invalid or expired.')).toBeVisible();
+  });
+});
+
 test.describe('authenticated user — route guards', () => {
   test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
 

@@ -8,6 +8,8 @@ import { ContactPage } from './pages/Contact/ContactPage';
 import { AccountPage } from './pages/Account/AccountPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { ForgotPassword } from './pages/auth/ForgotPassword';
+import { ResetPassword } from './pages/auth/ResetPassword';
 import { CheckoutPage } from './pages/Checkout/CheckoutPage';
 import { PaymentPortal } from './pages/Payment/PaymentPortal';
 import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
@@ -55,6 +57,18 @@ const AnimatedRoutes = () => {
         <Route path="/register" element={
           <GuestRoute>
             <Register />
+          </GuestRoute>
+        } />
+
+        <Route path="/forgot-password" element={
+          <GuestRoute>
+            <ForgotPassword />
+          </GuestRoute>
+        } />
+
+        <Route path="/reset-password" element={
+          <GuestRoute>
+            <ResetPassword />
           </GuestRoute>
         } />
 

@@ -293,6 +293,42 @@ class TestClientStatusTransition:
             )
             assert response.status_code == status.HTTP_200_OK
 
+    def test_staff_can_cancel_via_dedicated_route(
+        self, api_client, gerant_user, client_user, table
+    ):
+        reservation = make_reservation(client_user, table)
+        api_client.force_authenticate(user=gerant_user)
+
+        response = api_client.patch(
+            reverse("reservation-annuler", args=[reservation.id]),
+            {},
+            format="json",
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        reservation.refresh_from_db()
+        assert reservation.statut == Reservation.Statut.ANNULEE
+
+    def test_staff_can_confirm_via_dedicated_route(
+        self, api_client, gerant_user, client_user, table
+    ):
+        reservation = make_reservation(
+            client_user,
+            table,
+            statut=Reservation.Statut.ABSENTE,
+        )
+        api_client.force_authenticate(user=gerant_user)
+
+        response = api_client.patch(
+            reverse("reservation-confirmer", args=[reservation.id]),
+            {},
+            format="json",
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        reservation.refresh_from_db()
+        assert reservation.statut == Reservation.Statut.CONFIRMEE
+
 
 @pytest.mark.django_db
 class TestOverlapEnforcement:
