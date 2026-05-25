@@ -100,13 +100,16 @@ docker compose up -d --build backend
 - `npm run test`
 - `npm run test:integration`
 - `npm run test:e2e`
+- `npm run test:e2e:cross-app`
 - `npm run test:e2e:matrix`
 - `npm run test:preview`
 - `npm run test:load`
 
 For the curated, student-friendly QA entrypoint introduced for this repo, see `TESTING.md`.
 
-The root QA runner now waits for both the backoffice shell and the proxied auth API before starting Playwright, which keeps Docker startup races from turning into false-negative browser runs. The supported automation surface is green for full backend `pytest`, full backoffice Playwright, full client Playwright, the expanded browser matrix smoke, preview smoke, and the Dockerized Locust campaign with threshold checks on p95, average latency, failure ratio, and minimum request volume.
+The root QA runner now waits for both the backoffice shell and the proxied auth API before starting Playwright, which keeps Docker startup races from turning into false-negative browser runs. The supported automation surface is green for full backend `pytest`, full backoffice Playwright, full client Playwright, the dedicated cross-app realism suite, the expanded browser matrix smoke, preview smoke, and the Dockerized Locust campaign with threshold checks on p95, average latency, failure ratio, and minimum request volume.
+
+Client authentication now also includes a first-class password-reset flow backed by signed short-lived tokens and non-enumerating request semantics. Transactional notification hooks are centralized in `app/backend/core/notifications.py` and currently cover password reset requests, reservation confirmations, and payment confirmations without coupling the product to a live email provider during Docker or CI runs.
 
 ## GitHub Actions
 - `.github/workflows/backoffice-ci.yml` runs on pull requests, pushes to `main`/`master`, nightly schedule, and manual `workflow_dispatch`.
@@ -115,10 +118,11 @@ The root QA runner now waits for both the backoffice shell and the proxied auth 
 - `backend-pytest` brings up `db`, `redis`, and `backend` with Docker Compose, then runs `python manage.py check`, `makemigrations --check --dry-run`, and the full Dockerized backend `pytest` suite.
 - `dependency-review` blocks risky dependency additions on pull requests, while `dependency-security-audits` runs `npm audit` on both frontends and enforces backend `pip-audit` through an explicit allowlist gate.
 - `client-e2e` and `backoffice-e2e` reuse the root Docker runners so CI and local readiness logic stay aligned.
+- `cross-app-realism` runs a small low-mock browser slice that exercises client-to-backoffice reservation and payment propagation through the live Docker stack without joining the default blocking suites.
 - `expanded-browser-smoke` widens coverage with Firefox, WebKit, and mobile Chromium/browser projects.
 - `preview-smoke` validates the preview stack with `vite preview`.
 - `load-tests` runs the Locust campaign on nightly/manual/full-run executions, validates the generated metrics, and stores the results under `artifacts/load-tests`.
-- `real-device-matrix` remains a non-blocking preflight until a real provider profile is configured.
+- `real-device-matrix` remains a non-blocking preflight until a real provider profile is configured, but it already exposes provider-agnostic environment hooks for iPhone Safari and Android Chrome style capability adapters.
 
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.

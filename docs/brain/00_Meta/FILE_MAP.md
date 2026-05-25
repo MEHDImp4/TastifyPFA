@@ -17,9 +17,9 @@ tastify-pfa/
 │   │   │   ├── urls.py           # API routes + OpenAPI/Swagger/ReDoc endpoints
 │   │   │   ├── asgi.py            # Daphne entry — ProtocolTypeRouter
 │   │   │   └── wsgi.py
-│   │   ├── core/                  # Root config app, Channels middleware/consumers/helpers/tests (incl. API docs smoke tests)
+│   │   ├── core/                  # Root config app, Channels middleware/consumers/helpers/tests, and transactional notification dispatch
 │   │   ├── apps/                  # Domain apps
-│   │   │   ├── users/             # Custom User model, Auth (Phase 2 & 3)
+│   │   │   ├── users/             # Custom User model, auth, and signed password-reset token flows
 │   │   │   ├── menu/              # Categories & Dishes (Phase 4+)
 │   │   │   ├── tables/            # Table model, API, and seed data
 │   │   │   ├── reservations/      # Reservation domain
@@ -53,11 +53,12 @@ tastify-pfa/
 │           ├── src/store/         # Zustand stores (including configStore.ts)
 │           ├── src/components/    # Shared UI/auth/branding primitives
 │           ├── src/layouts/       # PublicLayout (Dynamic branding)
-│           ├── tests/e2e/         # Playwright coverage for auth, catalog, reservations, checkout, account, loyalty, contact, payment, quality, accessibility, responsive, and browser-matrix journeys
+│           ├── tests/e2e/         # Playwright coverage for auth, reset password, catalog, reservations, checkout, account, loyalty, contact, payment, cross-app realism, quality, accessibility, responsive, and browser-matrix journeys
 │           └── src/pages/
 │               ├── Home/          # Bento-Command Landing (Horizontal Scroll)
 │               ├── Menu/          # Cinematic Catalog
-│               └── Reservations/  # Multi-step booking wizard
+│               ├── Reservations/  # Multi-step booking wizard
+│               └── auth/          # Login, forgot-password, and reset-password flows
 ├── docs/                          # Obsidian Brain
 │   ├── brain/                     # Knowledge base
 │   └── cahier_de_charge_tastify.md
@@ -70,7 +71,7 @@ tastify-pfa/
 │   ├── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
 │   ├── locustfile.py              # Locust scenarios for auth, recommendations, reservations, payments, and analytics load checks
 │   └── testing/
-│       ├── run-suite.mjs          # Root QA orchestrator for lint/build/unit/integration/E2E/load/preview flows
+│       ├── run-suite.mjs          # Root QA orchestrator for lint/build/unit/integration/E2E/load/preview/cross-app/real-device flows
 │       ├── check-load-report.mjs  # Validates Locust p95/avg/error-rate/request-count thresholds
 │       ├── check-pip-audit.mjs    # Fails CI when pip-audit findings exceed the approved allowlist
 │       └── pip-audit-allowlist.json # Temporary backend Python CVE exceptions with explicit scope

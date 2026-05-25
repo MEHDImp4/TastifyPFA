@@ -1,3 +1,28 @@
+## [2026-05-25] - 16:42
+### Added
+- Added a full client password-reset product slice with signed short-lived reset tokens, dedicated request/validation/confirmation endpoints, new `ForgotPassword` and `ResetPassword` portal screens, and deterministic backend + Playwright coverage for invalid, expired, reused, and successful reset flows.
+- Added centralized transactional notification dispatch in `app/backend/core/notifications.py` plus backend tests for reset-password, reservation-confirmation, and payment-confirmation email contracts using local in-memory or console mail backends.
+- Added `client.cross-app.spec.ts` and shared cross-app browser fixtures so Dockerized low-mock realism now covers live reservation propagation from client to backoffice and QR payment settlement reflected on the staff side.
+
+### Changed
+- Extended the root QA runner and GitHub Actions workflow with a dedicated `npm run test:e2e:cross-app` slice and a provider-agnostic real-device preflight driven by `PLAYWRIGHT_REAL_DEVICE_PROVIDER`, `REAL_DEVICE_USERNAME`, `REAL_DEVICE_ACCESS_KEY`, `REAL_DEVICE_PROJECT`, and `REAL_DEVICE_BUILD`.
+- Hardened browser validation so transactional email flows run against local mail backends during Docker and CI execution, and kept cross-app realism outside the default client suite unless explicitly enabled.
+- Updated `README.md`, `TESTING.md`, `docs/brain/00_Meta/FILE_MAP.md`, and `docs/brain/03_Architecture/QUIRKS.md` so the documented QA contract now includes reset password, transactional emails, cross-app realism, and the current real-device posture.
+
+### Validation
+- `docker compose exec -T backend python manage.py check`
+- `docker compose exec -T backend python manage.py makemigrations --check --dry-run`
+- `docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q apps/reservations/tests/test_api.py apps/users/tests/test_password_reset.py apps/reservations/tests/test_transactional_email.py apps/paiements/tests/test_transactional_email.py`
+- `npm run test:integration`
+- `node scripts/testing/run-suite.mjs e2e:client`
+- `node scripts/testing/run-suite.mjs e2e:cross-app`
+- `npm run test:e2e`
+- `npm --prefix app/frontend/backoffice-app run build`
+- `npm --prefix app/frontend/client-app run build`
+
+### Commit
+- `3e0abef` `Add reset password and cross-app realism`
+
 ## [2026-05-24] - 15:03
 ### Added
 - Added `docker-compose.ci.yml` with a Dockerized Locust `load-tester` service and `docker-compose.preview.yml` to validate both SPAs through `vite preview` instead of only dev servers.
