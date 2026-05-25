@@ -37,7 +37,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setError(null);
     if (!username || !password) {
-      setError('IDENTIFIER_REQUIRED');
+      setError('IDENTIFIANT_REQUIS');
       return;
     }
     setIsLoading(true);
@@ -45,12 +45,12 @@ export const Login: React.FC = () => {
       const response = await api.post('/users/login/', { username, password });
       const { access, role, username: resUsername } = response.data;
       setAuth(access, role, resUsername);
-      toast.success('ACCESS_GRANTED');
+      toast.success('ACCÈS_AUTORISÉ');
       const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'ACCESS_DENIED' : 'SYSTEM_ERROR');
-      toast.error('AUTHENTICATION_FAILURE');
+      setError(err.response?.status === 401 ? 'ACCÈS_REFUSÉ' : 'ERREUR_SYSTÈME');
+      toast.error('ÉCHEC_D_AUTHENTIFICATION');
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +73,7 @@ export const Login: React.FC = () => {
                <Terminal className="w-8 h-8 text-primary relative z-10" strokeWidth={1.5} />
             </div>
             <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Tastify Staff OS</h1>
-            <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-60">Command Center Login</p>
+            <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-60">Connexion Centre de Commande</p>
         </motion.div>
 
         {/* Command Card */}
@@ -91,7 +91,7 @@ export const Login: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-3">
-              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Operator ID</label>
+              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">ID Opérateur</label>
               <div className="relative group">
                 <input 
                   type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
@@ -103,7 +103,7 @@ export const Login: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Access Passkey</label>
+              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Code d'Accès</label>
               <div className="relative group">
                 <input 
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
@@ -114,8 +114,8 @@ export const Login: React.FC = () => {
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide access passkey' : 'Show access passkey'}
-                  title={showPassword ? 'Hide access passkey' : 'Show access passkey'}
+                  aria-label={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
+                  title={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
                   data-testid="login-password-visibility"
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/40 hover:text-primary transition-colors"
                 >
@@ -132,7 +132,7 @@ export const Login: React.FC = () => {
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                 <>
-                  <span>Authenticate</span>
+                  <span>S'authentifier</span>
                   <Fingerprint className="w-5 h-5 text-on-primary/60 group-hover:text-on-primary transition-colors" />
                 </>
               )}
@@ -140,18 +140,18 @@ export const Login: React.FC = () => {
           </form>
 
           <div className="mt-10 text-center">
-             <button className="font-sans text-[10px] font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Protocol Recovery / Lost ID?</button>
+             <button className="font-sans text-[10px] font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Récupération de Protocole / ID Perdu ?</button>
           </div>
         </div>
 
         {/* System info tags */}
         <motion.div variants={itemVariants} className="mt-12 flex flex-col items-center gap-2">
             <div className="flex items-center gap-3 text-on-surface-variant/30 font-sans text-[9px] font-black uppercase tracking-[0.4em]">
-               <span>Authorized Personnel Only</span>
+               <span>Personnel Autorisé Uniquement</span>
                <div className="w-1 h-1 rounded-full bg-outline-variant/30" />
-               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> End-to-End Encrypted</span>
+               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> Chiffrement de Bout en Bout</span>
             </div>
-            <span className="font-mono text-[8px] text-on-surface-variant/20 uppercase tracking-widest mt-2">Node v4.2.1 • Tastify PFA</span>
+            <span className="font-mono text-[8px] text-on-surface-variant/20 uppercase tracking-widest mt-2">Nœud v4.2.1 • Tastify PFA</span>
         </motion.div>
       </motion.div>
     </div>

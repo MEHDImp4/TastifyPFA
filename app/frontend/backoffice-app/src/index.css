@@ -79,20 +79,6 @@
     @apply tracking-tight font-bold;
   }
 
-  /* Absolute Visibility Mandate: Hard Outlines and 100% Opacity */
-  .tonal-card {
-    @apply rounded-xl border border-outline-variant/30 bg-surface-container-low shadow-none;
-  }
-
-  .double-bezel {
-    @apply rounded-xl border border-outline/20 bg-surface-container relative overflow-hidden;
-  }
-
-  .double-bezel::before {
-    content: '';
-    @apply absolute inset-0 rounded-[inherit] border border-white/5 pointer-events-none z-0;
-  }
-
   /* Typography scale utility-like classes */
   .text-display-lg {
     font-family: var(--font-serif);
@@ -132,6 +118,23 @@
   textarea,
   label {
     font-family: var(--font-sans);
+  }
+
+  select {
+    @apply appearance-none bg-surface-container border border-outline-variant rounded-lg px-4 py-2 font-sans font-bold text-on-surface outline-none transition-all cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffb785' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+
+  select:focus {
+    @apply border-primary ring-2 ring-primary/20 bg-surface-container-high;
+  }
+
+  select option {
+    @apply bg-surface-container-high text-on-surface py-2;
   }
 
   /* Compact Scrollbar */

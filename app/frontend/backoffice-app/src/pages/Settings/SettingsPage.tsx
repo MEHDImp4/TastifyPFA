@@ -69,7 +69,7 @@ export const SettingsPage: React.FC = () => {
   };
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
-  if (!config) return <div className="p-10 text-center font-sans text-error">CRITICAL: UNAVAILABLE.</div>;
+  if (!config) return <div className="p-10 text-center font-sans text-error">CRITIQUE : INDISPONIBLE.</div>;
 
   return (
     <div className="h-full flex flex-col -m-4 bg-surface-main overflow-hidden font-body selection:bg-primary/20">
@@ -77,13 +77,13 @@ export const SettingsPage: React.FC = () => {
       {/* Dynamic Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">System Settings</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Paramètres Système</h1>
           <h2 className="sr-only">Configuration</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Global parameters and defaults</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Paramètres globaux et valeurs par défaut</p>
         </div>
         <div className="flex gap-unit-md items-center">
           <button type="button" className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <RotateCcw className="w-3.5 h-3.5" /> Discard
+            <RotateCcw className="w-3.5 h-3.5" /> Annuler
           </button>
           <button 
             onClick={handleSave}
@@ -91,7 +91,7 @@ export const SettingsPage: React.FC = () => {
             className="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all border border-primary"
           >
             {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            <span>Deploy Changes</span>
+            <span>Déployer Modifications</span>
           </button>
         </div>
       </header>
@@ -106,12 +106,12 @@ export const SettingsPage: React.FC = () => {
             <section className="bg-surface-container border border-outline-variant rounded p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-8 border-b border-outline-variant/30 pb-3">
                 <Building2 className="w-4.5 h-4.5 text-primary" />
-                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Entity Details</h2>
+                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Détails de l'Entité</h2>
               </div>
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="col-span-2 space-y-unit-xs">
-                  <label htmlFor="settings-nom" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Trading Name</label>
+                  <label htmlFor="settings-nom" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Nom Commercial</label>
                   <input 
                     id="settings-nom" type="text" name="nom" value={config.nom} onChange={handleInputChange}
                     className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase"
@@ -119,7 +119,7 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 md:col-span-1 space-y-unit-xs">
-                  <label htmlFor="settings-registration" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Registration No.</label>
+                  <label htmlFor="settings-registration" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">N° d'Enregistrement</label>
                   <input 
                     id="settings-registration" type="text" value="REG-8839-AB" disabled
                     className="w-full h-12 px-4 bg-surface-container-low border border-outline-variant rounded font-mono font-bold text-on-surface-variant outline-none"
@@ -127,7 +127,7 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 md:col-span-1 space-y-unit-xs">
-                  <label htmlFor="settings-telephone" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Primary Contact</label>
+                  <label htmlFor="settings-telephone" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Contact Principal</label>
                   <input 
                     id="settings-telephone" type="text" name="telephone" value={config.telephone || ''} onChange={handleInputChange}
                     className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
@@ -135,7 +135,7 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 space-y-unit-xs">
-                  <label htmlFor="settings-description" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Restaurant Description</label>
+                  <label htmlFor="settings-description" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Description du Restaurant</label>
                   <textarea 
                     id="settings-description" name="description" value={config.description || ''} onChange={handleInputChange}
                     className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
@@ -144,7 +144,7 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="col-span-2 space-y-unit-xs">
-                  <label htmlFor="settings-adresse" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Physical Address</label>
+                  <label htmlFor="settings-adresse" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Adresse Physique</label>
                   <textarea 
                     id="settings-adresse" name="adresse" value={config.adresse || ''} onChange={handleInputChange}
                     className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
@@ -158,12 +158,12 @@ export const SettingsPage: React.FC = () => {
             <section className="bg-surface-container border border-outline-variant rounded p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-8 border-b border-outline-variant/30 pb-3">
                 <DollarSign className="w-4.5 h-4.5 text-primary" />
-                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Financial Parameters</h2>
+                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Paramètres Financiers</h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                  <div className="space-y-unit-xs">
-                    <label htmlFor="settings-tax" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">State Tax (%)</label>
+                    <label htmlFor="settings-tax" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Taxe d'État (%)</label>
                     <div className="relative">
                       <input 
                         id="settings-tax" type="number" step="0.001" value="8.875" disabled
@@ -173,7 +173,7 @@ export const SettingsPage: React.FC = () => {
                     </div>
                  </div>
                  <div className="space-y-unit-xs">
-                    <label htmlFor="settings-gratuity-threshold" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Auto-Gratuity Threshold</label>
+                    <label htmlFor="settings-gratuity-threshold" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Seuil Pourboire Auto</label>
                     <div className="relative">
                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 font-bold">PAX</span>
                        <input 
@@ -183,7 +183,7 @@ export const SettingsPage: React.FC = () => {
                     </div>
                  </div>
                  <div className="space-y-unit-xs">
-                    <label htmlFor="settings-default-gratuity" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Default Gratuity (%)</label>
+                    <label htmlFor="settings-default-gratuity" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Pourboire par Défaut (%)</label>
                     <div className="relative">
                       <input 
                         id="settings-default-gratuity" type="number" value="20" disabled
@@ -204,26 +204,26 @@ export const SettingsPage: React.FC = () => {
               <div className="absolute inset-0 bg-primary/5 pointer-events-none" style={{ clipPath: 'polygon(100% 0, 100% 30%, 50% 100%, 0 100%, 0 0)' }} />
               <div className="flex items-center gap-3 mb-8 border-b border-outline-variant/30 pb-3 relative z-10">
                 <Timer className="w-4.5 h-4.5 text-primary" />
-                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Throughput Targets</h2>
+                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Objectifs de Débit</h2>
               </div>
               
               <div className="space-y-8 relative z-10">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <label htmlFor="settings-prep-target" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Avg Prep Target</label>
+                    <label htmlFor="settings-prep-target" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Objectif Prép. Moyen</label>
                     <span className="font-sans text-[12px] font-black text-primary uppercase">18 Minutes</span>
                   </div>
-                  <input id="settings-prep-target" aria-describedby="settings-prep-target-range" aria-label="Average preparation target" title="Average preparation target" type="range" min="5" max="45" value="18" className="w-full accent-primary h-1 bg-surface-container-highest rounded-full cursor-pointer" />
+                  <input id="settings-prep-target" aria-describedby="settings-prep-target-range" aria-label="Objectif de préparation moyen" title="Objectif de préparation moyen" type="range" min="5" max="45" value="18" className="w-full accent-primary h-1 bg-surface-container-highest rounded-full cursor-pointer" />
                   <div id="settings-prep-target-range" className="flex justify-between font-mono text-[9px] text-on-surface-variant/90">
                     <span>5M</span>
                     <span>45M</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-surface-main border border-outline-variant rounded-lg" role="switch" aria-checked="true" aria-label="Course auto-fire">
+                <div className="flex items-center justify-between p-4 bg-surface-main border border-outline-variant rounded-lg" role="switch" aria-checked="true" aria-label="Envoi auto des plats">
                   <div>
-                    <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-tight">Course Auto-Fire</p>
-                    <p className="font-sans text-[9px] text-on-surface-variant/90 uppercase mt-1">Fire mains when apps cleared</p>
+                    <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-tight">Envoi Auto des Plats</p>
+                    <p className="font-sans text-[9px] text-on-surface-variant/90 uppercase mt-1">Envoyer les plats principaux après les entrées</p>
                   </div>
                   <div className="w-10 h-5 bg-primary rounded-full relative border border-primary">
                     <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-white rounded-full" />
@@ -236,12 +236,12 @@ export const SettingsPage: React.FC = () => {
             <section className="bg-surface-container border border-outline-variant rounded p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-8 border-b border-outline-variant/30 pb-3">
                 <Palette className="w-4.5 h-4.5 text-primary" />
-                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Brand Identity</h2>
+                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Identité de Marque</h2>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <label htmlFor="settings-logo" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Guest Receipt Logo</label>
+                  <label htmlFor="settings-logo" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Logo Ticket Client</label>
                   <div className="relative group aspect-video bg-surface-main border-2 border-dashed border-outline-variant rounded flex flex-col items-center justify-center transition-all hover:border-primary overflow-hidden">
                     {logoPreview ? (
                       <>
@@ -251,15 +251,15 @@ export const SettingsPage: React.FC = () => {
                     ) : (
                        <>
                         <CloudUpload className="w-8 h-8 text-on-surface-variant/20 mb-2" />
-                        <span className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Select Monochrome PNG</span>
+                        <span className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Sélectionner PNG Monochrome</span>
                        </>
                     )}
-                    <input id="settings-logo" aria-label="Upload guest receipt logo" title="Upload guest receipt logo" type="file" onChange={handleLogoChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
+                    <input id="settings-logo" aria-label="Télécharger le logo du ticket client" title="Télécharger le logo du ticket client" type="file" onChange={handleLogoChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">POS Accent Color</label>
+                  <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Couleur d'Accentuation TPV</label>
                   <div className="flex items-center gap-3 bg-surface-main border border-outline-variant rounded p-1.5 pr-4">
                     <div className="w-6 h-6 rounded bg-primary shadow-sm" />
                     <span className="font-mono text-[11px] font-bold text-on-surface">#FFB785</span>
@@ -273,4 +273,3 @@ export const SettingsPage: React.FC = () => {
     </div>
   );
 };
-

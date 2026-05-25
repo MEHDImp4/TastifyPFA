@@ -56,13 +56,15 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and user.role in ['GERANT', 'CUISINIER']:
-            qs = Plat.objects.all()
-        else:
-            # On ne montre que les plats actifs et en stock aux clients
-            qs = Plat.objects.active().filter(est_disponible=True)
+        # We only show active plats in the main list. 
+        # Inactive plats are kept in DB for order history but hidden from the menu management.
+        qs = Plat.objects.active()
+        
+        if not (user.is_authenticated and user.role in ['GERANT', 'CUISINIER']):
+            # Clients only see available plats
+            qs = qs.filter(est_disponible=True)
             
-        # Filtre optionnel : ?categorie=ID pour n'avoir que les plats d'une catégorie
+        # Filtre optionnel : ?categorie=ID
         categorie_id = self.request.query_params.get('categorie')
         if categorie_id:
             qs = qs.filter(categorie_id=categorie_id)

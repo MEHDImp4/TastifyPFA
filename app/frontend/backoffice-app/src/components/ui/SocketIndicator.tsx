@@ -10,34 +10,34 @@ export const SocketIndicator: React.FC = () => {
       case 'connected':
         return {
           icon: Wifi,
-          color: 'text-secondary',
-          label: 'LIVE SIGNAL',
+          color: 'text-primary',
+          label: 'SIGNAL DIRECT',
           pulse: false,
-          bg: 'bg-background'
+          bg: 'bg-primary/5 border-primary/20'
         };
       case 'connecting':
         return {
           icon: Loader2,
-          color: 'text-primary',
-          label: 'SYNCING...',
+          color: 'text-tertiary',
+          label: 'SYNCHRONISATION...',
           pulse: true,
-          bg: 'bg-surface-container'
+          bg: 'bg-surface-container-high border-outline-variant/30'
         };
       case 'error':
         return {
           icon: AlertCircle,
           color: 'text-error',
-          label: 'SIGNAL ERR',
+          label: 'ERREUR RÉSEAU',
           pulse: false,
-          bg: 'bg-error-container'
+          bg: 'bg-error/5 border-error/20'
         };
       default:
         return {
           icon: WifiOff,
-          color: 'text-on-surface/40',
-          label: 'OFFLINE',
+          color: 'text-on-surface/30',
+          label: 'HORS LIGNE',
           pulse: false,
-          bg: 'bg-surface-dim'
+          bg: 'bg-surface-container-lowest border-outline-variant/10'
         };
     }
   };
@@ -46,17 +46,11 @@ export const SocketIndicator: React.FC = () => {
   const Icon = config.icon;
 
   return (
-    <div className={`flex items-center gap-3 px-4 py-2 border-2 border-on-surface shadow-[4px_4px_0px_#301400] transition-all duration-300 ${config.bg}`}>
-      <Icon strokeWidth={2.5} className={`w-4 h-4 ${config.color} ${config.pulse ? 'animate-spin' : ''}`} />
-      <span className={`text-ui-label-bold text-[9px] ${config.color}`}>
+    <div className={`flex items-center gap-2.5 px-3 py-1.5 border rounded-full transition-all duration-300 ${config.bg}`}>
+      <Icon strokeWidth={2.5} className={`w-3.5 h-3.5 ${config.color} ${config.pulse ? 'animate-spin' : ''}`} />
+      <span className={`font-sans font-black text-[9px] uppercase tracking-[0.2em] ${config.color}`}>
         {config.label}
       </span>
-      {status === 'connected' && (
-        <span className="flex h-2 w-2 relative">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-        </span>
-      )}
     </div>
   );
 };

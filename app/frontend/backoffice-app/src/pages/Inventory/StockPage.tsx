@@ -100,29 +100,29 @@ export const StockPage: React.FC = () => {
       {/* Dynamic Header Area */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Inventory & Logistics</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Inventaire & Logistique</h1>
           <h2 className="sr-only">Stock</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Real-time supply chain monitoring</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Suivi de la chaîne d'approvisionnement en temps réel</p>
         </div>
         <div className="flex gap-unit-md items-center">
           <div className="relative group mr-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input 
               type="text"
-              placeholder="RESOURCE LOOKUP..."
+              placeholder="RECHERCHE RESSOURCE..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-56 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
             />
           </div>
           <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <Download className="w-3.5 h-3.5" /> Export CSV
+            <Download className="w-3.5 h-3.5" /> Exporter CSV
           </button>
           <button 
             onClick={() => handleOpenEditor()}
             className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
           >
-            <Plus className="w-4 h-4" /> Add Item
+            <Plus className="w-4 h-4" /> Ajouter Article
           </button>
         </div>
       </header>
@@ -134,12 +134,12 @@ export const StockPage: React.FC = () => {
           {/* Total Units */}
           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Active Units</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Unités Actives Totales</span>
               <Warehouse className="w-5 h-5 text-on-surface-variant/30 group-hover:text-primary transition-colors" />
             </div>
             <div className="mt-6 z-10">
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{ingredients.length}</span>
-              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Across primary storage</span>
+              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Dans l'entrepôt principal</span>
             </div>
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all" />
           </div>
@@ -147,12 +147,12 @@ export const StockPage: React.FC = () => {
           {/* Low Stock Alerts */}
           <div className={`bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group ${lowStockItems.length > 0 ? 'ring-2 ring-error/20' : ''}`}>
              <div className="flex justify-between items-start z-10">
-              <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${lowStockItems.length > 0 ? 'text-error' : 'text-on-surface-variant'}`}>Stock Depletion Alerts</span>
+              <span className={`font-sans text-[10px] font-black uppercase tracking-widest ${lowStockItems.length > 0 ? 'text-error' : 'text-on-surface-variant'}`}>Alertes Rupture de Stock</span>
               <TrendingDown className={`w-5 h-5 ${lowStockItems.length > 0 ? 'text-error animate-pulse' : 'text-on-surface-variant/30'}`} />
             </div>
             <div className="mt-6 z-10">
               <span className={`font-serif text-3xl font-black tabular-nums ${lowStockItems.length > 0 ? 'text-error' : 'text-on-surface'}`}>{lowStockItems.length}</span>
-              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Requiring immediate restock</span>
+              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Nécessite réappro. immédiat</span>
             </div>
             {lowStockItems.length > 0 && <div className="absolute top-0 right-0 w-full h-1 bg-error/30" />}
           </div>
@@ -160,12 +160,12 @@ export const StockPage: React.FC = () => {
           {/* Value Approximation */}
           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Est. Inventory Value</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Valeur Estimée Stock</span>
               <History className="w-5 h-5 text-on-surface-variant/30" />
             </div>
             <div className="mt-6 z-10">
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">42,850 DH</span>
-              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Synced 2m ago</span>
+              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Mis à jour il y a 2m</span>
             </div>
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-success/5 rounded-full blur-2xl group-hover:bg-success/10 transition-all" />
           </div>
@@ -177,13 +177,13 @@ export const StockPage: React.FC = () => {
           <div className="p-unit-sm border-b border-outline-variant bg-surface-container flex items-center justify-between">
             <div className="flex gap-2">
               <button className="px-3 py-1.5 bg-surface-container-high border border-outline-variant rounded text-on-surface font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
-                 Metric Group <ChevronDown className="w-3 h-3" />
+                 Groupe de Métriques <ChevronDown className="w-3 h-3" />
               </button>
               <button className="px-3 py-1.5 bg-surface-container-high border border-outline-variant rounded text-on-surface font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
-                 Criticality <ChevronDown className="w-3 h-3" />
+                 Criticité <ChevronDown className="w-3 h-3" />
               </button>
             </div>
-            <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] mr-2">Showing {filteredIngredients.length} index points</span>
+            <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] mr-2">Affichage de {filteredIngredients.length} points d'index</span>
           </div>
 
           {/* Table */}
@@ -191,12 +191,12 @@ export const StockPage: React.FC = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-surface-container-lowest border-b border-outline-variant">
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Resource Identifier</th>
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Unit</th>
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Quantity</th>
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Threshold</th>
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Operational Status</th>
-                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-right">Operations</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Identifiant Ressource</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Unité</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Quantité</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-center">Seuil</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Statut Opérationnel</th>
+                  <th className="py-4 px-6 font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] text-right">Opérations</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/30 font-sans text-[13px] font-bold text-on-surface">
@@ -220,12 +220,12 @@ export const StockPage: React.FC = () => {
                         {isLow ? (
                           <div className="flex items-center gap-2 text-error font-black text-[10px] uppercase tracking-wider animate-pulse">
                             <AlertTriangle className="w-3.5 h-3.5" />
-                            <span>CRITICAL DEPLETION</span>
+                            <span>RUPTURE CRITIQUE</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 text-success font-black text-[10px] uppercase tracking-wider opacity-60">
                              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                             <span>NOMINAL LEVEL</span>
+                             <span>NIVEAU NOMINAL</span>
                           </div>
                         )}
                       </td>
@@ -261,8 +261,8 @@ export const StockPage: React.FC = () => {
             >
               <div className="flex-none flex items-center justify-between p-6 border-b border-outline-variant bg-surface-main">
                 <div>
-                  <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">{editingItem ? 'Edit Resource' : 'New Resource'}</h2>
-                  <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mt-1">Resource Metric Configuration</p>
+                  <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">{editingItem ? 'Modifier Ressource' : 'Nouvelle Ressource'}</h2>
+                  <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mt-1">Configuration Métrique Ressource</p>
                 </div>
                 <button onClick={() => setIsEditorOpen(false)} className="p-2 rounded hover:bg-surface-container-high transition-colors">
                   <X className="w-6 h-6" />
@@ -271,7 +271,7 @@ export const StockPage: React.FC = () => {
 
               <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-unit-lg">
                 <div className="space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Resource Nomenclature</label>
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Nomenclature Ressource</label>
                   <input 
                     type="text" required value={nom} onChange={(e) => setNom(e.target.value)}
                     className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase"
@@ -280,18 +280,18 @@ export const StockPage: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-unit-md">
                    <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Metric Unit</label>
+                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Unité Métrique</label>
                       <select 
                         value={unite} onChange={(e) => setUnite(e.target.value as any)}
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                       >
-                        <option value="g">GRAMS (G)</option>
-                        <option value="ml">MILLILITERS (ML)</option>
-                        <option value="pcs">PIECES (PCS)</option>
+                        <option value="g">GRAMMES (G)</option>
+                        <option value="ml">MILLILITRES (ML)</option>
+                        <option value="pcs">PIÈCES (PCS)</option>
                       </select>
                    </div>
                    <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Initial Balance</label>
+                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Solde Initial</label>
                       <input 
                         type="number" step="0.01" value={stock} onChange={(e) => setStock(e.target.value)}
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-primary outline-none transition-all tabular-nums"
@@ -300,7 +300,7 @@ export const StockPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-unit-xs">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Critical Alert Threshold</label>
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Seuil d'Alerte Critique</label>
                   <div className="relative">
                     <AlertTriangle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-error opacity-40" />
                     <input 
@@ -308,17 +308,17 @@ export const StockPage: React.FC = () => {
                       className="w-full h-12 pl-10 pr-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-error outline-none transition-all tabular-nums"
                     />
                   </div>
-                  <p className="font-sans text-[9px] text-on-surface-variant uppercase mt-2 tracking-wider">System will flag the resource when balance drops below this point.</p>
+                  <p className="font-sans text-[9px] text-on-surface-variant uppercase mt-2 tracking-wider">Le système signalera la ressource lorsque le solde tombera en dessous de ce point.</p>
                 </div>
               </form>
 
               <div className="flex-none p-6 border-t border-outline-variant bg-surface-main flex gap-4">
-                <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Discard</button>
+                <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Annuler</button>
                 <button 
                   onClick={handleSubmit} disabled={isSaving}
                   className="flex-[2] h-14 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 border border-primary"
                 >
-                  {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Commit Record</span></>}
+                  {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Enregistrer</span></>}
                 </button>
               </div>
             </motion.div>

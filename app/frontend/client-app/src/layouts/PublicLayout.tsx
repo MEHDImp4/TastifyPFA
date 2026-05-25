@@ -44,9 +44,9 @@ export const PublicLayout: React.FC = () => {
 
             <nav className="hidden lg:flex items-center gap-10">
               {[
-                { to: '/menu', label: 'THE CATALOG' },
-                { to: '/reservations', label: 'BOOKINGS' },
-                { to: '/loyalty', label: 'ECHELON' },
+                { to: '/menu', label: 'LE CATALOGUE' },
+                { to: '/reservations', label: 'RÉSERVATIONS' },
+                { to: '/loyalty', label: 'ÉCHELON' },
                 { to: '/contact', label: 'CONCIERGE' },
               ].map((link) => (
                 <Link 
@@ -74,17 +74,17 @@ export const PublicLayout: React.FC = () => {
                   to="/login"
                   className="inline-flex rounded-full border border-outline-variant px-4 py-2 font-sans text-[9px] font-black uppercase tracking-[0.25em] text-on-surface transition-colors hover:border-primary hover:text-primary"
                 >
-                  Log In
+                  Connexion
                 </Link>
               </div>
             )}
 
             <Link 
                 to="/checkout" 
-                aria-label={`Open checkout with ${items.length} item${items.length === 1 ? '' : 's'}`}
+                aria-label={`Ouvrir le panier avec ${items.length} article${items.length === 1 ? '' : 's'}`}
                 className="relative group p-2 transition-all active:scale-90"
             >
-                <span className="sr-only">{`Open checkout with ${items.length} item${items.length === 1 ? '' : 's'}`}</span>
+                <span className="sr-only">{`Ouvrir le panier avec ${items.length} article${items.length === 1 ? '' : 's'}`}</span>
                 <ShoppingBag className="w-5 h-5 text-on-surface group-hover:text-primary transition-colors" strokeWidth={1.5} />
                 {items.length > 0 && (
                     <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-on-primary text-[8px] font-black rounded-full flex items-center justify-center shadow-lg">
@@ -98,14 +98,14 @@ export const PublicLayout: React.FC = () => {
                 <div className="flex items-center gap-5 pl-8 border-l border-outline-variant/30">
                   <Link to="/account" className="flex flex-col items-end group leading-none">
                     <p className="font-sans text-[11px] font-black text-on-surface uppercase tracking-wider group-hover:text-primary transition-colors">{username}</p>
-                    <p className="font-sans text-[8px] font-bold text-on-surface-variant tracking-[0.2em] uppercase mt-1">Echelon Pass</p>
+                    <p className="font-sans text-[8px] font-bold text-on-surface-variant tracking-[0.2em] uppercase mt-1">Pass Échelon</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    aria-label="Sign out"
+                    aria-label="Se déconnecter"
                     className="p-2 text-on-surface-variant hover:text-error transition-colors active:scale-75"
                   >
-                    <span className="sr-only">Sign out</span>
+                    <span className="sr-only">Se déconnecter</span>
                     <LogOut className="w-4 h-4" strokeWidth={2.5} />
                   </button>
                 </div>
@@ -114,7 +114,7 @@ export const PublicLayout: React.FC = () => {
                   to="/login"
                   className="px-8 py-2.5 bg-primary text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20 border border-primary"
                 >
-                  Authenticate
+                  S'authentifier
                 </Link>
               )}
             </div>
@@ -123,10 +123,10 @@ export const PublicLayout: React.FC = () => {
               onClick={toggleMenu}
               aria-controls="mobile-navigation"
               aria-expanded={isMenuOpen}
-              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               className="lg:hidden p-3 bg-surface-container-high border border-outline-variant rounded-xl hover:bg-surface-container-highest transition-all"
             >
-              <span className="sr-only">{isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}</span>
+              <span className="sr-only">{isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}</span>
               {isMenuOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5 text-on-surface" />}
             </button>
           </div>
@@ -148,7 +148,7 @@ export const PublicLayout: React.FC = () => {
               <div className="space-y-10 relative z-10">
                 <div className="rounded-2xl border border-outline-variant bg-surface-container p-4">
                   <p className="font-sans text-[10px] font-black uppercase tracking-[0.28em] text-on-surface-variant">
-                    Guest navigation
+                    Navigation Invité
                   </p>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <Link
@@ -163,14 +163,14 @@ export const PublicLayout: React.FC = () => {
                       onClick={() => setIsMenuOpen(false)}
                       className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
                     >
-                      Book
+                      Réserver
                     </Link>
                     <Link
                       to="/loyalty"
                       onClick={() => setIsMenuOpen(false)}
                       className="rounded-xl border border-outline-variant bg-surface px-4 py-3 text-center font-sans text-[10px] font-black uppercase tracking-[0.22em] text-on-surface transition-colors hover:border-primary hover:text-primary"
                     >
-                      Loyalty
+                      Fidélité
                     </Link>
                     <Link
                       to="/contact"
@@ -183,25 +183,25 @@ export const PublicLayout: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-5">
-                  <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">The Catalog</Link>
-                  <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Bookings</Link>
-                  <Link to="/loyalty" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">The Echelon</Link>
+                  <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Le Catalogue</Link>
+                  <Link to="/reservations" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Réservations</Link>
+                  <Link to="/loyalty" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">L'Échelon</Link>
                   <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="font-serif text-4xl font-black italic text-on-surface hover:text-primary transition-colors tracking-tight">Concierge</Link>
                 </div>
               </div>
               <div className="pt-8 border-t border-outline-variant/30 space-y-6 relative z-10">
                 {isAuthenticated ? (
                   <div className="flex flex-col gap-6">
-                    <Link to="/account" onClick={() => setIsMenuOpen(false)} className="font-sans text-xl font-black text-on-surface uppercase tracking-widest">Guest Profile</Link>
-                    <button onClick={handleLogout} className="font-sans text-xl font-black text-error text-left uppercase tracking-widest">Terminate Session</button>
+                    <Link to="/account" onClick={() => setIsMenuOpen(false)} className="font-sans text-xl font-black text-on-surface uppercase tracking-widest">Profil Invité</Link>
+                    <button onClick={handleLogout} className="font-sans text-xl font-black text-error text-left uppercase tracking-widest">Terminer la Session</button>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     <p className="font-sans text-[10px] font-black uppercase tracking-[0.28em] text-on-surface-variant">
-                      Account access
+                      Accès au compte
                     </p>
                     <Link to="/login" onClick={() => setIsMenuOpen(false)} className="inline-block w-full py-5 bg-primary text-on-primary text-center font-sans text-xs font-black uppercase tracking-[0.35em] rounded-2xl shadow-2xl">
-                      Authenticate
+                      S'authentifier
                     </Link>
                   </div>
                 )}

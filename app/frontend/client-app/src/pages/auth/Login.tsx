@@ -24,7 +24,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     
     if (!username || !password) {
-      setError('IDENTIFIER_REQUIRED');
+      setError('IDENTIFIANT_REQUIS');
       return;
     }
 
@@ -36,16 +36,16 @@ export const Login: React.FC = () => {
       
       if (role !== 'CLIENT') {
           await api.post('/users/logout/');
-          setError("GUEST_ACCESS_ONLY");
+          setError("ACCÈS_CLIENT_UNIQUEMENT");
           setIsLoading(false);
           return;
       }
       
       setAuth(access, role, resUsername);
-      toast.success('AUTHENTICATION_SECURED');
+      toast.success('AUTHENTIFICATION_SÉCURISÉE');
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'INVALID_PROTOCOL' : 'SYSTEM_BREACH');
+      setError(err.response?.status === 401 ? 'PROTOCOLE_INVALIDE' : 'ERREUR_SYSTÈME');
       setIsLoading(false);
     }
   };
@@ -61,11 +61,11 @@ export const Login: React.FC = () => {
 
       <Link 
         to="/" 
-        aria-label="Return home"
+        aria-label="Retour à l'accueil"
         className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
-        Return
+        Retour
       </Link>
 
       <motion.div 
@@ -78,8 +78,8 @@ export const Login: React.FC = () => {
                 <Sparkles className="w-6 h-6" strokeWidth={1.5} />
              </div>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Welcome Back.</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">Secure Guest Authentication</p>
+          <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Bon retour.</h1>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">Authentification Client Sécurisée</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -101,14 +101,14 @@ export const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="w-full space-y-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="login-username-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Username</label>
+              <label htmlFor="login-username-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Nom d'utilisateur</label>
               <div className="relative group">
                 <input
                   id="login-username-input"
-                  aria-label="Username"
+                  aria-label="Nom d'utilisateur"
                   type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
-                  placeholder="GUEST_ID"
+                  placeholder="ID_GUEST"
                   data-testid="login-username"
                 />
               </div>
@@ -116,13 +116,13 @@ export const Login: React.FC = () => {
 
             <div className="space-y-2">
               <div className="flex justify-between items-center px-2">
-                 <label htmlFor="login-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Passkey</label>
-                 <Link to="/forgot-password" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Recovery?</Link>
+                 <label htmlFor="login-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Code d'accès</label>
+                 <Link to="/forgot-password" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Récupération ?</Link>
               </div>
               <div className="relative group">
                 <input
                   id="login-password-input"
-                  aria-label="Passkey"
+                  aria-label="Code d'accès"
                   type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
                   placeholder="••••••••"
@@ -140,7 +140,7 @@ export const Login: React.FC = () => {
              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
-                <span>Secure Entry</span>
+                <span>Entrée Sécurisée</span>
                 <Fingerprint className="w-5 h-5 text-on-background group-hover:text-on-background transition-colors" />
               </>
             )}
@@ -149,8 +149,8 @@ export const Login: React.FC = () => {
 
         <div className="pt-6 border-t border-outline-variant/30 w-full text-center">
           <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
-            New to the echelon? {' '}
-            <Link to="/register" className="text-primary hover:text-on-surface ml-2 transition-colors">Join Now</Link>
+            Nouveau chez Échelon ? {' '}
+            <Link to="/register" className="text-primary hover:text-on-surface ml-2 transition-colors">Rejoignez-nous</Link>
           </p>
         </div>
       </motion.div>

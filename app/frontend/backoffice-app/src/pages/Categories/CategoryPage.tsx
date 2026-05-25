@@ -88,33 +88,33 @@ export const CategoryPage: React.FC = () => {
     try {
       if (editingCategory) {
         await menuApi.updateCategory(editingCategory.id, formData);
-        toast.success('Category updated successfully');
+        toast.success('Catégorie mise à jour avec succès');
       } else {
         await menuApi.createCategory(formData);
-        toast.success('Category created successfully');
+        toast.success('Catégorie créée avec succès');
       }
       fetchCategories();
       setIsEditorOpen(false);
       setEditingCategory(null);
     } catch (err) {
-      toast.error('Failed to save category');
+      toast.error('Échec de l\'enregistrement de la catégorie');
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
       try {
         await menuApi.deleteCategory(id);
-        toast.success('Category deleted');
+        toast.success('Catégorie supprimée');
         fetchCategories();
         if (editingCategory?.id === id) {
            setEditingCategory(null);
            setIsEditorOpen(false);
         }
       } catch (err) {
-        toast.error('Deletion failed');
+        toast.error('Échec de la suppression');
       }
     }
   };
@@ -131,16 +131,16 @@ export const CategoryPage: React.FC = () => {
       {/* Top Controls Area */}
       <div className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Category Management</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Gestion des Catégories</h1>
           <h2 className="sr-only">Catégories</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Hierarchical menu structure configuration</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Configuration de la structure hiérarchique du menu</p>
         </div>
         <div className="flex gap-unit-md items-center">
            <div className="relative group mr-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input 
               type="text"
-              placeholder="FILTER INDEX..."
+              placeholder="FILTRER L'INDEX..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-48 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
@@ -150,14 +150,14 @@ export const CategoryPage: React.FC = () => {
             onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} // Discard
             className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> Discard
+            <RotateCcw className="w-3.5 h-3.5" /> Annuler
           </button>
           <button 
             onClick={startNewCategory}
             data-testid="category-create-button"
             className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
           >
-            <Plus className="w-4 h-4" /> New Category
+            <Plus className="w-4 h-4" /> Nouvelle Catégorie
           </button>
         </div>
       </div>
@@ -171,9 +171,9 @@ export const CategoryPage: React.FC = () => {
           <div className="flex-none px-6 py-3 border-b border-outline-variant bg-surface-container flex items-center text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
             <div className="w-8"></div>
             <div className="w-12"></div>
-            <div className="flex-1">Category Name</div>
-            <div className="w-24 text-center">Rank</div>
-            <div className="w-32 text-center">Status</div>
+            <div className="flex-1">Nom de la Catégorie</div>
+            <div className="w-24 text-center">Rang</div>
+            <div className="w-32 text-center">Statut</div>
             <div className="w-10"></div>
           </div>
 
@@ -217,7 +217,7 @@ export const CategoryPage: React.FC = () => {
                       {cat.nom}
                     </h3>
                     <p className="font-sans text-[10px] text-on-surface-variant truncate uppercase tracking-widest mt-0.5 opacity-60">
-                      {cat.description || 'No context logged'}
+                      {cat.description || 'Aucun contexte enregistré'}
                     </p>
                   </div>
 
@@ -241,8 +241,8 @@ export const CategoryPage: React.FC = () => {
                     <button
                       type="button"
                       data-testid={`category-edit-${cat.id}`}
-                      aria-label={`Edit category ${cat.nom}`}
-                      title={`Edit category ${cat.nom}`}
+                      aria-label={`Modifier la catégorie ${cat.nom}`}
+                      title={`Modifier la catégorie ${cat.nom}`}
                       className="p-1 hover:text-primary transition-colors"
                     >
                       <Edit2 className="w-4 h-4" />
@@ -250,8 +250,8 @@ export const CategoryPage: React.FC = () => {
                     <button
                       type="button"
                       data-testid={`category-delete-${cat.id}`}
-                      aria-label={`Delete category ${cat.nom}`}
-                      title={`Delete category ${cat.nom}`}
+                      aria-label={`Supprimer la catégorie ${cat.nom}`}
+                      title={`Supprimer la catégorie ${cat.nom}`}
                       onClick={(e) => { e.stopPropagation(); handleDelete(cat.id); }}
                       className="p-1 hover:text-error transition-colors"
                     >
@@ -278,16 +278,16 @@ export const CategoryPage: React.FC = () => {
                 <div className="flex-none flex items-center justify-between p-6 border-b border-outline-variant bg-surface-main">
                   <div>
                     <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">
-                      {editingCategory ? 'Edit Sector' : 'New Sector'}
+                      {editingCategory ? 'Modifier Secteur' : 'Nouveau Secteur'}
                     </h2>
-                    <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Metadata Configuration</p>
+                    <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Configuration des Métadonnées</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }}
                     data-testid="close-editor"
-                    aria-label="Close category editor"
-                    title="Close category editor"
+                    aria-label="Fermer l'éditeur de catégorie"
+                    title="Fermer l'éditeur de catégorie"
                     className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant"
                   >
                     <X className="w-6 h-6" />
@@ -297,7 +297,7 @@ export const CategoryPage: React.FC = () => {
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-unit-lg">
                   {/* Image Upload Area */}
                   <div className="space-y-unit-xs">
-                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Visual Identity</label>
+                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Identité Visuelle</label>
                     <div className="relative group aspect-video rounded border-2 border-dashed border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center overflow-hidden transition-all hover:border-primary">
                       {preview ? (
                          <>
@@ -305,17 +305,17 @@ export const CategoryPage: React.FC = () => {
                            src={preview}
                            data-testid="category-image-preview"
                            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700"
-                           alt="Preview"
+                           alt="Aperçu"
                          />
                           <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-background/40">
                              <CloudUpload className="w-8 h-8 text-primary mb-2" />
-                             <span className="font-sans text-[10px] font-black text-white uppercase tracking-widest">Replace File</span>
+                             <span className="font-sans text-[10px] font-black text-white uppercase tracking-widest">Remplacer Fichier</span>
                           </div>
                          </>
                       ) : (
                         <div className="flex flex-col items-center text-on-surface-variant/20 group-hover:text-primary transition-colors">
                           <CloudUpload className="w-10 h-10 mb-2 stroke-[1]" />
-                          <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Upload Asset</span>
+                          <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Charger Ressource</span>
                         </div>
                       )}
                       <input
@@ -330,7 +330,7 @@ export const CategoryPage: React.FC = () => {
                   {/* Fields */}
                   <div className="space-y-unit-md">
                     <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Sector Name</label>
+                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Nom du Secteur</label>
                       <input 
                         type="text"
                         required
@@ -342,19 +342,19 @@ export const CategoryPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Operations Memo</label>
+                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Mémo Opérationnel</label>
                       <textarea 
                         rows={3}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         data-testid="category-description-input"
                         className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20 resize-none"
-                        placeholder="EX: CORE DINNER MENU STARTERS..."
+                        placeholder="EX: ENTRÉES DU MENU PRINCIPAL..."
                       />
                     </div>
 
                     <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Hierarchy Rank</label>
+                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Rang Hiérarchique</label>
                       <input 
                         type="number"
                         value={ordre}
@@ -368,13 +368,13 @@ export const CategoryPage: React.FC = () => {
                   {/* Visibility Toggle */}
                   <div className="py-unit-md border-y border-outline-variant/30 flex items-center justify-between">
                     <div>
-                      <label className="block font-sans text-[12px] font-black text-on-surface uppercase">Live Visibility</label>
-                      <p className="font-sans text-[10px] text-on-surface-variant uppercase mt-0.5 tracking-wider opacity-60">Show on POS & Menu</p>
+                      <label className="block font-sans text-[12px] font-black text-on-surface uppercase">Visibilité en Direct</label>
+                      <p className="font-sans text-[10px] text-on-surface-variant uppercase mt-0.5 tracking-wider opacity-60">Afficher sur le TPV & Menu</p>
                     </div>
                     <button 
                       type="button"
                       onClick={() => setEditingCategory(prev => prev ? { ...prev, est_active: !prev.est_active } : null)}
-                      aria-label={`Toggle category visibility ${editingCategory?.est_active ?? true ? 'off' : 'on'}`}
+                      aria-label={`Basculer la visibilité de la catégorie ${editingCategory?.est_active ?? true ? 'désactiver' : 'activer'}`}
                       aria-pressed={editingCategory?.est_active ?? true}
                       className={`w-12 h-6 rounded-full relative transition-all border ${editingCategory?.est_active ?? true ? 'bg-primary border-primary' : 'bg-surface-container-highest border-outline-variant'}`}
                     >
@@ -384,7 +384,7 @@ export const CategoryPage: React.FC = () => {
                 </form>
 
                 <div className="flex-none p-6 border-t border-outline-variant bg-surface-main flex gap-4">
-                  <button type="button" onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Discard</button>
+                  <button type="button" onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Annuler</button>
                   <button 
                     onClick={handleSubmit}
                     disabled={isSaving}
@@ -394,7 +394,7 @@ export const CategoryPage: React.FC = () => {
                     {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                       <>
                         <Save className="w-4 h-4" />
-                        <span>Commit Data</span>
+                        <span>Enregistrer</span>
                       </>
                     )}
                   </button>
@@ -407,4 +407,3 @@ export const CategoryPage: React.FC = () => {
     </div>
   );
 };
-

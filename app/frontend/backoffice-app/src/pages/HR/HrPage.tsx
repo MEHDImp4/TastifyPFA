@@ -55,19 +55,19 @@ export const HrPage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main sticky top-0 z-30 backdrop-blur-md bg-surface-main/90">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Human Resources</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Ressources Humaines</h1>
           <h2 className="sr-only">Employés</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Staff roster and credential management</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Gestion des effectifs et des identifiants</p>
         </div>
         <div className="flex gap-unit-md items-center">
           <button 
             onClick={() => toast.info('GENERATING_EXPORT_STREAM')}
             className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
           >
-            <Download className="w-3.5 h-3.5" /> EXPORT ROSTER
+            <Download className="w-3.5 h-3.5" /> EXPORTER EFFECTIFS
           </button>
           <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
-            <Plus className="w-4 h-4" /> Add Staff
+            <Plus className="w-4 h-4" /> Ajouter Personnel
           </button>
         </div>
       </header>
@@ -79,13 +79,13 @@ export const HrPage: React.FC = () => {
           {/* Total Staff */}
           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Personnel</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Effectif Total</span>
               <Users className="w-5 h-5 text-on-surface-variant/30" />
             </div>
             <div className="mt-6 z-10 flex items-end gap-3">
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{employes.length}</span>
               <span className="font-sans text-[9px] text-primary font-black uppercase tracking-widest mb-1 flex items-center gap-1">
-                 <TrendingUp className="w-3 h-3" /> +2 this month
+                 <TrendingUp className="w-3 h-3" /> +2 ce mois
               </span>
             </div>
           </div>
@@ -93,24 +93,24 @@ export const HrPage: React.FC = () => {
           {/* Active Shifts */}
           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Active Shifts</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Services Actifs</span>
               <Clock className="w-5 h-5 text-on-surface-variant/30" />
             </div>
             <div className="mt-6 z-10">
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{Math.floor(employes.length * 0.4)}</span>
-              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">/ 24 Station Capacity</span>
+              <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">/ 24 Capacité Station</span>
             </div>
           </div>
 
           {/* Critical Alerts */}
           <div className="bg-secondary-container/20 border border-primary/30 rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-primary uppercase tracking-widest">Pending Approvals</span>
+              <span className="font-sans text-[10px] font-black text-primary uppercase tracking-widest">Approbations en Attente</span>
               <AlertTriangle className="w-5 h-5 text-primary opacity-50" />
             </div>
             <div className="mt-6 z-10">
               <span className="font-serif text-3xl font-black text-primary tabular-nums">4</span>
-              <span className="block font-sans text-[10px] text-primary/60 uppercase tracking-widest mt-1">Action required</span>
+              <span className="block font-sans text-[10px] text-primary/60 uppercase tracking-widest mt-1">Action requise</span>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ export const HrPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary" />
             <input 
               type="text"
-              placeholder="SEARCH BY NAME, ROLE, OR ID..."
+              placeholder="RECHERCHER PAR NOM, RÔLE OU ID..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-surface-main border border-outline-variant rounded py-2 pl-10 pr-3 text-on-surface font-sans text-xs font-bold focus:border-primary focus:ring-0 transition-all uppercase placeholder:text-on-surface-variant/30"
@@ -134,7 +134,7 @@ export const HrPage: React.FC = () => {
                 onClick={() => setActiveFilter(tab)}
                 className={`px-4 py-1.5 rounded-full border font-sans text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${activeTab === tab ? 'bg-primary/10 border-primary text-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
               >
-                {tab === 'ALL' ? 'All Staff' : tab}
+                {tab === 'ALL' ? 'Tout le Personnel' : tab}
               </button>
             ))}
           </div>
@@ -143,10 +143,10 @@ export const HrPage: React.FC = () => {
         {/* Staff Data Grid */}
         <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl mb-8">
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container border-b border-outline-variant font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <div className="col-span-4 sm:col-span-3">Employee</div>
-            <div className="col-span-3 hidden sm:block">Role & Sector</div>
-            <div className="col-span-3 sm:col-span-2 text-center">Status</div>
-            <div className="col-span-3 hidden md:block">Operational Contact</div>
+            <div className="col-span-4 sm:col-span-3">Employé</div>
+            <div className="col-span-3 hidden sm:block">Rôle & Secteur</div>
+            <div className="col-span-3 sm:col-span-2 text-center">Statut</div>
+            <div className="col-span-3 hidden md:block">Contact Opérationnel</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
 
@@ -173,13 +173,13 @@ export const HrPage: React.FC = () => {
 
                   <div className="col-span-3 hidden sm:flex flex-col justify-center">
                     <span className="font-sans text-[11px] font-bold text-on-surface uppercase">{emp.poste}</span>
-                    <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Operations</span>
+                    <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Opérations</span>
                   </div>
 
                   <div className="col-span-3 sm:col-span-2 flex justify-center">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-success/5 border border-success/20 text-success font-sans text-[9px] font-black uppercase tracking-wider">
                       <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                      On Shift
+                      En Service
                     </span>
                   </div>
 
@@ -207,18 +207,18 @@ export const HrPage: React.FC = () => {
             {filteredEmployes.length === 0 && (
               <div className="flex-1 flex flex-col items-center justify-center p-12 text-on-surface-variant/20">
                 <Users className="w-16 h-16 mb-4 stroke-[1]" />
-                <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em]">NO STAFF RECORDS FOUND</p>
+                <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em]">AUCUN DOSSIER PERSONNEL TROUVÉ</p>
               </div>
             )}
           </div>
 
           <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-between items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <span>Active Record Count: {filteredEmployes.length}</span>
+            <span>Nombre de Dossiers Actifs : {filteredEmployes.length}</span>
             <div className="flex gap-4">
-               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all disabled:opacity-20">Prev</button>
+               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all disabled:opacity-20">Préc.</button>
                <span className="px-2 py-1 bg-primary text-on-primary rounded">1</span>
                <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all">2</button>
-               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all">Next</button>
+               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all">Suiv.</button>
             </div>
           </div>
         </div>

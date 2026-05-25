@@ -26,7 +26,7 @@ export const AvisPage: React.FC = () => {
       setAvis(res.data);
     } catch (err) {
       console.error('Failed to fetch avis', err);
-      toast.error('Feedback record load failed');
+      toast.error('Échec du chargement des avis');
     } finally {
       setIsLoading(false);
     }
@@ -43,9 +43,9 @@ export const AvisPage: React.FC = () => {
   };
 
   const getSentimentLabel = (score: number) => {
-    if (score > 10) return "POSITIVE";
-    if (score < -10) return "NEGATIVE";
-    return "NEUTRAL";
+    if (score > 10) return "POSITIF";
+    if (score < -10) return "NÉGATIF";
+    return "NEUTRE";
   };
 
   const stats = {
@@ -68,16 +68,16 @@ export const AvisPage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Client Sentiment</h1>
+          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Sentiment Client</h1>
           <h2 className="sr-only">Avis</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Real-time feedback and review analysis</p>
+          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Analyse des avis et retours en direct</p>
         </div>
         <div className="flex gap-unit-md items-center">
           <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <Calendar className="w-3.5 h-3.5" /> Last 30 Days
+            <Calendar className="w-3.5 h-3.5" /> Derniers 30 Jours
           </button>
           <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
-            <Download className="w-4 h-4" /> Export
+            <Download className="w-4 h-4" /> Exporter
           </button>
         </div>
       </header>
@@ -87,9 +87,9 @@ export const AvisPage: React.FC = () => {
         {/* KPI Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-staff-gutter">
           {/* Average Rating */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group">
+          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group shadow-sm">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Avg Rating</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Note Moyenne</span>
               <Star className="w-5 h-5 text-primary fill-primary/20" />
             </div>
             <div className="mt-6 z-10 flex items-baseline gap-2">
@@ -99,27 +99,27 @@ export const AvisPage: React.FC = () => {
           </div>
 
           {/* Volume */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group">
+          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group shadow-sm">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Reviews</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total des Avis</span>
               <MessageSquare className="w-5 h-5 text-on-surface-variant/30" />
             </div>
             <div className="mt-6 z-10">
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{avis.length}</span>
-              <span className="block font-sans text-[9px] text-primary font-black uppercase tracking-widest mt-1">+15% volume this week</span>
+              <span className="block font-sans text-[9px] text-primary font-black uppercase tracking-widest mt-1">+15% volume cette semaine</span>
             </div>
           </div>
 
           {/* Sentiment Distribution */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden">
+          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden shadow-sm">
             <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Sentiment Split</span>
+              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Répartition Sentiment</span>
               <Activity className="w-5 h-5 text-on-surface-variant/30" />
             </div>
             <div className="space-y-3 z-10 relative">
                <div>
                   <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-primary uppercase tracking-widest">Positive</span>
+                    <span className="text-primary uppercase tracking-widest">Positif</span>
                     <span className="text-on-surface">{Math.round((stats.positive / (avis.length || 1)) * 100)}%</span>
                   </div>
                   <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
@@ -128,7 +128,7 @@ export const AvisPage: React.FC = () => {
                </div>
                <div>
                   <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-on-surface-variant uppercase tracking-widest opacity-60">Neutral</span>
+                    <span className="text-on-surface-variant uppercase tracking-widest opacity-60">Neutre</span>
                     <span className="text-on-surface">{Math.round((stats.neutral / (avis.length || 1)) * 100)}%</span>
                   </div>
                   <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
@@ -137,7 +137,7 @@ export const AvisPage: React.FC = () => {
                </div>
                <div>
                   <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-error uppercase tracking-widest">Negative</span>
+                    <span className="text-error uppercase tracking-widest">Négatif</span>
                     <span className="text-on-surface">{Math.round((stats.negative / (avis.length || 1)) * 100)}%</span>
                   </div>
                   <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
@@ -151,12 +151,12 @@ export const AvisPage: React.FC = () => {
         {/* Search & List */}
         <div className="bg-surface-main border border-outline-variant rounded-xl overflow-hidden flex flex-col shadow-2xl mb-8">
           <div className="p-6 border-b border-outline-variant bg-surface-container flex items-center justify-between">
-            <h3 className="font-sans text-[12px] font-black text-on-surface uppercase tracking-[0.2em]">Recent Feedback Index</h3>
+            <h3 className="font-sans text-[12px] font-black text-on-surface uppercase tracking-[0.2em]">Index des Avis Récents</h3>
             <div className="relative group w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary" />
               <input 
                 type="text"
-                placeholder="FILTER ENTRIES..."
+                placeholder="FILTRER LES ENTRÉES..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full h-9 bg-surface-main border border-outline-variant pl-9 pr-3 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all"
@@ -181,7 +181,7 @@ export const AvisPage: React.FC = () => {
                       ))}
                     </div>
                     <span className="font-sans text-[13px] font-black text-on-surface uppercase truncate">{a.user_username}</span>
-                    <span className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest opacity-60">{new Date(a.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+                    <span className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest opacity-60">{new Date(a.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span>
                     <div className="mt-1 flex items-center gap-2">
                        {getSentimentIcon(a.sentiment_score || 0)}
                        <span className={`font-sans text-[9px] font-black tracking-widest ${(a.sentiment_score || 0) > 10 ? 'text-primary' : (a.sentiment_score || 0) < -10 ? 'text-error' : 'text-on-surface-variant opacity-60'}`}>
@@ -197,11 +197,11 @@ export const AvisPage: React.FC = () => {
                     </div>
                     <div className="mt-4 flex items-center justify-between">
                        <div className="flex items-center gap-3">
-                          <span className="font-mono text-[9px] text-on-surface-variant/40">NEURAL_ID: {a.id.toString().padStart(6, '0')}</span>
+                          <span className="font-mono text-[9px] text-on-surface-variant/40">ID_NEURAL: {a.id.toString().padStart(6, '0')}</span>
                           <div className="w-1 h-1 rounded-full bg-outline-variant" />
-                          <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">{a.sentiment_score || 0} UNITS</span>
+                          <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">{a.sentiment_score || 0} UNITÉS</span>
                        </div>
-                       <button className="font-sans text-[10px] font-black text-on-surface-variant hover:text-primary uppercase tracking-widest transition-colors">Dispatch Response</button>
+                       <button className="font-sans text-[10px] font-black text-on-surface-variant hover:text-primary uppercase tracking-widest transition-colors">Répondre</button>
                     </div>
                   </div>
                 </motion.div>
@@ -211,7 +211,7 @@ export const AvisPage: React.FC = () => {
             {filteredAvis.length === 0 && (
               <div className="py-20 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
                   <MessageSquare className="w-16 h-16 stroke-[1]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">NO FEEDBACK DATA LOGGED</p>
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">AUCUNE DONNÉE DE RETOUR ENREGISTRÉE</p>
               </div>
             )}
           </div>
@@ -220,4 +220,3 @@ export const AvisPage: React.FC = () => {
     </div>
   );
 };
-

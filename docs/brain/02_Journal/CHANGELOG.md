@@ -6,7 +6,7 @@
 - `npm --prefix app/frontend/backoffice-app run typecheck`
 
 ### Commit
-- `[COMMIT_HASH]` `Fix(backoffice): resolve syntax error in ReservationsPage.tsx`
+- `f6d7929` `Fix(backoffice): resolve syntax error in ReservationsPage.tsx`
 
 ## [2026-05-25] - 18:15
 ### Fixed

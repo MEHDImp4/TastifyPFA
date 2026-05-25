@@ -163,9 +163,9 @@ export const SallePage: React.FC = () => {
         if (table) {
             try {
                 await salleApi.updateTablePos(table.id, { pos_x: table.pos_x, pos_y: table.pos_y });
-                toast.success('Position saved');
+                toast.success('Position enregistrée');
             } catch (err) {
-                toast.error('Save failed');
+                toast.error('Échec de sauvegarde');
             }
         }
     } else {
@@ -173,9 +173,9 @@ export const SallePage: React.FC = () => {
         if (textObj) {
             try {
                 await salleApi.updatePlanTextPos(textObj.id, { pos_x: textObj.pos_x, pos_y: textObj.pos_y });
-                toast.success('Label saved');
+                toast.success('Étiquette enregistrée');
             } catch (err) {
-                toast.error('Save failed');
+                toast.error('Échec de sauvegarde');
             }
         }
     }
@@ -189,23 +189,23 @@ export const SallePage: React.FC = () => {
       <h1 className="sr-only">Plan de Salle Architectural</h1>
       
       {/* Legend & Toolbar */}
-      <div className="flex flex-col gap-4 px-staff-margin py-4 border-b border-outline-variant bg-surface-main z-10 xl:flex-row xl:items-center xl:justify-between shadow-sm">
+      <div className="flex flex-col gap-4 px-staff-margin py-3 border-b border-outline-variant bg-surface-main z-10 xl:flex-row xl:items-center xl:justify-between shadow-sm flex-none">
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-4 h-4 border-2 border-outline-variant bg-surface-container-lowest/40 rounded-sm shadow-inner"></div>
+            <div className="w-3.5 h-3.5 border-2 border-outline-variant bg-surface-container-lowest/40 rounded-sm shadow-inner"></div>
             <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Disponible</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <div className="w-4 h-4 bg-primary border border-primary rounded-sm shadow-lg shadow-primary/20"></div>
+            <div className="w-3.5 h-3.5 bg-primary border border-primary rounded-sm shadow-lg shadow-primary/20"></div>
             <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">Occupé</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <div className="w-4 h-4 bg-surface-container-highest border border-primary-container rounded-sm border-dashed"></div>
+            <div className="w-3.5 h-3.5 bg-surface-container-highest border border-primary-container rounded-sm border-dashed"></div>
             <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-primary">Réservé</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <div className="w-4 h-4 bg-error border-2 border-error rounded-sm animate-pulse shadow-lg shadow-error/20"></div>
+            <div className="w-3.5 h-3.5 bg-error border-2 border-error rounded-sm animate-pulse shadow-lg shadow-error/20"></div>
             <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-error">Addition</span>
           </div>
         </div>
@@ -262,38 +262,24 @@ export const SallePage: React.FC = () => {
                   <div className="absolute bottom-10 right-10 w-20 h-20 border-b border-r border-primary/40" />
               </div>
 
-              <div className="sticky left-0 top-0 z-20 flex w-full flex-col gap-2 border-b border-outline-variant/50 bg-[#0d0b0a]/90 backdrop-blur-md px-6 py-4 md:flex-row md:items-center md:justify-between">
+              <div className="sticky left-0 top-0 z-20 flex w-full flex-col gap-2 border-b border-outline-variant/50 bg-[#0d0b0a]/90 backdrop-blur-md px-6 py-3.5 md:flex-row md:items-center md:justify-between">
                   <div>
-                      <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary">Vue de Salle Adaptative</p>
-                      <p className="mt-1 text-[11px] font-bold text-on-surface-variant/70">
-                          Mode {isEditMode ? 'CONFIGURATION' : 'OPÉRATIONS DIRECTES'} • Synchro Temps Réel
+                      <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary">Disposition de Salle</p>
+                      <p className="mt-1 text-[11px] font-bold text-on-surface-variant/70 uppercase tracking-widest">
+                          Mode {isEditMode ? 'CONFIGURATION' : 'DIRECT'} • Synchro Temps Réel
                       </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                     <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                     <p className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant md:max-w-[18rem] md:text-right">
-                         Glisser pour naviguer sur les terminaux mobiles
-                     </p>
                   </div>
               </div>
 
               <div 
                   ref={mapRef}
-                  className={`min-w-[1000px] min-h-[700px] sm:min-w-[1140px] sm:min-h-[800px] lg:min-w-[1320px] lg:min-h-[920px] xl:min-w-[1500px] xl:min-h-[1020px] w-full h-full relative transition-colors duration-700 ${isEditMode ? 'bg-primary/[0.03] cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
+                  className={`min-w-[1500px] min-h-[1000px] w-full h-full relative transition-colors duration-700 ${isEditMode ? 'bg-primary/[0.03] cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
                   tabIndex={0}
                   aria-label="Zone de disposition de la salle"
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
                   onPointerLeave={handlePointerUp}
               >
-                  {/* Zone Label Placeholder */}
-                  <motion.div 
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    className="absolute top-12 left-12 font-serif text-5xl text-outline-variant/10 font-black uppercase tracking-[0.5em] select-none pointer-events-none"
-                  >
-                      Salle Principale
-                  </motion.div>
-
                   {/* Plan Texts */}
                   {planTexts.filter(t => t.est_active).map((textObj) => (
                       <motion.div
@@ -555,4 +541,3 @@ export const SallePage: React.FC = () => {
     </div>
   );
 };
-
