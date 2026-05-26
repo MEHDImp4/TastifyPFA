@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-26 00:52:40<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-26 01:02:24<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1151,6 +1151,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Improved table alignment in `PlatPage.tsx` (Menu Operations). Synchronized header and row grid properties using `flex justify-center` and `items-center` to ensure price values and toggle switches are perfectly centered under their respective columns, resolving a visual misalignment identified in user feedback.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> Visual audit of `PlatPage.tsx` grid structure.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app run typecheck`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `[COMMIT_HASH]` `Fix(ui): center price and toggle columns in PlatPage ledger`</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:25</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved syntax error in `ReservationsPage.tsx` caused by duplicated component closing tags (`  ); };`) at the end of the file, restoring build stability for the backoffice application.</p>
                             </li>
@@ -1203,26 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
                                 <p class="text-gray-300 text-sm"><strong>Changed:</strong> Completed the pending KDS header polish by wiring the back button to real navigation and making the empty-state contrast stronger instead of fading the entire sector-clear panel into near invisibility.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Simplified the public client home by removing the extra philosophy block from `PortalHomePage.tsx`, keeping the page closer to the faster reservation/menu-first flow already established in the previous UX waves.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Disabled `vite-plugin-pwa` dev-mode registration in `app/frontend/client-app/vite.config.ts` so local frontend work stops regenerating service-worker side effects during routine development.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app run build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/client-app run build`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

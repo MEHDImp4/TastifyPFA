@@ -1,3 +1,14 @@
+## [2026-05-25] - 18:45
+### Fixed
+- Improved table alignment in `PlatPage.tsx` (Menu Operations). Synchronized header and row grid properties using `flex justify-center` and `items-center` to ensure price values and toggle switches are perfectly centered under their respective columns, resolving a visual misalignment identified in user feedback.
+
+### Validation
+- Visual audit of `PlatPage.tsx` grid structure.
+- `npm --prefix app/frontend/backoffice-app run typecheck`
+
+### Commit
+- `[COMMIT_HASH]` `Fix(ui): center price and toggle columns in PlatPage ledger`
+
 ## [2026-05-25] - 18:25
 ### Fixed
 - Resolved syntax error in `ReservationsPage.tsx` caused by duplicated component closing tags (`  ); };`) at the end of the file, restoring build stability for the backoffice application.

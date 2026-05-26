@@ -49,9 +49,9 @@ export const PlatPage: React.FC = () => {
   // Recipe Form State
   const [selectedIngredients, setSelectedIngredients] = useState<{ingredient: number, quantite: string, isNew: boolean, id?: number}[]>([]);
 
-  // Deletion Timeouts Ref
-  const pendingDeletions = useRef<Record<number, any>>({});
+  // Refs for Scroll and Undo Logic
   const scrollRef = useRef<HTMLDivElement>(null);
+  const pendingDeletions = useRef<Record<number, any>>({});
 
   const fetchData = async () => {
     try {
@@ -79,11 +79,12 @@ export const PlatPage: React.FC = () => {
   useEffect(() => {
     fetchData();
     return () => {
+        // Cleanup all pending deletions on unmount
         Object.values(pendingDeletions.current).forEach(t => clearTimeout(t));
     };
   }, []);
 
-  // Reset internal scroll on page change to fix visual jump
+  // Reset scroll on page change
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: 0, behavior: 'auto' });
@@ -209,20 +210,25 @@ export const PlatPage: React.FC = () => {
     const platToDelete = plats.find(p => p.id === id);
     if (!platToDelete) return;
 
+    // 1. Optimistic removal from UI
     setPlats(prev => prev.filter(p => p.id !== id));
 
+    // 2. Schedule actual deletion
     const timeoutId = setTimeout(async () => {
         try {
             await menuApi.deletePlat(id);
+            // Cleanup ref
             delete pendingDeletions.current[id];
         } catch (err) {
-            toast.error(`Échec de suppression pour ${platToDelete.nom}`);
+            console.error(err);
+            // Restore item on error
             setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
         }
     }, 10000);
 
     pendingDeletions.current[id] = timeoutId;
 
+    // 3. Show undo toast
     toast.warning(`Plat "${platToDelete.nom}" supprimé`, {
         duration: 10000,
         action: {
@@ -230,6 +236,7 @@ export const PlatPage: React.FC = () => {
             onClick: () => {
                 clearTimeout(pendingDeletions.current[id]);
                 delete pendingDeletions.current[id];
+                // Restore item in UI
                 setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
                 toast.success('Suppression annulée');
             }
@@ -277,26 +284,35 @@ export const PlatPage: React.FC = () => {
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Registre opérationnel des créations actives</p>
         </div>
         <div className="flex gap-unit-md items-center">
-          <div className="relative group mr-4">
+          <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input 
               type="text"
-              placeholder="RECHERCHER CATALOGUE..."
+              placeholder="RECHERCHER..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-56 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+              className="w-48 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded-lg font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
             />
           </div>
-          <button 
-            onClick={() => { setActiveFilterCat(null); setCurrentPage(1); }}
-            className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
-          >
-            <Filter className="w-3.5 h-3.5" /> Filtrer
-          </button>
+          
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-primary" />
+            <select 
+              value={activeFilterCat || ''} 
+              onChange={(e) => { setActiveFilterCat(e.target.value ? parseInt(e.target.value) : null); setCurrentPage(1); }}
+              className="h-10 bg-surface-container-low border border-outline-variant rounded-lg px-3 text-[10px] font-black uppercase tracking-widest min-w-[140px]"
+            >
+              <option value="">TOUTES CATÉGORIES</option>
+              {categories.map(c => (
+                <option key={c.id} value={c.id}>{c.nom.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
+
           <button 
             onClick={() => handleOpenEditor()}
             data-testid="plat-create-button"
-            className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
+            className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-lg font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all border border-primary"
           >
             <Plus className="w-4 h-4" /> Ajouter Plat
           </button>
@@ -309,12 +325,12 @@ export const PlatPage: React.FC = () => {
         {/* Ledger Grid (Dense Table) */}
         <div className="flex-1 bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl">
           {/* Grid Header */}
-          <div className="grid grid-cols-[64px_2fr_1fr_1fr_100px_80px] gap-unit-md px-6 py-4 bg-surface-container border-b border-outline-variant font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+          <div className="grid grid-cols-[64px_2fr_1fr_1fr_100px_80px] gap-unit-md px-6 py-4 bg-surface-container border-b border-outline-variant font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] items-center">
             <div>Ref</div>
-            <div>Plat & Détails Techniques</div>
+            <div className="truncate">Plat & Détails Techniques</div>
             <div>Catégorie</div>
-            <div className="text-right">Prix Marché DH</div>
-            <div className="text-center">Ops Direct</div>
+            <div className="flex justify-center">Prix Marché DH</div>
+            <div className="flex justify-center">Ops Direct</div>
             <div className="text-right">Actions</div>
           </div>
 
@@ -361,7 +377,7 @@ export const PlatPage: React.FC = () => {
                     </div>
 
                     {/* Price */}
-                    <div className="text-center font-sans text-[15px] font-black text-primary tabular-nums">
+                    <div className="flex justify-center font-sans text-[15px] font-black text-primary tabular-nums">
                       {parseFloat(plat.prix).toFixed(0)}
                     </div>
 
