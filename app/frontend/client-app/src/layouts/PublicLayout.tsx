@@ -28,6 +28,28 @@ export const PublicLayout: React.FC = () => {
     if (isMenuOpen) setIsMenuOpen(false);
   };
 
+  // Base links visible to everyone
+  const navLinks = [
+    { to: '/menu', label: 'LA CARTE' },
+    { to: '/reservations', label: 'RESERVER' },
+    { to: '/contact', label: 'CONCIERGE' },
+  ];
+
+  // Add Loyalty link only if authenticated
+  if (isAuthenticated) {
+    navLinks.splice(2, 0, { to: '/loyalty', label: 'ECHO' });
+  }
+
+  // Mobile navigation links
+  const mobileLinks = [
+    { to: '/menu', label: 'La Carte' },
+    { to: '/reservations', label: 'Réservations' },
+  ];
+  if (isAuthenticated) {
+    mobileLinks.push({ to: '/loyalty', label: 'Privilèges' });
+  }
+  mobileLinks.push({ to: '/contact', label: 'Concierge' });
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#2D2424] selection:bg-[#C5A059]/20 selection:text-[#2D2424] overflow-x-hidden font-body">
       <header className="sticky top-0 z-50 bg-[#FAF9F6]/80 backdrop-blur-xl border-b border-[#2D2424]/5 shrink-0">
@@ -55,12 +77,7 @@ export const PublicLayout: React.FC = () => {
             </Link>
 
             <nav className="hidden lg:flex items-center gap-10">
-              {[
-                { to: '/menu', label: 'LA CARTE' },
-                { to: '/reservations', label: 'RESERVER' },
-                { to: '/loyalty', label: 'ECHO' },
-                { to: '/contact', label: 'CONCIERGE' },
-              ].map((link) => (
+              {navLinks.map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
@@ -129,12 +146,7 @@ export const PublicLayout: React.FC = () => {
             >
               <div className="space-y-16">
                 <div className="flex flex-col gap-8">
-                  {[
-                    { to: '/menu', label: 'La Carte' },
-                    { to: '/reservations', label: 'Réservations' },
-                    { to: '/loyalty', label: 'Privilèges' },
-                    { to: '/contact', label: 'Concierge' },
-                  ].map((link, i) => (
+                  {mobileLinks.map((link, i) => (
                     <motion.div 
                         key={link.to}
                         initial={{ opacity: 0, x: -20 }}
