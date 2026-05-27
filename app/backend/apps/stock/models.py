@@ -61,3 +61,48 @@ class PlatIngredient(models.Model):
 
     def __str__(self):
         return f"{self.plat} — {self.ingredient} ({self.quantite_requise} {self.ingredient.unite_mesure})"
+
+
+class MouvementStock(models.Model):
+    TYPE_MOUVEMENT_CHOICES = [
+        ('ENTREE', 'Entrée de stock'),
+        ('SORTIE', 'Sortie de stock'),
+    ]
+
+    SOURCE_CHOICES = [
+        ('LIVRAISON', 'Livraison fournisseur'),
+        ('ACHAT_PERSONNEL', 'Achat personnel'),
+        ('AJUSTEMENT_INVENTAIRE', 'Ajustement inventaire'),
+        ('CONSOMMATION_CUISINE', 'Consommation cuisine'),
+        ('PERTE', 'Perte / Gaspillage'),
+    ]
+
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name='mouvements'
+    )
+    quantite = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    type_mouvement = models.CharField(max_length=10, choices=TYPE_MOUVEMENT_CHOICES)
+    source = models.CharField(max_length=30, choices=SOURCE_CHOICES)
+    commentaire = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Mouvement de stock'
+        verbose_name_plural = 'Mouvements de stock'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.type_mouvement} - {self.ingredient.nom} ({self.quantite} {self.ingredient.unite_mesure})"
+
+    def save(self, *args, **kwargs):
+        # Mettre à jour le stock actuel de l'ingrédient lors de la création d'un mouvement
+        is_new = self._state.adding
+        if is_new:
+            if self.type_mouvement == 'ENTREE':
+                self.ingredient.stock_actuel += self.quantite
+            else:
+                self.ingredient.stock_actuel -= self.quantite
+            self.ingredient.save()
+        super().save(*args, **kwargs)

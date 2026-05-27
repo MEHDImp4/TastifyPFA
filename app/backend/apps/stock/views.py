@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.users.permissions import IsGerant, IsCuisinierOrGerant
-from .models import Ingredient, PlatIngredient
-from .serializers import IngredientSerializer, PlatIngredientSerializer
+from .models import Ingredient, PlatIngredient, MouvementStock
+from .serializers import IngredientSerializer, PlatIngredientSerializer, MouvementStockSerializer
 
 from rest_framework.decorators import action
 from .services.procurement import ProcurementService
@@ -52,3 +52,14 @@ class PlatIngredientViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'retrieve'):
             return [IsAuthenticated()]
         return [IsAuthenticated(), IsCuisinierOrGerant()]
+
+
+class MouvementStockViewSet(viewsets.ModelViewSet):
+    serializer_class = MouvementStockSerializer
+    queryset = MouvementStock.objects.select_related('ingredient').all()
+
+    def get_permissions(self):
+        """GERANT: full CRUD. All authenticated users: read-only."""
+        if self.action in ('list', 'retrieve'):
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsGerant()]

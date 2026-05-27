@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Ingredient, PlatIngredient
+from .models import Ingredient, PlatIngredient, MouvementStock
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -33,3 +33,18 @@ class PlatIngredientSerializer(serializers.ModelSerializer):
             'quantite_requise',
         ]
         read_only_fields = ['id']
+
+
+class MouvementStockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MouvementStock
+        fields = [
+            'id',
+            'ingredient',
+            'quantite',
+            'type_mouvement',
+            'source',
+            'commentaire',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'created_at']
