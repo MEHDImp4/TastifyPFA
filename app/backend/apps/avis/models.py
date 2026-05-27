@@ -30,7 +30,9 @@ class Avis(models.Model):
     )
     commentaire = models.TextField()
     note = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)] # Note de 1 à 5 étoiles
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        null=True,
+        blank=True
     )
     
     # Stockage temporaire pour le score d'analyse

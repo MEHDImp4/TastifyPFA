@@ -6,7 +6,6 @@ import {
   Share2,
   Sparkles,
   MessageSquare,
-  Star,
   TrendingUp,
   Quote
 } from 'lucide-react';
@@ -106,7 +105,7 @@ export const PortalHomePage = () => {
                  <span className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-[#C5A059]">TOP TENDANCES IA</span>
               </div>
               <h3 className="font-serif text-5xl md:text-6xl text-[#2D2424] italic tracking-tight">Vos Coups de Cœur</h3>
-              <p className="font-body text-sm text-[#2D2424]/60 uppercase tracking-widest">Plats les mieux notés par nos convives</p>
+              <p className="font-body text-sm text-[#2D2424]/60 uppercase tracking-widest">Plats les plus appréciés selon vos retours</p>
             </div>
             <Link to="/menu" className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-[#D14D1A] border-b border-[#D14D1A]/20 pb-2 hover:border-[#D14D1A] transition-all">
                 Voir toute la carte
@@ -147,8 +146,7 @@ export const PortalHomePage = () => {
                                     <span className="font-sans text-[10px] font-black uppercase tracking-widest">Tendances</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    <Star className="w-3.5 h-3.5 fill-[#C5A059] text-[#C5A059]" />
-                                    <span className="font-sans text-xs font-black text-[#2D2424]">{((dish.sentiment_score || 0) * 5).toFixed(1)} / 5</span>
+                                    <span className="font-sans text-xs font-black text-[#2D2424]">Taux de satisfaction élevé</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +163,7 @@ export const PortalHomePage = () => {
                         <div className="space-y-6">
                             <div className="flex items-center gap-2 text-[#C5A059]">
                                 <MessageSquare className="w-3.5 h-3.5" />
-                                <span className="font-sans text-[9px] font-black uppercase tracking-[0.3em]">Avis des Convives</span>
+                                <span className="font-sans text-[9px] font-black uppercase tracking-[0.3em]">Retours des Convives</span>
                             </div>
                             
                             <div className="space-y-4">
@@ -181,13 +179,8 @@ export const PortalHomePage = () => {
                                         <p className="text-sm font-body italic text-[#2D2424]/80 line-clamp-2 leading-relaxed">
                                             "{avis.commentaire}"
                                         </p>
-                                        <div className="mt-2 flex items-center justify-between">
+                                        <div className="mt-2">
                                             <span className="text-[10px] font-sans font-bold text-[#C5A059] uppercase">@{avis.user_username}</span>
-                                            <div className="flex gap-0.5">
-                                                {[...Array(avis.note)].map((_, j) => (
-                                                    <Star key={j} className="w-2.5 h-3.5 fill-[#C5A059] text-[#C5A059]" />
-                                                ))}
-                                            </div>
                                         </div>
                                     </motion.div>
                                 )) : (
@@ -351,7 +344,7 @@ export const PortalHomePage = () => {
           </span>
           <div className="flex gap-10">
              <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D2424]/40 hover:text-[#2D2424] transition-all">
-                Staff Terminal
+                Terminal Staff
              </Link>
           </div>
         </div>
