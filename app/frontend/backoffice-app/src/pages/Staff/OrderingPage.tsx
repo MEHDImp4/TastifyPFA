@@ -121,12 +121,16 @@ export const OrderingPage: React.FC = () => {
     try {
       if (currentCommande) {
         await salleApi.addItemsToCommande(currentCommande.id, lignes);
+        if (currentCommande.statut === 'EN_COURS') {
+          await salleApi.updateCommandeStatut(currentCommande.id, 'EN_CUISINE');
+        }
       } else {
-        await salleApi.createCommande({
+        const orderRes = await salleApi.createCommande({
           table: Number(tableId),
           type: 'SUR_PLACE',
           lignes: lignes
         });
+        await salleApi.updateCommandeStatut(orderRes.data.id, 'EN_CUISINE');
       }
       navigate('/salle');
     } catch (err) {
@@ -313,7 +317,7 @@ export const OrderingPage: React.FC = () => {
               {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" strokeWidth={3}/> : (
                 <>
                   <Send className="w-4 h-4" />
-                  <span>Send to Kitchen</span>
+                  <span>Envoyer en cuisine</span>
                 </>
               )}
             </button>
