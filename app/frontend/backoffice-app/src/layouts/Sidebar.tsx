@@ -12,8 +12,7 @@ import {
   Star,
   LogOut,
   Settings,
-  Activity,
-  Truck
+  Activity
 } from 'lucide-react';
 
 interface SidebarProps {

@@ -206,42 +206,38 @@ export const PlatPage: React.FC = () => {
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     const platToDelete = plats.find(p => p.id === id);
     if (!platToDelete) return;
 
     // 1. Optimistic removal from UI
     setPlats(prev => prev.filter(p => p.id !== id));
 
-    // 2. Schedule actual deletion
-    const timeoutId = setTimeout(async () => {
-        try {
-            await menuApi.deletePlat(id);
-            // Cleanup ref
-            delete pendingDeletions.current[id];
-        } catch (err) {
-            console.error(err);
-            // Restore item on error
-            setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
-        }
-    }, 10000);
-
-    pendingDeletions.current[id] = timeoutId;
-
-    // 3. Show undo toast
-    toast.warning(`Plat "${platToDelete.nom}" supprimé`, {
-        duration: 10000,
-        action: {
-            label: 'ANNULER',
-            onClick: () => {
-                clearTimeout(pendingDeletions.current[id]);
-                delete pendingDeletions.current[id];
-                // Restore item in UI
-                setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
-                toast.success('Suppression annulée');
+    try {
+        await menuApi.deletePlat(id);
+        
+        toast.warning(`Plat "${platToDelete.nom}" supprimé`, {
+            duration: 10000,
+            action: {
+                label: 'ANNULER',
+                onClick: async () => {
+                    try {
+                        const formData = new FormData();
+                        formData.append('est_active', 'true');
+                        await menuApi.updatePlat(id, formData);
+                        fetchData();
+                        toast.success('Suppression annulée');
+                    } catch (restoreErr) {
+                        toast.error('Échec de la restauration');
+                        setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
+                    }
+                }
             }
-        }
-    });
+        });
+    } catch (err) {
+        toast.error(`Échec de suppression pour ${platToDelete.nom}`);
+        setPlats(prev => [...prev, platToDelete].sort((a, b) => a.nom.localeCompare(b.nom)));
+    }
   };
 
   const toggleAvailability = async (plat: Plat) => {
@@ -429,15 +425,10 @@ export const PlatPage: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          {/* Footer Info & Pagination */}
-          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-between items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <div className="flex gap-6 items-center">
-                <span>Dossiers : {filteredPlats.length}</span>
-                <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> Plat Signature</span>
-            </div>
-
+          {/* Footer Pagination - Centered */}
+          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
             {/* Pagination Controls */}
-            {totalPages > 1 && (
+            {totalPages > 1 ? (
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -446,7 +437,7 @@ export const PlatPage: React.FC = () => {
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
-                    <div className="flex items-center gap-1.5 bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant/30">
+                    <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30">
                         <span className="text-primary">{currentPage}</span>
                         <span className="opacity-30">/</span>
                         <span>{totalPages}</span>
@@ -459,9 +450,9 @@ export const PlatPage: React.FC = () => {
                         <ChevronRight className="w-4 h-4" />
                     </button>
                 </div>
+            ) : (
+                <span className="opacity-20 tracking-[0.5em]">FIN DU CATALOGUE</span>
             )}
-
-            <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-outline-variant" /> État Brouillon</span>
           </div>
         </div>
       </main>

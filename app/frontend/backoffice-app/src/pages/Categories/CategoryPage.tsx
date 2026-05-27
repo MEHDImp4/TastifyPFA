@@ -11,10 +11,13 @@ import {
   CloudUpload,
   Search,
   X,
-  Edit2
+  Edit2,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
@@ -23,6 +26,14 @@ export const CategoryPage: React.FC = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [search, setSearch] = useState('');
   
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  // Modal state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
+
   // Form state
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
@@ -88,39 +99,50 @@ export const CategoryPage: React.FC = () => {
     try {
       if (editingCategory) {
         await menuApi.updateCategory(editingCategory.id, formData);
-        toast.success('Catégorie mise à jour avec succès');
+        toast.success('Catégorie mise à jour');
       } else {
         await menuApi.createCategory(formData);
-        toast.success('Catégorie créée avec succès');
+        toast.success('Catégorie créée');
       }
       fetchCategories();
       setIsEditorOpen(false);
       setEditingCategory(null);
     } catch (err) {
-      toast.error('Échec de l\'enregistrement de la catégorie');
+      toast.error('Erreur d\'enregistrement');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
-      try {
-        await menuApi.deleteCategory(id);
+  const confirmDelete = (id: number) => {
+    setCategoryToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const executeDelete = async () => {
+    if (!categoryToDelete) return;
+    try {
+        await menuApi.deleteCategory(categoryToDelete);
         toast.success('Catégorie supprimée');
         fetchCategories();
-        if (editingCategory?.id === id) {
+        if (editingCategory?.id === categoryToDelete) {
            setEditingCategory(null);
            setIsEditorOpen(false);
         }
-      } catch (err) {
-        toast.error('Échec de la suppression');
-      }
+    } catch (err) {
+        toast.error('Échec de suppression');
     }
+    setCategoryToDelete(null);
   };
 
   const filteredCategories = categories.filter(c => 
-    c.nom.toLowerCase().includes(search.toLowerCase())
+    c.est_active && c.nom.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+  const paginatedCategories = filteredCategories.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
@@ -140,14 +162,14 @@ export const CategoryPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input 
               type="text"
-              placeholder="FILTRER L'INDEX..."
+              placeholder="RECHERCHE..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-48 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
             />
           </div>
           <button 
-            onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} // Discard
+            onClick={() => { setSearch(''); setEditingCategory(null); setIsEditorOpen(false); setCurrentPage(1); }}
             className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Annuler
@@ -165,7 +187,7 @@ export const CategoryPage: React.FC = () => {
       {/* Main Split Layout */}
       <div className="flex-1 overflow-hidden relative">
         
-        {/* Category List (Full Width when no editor) */}
+        {/* Category List */}
         <div className="h-full bg-surface-container-lowest flex flex-col">
           {/* List Header */}
           <div className="flex-none px-6 py-3 border-b border-outline-variant bg-surface-container flex items-center text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
@@ -180,7 +202,7 @@ export const CategoryPage: React.FC = () => {
           {/* Scrollable List Body */}
           <div className="flex-1 overflow-y-auto p-unit-sm space-y-1 custom-scrollbar">
             <AnimatePresence mode="popLayout">
-              {filteredCategories.map((cat) => (
+              {paginatedCategories.map((cat) => (
                 <motion.div 
                   key={cat.id}
                   layout
@@ -195,13 +217,11 @@ export const CategoryPage: React.FC = () => {
                 >
                   {editingCategory?.id === cat.id && <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
                   
-                  {/* Drag Handle Spacer */}
                   <div className="text-on-surface-variant/20 group-hover:text-primary transition-colors">
                     <GripVertical className="w-5 h-5" />
                   </div>
 
-                  {/* Thumbnail */}
-                  <div className="w-12 h-12 rounded border border-outline-variant bg-surface-main overflow-hidden shrink-0">
+                  <div className="w-12 h-12 rounded border border-outline-variant bg-surface-main overflow-hidden shrink-0 shadow-inner">
                     {cat.image ? (
                       <img src={cat.image} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" alt={cat.nom} />
                     ) : (
@@ -211,7 +231,6 @@ export const CategoryPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Details */}
                   <div className="flex-1 min-w-0">
                     <h3 className={`font-sans text-[13px] font-black uppercase tracking-tight ${editingCategory?.id === cat.id ? 'text-primary' : 'text-on-surface'}`}>
                       {cat.nom}
@@ -221,14 +240,12 @@ export const CategoryPage: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Rank */}
                   <div className="w-24 text-center">
                     <span className="font-mono text-[11px] font-bold text-on-surface-variant bg-background px-2 py-0.5 rounded border border-outline-variant/30">
                       #{cat.ordre_affichage.toString().padStart(2, '0')}
                     </span>
                   </div>
 
-                  {/* Status */}
                   <div className="w-32 flex justify-center">
                     <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${cat.est_active ? 'bg-success/5 border-success/20 text-success' : 'bg-on-surface-variant/5 border-on-surface-variant/20 text-on-surface-variant'}`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${cat.est_active ? 'bg-success animate-pulse' : 'bg-on-surface-variant'}`} />
@@ -236,23 +253,13 @@ export const CategoryPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="w-10 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity gap-2">
-                    <button
-                      type="button"
-                      data-testid={`category-edit-${cat.id}`}
-                      aria-label={`Modifier la catégorie ${cat.nom}`}
-                      title={`Modifier la catégorie ${cat.nom}`}
-                      className="p-1 hover:text-primary transition-colors"
-                    >
+                    <button type="button" className="p-1 hover:text-primary transition-colors">
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       type="button"
-                      data-testid={`category-delete-${cat.id}`}
-                      aria-label={`Supprimer la catégorie ${cat.nom}`}
-                      title={`Supprimer la catégorie ${cat.nom}`}
-                      onClick={(e) => { e.stopPropagation(); handleDelete(cat.id); }}
+                      onClick={(e) => { e.stopPropagation(); confirmDelete(cat.id); }}
                       className="p-1 hover:text-error transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -261,6 +268,35 @@ export const CategoryPage: React.FC = () => {
                 </motion.div>
               ))}
             </AnimatePresence>
+          </div>
+
+          {/* Footer Pagination - Centered */}
+          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+            {totalPages > 1 ? (
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30">
+                        <span className="text-primary">{currentPage}</span>
+                        <span className="opacity-30">/</span>
+                        <span>{totalPages}</span>
+                    </div>
+                    <button 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+            ) : (
+                <span className="opacity-20 tracking-[0.5em]">FIN DU CATALOGUE</span>
+            )}
           </div>
         </div>
 
@@ -285,9 +321,6 @@ export const CategoryPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }}
-                    data-testid="close-editor"
-                    aria-label="Fermer l'éditeur de catégorie"
-                    title="Fermer l'éditeur de catégorie"
                     className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant"
                   >
                     <X className="w-6 h-6" />
@@ -295,18 +328,12 @@ export const CategoryPage: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-unit-lg">
-                  {/* Image Upload Area */}
                   <div className="space-y-unit-xs">
                     <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Identité Visuelle</label>
                     <div className="relative group aspect-video rounded border-2 border-dashed border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center overflow-hidden transition-all hover:border-primary">
                       {preview ? (
                          <>
-                         <img
-                           src={preview}
-                           data-testid="category-image-preview"
-                           className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700"
-                           alt="Aperçu"
-                         />
+                         <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="Aperçu" />
                           <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-background/40">
                              <CloudUpload className="w-8 h-8 text-primary mb-2" />
                              <span className="font-sans text-[10px] font-black text-white uppercase tracking-widest">Remplacer Fichier</span>
@@ -318,25 +345,15 @@ export const CategoryPage: React.FC = () => {
                           <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Charger Ressource</span>
                         </div>
                       )}
-                      <input
-                        type="file"
-                        data-testid="category-image-input"
-                        onChange={handleImageChange}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                      />
+                      <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
                     </div>
                   </div>
 
-                  {/* Fields */}
                   <div className="space-y-unit-md">
                     <div className="space-y-unit-xs">
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Nom du Secteur</label>
                       <input 
-                        type="text"
-                        required
-                        value={nom}
-                        onChange={(e) => setNom(e.target.value)}
-                        data-testid="category-name-input"
+                        type="text" required value={nom} onChange={(e) => setNom(e.target.value)}
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
                       />
                     </div>
@@ -344,10 +361,7 @@ export const CategoryPage: React.FC = () => {
                     <div className="space-y-unit-xs">
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Mémo Opérationnel</label>
                       <textarea 
-                        rows={3}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        data-testid="category-description-input"
+                        rows={3} value={description} onChange={(e) => setDescription(e.target.value)}
                         className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20 resize-none"
                         placeholder="EX: ENTRÉES DU MENU PRINCIPAL..."
                       />
@@ -356,16 +370,12 @@ export const CategoryPage: React.FC = () => {
                     <div className="space-y-unit-xs">
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Rang Hiérarchique</label>
                       <input 
-                        type="number"
-                        value={ordre}
-                        onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-                        data-testid="category-order-input"
+                        type="number" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
                         className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-primary outline-none transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Visibility Toggle */}
                   <div className="py-unit-md border-y border-outline-variant/30 flex items-center justify-between">
                     <div>
                       <label className="block font-sans text-[12px] font-black text-on-surface uppercase">Visibilité en Direct</label>
@@ -374,8 +384,6 @@ export const CategoryPage: React.FC = () => {
                     <button 
                       type="button"
                       onClick={() => setEditingCategory(prev => prev ? { ...prev, est_active: !prev.est_active } : null)}
-                      aria-label={`Basculer la visibilité de la catégorie ${editingCategory?.est_active ?? true ? 'désactiver' : 'activer'}`}
-                      aria-pressed={editingCategory?.est_active ?? true}
                       className={`w-12 h-6 rounded-full relative transition-all border ${editingCategory?.est_active ?? true ? 'bg-primary border-primary' : 'bg-surface-container-highest border-outline-variant'}`}
                     >
                       <div className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-white transition-all ${editingCategory?.est_active ?? true ? 'right-1' : 'left-1'}`} />
@@ -386,17 +394,10 @@ export const CategoryPage: React.FC = () => {
                 <div className="flex-none p-6 border-t border-outline-variant bg-surface-main flex gap-4">
                   <button type="button" onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Annuler</button>
                   <button 
-                    onClick={handleSubmit}
-                    disabled={isSaving}
-                    data-testid="category-save-button"
+                    onClick={handleSubmit} disabled={isSaving}
                     className="flex-[2] h-14 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 border border-primary"
                   >
-                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                      <>
-                        <Save className="w-4 h-4" />
-                        <span>Enregistrer</span>
-                      </>
-                    )}
+                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Enregistrer</span></>}
                   </button>
                 </div>
               </motion.aside>
@@ -404,6 +405,17 @@ export const CategoryPage: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={executeDelete}
+          title="Supprimer Catégorie"
+          message="Êtes-vous sûr de vouloir supprimer définitivement cette catégorie ? Tous les plats associés risquent de perdre leur secteur."
+          confirmLabel="SUPPRIMER"
+          variant="danger"
+      />
     </div>
   );
 };

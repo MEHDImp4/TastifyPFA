@@ -1,3 +1,23 @@
+## [2026-05-26] - 11:30
+### Added
+- **Salle Map Zoom & Pan**: Integrated `react-zoom-pan-pinch` into the backoffice `SallePage.tsx` to provide a robust, premium navigation experience for the architectural floor plan.
+- **Interactive Controls**: Added a floating tactical control panel with Zoom-In, Zoom-Out, and 100% Reset buttons.
+- **Seamless Panning**: Enabled mouse-wheel zoom and click-to-pan functionality on the map background, ensuring it doesn't conflict with table dragging in edit mode.
+- **Auto-Locking**: Panning is automatically disabled while dragging a table to prevent accidental view shifts during configuration.
+
+### Fixed
+- **Build Stabilization**: Resolved "unused variable" and "missing import" TypeScript errors in `Sidebar.tsx`, `ReservationsPage.tsx`, and `HrPage.tsx` to restore a 100% green production build.
+- **Runtime Correction**: Fixed a `ReferenceError: AnimatePresence is not defined` in `ReservationsPage.tsx` by adding the missing `framer-motion` import.
+- **File Integrity**: Corrected a duplicated code block in `SallePage.tsx` caused by a previous surgical edit.
+- **Docker Sync**: Resolved a Vite import resolution failure by synchronizing the `node_modules` volume inside the `backoffice-app` container (`docker compose exec backoffice-app npm install`).
+
+### Validation
+- **Production Build**: Successfully executed `npm run build` in `app/frontend/backoffice-app`.
+- **Dependency Audit**: Verified `react-zoom-pan-pinch` is correctly installed and bundled.
+
+### Commit
+- `Feat(backoffice): add zoom and pan to salle map + build fixes`
+
 ## [2026-05-25] - 18:45
 ### Fixed
 - Improved table alignment in `PlatPage.tsx` (Menu Operations). Synchronized header and row grid properties using `flex justify-center` and `items-center` to ensure price values and toggle switches are perfectly centered under their respective columns, resolving a visual misalignment identified in user feedback.
@@ -7,7 +27,7 @@
 - `npm --prefix app/frontend/backoffice-app run typecheck`
 
 ### Commit
-- `[COMMIT_HASH]` `Fix(ui): center price and toggle columns in PlatPage ledger`
+- `99caa18` `Fix(ui): center price and toggle columns in PlatPage ledger`
 
 ## [2026-05-25] - 18:25
 ### Fixed

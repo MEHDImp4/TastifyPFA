@@ -6,4 +6,5 @@ export const reservationApi = {
   updateReservationStatus: (id: number, statut: string) => api.patch<Reservation>(`/reservations/${id}/`, { statut }),
   confirmReservation: (id: number) => api.patch<Reservation>(`/reservations/${id}/confirmer/`, {}),
   cancelReservation: (id: number) => api.patch<Reservation>(`/reservations/${id}/annuler/`, {}),
+  deleteReservation: (id: number) => api.delete(`/reservations/${id}/`),
 };

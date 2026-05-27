@@ -10,21 +10,35 @@ import {
   Search,
   MoreVertical,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Eye,
+  Trash2,
+  Table as TableIcon
 } from 'lucide-react';
 
 import { Skeleton } from '../../components/ui/Skeleton';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
   const [search, setSearch] = useState('');
+  const navigate = useNavigate();
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const reservationsPerPage = 3;
+
+  // Dropdown state - tracking by ID
+  const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
+
+  // Modal state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reservationToDelete, setReservationToDelete] = useState<number | null>(null);
 
   const fetchReservations = async () => {
     try {
@@ -39,6 +53,11 @@ export const ReservationsPage: React.FC = () => {
 
   useEffect(() => {
     fetchReservations();
+    
+    // Global click listener to close any open dropdowns
+    const handleGlobalClick = () => setActiveMenuId(null);
+    window.addEventListener('click', handleGlobalClick);
+    return () => window.removeEventListener('click', handleGlobalClick);
   }, []);
 
   if (isLoading) {
@@ -61,16 +80,39 @@ export const ReservationsPage: React.FC = () => {
   }
 
   const handleStatusUpdate = async (id: number, action: 'confirm' | 'cancel') => {
+    setActiveMenuId(null);
     try {
       if (action === 'confirm') {
         await reservationApi.confirmReservation(id);
+        toast.success('RÉSERVATION CONFIRMÉE');
       } else {
         await reservationApi.cancelReservation(id);
+        toast.warning('RÉSERVATION ANNULÉE');
       }
       fetchReservations();
     } catch (err) {
+      toast.error('ÉCHEC DE L\'OPÉRATION');
       console.error(`Failed to ${action} reservation`, err);
     }
+  };
+
+  const confirmDelete = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation(); // Prevent global click from closing it before we can see the modal
+    setReservationToDelete(id);
+    setIsDeleteModalOpen(true);
+    setActiveMenuId(null);
+  };
+
+  const executeDelete = async () => {
+    if (!reservationToDelete) return;
+    try {
+        await reservationApi.cancelReservation(reservationToDelete);
+        toast.success('RÉSERVATION SUPPRIMÉE');
+        fetchReservations();
+    } catch (err) {
+        toast.error('ÉCHEC DE SUPPRESSION');
+    }
+    setReservationToDelete(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -145,7 +187,7 @@ export const ReservationsPage: React.FC = () => {
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
-              className="group rounded-lg border border-outline bg-surface-container p-5 md:p-6 transition-colors hover:border-primary/60 shadow-sm"
+              className="group rounded-lg border border-outline bg-surface-container p-5 md:p-6 transition-colors hover:border-primary/60 shadow-sm relative"
             >
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full">
                 <div className="flex items-start gap-4 md:gap-5">
@@ -218,13 +260,53 @@ export const ReservationsPage: React.FC = () => {
                    </button>
                 )}
 
-                <button
-                    aria-label={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
-                    title={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
-                    className="rounded-md p-3 text-on-surface-variant hover:bg-background hover:text-primary transition-colors"
-                >
-                    <MoreVertical className="w-5 h-5"  strokeWidth={2.5}/>
-                </button>
+                <div className="relative">
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setActiveMenuId(activeMenuId === res.id ? null : res.id); }}
+                        aria-label={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
+                        title={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
+                        className={`rounded-md p-3 transition-colors ${activeMenuId === res.id ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:bg-background hover:text-primary'}`}
+                    >
+                        <MoreVertical className="w-5 h-5"  strokeWidth={2.5}/>
+                    </button>
+
+                    <AnimatePresence>
+                        {activeMenuId === res.id && (
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                                className="absolute right-0 top-full mt-2 w-56 bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl z-50 overflow-hidden"
+                            >
+                                <div className="p-2 space-y-1">
+                                    <button 
+                                        onClick={() => { setActiveMenuId(null); toast.info('FONCTIONNALITÉ DÉTAILS EN COURS...'); }}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 hover:text-primary transition-all font-sans text-[11px] font-black uppercase tracking-widest text-on-surface-variant"
+                                    >
+                                        <Eye className="w-4 h-4" />
+                                        Voir Détails
+                                    </button>
+                                    <button 
+                                        onClick={() => { setActiveMenuId(null); navigate('/salle'); }}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 hover:text-primary transition-all font-sans text-[11px] font-black uppercase tracking-widest text-on-surface-variant"
+                                    >
+                                        <TableIcon className="w-4 h-4" />
+                                        Associer Table
+                                    </button>
+                                    <div className="h-px bg-outline-variant/30 my-1" />
+                                    <button 
+                                        onClick={(e) => confirmDelete(e, res.id)}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-error/10 hover:text-error transition-all font-sans text-[11px] font-black uppercase tracking-widest text-error/70"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                        Supprimer
+                                    </button>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
               </div>
               </div>
             </div>
@@ -281,6 +363,17 @@ export const ReservationsPage: React.FC = () => {
           )}
         </div>
       </footer>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={executeDelete}
+        title="Supprimer Réservation"
+        message="Êtes-vous sûr de vouloir supprimer définitivement cette réservation ? Cette action est irréversible."
+        confirmLabel="SUPPRIMER"
+        variant="danger"
+      />
     </div>
   );
 };

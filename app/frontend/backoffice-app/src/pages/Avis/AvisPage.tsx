@@ -10,7 +10,9 @@ import {
   Smile,
   Meh,
   Frown,
-  Activity
+  Activity,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -214,6 +216,19 @@ export const AvisPage: React.FC = () => {
                   <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">AUCUNE DONNÉE DE RETOUR ENREGISTRÉE</p>
               </div>
             )}
+          </div>
+          
+          {/* Footer Pagination - Centered */}
+          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+            <div className="flex items-center gap-4">
+                <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
+                <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30 text-on-surface">
+                    <span className="text-primary font-bold">1</span>
+                    <span className="opacity-30">/</span>
+                    <span>1</span>
+                </div>
+                <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
+            </div>
           </div>
         </div>
       </main>

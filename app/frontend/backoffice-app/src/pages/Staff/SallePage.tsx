@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 import { useSocketStore } from '../../store/socketStore';
 import { useAuthStore } from '../../store/authStore';
+import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const SallePage: React.FC = () => {
   const [tables, setTables] = useState<Table[]>([]);
@@ -26,6 +27,13 @@ export const SallePage: React.FC = () => {
   const [isAddingText, setIsAddingText] = useState(false);
   const [formData, setFormData] = useState({ numero: '', capacite: '' });
   const [textFormData, setTextFormData] = useState({ texte: '' });
+
+  // Modal State
+  const [deleteConfig, setDeleteConfig] = useState<{ isOpen: boolean, type: 'table' | 'text', id: number | null }>({
+    isOpen: false,
+    type: 'table',
+    id: null
+  });
 
   const hasDragged = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
@@ -182,6 +190,25 @@ export const SallePage: React.FC = () => {
     
     setDraggingItem(null);
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+  };
+
+  const executeDelete = async () => {
+    if (!deleteConfig.id) return;
+    try {
+        if (deleteConfig.type === 'table') {
+            await salleApi.deleteTable(deleteConfig.id);
+            toast.success('UNITÉ SUPPRIMÉE');
+            setSelectedTableForEdit(null);
+        } else {
+            await salleApi.deletePlanText(deleteConfig.id);
+            toast.success('ÉTIQUETTE SUPPRIMÉE');
+            setSelectedTextForEdit(null);
+        }
+        fetchData();
+    } catch (err) {
+        toast.error('ÉCHEC DE SUPPRESSION');
+    }
+    setDeleteConfig({ isOpen: false, type: 'table', id: null });
   };
 
   return (
@@ -403,18 +430,7 @@ export const SallePage: React.FC = () => {
                 <div className="flex items-center gap-4 mt-12">
                     {selectedTableForEdit && (
                         <button
-                            onClick={async () => {
-                                if (window.confirm('SUPPRIMER DÉFINITIVEMENT CETTE UNITÉ ?')) {
-                                  try {
-                                      await salleApi.deleteTable(selectedTableForEdit.id);
-                                      toast.success('UNITÉ SUPPRIMÉE');
-                                      fetchData();
-                                      setSelectedTableForEdit(null);
-                                  } catch (err) {
-                                      toast.error('ÉCHEC DE SUPPRESSION');
-                                  }
-                                }
-                            }}
+                            onClick={() => setDeleteConfig({ isOpen: true, type: 'table', id: selectedTableForEdit.id })}
                             className="h-16 w-16 flex items-center justify-center text-error border border-error/30 hover:bg-error/10 rounded-xl transition-all active:scale-90"
                         >
                             <Trash2 className="w-6 h-6" />
@@ -490,16 +506,7 @@ export const SallePage: React.FC = () => {
                 <div className="flex items-center gap-4 mt-12">
                     {selectedTextForEdit && (
                         <button
-                            onClick={async () => {
-                                try {
-                                    await salleApi.deletePlanText(selectedTextForEdit.id);
-                                    toast.success('ÉTIQUETTE SUPPRIMÉE');
-                                    fetchData();
-                                    setSelectedTextForEdit(null);
-                                } catch (err) {
-                                    toast.error('ÉCHEC DE SUPPRESSION');
-                                }
-                            }}
+                            onClick={() => setDeleteConfig({ isOpen: true, type: 'text', id: selectedTextForEdit.id })}
                             className="h-16 w-16 flex items-center justify-center text-error border border-error/30 hover:bg-error/10 rounded-xl transition-all active:scale-90"
                         >
                             <Trash2 className="w-6 h-6" />
@@ -538,6 +545,17 @@ export const SallePage: React.FC = () => {
             </motion.div>
         </div>
       )}
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteConfig.isOpen}
+        onClose={() => setDeleteConfig({ ...deleteConfig, isOpen: false })}
+        onConfirm={executeDelete}
+        title={deleteConfig.type === 'table' ? "Supprimer Table" : "Supprimer Étiquette"}
+        message={`Voulez-vous vraiment supprimer définitivement cet élément du plan ?`}
+        confirmLabel="SUPPRIMER"
+        variant="danger"
+      />
     </div>
   );
 };

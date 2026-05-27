@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-26 01:02:24<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-27 15:03:02<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -1150,6 +1150,61 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Salle Map Zoom & Pan**: Integrated `react-zoom-pan-pinch` into the backoffice `SallePage.tsx` to provide a robust, premium navigation experience for the architectural floor plan.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Interactive Controls**: Added a floating tactical control panel with Zoom-In, Zoom-Out, and 100% Reset buttons.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Seamless Panning**: Enabled mouse-wheel zoom and click-to-pan functionality on the map background, ensuring it doesn't conflict with table dragging in edit mode.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Auto-Locking**: Panning is automatically disabled while dragging a table to prevent accidental view shifts during configuration.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Build Stabilization**: Resolved "unused variable" and "missing import" TypeScript errors in `Sidebar.tsx`, `ReservationsPage.tsx`, and `HrPage.tsx` to restore a 100% green production build.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Runtime Correction**: Fixed a `ReferenceError: AnimatePresence is not defined` in `ReservationsPage.tsx` by adding the missing `framer-motion` import.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **File Integrity**: Corrected a duplicated code block in `SallePage.tsx` caused by a previous surgical edit.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Docker Sync**: Resolved a Vite import resolution failure by synchronizing the `node_modules` volume inside the `backoffice-app` container (`docker compose exec backoffice-app npm install`).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Production Build**: Successfully executed `npm run build` in `app/frontend/backoffice-app`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Dependency Audit**: Verified `react-zoom-pan-pinch` is correctly installed and bundled.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-26 11:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `Feat(backoffice): add zoom and pan to salle map + build fixes`</p>
+                            </li>
+                            <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Improved table alignment in `PlatPage.tsx` (Menu Operations). Synchronized header and row grid properties using `flex justify-center` and `items-center` to ensure price values and toggle switches are perfectly centered under their respective columns, resolving a visual misalignment identified in user feedback.</p>
@@ -1167,62 +1222,7 @@
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-25 18:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `[COMMIT_HASH]` `Fix(ui): center price and toggle columns in PlatPage ledger`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved syntax error in `ReservationsPage.tsx` caused by duplicated component closing tags (`  ); };`) at the end of the file, restoring build stability for the backoffice application.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `npm --prefix app/frontend/backoffice-app run typecheck`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:25</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `f6d7929` `Fix(backoffice): resolve syntax error in ReservationsPage.tsx`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Resolved "date-fns" import resolution failure in `backoffice-app` by installing the package and updating `package.json`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> Cleaned up `DashboardPage.tsx` by removing unused `Clock` import and `idx` parameter in the live feed map function to ensure a green production build.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker-compose exec -T backoffice-app npm run typecheck`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> `docker-compose exec -T backoffice-app npm run build`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `ce3ef55` `Fix(dashboard): add missing date-fns dependency and cleanup unused code`</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Integrated the remaining safe UI polish changes across the shared backoffice shell and the client home surface, keeping the lot focused on accessibility, usability, and dev-environment stability rather than introducing new product scope.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Added explicit accessible labels to the staff notification bell, mobile shell controls, and security affordance in `NotificationCenter.tsx` and `Topbar.tsx`, while making the main workspace container keyboard-focusable in `AppShell.tsx`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-25 18:04</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> Completed the pending KDS header polish by wiring the back button to real navigation and making the empty-state contrast stronger instead of fading the entire sector-clear panel into near invisibility.</p>
+                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `99caa18` `Fix(ui): center price and toggle columns in PlatPage ledger`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

@@ -13,7 +13,9 @@ import {
   AlertTriangle,
   MoreVertical,
   Mail,
-  Phone
+  Phone,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -40,6 +42,44 @@ export const HrPage: React.FC = () => {
     fetchHr();
   }, []);
 
+  const handleExportCSV = () => {
+    try {
+        if (employes.length === 0) {
+            toast.error("Aucune donnée à exporter");
+            return;
+        }
+
+        const headers = ["ID", "Utilisateur", "Rôle/Poste", "Email Local", "Statut"];
+        const rows = employes.map(e => [
+            e.id,
+            e.username,
+            e.poste,
+            `${(e.username || 'unknown').toLowerCase()}@staff.os`,
+            "EN SERVICE"
+        ]);
+
+        const csvContent = [
+            headers.join(";"),
+            ...rows.map(row => row.join(";"))
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `personnel_tastify_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        toast.success("Export RH réussi");
+    } catch (err) {
+        console.error("CSV Export error", err);
+        toast.error("Échec de l'exportation");
+    }
+  };
+
   const filteredEmployes = employes.filter(emp => {
     const u = emp.username || '';
     const matchesSearch = u.toLowerCase().includes(search.toLowerCase()) || emp.poste.toLowerCase().includes(search.toLowerCase());
@@ -61,7 +101,7 @@ export const HrPage: React.FC = () => {
         </div>
         <div className="flex gap-unit-md items-center">
           <button 
-            onClick={() => toast.info('GENERATING_EXPORT_STREAM')}
+            onClick={handleExportCSV}
             className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
           >
             <Download className="w-3.5 h-3.5" /> EXPORTER EFFECTIFS
@@ -212,13 +252,16 @@ export const HrPage: React.FC = () => {
             )}
           </div>
 
-          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-between items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <span>Nombre de Dossiers Actifs : {filteredEmployes.length}</span>
-            <div className="flex gap-4">
-               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all disabled:opacity-20">Préc.</button>
-               <span className="px-2 py-1 bg-primary text-on-primary rounded">1</span>
-               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all">2</button>
-               <button className="px-2 py-1 rounded hover:bg-surface-container-high transition-all">Suiv.</button>
+          {/* Centered Pagination Footer */}
+          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+            <div className="flex items-center gap-4">
+               <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
+               <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30 text-on-surface">
+                  <span className="text-primary font-bold">1</span>
+                  <span className="opacity-30">/</span>
+                  <span>1</span>
+               </div>
+               <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
             </div>
           </div>
         </div>
@@ -226,4 +269,3 @@ export const HrPage: React.FC = () => {
     </div>
   );
 };
-

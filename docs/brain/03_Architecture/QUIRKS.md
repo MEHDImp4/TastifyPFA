@@ -112,9 +112,14 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Issue**: The low-mock cross-app scenarios rely on both SPAs and the live backend being available together. If they run inside the default client Playwright suite, they either slow the main gate unnecessarily or fail when the backoffice stack is intentionally absent.
 - **Fix**: Keep `client.cross-app.spec.ts` excluded from the default client Playwright config unless `PLAYWRIGHT_INCLUDE_CROSS_APP=true`, and run it through the dedicated `e2e:cross-app` root target instead.
 
-### 12. Docker E2E Must Override Email Delivery for Transactional Flows
+### 13. Docker E2E Must Override Email Delivery for Transactional Flows
 - **Issue**: Password-reset requests and transactional notifications now execute in browser and integration tests. Pointing those flows at a real SMTP backend during Docker validation causes avoidable 500s or outbound-network drift.
 - **Fix**: The root QA runner injects a temporary Compose override that forces a local email backend (`console`/`locmem`) for E2E and integration contexts, so reset-password, reservation-confirmation, and payment-confirmation coverage stays deterministic without external mail infrastructure.
+
+### 14. `node_modules` Volume Drift (Shared Persistence)
+- **Issue**: Adding a new frontend dependency on the host (e.g., `npm install react-zoom-pan-pinch`) updates `package.json`, but the running Docker container often uses a persistent `node_modules` volume that remains stale. This leads to `[plugin:vite:import-analysis] Failed to resolve import` errors in the browser.
+- **Fix**: Run `docker compose exec <service> npm install` immediately after adding a dependency on the host to synchronize the container's volume. Alternatively, rebuild the image without cache if the volume is managed at build-time.
+
 ## GitHub Actions CI Scope
 - The supported backend CI gate now runs the full Dockerized repo `pytest` suite under `tastify_backend.settings.test`, alongside `manage.py check` and `makemigrations --check --dry-run`.
 - If a future backend test starts failing only in CI, check first that the workflow command and local Docker command still both force the same Django test settings.

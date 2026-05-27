@@ -9,15 +9,17 @@ import {
   AlertTriangle, 
   Download, 
   Search, 
-  ChevronDown,
   TrendingDown,
   Warehouse,
   History,
   X,
-  Save
+  Save,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const StockPage: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -26,6 +28,15 @@ export const StockPage: React.FC = () => {
   const [editingItem, setEditingItem] = useState<Ingredient | null>(null);
   const [search, setSearch] = useState('');
   
+  // Modal state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  // Form State
   const [nom, setNom] = useState('');
   const [unite, setUnite] = useState<'g' | 'ml' | 'pcs'>('g');
   const [stock, setStock] = useState('0');
@@ -38,7 +49,7 @@ export const StockPage: React.FC = () => {
       setIngredients(res.data);
     } catch (err) {
       console.error('Failed to fetch stock', err);
-      toast.error('Inventory load failed');
+      toast.error('Erreur de chargement de l\'inventaire');
     } finally {
       setIsLoading(false);
     }
@@ -72,24 +83,97 @@ export const StockPage: React.FC = () => {
     try {
       if (editingItem) {
         await stockApi.updateIngredient(editingItem.id, payload);
-        toast.success('Resource record updated');
+        toast.success('Ressource mise à jour');
       } else {
         await stockApi.createIngredient(payload);
-        toast.success('New resource registered');
+        toast.success('Ressource enregistrée');
       }
       setIsEditorOpen(false);
       fetchStock();
     } catch (err) {
-      toast.error('Failed to commit record');
+      toast.error('Échec de l\'enregistrement');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const lowStockItems = ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte));
-  
+  const confirmDelete = (id: number) => {
+    setItemToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const executeDelete = async () => {
+    if (!itemToDelete) return;
+    try {
+        await stockApi.deleteIngredient(itemToDelete);
+        toast.success('Ressource supprimée');
+        fetchStock();
+    } catch (err) {
+        toast.error('Échec de suppression');
+    }
+    setItemToDelete(null);
+  };
+
+  const handleExportCSV = () => {
+    try {
+        if (ingredients.length === 0) {
+            toast.error("Aucune donnée à exporter");
+            return;
+        }
+
+        // Professional Metadata
+        const reportTitle = "RAPPORT D'INVENTAIRE TASTIFY OS";
+        const exportDate = new Date().toLocaleString('fr-FR');
+        
+        const headers = ["ID_RESSOURCE", "DÉSIGNATION", "UNITÉ", "STOCK_ACTUEL", "SEUIL_ALERTE", "ÉTAT_OPÉRATIONNEL"];
+        
+        const rows = ingredients.map(i => {
+            const isLow = parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte);
+            return [
+                `#${i.id.toString().padStart(4, '0')}`,
+                i.nom.toUpperCase(),
+                i.unite_mesure.toUpperCase(),
+                i.stock_actuel,
+                i.seuil_alerte,
+                isLow ? "CRITIQUE (RÉAPPRO)" : "NOMINAL"
+            ];
+        });
+
+        // Add UTF-8 BOM for Excel and metadata rows
+        const csvContent = "\uFEFF" + [
+            `"${reportTitle}";;;;;`,
+            `"Généré le : ${exportDate}";;;;;`,
+            "",
+            headers.join(";"),
+            ...rows.map(row => row.join(";"))
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `TASTIFY_STOCK_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        toast.success("Export Inventaire Premium réussi");
+    } catch (err) {
+        console.error("CSV Export error", err);
+        toast.error("Échec de l'exportation");
+    }
+  };
+
   const filteredIngredients = ingredients.filter(i => 
     i.est_active && i.nom.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const lowStockItems = ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte));
+  const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
+  const paginatedIngredients = filteredIngredients.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
@@ -97,7 +181,7 @@ export const StockPage: React.FC = () => {
   return (
     <div className="h-full flex flex-col -m-4 bg-surface-main overflow-hidden font-body selection:bg-primary/20">
       
-      {/* Dynamic Header Area */}
+      {/* Page Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
           <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Inventaire & Logistique</h1>
@@ -109,13 +193,16 @@ export const StockPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input 
               type="text"
-              placeholder="RECHERCHE RESSOURCE..."
+              placeholder="RECHERCHE..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-56 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+              className="w-56 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded-lg font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
+          <button 
+            onClick={handleExportCSV}
+            className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
+          >
             <Download className="w-3.5 h-3.5" /> Exporter CSV
           </button>
           <button 
@@ -129,7 +216,7 @@ export const StockPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto p-staff-margin bg-surface-container-lowest custom-scrollbar space-y-staff-margin">
         
-        {/* Bento Summary Grid */}
+        {/* KPI Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-unit-md">
           {/* Total Units */}
           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
@@ -141,7 +228,6 @@ export const StockPage: React.FC = () => {
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{ingredients.length}</span>
               <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Dans l'entrepôt principal</span>
             </div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all" />
           </div>
 
           {/* Low Stock Alerts */}
@@ -167,26 +253,11 @@ export const StockPage: React.FC = () => {
               <span className="font-serif text-3xl font-black text-on-surface tabular-nums">42,850 DH</span>
               <span className="block font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Mis à jour il y a 2m</span>
             </div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-success/5 rounded-full blur-2xl group-hover:bg-success/10 transition-all" />
           </div>
         </div>
 
         {/* Tactical Data Grid */}
-        <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl">
-          {/* Toolbar */}
-          <div className="p-unit-sm border-b border-outline-variant bg-surface-container flex items-center justify-between">
-            <div className="flex gap-2">
-              <button className="px-3 py-1.5 bg-surface-container-high border border-outline-variant rounded text-on-surface font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
-                 Groupe de Métriques <ChevronDown className="w-3 h-3" />
-              </button>
-              <button className="px-3 py-1.5 bg-surface-container-high border border-outline-variant rounded text-on-surface font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
-                 Criticité <ChevronDown className="w-3 h-3" />
-              </button>
-            </div>
-            <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] mr-2">Affichage de {filteredIngredients.length} points d'index</span>
-          </div>
-
-          {/* Table */}
+        <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl mb-8">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -200,7 +271,7 @@ export const StockPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/30 font-sans text-[13px] font-bold text-on-surface">
-                {filteredIngredients.map((item) => {
+                {paginatedIngredients.map((item) => {
                   const isLow = parseFloat(item.stock_actuel) <= parseFloat(item.seuil_alerte);
                   return (
                     <tr key={item.id} className="hover:bg-surface-container-low transition-colors group">
@@ -234,7 +305,7 @@ export const StockPage: React.FC = () => {
                           <button onClick={() => handleOpenEditor(item)} className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
                             <Edit2 className="w-4 h-4" />
                           </button>
-                          <button className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
+                          <button onClick={() => confirmDelete(item.id)} className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -244,6 +315,35 @@ export const StockPage: React.FC = () => {
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* Footer Pagination - Centered */}
+          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+            {totalPages > 1 ? (
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30 text-on-surface">
+                        <span className="text-primary font-bold">{currentPage}</span>
+                        <span className="opacity-30">/</span>
+                        <span>{totalPages}</span>
+                    </div>
+                    <button 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+            ) : (
+                <span className="opacity-20 tracking-[0.5em]">FIN DE L'INDEX</span>
+            )}
           </div>
         </div>
       </main>
@@ -264,12 +364,12 @@ export const StockPage: React.FC = () => {
                   <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">{editingItem ? 'Modifier Ressource' : 'Nouvelle Ressource'}</h2>
                   <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mt-1">Configuration Métrique Ressource</p>
                 </div>
-                <button onClick={() => setIsEditorOpen(false)} className="p-2 rounded hover:bg-surface-container-high transition-colors">
+                <button onClick={() => setIsEditorOpen(false)} className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant">
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-unit-lg">
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-unit-lg custom-scrollbar">
                 <div className="space-y-unit-xs">
                   <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Nomenclature Ressource</label>
                   <input 
@@ -283,7 +383,7 @@ export const StockPage: React.FC = () => {
                       <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Unité Métrique</label>
                       <select 
                         value={unite} onChange={(e) => setUnite(e.target.value as any)}
-                        className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
+                        className="w-full"
                       >
                         <option value="g">GRAMMES (G)</option>
                         <option value="ml">MILLILITRES (ML)</option>
@@ -308,7 +408,7 @@ export const StockPage: React.FC = () => {
                       className="w-full h-12 pl-10 pr-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-error outline-none transition-all tabular-nums"
                     />
                   </div>
-                  <p className="font-sans text-[9px] text-on-surface-variant uppercase mt-2 tracking-wider">Le système signalera la ressource lorsque le solde tombera en dessous de ce point.</p>
+                  <p className="font-sans text-[9px] text-on-surface-variant uppercase mt-2 tracking-wider opacity-60">Le système signalera la ressource lorsque le solde tombera en dessous de ce point.</p>
                 </div>
               </form>
 
@@ -325,7 +425,17 @@ export const StockPage: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={executeDelete}
+        title="Supprimer Ressource"
+        message="Êtes-vous sûr de vouloir supprimer définitivement cet article du stock ? Cette opération peut affecter les recettes liées."
+        confirmLabel="SUPPRIMER"
+        variant="danger"
+      />
     </div>
   );
 };
-

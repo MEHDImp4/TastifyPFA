@@ -56,22 +56,20 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        # We only show active plats in the main list. 
-        # Inactive plats are kept in DB for order history but hidden from the menu management.
-        qs = Plat.objects.active()
         
-        if not (user.is_authenticated and user.role in ['GERANT', 'CUISINIER']):
-            # Clients only see available plats
-            qs = qs.filter(est_disponible=True)
-            
-        # Filtre optionnel : ?categorie=ID
-        categorie_id = self.request.query_params.get('categorie')
-        if categorie_id:
-            qs = qs.filter(categorie_id=categorie_id)
-        return qs.order_by('categorie', 'nom')
+        # Managers (Gerant/Cuisinier) can access all plats (including inactive for detail/update)
+        if user.is_authenticated and user.role in ['GERANT', 'CUISINIER']:
+            if self.action == 'list':
+                # But even for managers, only show active in the main list to avoid clutter
+                return Plat.objects.active().order_by('categorie', 'nom')
+            return Plat.objects.all().order_by('categorie', 'nom')
+
+        # Clients only see active and available plats
+        return Plat.objects.active().filter(est_disponible=True).order_by('categorie', 'nom')
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        print(f"DEBUG: Suppressing plat ID {instance.id} - {instance.nom}")
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
