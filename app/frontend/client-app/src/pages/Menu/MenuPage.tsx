@@ -12,6 +12,28 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.23, 1, 0.32, 1]
+    }
+  }
+};
+
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [plats, setPlats] = useState<Plat[]>([]);
@@ -64,23 +86,23 @@ export const MenuPage: React.FC = () => {
     <div className="flex-1 flex flex-col bg-background font-body selection:bg-primary/20">
       
       {/* Search & Header */}
-      <div className="flex-none px-client-margin py-unit-lg border-b border-outline-variant bg-surface-main">
+      <div className="flex-none px-client-margin py-unit-lg border-b border-outline-variant bg-surface-container-low">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">
            <div>
               <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase italic">Notre Carte</h1>
-              <p className="font-body text-sm text-on-surface-variant mt-2 uppercase tracking-widest opacity-60">Architectural gastronomy curated for the equinox</p>
+              <p className="font-body text-sm text-on-surface-variant mt-2 uppercase tracking-widest opacity-60 italic">Gastronomie architecturale sculptée pour l'équinoxe</p>
            </div>
            <div className="relative group w-full md:w-96">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
-              <label htmlFor="menu-search-input" className="sr-only">Search menu</label>
+              <label htmlFor="menu-search-input" className="sr-only">Rechercher dans la carte</label>
               <input 
                 id="menu-search-input"
                 type="text"
-                aria-label="Search menu"
-                placeholder="FIND A CREATION..."
+                aria-label="Rechercher dans la carte"
+                placeholder="TROUVER UNE CRÉATION..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-12 bg-surface-container border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+                className="w-full h-12 bg-surface-container border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30 shadow-inner"
               />
            </div>
         </div>
@@ -91,16 +113,22 @@ export const MenuPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-client-margin py-4 flex gap-3 overflow-x-auto no-scrollbar">
            <button
              onClick={() => setActiveCat(null)}
-             className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === null ? 'bg-primary border-primary text-on-primary shadow-lg shadow-primary/20' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+             className={`relative px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === null ? 'border-primary text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
            >
-             All Selections
+             {activeCat === null && (
+               <motion.div layoutId="active-cat" className="absolute inset-0 bg-primary rounded-full -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
+             )}
+             Toutes les Sélections
            </button>
            {categories.map(cat => (
              <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === cat.id ? 'bg-primary border-primary text-on-primary shadow-lg shadow-primary/20' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+                className={`relative px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === cat.id ? 'border-primary text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
              >
+               {activeCat === cat.id && (
+                 <motion.div layoutId="active-cat" className="absolute inset-0 bg-primary rounded-full -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
+               )}
                {cat.nom}
              </button>
            ))}
@@ -109,17 +137,21 @@ export const MenuPage: React.FC = () => {
 
       {/* Grid Canvas */}
       <main className="flex-1 overflow-y-auto p-client-margin bg-background custom-scrollbar">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24"
+        >
            <AnimatePresence mode="popLayout">
-              {filteredPlats.map((plat, idx) => (
+              {filteredPlats.map((plat) => (
                 <motion.div 
                   key={plat.id}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
+                  variants={itemVariants}
+                  whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
                   data-testid={`menu-card-${plat.id}`}
-                  className={`group flex flex-col bg-surface-container-low rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary hover:bg-surface-container-high shadow-sm hover:shadow-2xl hover:shadow-black/40'}`}
+                  className={`group flex flex-col bg-surface-container-low rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary hover:bg-surface-bright shadow-sm hover:shadow-2xl hover:shadow-primary/5'}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-highest">
@@ -132,10 +164,10 @@ export const MenuPage: React.FC = () => {
                     <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
                        <div className="bg-background/80 backdrop-blur-md border border-outline-variant/30 px-3 py-1 rounded-lg flex items-center gap-2">
                           <Timer className="w-3.5 h-3.5 text-primary" />
-                          <span className="font-sans text-[11px] font-black text-on-surface tabular-nums">{plat.temps_preparation}M</span>
+                          <span className="font-sans text-[11px] font-black text-on-surface tabular-nums">{plat.temps_preparation} min</span>
                        </div>
                        {!plat.est_disponible && (
-                          <span className="bg-error text-on-error px-3 py-1 rounded font-sans text-[9px] font-black uppercase tracking-widest">Depleted</span>
+                          <span className="bg-error text-on-error px-3 py-1 rounded font-sans text-[9px] font-black uppercase tracking-widest">Épuisé</span>
                        )}
                     </div>
                   </div>
@@ -145,26 +177,27 @@ export const MenuPage: React.FC = () => {
                       <h3 className="font-serif text-lg font-black text-on-surface uppercase tracking-tight leading-tight group-hover:text-primary transition-colors">{plat.nom}</h3>
                       <span className="font-sans text-lg font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
                     </div>
-                    <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Seasonal masterpiece prepared with seasonal precision.'}</p>
+                    <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Chef-d\'œuvre saisonnier préparé avec précision.'}</p>
                     
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); addItem(plat); toast.success('Added to cart'); }}
+                    <motion.button 
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => { e.stopPropagation(); addItem(plat); toast.success('Ajouté au panier'); }}
                       disabled={!plat.est_disponible}
-                      className="mt-4 w-full h-12 bg-surface-container-highest border border-outline-variant rounded-xl flex items-center justify-center gap-3 font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all active:scale-95 disabled:hidden"
+                      className="mt-4 w-full h-12 bg-surface-container-highest border border-outline-variant rounded-xl flex items-center justify-center gap-3 font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all disabled:hidden shadow-sm hover:shadow-md"
                     >
                       <Plus className="w-4 h-4" />
-                      Add to cart
-                    </button>
+                      Ajouter au panier
+                    </motion.button>
                   </div>
                 </motion.div>
               ))}
            </AnimatePresence>
-        </div>
+        </motion.div>
 
         {filteredPlats.length === 0 && (
            <div className="py-32 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
               <ShoppingBag className="w-16 h-16 stroke-[0.5]" />
-              <p className="font-sans text-[11px] font-black uppercase tracking-[0.5em]">No creations match your query</p>
+              <p className="font-sans text-[11px] font-black uppercase tracking-[0.5em]">Aucune création ne correspond à votre recherche</p>
            </div>
         )}
       </main>
@@ -184,7 +217,7 @@ export const MenuPage: React.FC = () => {
                exit={{ opacity: 0, scale: 0.95, y: 20 }}
                className="relative w-full max-w-4xl bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button aria-label="Close dish details" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
+                <button aria-label="Fermer les détails du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
                    {selectedPlat.image ? (
@@ -197,7 +230,7 @@ export const MenuPage: React.FC = () => {
 
                 <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
                    <div className="mb-8">
-                      <span className="editorial-kicker mb-3">GASTRONOMIC RECORD</span>
+                      <span className="editorial-kicker mb-3">DOSSIER GASTRONOMIQUE</span>
                       <h2 className="font-serif text-3xl md:text-5xl font-black text-primary uppercase italic tracking-tighter leading-none mb-4">{selectedPlat.nom}</h2>
                       <div className="flex items-baseline gap-4">
                          <span className="font-sans text-4xl font-black text-on-surface tabular-nums">{selectedPlat.prix} DH</span>
@@ -205,31 +238,31 @@ export const MenuPage: React.FC = () => {
                    </div>
 
                    <p className="font-body text-lg md:text-xl text-on-surface-variant italic leading-relaxed mb-10 flex-1 uppercase tracking-tight">
-                     {selectedPlat.description || 'A signature creation meticulously orchestrated by our culinary leads using only the finest organic constituents.'}
+                     {selectedPlat.description || 'Une création signature méticuleusement orchestrée par nos chefs utilisant uniquement les meilleurs composants biologiques.'}
                    </p>
 
                    <div className="space-y-8 pt-8 border-t border-outline-variant">
                       <div className="flex items-center gap-8">
                          <div className="space-y-1">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Velocity</p>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Temps</p>
                             <div className="flex items-center gap-2 font-sans font-bold text-on-surface uppercase text-sm">
                                <Timer className="w-4 h-4 text-primary" />
                                {selectedPlat.temps_preparation} Minutes
                             </div>
                          </div>
                          <div className="space-y-1">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Allocation</p>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Catégorie</p>
                             <div className="font-sans font-bold text-on-surface uppercase text-sm">
-                               {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Uncategorized'}
+                               {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Non classé'}
                             </div>
                          </div>
                       </div>
 
                       <button 
-                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); toast.success('Added to collection'); }}
+                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); toast.success('Ajouté à la collection'); }}
                         className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4"
                       >
-                         Add to Selection <Plus className="w-5 h-5" />
+                         Ajouter à la Sélection <Plus className="w-5 h-5" />
                       </button>
                    </div>
                 </div>
