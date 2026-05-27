@@ -297,7 +297,6 @@ export const PortalHomePage = () => {
               <li><Link to="/menu" className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-[#2D2424]/60 hover:text-[#2D2424] transition-colors">Carte Digitale</Link></li>
               <li><Link to="/reservations" className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-[#2D2424]/60 hover:text-[#2D2424] transition-colors">Réservations</Link></li>
               <li><Link to="/loyalty" className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-[#2D2424]/60 hover:text-[#2D2424] transition-colors">L'Échelon</Link></li>
-              <li><Link to="/contact" className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-[#2D2424]/60 hover:text-[#2D2424] transition-colors">Concierge</Link></li>
             </ul>
           </div>
 

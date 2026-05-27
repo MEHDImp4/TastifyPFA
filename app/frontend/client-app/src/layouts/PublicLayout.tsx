@@ -32,7 +32,6 @@ export const PublicLayout: React.FC = () => {
   const navLinks = [
     { to: '/menu', label: 'LA CARTE' },
     { to: '/reservations', label: 'RESERVER' },
-    { to: '/contact', label: 'CONCIERGE' },
   ];
 
   // Add Loyalty link only if authenticated
@@ -48,7 +47,6 @@ export const PublicLayout: React.FC = () => {
   if (isAuthenticated) {
     mobileLinks.push({ to: '/loyalty', label: 'Privilèges' });
   }
-  mobileLinks.push({ to: '/contact', label: 'Concierge' });
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#2D2424] selection:bg-[#C5A059]/20 selection:text-[#2D2424] overflow-x-hidden font-body">

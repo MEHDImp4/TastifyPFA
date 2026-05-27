@@ -5,7 +5,6 @@ import { PublicLayout } from './layouts/PublicLayout';
 import { PortalHomePage } from './pages/Home/PortalHomePage';
 import { MenuPage } from './pages/Menu/MenuPage';
 import { ReservationWizard } from './pages/Reservations/ReservationWizard';
-import { ContactPage } from './pages/Contact/ContactPage';
 import { AccountPage } from './pages/Account/AccountPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
@@ -40,7 +39,6 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<PortalHomePage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/reservations" element={<ReservationWizard />} />
-        <Route path="/contact" element={<ContactPage />} />
 
         {/* Member-only Action Pages */}
         <Route path="/loyalty" element={
