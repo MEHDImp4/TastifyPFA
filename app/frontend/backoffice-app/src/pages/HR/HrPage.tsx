@@ -49,13 +49,15 @@ export const HrPage: React.FC = () => {
             return;
         }
 
-        const headers = ["ID", "Utilisateur", "Rôle/Poste", "Email Local", "Statut"];
+        const headers = ["ID", "Utilisateur", "Nom Complet", "Rôle/Poste", "Email", "Téléphone", "Statut"];
         const rows = employes.map(e => [
             e.id,
-            e.username,
+            e.user_details?.username || 'N/A',
+            `${e.user_details?.first_name || ''} ${e.user_details?.last_name || ''}`.trim() || 'N/A',
             e.poste,
-            `${(e.username || 'unknown').toLowerCase()}@staff.os`,
-            "EN SERVICE"
+            e.user_details?.email || 'N/A',
+            e.telephone || 'N/A',
+            e.user_details?.is_active ? "EN SERVICE" : "INACTIF"
         ]);
 
         const csvContent = [
@@ -81,8 +83,13 @@ export const HrPage: React.FC = () => {
   };
 
   const filteredEmployes = employes.filter(emp => {
-    const u = emp.username || '';
-    const matchesSearch = u.toLowerCase().includes(search.toLowerCase()) || emp.poste.toLowerCase().includes(search.toLowerCase());
+    const fullName = `${emp.user_details?.first_name || ''} ${emp.user_details?.last_name || ''}`.trim();
+    const u = emp.user_details?.username || '';
+    const matchesSearch = 
+      u.toLowerCase().includes(search.toLowerCase()) || 
+      fullName.toLowerCase().includes(search.toLowerCase()) ||
+      emp.poste.toLowerCase().includes(search.toLowerCase());
+      
     if (activeTab === 'ALL') return matchesSearch;
     return matchesSearch && emp.poste.toUpperCase().includes(activeTab);
   });
@@ -187,7 +194,7 @@ export const HrPage: React.FC = () => {
             <div className="col-span-2 text-center">Rôle & Secteur</div>
             <div className="col-span-2 text-center">Statut</div>
             <div className="col-span-2 text-center">Contact Opérationnel</div>
-            <div className="col-span-1 text-right">Actions</div>
+            <div className="col-span-1 text-right pr-2">Actions</div>
           </div>
 
           <div className="flex flex-col divide-y divide-outline-variant/30 min-h-[200px]">
@@ -202,11 +209,17 @@ export const HrPage: React.FC = () => {
                 >
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-10 h-10 rounded bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden shrink-0 relative shadow-inner">
-                      <span className="font-serif text-sm font-black text-on-surface-variant">{(emp.username || 'U').charAt(0).toUpperCase()}</span>
-                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-success rounded-full border-2 border-surface-container-low" />
+                      <span className="font-serif text-sm font-black text-on-surface-variant">
+                        {(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}
+                      </span>
+                      <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-surface-container-low ${emp.user_details?.is_active ? 'bg-success' : 'bg-on-surface-variant'}`} />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-sans text-[13px] font-black text-on-surface uppercase tracking-tight truncate group-hover:text-primary transition-colors">{emp.username}</h3>
+                      <h3 className="font-sans text-[13px] font-black text-on-surface uppercase tracking-tight truncate group-hover:text-primary transition-colors">
+                        {emp.user_details?.first_name && emp.user_details?.last_name 
+                          ? `${emp.user_details.first_name} ${emp.user_details.last_name}`
+                          : emp.user_details?.username || 'Utilisateur'}
+                      </h3>
                       <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-widest opacity-40">ID: EMP-{emp.id.toString().padStart(4, '0')}</p>
                     </div>
                   </div>
@@ -217,28 +230,32 @@ export const HrPage: React.FC = () => {
                   </div>
 
                   <div className="col-span-2 flex justify-center">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-success/5 border border-success/20 text-success font-sans text-[9px] font-black uppercase tracking-wider">
-                      <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                      En Service
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-sm border font-sans text-[9px] font-black uppercase tracking-wider ${emp.user_details?.is_active ? 'bg-success/5 border-success/20 text-success' : 'bg-on-surface-variant/5 border-on-surface-variant/20 text-on-surface-variant'}`}>
+                      <div className={`w-1.5 h-1.5 rounded-full ${emp.user_details?.is_active ? 'bg-success animate-pulse' : 'bg-on-surface-variant'}`} />
+                      {emp.user_details?.is_active ? 'En Service' : 'Inactif'}
                     </span>
                   </div>
 
                   <div className="col-span-2 flex flex-col items-center justify-center gap-1">
                     <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
                       <Mail className="w-3 h-3 text-primary" />
-                      <span className="font-sans text-[10px] font-bold">{(emp.username || 'unknown').toLowerCase()}@staff.os</span>
+                      <span className="font-sans text-[10px] font-bold truncate max-w-[120px]">
+                        {emp.user_details?.email || 'Aucun email'}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
                       <Phone className="w-3 h-3 text-primary" />
-                      <span className="font-sans text-[10px] font-bold">+212-6-00-00-00</span>
+                      <span className="font-sans text-[10px] font-bold">
+                        {emp.telephone || '+212-6-00-00-00'}
+                      </span>
                     </div>
                   </div>
 
                   <div className="col-span-1 flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                    <button className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
+                    <button className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75" title="Modifier">
                       <Edit2 className="w-4 h-4" />
                     </button>
-                    <button className="p-2 rounded hover:bg-surface-container-highest text-on-surface-variant transition-all active:scale-75">
+                    <button className="p-2 rounded hover:bg-surface-container-highest text-on-surface-variant transition-all active:scale-75" title="Menu">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>

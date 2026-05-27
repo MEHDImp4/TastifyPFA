@@ -17,7 +17,15 @@ export interface PlatIngredient {
 export interface Employe {
   id: number;
   user: number;
-  username?: string;
+  user_details?: {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: string;
+    is_active: boolean;
+  };
   poste: string;
   salaire: string;
   date_embauche: string;
