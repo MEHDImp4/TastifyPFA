@@ -15,7 +15,8 @@ import {
   X,
   Save,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  PackagePlus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -43,6 +44,14 @@ export const StockPage: React.FC = () => {
   const [seuil, setSeuil] = useState('0');
   const [isSaving, setIsSaving] = useState(false);
 
+  // Adjustment Modal State
+  const [isAdjustmentOpen, setIsAdjustmentOpen] = useState(false);
+  const [adjustmentItem, setAdjustmentItem] = useState<Ingredient | null>(null);
+  const [adjAmount, setAdjAmount] = useState('10');
+  const [adjSource, setAdjSource] = useState('LIVRAISON');
+  const [adjComment, setAdjComment] = useState('');
+  const [isAdjSaving, setIsAdjSaving] = useState(false);
+
   const fetchStock = async () => {
     try {
       const res = await stockApi.getIngredients();
@@ -58,6 +67,36 @@ export const StockPage: React.FC = () => {
   useEffect(() => {
     fetchStock();
   }, []);
+
+  const handleOpenAdjustment = (item: Ingredient) => {
+    setAdjustmentItem(item);
+    setAdjAmount('10');
+    setAdjSource('LIVRAISON');
+    setAdjComment('');
+    setIsAdjustmentOpen(true);
+  };
+
+  const handleAdjustmentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!adjustmentItem) return;
+    setIsAdjSaving(true);
+    try {
+        await stockApi.createMouvement({
+            ingredient: adjustmentItem.id,
+            quantite: adjAmount,
+            type_mouvement: 'ENTREE',
+            source: adjSource,
+            commentaire: adjComment
+        });
+        toast.success(`Approvisionnement réussi : +${adjAmount} ${adjustmentItem.unite_mesure}`);
+        setIsAdjustmentOpen(false);
+        fetchStock();
+    } catch (err) {
+        toast.error('Échec de l\'approvisionnement');
+    } finally {
+        setIsAdjSaving(false);
+    }
+  };
 
   const handleOpenEditor = (item?: Ingredient) => {
     if (item) {
@@ -302,8 +341,16 @@ export const StockPage: React.FC = () => {
                       </td>
                       <td className="py-4 px-6 text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                          <button onClick={() => handleOpenEditor(item)} className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
-                            <Edit2 className="w-4 h-4" />
+                          <button 
+                            onClick={() => handleOpenAdjustment(item)} 
+                            className="p-2 rounded hover:bg-primary/10 text-primary transition-all active:scale-75 flex items-center gap-1.5"
+                            title="Entrée de stock"
+                          >
+                            <PackagePlus className="w-4 h-4" />
+                            <span className="text-[10px] font-black uppercase tracking-tighter">Réappro</span>
+                          </button>
+                          <button onClick={() => handleOpenEditor(item)} className="p-2 rounded hover:bg-surface-container-high transition-all active:scale-75">
+                            <Edit2 className="w-4 h-4 text-on-surface-variant" />
                           </button>
                           <button onClick={() => confirmDelete(item.id)} className="p-2 rounded hover:bg-error/10 hover:text-error transition-all active:scale-75">
                             <Trash2 className="w-4 h-4" />
@@ -421,6 +468,83 @@ export const StockPage: React.FC = () => {
                   {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Enregistrer</span></>}
                 </button>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Stock Adjustment Modal */}
+      <AnimatePresence>
+        {isAdjustmentOpen && adjustmentItem && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-md bg-surface-container rounded-xl border border-outline-variant shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 border-b border-outline-variant bg-surface-main flex justify-between items-center">
+                <div>
+                  <h3 className="font-serif text-xl font-black text-on-surface uppercase tracking-tight">Entrée de Stock</h3>
+                  <p className="font-sans text-[10px] font-bold text-primary uppercase mt-1 tracking-widest">{adjustmentItem.nom}</p>
+                </div>
+                <button onClick={() => setIsAdjustmentOpen(false)} className="text-on-surface-variant hover:text-on-surface transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleAdjustmentSubmit} className="p-6 space-y-6">
+                <div className="space-y-4">
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Quantité à Ajouter ({adjustmentItem.unite_mesure})</label>
+                  
+                  {/* Quick-Add Grid */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {[10, 50, 100, 500].map(val => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setAdjAmount(val.toString())}
+                        className={`py-2 rounded border font-mono font-bold text-[11px] transition-all ${adjAmount === val.toString() ? 'bg-primary text-on-primary border-primary' : 'bg-surface-main border-outline-variant hover:border-primary text-on-surface'}`}
+                      >
+                        +{val}
+                      </button>
+                    ))}
+                  </div>
+
+                  <input 
+                    type="number" step="0.01" required value={adjAmount} onChange={(e) => setAdjAmount(e.target.value)}
+                    className="w-full h-14 px-4 bg-surface-main border-2 border-primary/20 rounded-lg font-mono text-2xl font-black text-primary focus:border-primary outline-none text-center transition-all"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Origine des Ressources</label>
+                  <select 
+                    value={adjSource} onChange={(e) => setAdjSource(e.target.value)}
+                    className="w-full h-12 bg-surface-main border border-outline-variant rounded px-4 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase text-[11px] tracking-wider"
+                  >
+                    <option value="LIVRAISON">LIVRAISON FOURNISSEUR</option>
+                    <option value="ACHAT_PERSONNEL">ACHAT PERSONNEL</option>
+                    <option value="AJUSTEMENT_INVENTAIRE">AJUSTEMENT INVENTAIRE</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Note Opérationnelle (Optionnel)</label>
+                  <textarea 
+                    rows={2} value={adjComment} onChange={(e) => setAdjComment(e.target.value)}
+                    className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[11px] font-bold text-on-surface focus:border-primary outline-none transition-all resize-none uppercase"
+                    placeholder="EX: FACTURE #1234, PROVENANCE MARCHÉ CENTRAL..."
+                  />
+                </div>
+
+                <button 
+                  type="submit" disabled={isAdjSaving || parseFloat(adjAmount) <= 0}
+                  className="w-full h-14 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                >
+                  {isAdjSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><PackagePlus className="w-5 h-5" /><span>Confirmer Réappro</span></>}
+                </button>
+              </form>
             </motion.div>
           </div>
         )}

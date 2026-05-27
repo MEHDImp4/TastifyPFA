@@ -11,6 +11,9 @@ export const stockApi = {
   createPlatIngredient: (data: Partial<PlatIngredient>) => api.post<PlatIngredient>('/stock/plat-ingredients/', data),
   updatePlatIngredient: (id: number, data: Partial<PlatIngredient>) => api.patch<PlatIngredient>(`/stock/plat-ingredients/${id}/`, data),
   deletePlatIngredient: (id: number) => api.delete(`/stock/plat-ingredients/${id}/`),
+
+  createMouvement: (data: { ingredient: number, quantite: string, type_mouvement: 'ENTREE' | 'SORTIE', source: string, commentaire?: string }) => 
+    api.post('/stock/mouvements/', data),
 };
 
 export const hrApi = {
