@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { useSocketStore } from '../../store/socketStore';
 import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale/fr';
+import { fr } from 'date-fns/locale';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
