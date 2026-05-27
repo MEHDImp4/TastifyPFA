@@ -11,7 +11,6 @@ import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { ResetPassword } from './pages/auth/ResetPassword';
-import { CheckoutPage } from './pages/Checkout/CheckoutPage';
 import { PaymentPortal } from './pages/Payment/PaymentPortal';
 import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
 import { NotFoundPage } from './pages/System/NotFoundPage';
@@ -37,28 +36,15 @@ const AnimatedRoutes = () => {
   return (
     <Routes>
       <Route element={<PublicLayout />}>
-        {/* Core Pages (Now Protected) */}
-        <Route path="/" element={
-          <ProtectedRoute>
-            <PortalHomePage />
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/menu" element={
-          <ProtectedRoute>
-            <MenuPage />
-          </ProtectedRoute>
-        } />
-        
+        {/* Public Showcase Pages */}
+        <Route path="/" element={<PortalHomePage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+        {/* Member-only Action Pages (Gated via ProtectedRoute or internally) */}
         <Route path="/reservations" element={
           <ProtectedRoute>
             <ReservationWizard />
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/contact" element={
-          <ProtectedRoute>
-            <ContactPage />
           </ProtectedRoute>
         } />
         
@@ -68,12 +54,6 @@ const AnimatedRoutes = () => {
           </ProtectedRoute>
         } />
 
-        <Route path="/checkout" element={
-          <ProtectedRoute>
-            <CheckoutPage />
-          </ProtectedRoute>
-        } />
-        
         <Route path="/account" element={
           <ProtectedRoute>
             <AccountPage />
@@ -106,6 +86,7 @@ const AnimatedRoutes = () => {
         } />
 
         {/* Global Helpers */}
+        <Route path="/checkout" element={<Navigate to="/menu" replace />} />
         <Route path="/pay/:token" element={<PaymentPortal />} />
         <Route path="/offline" element={<OfflineModePage />} />
         <Route path="*" element={<NotFoundPage />} />
