@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
-import { useCartStore } from '../store/cartStore';
 import { useConfigStore } from '../store/configStore';
-import { LogOut, ShoppingBag, Menu, X, Sparkles } from 'lucide-react';
+import { LogOut, Menu, X, Sparkles } from 'lucide-react';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
-  const { items } = useCartStore();
   const { config } = useConfigStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,18 +84,6 @@ export const PublicLayout: React.FC = () => {
                 </Link>
               </div>
             )}
-
-            <Link 
-                to="/checkout" 
-                className="relative group p-3 bg-[#2D2424]/5 rounded-full transition-all active:scale-90 hover:bg-[#2D2424]/10"
-            >
-                <ShoppingBag className="w-4 h-4 text-[#2D2424]" strokeWidth={2} />
-                {items.length > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D14D1A] text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-lg border-2 border-[#FAF9F6]">
-                        {items.length}
-                    </span>
-                )}
-            </Link>
             
             <div className="hidden md:block">
               {isAuthenticated ? (

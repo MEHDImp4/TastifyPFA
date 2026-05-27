@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
-import { useCartStore } from '../../store/cartStore';
 import { 
   Search, 
-  Plus, 
   X,
   Timer,
-  ShoppingBag
+  ShoppingBag,
+  Loader2
 } from 'lucide-react';
-import { toast } from 'sonner';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,7 +39,6 @@ export const MenuPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
-  const { addItem } = useCartStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -184,16 +181,6 @@ export const MenuPage: React.FC = () => {
                       <span className="font-sans text-lg font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
                     </div>
                     <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
-                    
-                    <motion.button 
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e) => { e.stopPropagation(); addItem(plat); toast.success('Ajouté au panier'); }}
-                      disabled={!plat.est_disponible}
-                      className="mt-4 w-full h-12 bg-surface-container-highest border border-outline-variant rounded-xl flex items-center justify-center gap-3 font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all disabled:hidden"
-                    >
-                      <Plus className="w-4 h-4" />
-                      Ajouter
-                    </motion.button>
                   </div>
                 </motion.div>
               ))}
@@ -263,15 +250,6 @@ export const MenuPage: React.FC = () => {
                             </div>
                          </div>
                       </div>
-
-                      <motion.button 
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); toast.success('Ajouté au panier'); }}
-                        className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:bg-[#B13D15] transition-all flex items-center justify-center gap-4"
-                      >
-                         Ajouter à ma sélection <Plus className="w-5 h-5" />
-                      </motion.button>
                    </div>
                 </div>
              </motion.div>
@@ -281,7 +259,3 @@ export const MenuPage: React.FC = () => {
     </div>
   );
 };
-
-const Loader2 = ({ className, strokeWidth }: { className?: string, strokeWidth?: number }) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4"/><path d="m16.2 4.2 2.8 2.8"/><path d="M18 12h4"/><path d="m16.2 19.8 2.8-2.8"/><path d="M12 18v4"/><path d="m4.8 19.8 2.8-2.8"/><path d="M2 12h4"/><path d="m4.8 4.2 2.8 2.8"/></svg>
-);
