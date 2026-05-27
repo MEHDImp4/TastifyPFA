@@ -37,10 +37,30 @@ const AnimatedRoutes = () => {
   return (
     <Routes>
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<PortalHomePage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/reservations" element={<ReservationWizard />} />
-        <Route path="/contact" element={<ContactPage />} />
+        {/* Core Pages (Now Protected) */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            <PortalHomePage />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/menu" element={
+          <ProtectedRoute>
+            <MenuPage />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/reservations" element={
+          <ProtectedRoute>
+            <ReservationWizard />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/contact" element={
+          <ProtectedRoute>
+            <ContactPage />
+          </ProtectedRoute>
+        } />
         
         <Route path="/loyalty" element={
           <ProtectedRoute>
@@ -60,6 +80,7 @@ const AnimatedRoutes = () => {
           </ProtectedRoute>
         } />
 
+        {/* Guest-only Auth Pages */}
         <Route path="/login" element={
           <GuestRoute>
             <Login />
@@ -84,9 +105,9 @@ const AnimatedRoutes = () => {
           </GuestRoute>
         } />
 
+        {/* Global Helpers */}
         <Route path="/pay/:token" element={<PaymentPortal />} />
         <Route path="/offline" element={<OfflineModePage />} />
-
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
