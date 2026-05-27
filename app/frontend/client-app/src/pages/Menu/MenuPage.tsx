@@ -29,7 +29,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.23, 1, 0.32, 1]
+      ease: [0.23, 1, 0.32, 1] as any
     }
   }
 };
@@ -76,7 +76,7 @@ export const MenuPage: React.FC = () => {
             className="flex flex-col items-center gap-6 relative z-10"
         >
             <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Carte en préparation</span>
+            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Chargement de la carte</span>
         </motion.div>
         <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
     </div>
@@ -86,23 +86,23 @@ export const MenuPage: React.FC = () => {
     <div className="flex-1 flex flex-col bg-background font-body selection:bg-primary/20">
       
       {/* Search & Header */}
-      <div className="flex-none px-client-margin py-unit-lg border-b border-outline-variant bg-surface-container-low">
+      <div className="flex-none px-client-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">
            <div>
               <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase italic">Notre Carte</h1>
-              <p className="font-body text-sm text-on-surface-variant mt-2 uppercase tracking-widest opacity-60 italic">Gastronomie architecturale sculptée pour l'équinoxe</p>
+              <p className="font-body text-sm text-on-surface-variant mt-2 uppercase tracking-widest opacity-60">Découvrez nos créations culinaires</p>
            </div>
            <div className="relative group w-full md:w-96">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
-              <label htmlFor="menu-search-input" className="sr-only">Rechercher dans la carte</label>
+              <label htmlFor="menu-search-input" className="sr-only">Rechercher</label>
               <input 
                 id="menu-search-input"
                 type="text"
-                aria-label="Rechercher dans la carte"
-                placeholder="TROUVER UNE CRÉATION..."
+                aria-label="Rechercher"
+                placeholder="RECHERCHER UN PLAT..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-12 bg-surface-container border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30 shadow-inner"
+                className="w-full h-12 bg-surface-container border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
               />
            </div>
         </div>
@@ -110,26 +110,32 @@ export const MenuPage: React.FC = () => {
 
       {/* Category Navigation */}
       <div className="flex-none bg-surface-container-low border-b border-outline-variant">
-        <div className="max-w-7xl mx-auto px-client-margin py-4 flex gap-3 overflow-x-auto no-scrollbar">
+        <div className="max-w-7xl mx-auto px-client-margin py-4 flex gap-3 overflow-x-auto no-scrollbar relative">
            <button
              onClick={() => setActiveCat(null)}
-             className={`relative px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === null ? 'border-primary text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+             className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all relative z-10 ${activeCat === null ? 'text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
            >
              {activeCat === null && (
-               <motion.div layoutId="active-cat" className="absolute inset-0 bg-primary rounded-full -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
+                <motion.div 
+                    layoutId="active-cat-bg"
+                    className="absolute inset-0 bg-primary rounded-full -z-10 shadow-lg shadow-primary/20"
+                />
              )}
-             Toutes les Sélections
+             Tous les plats
            </button>
            {categories.map(cat => (
              <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`relative px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all ${activeCat === cat.id ? 'border-primary text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+                className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all relative z-10 ${activeCat === cat.id ? 'text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
              >
-               {activeCat === cat.id && (
-                 <motion.div layoutId="active-cat" className="absolute inset-0 bg-primary rounded-full -z-10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
-               )}
-               {cat.nom}
+                {activeCat === cat.id && (
+                    <motion.div 
+                        layoutId="active-cat-bg"
+                        className="absolute inset-0 bg-primary rounded-full -z-10 shadow-lg shadow-primary/20"
+                    />
+                )}
+                {cat.nom}
              </button>
            ))}
         </div>
@@ -138,10 +144,10 @@ export const MenuPage: React.FC = () => {
       {/* Grid Canvas */}
       <main className="flex-1 overflow-y-auto p-client-margin bg-background custom-scrollbar">
         <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24"
         >
            <AnimatePresence mode="popLayout">
               {filteredPlats.map((plat) => (
@@ -149,10 +155,10 @@ export const MenuPage: React.FC = () => {
                   key={plat.id}
                   layout
                   variants={itemVariants}
-                  whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
                   data-testid={`menu-card-${plat.id}`}
-                  className={`group flex flex-col bg-surface-container-low rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary hover:bg-surface-bright shadow-sm hover:shadow-2xl hover:shadow-primary/5'}`}
+                  className={`group flex flex-col bg-surface-container-low rounded-3xl border transition-all duration-700 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary/40 hover:bg-surface-bright shadow-sm hover:shadow-2xl'}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
+                  whileHover={{ y: -8 }}
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-highest">
                     {plat.image ? (
@@ -177,16 +183,16 @@ export const MenuPage: React.FC = () => {
                       <h3 className="font-serif text-lg font-black text-on-surface uppercase tracking-tight leading-tight group-hover:text-primary transition-colors">{plat.nom}</h3>
                       <span className="font-sans text-lg font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
                     </div>
-                    <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Chef-d\'œuvre saisonnier préparé avec précision.'}</p>
+                    <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
                     
                     <motion.button 
                       whileTap={{ scale: 0.95 }}
                       onClick={(e) => { e.stopPropagation(); addItem(plat); toast.success('Ajouté au panier'); }}
                       disabled={!plat.est_disponible}
-                      className="mt-4 w-full h-12 bg-surface-container-highest border border-outline-variant rounded-xl flex items-center justify-center gap-3 font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all disabled:hidden shadow-sm hover:shadow-md"
+                      className="mt-4 w-full h-12 bg-surface-container-highest border border-outline-variant rounded-xl flex items-center justify-center gap-3 font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all disabled:hidden"
                     >
                       <Plus className="w-4 h-4" />
-                      Ajouter au panier
+                      Ajouter
                     </motion.button>
                   </div>
                 </motion.div>
@@ -197,7 +203,7 @@ export const MenuPage: React.FC = () => {
         {filteredPlats.length === 0 && (
            <div className="py-32 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
               <ShoppingBag className="w-16 h-16 stroke-[0.5]" />
-              <p className="font-sans text-[11px] font-black uppercase tracking-[0.5em]">Aucune création ne correspond à votre recherche</p>
+              <p className="font-sans text-[11px] font-black uppercase tracking-[0.5em]">Aucun résultat trouvé</p>
            </div>
         )}
       </main>
@@ -217,7 +223,7 @@ export const MenuPage: React.FC = () => {
                exit={{ opacity: 0, scale: 0.95, y: 20 }}
                className="relative w-full max-w-4xl bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button aria-label="Fermer les détails du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
+                <button aria-label="Fermer" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
                    {selectedPlat.image ? (
@@ -230,7 +236,7 @@ export const MenuPage: React.FC = () => {
 
                 <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
                    <div className="mb-8">
-                      <span className="editorial-kicker mb-3">DOSSIER GASTRONOMIQUE</span>
+                      <span className="editorial-kicker mb-3">DÉTAILS DU PLAT</span>
                       <h2 className="font-serif text-3xl md:text-5xl font-black text-primary uppercase italic tracking-tighter leading-none mb-4">{selectedPlat.nom}</h2>
                       <div className="flex items-baseline gap-4">
                          <span className="font-sans text-4xl font-black text-on-surface tabular-nums">{selectedPlat.prix} DH</span>
@@ -238,32 +244,34 @@ export const MenuPage: React.FC = () => {
                    </div>
 
                    <p className="font-body text-lg md:text-xl text-on-surface-variant italic leading-relaxed mb-10 flex-1 uppercase tracking-tight">
-                     {selectedPlat.description || 'Une création signature méticuleusement orchestrée par nos chefs utilisant uniquement les meilleurs composants biologiques.'}
+                     {selectedPlat.description || 'Une création signature préparée avec soin par nos chefs.'}
                    </p>
 
                    <div className="space-y-8 pt-8 border-t border-outline-variant">
                       <div className="flex items-center gap-8">
                          <div className="space-y-1">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Temps</p>
+                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Préparation</p>
                             <div className="flex items-center gap-2 font-sans font-bold text-on-surface uppercase text-sm">
                                <Timer className="w-4 h-4 text-primary" />
-                               {selectedPlat.temps_preparation} Minutes
+                               {selectedPlat.temps_preparation} min
                             </div>
                          </div>
                          <div className="space-y-1">
                             <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Catégorie</p>
                             <div className="font-sans font-bold text-on-surface uppercase text-sm">
-                               {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Non classé'}
+                               {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Plat'}
                             </div>
                          </div>
                       </div>
 
-                      <button 
-                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); toast.success('Ajouté à la collection'); }}
-                        className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4"
+                      <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); toast.success('Ajouté au panier'); }}
+                        className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:bg-[#B13D15] transition-all flex items-center justify-center gap-4"
                       >
-                         Ajouter à la Sélection <Plus className="w-5 h-5" />
-                      </button>
+                         Ajouter à ma sélection <Plus className="w-5 h-5" />
+                      </motion.button>
                    </div>
                 </div>
              </motion.div>
@@ -277,5 +285,3 @@ export const MenuPage: React.FC = () => {
 const Loader2 = ({ className, strokeWidth }: { className?: string, strokeWidth?: number }) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4"/><path d="m16.2 4.2 2.8 2.8"/><path d="M18 12h4"/><path d="m16.2 19.8 2.8-2.8"/><path d="M12 18v4"/><path d="m4.8 19.8 2.8-2.8"/><path d="M2 12h4"/><path d="m4.8 4.2 2.8 2.8"/></svg>
 );
-
-
