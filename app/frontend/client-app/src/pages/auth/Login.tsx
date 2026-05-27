@@ -7,7 +7,7 @@ import {
   ShieldAlert, 
   ChevronLeft,
   Sparkles,
-  Fingerprint
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -24,7 +24,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     
     if (!username || !password) {
-      setError('IDENTIFIANT_REQUIS');
+      setError('Veuillez remplir tous les champs');
       return;
     }
 
@@ -36,124 +36,146 @@ export const Login: React.FC = () => {
       
       if (role !== 'CLIENT') {
           await api.post('/users/logout/');
-          setError("ACCÈS_CLIENT_UNIQUEMENT");
+          setError("Accès réservé aux clients");
           setIsLoading(false);
           return;
       }
       
       setAuth(access, role, resUsername);
-      toast.success('AUTHENTIFICATION_SÉCURISÉE');
+      toast.success('Bienvenue chez Tastify');
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'PROTOCOLE_INVALIDE' : 'ERREUR_SYSTÈME');
+      setError(err.response?.status === 401 ? 'Identifiants incorrects' : 'Une erreur est survenue');
       setIsLoading(false);
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.8, 
+        ease: [0.23, 1, 0.32, 1] as any,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="min-h-[100dvh] bg-background font-body selection:bg-primary/20 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-[100dvh] bg-[#FAF9F6] font-body selection:bg-[#C5A059]/20 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       
-      {/* Background Ambience */}
+      {/* Luminous Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=2000')] opacity-5 grayscale" />
-         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent" />
+         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=2000')] opacity-5 mix-blend-multiply" />
+         <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F6] via-[#FAF9F6]/60 to-transparent" />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#C5A059]/5 blur-[120px] rounded-full" />
       </div>
 
       <Link 
         to="/" 
-        aria-label="Retour à l'accueil"
-        className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
+        className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-[#2D2424]/40 hover:text-[#D14D1A] transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
         Retour
       </Link>
 
       <motion.div 
-        initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 md:p-16 shadow-2xl flex flex-col items-center gap-12"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full max-w-xl bg-white border border-[#2D2424]/5 rounded-[3.5rem] p-12 md:p-20 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] flex flex-col items-center gap-12"
       >
-        <div className="text-center space-y-4">
-          <div className="flex justify-center mb-6">
-             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary border border-primary/20">
-                <Sparkles className="w-6 h-6" strokeWidth={1.5} />
+        <motion.div variants={itemVariants} className="text-center space-y-6">
+          <div className="flex justify-center mb-8">
+             <div className="w-16 h-16 bg-[#D14D1A]/5 rounded-full flex items-center justify-center text-[#D14D1A] border border-[#D14D1A]/10 relative">
+                <Sparkles className="w-6 h-6" strokeWidth={1} />
+                <div className="absolute inset-0 bg-[#D14D1A]/10 rounded-full animate-ping opacity-20" />
              </div>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Bon retour.</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">Authentification Client Sécurisée</p>
-        </div>
+          <h1 className="font-serif text-5xl md:text-6xl font-black text-[#2D2424] uppercase italic tracking-tighter m-0 leading-none">Bon retour.</h1>
+          <p className="font-sans text-[10px] font-black text-[#2D2424]/40 uppercase tracking-[0.5em]">Identifiez-vous pour continuer</p>
+        </motion.div>
 
         <AnimatePresence mode="wait">
           {error && (
             <motion.div 
               key="error-msg"
-              initial={{ opacity: 0, y: -10 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0, y: -10 }}
-              data-testid="login-error" 
-              className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3"
+              initial={{ opacity: 0, scale: 0.95 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full p-5 bg-[#B3261E]/5 border border-[#B3261E]/10 rounded-2xl flex items-center gap-4"
             >
-              <ShieldAlert className="w-4 h-4 text-error" />
-              <p className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</p>
+              <ShieldAlert className="w-5 h-5 text-[#B3261E]" />
+              <p className="font-sans text-[11px] font-bold text-[#B3261E] uppercase tracking-widest">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
 
         <form onSubmit={handleSubmit} className="w-full space-y-10">
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="login-username-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">Nom d'utilisateur</label>
-              <div className="relative group">
+          <div className="space-y-8">
+            <motion.div variants={itemVariants} className="space-y-3">
+              <label htmlFor="login-username" className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em] ml-2">Identifiant</label>
+              <div className="relative">
                 <input
-                  id="login-username-input"
-                  aria-label="Nom d'utilisateur"
+                  id="login-username"
                   type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
-                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
-                  placeholder="ID_GUEST"
-                  data-testid="login-username"
+                  className="w-full h-20 bg-[#FAF9F6] border border-[#2D2424]/5 rounded-3xl px-8 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A]/30 focus:bg-white outline-none transition-all placeholder:text-[#2D2424]/10"
+                  placeholder="NOM_UTILISATEUR"
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
+            <motion.div variants={itemVariants} className="space-y-3">
               <div className="flex justify-between items-center px-2">
-                 <label htmlFor="login-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">Code d'accès</label>
-                 <Link to="/forgot-password" className="font-sans text-[9px] font-black text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Récupération ?</Link>
+                 <label htmlFor="login-password" className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">Mot de passe</label>
+                 <Link to="/forgot-password" className="font-sans text-[9px] font-black text-[#C5A059] hover:text-[#D14D1A] transition-colors uppercase tracking-[0.2em]">Oublié ?</Link>
               </div>
-              <div className="relative group">
+              <div className="relative">
                 <input
-                  id="login-password-input"
-                  aria-label="Code d'accès"
+                  id="login-password"
                   type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
-                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
+                  className="w-full h-20 bg-[#FAF9F6] border border-[#2D2424]/5 rounded-3xl px-8 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A]/30 focus:bg-white outline-none transition-all placeholder:text-[#2D2424]/10"
                   placeholder="••••••••"
-                  data-testid="login-password"
                 />
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <button
+          <motion.button
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit" disabled={isLoading}
-            data-testid="login-submit"
-            className="w-full h-20 bg-primary-container text-on-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary-container relative overflow-hidden group"
+            className="w-full h-20 bg-[#2D2424] text-[#FAF9F6] rounded-3xl font-sans text-xs font-black uppercase tracking-[0.5em] shadow-2xl hover:bg-[#D14D1A] transition-all flex items-center justify-center gap-4 group"
           >
-             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>
-                <span>Entrée Sécurisée</span>
-                <Fingerprint className="w-5 h-5 text-on-background group-hover:text-on-background transition-colors" />
+                <span>Se Connecter</span>
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </>
             )}
-          </button>
+          </motion.button>
         </form>
 
-        <div className="pt-6 border-t border-outline-variant/30 w-full text-center">
-          <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
-            Nouveau chez Échelon ? {' '}
-            <Link to="/register" className="text-primary hover:text-on-surface ml-2 transition-colors">Rejoignez-nous</Link>
+        <motion.div variants={itemVariants} className="pt-8 border-t border-[#2D2424]/5 w-full text-center">
+          <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">
+            Pas encore de compte ? {' '}
+            <Link to="/register" className="text-[#D14D1A] hover:text-[#2D2424] ml-2 transition-colors border-b border-[#D14D1A]/20 pb-0.5">S'inscrire</Link>
           </p>
-        </div>
+        </motion.div>
       </motion.div>
+      
+      {/* Decorative Branding Detail */}
+      <div className="fixed bottom-12 right-12 opacity-10 hidden lg:block">
+         <span className="font-serif text-[120px] font-black italic text-[#2D2424] leading-none select-none">T.</span>
+      </div>
     </div>
   );
 };
