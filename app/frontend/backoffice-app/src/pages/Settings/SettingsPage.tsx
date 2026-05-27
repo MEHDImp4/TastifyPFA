@@ -5,7 +5,6 @@ import {
   Building2, 
   Save, 
   Loader2,
-  DollarSign,
   Timer,
   Palette,
   RotateCcw,
@@ -192,49 +191,6 @@ export const SettingsPage: React.FC = () => {
                     rows={2}
                   />
                 </div>
-              </div>
-            </section>
-
-            {/* Financial Parameters */}
-            <section className="bg-surface-container border border-outline-variant rounded p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-8 border-b border-outline-variant/30 pb-3">
-                <DollarSign className="w-4.5 h-4.5 text-primary" />
-                <h2 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Paramètres Financiers</h2>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="space-y-unit-xs">
-                    <label htmlFor="settings-tax" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Taxe sur les Ventes (%)</label>
-                    <div className="relative">
-                      <input 
-                        id="settings-tax" type="number" step="0.01" name="tax_rate" value={config.tax_rate} onChange={handleInputChange}
-                        className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface text-right focus:border-primary outline-none transition-all"
-                      />
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 font-black text-[10px]">TVA</span>
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-primary font-bold">%</span>
-                    </div>
-                 </div>
-                 <div className="space-y-unit-xs">
-                    <label htmlFor="settings-gratuity-threshold" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Seuil Service Auto</label>
-                    <div className="relative">
-                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 font-black text-[10px]">PAX</span>
-                       <input 
-                        id="settings-gratuity-threshold" type="number" name="gratuity_threshold" value={config.gratuity_threshold} onChange={handleInputChange}
-                        className="w-full h-12 pl-12 pr-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface text-right focus:border-primary outline-none transition-all"
-                      />
-                    </div>
-                 </div>
-                 <div className="space-y-unit-xs">
-                    <label htmlFor="settings-default-gratuity" className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Service par Défaut (%)</label>
-                    <div className="relative">
-                      <input 
-                        id="settings-default-gratuity" type="number" step="0.01" name="default_gratuity_rate" value={config.default_gratuity_rate} onChange={handleInputChange}
-                        className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface text-right focus:border-primary outline-none transition-all"
-                      />
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 font-black text-[10px]">FIXE</span>
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-primary font-bold">%</span>
-                    </div>
-                 </div>
               </div>
             </section>
           </div>
