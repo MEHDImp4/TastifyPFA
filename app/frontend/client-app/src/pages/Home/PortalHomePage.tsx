@@ -64,11 +64,10 @@ export const PortalHomePage = () => {
               <span className="not-italic text-[#D14D1A]">L’Inspiration.</span>
             </h1>
 
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="max-w-2xl mx-auto">
                 <p className="text-xl md:text-2xl font-serif italic text-[#2D2424]/70 leading-relaxed">
                    "Une table marocaine contemporaine où chaque plat raconte une histoire de terroir et d'élégance."
                 </p>
-                <div className="h-8 w-[1px] bg-[#C5A059] mx-auto opacity-30" />
             </div>
 
             <motion.div 
@@ -92,14 +91,6 @@ export const PortalHomePage = () => {
             </motion.div>
           </motion.div>
         </div>
-        
-        <motion.div 
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-20"
-        >
-            <div className="w-[1px] h-16 bg-[#2D2424]" />
-        </motion.div>
       </section>
 
       {/* Appetizing Collections */}
