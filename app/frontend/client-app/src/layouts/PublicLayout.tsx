@@ -89,17 +89,6 @@ export const PublicLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 md:gap-8">
-            {!isAuthenticated && (
-              <div className="flex items-center gap-4 hidden md:flex">
-                <Link
-                  to="/login"
-                  className="font-sans text-[10px] font-black uppercase tracking-[0.3em] text-[#2D2424]/60 hover:text-[#D14D1A] transition-colors"
-                >
-                  Accès Membre
-                </Link>
-              </div>
-            )}
-            
             <div className="hidden md:block">
               {isAuthenticated ? (
                 <div className="flex items-center gap-6 pl-8 border-l border-[#2D2424]/10">
