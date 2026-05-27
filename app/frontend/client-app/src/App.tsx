@@ -40,9 +40,19 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<PortalHomePage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/reservations" element={<ReservationWizard />} />
-        <Route path="/loyalty" element={<LoyaltyPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
+        
+        <Route path="/loyalty" element={
+          <ProtectedRoute>
+            <LoyaltyPage />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/checkout" element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        } />
         
         <Route path="/account" element={
           <ProtectedRoute>
