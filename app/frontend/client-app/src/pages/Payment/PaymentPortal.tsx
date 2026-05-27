@@ -98,7 +98,19 @@ export const PaymentPortal: React.FC = () => {
     }
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-background text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
+  if (isLoading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF9F6] relative overflow-hidden">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center gap-6 relative z-10"
+        >
+            <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
+            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Initialisation du terminal de paiement</span>
+        </motion.div>
+        <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
+    </div>
+  );
 
   if (isSuccess) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center animate-in zoom-in-95 duration-1000 font-body">

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;1,400&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 
 @keyframes shimmer {
@@ -7,46 +7,47 @@
 }
 
 @theme {
-  /* Dark Surface colors from new Stitch Design System */
-  --color-background: #151312;
-  --color-on-background: #e8e1de;
-  --color-surface: #151312;
-  --color-on-surface: #e8e1de;
-  --color-on-surface-variant: #d8c2b6;
-  --color-surface-dim: #151312;
-  --color-surface-bright: #3c3937;
-  --color-surface-container: #221f1e;
-  --color-surface-container-low: #1d1b1a;
-  --color-surface-container-high: #2c2928;
-  --color-surface-container-highest: #373432;
-  --color-surface-container-lowest: #100e0c;
-  --color-outline: #a08d81;
-  --color-outline-variant: #53443a;
+  /* Warm Organic Palette */
+  --color-background: #FAF9F6;
+  --color-on-background: #2D2424;
+  --color-surface: #FAF9F6;
+  --color-on-surface: #2D2424;
+  --color-on-surface-variant: #2D2424;
+  
+  --color-surface-dim: #F4F1EA;
+  --color-surface-bright: #FFFFFF;
+  --color-surface-container: #F4F1EA;
+  --color-surface-container-low: #F9F7F2;
+  --color-surface-container-high: #EDE9E0;
+  --color-surface-container-highest: #E5E0D5;
+  --color-surface-container-lowest: #FFFFFF;
+  
+  --color-outline: #C5A059;
+  --color-outline-variant: #D14D1A20;
 
-  /* Organic Primary (Warm Amber) */
-  --color-primary: #ffb785;
-  --color-on-primary: #502400;
-  --color-primary-container: #8d4e1c;
-  --color-on-primary-container: #ffceaf;
+  /* Organic Accent Colors */
+  --color-primary: #D14D1A;
+  --color-on-primary: #FAF9F6;
+  --color-primary-container: #F4F1EA;
+  --color-on-primary-container: #D14D1A;
 
-  --color-secondary: #ffb785;
-  --color-on-secondary: #502400;
-  --color-secondary-container: #753901;
-  --color-on-secondary-container: #faa467;
+  --color-secondary: #C5A059;
+  --color-on-secondary: #FAF9F6;
+  --color-secondary-container: #F4F1EA;
+  --color-on-secondary-container: #C5A059;
 
   /* Status colors */
-  --color-error: #ffb4ab;
-  --color-on-error: #690005;
-  --color-error-container: #93000a;
-  --color-on-error-container: #ffdad6;
+  --color-error: #B3261E;
+  --color-on-error: #FFFFFF;
+  --color-success: #2E7D32;
 
-  /* Typography fonts - Updated */
-  --font-sans: "Rethink Sans", sans-serif;
-  --font-serif: "Public Sans", sans-serif;
-  --font-body: "Inclusive Sans", sans-serif;
+  /* Typography fonts - Updated for Organic Sophistication */
+  --font-sans: "Montserrat", sans-serif;
+  --font-serif: "Cormorant", serif;
+  --font-body: "Montserrat", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Spacing Tokens - Organic Sophistication */
+  /* Spacing Tokens */
   --spacing-unit-xs: 4px;
   --spacing-unit-sm: 8px;
   --spacing-unit-md: 16px;
@@ -59,8 +60,8 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 2.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 3rem;
 
   /* Animation primitives */
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
@@ -71,22 +72,23 @@
   body {
     font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh];
-    /* Clean dark texture */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    /* Soft light noise texture */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    @apply tracking-tight;
+    @apply tracking-tight font-medium;
   }
 
   /* Typography scale utility-like classes */
   .text-display-lg {
     font-family: var(--font-serif);
-    font-size: 64px;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-size: 80px;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
   }
 
   .text-headline-md {
@@ -125,36 +127,21 @@
 @layer components {
   /* Signature Premium Card - Editorial Sophistication */
   .editorial-card {
-    @apply rounded-3xl border border-outline-variant/10 bg-surface-container-low transition-all duration-700 hover:border-outline-variant/20 hover:bg-surface-container-high;
-    /* Absolute Visibility: Solid surfaces, subtle depth through tonal shifts */
-  }
-
-  .cinematic-shadow {
-    /* Switching to hard-rim lighting instead of soft blurs for Absolute Visibility */
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 20px 40px rgba(0, 0, 0, 0.4);
+    @apply rounded-[2rem] border border-outline/10 bg-surface-container-low transition-all duration-700 hover:border-primary/20 hover:bg-surface-bright shadow-lg hover:shadow-xl;
   }
 
   .glass-premium {
-    /* Absolute Visibility Rule: Solid background instead of high blurs */
-    @apply bg-surface-container-high border border-outline/20 shadow-2xl;
-  }
-
-  .tonal-spot {
-    @apply bg-primary/10 text-primary font-bold;
+    @apply bg-surface/80 backdrop-blur-xl border border-outline/10 shadow-2xl;
   }
 
   .editorial-kicker {
-    @apply font-sans text-[10px] font-extrabold uppercase tracking-[0.3em] text-primary;
-  }
-
-  .asymmetric-offset {
-    @apply translate-y-8 md:translate-y-16;
+    @apply font-sans text-[10px] font-black uppercase tracking-[0.4em] text-secondary;
   }
 
   /* Compact Scrollbar - Client Theme */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -164,14 +151,4 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
   }
-
-  /* Blueprint Grid Pattern */
-  .blueprint-grid {
-    background-size: 40px 40px;
-    background-image: 
-        linear-gradient(to right, rgba(160, 141, 129, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(160, 141, 129, 0.1) 1px, transparent 1px);
-  }
 }
-
-
