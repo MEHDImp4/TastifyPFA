@@ -208,10 +208,9 @@ export const CategoryPage: React.FC = () => {
                   layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  onClick={() => selectCategory(cat)}
                   data-testid={`category-card-${cat.id}`}
                   className={`
-                    group flex items-center gap-unit-md p-unit-sm rounded border transition-all cursor-pointer relative overflow-hidden
+                    group flex items-center gap-unit-md p-unit-sm rounded border transition-all cursor-default relative overflow-hidden
                     ${editingCategory?.id === cat.id ? 'bg-surface-container-highest border-primary/50 ring-1 ring-primary/20' : 'bg-transparent border-transparent hover:bg-surface-container-low'}
                   `}
                 >
@@ -254,7 +253,11 @@ export const CategoryPage: React.FC = () => {
                   </div>
 
                   <div className="w-10 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity gap-2">
-                    <button type="button" className="p-1 hover:text-primary transition-colors">
+                    <button 
+                      type="button" 
+                      onClick={() => selectCategory(cat)}
+                      className="p-1 hover:text-primary transition-colors"
+                    >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
