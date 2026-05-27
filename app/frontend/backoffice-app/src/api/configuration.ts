@@ -13,6 +13,12 @@ export interface RestaurantConfiguration {
   twitter: string | null;
   horaires: Record<string, string>;
   devise: string;
+  tax_rate: string;
+  gratuity_threshold: number;
+  default_gratuity_rate: string;
+  primary_color: string;
+  prep_target_minutes: number;
+  auto_send_main_course: boolean;
   updated_at: string;
 }
 

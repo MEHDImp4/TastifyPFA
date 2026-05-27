@@ -18,6 +18,16 @@ class RestaurantConfiguration(models.Model):
     
     devise = models.CharField(max_length=10, default="DH")
     
+    # Financials
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    gratuity_threshold = models.PositiveIntegerField(default=6)
+    default_gratuity_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+
+    # UI / Theme
+    primary_color = models.CharField(max_length=7, default="#FFB785") # Hex color
+    prep_target_minutes = models.PositiveIntegerField(default=15)
+    auto_send_main_course = models.BooleanField(default=True)
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
