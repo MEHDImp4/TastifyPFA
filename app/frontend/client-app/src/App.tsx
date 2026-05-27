@@ -39,15 +39,10 @@ const AnimatedRoutes = () => {
         {/* Public Showcase Pages */}
         <Route path="/" element={<PortalHomePage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/reservations" element={<ReservationWizard />} />
         <Route path="/contact" element={<ContactPage />} />
 
-        {/* Member-only Action Pages (Gated via ProtectedRoute or internally) */}
-        <Route path="/reservations" element={
-          <ProtectedRoute>
-            <ReservationWizard />
-          </ProtectedRoute>
-        } />
-        
+        {/* Member-only Action Pages */}
         <Route path="/loyalty" element={
           <ProtectedRoute>
             <LoyaltyPage />
