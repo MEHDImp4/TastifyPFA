@@ -310,22 +310,6 @@ export const SettingsPage: React.FC = () => {
                     <input id="settings-logo" type="file" accept="image/*" onChange={handleLogoChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                   </div>
                 </div>
-
-                <div className="space-y-3">
-                  <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Couleur d'Accentuation</label>
-                  <div className="flex items-center gap-3 bg-surface-main border border-outline-variant rounded p-1.5 pr-4 group transition-all focus-within:border-primary">
-                    <input 
-                        type="color" name="primary_color" value={config.primary_color} onChange={handleInputChange}
-                        className="w-10 h-10 rounded border-0 p-0 bg-transparent cursor-pointer"
-                    />
-                    <div className="flex-1">
-                        <input 
-                            type="text" name="primary_color" value={config.primary_color} onChange={handleInputChange}
-                            className="w-full bg-transparent border-0 font-mono text-[11px] font-bold text-on-surface outline-none uppercase"
-                        />
-                    </div>
-                  </div>
-                </div>
               </div>
             </section>
           </div>

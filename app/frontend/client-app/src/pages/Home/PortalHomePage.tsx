@@ -3,16 +3,19 @@ import { motion } from 'framer-motion';
 import {
   MapPin,
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  Phone
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
+import { useConfigStore } from '../../store/configStore';
 import type { Plat } from '../../api/menu';
 
 export const PortalHomePage = () => {
   const [topDishes, setTopDishes] = useState<Plat[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasRecommendationError, setHasRecommendationError] = useState(false);
+  const { config } = useConfigStore();
 
   useEffect(() => {
     const fetchTopDishes = async () => {
@@ -52,10 +55,10 @@ export const PortalHomePage = () => {
              transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
           >
             <h1 className="text-display-lg-mobile md:text-display-lg text-primary mb-6 leading-[1.1] tracking-tighter">
-              L’Art de la Table, <br className="hidden md:block"/> Réinventé
+              {config?.nom ? `${config.nom},` : "L’Art de la Table,"} <br className="hidden md:block"/> Réinventé
             </h1>
             <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium leading-relaxed">
-              Une table marocaine contemporaine, pensée pour celles et ceux qui veulent réserver vite, choisir juste et profiter d’un service soigné.
+              {config?.description || "Une table marocaine contemporaine, pensée pour celles et ceux qui veulent réserver vite, choisir juste et profiter d’un service soigné."}
             </p>
           </motion.div>
           
@@ -143,7 +146,7 @@ export const PortalHomePage = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-60" />
                   <div className="absolute bottom-6 right-6 font-sans text-2xl font-black text-primary tabular-nums tracking-tighter">
-                    {parseFloat(dish.prix).toFixed(0)} DH
+                    {parseFloat(dish.prix).toFixed(0)} {config?.devise || 'DH'}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -177,8 +180,10 @@ export const PortalHomePage = () => {
       <footer className="pt-24 pb-12 px-6 border-t border-outline-variant bg-surface-main">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
           <div className="space-y-8">
-            <h1 className="font-serif text-3xl font-black text-primary italic tracking-tighter leading-none m-0">Tastify.</h1>
-            <p className="text-sm font-body text-on-surface-variant leading-relaxed italic opacity-70">Une hospitalité marocaine contemporaine, servie avec précision et simplicité.</p>
+            <h1 className="font-serif text-3xl font-black text-primary italic tracking-tighter leading-none m-0">{config?.nom || "Tastify."}</h1>
+            <p className="text-sm font-body text-on-surface-variant leading-relaxed italic opacity-70">
+              {config?.description || "Une hospitalité marocaine contemporaine, servie avec précision et simplicité."}
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -192,22 +197,43 @@ export const PortalHomePage = () => {
           <div className="space-y-6">
             <span className="editorial-kicker">HORAIRES</span>
             <div className="space-y-3 font-sans text-[10px] font-black uppercase tracking-[0.1em] text-on-surface-variant/60">
-              <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>MON-FRI</span> <span className="text-on-surface">12h — 23h</span></div>
-              <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>SAT-SUN</span> <span className="text-on-surface">11h — 00h</span></div>
+              {config?.horaires && Object.keys(config.horaires).length > 0 ? (
+                Object.entries(config.horaires).map(([day, hours]) => (
+                  <div key={day} className="flex justify-between border-b border-outline-variant/10 pb-2">
+                    <span className="uppercase">{day}</span> 
+                    <span className="text-on-surface">{hours}</span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>MON-FRI</span> <span className="text-on-surface">12h — 23h</span></div>
+                  <div className="flex justify-between border-b border-outline-variant/10 pb-2"><span>SAT-SUN</span> <span className="text-on-surface">11h — 00h</span></div>
+                </>
+              )}
             </div>
           </div>
 
           <div className="space-y-6">
-            <span className="editorial-kicker">ADRESSE</span>
-            <div className="flex items-start gap-4">
-              <MapPin className="w-4 h-4 text-primary shrink-0" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Boulevard d'Anfa, Quartier Racine<br/>Casablanca 20250</p>
+            <span className="editorial-kicker">CONTACT & ADRESSE</span>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <MapPin className="w-4 h-4 text-primary shrink-0" />
+                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                  {config?.adresse || "Boulevard d'Anfa, Quartier Racine, Casablanca 20250"}
+                </p>
+              </div>
+              {config?.telephone && (
+                <div className="flex items-center gap-4">
+                  <Phone className="w-4 h-4 text-primary shrink-0" />
+                  <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">{config.telephone}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <span className="font-sans text-[9px] font-black uppercase tracking-[0.5em] text-on-surface-variant/30">© 2026 TASTIFY ECOSYSTEM</span>
+          <span className="font-sans text-[9px] font-black uppercase tracking-[0.5em] text-on-surface-variant/30">© 2026 {config?.nom?.toUpperCase() || "TASTIFY"} ECOSYSTEM</span>
           <div className="flex gap-8">
              <Link to="/login" className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 hover:text-primary transition-colors">Staff Terminal</Link>
           </div>
@@ -216,6 +242,3 @@ export const PortalHomePage = () => {
     </div>
   );
 };
-
-
-

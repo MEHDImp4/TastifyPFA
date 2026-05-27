@@ -3,12 +3,14 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
+import { useConfigStore } from '../store/configStore';
 import { LogOut, ShoppingBag, Menu, X } from 'lucide-react';
 import { BrandWordmark } from '../components/branding/BrandWordmark';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
   const { items } = useCartStore();
+  const { config } = useConfigStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,7 +41,11 @@ export const PublicLayout: React.FC = () => {
               onClick={handleLogoClick}
               className="flex items-center gap-2 group transition-transform active:scale-95 z-50"
             >
-              <BrandWordmark className="text-2xl font-serif italic font-black tracking-tight text-primary leading-none" />
+              {config?.logo ? (
+                <img src={config.logo} alt={config.nom} className="h-8 w-auto object-contain" />
+              ) : (
+                <BrandWordmark className="text-2xl font-serif italic font-black tracking-tight text-primary leading-none" />
+              )}
             </Link>
 
             <nav className="hidden lg:flex items-center gap-10">

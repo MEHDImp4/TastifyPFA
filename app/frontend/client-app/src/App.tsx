@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
@@ -16,6 +17,7 @@ import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
 import { NotFoundPage } from './pages/System/NotFoundPage';
 import { OfflineModePage } from './pages/System/OfflineModePage';
 import { useAuthStore } from './store/authStore';
+import { useConfigStore } from './store/configStore';
 
 import { Toaster } from 'sonner';
 
@@ -83,6 +85,12 @@ const AnimatedRoutes = () => {
 
 
 function App() {
+  const { fetchConfig } = useConfigStore();
+
+  useEffect(() => {
+    fetchConfig();
+  }, [fetchConfig]);
+
   return (
     <AuthBootstrap>
       <div className="selection:bg-primary/20 selection:text-primary">
