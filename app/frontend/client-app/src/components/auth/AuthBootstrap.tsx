@@ -72,7 +72,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
                 className="flex flex-col items-center relative z-10"
             >
                 <h1 className="font-serif text-6xl md:text-7xl font-black text-[#D14D1A] italic tracking-tighter mb-10 leading-none">
-                    {useConfigStore.getState().config?.nom || "Tastify."}
+                    Tastify.
                 </h1>
                 <div className="flex flex-col items-center gap-4">
                     <div className="flex gap-1">

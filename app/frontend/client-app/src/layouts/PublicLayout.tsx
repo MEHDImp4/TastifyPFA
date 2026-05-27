@@ -43,12 +43,16 @@ export const PublicLayout: React.FC = () => {
               {config?.logo ? (
                 <img src={config.logo} alt={config.nom} className="h-10 w-auto object-contain" />
               ) : (
-                <div className="flex flex-col">
-                    <span className="text-3xl font-serif italic font-black tracking-tight text-[#2D2424] leading-none group-hover:text-[#D14D1A] transition-colors">
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex flex-col min-w-[120px]"
+                >
+                    <span className="text-3xl font-serif italic font-black tracking-tight text-[#2D2424] leading-none group-hover:text-[#D14D1A] transition-colors whitespace-nowrap">
                         {config?.nom || "Tastify"}
                     </span>
                     <span className="text-[8px] font-sans font-black uppercase tracking-[0.4em] text-[#C5A059] mt-1">Établissement</span>
-                </div>
+                </motion.div>
               )}
             </Link>
 
