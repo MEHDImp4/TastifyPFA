@@ -182,12 +182,12 @@ export const HrPage: React.FC = () => {
 
         {/* Staff Data Grid */}
         <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl mb-8">
-          <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container border-b border-outline-variant font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <div className="col-span-4 sm:col-span-3">Employé</div>
-            <div className="col-span-3 hidden sm:block">Rôle & Secteur</div>
-            <div className="col-span-3 sm:col-span-2 text-center">Statut</div>
-            <div className="col-span-3 hidden md:block">Contact Opérationnel</div>
-            <div className="col-span-2 text-right">Actions</div>
+          <div className="grid grid-cols-10 gap-4 px-6 py-4 bg-surface-container border-b border-outline-variant font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+            <div className="col-span-3">Employé</div>
+            <div className="col-span-2 text-center">Rôle & Secteur</div>
+            <div className="col-span-2 text-center">Statut</div>
+            <div className="col-span-2 text-center">Contact Opérationnel</div>
+            <div className="col-span-1 text-right">Actions</div>
           </div>
 
           <div className="flex flex-col divide-y divide-outline-variant/30 min-h-[200px]">
@@ -198,9 +198,9 @@ export const HrPage: React.FC = () => {
                   layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="grid grid-cols-12 gap-4 px-6 py-4 items-center group hover:bg-surface-container-low transition-colors"
+                  className="grid grid-cols-10 gap-4 px-6 py-4 items-center group hover:bg-surface-container-low transition-colors"
                 >
-                  <div className="col-span-4 sm:col-span-3 flex items-center gap-4 min-w-0">
+                  <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-10 h-10 rounded bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden shrink-0 relative shadow-inner">
                       <span className="font-serif text-sm font-black text-on-surface-variant">{(emp.username || 'U').charAt(0).toUpperCase()}</span>
                       <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-success rounded-full border-2 border-surface-container-low" />
@@ -211,29 +211,30 @@ export const HrPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="col-span-3 hidden sm:flex flex-col justify-center">
+                  <div className="col-span-2 flex flex-col items-center justify-center text-center">
                     <span className="font-sans text-[11px] font-bold text-on-surface uppercase">{emp.poste}</span>
-                    <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Opérations</span>
+                    <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest opacity-60">Opérations</span>
                   </div>
 
-                  <div className="col-span-3 sm:col-span-2 flex justify-center">
+                  <div className="col-span-2 flex justify-center">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-success/5 border border-success/20 text-success font-sans text-[9px] font-black uppercase tracking-wider">
                       <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                       En Service
                     </span>
                   </div>
 
-                  <div className="col-span-3 hidden md:flex flex-col justify-center gap-1">
-                  <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
-                    <Mail className="w-3 h-3" />
-                    <span className="font-sans text-[10px] font-bold">{(emp.username || 'unknown').toLowerCase()}@staff.os</span>
+                  <div className="col-span-2 flex flex-col items-center justify-center gap-1">
+                    <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                      <Mail className="w-3 h-3 text-primary" />
+                      <span className="font-sans text-[10px] font-bold">{(emp.username || 'unknown').toLowerCase()}@staff.os</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                      <Phone className="w-3 h-3 text-primary" />
+                      <span className="font-sans text-[10px] font-bold">+212-6-00-00-00</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
-                    <Phone className="w-3 h-3" />
-                    <span className="font-sans text-[10px] font-bold">+212-6-00-00-00</span>
-                  </div>
-                  </div>
-                  <div className="col-span-2 flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
+
+                  <div className="col-span-1 flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
                     <button className="p-2 rounded hover:bg-primary/10 hover:text-primary transition-all active:scale-75">
                       <Edit2 className="w-4 h-4" />
                     </button>
