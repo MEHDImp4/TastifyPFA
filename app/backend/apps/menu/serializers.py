@@ -1,9 +1,18 @@
 from rest_framework import serializers
 from .models import Categorie, Plat
+from apps.avis.models import Avis
 from urllib.parse import urlparse
 
 
 # Les Serializers du Menu servent à transformer les données SQL en format JSON pour le frontend.
+
+class AvisMinimalSerializer(serializers.ModelSerializer):
+    user_username = serializers.ReadOnlyField(source='user.username')
+    
+    class Meta:
+        model = Avis
+        fields = ['id', 'user_username', 'commentaire', 'note', 'sentiment_score', 'created_at']
+
 
 class CategorieSerializer(serializers.ModelSerializer):
     # On précise comment gérer le champ image pour qu'il renvoie une URL propre
@@ -55,6 +64,10 @@ class PlatSerializer(serializers.ModelSerializer):
     prix = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0)
     temps_preparation = serializers.IntegerField(min_value=1)
 
+    # Sentiment analysis & reviews for recommendations
+    sentiment_score = serializers.FloatField(read_only=True, default=0.0)
+    top_avis = AvisMinimalSerializer(many=True, read_only=True)
+
     class Meta:
         model = Plat
         fields = [
@@ -67,10 +80,12 @@ class PlatSerializer(serializers.ModelSerializer):
             'image',
             'est_disponible',
             'est_active',
+            'sentiment_score',
+            'top_avis',
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'sentiment_score', 'top_avis']
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)

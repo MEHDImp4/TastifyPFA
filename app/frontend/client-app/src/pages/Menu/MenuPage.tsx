@@ -62,7 +62,7 @@ export const MenuPage: React.FC = () => {
 
   const filteredPlats = plats.filter(p => 
     (activeCat === null || p.categorie === activeCat) &&
-    (search === '' || p.nom.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase()))
+    (search === '' || p.nom.toLowerCase().includes(search.toLowerCase()) || (p.description && p.description.toLowerCase().includes(search.toLowerCase())))
   );
 
   if (isLoading) return (

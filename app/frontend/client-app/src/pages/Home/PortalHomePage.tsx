@@ -4,7 +4,11 @@ import {
   MapPin,
   ArrowRight,
   Share2,
-  Sparkles
+  Sparkles,
+  MessageSquare,
+  Star,
+  TrendingUp,
+  Quote
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
@@ -20,7 +24,7 @@ export const PortalHomePage = () => {
     const fetchTopDishes = async () => {
       try {
         const res = await menuApi.getTopRecommendations();
-        setTopDishes(res.data.slice(0, 3));
+        setTopDishes(res.data);
       } catch (err) {
         console.error('Failed to fetch top dishes', err);
         setTopDishes([]);
@@ -42,7 +46,6 @@ export const PortalHomePage = () => {
             alt="Warm Dining Atmosphere" 
             className="w-full h-full object-cover opacity-40 mix-blend-multiply"
           />
-          {/* Soft Luminous Gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#F4F1EA]/40 to-[#FAF9F6]"></div>
         </div>
         
@@ -93,18 +96,26 @@ export const PortalHomePage = () => {
         </div>
       </section>
 
-      {/* Appetizing Collections */}
+      {/* AI Sentiment-Driven Recommendations */}
       <section className="py-32 bg-[#FAF9F6]">
         <div className="max-w-7xl mx-auto px-client-margin">
-          <div className="text-center mb-24 space-y-4">
-            <span className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-[#C5A059]">LA SÉLECTION DU CHEF</span>
-            <h3 className="font-serif text-5xl md:text-6xl text-[#2D2424] italic tracking-tight">Nos Signatures du Moment</h3>
-            <div className="w-24 h-[2px] bg-[#D14D1A]/20 mx-auto mt-8" />
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-24 gap-8">
+            <div className="text-center md:text-left space-y-4">
+              <div className="flex items-center justify-center md:justify-start gap-3">
+                 <Sparkles className="w-5 h-5 text-[#C5A059]" />
+                 <span className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-[#C5A059]">TOP TENDANCES IA</span>
+              </div>
+              <h3 className="font-serif text-5xl md:text-6xl text-[#2D2424] italic tracking-tight">Vos Coups de Cœur</h3>
+              <p className="font-body text-sm text-[#2D2424]/60 uppercase tracking-widest">Plats les mieux notés par nos convives</p>
+            </div>
+            <Link to="/menu" className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-[#D14D1A] border-b border-[#D14D1A]/20 pb-2 hover:border-[#D14D1A] transition-all">
+                Voir toute la carte
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-            {isLoading ? [1, 2, 3].map(i => (
-               <div key={i} className="aspect-[3/4] bg-[#F4F1EA] animate-pulse rounded-2xl" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+            {isLoading ? [1, 2].map(i => (
+               <div key={i} className="aspect-video bg-[#F4F1EA] animate-pulse rounded-[3rem]" />
             )) : topDishes.map((dish, idx) => (
               <motion.div 
                 key={dish.id}
@@ -112,51 +123,89 @@ export const PortalHomePage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.2, duration: 1 }}
-                className="group cursor-pointer"
+                className="group relative"
               >
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#F4F1EA] shadow-xl transition-all duration-700 group-hover:shadow-2xl">
-                  {dish.image ? (
-                    <img 
-                      src={dish.image} 
-                      className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" 
-                      alt={dish.nom} 
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center font-serif italic text-8xl text-[#2D2424]/5">{dish.nom.charAt(0)}</div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2D2424]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <div className="absolute top-6 left-6">
-                     <div className="bg-[#FAF9F6]/90 backdrop-blur-sm px-4 py-1.5 rounded-full border border-[#C5A059]/20 shadow-sm flex items-center gap-2">
-                        <Sparkles className="w-3 h-3 text-[#C5A059]" />
-                        <span className="font-sans text-[9px] font-black uppercase tracking-widest text-[#2D2424]">Must-Try</span>
-                     </div>
-                  </div>
-
-                  <div className="absolute bottom-8 left-8 right-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <p className="text-[#FAF9F6] font-serif italic text-lg leading-snug mb-4">
-                        {dish.description || "Une expérience sensorielle unique, sublimée par nos ingrédients locaux."}
-                    </p>
-                    <Link to="/menu" className="inline-flex items-center gap-3 text-[#C5A059] font-sans text-[10px] font-black uppercase tracking-[0.3em]">
-                        Déguster <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
+                {/* Ranking Badge */}
+                <div className="absolute -top-6 -left-6 z-20 w-16 h-16 bg-[#2D2424] rounded-full flex items-center justify-center border-4 border-[#FAF9F6] shadow-xl">
+                   <span className="font-serif text-2xl font-black italic text-[#FAF9F6]">#0{idx + 1}</span>
                 </div>
-                
-                <div className="mt-8 text-center space-y-2">
-                   <h4 className="font-serif text-2xl font-black text-[#2D2424] uppercase tracking-tight group-hover:text-[#D14D1A] transition-colors">{dish.nom}</h4>
-                   <p className="font-sans text-[11px] font-black text-[#C5A059] tracking-[0.3em] uppercase">
-                    {parseFloat(dish.prix).toFixed(0)} {config?.devise || 'DH'}
-                   </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    {/* Visual */}
+                    <div className="lg:col-span-6 relative aspect-square overflow-hidden rounded-[2.5rem] bg-[#F4F1EA] shadow-2xl transition-all duration-700 group-hover:scale-[1.02]">
+                        {dish.image ? (
+                            <img src={dish.image} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt={dish.nom} />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center font-serif italic text-6xl text-[#2D2424]/5">{dish.nom.charAt(0)}</div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#2D2424]/60 via-transparent to-transparent opacity-40" />
+                        
+                        <div className="absolute bottom-6 left-6 right-6">
+                            <div className="bg-[#FAF9F6]/95 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between shadow-lg">
+                                <div className="flex items-center gap-2 text-[#D14D1A]">
+                                    <TrendingUp className="w-4 h-4" />
+                                    <span className="font-sans text-[10px] font-black uppercase tracking-widest">Tendances</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <Star className="w-3.5 h-3.5 fill-[#C5A059] text-[#C5A059]" />
+                                    <span className="font-sans text-xs font-black text-[#2D2424]">{((dish.sentiment_score || 0) * 5).toFixed(1)} / 5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Content & Reviews */}
+                    <div className="lg:col-span-6 space-y-8">
+                        <div>
+                            <h4 className="font-serif text-3xl font-black text-[#2D2424] uppercase tracking-tight group-hover:text-[#D14D1A] transition-colors">{dish.nom}</h4>
+                            <p className="font-body text-sm text-[#2D2424]/60 mt-2 uppercase tracking-[0.2em]">{config?.devise || 'DH'} {parseFloat(dish.prix).toFixed(0)}</p>
+                        </div>
+
+                        {/* Guest Feedback Carousel-like display */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 text-[#C5A059]">
+                                <MessageSquare className="w-3.5 h-3.5" />
+                                <span className="font-sans text-[9px] font-black uppercase tracking-[0.3em]">Avis des Convives</span>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                {dish.top_avis && dish.top_avis.length > 0 ? dish.top_avis.slice(0, 2).map((avis, i) => (
+                                    <motion.div 
+                                        key={avis.id}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: 0.3 + (i * 0.1) }}
+                                        className="relative pl-6 border-l border-[#2D2424]/10"
+                                    >
+                                        <Quote className="absolute -left-3 -top-2 w-4 h-4 text-[#C5A059]/20" />
+                                        <p className="text-sm font-body italic text-[#2D2424]/80 line-clamp-2 leading-relaxed">
+                                            "{avis.commentaire}"
+                                        </p>
+                                        <div className="mt-2 flex items-center justify-between">
+                                            <span className="text-[10px] font-sans font-bold text-[#C5A059] uppercase">@{avis.user_username}</span>
+                                            <div className="flex gap-0.5">
+                                                {[...Array(avis.note)].map((_, j) => (
+                                                    <Star key={j} className="w-2.5 h-3.5 fill-[#C5A059] text-[#C5A059]" />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )) : (
+                                    <p className="text-xs font-body italic text-[#2D2424]/40">Soyez le premier à partager votre expérience sur ce plat.</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <Link 
+                            to="/menu"
+                            className="inline-flex items-center gap-4 py-4 px-8 bg-[#FAF9F6] border border-[#2D2424]/10 rounded-full font-sans text-[10px] font-black uppercase tracking-[0.3em] text-[#2D2424] hover:bg-[#2D2424] hover:text-[#FAF9F6] transition-all group/btn"
+                        >
+                            Détails <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
                 </div>
               </motion.div>
             ))}
-          </div>
-
-          <div className="mt-24 text-center">
-            <Link to="/menu" className="inline-flex items-center gap-4 px-10 py-5 border border-[#2D2424]/20 rounded-full font-sans text-[10px] font-black uppercase tracking-[0.4em] text-[#2D2424] hover:bg-[#2D2424] hover:text-[#FAF9F6] transition-all">
-                Voir toute la carte <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>
