@@ -130,8 +130,8 @@ export const KdsPage: React.FC = () => {
   };
 
   const columns = [
-    { id: 'EN_CUISINE', label: 'In Progress', icon: Timer, color: 'text-primary' },
-    { id: 'PRETE', label: 'Ready for Pickup', icon: CheckCircle2, color: 'text-success' },
+    { id: 'EN_CUISINE', label: 'En Préparation', icon: Timer, color: 'text-primary' },
+    { id: 'PRETE', label: 'Prêt au Service', icon: CheckCircle2, color: 'text-success' },
   ];
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
