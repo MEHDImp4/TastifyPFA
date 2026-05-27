@@ -144,9 +144,13 @@ class CommandeViewSet(viewsets.ModelViewSet):
             qs = qs.filter(statut__in=kitchen_statuses).exclude(
                 completed_paid_total__gte=models.F('montant_total')
             )
-        elif user.role != 'GERANT':
-            # General list: only show the user's own orders
+        elif user.role == 'CLIENT':
+            # Phase 45: Clients only see their own orders
+            qs = qs.filter(client=user)
+        elif user.role == 'SERVEUR':
+            # Servers see orders they are assigned to
             qs = qs.filter(serveur=user)
+        # GERANT and CUISINIER (handled in elif/if above) see the full/scoped set
 
         if statut:
             statut_list = [s.strip() for s in statut.split(',')]

@@ -43,7 +43,15 @@ class Commande(models.Model):
     serveur = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
-        related_name='commandes',
+        related_name='commandes_prises',
+        null=True,
+        blank=True,
+    )
+    # Liaison avec le client authentifié (pour historique et avis)
+    client = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name='mes_commandes',
         null=True,
         blank=True,
     )

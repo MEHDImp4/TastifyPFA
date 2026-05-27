@@ -219,6 +219,11 @@ def create_payment(
             reference_transaction=reference_transaction,
         )
 
+        # Phase 45: Link the client to the Commande for history tracking if not already set
+        if client and not locked_commande.client:
+            locked_commande.client = client
+            locked_commande.save(update_fields=['client', 'updated_at'])
+
         if validation is not None:
             PaiementItem.objects.bulk_create(
                 [
