@@ -89,3 +89,9 @@ class KdsOrchestrator:
                     temps_preparation_snapshot=update['temps_preparation_snapshot'],
                     celery_task_id=update['celery_task_id'],
                 )
+
+    @classmethod
+    def schedule_reorchestration_after_commit(cls, commande_id):
+        """Helper to run reorchestration after the database transaction is finished."""
+        from apps.commandes.tasks import reorchestrate_order_task
+        transaction.on_commit(lambda: reorchestrate_order_task.delay(commande_id))
