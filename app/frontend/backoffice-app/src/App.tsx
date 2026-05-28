@@ -76,9 +76,7 @@ function App() {
               <Route path="/ordering/:tableId" element={
                 <ProtectedRoute>
                   <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
-                    <div className="min-h-[100dvh] bg-background text-on-background p-6 md:p-8">
-                      <OrderingPage />
-                    </div>
+                    <OrderingPage />
                   </RoleRoute>
                 </ProtectedRoute>
               } />

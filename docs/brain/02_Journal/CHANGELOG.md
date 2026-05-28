@@ -1,3 +1,57 @@
+## [2026-05-28] - 17:45
+### Fixed
+- **Mobile Server Interface (OrderingPage)**: Resolved a critical layout issue where the ticket panel would squeeze the menu catalog on mobile viewports.
+- **Responsive Navigation**: Implemented a toggle interface on mobile to switch between Menu and Ticket views, improving usability on smartphones.
+- **Viewport Fix**: Removed restrictive wrapper padding and fixed-width constraints that caused horizontal overflow on small screens.
+
+### Added
+- **Responsive Hook**: Added `useMediaQuery` and `useIsMobile` hooks to the backoffice application for robust viewport detection.
+
+## [2026-05-27] - 23:10
+### Fixed
+- **Dish Card Layout (Client Portal)**: Resolved alignment and wrapping issues where the price "DH" would wrap onto a new line. 
+- **Typography Polish**: Enforced `whitespace-nowrap` on prices, improved title visibility with consistent primary (orange) coloring, and balanced flex spacing for a more premium editorial look.
+
+## [2026-05-27] - 22:50
+### Fixed
+- **Salle Map Zoom & Pan**: Restored the missing `react-zoom-pan-pinch` integration in `SallePage.tsx`.
+- **Navigation Recovery**: Re-implemented the floating tactical control panel (Zoom In/Out/Reset) and enabled mouse-wheel/pan functionality.
+- **Operational Safety**: Re-enabled auto-locking of the map viewport during table/text dragging in edit mode.
+
+## [2026-05-27] - 21:00
+### Added
+- Started Phase: Premium Client Polishing.
+- Created PLAN for high-end finish on core client pages (Menu, Checkout, Account, Loyalty).
+- Standardizing on 'Warm Organic Sophistication' palette and Framer Motion enhancements.
+
+## [2026-05-26] - 16:30
+### Changed
+- **Final Localization Sweep**: Translated all remaining English strings to French in both `client-app` and `backoffice-app`.
+- **Targeted Improvements**: Updated labels, placeholders, and aria-labels in Account, Checkout, Payment, Menu, and Reservation pages (Client) and Stock, Plat, and Salle pages (Backoffice).
+- **Terminology Refinement**: Standardized "min" for minutes and "PERS" for table capacity across all applications.
+- **Aesthetic Alignment**: Maintained technical precision for backoffice and poetic warmth for client-facing content.
+
+### Validation
+- **Production Build**: Successfully executed `npm run build` in both `client-app` and `backoffice-app`.
+- **UI Verification**: Manual scan confirmed 100% French coverage in specified target files.
+
+### Commit
+- `feat(localization): final French translation sweep across all apps`
+
+## [2026-05-26] - 14:00
+### Changed
+- **French Translation Overhaul**: Completed the batch translation of user-facing English strings to French in `client-app` (Login, Register, ResetPassword, ReservationWizard, NotFound, OfflineMode).
+- **Brand Consistency**: Updated all references from "Échelon" to "Tastify" across the auth and system pages.
+- **Specific Terminology**: Enforced requested terms: 'Réservation', 'Connexion', 'Inscription', 'Page Introuvable', and 'Mode Hors Ligne'.
+- **Tactical Tone**: Maintained the 'Warm Organic Sophistication' aesthetic with high-contrast, bold, and poetic French descriptions.
+
+### Validation
+- **Production Build**: Successfully executed `npm run build` in `app/frontend/client-app`.
+- **UI Consistency**: Verified that all placeholders, aria-labels, and toast messages are translated.
+
+### Commit
+- `docs(client-app): batch translate UI strings to French`
+
 ## [2026-05-26] - 11:30
 ### Added
 - **Salle Map Zoom & Pan**: Integrated `react-zoom-pan-pinch` into the backoffice `SallePage.tsx` to provide a robust, premium navigation experience for the architectural floor plan.
