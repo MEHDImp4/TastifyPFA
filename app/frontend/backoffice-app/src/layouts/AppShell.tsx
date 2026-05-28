@@ -22,7 +22,7 @@ export const AppShell: React.FC = () => {
           aria-label="Workspace content"
         >
           <div
-            className="flex-1 flex flex-col min-h-0 max-w-[1700px] mx-auto w-full p-4"
+            className="flex-1 flex flex-col min-h-0 w-full"
             tabIndex={0}
             aria-label="Workspace page content"
           >
