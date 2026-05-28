@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
 import { menuApi } from '../../api/menu';
+import { useIsMobile } from '../../hooks/useMediaQuery';
 import type { Table, Commande } from '../../types/salle';
 import type { Plat, Categorie } from '../../types/menu';
 import { 
@@ -11,15 +12,20 @@ import {
   Trash2, 
   Loader2, 
   Send, 
-  History, 
-  Search,
   ShoppingCart,
   X,
   CreditCard,
   Banknote,
   QrCode,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  RefreshCcw,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  Hash,
+  UtensilsCrossed,
+  ReceiptText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -27,24 +33,26 @@ import { QRCodeSVG } from 'qrcode.react';
 
 // --- Constants ---
 const MUTABLE_COMMANDE_PRIORITY: Record<string, number> = {
-  EN_COURS: 0,
-  EN_CUISINE: 1,
-  PRETE: 2,
+  'EN_COURS': 0,
+  'EN_CUISINE': 1,
+  'PRETE': 2,
+  'PAYEE': 3,
+  'ANNULEE': 4,
 };
 
 const selectCurrentCommande = (commandes: Commande[]): Commande | null => {
+    if (!commandes || !Array.isArray(commandes) || commandes.length === 0) return null;
     return [...commandes].sort((left, right) => {
-      const priorityDiff = MUTABLE_COMMANDE_PRIORITY[left.statut] - MUTABLE_COMMANDE_PRIORITY[right.statut];
-      if (priorityDiff !== 0) {
-        return priorityDiff;
-      }
-      return left.id - right.id;
+      const priorityDiff = (MUTABLE_COMMANDE_PRIORITY[left.statut] ?? 99) - (MUTABLE_COMMANDE_PRIORITY[right.statut] ?? 99);
+      if (priorityDiff !== 0) return priorityDiff;
+      return right.id - left.id;
     })[0] ?? null;
-  };
+};
 
 export const OrderingPage: React.FC = () => {
-  const { tableId } = useParams();
+  const { tableId } = useParams<{ tableId: string }>();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   const [table, setTable] = useState<Table | null>(null);
   const [currentCommande, setCurrentCommande] = useState<Commande | null>(null);
@@ -53,10 +61,11 @@ export const OrderingPage: React.FC = () => {
   const [activeCat, setActiveCat] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<{ plat: Plat; quantite: number; notes: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSaving] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   // Payment Modal State
   const [isPayModalOpen, setIsPayModalOpen] = useState(false);
@@ -68,7 +77,7 @@ export const OrderingPage: React.FC = () => {
     try {
       const [tablesRes, cmdRes, platsRes, catsRes] = await Promise.all([
         salleApi.getTables(),
-        salleApi.getCommandeByTable(Number(tableId)),
+        salleApi.getCommandes({ table: tableId }),
         menuApi.getPlats(),
         menuApi.getCategories()
       ]);
@@ -76,14 +85,20 @@ export const OrderingPage: React.FC = () => {
       const currentTable = tablesRes.data.find(t => t.id === Number(tableId));
       setTable(currentTable || null);
 
-      const activeCmd = selectCurrentCommande(cmdRes.data);
+      const activeCommands = cmdRes.data.filter(cmd => !['PAYEE', 'ANNULEE'].includes(cmd.statut));
+      const activeCmd = selectCurrentCommande(activeCommands);
       setCurrentCommande(activeCmd);
       
-      setPlats(platsRes.data);
-      setCategories(catsRes.data.sort((a, b) => a.ordre_affichage - b.ordre_affichage));
+      setPlats(platsRes.data.filter(p => p.est_active && p.est_disponible));
+      const sortedCats = catsRes.data.filter(c => c.est_active).sort((a, b) => a.ordre_affichage - b.ordre_affichage);
+      setCategories(sortedCats);
       
-      if (!activeCat && catsRes.data.length > 0) {
-          setActiveCat(catsRes.data[0].id);
+      if (!activeCat && sortedCats.length > 0) {
+          setActiveCat(sortedCats[0].id);
+      }
+      
+      if (activeCmd && !silent) {
+          toast.success(`Commande active (#${activeCmd.id}) chargée`);
       }
     } catch (err) {
       console.error('Failed to fetch data', err);
@@ -137,6 +152,9 @@ export const OrderingPage: React.FC = () => {
         if (currentCommande.statut === 'EN_COURS') {
           await salleApi.updateCommandeStatut(currentCommande.id, 'EN_CUISINE');
         }
+        toast.success('Articles envoyés');
+        setCart([]);
+        await fetchData(true);
       } else {
         const orderRes = await salleApi.createCommande({
           table: Number(tableId),
@@ -144,10 +162,9 @@ export const OrderingPage: React.FC = () => {
           lignes: lignes as any
         });
         await salleApi.updateCommandeStatut(orderRes.data.id, 'EN_CUISINE');
+        toast.success('Commande validée');
+        navigate('/salle');
       }
-      toast.success('Commande envoyée en cuisine');
-      setCart([]);
-      await fetchData(true);
     } catch (err) {
       console.error('Failed to submit order', err);
       toast.error('Échec d\'envoi');
@@ -202,95 +219,128 @@ export const OrderingPage: React.FC = () => {
   );
 
   const cartTotal = cart.reduce((sum, item) => sum + (parseFloat(item.plat.prix) * item.quantite), 0);
+  const existingTotal = currentCommande ? parseFloat(currentCommande.montant_total) : 0;
+  const grandTotal = cartTotal + existingTotal;
 
   if (isLoading) return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50">
-      <Loader2 className="w-12 h-12 animate-spin text-primary" strokeWidth={2.5}/>
-      <p className="font-sans text-[10px] font-black uppercase tracking-[0.4em] text-primary mt-6 animate-pulse">Sourcing Data...</p>
+      <Loader2 className="w-12 h-12 animate-spin text-primary" strokeWidth={3}/>
+      <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-primary mt-8 animate-pulse">Chargement...</p>
     </div>
   );
 
   return (
-    <div className="flex-1 h-full min-h-0 flex flex-col bg-surface-container-low text-on-surface selection:bg-primary/20 overflow-hidden font-sans">
+    <div className="fixed inset-0 flex flex-col bg-background p-0 selection:bg-primary/20 selection:text-primary font-body overflow-hidden text-on-background">
       
       {/* Tactical Header */}
-      <header className="flex-none h-20 bg-white border-b border-outline-variant px-10 flex items-center justify-between shadow-sm z-30">
-        <div className="flex items-center gap-8">
+      <header className="flex-none h-20 bg-surface-container-lowest border-b border-outline-variant px-4 md:px-staff-margin flex items-center justify-between shadow-sm z-30">
+        <div className="flex items-center gap-4 md:gap-8">
           <button onClick={() => navigate('/salle')} className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant hover:text-primary transition-all flex items-center justify-center">
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
           <div>
             <div className="flex items-center gap-3">
-               <h1 className="text-2xl font-black uppercase tracking-tight text-on-surface leading-none">Table {table?.numero}</h1>
-               <span className="px-3 py-1 rounded-full bg-primary/5 text-primary font-sans text-[9px] font-black uppercase tracking-widest border border-primary/20">Active Unit</span>
+               <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary italic leading-none">Table {table?.numero}</h1>
+               {currentCommande && (
+                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-sans text-[9px] font-black uppercase tracking-widest shadow-sm">
+                     <Hash className="w-3 h-3" /> {currentCommande.id}
+                   </div>
+               )}
             </div>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-1.5 opacity-60">Terminal de prise de commande tactile</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-10">
-           {currentCommande && (
-               <div className="text-right hidden md:block border-r border-outline-variant pr-10">
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Addition en cours</p>
-                  <p className="font-mono text-2xl font-black text-primary leading-none mt-1">{parseFloat(currentCommande.montant_total).toFixed(2)} DH</p>
-               </div>
-           )}
+        <div className="flex items-center gap-3 md:gap-6">
+          <div className="relative group hidden sm:block">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+            <input 
+              type="text"
+              placeholder="SEARCH..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-48 md:w-64 h-11 bg-surface-container border border-outline-variant/50 pl-10 pr-4 rounded-xl font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
+            />
+          </div>
+          
            <button 
              onClick={handleOpenPayModal}
              disabled={!currentCommande || isPaying}
-             className="h-14 px-8 bg-success text-white rounded-xl font-sans text-xs font-black uppercase tracking-widest shadow-xl shadow-success/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-20 disabled:grayscale"
+             className="h-12 md:h-14 px-6 md:px-8 bg-success text-on-success rounded-xl font-sans text-[10px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-success/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-20 disabled:grayscale"
            >
-             Procéder à l'Encaissement
+             Encaisser {currentCommande ? `${parseFloat(currentCommande.montant_total).toFixed(0)} DH` : ''}
            </button>
+           
+           <button onClick={() => fetchData(true)} className="p-3 rounded-xl bg-surface-container border border-outline-variant text-primary hover:bg-primary hover:text-on-primary transition-all">
+            <RefreshCcw className="w-5 h-5" />
+          </button>
+
+          {isMobile && (
+            <button 
+              onClick={() => setShowCart(!showCart)}
+              className={`p-3 rounded-xl relative transition-all border ${showCart ? 'bg-primary border-primary text-on-primary shadow-lg shadow-primary/30' : 'bg-surface-container border-outline-variant text-on-surface'}`}
+            >
+              {showCart ? <UtensilsCrossed className="w-6 h-6" /> : <ReceiptText className="w-6 h-6" />}
+              {(cart.length > 0 || (currentCommande?.lignes?.length || 0) > 0) && !showCart && (
+                <span className="absolute -top-1.5 -right-1.5 bg-error text-on-error text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
+                  {cart.length + (currentCommande?.lignes?.length || 0)}
+                </span>
+              )}
+            </button>
+          )}
         </div>
       </header>
 
-      <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex overflow-hidden min-h-0 relative">
         
-        {/* Left: Menu Explorer */}
-        <section className="flex-1 flex flex-col min-w-0 border-r border-outline-variant bg-white">
-          
-          {/* Categories Strip */}
-          <div className="flex-none h-16 border-b border-outline-variant bg-surface-container-lowest flex gap-2 p-2 overflow-x-auto no-scrollbar">
+        {/* Left: Menu */}
+        <section 
+          data-testid="menu-catalog" 
+          className={`
+            flex-[7] flex flex-col min-w-0 border-r border-outline-variant bg-background transition-all duration-500 ease-in-out
+            ${isMobile && showCart ? 'translate-x-[-100%] absolute inset-0 z-0 opacity-0 pointer-events-none' : 'translate-x-0 relative z-10'}
+          `}
+        >
+          {/* Categories */}
+          <div className="flex-none h-16 border-b border-outline-variant bg-surface-container-lowest flex gap-2.5 p-2 overflow-x-auto no-scrollbar">
+            <button
+                onClick={() => setActiveCat(null)}
+                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === null ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/20' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
+            >
+              Tous
+            </button>
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`px-8 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeCat === cat.id ? 'bg-on-surface text-white shadow-lg' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'}`}
+                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/20' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
               >
                 {cat.nom}
               </button>
             ))}
           </div>
 
-          {/* Search Strip */}
-          <div className="flex-none p-6 border-b border-outline-variant bg-white">
-             <div className="relative group max-w-2xl">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="text" placeholder="RECHERCHE RAPIDE PAR NOM..." value={search} onChange={(e) => setSearch(e.target.value)}
-                  className="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-sm font-bold text-on-surface focus:border-primary focus:bg-white outline-none transition-all uppercase placeholder:text-on-surface-variant/40 shadow-inner"
-                />
-             </div>
-          </div>
-
-          {/* Plats Grid */}
-          <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-surface-container-low">
-            <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[radial-gradient(circle_at_top_right,#1d1b1a,transparent)]">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                {filteredPlats.map(plat => (
                  <button
                    key={plat.id}
-                   onClick={() => addToCart(plat)}
-                   className="luxury-card group p-6 text-left transition-all hover:border-primary hover:shadow-2xl active:scale-95"
+                   onClick={() => { addToCart(plat); if (isMobile) toast.success(`${plat.nom} +1`, { duration: 600, position: 'bottom-center' }); }}
+                   className={`
+                     group bg-surface-container border-2 border-outline-variant rounded-2xl p-4 md:p-6 text-left transition-all hover:border-primary hover:bg-surface-container-high active:scale-[0.96] relative overflow-hidden h-40 md:h-48
+                     ${!plat.est_disponible ? 'opacity-40 grayscale cursor-not-allowed border-dashed' : ''}
+                   `}
+                   disabled={!plat.est_disponible}
                  >
-                    <div className="flex justify-between items-start mb-4">
-                       <h3 className="font-serif text-lg font-black text-on-surface uppercase tracking-tight leading-tight pr-8 italic">{plat.nom}</h3>
-                       <span className="font-mono text-lg font-black text-primary">{parseFloat(plat.prix).toFixed(0)}</span>
+                    <div className="flex flex-col gap-1">
+                       <h3 className="font-serif text-base md:text-lg font-black text-on-surface uppercase tracking-tight leading-tight line-clamp-2 italic">{plat.nom}</h3>
+                       <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">
+                         {categories.find(c => c.id === plat.categorie)?.nom}
+                       </span>
                     </div>
-                    <p className="font-sans text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity">{plat.description}</p>
-                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                       <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg">
-                          <Plus className="w-5 h-5" strokeWidth={4} />
+                    <div className="flex items-end justify-between mt-auto">
+                       <span className="font-sans text-lg md:text-xl font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
+                       <div className="size-10 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all shadow-sm">
+                          <Plus className="w-5 h-5 text-on-surface group-hover:text-on-primary" strokeWidth={4} />
                        </div>
                     </div>
                  </button>
@@ -299,171 +349,237 @@ export const OrderingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Right: Order / Cart */}
-        <section className="w-[450px] flex flex-col bg-white border-l border-outline-variant shadow-2xl z-20">
-          <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-low shadow-sm">
+        {/* Right: Ticket */}
+        <section 
+          data-testid="ordering-cart" 
+          className={`
+            flex-[3] flex flex-col bg-surface-container border-l border-outline-variant shadow-[-20px_0_40px_rgba(0,0,0,0.4)] z-20 transition-all duration-500 ease-in-out
+            ${isMobile ? (showCart ? 'w-full translate-x-0 relative' : 'w-full translate-x-[100%] absolute inset-0 opacity-0 pointer-events-none') : 'min-w-[400px] translate-x-0 relative'}
+          `}
+        >
+          <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-high shadow-sm">
              <div className="flex items-center gap-4">
                 <ShoppingCart className="w-6 h-6 text-primary" />
-                <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Commande Active</h2>
+                <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Ticket Actuel</h2>
              </div>
-             <span className="font-mono text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">v1.4.2</span>
+             <div className="bg-primary/10 text-primary px-3 py-1 rounded-lg font-sans text-[11px] font-black tabular-nums border border-primary/20">
+               {cart.length + (currentCommande?.lignes?.length || 0)} <span className="text-[9px] opacity-60 ml-1">PCS</span>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-12">
-            
-            {/* Persisted Order Lines */}
-            {currentCommande && currentCommande.lignes.length > 0 && (
-                <div className="space-y-6">
-                    <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] border-b border-outline-variant/30 pb-3">Saisie en cuisine</p>
-                    <div className="space-y-4">
-                        {currentCommande.lignes.map(ligne => (
-                            <div key={ligne.id} className="flex items-center justify-between opacity-50 bg-surface-container-low/50 p-4 rounded-xl border border-outline-variant/20">
-                                <div className="flex gap-4 items-center">
-                                    <span className="font-mono text-xl font-black text-primary">{ligne.quantite}x</span>
-                                    <span className="font-sans text-xs font-black uppercase tracking-tight text-on-surface">{ligne.plat_nom}</span>
-                                </div>
-                                <span className={`text-[9px] font-black px-3 py-1.5 rounded-full border ${ligne.statut === 'PRET' ? 'bg-success/5 border-success/30 text-success' : 'bg-primary/5 border-primary/30 text-primary'}`}>
-                                    {ligne.statut}
-                                </span>
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {cart.length === 0 && (!currentCommande || !currentCommande.lignes || currentCommande.lignes.length === 0) ? (
+               <div className="h-full flex flex-col items-center justify-center p-12 opacity-10 gap-6">
+                  <UtensilsCrossed className="w-16 h-16 stroke-[0.5]" />
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-center">Ticket Vide</p>
+               </div>
+            ) : (
+              <div className="flex flex-col">
+                {/* Existing Commanded Items */}
+                {currentCommande && currentCommande.lignes && currentCommande.lignes.length > 0 && (
+                  <div className="flex flex-col border-b border-outline-variant">
+                    <div className="px-8 py-3 bg-surface-container-highest/30 flex items-center justify-between border-b border-outline-variant/10">
+                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">Enregistré</span>
+                       <span className="font-sans text-[10px] font-bold text-primary italic uppercase tracking-tighter">ID: #{currentCommande.id}</span>
+                    </div>
+                    {currentCommande.lignes.map(ligne => (
+                      <div key={ligne.id} className="px-8 py-5 border-b border-outline-variant/10 bg-surface-container-low/20 flex justify-between items-start group">
+                        <div className="flex gap-4 min-w-0 flex-1">
+                          <div className="h-10 w-10 rounded-xl bg-surface-container-highest flex items-center justify-center font-sans text-sm font-black text-on-surface-variant/60 tabular-nums border border-outline-variant/20">
+                            {ligne.quantite}x
+                          </div>
+                          <div className="flex-1 min-w-0 py-0.5">
+                            <p className="font-body text-[15px] font-bold text-on-surface/80 truncate uppercase tracking-tight">{ligne.plat_nom || 'Item'}</p>
+                            <div className="flex items-center gap-2.5 mt-1.5">
+                               <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full font-sans text-[8px] font-black uppercase tracking-widest border transition-colors ${
+                                 ligne.statut === 'SERVI' ? 'bg-success/10 text-success border-success/20' : 
+                                 ligne.statut === 'PRET' ? 'bg-primary/10 text-primary border-primary/20 animate-pulse' : 
+                                 'bg-surface-container-highest text-on-surface-variant/60 border-outline-variant/30'
+                               }`}>
+                                 {ligne.statut === 'PRET' && <CheckCircle2 className="w-2.5 h-2.5" />}
+                                 {ligne.statut === 'EN_PREPARATION' && <Clock className="w-2.5 h-2.5 animate-spin" />}
+                                 {ligne.statut}
+                               </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+                          </div>
+                        </div>
+                        <span className="font-sans text-[15px] font-black text-on-surface-variant/40 tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire) * ligne.quantite).toFixed(0)} DH</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-            {/* Current Draft Cart */}
-            <div className="space-y-6">
-               <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] border-b border-primary/20 pb-3">Brouillon Actif</p>
-               <AnimatePresence mode="popLayout">
-                  {cart.length === 0 ? (
-                    <div className="py-24 flex flex-col items-center justify-center opacity-10 gap-6">
-                       <History className="w-16 h-16" strokeWidth={1} />
-                       <p className="font-sans text-xs font-black uppercase tracking-[0.6em]">Registre Vide</p>
+                {/* New Cart Items */}
+                {cart.length > 0 && (
+                  <div className="flex flex-col">
+                    <div className="px-8 py-3 bg-primary/5 flex items-center gap-3 border-b border-primary/10">
+                       <Plus className="w-3.5 h-3.5 text-primary" strokeWidth={3} />
+                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-primary">Nouveaux Articles</span>
                     </div>
-                  ) : cart.map(item => (
-                    <motion.div 
-                      key={item.plat.id} layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                      className="flex items-center justify-between group bg-white border border-outline-variant p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all"
-                    >
-                      <div className="flex gap-4 min-w-0 pr-4">
-                        <span className="font-mono text-2xl font-black text-primary w-10 text-right">{item.quantite}x</span>
-                        <div className="flex-1 min-w-0">
-                           <p className="text-[14px] font-black text-on-surface uppercase tracking-tight truncate">{item.plat.nom}</p>
-                           <input 
-                             type="text" placeholder="Ajouter une consigne..." value={item.notes} 
-                             onChange={(e) => setCart(prev => prev.map(i => i.plat.id === item.plat.id ? { ...i, notes: e.target.value } : i))}
-                             className="w-full bg-transparent border-0 p-0 font-sans text-[10px] font-bold text-on-surface-variant/40 focus:text-primary outline-none uppercase tracking-widest mt-1.5"
-                           />
+                    {cart.map((item, idx) => (
+                      <div key={`new-${item.plat.id}-${idx}`} data-testid={`cart-item-${item.plat.id}`} className="px-8 py-5 border-b border-outline-variant hover:bg-surface-container-high transition-all group bg-primary/[0.02] flex justify-between items-start">
+                        <div className="flex gap-4 min-w-0 flex-1">
+                          <div className="h-11 w-11 rounded-xl bg-primary/20 flex items-center justify-center font-sans text-base font-black text-primary tabular-nums border border-primary/30">
+                             {item.quantite}x
+                          </div>
+                          <div className="flex-1 min-w-0 py-0.5">
+                            <p className="font-body text-[16px] font-bold text-on-surface truncate uppercase tracking-tight">{item.plat.nom}</p>
+                            <div className="flex items-center gap-4 mt-2">
+                              <button onClick={() => updateCartQty(item.plat.id, -1)} className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                                <Minus className="w-3.5 h-3.5" strokeWidth={3} />
+                              </button>
+                              <span className="font-sans text-sm font-black text-on-surface tabular-nums">{item.quantite}</span>
+                              <button onClick={() => addToCart(item.plat)} className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                                <Plus className="w-3.5 h-3.5" strokeWidth={3} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-3 shrink-0 py-0.5">
+                          <span className="font-sans text-[17px] font-black text-primary tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
+                          <button onClick={() => removeFromCart(item.plat.id)} className="p-2 rounded-lg bg-error/5 text-error/30 hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
+                              <Trash2 className="w-5 h-5" />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                         <button onClick={() => updateCartQty(item.plat.id, -1)} className="p-2 hover:bg-surface-container-low rounded-lg text-on-surface-variant hover:text-primary"><Minus className="w-4 h-4" /></button>
-                         <button onClick={() => updateCartQty(item.plat.id, 1)} className="p-2 hover:bg-surface-container-low rounded-lg text-on-surface-variant hover:text-primary"><Plus className="w-4 h-4" /></button>
-                         <button onClick={() => removeFromCart(item.plat.id)} className="p-2 hover:bg-error/5 rounded-lg text-on-surface-variant hover:text-error ml-2"><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    </motion.div>
-                  ))}
-               </AnimatePresence>
-            </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Action Footer */}
-          <div className="flex-none p-10 bg-white border-t border-outline-variant space-y-10 shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
-            <div className="flex justify-between items-end">
-               <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] opacity-60">Estimation Total</span>
-               <span className="font-mono text-4xl font-black text-on-surface tracking-tighter">{cartTotal.toFixed(0)} DH</span>
+          <div className="flex-none p-8 bg-surface-container-high border-t border-outline-variant space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.5)] z-30">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+                <span>Déjà Commandé</span>
+                <span className="tabular-nums">{existingTotal.toFixed(0)} DH</span>
+              </div>
+              <div className="flex justify-between items-center font-sans text-[11px] font-black text-primary uppercase tracking-widest">
+                <span>En attente</span>
+                <span className="tabular-nums">{cartTotal.toFixed(0)} DH</span>
+              </div>
+              <div className="pt-4 border-t border-outline-variant border-dashed flex justify-between items-center">
+                <span className="font-serif text-2xl font-black text-on-surface italic tracking-tight uppercase">TOTAL</span>
+                <span className="font-sans text-3xl font-black text-primary tabular-nums tracking-tighter">{grandTotal.toFixed(0)} DH</span>
+              </div>
             </div>
-            
-            <button 
-              onClick={handleSubmitOrder}
-              disabled={cart.length === 0 || isSubmitting}
-              className="w-full h-20 bg-primary text-white rounded-2xl font-sans text-sm font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 disabled:opacity-20 disabled:grayscale"
-            >
-              {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-                <>
-                  <Send className="w-5 h-5" />
-                  <span>Envoyer en cuisine</span>
-                </>
+
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={handleSubmitOrder}
+                disabled={cart.length === 0 || isSubmitting}
+                className="w-full h-18 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border-2 border-primary group disabled:opacity-20 disabled:grayscale"
+              >
+                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                  <>
+                    <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" strokeWidth={3} />
+                    <span>Envoyer en cuisine</span>
+                  </>
+                )}
+              </button>
+              
+              {currentCommande && cart.length > 0 && (
+                 <div className="flex items-center justify-center gap-2 py-2 px-4 rounded bg-surface-container border border-outline-variant/30">
+                    <AlertCircle className="w-3.5 h-3.5 text-on-surface-variant/40" />
+                    <p className="font-sans text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">Envoyer la suite pour encaisser</p>
+                 </div>
               )}
-            </button>
+            </div>
           </div>
         </section>
       </div>
 
-      {/* --- Payment Selection Modal --- */}
+      {/* Mobile Floating Bar */}
+      {isMobile && !showCart && (cart.length > 0 || (currentCommande?.lignes?.length || 0) > 0) && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-md">
+           <button 
+             onClick={() => setShowCart(true)}
+             className="w-full h-18 bg-[#0d0b0a] text-primary rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex items-center justify-between px-10 font-sans text-[12px] font-black uppercase tracking-[0.3em] animate-in slide-in-from-bottom-20 fade-in duration-700 border border-primary/30"
+           >
+             <span className="flex items-center gap-5">
+               <ReceiptText className="w-6 h-6" strokeWidth={2.5} />
+               <span>TICKET ({cart.length + (currentCommande?.lignes?.length || 0)})</span>
+             </span>
+             <div className="flex items-center gap-3">
+                <span className="bg-primary/10 px-5 py-2 rounded-full border border-primary/20 tabular-nums">{grandTotal.toFixed(0)} DH</span>
+                <ChevronRight className="w-5 h-5 opacity-30" />
+             </div>
+           </button>
+        </div>
+      )}
+
+      {/* --- Payment Modal --- */}
       <AnimatePresence>
         {isPayModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-8 bg-on-surface/30 backdrop-blur-md">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-8 bg-on-surface/40 backdrop-blur-md">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl bg-white rounded-[3rem] border border-outline-variant shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-xl bg-surface-container border border-outline-variant shadow-2xl rounded-[2.5rem] overflow-hidden relative"
             >
-              {/* Modal Header */}
-              <div className="p-12 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-primary" />
+              
+              <div className="p-10 md:p-12 border-b border-outline-variant bg-surface-container-high flex justify-between items-center">
                 <div>
-                  <h3 className="font-serif text-3xl font-black text-on-surface uppercase tracking-tight italic leading-none">Règlement Addition</h3>
-                  <p className="text-[11px] font-bold text-primary uppercase mt-3 tracking-[0.4em] opacity-80">Table {table?.numero} • Total : {parseFloat(currentCommande?.montant_total || '0').toFixed(2)} DH</p>
+                  <h3 className="font-serif text-3xl font-black text-on-surface uppercase tracking-tight italic leading-none">Règlement</h3>
+                  <p className="text-[10px] font-bold text-primary uppercase mt-3 tracking-[0.4em]">Table {table?.numero} • Total : {parseFloat(currentCommande?.montant_total || '0').toFixed(0)} DH</p>
                 </div>
-                <button onClick={() => setIsPayModalOpen(false)} className="p-3 bg-white hover:bg-surface-container-low border border-outline-variant rounded-full transition-all text-on-surface-variant hover:text-primary">
+                <button onClick={() => setIsPayModalOpen(false)} className="p-3 bg-surface-container-low hover:bg-surface-container-highest border border-outline-variant rounded-full transition-all text-on-surface-variant hover:text-primary">
                   <X className="w-7 h-7" />
                 </button>
               </div>
 
-              <div className="p-12">
+              <div className="p-10 md:p-12">
                 <AnimatePresence mode="wait">
                   {paymentStep === 'CHOICE' ? (
                     <motion.div 
                       key="choice" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                      className="grid grid-cols-1 gap-6"
+                      className="flex flex-col gap-6"
                     >
                       <button 
                         onClick={() => handleManualPay('CASH')}
-                        className="group flex items-center gap-8 p-8 bg-white border-2 border-outline-variant rounded-[2rem] hover:border-success/40 hover:bg-success/5 transition-all text-left shadow-sm hover:shadow-xl"
+                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-success/40 hover:bg-success/5 transition-all text-left shadow-lg"
                       >
                          <div className="w-16 h-16 rounded-2xl bg-success/10 flex items-center justify-center text-success group-hover:scale-110 transition-transform">
                             <Banknote className="w-10 h-10" />
                          </div>
                          <div>
-                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Espèces / Cash</p>
-                            <p className="text-[10px] font-bold text-on-surface-variant uppercase mt-2 tracking-widest opacity-60">Validation physique immédiate</p>
+                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Espèces</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-60">Validation physique immédiate</p>
                          </div>
-                         <ChevronRight className="w-6 h-6 ml-auto text-outline-variant opacity-0 group-hover:opacity-100 transition-all" />
                       </button>
 
                       <button 
                         onClick={() => handleManualPay('CARD')}
-                        className="group flex items-center gap-8 p-8 bg-white border-2 border-outline-variant rounded-[2rem] hover:border-primary/40 hover:bg-primary/5 transition-all text-left shadow-sm hover:shadow-xl"
+                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-primary/40 hover:bg-primary/5 transition-all text-left shadow-lg"
                       >
                          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                             <CreditCard className="w-10 h-10" />
                          </div>
                          <div>
-                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Carte Bancaire / TPE</p>
-                            <p className="text-[10px] font-bold text-on-surface-variant uppercase mt-2 tracking-widest opacity-60">Utilisation du terminal externe</p>
+                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Carte Bancaire</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-60">Utilisation Terminal Externe</p>
                          </div>
-                         <ChevronRight className="w-6 h-6 ml-auto text-outline-variant opacity-0 group-hover:opacity-100 transition-all" />
                       </button>
 
                       <div className="flex items-center gap-6 py-4">
-                          <div className="h-px flex-1 bg-outline-variant/30" />
-                          <span className="text-[10px] font-black text-on-surface-variant/40 uppercase tracking-widest">Alternative</span>
-                          <div className="h-px flex-1 bg-outline-variant/30" />
+                          <div className="h-px flex-1 bg-outline-variant/20" />
+                          <span className="text-[9px] font-black text-on-surface-variant/30 uppercase tracking-widest">Ou client scanne</span>
+                          <div className="h-px flex-1 bg-outline-variant/20" />
                       </div>
 
                       <button 
                         onClick={handleGenerateQr}
-                        className="group flex items-center gap-8 p-8 bg-on-surface border-2 border-transparent rounded-[2rem] hover:scale-[1.02] transition-all text-left shadow-2xl"
+                        className="group flex items-center gap-8 p-8 bg-[#0d0b0a] border-2 border-primary/20 rounded-[2rem] hover:scale-[1.02] transition-all text-left shadow-2xl"
                       >
-                         <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                             <QrCode className="w-10 h-10" />
                          </div>
                          <div>
-                            <p className="text-lg font-black text-white uppercase tracking-widest">Paiement Mobile (QR)</p>
-                            <p className="text-[10px] font-bold text-primary uppercase mt-2 tracking-widest">Générer un lien pour le client</p>
+                            <p className="text-lg font-black text-primary uppercase tracking-widest italic">Lien de Paiement QR</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Apple Pay, Google Pay, Carte</p>
                          </div>
-                         <QrCode className="w-6 h-6 ml-auto text-primary opacity-50 animate-pulse" />
                       </button>
                     </motion.div>
                   ) : (
@@ -471,39 +587,27 @@ export const OrderingPage: React.FC = () => {
                       key="qr" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                       className="flex flex-col items-center text-center space-y-10"
                     >
-                       <div className="p-10 bg-white rounded-[3rem] shadow-2xl border border-outline-variant/30 relative">
+                       <div className="p-10 bg-white rounded-[3rem] shadow-2xl border-8 border-[#151312]">
                           {qrData && (
                             <QRCodeSVG 
-                                value={`${window.location.origin}${qrData.url}`}
-                                size={280}
+                                value={qrData.url}
+                                size={260}
                                 level="H"
-                                includeMargin={false}
-                                fgColor="#1c1b1b"
+                                fgColor="#151312"
                             />
                           )}
-                          <div className="absolute inset-0 border-4 border-white rounded-[3rem] pointer-events-none" />
                        </div>
                        
                        <div className="space-y-4">
-                          <p className="font-serif text-2xl italic text-on-surface leading-tight px-4">Présentez ce code au convive pour un règlement sécurisé.</p>
+                          <p className="font-serif text-2xl italic text-on-surface leading-tight px-4 uppercase font-black tracking-tighter">Code de Règlement Sécurisé</p>
                           <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed opacity-60">
-                            La table sera libérée automatiquement <br/> après la confirmation bancaire.
+                            Session: {qrData?.token?.substring(0, 8)}...
                           </p>
                        </div>
 
                        <div className="w-full flex gap-6">
-                          <button 
-                            onClick={() => setPaymentStep('CHOICE')}
-                            className="flex-1 h-16 border-2 border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-surface-container-low transition-all"
-                          >
-                             Retour
-                          </button>
-                          <a 
-                            href={qrData?.url} target="_blank" rel="noreferrer"
-                            className="flex-1 h-16 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all"
-                          >
-                             Accès Direct <ExternalLink className="w-4 h-4" />
-                          </a>
+                          <button onClick={() => setPaymentStep('CHOICE')} className="flex-1 h-16 border-2 border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px] text-on-surface-variant hover:bg-surface-container-high">Retour</button>
+                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="flex-1 h-16 bg-primary text-on-primary rounded-2xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 shadow-xl shadow-primary/30">Lien Direct <ExternalLink className="w-4 h-4" /></a>
                        </div>
                     </motion.div>
                   )}

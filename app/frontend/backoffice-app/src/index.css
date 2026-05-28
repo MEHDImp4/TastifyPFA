@@ -1,18 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;1,400&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap");
 @import "tailwindcss";
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 @theme {
-  /* Dark Surface colors from new Stitch Design System */
-  --color-background: #151312;
+  /* Tactical Command Center - Staff OS Core Palette */
+  --color-background: #0d0b0a;
   --color-on-background: #e8e1de;
+  
   --color-surface: #151312;
   --color-on-surface: #e8e1de;
   --color-on-surface-variant: #d8c2b6;
+  
   --color-surface-dim: #151312;
   --color-surface-bright: #3c3937;
   --color-surface-container: #221f1e;
@@ -20,33 +17,33 @@
   --color-surface-container-high: #2c2928;
   --color-surface-container-highest: #373432;
   --color-surface-container-lowest: #100e0c;
+  
   --color-outline: #a08d81;
   --color-outline-variant: #53443a;
 
-  /* Tactical Primary (Amber/Sienna) */
+  /* Amber & Sienna Tactical Accents */
   --color-primary: #ffb785;
-  --color-on-primary: #502400;
+  --color-on-primary: #301400;
   --color-primary-container: #8d4e1c;
   --color-on-primary-container: #ffceaf;
 
   --color-secondary: #ffb785;
   --color-on-secondary: #502400;
-  --color-secondary-container: #753901;
-  --color-on-secondary-container: #faa467;
 
-  /* Status colors */
+  /* Operational Status */
+  --color-success: #00E676;
+  --color-on-success: #000000;
   --color-error: #ffb4ab;
   --color-on-error: #690005;
-  --color-error-container: #93000a;
-  --color-on-error-container: #ffdad6;
+  --color-warning: #f2bb96;
 
-  /* Typography fonts - Updated */
-  --font-sans: "Rethink Sans", sans-serif;
-  --font-serif: "Public Sans", sans-serif;
-  --font-body: "Inclusive Sans", sans-serif;
+  /* High-Contrast Professional Typography */
+  --font-sans: "Rethink Sans", system-ui, sans-serif;
+  --font-serif: "Public Sans", system-ui, serif;
+  --font-body: "Inclusive Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Spacing Tokens */
+  /* Geometric Spacing */
   --spacing-unit-xs: 4px;
   --spacing-unit-sm: 8px;
   --spacing-unit-md: 16px;
@@ -54,148 +51,67 @@
   --spacing-staff-gutter: 1rem;
   --spacing-staff-margin: 1.5rem;
 
-  /* Corner Roundness */
+  /* Radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-
-  /* Animation primitives */
-  --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out-expo: cubic-bezier(0.77, 0, 0.175, 1);
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
 @layer base {
   body {
     font-family: var(--font-body);
-    @apply bg-background text-on-background antialiased min-h-[100dvh];
-    /* Dark noise texture */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    @apply bg-background text-on-background antialiased min-h-[100dvh] overflow-hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    @apply tracking-tight font-bold;
+    @apply tracking-tight font-black text-on-surface uppercase italic;
   }
 
-  /* Typography scale utility-like classes */
-  .text-display-lg {
-    font-family: var(--font-serif);
-    font-size: 64px;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+  button, input, select, textarea {
+    @apply transition-all duration-200 outline-none;
   }
 
-  .text-ui-label-bold {
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-  }
-
-  .text-ui-button {
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: 0.05em;
-  }
-
-  .text-ui-data-dense {
-    font-family: var(--font-sans);
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.0;
-  }
-
-  button,
-  input,
-  select,
-  textarea,
-  label {
-    font-family: var(--font-sans);
-  }
-
-  select {
-    @apply appearance-none bg-surface-container border border-outline-variant rounded-lg px-4 py-2 font-sans font-bold text-on-surface outline-none transition-all cursor-pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffb785' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-    padding-right: 2.5rem;
-  }
-
-  select:focus {
-    @apply border-primary ring-2 ring-primary/20 bg-surface-container-high;
-  }
-
-  select option {
-    @apply bg-surface-container-high text-on-surface py-2;
-  }
-
-  /* Compact Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
-
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
-  }
-
-  /* Hide number input arrows (spin buttons) */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  input[type=number] {
-    -moz-appearance: textfield;
-    appearance: textfield;
+    @apply bg-outline-variant/30 rounded-full hover:bg-outline/50;
   }
 }
 
 @layer components {
-  /* Tactical Staff OS components */
-  .glass {
-    /* Absolute Visibility Rule: No blurs on critical surfaces. 
-       Switching to solid tonal layering. */
-    @apply bg-surface-container-high border border-outline/30;
+  .luxury-card {
+    @apply bg-surface-container-low border border-outline-variant/30 rounded-xl relative;
   }
 
-  .tonal-spot {
-    @apply bg-primary/10 text-primary font-bold;
+  .btn-primary {
+    @apply h-12 px-8 bg-primary text-on-primary rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-[0.2em] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10;
   }
 
-  .editorial-kicker {
-    @apply font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-primary;
-  }
-
-  /* Blueprint Grid Pattern for Salle Map */
-  .blueprint-grid {
-    background-size: 40px 40px;
-    background-image: 
-        linear-gradient(to right, rgba(160, 141, 129, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(160, 141, 129, 0.1) 1px, transparent 1px);
-  }
-
-  @keyframes pulse-border-error {
-    0%, 100% { border-color: #ffb4ab; box-shadow: 0 0 0 0 rgba(255, 180, 171, 0.2); }
-    50% { border-color: #93000a; box-shadow: 0 0 0 8px rgba(255, 180, 171, 0); }
-  }
-
-  .animate-pulse-error {
-    animation: pulse-border-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .btn-tactical {
+    @apply h-12 px-6 bg-surface-container border border-outline-variant/50 rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-widest text-on-surface hover:border-primary hover:text-primary active:scale-95 transition-all;
   }
 }
 
+/* Operational Pulse Animations */
+@keyframes pulse-border-error {
+  0% { border-color: #ba1a1a; box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.2); }
+  50% { border-color: #ffb4ab; box-shadow: 0 0 0 8px rgba(186, 26, 26, 0); }
+  100% { border-color: #ba1a1a; box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+}
 
+.animate-pulse-error {
+  animation: pulse-border-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.blueprint-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 183, 133, 0.05) 1px, transparent 0);
+  background-size: 40px 40px;
+}
