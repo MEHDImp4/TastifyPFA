@@ -5,15 +5,16 @@ import {
   Plus, 
   Trash2, 
   Loader2, 
-  GripVertical,
-  Save,
-  RotateCcw,
   CloudUpload,
   Search,
   X,
   Edit2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Hash,
+  Activity,
+  Image as ImageIcon,
+  Save
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -28,7 +29,7 @@ export const CategoryPage: React.FC = () => {
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 10;
 
   // Modal state
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -99,16 +100,16 @@ export const CategoryPage: React.FC = () => {
     try {
       if (editingCategory) {
         await menuApi.updateCategory(editingCategory.id, formData);
-        toast.success('Catégorie mise à jour');
+        toast.success('UNITÉ MISE À JOUR');
       } else {
         await menuApi.createCategory(formData);
-        toast.success('Catégorie créée');
+        toast.success('NOUVEAU SECTEUR CRÉÉ');
       }
       fetchCategories();
       setIsEditorOpen(false);
       setEditingCategory(null);
     } catch (err) {
-      toast.error('Erreur d\'enregistrement');
+      toast.error('ÉCHEC SAUVEGARDE');
     } finally {
       setIsSaving(false);
     }
@@ -123,20 +124,20 @@ export const CategoryPage: React.FC = () => {
     if (!categoryToDelete) return;
     try {
         await menuApi.deleteCategory(categoryToDelete);
-        toast.success('Catégorie supprimée');
+        toast.success('SECTEUR SUPPRIMÉ');
         fetchCategories();
         if (editingCategory?.id === categoryToDelete) {
            setEditingCategory(null);
            setIsEditorOpen(false);
         }
     } catch (err) {
-        toast.error('Échec de suppression');
+        toast.error('ÉCHEC SUPPRESSION');
     }
     setCategoryToDelete(null);
   };
 
   const filteredCategories = categories.filter(c => 
-    c.est_active && c.nom.toLowerCase().includes(search.toLowerCase())
+    c.nom.toLowerCase().includes(search.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
@@ -145,278 +146,201 @@ export const CategoryPage: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   return (
-    <div className="h-full flex flex-col -m-4 bg-surface-main overflow-hidden font-body selection:bg-primary/20">
+    <div className="flex-1 flex flex-col min-h-0 bg-background font-sans selection:bg-primary/20 overflow-hidden">
       
-      {/* Top Controls Area */}
-      <div className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
+      {/* Registry Header */}
+      <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Gestion des Catégories</h1>
-          <h2 className="sr-only">Catégories</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Configuration de la structure hiérarchique du menu</p>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre des Catégories</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Configuration de l'Architecture du Menu</p>
         </div>
-        <div className="flex gap-unit-md items-center">
-           <div className="relative group mr-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
+        <div className="flex items-center gap-4">
+           <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
             <input 
               type="text"
-              placeholder="RECHERCHE..."
+              placeholder="FILTRER PAR NOM..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-48 h-10 bg-surface-container-low border border-outline-variant pl-10 pr-4 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
             />
           </div>
           <button 
-            onClick={() => { setSearch(''); setEditingCategory(null); setIsEditorOpen(false); setCurrentPage(1); }}
-            className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all"
-          >
-            <RotateCcw className="w-3.5 h-3.5" /> Annuler
-          </button>
-          <button 
             onClick={startNewCategory}
-            data-testid="category-create-button"
-            className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
+            className="btn-primary"
           >
-            <Plus className="w-4 h-4" /> Nouvelle Catégorie
+            <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Catégorie
           </button>
         </div>
       </div>
 
-      {/* Main Split Layout */}
-      <div className="flex-1 overflow-hidden relative">
-        
-        {/* Category List */}
-        <div className="h-full bg-surface-container-lowest flex flex-col">
-          {/* List Header */}
-          <div className="flex-none px-6 py-3 border-b border-outline-variant bg-surface-container flex items-center text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <div className="w-8"></div>
-            <div className="w-12"></div>
-            <div className="flex-1">Nom de la Catégorie</div>
-            <div className="w-24 text-center">Rang</div>
-            <div className="w-32 text-center">Statut</div>
-            <div className="w-10"></div>
+      {/* Registry Table Area */}
+      <div className="flex-1 overflow-hidden flex flex-col p-8 min-h-0">
+        <div className="flex-1 bg-surface-container-lowest border border-outline rounded-xl overflow-hidden flex flex-col">
+          
+          {/* Table Header */}
+          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
+            <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3" /> ID</div>
+            <div className="col-span-1 flex items-center justify-center"><ImageIcon className="w-3 h-3" /></div>
+            <div className="col-span-4">Libellé du Secteur</div>
+            <div className="col-span-2 text-center">Ordre</div>
+            <div className="col-span-2 text-center">Statut</div>
+            <div className="col-span-2 text-right">Actions</div>
           </div>
 
-          {/* Scrollable List Body */}
-          <div className="flex-1 overflow-y-auto p-unit-sm space-y-1 custom-scrollbar">
-            <AnimatePresence mode="popLayout">
-              {paginatedCategories.map((cat) => (
-                <motion.div 
+          {/* Table Body */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {paginatedCategories.length > 0 ? paginatedCategories.map((cat) => (
+                <div 
                   key={cat.id}
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  data-testid={`category-card-${cat.id}`}
-                  className={`
-                    group flex items-center gap-unit-md p-unit-sm rounded border transition-all cursor-default relative overflow-hidden
-                    ${editingCategory?.id === cat.id ? 'bg-surface-container-highest border-primary/50 ring-1 ring-primary/20' : 'bg-transparent border-transparent hover:bg-surface-container-low'}
-                  `}
+                  className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
-                  {editingCategory?.id === cat.id && <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />}
-                  
-                  <div className="text-on-surface-variant/20 group-hover:text-primary transition-colors">
-                    <GripVertical className="w-5 h-5" />
-                  </div>
-
-                  <div className="w-12 h-12 rounded border border-outline-variant bg-surface-main overflow-hidden shrink-0 shadow-inner">
-                    {cat.image ? (
-                      <img src={cat.image} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" alt={cat.nom} />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-on-surface-variant/20 font-serif italic text-xl">
-                        {cat.nom.charAt(0)}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <h3 className={`font-sans text-[13px] font-black uppercase tracking-tight ${editingCategory?.id === cat.id ? 'text-primary' : 'text-on-surface'}`}>
-                      {cat.nom}
-                    </h3>
-                    <p className="font-sans text-[10px] text-on-surface-variant truncate uppercase tracking-widest mt-0.5 opacity-60">
-                      {cat.description || 'Aucun contexte enregistré'}
-                    </p>
-                  </div>
-
-                  <div className="w-24 text-center">
-                    <span className="font-mono text-[11px] font-bold text-on-surface-variant bg-background px-2 py-0.5 rounded border border-outline-variant/30">
-                      #{cat.ordre_affichage.toString().padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  <div className="w-32 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${cat.est_active ? 'bg-success/5 border-success/20 text-success' : 'bg-on-surface-variant/5 border-on-surface-variant/20 text-on-surface-variant'}`}>
-                      <div className={`w-1.5 h-1.5 rounded-full ${cat.est_active ? 'bg-success animate-pulse' : 'bg-on-surface-variant'}`} />
-                      <span className="font-sans text-[9px] font-black uppercase tracking-wider">{cat.est_active ? 'Active' : 'Inactive'}</span>
+                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{cat.id}</div>
+                  <div className="col-span-1 flex justify-center">
+                    <div className="w-10 h-10 rounded border border-outline bg-background overflow-hidden shrink-0">
+                        {cat.image ? (
+                            <img src={cat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant/20">{cat.nom.charAt(0)}</div>
+                        )}
                     </div>
                   </div>
-
-                  <div className="w-10 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity gap-2">
-                    <button 
-                      type="button" 
-                      onClick={() => selectCategory(cat)}
-                      className="p-1 hover:text-primary transition-colors"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); confirmDelete(cat.id); }}
-                      className="p-1 hover:text-error transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <div className="col-span-4">
+                    <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">{cat.nom}</h3>
+                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-50 truncate">{cat.description || 'SANS DESCRIPTION'}</p>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  <div className="col-span-2 text-center">
+                    <span className="font-mono text-xs font-black text-primary bg-primary/5 px-3 py-1 rounded border border-primary/20">{cat.ordre_affichage.toString().padStart(2, '0')}</span>
+                  </div>
+                  <div className="col-span-2 flex justify-center">
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded border ${cat.est_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant/40'}`}>
+                      <div className={`w-1.5 h-1.5 rounded-full ${cat.est_active ? 'bg-success' : 'bg-outline-variant'}`} />
+                      <span className="text-[9px] font-black uppercase tracking-widest">{cat.est_active ? 'ACTIF' : 'INACTIF'}</span>
+                    </div>
+                  </div>
+                  <div className="col-span-2 flex justify-end gap-2">
+                    <button onClick={() => selectCategory(cat)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => confirmDelete(cat.id)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                </div>
+            )) : (
+                <div className="h-64 flex flex-col items-center justify-center opacity-10">
+                    <Activity className="w-16 h-16 mb-4" strokeWidth={1} />
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Registre Vide</p>
+                </div>
+            )}
           </div>
 
-          {/* Footer Pagination - Centered */}
-          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            {totalPages > 1 ? (
+          {/* Table Footer / Pagination */}
+          <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
+            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+                Total : {filteredCategories.length} Secteurs identifiés
+            </span>
+            {totalPages > 1 && (
                 <div className="flex items-center gap-4">
-                    <button 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
-                    >
-                        <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30">
+                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
+                    <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
                         <span className="text-primary">{currentPage}</span>
-                        <span className="opacity-30">/</span>
-                        <span>{totalPages}</span>
+                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface">{totalPages}</span>
                     </div>
-                    <button 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                        className="p-1 hover:text-primary disabled:opacity-20 transition-colors"
-                    >
-                        <ChevronRight className="w-4 h-4" />
-                    </button>
+                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
                 </div>
-            ) : (
-                <span className="opacity-20 tracking-[0.5em]">FIN DU CATALOGUE</span>
             )}
           </div>
         </div>
-
-        {/* Slide-over Category Editor */}
-        <AnimatePresence>
-          {isEditorOpen && (
-            <div className="fixed inset-0 z-[100] flex justify-end bg-black/60 backdrop-blur-sm">
-              <motion.aside 
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="w-full max-w-lg h-full bg-surface-container-low border-l border-outline-variant shadow-2xl flex flex-col"
-              >
-                <div className="flex-none flex items-center justify-between p-6 border-b border-outline-variant bg-surface-main">
-                  <div>
-                    <h2 className="font-serif text-2xl font-black text-on-surface uppercase tracking-tight">
-                      {editingCategory ? 'Modifier Secteur' : 'Nouveau Secteur'}
-                    </h2>
-                    <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Configuration des Métadonnées</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }}
-                    className="p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-
-                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-unit-lg">
-                  <div className="space-y-unit-xs">
-                    <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Identité Visuelle</label>
-                    <div className="relative group aspect-video rounded border-2 border-dashed border-outline-variant bg-surface-container-lowest flex flex-col items-center justify-center overflow-hidden transition-all hover:border-primary">
-                      {preview ? (
-                         <>
-                         <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="Aperçu" />
-                          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-background/40">
-                             <CloudUpload className="w-8 h-8 text-primary mb-2" />
-                             <span className="font-sans text-[10px] font-black text-white uppercase tracking-widest">Remplacer Fichier</span>
-                          </div>
-                         </>
-                      ) : (
-                        <div className="flex flex-col items-center text-on-surface-variant/20 group-hover:text-primary transition-colors">
-                          <CloudUpload className="w-10 h-10 mb-2 stroke-[1]" />
-                          <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Charger Ressource</span>
-                        </div>
-                      )}
-                      <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-unit-md">
-                    <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Nom du Secteur</label>
-                      <input 
-                        type="text" required value={nom} onChange={(e) => setNom(e.target.value)}
-                        className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase tracking-tight"
-                      />
-                    </div>
-
-                    <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Mémo Opérationnel</label>
-                      <textarea 
-                        rows={3} value={description} onChange={(e) => setDescription(e.target.value)}
-                        className="w-full p-4 bg-surface-main border border-outline-variant rounded font-sans text-[13px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20 resize-none"
-                        placeholder="EX: ENTRÉES DU MENU PRINCIPAL..."
-                      />
-                    </div>
-
-                    <div className="space-y-unit-xs">
-                      <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Rang Hiérarchique</label>
-                      <input 
-                        type="number" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)}
-                        className="w-full h-12 px-4 bg-surface-main border border-outline-variant rounded font-mono font-bold text-on-surface focus:border-primary outline-none transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="py-unit-md border-y border-outline-variant/30 flex items-center justify-between">
-                    <div>
-                      <label className="block font-sans text-[12px] font-black text-on-surface uppercase">Visibilité en Direct</label>
-                      <p className="font-sans text-[10px] text-on-surface-variant uppercase mt-0.5 tracking-wider opacity-60">Afficher sur le TPV & Menu</p>
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => setEditingCategory(prev => prev ? { ...prev, est_active: !prev.est_active } : null)}
-                      className={`w-12 h-6 rounded-full relative transition-all border ${editingCategory?.est_active ?? true ? 'bg-primary border-primary' : 'bg-surface-container-highest border-outline-variant'}`}
-                    >
-                      <div className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-white transition-all ${editingCategory?.est_active ?? true ? 'right-1' : 'left-1'}`} />
-                    </button>
-                  </div>
-                </form>
-
-                <div className="flex-none p-6 border-t border-outline-variant bg-surface-main flex gap-4">
-                  <button type="button" onClick={() => { setEditingCategory(null); setIsEditorOpen(false); }} className="flex-1 h-14 border border-outline-variant rounded font-sans text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all">Annuler</button>
-                  <button 
-                    onClick={handleSubmit} disabled={isSaving}
-                    className="flex-[2] h-14 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 border border-primary"
-                  >
-                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /><span>Enregistrer</span></>}
-                  </button>
-                </div>
-              </motion.aside>
-            </div>
-          )}
-        </AnimatePresence>
       </div>
 
-      {/* Custom Confirmation Modal */}
+      {/* Editor Side-panel */}
+      <AnimatePresence>
+        {isEditorOpen && (
+          <div className="fixed inset-0 z-[100] flex justify-end bg-black/80">
+            <motion.aside 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+              className="w-full max-w-xl h-full bg-surface-container-lowest border-l border-outline flex flex-col"
+            >
+                <div className="flex-none h-24 flex items-center justify-between px-10 border-b border-outline bg-surface-container-lowest">
+                    <div>
+                        <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingCategory ? 'Configuration Secteur' : 'Nouveau Secteur'}</h2>
+                        <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Édition des métadonnées structurelles</p>
+                    </div>
+                    <button onClick={() => setIsEditorOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10">
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Ressource Visuelle</label>
+                        <div className="relative aspect-video rounded-xl border-2 border-dashed border-outline bg-background flex flex-col items-center justify-center overflow-hidden hover:border-primary transition-all group">
+                            {preview ? (
+                                <>
+                                    <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="" />
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 z-10 transition-all">
+                                        <CloudUpload className="w-10 h-10 text-primary mb-3" />
+                                        <span className="text-[10px] font-black text-on-surface uppercase tracking-widest">Remplacer le fichier</span>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="flex flex-col items-center opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all">
+                                    <CloudUpload className="w-12 h-12 mb-3" strokeWidth={1} />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">Charger une icône / Image</span>
+                                </div>
+                            )}
+                            <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Dénomination</label>
+                        <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="NOM DU SECTEUR" />
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Description Technique</label>
+                        <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DÉTAILS OPÉRATIONNELS..." />
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Rang d'Affichage</label>
+                        <input type="number" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-mono text-xl font-black text-primary focus:border-primary" />
+                    </div>
+
+                    <div className="py-10 border-y border-outline flex items-center justify-between">
+                        <div>
+                            <span className="text-sm font-black text-on-surface uppercase tracking-tight">Statut de Visibilité</span>
+                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest mt-1">Actif sur le TPV et Menu Digital</p>
+                        </div>
+                        <button 
+                            type="button"
+                            onClick={() => setEditingCategory(prev => prev ? { ...prev, est_active: !prev.est_active } : null)}
+                            className={`w-14 h-7 rounded-full relative transition-all ${editingCategory?.est_active ?? true ? 'bg-primary' : 'bg-surface-container-high'}`}
+                        >
+                            <div className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-all ${editingCategory?.est_active ?? true ? 'right-1' : 'left-1'}`} />
+                        </button>
+                    </div>
+                </form>
+
+                <div className="flex-none h-24 bg-surface-container-lowest border-t border-outline p-6 flex gap-6">
+                    <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 border border-outline rounded-lg text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Annuler</button>
+                    <button onClick={handleSubmit} disabled={isSaving} className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
+                        {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Sauvegarder</>}
+                    </button>
+                </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+
       <ConfirmationModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           onConfirm={executeDelete}
-          title="Supprimer Catégorie"
-          message="Êtes-vous sûr de vouloir supprimer définitivement cette catégorie ? Tous les plats associés risquent de perdre leur secteur."
-          confirmLabel="SUPPRIMER"
+          title="DÉSTRUCTION UNITÉ"
+          message="Confirmez-vous la suppression définitive de cette catégorie ? Cette action est irréversible."
+          confirmLabel="DÉTRUIRE"
           variant="danger"
       />
     </div>

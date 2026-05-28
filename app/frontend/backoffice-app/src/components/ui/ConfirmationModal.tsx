@@ -35,14 +35,14 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80"
           />
           
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-surface-container border border-outline-variant rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
+            className="relative w-full max-w-md bg-surface-container border border-outline-variant rounded-2xl overflow-hidden"
           >
             <div className={`h-1.5 w-full ${variant === 'danger' ? 'bg-error' : 'bg-primary'}`} />
             
@@ -75,7 +75,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     onConfirm();
                     onClose();
                   }}
-                  className={`flex-[1.5] h-14 ${buttonBg} text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
+                  className={`flex-[1.5] h-14 ${buttonBg} text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
                 >
                   {confirmLabel}
                 </button>

@@ -61,7 +61,7 @@ export const DeliveryHubPage: React.FC = () => {
           </div>
           <div className="flex gap-4">
              <button className="text-on-surface-variant hover:text-primary transition-colors"><Activity className="w-5 h-5" /></button>
-             <div className="w-8 h-8 rounded bg-surface-bright border border-outline-variant overflow-hidden shadow-inner">
+             <div className="w-8 h-8 rounded bg-surface-bright border border-outline-variant overflow-hidden">
                 <span className="w-full h-full flex items-center justify-center font-sans font-black text-[10px] text-primary">OP</span>
              </div>
           </div>
@@ -73,7 +73,7 @@ export const DeliveryHubPage: React.FC = () => {
         {/* Metric Row */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-unit-md">
           {kpis.map((kpi, i) => (
-            <div key={i} className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between shadow-sm transition-all hover:bg-surface-container-high group">
+            <div key={i} className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between transition-all hover:bg-surface-container-high group">
               <div className="flex justify-between items-start">
                 <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">{kpi.label}</span>
                 <kpi.icon className={`w-4 h-4 ${kpi.color} opacity-40 group-hover:opacity-100 transition-all`} />
@@ -89,7 +89,7 @@ export const DeliveryHubPage: React.FC = () => {
         </section>
 
         {/* Dispatch Grid */}
-        <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-2xl">
+        <div className="bg-surface-main border border-outline-variant rounded-lg overflow-hidden flex flex-col">
           <div className="px-6 py-4 border-b border-outline-variant bg-surface-container flex items-center justify-between">
              <div className="flex gap-6">
                 <button className="font-sans text-[11px] font-black text-primary border-b-2 border-primary pb-1 uppercase tracking-[0.2em]">All Active (14)</button>
@@ -151,7 +151,7 @@ export const DeliveryHubPage: React.FC = () => {
 
         {/* Auxiliary Dispatch Tools */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-staff-gutter">
-           <div className="lg:col-span-8 bg-surface-container border border-outline-variant rounded-lg p-8 space-y-6 shadow-sm relative overflow-hidden">
+           <div className="lg:col-span-8 bg-surface-container border border-outline-variant rounded-lg p-8 space-y-6 relative overflow-hidden">
               <div className="flex justify-between items-center mb-4">
                  <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Active Delivery Radius</h3>
                  <span className="font-sans text-[9px] font-black text-on-surface-variant bg-background px-3 py-1 rounded border border-outline-variant uppercase tracking-widest opacity-60">LIVE MONITORING</span>
@@ -161,11 +161,11 @@ export const DeliveryHubPage: React.FC = () => {
                     <Navigation className="w-32 h-32 text-primary stroke-[0.5]" />
                  </div>
                  <div className="absolute bottom-6 left-6 right-6 flex justify-between">
-                    <div className="bg-background/80 backdrop-blur-md p-4 rounded border border-outline-variant/30">
+                    <div className="bg-background/80 p-4 rounded border border-outline-variant/30">
                        <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Density</p>
                        <p className="font-sans text-xs font-bold text-primary uppercase">Downtown Zone Alpha: High</p>
                     </div>
-                    <div className="bg-background/80 backdrop-blur-md p-4 rounded border border-outline-variant/30">
+                    <div className="bg-background/80 p-4 rounded border border-outline-variant/30">
                        <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1 opacity-60">Traffic</p>
                        <p className="font-sans text-xs font-bold text-error uppercase">+4m peak lag detected</p>
                     </div>
@@ -173,7 +173,7 @@ export const DeliveryHubPage: React.FC = () => {
               </div>
            </div>
 
-           <div className="lg:col-span-4 bg-surface-container border border-outline-variant rounded-lg p-8 space-y-8 shadow-sm flex flex-col">
+           <div className="lg:col-span-4 bg-surface-container border border-outline-variant rounded-lg p-8 space-y-8 flex flex-col">
               <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] border-b border-outline-variant/30 pb-4">Courier Wait List</h3>
               <div className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-2">
                  {[
@@ -183,7 +183,7 @@ export const DeliveryHubPage: React.FC = () => {
                  ].map((courier, i) => (
                    <div key={i} className={`p-4 bg-surface-main border border-outline-variant rounded flex items-center justify-between group hover:border-primary transition-all ${i === 2 ? 'opacity-40 grayscale' : ''}`}>
                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center font-sans font-black text-[11px] text-on-surface-variant shadow-inner group-hover:text-primary transition-colors">{courier.id}</div>
+                         <div className="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center font-sans font-black text-[11px] text-on-surface-variant group-hover:text-primary transition-colors">{courier.id}</div>
                          <div>
                             <p className="font-sans text-[12px] font-black text-on-surface uppercase tracking-tight">{courier.name}</p>
                             <p className="font-sans text-[9px] text-on-surface-variant uppercase tracking-widest opacity-60">{courier.channel} • {courier.wait}</p>

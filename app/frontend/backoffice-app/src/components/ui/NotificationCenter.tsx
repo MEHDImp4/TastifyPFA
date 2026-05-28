@@ -54,7 +54,7 @@ export const NotificationCenter: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-4 w-96 bg-surface-container border border-outline-variant rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute top-full right-0 mt-4 w-96 bg-surface-container border border-outline-variant rounded-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="p-4 bg-surface-container-high border-b border-outline-variant flex items-center justify-between">
             <h4 className="font-sans text-[10px] font-black tracking-[0.25em] text-on-surface uppercase">Alertes Opérationnelles</h4>
             <button

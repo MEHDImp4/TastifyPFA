@@ -23,7 +23,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative w-full max-w-lg bg-surface-container border border-outline-variant rounded-xl shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-lg bg-surface-container border border-outline-variant rounded-xl overflow-hidden flex flex-col"
           >
             <div className="flex items-center justify-between p-6 border-b border-outline-variant/30 bg-surface-container-high">
               <h3 className="font-sans text-[11px] font-black text-primary uppercase tracking-[0.2em] m-0">{title}</h3>

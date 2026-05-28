@@ -58,17 +58,13 @@ export const Login: React.FC = () => {
 
   return (
     <div className="relative min-h-[100dvh] bg-background flex items-center justify-center p-6 md:p-12 overflow-hidden selection:bg-primary/20 blueprint-grid font-body">
-      
-      {/* Ambient background glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-      
       <motion.div
         variants={containerVariants} initial="hidden" animate="visible"
         className="relative z-10 w-full max-w-lg"
       >
         {/* Terminal Header */}
         <motion.div variants={itemVariants} className="flex flex-col items-center mb-12">
-            <div className="w-16 h-16 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center mb-6 shadow-xl relative overflow-hidden group">
+            <div className="w-16 h-16 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                <Terminal className="w-8 h-8 text-primary relative z-10" strokeWidth={1.5} />
             </div>
@@ -77,7 +73,7 @@ export const Login: React.FC = () => {
         </motion.div>
 
         {/* Command Card */}
-        <div className="bg-surface-container border border-outline-variant rounded-xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <div className="bg-surface-container border border-outline-variant rounded-xl p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
           
           <AnimatePresence mode="wait">
@@ -127,7 +123,7 @@ export const Login: React.FC = () => {
             <button 
               type="submit" disabled={isLoading}
               data-testid="login-submit"
-              className="w-full h-16 bg-primary text-on-primary rounded-lg font-sans text-xs font-black uppercase tracking-[0.4em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary relative overflow-hidden group"
+              className="w-full h-16 bg-primary text-on-primary rounded-lg font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (

@@ -36,7 +36,7 @@ export const MaintenancePage: React.FC = () => {
           <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
             <Download className="w-3.5 h-3.5" /> Export Logs
           </button>
-          <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
+          <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider hover:scale-[1.02] transition-all">
             <RotateCcw className="w-4 h-4" /> Manual Sync
           </button>
         </div>
@@ -46,7 +46,7 @@ export const MaintenancePage: React.FC = () => {
         
         {/* Module Health Bento */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-unit-md">
-           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all shadow-sm">
+           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all">
               <div className="flex justify-between items-start">
                  <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest flex items-center gap-2"><Server className="w-3.5 h-3.5" /> Kitchen Core</span>
                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
@@ -60,7 +60,7 @@ export const MaintenancePage: React.FC = () => {
               </div>
            </div>
 
-           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all shadow-sm">
+           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all">
               <div className="flex justify-between items-start">
                  <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest flex items-center gap-2"><Network className="w-3.5 h-3.5" /> Floor Comm</span>
                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
@@ -74,7 +74,7 @@ export const MaintenancePage: React.FC = () => {
               </div>
            </div>
 
-           <div className="bg-primary/10 border-2 border-primary/40 rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden shadow-xl">
+           <div className="bg-primary/10 border-2 border-primary/40 rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden">
               <div className="flex justify-between items-start">
                  <span className="font-sans text-[10px] font-black text-primary uppercase tracking-widest flex items-center gap-2"><Cpu className="w-3.5 h-3.5" /> API Gateway</span>
                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -86,13 +86,12 @@ export const MaintenancePage: React.FC = () => {
                     <span>Err: 2.1%</span>
                  </div>
               </div>
-              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 blur-2xl rounded-full" />
            </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-staff-gutter">
            {/* Event Log */}
-           <div className="lg:col-span-8 bg-surface-main border border-outline-variant rounded-lg flex flex-col h-[450px] shadow-2xl overflow-hidden">
+           <div className="lg:col-span-8 bg-surface-main border border-outline-variant rounded-lg flex flex-col h-[450px] overflow-hidden">
               <div className="px-6 py-3 border-b border-outline-variant bg-surface-container flex items-center justify-between font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
                  <span className="flex items-center gap-2"><Terminal className="w-3.5 h-3.5" /> System Event Log</span>
                  <div className="flex gap-1.5 opacity-20">
@@ -115,7 +114,7 @@ export const MaintenancePage: React.FC = () => {
 
            {/* Sidebar Info */}
            <div className="lg:col-span-4 space-y-staff-gutter">
-              <div className="bg-surface-container border border-outline-variant rounded-lg p-8 space-y-8 shadow-sm">
+              <div className="bg-surface-container border border-outline-variant rounded-lg p-8 space-y-8">
                  <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] border-b border-outline-variant/30 pb-4">Environment</h3>
                  <ul className="space-y-4 font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
                     <li className="flex justify-between"><span>Version</span><span className="text-on-surface">Terminal v1.4.2</span></li>
@@ -125,7 +124,7 @@ export const MaintenancePage: React.FC = () => {
                  </ul>
               </div>
 
-              <div className="bg-surface-container-high border border-outline-variant rounded-lg p-8 space-y-6 shadow-sm flex-1">
+              <div className="bg-surface-container-high border border-outline-variant rounded-lg p-8 space-y-6 flex-1">
                  <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] flex items-center gap-2"><Database className="w-4 h-4" /> Technical Support</h3>
                  <p className="font-body text-[13px] text-on-surface-variant italic opacity-60 uppercase tracking-tight leading-relaxed">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
                  <div className="space-y-3 pt-4">

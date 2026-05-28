@@ -9,19 +9,18 @@ import {
   Users,
   ShoppingBag,
   Timer,
-  ChevronRight,
-  BellRing,
   Activity,
   AlertTriangle,
   CheckCircle2,
   Loader2,
-  CreditCard,
-  ChefHat,
-  ChevronLeft
+  ChevronRight,
+  History,
+  ArrowUpRight
 } from 'lucide-react';
 import { useSocketStore } from '../../store/socketStore';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -29,10 +28,6 @@ export const DashboardPage: React.FC = () => {
   const [activeTickets, setActiveTickets] = useState<Commande[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const lastUpdate = useSocketStore(state => state.lastUpdate);
-
-  // Pagination state for Alerts
-  const [alertPage, setAlertPage] = useState(0);
-  const alertsPerPage = 7;
 
   const fetchData = async () => {
     try {
@@ -56,185 +51,172 @@ export const DashboardPage: React.FC = () => {
   }, [lastUpdate]);
 
   if (isLoading || !data) return (
-    <div className="h-full flex items-center justify-center text-primary bg-surface-container-lowest rounded-lg border border-outline-variant">
-      <Loader2 className="w-10 h-10 animate-spin" />
+    <div className="h-full flex items-center justify-center text-primary">
+      <Loader2 className="w-12 h-12 animate-spin" />
     </div>
   );
 
   const kpis = [
     { label: "Chiffre d'Affaires", value: `${data.todayRevenue.toFixed(0)} DH`, icon: TrendingUp, trend: "+8.4%", color: "text-primary" },
-    { label: "Taux d'Occupation", value: `${Math.round((data.activeTables / 28) * 100)}%`, icon: Users, trend: `${data.activeTables}/28 Tables`, color: "text-primary" },
-    { label: "Commandes en Attente", value: data.pendingOrders, icon: ShoppingBag, trend: "Tickets Actifs", color: "text-primary", border: "border-l-4 border-l-primary" },
-    { label: "Temps de Prép. Moyen", value: `${data.avgPrepTime}m`, icon: Timer, trend: "+2m retard", color: "text-error" },      
+    { label: "Occupation Salle", value: `${Math.round((data.activeTables / 28) * 100)}%`, icon: Users, trend: `${data.activeTables}/28 Tables`, color: "text-primary" },
+    { label: "Tickets Actifs", value: data.pendingOrders, icon: ShoppingBag, trend: "En Cuisine / Prêts", color: "text-primary" },
+    { label: "Service Cuisine", value: `${data.avgPrepTime}m`, icon: Timer, trend: "Objectif: 15m", color: "text-success" },      
   ];
 
   const groupedTickets = {
-    active: activeTickets.filter(t => t.statut === 'EN_COURS' || t.statut === 'EN_CUISINE'),
-    ready: activeTickets.filter(t => t.statut === 'PRETE'),
     late: activeTickets.filter(t => {
         const elapsed = (Date.now() - new Date(t.created_at).getTime()) / 60000;
-        return (t.statut === 'EN_CUISINE' || t.statut === 'EN_COURS') && elapsed > 20;
+        return (t.statut === 'EN_CUISINE') && elapsed > 20;
     })
   };
 
   return (
-    <div className="h-full flex flex-col gap-3 overflow-hidden font-body selection:bg-primary/20 -mt-2">
+    <div className="flex-1 flex flex-col gap-10 overflow-hidden font-sans">
+      
+      {/* Page Header */}
+      <div className="flex-none flex justify-between items-end">
+        <div>
+           <h1 className="text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
+           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-2 opacity-60">Intelligence Opérationnelle & Monitoring Direct</p>
+        </div>
+        <div className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-8 py-3.5 rounded-xl">
+           <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+           <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">Système Connecté</span>
+        </div>
+      </div>
 
-      {/* Tactical KPI Row - Ultra Condensed */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 flex-none">
+      {/* KPI Section */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {kpis.map((kpi, i) => (
-          <div key={i} className={`bg-surface-container p-3 rounded-lg border border-outline-variant flex flex-col gap-1 shadow-sm transition-all hover:bg-surface-container-high ${kpi.border || ''}`}>
-            <div className="flex justify-between items-start">
-              <span className="font-sans text-[8px] font-black text-on-surface-variant uppercase tracking-widest">{kpi.label}</span>
-              <kpi.icon className={`w-3.5 h-3.5 ${kpi.color}`} />
-            </div>
-            <div className="font-serif text-xl font-black text-on-surface tabular-nums">{kpi.value}</div>
-            <div className={`font-sans text-[8px] font-black uppercase tracking-widest flex items-center gap-1 ${kpi.trend.includes('+') ? 'text-primary' : 'text-on-surface-variant opacity-80'}`}>
-              <Activity className="w-2 h-2" /> {kpi.trend}
-            </div>
+          <div key={i} className="luxury-card p-8 group transition-all cursor-default">
+             <div className="flex justify-between items-center mb-6">
+                <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60">{kpi.label}</span>
+                <div className={`p-2.5 rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10`}>
+                    <kpi.icon className={`w-5 h-5 ${kpi.color}`} strokeWidth={2.5} />
+                </div>
+             </div>
+             <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-black text-on-surface tracking-tighter tabular-nums">{kpi.value}</span>
+             </div>
+             <div className="mt-8 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">{kpi.trend}</span>
+                <ArrowUpRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-all" />
+             </div>
           </div>
         ))}
       </section>
 
-      {/* Main Content Area - Split Panel */}
-      <div className="flex-1 grid grid-cols-12 gap-3 min-h-0">
+      {/* Operation Grid */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
         
-        {/* Left: Alerts and Notifications (4 cols) */}
-        <section className="col-span-12 lg:col-span-4 flex flex-col gap-3 min-h-0">
-          <div className="bg-surface-container rounded-lg border border-outline-variant p-4 flex flex-col min-h-0 shadow-sm flex-1">
-            <div className="flex items-center justify-between mb-3 flex-none">
-              <div className="flex items-center gap-2">
-                <BellRing className="w-4 h-4 text-primary" />
-                <h3 className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em]">Flux d'Alertes Prioritaires</h3>
+        {/* Left: Tactical Feed (7 cols) */}
+        <section className="lg:col-span-7 flex flex-col min-h-0">
+           <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-primary" strokeWidth={2.5} />
+                 </div>
+                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Flux Opérationnel</h2>
               </div>
-              <div className="flex gap-1">
-                <button 
-                  onClick={() => setAlertPage(prev => Math.max(0, prev - 1))}
-                  disabled={alertPage === 0}
-                  className="p-1 hover:bg-surface-container-high rounded disabled:opacity-20"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button 
-                  onClick={() => setAlertPage(prev => prev + 1)}
-                  className="p-1 hover:bg-surface-container-high rounded"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+              <button onClick={() => navigate('/salle')} className="h-10 px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-primary hover:border-primary transition-all flex items-center gap-2">
+                Accéder au Plan <ChevronRight className="w-4 h-4" />
+              </button>
+           </div>
 
-            <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-thin scrollbar-thumb-outline">
-              {groupedTickets.late.length > 0 ? (
-                groupedTickets.late.slice(alertPage * alertsPerPage, (alertPage + 1) * alertsPerPage).map((t, i) => (
-                  <div key={i} className="bg-surface-main p-3 rounded border-l-4 border-l-error border-outline-variant flex flex-col gap-1.5 animate-in slide-in-from-left duration-300">
-                    <div className="flex justify-between items-center">
-                      <span className="font-sans text-[10px] font-bold text-error uppercase tracking-widest flex items-center gap-1">
-                        <AlertTriangle className="w-3 h-3" /> Retard Critique
-                      </span>
-                      <span className="font-sans text-[8px] font-black text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded">T{t.table}</span>
+           <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
+              <div className="grid grid-cols-1 gap-4">
+                 {activeTickets.length > 0 ? activeTickets.map((ticket, i) => (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                        key={ticket.id}
+                        className="luxury-card p-6 flex items-center justify-between hover:border-primary/20 transition-all group"
+                    >
+                        <div className="flex items-center gap-8">
+                            <div className="w-16 h-16 bg-surface-container-low border border-outline-variant rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+                                <span className="font-mono text-2xl font-black">T{ticket.table}</span>
+                            </div>
+                            <div>
+                                <h4 className="text-lg font-black text-on-surface uppercase tracking-tight">Commande #{ticket.id}</h4>
+                                <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mt-1.5 opacity-50">
+                                    {ticket.lignes.length} Articles • {ticket.type.replace('_', ' ')}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-10">
+                            <div className="text-right hidden sm:block">
+                                <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Durée</p>
+                                <p className="font-sans text-sm font-bold text-on-surface mt-1 uppercase tracking-tight">
+                                    {formatDistanceToNow(new Date(ticket.created_at), { locale: fr })}
+                                </p>
+                            </div>
+                            <div className={`px-5 py-2.5 rounded-full font-sans text-[10px] font-black uppercase tracking-widest border ${
+                                ticket.statut === 'PRETE' ? 'bg-success/5 text-success border-success/30' : 'bg-primary/5 text-primary border-primary/30'
+                            }`}>
+                                {ticket.statut.replace('_', ' ')}
+                            </div>
+                        </div>
+                    </motion.div>
+                 )) : (
+                    <div className="h-64 border-2 border-dashed border-outline-variant rounded-[2rem] flex flex-col items-center justify-center opacity-10">
+                        <History className="w-12 h-12 mb-4" />
+                        <p className="text-xs font-black uppercase tracking-[0.4em]">Aucune transaction active</p>
                     </div>
-                    <p className="font-serif text-sm font-black text-on-surface leading-tight">Table {t.table} attend depuis {Math.round((Date.now() - new Date(t.created_at).getTime())/60000)}m</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[9px] text-on-surface-variant font-medium">Ticket #{t.id.toString().slice(-4)}</span>
-                      <button className="text-[9px] font-black text-primary uppercase tracking-tighter hover:underline">Intervenir</button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-40 gap-3 grayscale">
-                  <CheckCircle2 className="w-12 h-12 text-primary" strokeWidth={1} />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-widest">Aucun retard détecté</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-surface-container rounded-lg border border-outline-variant p-4 flex-none shadow-sm">
-            <h3 className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] mb-3">Statut Système</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center p-2 bg-surface-main rounded border border-outline-variant/50">
-                <span className="text-[10px] font-bold text-on-surface-variant">WS.ORCHESTRATOR</span>
-                <div className="flex items-center gap-1.5">
-                   <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                   <span className="text-[9px] font-black text-primary uppercase">Connecté</span>
-                </div>
+                 )}
               </div>
-            </div>
-          </div>
+           </div>
         </section>
 
-        {/* Right: Operational Kanban (8 cols) */}
-        <section className="col-span-12 lg:col-span-8 bg-surface-container rounded-lg border border-outline-variant flex flex-col min-h-0 shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-outline-variant flex items-center justify-between flex-none bg-surface-container-high/30">
-             <div className="flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4 text-primary" />
-                <h3 className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em]">Tickets Actifs en Cuisine</h3>
-             </div>
-             <div className="flex gap-4">
-                <div className="flex items-center gap-1.5">
-                   <div className="w-2 h-2 rounded-full bg-primary" />
-                   <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">{groupedTickets.active.length} En cours</span>
+        {/* Right: Security & Alerts (5 cols) */}
+        <section className="lg:col-span-5 flex flex-col min-h-0 luxury-card p-10 overflow-hidden">
+            <div className="flex items-center gap-4 mb-10 border-b border-outline-variant/30 pb-6">
+                <div className="w-10 h-10 rounded-lg bg-error/5 flex items-center justify-center">
+                    <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
-                <div className="flex items-center gap-1.5">
-                   <div className="w-2 h-2 rounded-full bg-secondary" />
-                   <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">{groupedTickets.ready.length} Prêts</span>
-                </div>
-             </div>
-          </div>
+                <h2 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Incidents Critiques</h2>
+            </div>
 
-          <div className="p-4 flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3 content-start scrollbar-thin scrollbar-thumb-outline">
-            {activeTickets.length > 0 ? (
-              activeTickets.map((ticket, i) => (
-                <div 
-                  key={i} 
-                  className={`bg-surface-main rounded-lg border border-outline-variant p-3 flex flex-col gap-3 shadow-sm hover:border-primary/50 transition-colors group cursor-pointer ${ticket.statut === 'PRETE' ? 'bg-secondary/5 border-secondary/30' : ''}`}
-                  onClick={() => navigate('/commandes')}
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="flex flex-col">
-                      <span className="font-sans text-[8px] font-black text-on-surface-variant uppercase tracking-tighter opacity-60">Ticket #{ticket.id.toString().slice(-4)}</span>
-                      <span className="font-serif text-lg font-black text-on-surface">Table {ticket.table}</span>
-                    </div>
-                    <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
-                      ticket.statut === 'PRETE' ? 'bg-secondary text-on-secondary' : 'bg-primary text-on-primary'
-                    }`}>
-                      {ticket.statut.replace('_', ' ')}
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-1.5">
-                    {ticket.lignes?.slice(0, 3).map((item, j) => (
-                      <span key={j} className="text-[9px] font-bold bg-surface-container-high px-2 py-0.5 rounded text-on-surface border border-outline-variant/30">
-                        {item.quantite}x {item.plat_nom}
-                      </span>
-                    ))}
-                    {(ticket.lignes?.length || 0) > 3 && (
-                      <span className="text-[9px] font-bold text-on-surface-variant opacity-60 px-1">+{(ticket.lignes?.length || 0) - 3}</span>
+            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-6">
+                <AnimatePresence mode="wait">
+                    {groupedTickets.late.length > 0 ? (
+                        groupedTickets.late.map((t) => (
+                            <motion.div 
+                                key={t.id} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                                className="bg-error/5 border border-error/20 rounded-2xl p-6 relative overflow-hidden"
+                            >
+                                <div className="flex justify-between items-start mb-4">
+                                    <span className="text-[10px] font-black text-error uppercase tracking-widest">Temps Dépassé</span>
+                                    <span className="font-mono text-xs font-bold text-on-surface-variant">T-{t.id}</span>
+                                </div>
+                                <p className="text-sm font-bold text-on-surface leading-relaxed uppercase tracking-tight">
+                                    Alerte production : La table {t.table} dépasse l'objectif de 20 minutes.
+                                </p>
+                                <button 
+                                    onClick={() => navigate('/kds')}
+                                    className="mt-6 w-full py-4 bg-error text-on-error rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
+                                >
+                                    Consulter Cuisine
+                                </button>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <div className="h-full flex flex-col items-center justify-center text-center opacity-20">
+                            <CheckCircle2 className="w-16 h-16 text-success mb-6" strokeWidth={1} />
+                            <p className="text-[11px] font-black uppercase tracking-[0.4em]">Tous les indicateurs sont nominaux</p>
+                        </div>
                     )}
-                  </div>
+                </AnimatePresence>
+            </div>
 
-                  <div className="mt-auto pt-3 border-t border-outline-variant/30 flex justify-between items-center">
-                    <div className="flex items-center gap-1 text-on-surface-variant">
-                      <Timer className="w-3 h-3" />
-                      <span className="text-[9px] font-bold">
-                        {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true, locale: fr })}
-                      </span>
+            <div className="mt-10 pt-10 border-t border-outline-variant/30">
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] mb-6">Santé de l'Infrastructure</h3>
+                <div className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="w-2.5 h-2.5 rounded-full bg-success" />
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface">Serveur Central</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                       <CreditCard className="w-3.5 h-3.5 text-on-surface-variant/40" />
-                       <ChefHat className="w-3.5 h-3.5 text-on-surface-variant/40" />
-                    </div>
-                  </div>
+                    <span className="font-mono text-[10px] font-black text-on-surface-variant uppercase">Latence 14ms</span>
                 </div>
-              ))
-            ) : (
-              <div className="col-span-full h-40 flex flex-col items-center justify-center text-center opacity-30 gap-2 grayscale">
-                <ShoppingBag className="w-8 h-8" strokeWidth={1.5} />
-                <p className="font-sans text-[10px] font-black uppercase tracking-widest">Aucun ticket actif</p>
-              </div>
-            )}
-          </div>
+            </div>
         </section>
       </div>
 

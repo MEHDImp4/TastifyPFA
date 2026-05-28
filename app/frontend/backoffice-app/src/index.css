@@ -92,7 +92,7 @@
   }
 
   .btn-primary {
-    @apply h-12 px-8 bg-primary text-on-primary rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-[0.2em] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10;
+    @apply h-12 px-8 bg-primary text-on-primary rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-[0.2em] hover:brightness-110 active:scale-95 transition-all;
   }
 
   .btn-tactical {
@@ -100,11 +100,10 @@
   }
 }
 
-/* Operational Pulse Animations */
+/* Operational Pulse: pulse the hard outline, not a soft glow (DESIGN.md:157-158 "no shadows") */
 @keyframes pulse-border-error {
-  0% { border-color: #ba1a1a; box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.2); }
-  50% { border-color: #ffb4ab; box-shadow: 0 0 0 8px rgba(186, 26, 26, 0); }
-  100% { border-color: #ba1a1a; box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+  0%, 100% { border-color: var(--color-error); }
+  50% { border-color: var(--color-on-error-container); }
 }
 
 .animate-pulse-error {
