@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      devOptions: { enabled: false },
+      devOptions: { enabled: true },
       manifest: {
         name: 'Tastify Restaurant',
         short_name: 'Tastify',
@@ -22,6 +22,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,ico,woff2}'],
+        navigateFallbackAllowlist: [/^\/pay\/.*/, /^\/menu/, /^\/reservations/, /^\/account/, /^\/loyalty/, /^\/login/, /^\/register/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,

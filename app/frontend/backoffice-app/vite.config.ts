@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      devOptions: { enabled: false },
+      devOptions: { enabled: true },
       manifest: {
         name: 'Tastify Backoffice',
         short_name: 'Tastify Staff',
@@ -22,6 +22,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,ico,woff2}'],
+        navigateFallbackAllowlist: [/^\//], // Allow all root-level navigations
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
