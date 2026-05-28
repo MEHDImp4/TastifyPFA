@@ -233,7 +233,7 @@ export const KdsPage: React.FC = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       data-testid={`kds-ticket-${ticket.id}`}
                       className={`
-                        flex flex-col rounded-lg border overflow-hidden shadow-sm transition-all duration-300
+                        shrink-0 flex flex-col rounded-lg border overflow-hidden shadow-sm transition-all duration-300
                         ${critical ? 'border-error bg-error/5' : 'border-outline-variant bg-surface-container-low'}
                       `}
                     >
