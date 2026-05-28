@@ -58,7 +58,13 @@ You are an elite autonomous AI software engineer. This file defines the core beh
 - **Service Management**: Use `docker-compose` for orchestration and ensuring environment parity between development and production.
 
 ## 13. Technical Integrity & Quirk Tracking
-- **Environment Sync**: If you add or change a `.env` variable, you must immediately update `.env.example`.
+- **Environment Sync**: If you add or change a .env variable, you must immediately update .env.example.
 - **Migration Guard**: After any change to a Django model, you must run `makemigrations --check` to ensure the migration files exist and are valid.
 - **Quirk Log**: Maintain `docs/brain/03_Architecture/QUIRKS.md` for non-obvious technical behaviors (e.g., Docker CRLF issues, specific library resolution hacks) to prevent regression.
 - **Pre-Flight Build**: Before marking a frontend task as done, you must run a production build (`npm run build`) to catch environment-specific resolution errors.
+
+## 14. Living Report Maintenance (CRITICAL)
+- **Mandatory Updates**: Whenever a feature is added, removed, or modified, or if the visual identity changes, you MUST update `docs/RAPPORT_PFA_REFERENCE.md` to reflect these changes.
+- **Single Source of Truth**: This file is the primary data source for the user's final PFA report. It must always be accurate and exhaustive.
+- **Structure**: Maintain the document's structured breakdown: Vision, Architecture, User Journeys, Functional Modules, and Business Rules.
+
