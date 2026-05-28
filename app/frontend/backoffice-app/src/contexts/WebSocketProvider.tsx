@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useKdsStore } from '../store/kdsStore';
 import { useSocketStore } from '../store/socketStore';
+import { toast } from 'sonner';
 
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const accessToken = useAuthStore(state => state.accessToken);
@@ -65,6 +66,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             if (!order) break;
             upsertTicket(order);
             useSocketStore.getState().addNotification(`Nouvelle commande #${order.id} reçue`, 'SUCCESS');
+            toast.success(`Nouvelle Commande #${order.id}`, { description: 'Reçue et envoyée en préparation' });
             break;
           }
           case 'order_updated': {
@@ -82,6 +84,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             break;
           case 'line_ready':
             updateLigneStatut(data.payload.ligne_id, 'PRET');
+            toast.info('Plat prêt au service', { description: `Ligne #${data.payload.ligne_id} prête au passe` });
             break;
           case 'line_cancelled':
             updateLigneStatut(data.payload.ligne_id, 'ANNULE');
