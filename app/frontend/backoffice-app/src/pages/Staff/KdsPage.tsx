@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
 import { 
   Loader2, 
   ArrowLeft,
-  Filter,
-  PlayCircle,
   Timer,
   CheckCircle2,
-  Play,
-  RotateCcw
+  RotateCcw,
+  UtensilsCrossed,
+  Check
 } from 'lucide-react';
 
+// --- Utilitaires ---
 const playDing = () => {
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -34,25 +33,175 @@ const playDing = () => {
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + 0.6);
     } catch (e) {
-        console.error("Audio playback failed", e);
+        console.error("Erreur audio", e);
     }
 };
 
+// --- Composant Chronomètre Isolé ---
+const TicketTimer = ({ createdAt, onCritical }: { createdAt: string, onCritical: (val: boolean) => void }) => {
+    const [elapsed, setElapsed] = useState('');
+    const [isRush, setIsRush] = useState(false);
+
+    useEffect(() => {
+        const calculateTime = () => {
+            const start = new Date(createdAt).getTime();
+            const now = Date.now();
+            const totalSeconds = Math.floor((now - start) / 1000);
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            
+            const rush = (now - start) > 15 * 60000;
+            if (rush !== isRush) {
+                setIsRush(rush);
+                onCritical(rush);
+            }
+            
+            setElapsed(`${mins}m ${secs.toString().padStart(2, '0')}s`);
+        };
+
+        calculateTime();
+        const interval = setInterval(calculateTime, 1000);
+        return () => clearInterval(interval);
+    }, [createdAt, isRush, onCritical]);
+
+    return (
+        <span className={`font-mono text-xl font-black tabular-nums tracking-tighter ${isRush ? 'text-[#ff4d4d]' : 'text-white'}`}>
+            {elapsed}
+        </span>
+    );
+};
+
+// --- Composant Ticket KDS ---
+const KdsTicket = ({ 
+    ticket, 
+    onUpdateItem, 
+    onUpdateCommand 
+}: { 
+    ticket: any, 
+    onUpdateItem: (id: number, statut: string) => void,
+    onUpdateCommand: (id: number, statut: string, forceReady?: boolean) => void
+}) => {
+    const [isCritical, setIsCritical] = useState(false);
+    const isTakeaway = ticket.type === 'EMPORTER';
+    const allLignesReady = ticket.lignes.every((l: any) => l.statut === 'PRET');
+    const isDone = ticket.statut === 'PRETE';
+
+    // Styles tactiques
+    const borderColor = isDone ? 'border-[#00e676]' : (isCritical ? 'border-[#ff4d4d]' : 'border-[#4b4b4b]');
+    const headerBg = isDone ? 'bg-[#00e676]/10' : (isCritical ? 'bg-[#ff4d4d]/10' : 'bg-[#1e1e1e]');
+
+    const handleMainAction = () => {
+        if (isDone) {
+            // Retirer de l'écran
+            onUpdateCommand(ticket.id, ticket.statut);
+        } else if (allLignesReady) {
+            // Passer la commande à "PRETE"
+            onUpdateCommand(ticket.id, ticket.statut);
+        } else {
+            // Force tous les plats à PRET
+            onUpdateCommand(ticket.id, ticket.statut, true);
+        }
+    };
+
+    return (
+        <div className={`flex flex-col bg-[#121212] border-2 ${borderColor} rounded-xl overflow-hidden shrink-0 shadow-2xl mb-4`}>
+            
+            {/* En-tête du Ticket */}
+            <div className={`p-4 ${headerBg} border-b ${borderColor} flex justify-between items-start`}>
+                <div>
+                    <div className="flex gap-2 mb-2">
+                        <span className={`px-2 py-1 rounded text-[11px] font-black uppercase tracking-widest ${isTakeaway ? 'bg-[#ff9100] text-black' : 'bg-white text-black'}`}>
+                            {isTakeaway ? `À EMPORTER` : `TABLE ${ticket.table_numero || '??'}`}
+                        </span>
+                        {isCritical && !isDone && <span className="px-2 py-1 rounded bg-[#ff4d4d] text-white text-[11px] font-black uppercase tracking-widest animate-pulse">URGENT</span>}
+                    </div>
+                    <h3 className="font-mono text-lg font-bold text-white/70">#CMD-{ticket.id}</h3>
+                    {isTakeaway && ticket.client_nom && <p className="font-sans text-sm font-bold text-white uppercase mt-1">{ticket.client_nom}</p>}
+                </div>
+                
+                <div className="text-right flex flex-col items-end">
+                    <TicketTimer createdAt={ticket.created_at} onCritical={setIsCritical} />
+                    <div className="flex items-center gap-1.5 mt-2 opacity-50">
+                        <Timer className="w-3.5 h-3.5" />
+                        <span className="font-sans text-[10px] font-bold uppercase tracking-widest">Temps écoulé</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Liste des Plats */}
+            <div className="flex-1 p-2 bg-[#121212] flex flex-col gap-2">
+                {ticket.lignes.map((item: any) => {
+                    const isItemReady = item.statut === 'PRET';
+                    return (
+                        <button 
+                            key={item.id}
+                            onClick={() => onUpdateItem(item.id, item.statut)}
+                            className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center gap-4 ${isItemReady ? 'bg-[#00e676]/10 border-[#00e676]/30 opacity-50' : 'bg-[#1e1e1e] border-transparent hover:border-[#ffffff]/20 active:scale-95'}`}
+                        >
+                            <span className={`font-mono text-2xl font-black w-8 text-center ${isItemReady ? 'text-[#00e676]' : 'text-[#ff9100]'}`}>
+                                {item.quantite}
+                            </span>
+                            <div className="flex-1">
+                                <p className={`font-sans text-lg font-black uppercase tracking-tight ${isItemReady ? 'text-white/50 line-through' : 'text-white'}`}>
+                                    {item.plat_nom}
+                                </p>
+                                {item.notes && (
+                                    <p className="font-sans text-xs font-bold text-[#ff9100] uppercase mt-1 tracking-wider bg-[#ff9100]/10 inline-block px-2 py-1 rounded">
+                                        NOTE: {item.notes}
+                                    </p>
+                                )}
+                            </div>
+                            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 ${isItemReady ? 'bg-[#00e676] border-[#00e676]' : 'border-[#4b4b4b]'}`}>
+                                {isItemReady && <Check className="w-5 h-5 text-black" strokeWidth={3} />}
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Bouton d'Action */}
+            <div className="p-4 bg-[#1e1e1e] border-t border-[#333333]">
+                {isDone ? (
+                    <button 
+                        onClick={handleMainAction}
+                        className="w-full h-16 rounded-lg border-2 border-[#ffffff]/20 text-white font-sans text-sm font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
+                    >
+                        Retirer de l'écran
+                    </button>
+                ) : (
+                    <button 
+                        onClick={handleMainAction}
+                        className={`w-full h-16 rounded-lg font-sans text-sm font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${allLignesReady ? 'bg-[#00e676] text-black shadow-[0_0_20px_rgba(0,230,118,0.3)] hover:scale-[1.02] active:scale-[0.98]' : 'bg-[#ff9100] text-black hover:scale-[1.02] active:scale-[0.98]'}`}
+                    >
+                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Passe</> : <><CheckCircle2 className="w-5 h-5" /> Tout marquer prêt</>}
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+};
+
+
+// --- Page Principale KDS ---
 export const KdsPage: React.FC = () => {
   const navigate = useNavigate();
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Fix 1: Persist cleared tickets in localStorage to survive page reloads
+  // Persistance robuste des tickets retirés
   const [clearedTickets, setClearedTickets] = useState<number[]>(() => {
     try {
-      const saved = localStorage.getItem('kds_cleared_tickets');
-      return saved ? JSON.parse(saved) : [];
+      const saved = localStorage.getItem('tastify_kds_cleared');
+      if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed.map(Number);
+      }
+      return [];
     } catch {
       return [];
     }
   });
+
   const previousTicketsRef = useRef<number>(0);
 
   const fetchTickets = async () => {
@@ -77,7 +226,7 @@ export const KdsPage: React.FC = () => {
       setTickets(transformed);
       previousTicketsRef.current = transformed.length;
     } catch (err) {
-      console.error('Failed to fetch KDS tickets', err);
+      console.error('Erreur chargement KDS', err);
     } finally {
       setIsLoading(false);
     }
@@ -85,13 +234,12 @@ export const KdsPage: React.FC = () => {
 
   useEffect(() => {
     fetchTickets();
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const syncer = setInterval(fetchTickets, 30000); // Sync toutes les 30s
+    return () => clearInterval(syncer);
   }, []);
 
-  // Save cleared tickets to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('kds_cleared_tickets', JSON.stringify(clearedTickets));
+    localStorage.setItem('tastify_kds_cleared', JSON.stringify(clearedTickets));
   }, [clearedTickets]);
 
   useEffect(() => {
@@ -103,214 +251,132 @@ export const KdsPage: React.FC = () => {
 
   const handleUpdateItem = async (ligneId: number, currentStatut: string) => {
     let nextStatut = '';
-    if (currentStatut === 'EN_ATTENTE') nextStatut = 'EN_PREPARATION';
-    else if (currentStatut === 'EN_PREPARATION') nextStatut = 'PRET';
+    if (currentStatut === 'EN_ATTENTE' || currentStatut === 'EN_PREPARATION') nextStatut = 'PRET';
+    else if (currentStatut === 'PRET') nextStatut = 'EN_PREPARATION'; // Rollback d'erreur
     else return;
 
-    // Optimistic UI update so the spinner shows immediately
+    // UI Optimiste
     updateLigneStatut(ligneId, nextStatut);
-
     try {
       await kdsApi.updateItemStatut(ligneId, nextStatut);
     } catch (err) {
-      console.error('Failed to update item statut', err);
-      // Revert if failed
-      updateLigneStatut(ligneId, currentStatut);
+      updateLigneStatut(ligneId, currentStatut); // Annulation si erreur API
     }
   };
 
-  const handleUpdateCommand = async (commandId: number, currentStatut: string) => {
+  const handleUpdateCommand = async (commandId: number, currentStatut: string, forceReady: boolean = false) => {
     if (currentStatut === 'EN_CUISINE') {
-      try {
-        await kdsApi.updateCommandeStatut(commandId, 'PRETE');
-        fetchTickets();
-      } catch (err) {
-        console.error('Failed to update command statut', err);
-      }
+        if (forceReady) {
+            // Option 1: Le cuisinier a cliqué sur "Tout marquer prêt"
+            const ticketToUpdate = tickets.find(t => t.id === commandId);
+            if (ticketToUpdate) {
+                // Marquer chaque ligne comme prête localement puis sur l'API
+                for (const ligne of ticketToUpdate.lignes) {
+                    if (ligne.statut !== 'PRET') {
+                        updateLigneStatut(ligne.id, 'PRET');
+                        await kdsApi.updateItemStatut(ligne.id, 'PRET').catch(() => {});
+                    }
+                }
+            }
+        }
+        
+        // Ensuite, passer la commande elle-même à PRETE
+        try {
+            await kdsApi.updateCommandeStatut(commandId, 'PRETE');
+            fetchTickets();
+        } catch (err) {
+            console.error('Erreur MAJ Commande', err);
+        }
     } else if (currentStatut === 'PRETE') {
-      // Pour éviter l'erreur 403, le cuisinier retire simplement le ticket de son écran localement
-      setClearedTickets(prev => [...prev, commandId]);
+        // Le cuisinier retire le ticket de l'écran pour nettoyer sa vue
+        setClearedTickets(prev => {
+            const newSet = [...new Set([...prev, commandId])]; // Évite les doublons
+            return newSet;
+        });
     }
-  };
-
-  const getElapsedTime = (startTime: string) => {
-    const start = new Date(startTime).getTime();
-    const now = currentTime.getTime();
-    const totalSeconds = Math.floor((now - start) / 1000);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${mins}m ${secs}s`;
-  };
-
-  const isTicketCritical = (createdAt: string) => {
-    const start = new Date(createdAt).getTime();
-    const now = currentTime.getTime();
-    return (now - start) > 15 * 60000;
   };
 
   const columns = [
-    { id: 'EN_CUISINE', label: 'En Préparation', icon: Timer, color: 'text-primary' },
-    { id: 'PRETE', label: 'Prêt au Service', icon: CheckCircle2, color: 'text-success' },
+    { id: 'EN_CUISINE', label: 'En Préparation' },
+    { id: 'PRETE', label: 'Au Passe' },
   ];
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
+  if (isLoading) return <div className="h-screen w-screen bg-[#0a0a0a] flex items-center justify-center text-white"><Loader2 className="w-16 h-16 animate-spin" strokeWidth={2}/></div>;
 
   const visibleTickets = tickets.filter(t => !clearedTickets.includes(t.id));
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden -m-staff-margin p-0 selection:bg-primary/20 selection:text-primary font-body">
-      
-      {/* Tactical KDS Header */}
-      <header className="flex-none flex items-center justify-between border-b border-outline-variant bg-surface-container-low px-staff-margin py-unit-md">
-        <div className="flex items-center gap-unit-md">
+    <div className="flex-1 flex flex-col bg-[#0a0a0a] text-white overflow-hidden font-sans -m-staff-margin">
+
+      {/* Tactical Header */}
+      <header className="flex-none h-20 bg-[#121212] border-b border-[#333333] px-6 flex items-center justify-between shadow-lg">
+        <div className="flex items-center gap-6">
           <button
-            type="button"
             onClick={() => navigate(-1)}
-            aria-label="Retour à l'écran précédent"
-            title="Retour à l'écran précédent"
-            className="flex items-center justify-center size-10 rounded-md border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors"
+            className="w-12 h-12 rounded-lg bg-[#2a2a2a] hover:bg-[#3a3a3a] flex items-center justify-center transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="sr-only">Retour</span>
+            <ArrowLeft className="w-6 h-6 text-white" />
           </button>
           <div>
-            <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Écran Cuisine (KDS)</h1>
-            <h2 className="sr-only">Cuisine</h2>
-            <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Service • {currentTime.toLocaleTimeString('fr-FR', { hour12: false })}</p>
+            <h1 className="text-2xl font-black uppercase tracking-widest leading-none text-[#ffffff]">Système KDS</h1>
+            <p className="text-xs font-bold text-[#888888] uppercase tracking-[0.3em] mt-1">Cuisine Centrale</p>
           </div>
         </div>
-        <div className="flex items-center gap-staff-gutter">
+        
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8 bg-[#1a1a1a] px-8 py-3 rounded-xl border border-[#333333]">
+             <div className="text-center">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#888888]">TICKETS ACTIFS</p>
+                <p className="text-xl font-mono font-black text-[#ffffff] leading-none mt-1">{visibleTickets.length}</p>
+             </div>
+          </div>
+          
           <button 
             onClick={fetchTickets}
-            className="flex items-center gap-2 h-10 px-4 rounded-md bg-surface-main border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-all font-sans text-xs font-bold uppercase tracking-wider mr-4"
+            className="h-14 px-6 rounded-xl bg-[#2a2a2a] hover:bg-[#3a3a3a] border border-[#444444] font-black uppercase tracking-widest text-sm transition-colors flex items-center gap-3"
           >
-            <RotateCcw className="w-4 h-4" />
-            Actualiser
-          </button>
-          <div className="flex gap-unit-md border-r border-outline-variant pr-unit-md mr-unit-md">
-            <div className="text-center">
-              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Temps Moyen</p>
-              <p className="font-sans text-[15px] font-bold text-primary mt-1">12m 45s</p>
-            </div>
-            <div className="text-center">
-              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Actifs</p>
-              <p className="font-sans text-[15px] font-bold text-on-surface mt-1">{visibleTickets.length}</p>
-            </div>
-          </div>
-          <button className="flex items-center gap-unit-xs h-10 px-unit-md rounded-md bg-surface-variant border border-outline-variant text-on-surface hover:border-outline transition-colors font-sans text-xs font-bold uppercase tracking-wider">
-            <Filter className="w-4 h-4" />
-            Poste : Grill & Expo
+            <RotateCcw className="w-5 h-5" /> Synchroniser
           </button>
         </div>
       </header>
 
       {/* Kanban Grid */}
-      <main className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-0 bg-surface-container-lowest">
-        {columns.map((col) => (
-          <section key={col.id} className="flex flex-col h-full min-h-0 border-r border-outline-variant last:border-r-0">
-            <header className="flex-none flex items-center justify-between p-unit-md border-b border-outline-variant bg-surface-container sticky top-0 z-10">
-              <div className="flex items-center gap-3">
-                <col.icon className={`w-4 h-4 ${col.color}`} />
-                <h2 className={`font-sans text-[12px] font-black uppercase tracking-[0.2em] ${col.color}`}>{col.label}</h2>
-              </div>
-              <span className="flex items-center justify-center bg-surface-container-highest text-on-surface font-sans text-[11px] font-bold rounded-full h-6 w-6 border border-outline-variant">
-                {visibleTickets.filter(t => t.statut === col.id).length}
-              </span>
-            </header>
-
-            <div className="flex-1 overflow-y-auto p-unit-md flex flex-col gap-unit-md custom-scrollbar bg-background/50">
-              <AnimatePresence>
-                {visibleTickets.filter(t => t.statut === col.id).map((ticket) => {
-                  const critical = isTicketCritical(ticket.created_at) && ticket.statut !== 'PRET';
-                  const isTakeaway = ticket.type === 'EMPORTER';
-                  const allLignesReady = ticket.lignes.every(l => l.statut === 'PRET');
-                  
-                  return (
-                    <motion.article 
-                      key={ticket.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      data-testid={`kds-ticket-${ticket.id}`}
-                      className={`
-                        shrink-0 flex flex-col rounded-lg border overflow-hidden shadow-sm transition-all duration-300
-                        ${critical ? 'border-error bg-error/5' : 'border-outline-variant bg-surface-container-low'}
-                      `}
-                    >
-                      <div className={`flex items-start justify-between p-unit-md border-b ${critical ? 'border-error/30 bg-error/10' : 'border-outline-variant bg-surface-container-high'}`}>
-                        <div>
-                          <div className="flex items-center gap-unit-xs mb-1">
-                            <span className="px-2 py-0.5 rounded-sm bg-surface-bright border border-outline-variant text-on-surface font-sans text-[10px] font-bold uppercase tracking-wider">
-                              {isTakeaway ? `À EMPORTER : ${ticket.client_nom || 'INVITÉ'}` : `Table ${ticket.table_numero || '??'}`}
-                            </span>
-                            {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider">URGENT</span>}
-                            {allLignesReady && <span className="px-2 py-0.5 rounded-sm bg-success text-on-success font-sans text-[10px] font-black uppercase tracking-wider">PRÊT</span>}
-                          </div>
-                          <h3 className={`font-serif text-lg font-bold leading-none mt-1 ${critical ? 'text-error' : 'text-on-surface'}`}>#{ticket.id}</h3>
-                        </div>
-                        <div className="text-right">
-                          <span className={`font-sans text-[11px] font-bold px-2 py-1 rounded border flex items-center gap-1.5 ${critical ? 'text-error border-error/30 bg-error/20' : 'text-on-surface-variant border-outline-variant bg-surface'}`}>
-                            <Timer className="w-3 h-3" />
-                            <span className="w-16 text-right tabular-nums">{getElapsedTime(ticket.created_at)}</span>
-                          </span>
-                        </div>
-                      </div>
-
-                      <ul className="flex-1 flex flex-col p-unit-md gap-unit-sm bg-surface-container-lowest/40">
-                        {ticket.lignes.map((item) => (
-                          <li key={item.id} 
-                              className={`flex items-start gap-unit-md py-2 border-b border-outline-variant/10 last:border-b-0 cursor-pointer group`}
-                              onClick={() => handleUpdateItem(item.id, item.statut)}
-                          >
-                            <span className={`font-sans text-primary text-base font-bold w-6 ${item.statut === 'PRET' ? 'opacity-30' : ''}`}>{item.quantite}x</span>
-                            <div className="flex-1">
-                              <p className={`font-body text-[15px] font-bold leading-tight ${item.statut === 'PRET' ? 'text-on-surface-variant/40 line-through' : 'text-on-surface'}`}>
-                                {item.plat_nom}
-                              </p>
-                              {item.notes && (
-                                <p className="font-sans text-[10px] font-black text-primary uppercase mt-1 tracking-widest leading-none">• {item.notes}</p>
-                              )}
-                            </div>
-                            <div className={`size-6 rounded border-2 flex items-center justify-center transition-all ${item.statut === 'PRET' ? 'bg-primary border-primary' : 'border-outline/30 group-hover:border-primary'}`}>
-                              {item.statut === 'PRET' ? <CheckCircle2 data-testid="ready-icon" className="w-4 h-4 text-on-primary" /> : (item.statut === 'EN_PREPARATION' ? <Loader2 className="w-3 h-3 text-primary animate-spin" /> : <Play className="w-3 h-3 text-on-surface-variant/30" />)}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className={`p-unit-sm border-t ${critical ? 'border-error/30 bg-error/5' : 'border-outline-variant bg-surface-container-high'}`}>
-                        {ticket.statut === 'PRETE' ? (
-                          <button 
-                            onClick={() => handleUpdateCommand(ticket.id, ticket.statut)}
-                            className="w-full h-12 rounded-md bg-transparent border-2 border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
-                          >
-                             Retirer de l'écran
-                          </button>
-                        ) : (
-                          <button 
-                            onClick={() => handleUpdateCommand(ticket.id, ticket.statut)}
-                            disabled={!allLignesReady}
-                            className={`w-full h-12 rounded-md font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${critical ? 'bg-error text-on-error hover:bg-error/90' : (allLignesReady ? 'bg-primary text-on-primary hover:bg-primary/90 shadow-lg shadow-primary/20' : 'bg-surface-container-highest text-on-surface-variant/20 cursor-not-allowed')}`}
-                          >
-                            {allLignesReady ? <><CheckCircle2 className="w-4 h-4" /> Prêt à servir</> : <><Loader2 className="w-4 h-4 animate-spin" /> En cours...</>}
-                          </button>
-                        )}
-                      </div>
-                    </motion.article>
-                  );
-                })}
-              </AnimatePresence>
-
-              {visibleTickets.filter(t => t.statut === col.id).length === 0 && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center py-20">
-                  <PlayCircle className="w-16 h-16 stroke-[1] text-on-surface-variant/40" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4 text-on-surface-variant">Aucune commande</p>
-                  <span className="sr-only">Cuisine vide.</span>
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-px bg-[#333333] overflow-hidden">
+        {columns.map((col) => {
+          const colTickets = visibleTickets.filter(t => t.statut === col.id);
+          
+          return (
+            <section key={col.id} className="relative flex flex-col h-full bg-[#0a0a0a]">
+              <header className="flex-none h-16 bg-[#121212] border-b border-[#333333] px-6 flex items-center justify-between shadow-md z-10">
+                <h2 className="text-base font-black uppercase tracking-[0.3em] text-[#ffffff]">{col.label}</h2>
+                <div className="bg-[#2a2a2a] text-white text-xs font-black px-3 py-1 rounded uppercase tracking-widest">
+                  {colTickets.length} TICKETS
                 </div>
-              )}
-            </div>
-          </section>
-        ))}
+              </header>
+
+              {/* Scrollable Area (Robust CSS implementation) */}
+              <div className="absolute top-16 left-0 right-0 bottom-0 overflow-y-auto p-6">
+                {colTickets.length > 0 ? (
+                  <div className="flex flex-col">
+                    {colTickets.map((ticket) => (
+                      <KdsTicket 
+                        key={ticket.id} 
+                        ticket={ticket} 
+                        onUpdateItem={handleUpdateItem} 
+                        onUpdateCommand={handleUpdateCommand} 
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center opacity-20 pb-20">
+                    <UtensilsCrossed className="w-24 h-24 mb-6" strokeWidth={1} />
+                    <p className="text-xl font-black uppercase tracking-[0.5em]">LIGNE CLAIRE</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        })}
       </main>
     </div>
   );
