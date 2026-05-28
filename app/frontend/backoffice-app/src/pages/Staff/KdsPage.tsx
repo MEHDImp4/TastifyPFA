@@ -43,7 +43,16 @@ export const KdsPage: React.FC = () => {
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [clearedTickets, setClearedTickets] = useState<number[]>([]);
+  
+  // Fix 1: Persist cleared tickets in localStorage to survive page reloads
+  const [clearedTickets, setClearedTickets] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('kds_cleared_tickets');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const previousTicketsRef = useRef<number>(0);
 
   const fetchTickets = async () => {
@@ -80,6 +89,11 @@ export const KdsPage: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Save cleared tickets to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('kds_cleared_tickets', JSON.stringify(clearedTickets));
+  }, [clearedTickets]);
+
   useEffect(() => {
     if (!isLoading && tickets.length > previousTicketsRef.current) {
         playDing();
@@ -93,11 +107,15 @@ export const KdsPage: React.FC = () => {
     else if (currentStatut === 'EN_PREPARATION') nextStatut = 'PRET';
     else return;
 
+    // Optimistic UI update so the spinner shows immediately
+    updateLigneStatut(ligneId, nextStatut);
+
     try {
       await kdsApi.updateItemStatut(ligneId, nextStatut);
-      updateLigneStatut(ligneId, nextStatut);
     } catch (err) {
       console.error('Failed to update item statut', err);
+      // Revert if failed
+      updateLigneStatut(ligneId, currentStatut);
     }
   };
 
@@ -158,10 +176,17 @@ export const KdsPage: React.FC = () => {
           <div>
             <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Écran Cuisine (KDS)</h1>
             <h2 className="sr-only">Cuisine</h2>
-            <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Service du Soir • {currentTime.toLocaleTimeString('fr-FR', { hour12: false })}</p>
+            <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Service • {currentTime.toLocaleTimeString('fr-FR', { hour12: false })}</p>
           </div>
         </div>
         <div className="flex items-center gap-staff-gutter">
+          <button 
+            onClick={fetchTickets}
+            className="flex items-center gap-2 h-10 px-4 rounded-md bg-surface-main border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-all font-sans text-xs font-bold uppercase tracking-wider mr-4"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Actualiser
+          </button>
           <div className="flex gap-unit-md border-r border-outline-variant pr-unit-md mr-unit-md">
             <div className="text-center">
               <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Temps Moyen</p>
@@ -203,14 +228,13 @@ export const KdsPage: React.FC = () => {
                   return (
                     <motion.article 
                       key={ticket.id}
-                      layout
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       data-testid={`kds-ticket-${ticket.id}`}
                       className={`
                         flex flex-col rounded-lg border overflow-hidden shadow-sm transition-all duration-300
-                        ${critical ? 'border-error ring-1 ring-error/20 bg-error/5' : 'border-outline-variant bg-surface-container-low'}
+                        ${critical ? 'border-error bg-error/5' : 'border-outline-variant bg-surface-container-low'}
                       `}
                     >
                       <div className={`flex items-start justify-between p-unit-md border-b ${critical ? 'border-error/30 bg-error/10' : 'border-outline-variant bg-surface-container-high'}`}>
@@ -219,7 +243,7 @@ export const KdsPage: React.FC = () => {
                             <span className="px-2 py-0.5 rounded-sm bg-surface-bright border border-outline-variant text-on-surface font-sans text-[10px] font-bold uppercase tracking-wider">
                               {isTakeaway ? `À EMPORTER : ${ticket.client_nom || 'INVITÉ'}` : `Table ${ticket.table_numero || '??'}`}
                             </span>
-                            {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider animate-pulse">URGENT</span>}
+                            {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider">URGENT</span>}
                             {allLignesReady && <span className="px-2 py-0.5 rounded-sm bg-success text-on-success font-sans text-[10px] font-black uppercase tracking-wider">PRÊT</span>}
                           </div>
                           <h3 className={`font-serif text-lg font-bold leading-none mt-1 ${critical ? 'text-error' : 'text-on-surface'}`}>#{ticket.id}</h3>
@@ -227,7 +251,7 @@ export const KdsPage: React.FC = () => {
                         <div className="text-right">
                           <span className={`font-sans text-[11px] font-bold px-2 py-1 rounded border flex items-center gap-1.5 ${critical ? 'text-error border-error/30 bg-error/20' : 'text-on-surface-variant border-outline-variant bg-surface'}`}>
                             <Timer className="w-3 h-3" />
-                            {getElapsedTime(ticket.created_at)}
+                            <span className="w-16 text-right tabular-nums">{getElapsedTime(ticket.created_at)}</span>
                           </span>
                         </div>
                       </div>
@@ -248,7 +272,7 @@ export const KdsPage: React.FC = () => {
                               )}
                             </div>
                             <div className={`size-6 rounded border-2 flex items-center justify-center transition-all ${item.statut === 'PRET' ? 'bg-primary border-primary' : 'border-outline/30 group-hover:border-primary'}`}>
-                              {item.statut === 'PRET' ? <CheckCircle2 data-testid="ready-icon" className="w-4 h-4 text-on-primary" /> : (item.statut === 'EN_PREPARATION' ? <RotateCcw className="w-3 h-3 text-primary animate-spin-slow" /> : <Play className="w-3 h-3 text-on-surface-variant/30" />)}
+                              {item.statut === 'PRET' ? <CheckCircle2 data-testid="ready-icon" className="w-4 h-4 text-on-primary" /> : (item.statut === 'EN_PREPARATION' ? <Loader2 className="w-3 h-3 text-primary animate-spin" /> : <Play className="w-3 h-3 text-on-surface-variant/30" />)}
                             </div>
                           </li>
                         ))}
@@ -291,5 +315,3 @@ export const KdsPage: React.FC = () => {
     </div>
   );
 };
-
-
