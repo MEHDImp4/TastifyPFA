@@ -38,13 +38,8 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     status=status.HTTP_403_FORBIDDEN
                 )
         elif user.role == 'SERVEUR':
-            if instance.commande.serveur != user:
-                return Response(
-                    {"error": "Vous n'êtes pas le serveur assigné à cette commande."},
-                    status=status.HTTP_403_FORBIDDEN
-                )
-            
             if new_statut == CommandeLigne.Statut.ANNULE:
+
                 if instance.statut not in [CommandeLigne.Statut.EN_ATTENTE]:
                     return Response(
                         {"error": "Impossible d'annuler un plat déjà en préparation ou servi."},
@@ -148,9 +143,9 @@ class CommandeViewSet(viewsets.ModelViewSet):
             # Phase 45: Clients only see their own orders
             qs = qs.filter(client=user)
         elif user.role == 'SERVEUR':
-            # Servers see orders they are assigned to
-            qs = qs.filter(serveur=user)
-        # GERANT and CUISINIER (handled in elif/if above) see the full/scoped set
+            # Phase 45: Servers see all active orders (collaborative service)
+            pass
+        # GERANT and CUISINIER (handled in elif/if above or falling through) see the full/scoped set
 
         if statut:
             statut_list = [s.strip() for s in statut.split(',')]
@@ -163,15 +158,22 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     def _check_ownership_or_cuisinier_ready(self, request, instance):
         """Helper to enforce Phase 16/17 ownership & role rules."""
-        # Phase 17: Allow Cuisinier to mark as PRETE
-        is_cuisinier_ready = (
-            request.user.role == 'CUISINIER' and 
-            request.data.get('statut') == Commande.Statut.PRETE
-        )
+        user = request.user
         
-        if not is_cuisinier_ready and instance.serveur != request.user and request.user.role != 'GERANT':
-            return False
-        return True
+        # Managers have full authority
+        if user.role == 'GERANT':
+            return True
+            
+        # Servers can manage any order (collaborative service)
+        if user.role == 'SERVEUR':
+            return True
+            
+        # Cooks can only mark orders as PRETE
+        if user.role == 'CUISINIER':
+            return request.data.get('statut') == Commande.Statut.PRETE
+            
+        # Clients can only manage their own orders
+        return instance.client == user
 
     def update(self, request, *args, **kwargs):
         """Phase 16 & 17: ownership rules for PUT."""
@@ -242,7 +244,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if commande.serveur != request.user and request.user.role != 'GERANT':
+        if not self._check_ownership_or_cuisinier_ready(request, commande):
             return Response(
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,
