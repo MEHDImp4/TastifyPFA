@@ -4,6 +4,30 @@ import { useKdsStore } from '../store/kdsStore';
 import { useSocketStore } from '../store/socketStore';
 import { toast } from 'sonner';
 
+const playNotificationSound = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        oscillator.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1); // C6
+
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5);
+    } catch (e) {
+        console.error("Audio playback failed", e);
+    }
+};
+
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const accessToken = useAuthStore(state => state.accessToken);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -66,6 +90,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             if (!order) break;
             upsertTicket(order);
             useSocketStore.getState().addNotification(`Nouvelle commande #${order.id} reçue`, 'SUCCESS');
+            playNotificationSound();
             toast.success(`Nouvelle Commande #${order.id}`, { description: 'Reçue et envoyée en préparation' });
             break;
           }
@@ -84,6 +109,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             break;
           case 'line_ready':
             updateLigneStatut(data.payload.ligne_id, 'PRET');
+            playNotificationSound();
             toast.info('Plat prêt au service', { description: `Ligne #${data.payload.ligne_id} prête au passe` });
             break;
           case 'line_cancelled':
