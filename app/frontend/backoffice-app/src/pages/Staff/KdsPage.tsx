@@ -205,10 +205,10 @@ export const KdsPage: React.FC = () => {
       </header>
 
       {/* Kanban Grid */}
-      <main className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0 bg-surface-container-lowest">
+      <main className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-0 bg-surface-container-lowest">
         {columns.map((col) => (
-          <section key={col.id} className="flex flex-col h-full border-r border-outline-variant last:border-r-0">
-            <header className="flex-none flex items-center justify-between p-unit-md border-b border-outline-variant bg-surface-container">
+          <section key={col.id} className="flex flex-col h-full min-h-0 border-r border-outline-variant last:border-r-0">
+            <header className="flex-none flex items-center justify-between p-unit-md border-b border-outline-variant bg-surface-container sticky top-0 z-10">
               <div className="flex items-center gap-3">
                 <col.icon className={`w-4 h-4 ${col.color}`} />
                 <h2 className={`font-sans text-[12px] font-black uppercase tracking-[0.2em] ${col.color}`}>{col.label}</h2>
@@ -218,7 +218,7 @@ export const KdsPage: React.FC = () => {
               </span>
             </header>
 
-            <div className="flex-1 overflow-y-auto p-unit-md flex flex-col gap-unit-md custom-scrollbar bg-background/50 relative">
+            <div className="flex-1 overflow-y-auto p-unit-md flex flex-col gap-unit-md custom-scrollbar bg-background/50">
               <AnimatePresence>
                 {visibleTickets.filter(t => t.statut === col.id).map((ticket) => {
                   const critical = isTicketCritical(ticket.created_at) && ticket.statut !== 'PRET';
