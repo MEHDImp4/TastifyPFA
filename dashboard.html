@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-28 17:39:12<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-28 19:49:27<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -455,28 +455,28 @@
                 <div class="card p-4 shrink-0">
                     <div class="flex items-center justify-between mb-3">
                         <h2 class="text-base font-bold">Stats Application</h2>
-                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">En Ligne</span><!-- DB_STATUS_BADGE_END -->
+                        <!-- DB_STATUS_BADGE_START --><span class="px-2 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">Délai/Exception</span><!-- DB_STATUS_BADGE_END -->
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Users</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->27<!-- DB_USERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_USERS_START -->0<!-- DB_USERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Catégories</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->5<!-- DB_CATS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_CATS_START -->0<!-- DB_CATS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Orders</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->29<!-- DB_ORDERS_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_ORDERS_START -->0<!-- DB_ORDERS_END --></p>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Tables</p>
-                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->17<!-- DB_TABLES_END --></p>
+                            <p class="text-xl font-bold text-white"><!-- DB_TABLES_START -->0<!-- DB_TABLES_END --></p>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-white/5">
                             <p class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Ventes</p>
-                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->152<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
+                            <p class="text-2xl font-black text-primary"><!-- DB_SALES_START -->0<!-- DB_SALES_END --> <span class="text-sm font-medium text-gray-500">DH</span></p>
                         </div>
                     </div>
                 </div>
@@ -1151,6 +1151,41 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Active Order Visibility**: Resolved a bug where returning to an occupied table showed an empty ticket. Existing order items from the database are now correctly displayed and included in the total calculation.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Order Finalization**: Added an "Encaisser" (Checkout) button to the `OrderingPage` to allow servers to mark orders as paid and free up tables directly from the interface.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Ticket UI Consistency**: Improved the ticket display to distinguish between "Existing Items" (in kitchen/served) and "New Items" (pending in cart).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Mobile Server Interface (OrderingPage)**: Resolved a critical layout issue where the ticket panel would squeeze the menu catalog on mobile viewports.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Responsive Navigation**: Implemented a toggle interface on mobile to switch between Menu and Ticket views, improving usability on smartphones.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Viewport Fix**: Removed restrictive wrapper padding and fixed-width constraints that caused horizontal overflow on small screens.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Responsive Hook**: Added `useMediaQuery` and `useIsMobile` hooks to the backoffice application for robust viewport detection.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-27 23:10</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Dish Card Layout (Client Portal)**: Resolved alignment and wrapping issues where the price "DH" would wrap onto a new line.</p>
                             </li>
@@ -1188,41 +1223,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-27 21:00</div>
                                 <p class="text-gray-300 text-sm"><strong>Added:</strong> Standardizing on 'Warm Organic Sophistication' palette and Framer Motion enhancements.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Final Localization Sweep**: Translated all remaining English strings to French in both `client-app` and `backoffice-app`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Targeted Improvements**: Updated labels, placeholders, and aria-labels in Account, Checkout, Payment, Menu, and Reservation pages (Client) and Stock, Plat, and Salle pages (Backoffice).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Terminology Refinement**: Standardized "min" for minutes and "PERS" for table capacity across all applications.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Aesthetic Alignment**: Maintained technical precision for backoffice and poetic warmth for client-facing content.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **Production Build**: Successfully executed `npm run build` in both `client-app` and `backoffice-app`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Validation:</strong> **UI Verification**: Manual scan confirmed 100% French coverage in specified target files.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-26 16:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Commit:</strong> `feat(localization): final French translation sweep across all apps`</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
