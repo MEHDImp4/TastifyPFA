@@ -21,8 +21,8 @@ export interface CommandeLigne {
   plat: number;
   plat_nom?: string;
   quantite: number;
-  prix_unitaire: string;
-  statut: 'EN_ATTENTE' | 'EN_PREPARATION' | 'PRET' | 'SERVI' | 'ANNULE';
+  prix_unitaire?: string;
+  statut?: 'EN_ATTENTE' | 'EN_PREPARATION' | 'PRET' | 'SERVI' | 'ANNULE';
   notes: string;
 }
 
