@@ -298,7 +298,7 @@ export const KdsPage: React.FC = () => {
 
   const columns = [
     { id: 'EN_CUISINE', label: 'En Préparation' },
-    { id: 'PRETE', label: 'Au Passe' },
+    { id: 'PRETE', label: 'Prêt au Service' },
   ];
 
   if (isLoading) return <div className="h-screen w-screen bg-[#0a0a0a] flex items-center justify-center text-white"><Loader2 className="w-16 h-16 animate-spin" strokeWidth={2}/></div>;
