@@ -173,7 +173,7 @@ const KdsTicket = ({
                         onClick={handleMainAction}
                         className={`w-full h-16 rounded-lg font-sans text-sm font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${allLignesReady ? 'bg-[#00e676] text-black shadow-[0_0_20px_rgba(0,230,118,0.3)] hover:scale-[1.02] active:scale-[0.98]' : 'bg-[#ff9100] text-black hover:scale-[1.02] active:scale-[0.98]'}`}
                     >
-                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Passe</> : <><CheckCircle2 className="w-5 h-5" /> Tout marquer prêt</>}
+                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Prêt au Service</> : <><CheckCircle2 className="w-5 h-5" /> Tout marquer prêt</>}
                     </button>
                 )}
             </div>
