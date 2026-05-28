@@ -43,6 +43,7 @@ export const KdsPage: React.FC = () => {
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [clearedTickets, setClearedTickets] = useState<number[]>([]);
   const previousTicketsRef = useRef<number>(0);
 
   const fetchTickets = async () => {
@@ -101,16 +102,16 @@ export const KdsPage: React.FC = () => {
   };
 
   const handleUpdateCommand = async (commandId: number, currentStatut: string) => {
-    let nextStatut = '';
-    if (currentStatut === 'EN_CUISINE') nextStatut = 'PRETE';
-    else if (currentStatut === 'PRETE') nextStatut = 'PAYEE';
-    else return;
-
-    try {
-      await kdsApi.updateCommandeStatut(commandId, nextStatut);
-      fetchTickets();
-    } catch (err) {
-      console.error('Failed to update command statut', err);
+    if (currentStatut === 'EN_CUISINE') {
+      try {
+        await kdsApi.updateCommandeStatut(commandId, 'PRETE');
+        fetchTickets();
+      } catch (err) {
+        console.error('Failed to update command statut', err);
+      }
+    } else if (currentStatut === 'PRETE') {
+      // Pour éviter l'erreur 403, le cuisinier retire simplement le ticket de son écran localement
+      setClearedTickets(prev => [...prev, commandId]);
     }
   };
 
@@ -136,6 +137,8 @@ export const KdsPage: React.FC = () => {
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
 
+  const visibleTickets = tickets.filter(t => !clearedTickets.includes(t.id));
+
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden -m-staff-margin p-0 selection:bg-primary/20 selection:text-primary font-body">
       
@@ -145,33 +148,33 @@ export const KdsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            aria-label="Return to previous screen"
-            title="Return to previous screen"
+            aria-label="Retour à l'écran précédent"
+            title="Retour à l'écran précédent"
             className="flex items-center justify-center size-10 rounded-md border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span className="sr-only">Return to previous screen</span>
+            <span className="sr-only">Retour</span>
           </button>
           <div>
-            <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Kitchen Display System</h1>
+            <h1 className="font-serif text-2xl font-bold text-on-surface leading-none">Écran Cuisine (KDS)</h1>
             <h2 className="sr-only">Cuisine</h2>
-            <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Evening Service • {currentTime.toLocaleTimeString('en-GB', { hour12: false })}</p>
+            <p className="font-sans text-[11px] font-bold text-on-surface-variant mt-unit-xs uppercase tracking-wider">Service du Soir • {currentTime.toLocaleTimeString('fr-FR', { hour12: false })}</p>
           </div>
         </div>
         <div className="flex items-center gap-staff-gutter">
           <div className="flex gap-unit-md border-r border-outline-variant pr-unit-md mr-unit-md">
             <div className="text-center">
-              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Avg Time</p>
+              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Temps Moyen</p>
               <p className="font-sans text-[15px] font-bold text-primary mt-1">12m 45s</p>
             </div>
             <div className="text-center">
-              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Active</p>
-              <p className="font-sans text-[15px] font-bold text-on-surface mt-1">{tickets.length}</p>
+              <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Actifs</p>
+              <p className="font-sans text-[15px] font-bold text-on-surface mt-1">{visibleTickets.length}</p>
             </div>
           </div>
           <button className="flex items-center gap-unit-xs h-10 px-unit-md rounded-md bg-surface-variant border border-outline-variant text-on-surface hover:border-outline transition-colors font-sans text-xs font-bold uppercase tracking-wider">
             <Filter className="w-4 h-4" />
-            Station: Grill & Expo
+            Poste : Grill & Expo
           </button>
         </div>
       </header>
@@ -186,13 +189,13 @@ export const KdsPage: React.FC = () => {
                 <h2 className={`font-sans text-[12px] font-black uppercase tracking-[0.2em] ${col.color}`}>{col.label}</h2>
               </div>
               <span className="flex items-center justify-center bg-surface-container-highest text-on-surface font-sans text-[11px] font-bold rounded-full h-6 w-6 border border-outline-variant">
-                {tickets.filter(t => t.statut === col.id).length}
+                {visibleTickets.filter(t => t.statut === col.id).length}
               </span>
             </header>
 
-            <div className="flex-1 overflow-y-auto p-unit-md flex flex-col gap-unit-md custom-scrollbar bg-background/50">
-              <AnimatePresence mode="popLayout">
-                {tickets.filter(t => t.statut === col.id).map((ticket) => {
+            <div className="flex-1 overflow-y-auto p-unit-md flex flex-col gap-unit-md custom-scrollbar bg-background/50 relative">
+              <AnimatePresence>
+                {visibleTickets.filter(t => t.statut === col.id).map((ticket) => {
                   const critical = isTicketCritical(ticket.created_at) && ticket.statut !== 'PRET';
                   const isTakeaway = ticket.type === 'EMPORTER';
                   const allLignesReady = ticket.lignes.every(l => l.statut === 'PRET');
@@ -206,18 +209,18 @@ export const KdsPage: React.FC = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       data-testid={`kds-ticket-${ticket.id}`}
                       className={`
-                        flex flex-col rounded-lg border overflow-hidden shadow-lg transition-all duration-300
-                        ${critical ? 'border-error ring-1 ring-error/20 bg-error/5 animate-pulse' : 'border-outline-variant bg-surface-container-low'}
+                        flex flex-col rounded-lg border overflow-hidden shadow-sm transition-all duration-300
+                        ${critical ? 'border-error ring-1 ring-error/20 bg-error/5' : 'border-outline-variant bg-surface-container-low'}
                       `}
                     >
                       <div className={`flex items-start justify-between p-unit-md border-b ${critical ? 'border-error/30 bg-error/10' : 'border-outline-variant bg-surface-container-high'}`}>
                         <div>
                           <div className="flex items-center gap-unit-xs mb-1">
                             <span className="px-2 py-0.5 rounded-sm bg-surface-bright border border-outline-variant text-on-surface font-sans text-[10px] font-bold uppercase tracking-wider">
-                              {isTakeaway ? `TAKEAWAY: ${ticket.client_nom || 'GUEST'}` : `Table #${ticket.table_numero || '??'}`}
+                              {isTakeaway ? `À EMPORTER : ${ticket.client_nom || 'INVITÉ'}` : `Table ${ticket.table_numero || '??'}`}
                             </span>
-                            {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider">RUSH</span>}
-                            {allLignesReady && <span className="px-2 py-0.5 rounded-sm bg-success text-on-success font-sans text-[10px] font-black uppercase tracking-wider">DONE</span>}
+                            {critical && <span className="px-2 py-0.5 rounded-sm bg-error text-on-error font-sans text-[10px] font-black uppercase tracking-wider animate-pulse">URGENT</span>}
+                            {allLignesReady && <span className="px-2 py-0.5 rounded-sm bg-success text-on-success font-sans text-[10px] font-black uppercase tracking-wider">PRÊT</span>}
                           </div>
                           <h3 className={`font-serif text-lg font-bold leading-none mt-1 ${critical ? 'text-error' : 'text-on-surface'}`}>#{ticket.id}</h3>
                         </div>
@@ -257,7 +260,7 @@ export const KdsPage: React.FC = () => {
                             onClick={() => handleUpdateCommand(ticket.id, ticket.statut)}
                             className="w-full h-12 rounded-md bg-transparent border-2 border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                           >
-                             Clear Ticket
+                             Retirer de l'écran
                           </button>
                         ) : (
                           <button 
@@ -265,7 +268,7 @@ export const KdsPage: React.FC = () => {
                             disabled={!allLignesReady}
                             className={`w-full h-12 rounded-md font-sans text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${critical ? 'bg-error text-on-error hover:bg-error/90' : (allLignesReady ? 'bg-primary text-on-primary hover:bg-primary/90 shadow-lg shadow-primary/20' : 'bg-surface-container-highest text-on-surface-variant/20 cursor-not-allowed')}`}
                           >
-                            {allLignesReady ? <><CheckCircle2 className="w-4 h-4" /> Ready to Window</> : <><Loader2 className="w-4 h-4 animate-spin" /> In Preparation</>}
+                            {allLignesReady ? <><CheckCircle2 className="w-4 h-4" /> Prêt à servir</> : <><Loader2 className="w-4 h-4 animate-spin" /> En cours...</>}
                           </button>
                         )}
                       </div>
@@ -274,10 +277,10 @@ export const KdsPage: React.FC = () => {
                 })}
               </AnimatePresence>
 
-              {tickets.filter(t => t.statut === col.id).length === 0 && (
-                <div className="flex-1 flex flex-col items-center justify-center py-20">
+              {visibleTickets.filter(t => t.statut === col.id).length === 0 && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center py-20">
                   <PlayCircle className="w-16 h-16 stroke-[1] text-on-surface-variant/40" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4 text-on-surface-variant">Sector Clear</p>
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] mt-4 text-on-surface-variant">Aucune commande</p>
                   <span className="sr-only">Cuisine vide.</span>
                 </div>
               )}
