@@ -60,7 +60,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         useSocketStore.getState().triggerUpdate();
 
         switch (data.type) {
-          case 'order_created':
+          case 'order_created': {
+            const order = data.payload?.order;
+            if (!order) break;
+            upsertTicket(order);
+            useSocketStore.getState().addNotification(`Nouvelle commande #${order.id} reçue`, 'SUCCESS');
+            break;
+          }
           case 'order_updated': {
             const order = data.payload?.order;
             if (!order) break;
