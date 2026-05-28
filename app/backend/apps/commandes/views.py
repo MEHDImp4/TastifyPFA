@@ -231,7 +231,6 @@ class CommandeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def add_items(self, request, pk=None):
         """CMD-API-05: Add items to an existing order."""
-        # Retrieve without user-scoping so we can give a 403 rather than a 404
         commande = get_object_or_404(
             Commande.objects.active().select_related('serveur'),
             pk=pk,
@@ -243,18 +242,21 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Only the order owner or a GERANT may modify it
         if commande.serveur != request.user and request.user.role != 'GERANT':
             return Response(
                 {"error": "Vous n'êtes pas autorisé à modifier cette commande."},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = CommandeLigneSerializer(data=request.data, many=True)
+        # Handle both {"lignes": [...]} and [...] formats
+        data = request.data
+        if isinstance(data, dict) and 'lignes' in data:
+            data = data['lignes']
+
+        serializer = CommandeLigneSerializer(data=data, many=True)
         if serializer.is_valid():
             with transaction.atomic():
                 new_lignes = serializer.save(commande=commande)
-                # Phase 20: If already fired, deduct stock for new items
                 if commande.statut == Commande.Statut.EN_CUISINE:
                     for ligne in new_lignes:
                         try:
@@ -264,7 +266,6 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
                 KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
             
-            # Re-serialize commande to return updated state
             full_serializer = self.get_serializer(commande)
             return Response(full_serializer.data, status=status.HTTP_201_CREATED)
         
