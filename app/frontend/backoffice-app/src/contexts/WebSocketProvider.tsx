@@ -114,8 +114,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // Detach from ref first so onclose/onerror handlers on this socket are ignored
       const socket = socketRef.current;
       socketRef.current = null;
-      if (socket && socket.readyState !== WebSocket.CLOSED) {
-        socket.close(1000);
+      if (socket) {
+        if (socket.readyState === WebSocket.CONNECTING) {
+          // Delay close until it opens to prevent browser warning in StrictMode
+          socket.addEventListener('open', () => socket.close(1000));
+        } else if (socket.readyState === WebSocket.OPEN) {
+          socket.close(1000);
+        }
       }
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
