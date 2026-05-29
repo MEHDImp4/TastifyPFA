@@ -200,24 +200,6 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if request.user.role == 'CLIENT':
-            requested_fields = set(request.data.keys())
-            if requested_fields != {'statut'}:
-                return Response(
-                    {"error": "Les clients ne peuvent que lancer leur commande a emporter."},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
-
-            if (
-                instance.type != Commande.Type.EMPORTER
-                or request.data.get('statut') != Commande.Statut.EN_CUISINE
-                or instance.statut != Commande.Statut.EN_COURS
-            ):
-                return Response(
-                    {"error": "Seule une commande a emporter en brouillon peut etre envoyee en cuisine."},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
-
         # Phase 20: stock deduction when firing an order
         new_statut = request.data.get('statut')
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:

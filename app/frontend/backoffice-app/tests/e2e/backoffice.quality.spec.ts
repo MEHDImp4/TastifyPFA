@@ -346,9 +346,9 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 430, height: 932 });
-      await page.goto('/delivery');
-      await expect(page.getByRole('heading', { name: 'DELIVERY HUB' })).toBeVisible();
-      await expect(page.getByRole('button', { name: 'Manage' }).first()).toBeVisible();
+      await page.goto('/reservations');
+      await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+      await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
     });
   });

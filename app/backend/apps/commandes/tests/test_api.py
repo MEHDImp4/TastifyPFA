@@ -262,35 +262,6 @@ class ClientTakeawayCommandeApiTestCase(APITestCase):
         )
         self.url = reverse('commande-list')
 
-    def test_client_can_create_and_fire_takeaway_order(self):
-        self.client.force_authenticate(user=self.client_user)
-
-        create_response = self.client.post(
-            self.url,
-            {
-                'type': Commande.Type.EMPORTER,
-                'client_nom': 'Client Retrait',
-                'lignes': [{'plat': self.plat.id, 'quantite': 2}],
-            },
-            format='json',
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-        commande = Commande.objects.get(pk=create_response.data['id'])
-        self.assertEqual(commande.serveur, self.client_user)
-        self.assertEqual(commande.type, Commande.Type.EMPORTER)
-        self.assertIsNone(commande.table)
-
-        patch_response = self.client.patch(
-            reverse('commande-detail', kwargs={'pk': commande.pk}),
-            {'statut': Commande.Statut.EN_CUISINE},
-            format='json',
-        )
-
-        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
-        commande.refresh_from_db()
-        self.assertEqual(commande.statut, Commande.Statut.EN_CUISINE)
-
     def test_client_cannot_use_kitchen_scope_or_sur_place_create(self):
         Commande.objects.create(
             serveur=self.serveur,

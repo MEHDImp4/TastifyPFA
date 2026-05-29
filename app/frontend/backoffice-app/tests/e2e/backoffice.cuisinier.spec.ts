@@ -661,65 +661,6 @@ test.describe('cuisinier browser workflows', () => {
     await expect(secondTicket.getByText('DONE')).toHaveCount(0);
   });
 
-  test('renders takeaway fallback identities and keeps them isolated from table tickets', async ({ page }) => {
-    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([
-          {
-            id: 9801,
-            statut: 'EN_CUISINE',
-            table_numero: null,
-            type: 'EMPORTER',
-            client_nom: null,
-            created_at: '2026-05-19T12:55:00Z',
-            lignes: [
-              {
-                id: 9401,
-                plat_nom: 'Sandwich kefta',
-                quantite: 1,
-                statut: 'EN_ATTENTE',
-                notes: 'Sans oignons',
-                heure_lancement: '2026-05-19T12:56:00Z',
-              },
-            ],
-          },
-          {
-            id: 9802,
-            statut: 'EN_CUISINE',
-            table_numero: 16,
-            type: 'SUR_PLACE',
-            client_nom: null,
-            created_at: '2026-05-19T12:57:00Z',
-            lignes: [
-              {
-                id: 9402,
-                plat_nom: 'Pastilla fruits de mer',
-                quantite: 1,
-                statut: 'EN_ATTENTE',
-                notes: '',
-                heure_lancement: '2026-05-19T12:58:00Z',
-              },
-            ],
-          },
-        ]),
-      });
-    });
-
-    await page.goto('/kds');
-    await page.waitForLoadState('networkidle');
-    const takeawayTicket = page.getByTestId('kds-ticket-9801');
-    const tableTicket = page.getByTestId('kds-ticket-9802');
-
-    await expect(takeawayTicket.getByText('Sandwich kefta')).toBeVisible();
-    await expect(takeawayTicket.getByText('Sans oignons')).toBeVisible();
-    await expect(takeawayTicket.getByText(/TAKEAWAY: GUEST/i)).toBeVisible();
-
-    await expect(tableTicket.getByText('Pastilla fruits de mer')).toBeVisible();
-    await expect(tableTicket.getByText('Table #16')).toBeVisible();
-  });
-
   test('adds a websocket-created ticket without mutating existing siblings', async ({ page }) => {
     await installMockStaffWebSocket(page);
 
@@ -761,9 +702,9 @@ test.describe('cuisinier browser workflows', () => {
         order: {
           id: 9902,
           statut: 'EN_CUISINE',
-          table_numero: null,
-          type: 'EMPORTER',
-          client_nom: 'Samira',
+          table_numero: 24,
+          type: 'SUR_PLACE',
+          client_nom: null,
           created_at: '2026-05-19T13:07:00Z',
           lignes: [
             {
@@ -779,10 +720,10 @@ test.describe('cuisinier browser workflows', () => {
       },
     });
 
-    const takeawayTicket = page.getByTestId('kds-ticket-9902');
-    await expect(takeawayTicket.getByText('Wrap falafel')).toBeVisible();
-    await expect(takeawayTicket.getByText('Sauce a part')).toBeVisible();
-    await expect(takeawayTicket.getByText(/TAKEAWAY: Samira/i)).toBeVisible();
+    const newTicket = page.getByTestId('kds-ticket-9902');
+    await expect(newTicket.getByText('Wrap falafel')).toBeVisible();
+    await expect(newTicket.getByText('Sauce a part')).toBeVisible();
+    await expect(newTicket.getByText('Table #24')).toBeVisible();
 
     await expect(existingTicket.getByText('Harira royale')).toBeVisible();
   });

@@ -4,7 +4,7 @@ interface KdsTicket {
   id: number;
   statut: string;
   table_numero?: number;
-  type: 'SUR_PLACE' | 'EMPORTER';
+  type: 'SUR_PLACE';
   client_nom?: string;
   lignes: {
     id: number;

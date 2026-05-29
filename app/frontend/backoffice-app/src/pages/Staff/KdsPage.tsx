@@ -83,11 +83,9 @@ const KdsTicket = ({
     onUpdateCommand: (id: number, statut: string, forceReady?: boolean) => void
 }) => {
     const [isCritical, setIsCritical] = useState(false);
-    const isTakeaway = ticket.type === 'EMPORTER';
     const allLignesReady = ticket.lignes.every((l: any) => l.statut === 'PRET');
     const isDone = ticket.statut === 'PRETE';
 
-    // Styles Minimalist Luxury
     const statusBg = isDone ? 'bg-success/5' : (isCritical ? 'bg-error/5' : 'bg-surface-container-low');
 
     const handleMainAction = () => {
@@ -107,13 +105,12 @@ const KdsTicket = ({
             <div className={`p-5 ${statusBg} border-b border-outline-variant flex justify-between items-start`}>
                 <div>
                     <div className="flex gap-2 mb-3">
-                        <span className={`px-2.5 py-1 rounded-sm text-[10px] font-black uppercase tracking-widest ${isTakeaway ? 'bg-primary text-on-primary' : 'bg-on-surface text-background'}`}>
-                            {isTakeaway ? `À EMPORTER` : `TABLE ${ticket.table_numero || '??'}`}
+                        <span className="px-2.5 py-1 rounded-sm bg-on-surface text-background text-[10px] font-black uppercase tracking-widest">
+                            TABLE {ticket.table_numero || '??'}
                         </span>
                         {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
                     </div>
                     <h3 className="font-mono text-sm font-bold text-on-surface-variant opacity-60">ID-NEURAL: #{ticket.id}</h3>
-                    {isTakeaway && ticket.client_nom && <p className="font-sans text-sm font-black text-on-surface uppercase mt-2">{ticket.client_nom}</p>}
                 </div>
                 
                 <div className="text-right flex flex-col items-end">

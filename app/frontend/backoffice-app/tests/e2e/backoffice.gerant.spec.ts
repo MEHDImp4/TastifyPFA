@@ -1112,22 +1112,6 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByText('1-800-TASTIFY')).toBeVisible();
   });
 
-  test('renders delivery hub controls and lets manager users search the dispatch surface', async ({ page }) => {
-    await page.goto('/delivery');
-
-    await expect(page.getByRole('heading', { name: 'DELIVERY HUB' })).toBeVisible();
-    await expect(page.getByText('OFF-PREMISE REVENUE')).toBeVisible();
-    await expect(page.getByText('#UBR-8812')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Manage' })).toHaveCount(3);
-
-    const searchInput = page.getByPlaceholder('Search orders...');
-    await searchInput.fill('GLV-0492');
-    await expect(searchInput).toHaveValue('GLV-0492');
-
-    await page.getByRole('button', { name: 'All Active (14)' }).click();
-    await expect(page.getByText('Audit Dispatch Log')).toBeVisible();
-  });
-
   test('has no critical or serious axe violations on the manager dashboard', async ({ page }) => {
     await page.goto('/');
 

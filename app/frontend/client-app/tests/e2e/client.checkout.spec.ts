@@ -42,13 +42,13 @@ async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['pa
   await mockMenuCatalog(page);
   await page.goto('/menu');
 
-  await page.getByRole('button', { name: /Add to cart/i }).click();
-  await page.getByRole('button', { name: /Add to cart/i }).click();
+  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
 
-  await page.getByRole('button', { name: /Plats/i }).click();
-  await page.getByRole('button', { name: /Add to cart/i }).click();
+  await page.getByRole('button', { name: 'Plats' }).click();
+  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
 
-  await page.getByRole('link', { name: /checkout/i }).click();
+  await page.getByRole('link', { name: /Voir le panier/i }).click();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -60,8 +60,8 @@ test.describe('checkout journey', () => {
   test('empty cart offers recovery back to the menu', async ({ page }) => {
     await page.goto('/checkout');
 
-    await expect(page.getByRole('heading', { name: /Your palette/i })).toBeVisible();
-    await page.getByRole('button', { name: /Explore Catalog/i }).click();
+    await expect(page.getByRole('heading', { name: /Votre panier/i })).toBeVisible();
+    await page.getByRole('button', { name: /Explorer la Carte/i }).click();
     await expect(page).toHaveURL('/menu');
   });
 
@@ -77,56 +77,12 @@ test.describe('checkout journey', () => {
       await page.getByRole('button', { name: '10%' }).click();
       await expect(page.getByText(/^100$/)).toBeVisible();
 
-      await page.getByRole('button', { name: 'Remove Tagine from cart' }).click();
+      await page.getByRole('button', { name: 'Retirer Tagine du panier' }).click();
       await expect(page.getByText('Tagine')).toHaveCount(0);
       await expect(page.getByText(/^35$/)).toBeVisible();
 
-      await page.getByRole('button', { name: 'Increase quantity for Harira' }).click();
+      await page.getByRole('button', { name: 'Augmenter la quantité pour Harira' }).click();
       await expect(page.getByText(/^53$/)).toBeVisible();
-    });
-
-    test('submits a takeout order, clears the cart, and lets the user track it', async ({ page }) => {
-      let orderPayload: Record<string, unknown> | null = null;
-
-      await seedAuthenticatedUser(page);
-      await page.route('**/api/commandes/', async (route) => {
-        orderPayload = JSON.parse(route.request().postData() ?? '{}');
-        await route.fulfill({
-          status: 201,
-          contentType: 'application/json',
-          body: JSON.stringify({ id: 901 }),
-        });
-      });
-
-      await page.route('**/api/reservations/', async (route) => {
-        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
-      });
-      await page.route('**/api/loyalty/my_status/', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ points: 450, tier: 'SILVER', tier_display: 'Silver' }),
-        });
-      });
-
-      await buildCheckoutCart(page);
-      await page.getByRole('button', { name: '10%' }).click();
-      await expect(page.getByText(/^100$/)).toBeVisible();
-      await page.getByRole('button', { name: /Authorize Manifest/i }).click();
-
-      await expect(page.getByRole('heading', { name: /Merci pour votre commande/i })).toBeVisible();
-      await expect(orderPayload).toEqual({
-        type: 'EMPORTER',
-        lignes: [
-          { plat: 11, quantite: 2, notes: '' },
-          { plat: 22, quantite: 1, notes: '' },
-        ],
-      });
-
-      await page.getByRole('button', { name: /Track Order/i }).click();
-      await expect(page).toHaveURL('/account');
-      await page.goto('/checkout');
-      await expect(page.getByRole('heading', { name: /Your palette/i })).toBeVisible();
     });
 
     test('shows order submission failure without losing the cart', async ({ page }) => {
@@ -140,12 +96,12 @@ test.describe('checkout journey', () => {
       });
 
       await buildCheckoutCart(page);
-      await page.getByRole('button', { name: /Authorize Manifest/i }).click();
+      await page.getByRole('button', { name: /Valider la commande/i }).click();
 
-      await expect(page.getByText('Protocol Breach')).toBeVisible();
+      await expect(page.getByText('Une erreur est survenue')).toBeVisible();
       await expect(page.getByText('Harira')).toBeVisible();
       await expect(page.getByText('Tagine')).toBeVisible();
-      await expect(page.getByRole('button', { name: /Authorize Manifest/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
     });
 
     test('prevents duplicate order submission while checkout is in flight', async ({ page }) => {
@@ -163,7 +119,7 @@ test.describe('checkout journey', () => {
       });
 
       await buildCheckoutCart(page);
-      const submitButton = page.getByRole('button', { name: /Authorize Manifest/i });
+      const submitButton = page.getByRole('button', { name: /Valider la commande/i });
       await submitButton.dblclick();
 
       await expect(page.getByRole('heading', { name: /Merci pour votre commande/i })).toBeVisible();

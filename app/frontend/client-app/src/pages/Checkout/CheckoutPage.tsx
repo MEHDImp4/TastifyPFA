@@ -51,7 +51,7 @@ export const CheckoutPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await api.post('/commandes/', {
-        type: 'EMPORTER',
+        type: 'SUR_PLACE',
         lignes: items.map(i => ({
           plat: i.plat.id,
           quantite: i.quantite,

@@ -102,8 +102,8 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps serveur logout working after visiting a secondary route', async ({ page }) => {
-    await page.goto('/delivery');
-    await expect(page).toHaveURL(/\/delivery$/);
+    await page.goto('/reservations');
+    await expect(page).toHaveURL(/\/reservations$/);
 
     await page.getByTestId('logout-button').click();
     await expect(page).toHaveURL(/\/login$/);
@@ -164,24 +164,6 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByTestId('cart-item-82')).toBeVisible();
     await page.getByTestId('order-submit').click();
     await expect(page).toHaveURL(/\/salle$/);
-  });
-
-  test('renders the delivery hub surface for serveur users and keeps interactions stable', async ({ page }) => {
-    await page.goto('/delivery');
-
-    await expect(page.getByRole('heading', { name: 'DELIVERY HUB' })).toBeVisible();
-    await expect(page.getByText('DRIVER SATISFACTION')).toBeVisible();
-    await expect(page.getByText('#GLV-0492')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Manage' })).toHaveCount(3);
-
-    const searchInput = page.getByPlaceholder('Search orders...');
-    await searchInput.fill('UBR');
-    await expect(searchInput).toHaveValue('UBR');
-
-    await page.getByRole('button', { name: 'All Active (14)' }).click();
-    await page.getByRole('button', { name: 'Manage' }).first().click();
-    await expect(page).toHaveURL(/\/delivery$/);
-    await expect(page.getByText('Audit Dispatch Log')).toBeVisible();
   });
 
   test('has no critical or serious axe violations on the salle page', async ({ page }) => {

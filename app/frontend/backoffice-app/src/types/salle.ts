@@ -30,7 +30,7 @@ export interface Commande {
   id: number;
   table: number | null;
   serveur: number | null;
-  type: 'SUR_PLACE' | 'EMPORTER';
+  type: 'SUR_PLACE';
   client_nom: string | null;
   statut: 'EN_COURS' | 'EN_CUISINE' | 'PRETE' | 'PAYEE' | 'ANNULEE';
   montant_total: string;

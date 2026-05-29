@@ -29,7 +29,6 @@ class Commande(models.Model):
 
     class Type(models.TextChoices):
         SUR_PLACE = 'SUR_PLACE', 'Sur place'
-        EMPORTER = 'EMPORTER', 'À emporter'
 
     # Liaison avec la table (si c'est sur place)
     table = models.ForeignKey(
@@ -82,9 +81,7 @@ class Commande(models.Model):
 
     def __str__(self):
         # Affiche un résumé simple pour l'étudiant/admin
-        type_label = "Emporter" if self.type == self.Type.EMPORTER else "Table"
-        target = self.client_nom if self.type == self.Type.EMPORTER else self.table_id
-        return f'Commande #{self.pk} - {type_label} {target}'
+        return f'Commande #{self.pk} - Table {self.table_id}'
 
     def delete(self, using=None, keep_parents=False):
         self.est_active = False
