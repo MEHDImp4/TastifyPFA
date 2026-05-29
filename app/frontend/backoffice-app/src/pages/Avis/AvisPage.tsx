@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../api/axios';
 import { 
-  Star, 
-  MessageSquare, 
   Loader2, 
   Search, 
-  Calendar, 
   Download,
   Smile,
   Meh,
   Frown,
-  Activity,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Hash,
+  Quote,
+  TrendingUp,
+  AlertCircle,
+  Activity
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
 export const AvisPage: React.FC = () => {
@@ -22,13 +22,17 @@ export const AvisPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const fetchAvis = async () => {
     try {
       const res = await api.get('/avis/');
       setAvis(res.data);
     } catch (err) {
       console.error('Failed to fetch avis', err);
-      toast.error('Échec du chargement des avis');
+      toast.error('Erreur chargement sentiments');
     } finally {
       setIsLoading(false);
     }
@@ -39,22 +43,16 @@ export const AvisPage: React.FC = () => {
   }, []);
 
   const getSentimentIcon = (score: number) => {
-    if (score > 10) return <Smile className="w-5 h-5 text-primary" />;
-    if (score < -10) return <Frown className="w-5 h-5 text-error" />;
-    return <Meh className="w-5 h-5 text-on-surface-variant/40" />;
-  };
-
-  const getSentimentLabel = (score: number) => {
-    if (score > 10) return "POSITIF";
-    if (score < -10) return "NÉGATIF";
-    return "NEUTRE";
+    if (score > 0.2) return <Smile className="w-5 h-5 text-success" />;
+    if (score < -0.2) return <Frown className="w-5 h-5 text-error" />;
+    return <Meh className="w-5 h-5 text-on-surface-variant/60" />;
   };
 
   const stats = {
-    avg: (avis.reduce((sum, a) => sum + a.note, 0) / (avis.length || 1)).toFixed(1),
-    positive: avis.filter(a => (a.sentiment_score || 0) > 10).length,
-    neutral: avis.filter(a => Math.abs(a.sentiment_score || 0) <= 10).length,
-    negative: avis.filter(a => (a.sentiment_score || 0) < -10).length,
+    avg: (avis.reduce((sum, a) => sum + (a.note || 5), 0) / (avis.length || 1)).toFixed(1),
+    positive: avis.filter(a => (a.sentiment_score || 0) > 0.2).length,
+    neutral: avis.filter(a => Math.abs(a.sentiment_score || 0) <= 0.2).length,
+    negative: avis.filter(a => (a.sentiment_score || 0) < -0.2).length,
   };
 
   const filteredAvis = avis.filter(a => 
@@ -62,176 +60,145 @@ export const AvisPage: React.FC = () => {
     a.user_username.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" strokeWidth={2.5}/></div>;
+  const totalPages = Math.ceil(filteredAvis.length / itemsPerPage);
+  const paginatedAvis = filteredAvis.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
 
   return (
-    <div className="h-full flex flex-col -m-4 bg-surface-main overflow-hidden font-body selection:bg-primary/20">
+    <div className="flex-1 flex flex-col min-h-0 bg-background font-sans selection:bg-primary/20 overflow-hidden">
       
-      {/* Page Header */}
-      <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
+      {/* Sentiment Header */}
+      <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">Sentiment Client</h1>
-          <h2 className="sr-only">Avis</h2>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Analyse des avis et retours en direct</p>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Intelligence Émotionnelle</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Analyse de la Perception de Marque et Satisfaction Convives</p>
         </div>
-        <div className="flex gap-unit-md items-center">
-          <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <Calendar className="w-3.5 h-3.5" /> Derniers 30 Jours
-          </button>
-          <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
-            <Download className="w-4 h-4" /> Exporter
+        <div className="flex items-center gap-4">
+           <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
+            <input 
+              type="text"
+              placeholder="FILTRER SENTIMENTS..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+            />
+          </div>
+          <button onClick={() => {}} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+             <Download className="w-4 h-4 inline-block mr-2" /> Manifeste PDF
           </button>
         </div>
-      </header>
+      </div>
 
-      <main className="flex-1 overflow-y-auto p-staff-margin bg-surface-container-lowest custom-scrollbar space-y-staff-margin">
+      {/* Main Grid Content */}
+      <div className="flex-1 overflow-hidden flex flex-col p-8 min-h-0">
         
-        {/* KPI Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-staff-gutter">
-          {/* Average Rating */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group shadow-sm">
-            <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Note Moyenne</span>
-              <Star className="w-5 h-5 text-primary fill-primary/20" />
+        {/* Sentiment KPI Bar */}
+        <div className="grid grid-cols-4 gap-6 mb-8">
+            <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
+                <div>
+                    <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Global Satisfaction</span>
+                    <p className="text-3xl font-black text-on-surface mt-1">{stats.avg}<span className="text-sm text-on-surface-variant/40 ml-2 uppercase">/ 5.0</span></p>
+                </div>
+                <TrendingUp className="w-10 h-10 text-on-surface-variant/20" />
             </div>
-            <div className="mt-6 z-10 flex items-baseline gap-2">
-              <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{stats.avg}</span>
-              <span className="font-sans text-[11px] text-on-surface-variant font-bold opacity-60">/ 5.0</span>
+            <div className="bg-surface-container-lowest border border-success/20 rounded-xl p-6 flex justify-between items-center bg-success/[0.01]">
+                <div>
+                    <span className="text-[10px] font-black text-success uppercase tracking-widest">Sentiments Positifs</span>
+                    <p className="text-3xl font-black text-on-surface mt-1">{stats.positive}</p>
+                </div>
+                <Smile className="w-10 h-10 text-success opacity-20" />
             </div>
-          </div>
-
-          {/* Volume */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group shadow-sm">
-            <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total des Avis</span>
-              <MessageSquare className="w-5 h-5 text-on-surface-variant/30" />
+            <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
+                <div>
+                    <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Retours Neutres</span>
+                    <p className="text-3xl font-black text-on-surface mt-1">{stats.neutral}</p>
+                </div>
+                <Meh className="w-10 h-10 text-on-surface-variant/20" />
             </div>
-            <div className="mt-6 z-10">
-              <span className="font-serif text-3xl font-black text-on-surface tabular-nums">{avis.length}</span>
-              <span className="block font-sans text-[9px] text-primary font-black uppercase tracking-widest mt-1">+15% volume cette semaine</span>
+            <div className="bg-surface-container-lowest border border-error/20 rounded-xl p-6 flex justify-between items-center bg-error/[0.01]">
+                <div>
+                    <span className="text-[10px] font-black text-error uppercase tracking-widest">Signaux Négatifs</span>
+                    <p className="text-3xl font-black text-on-surface mt-1">{stats.negative}</p>
+                </div>
+                <AlertCircle className="w-10 h-10 text-error opacity-20" />
             </div>
-          </div>
-
-          {/* Sentiment Distribution */}
-          <div className="bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden shadow-sm">
-            <div className="flex justify-between items-start z-10">
-              <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Répartition Sentiment</span>
-              <Activity className="w-5 h-5 text-on-surface-variant/30" />
-            </div>
-            <div className="space-y-3 z-10 relative">
-               <div>
-                  <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-primary uppercase tracking-widest">Positif</span>
-                    <span className="text-on-surface">{Math.round((stats.positive / (avis.length || 1)) * 100)}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: `${(stats.positive / (avis.length || 1)) * 100}%` }} />
-                  </div>
-               </div>
-               <div>
-                  <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-on-surface-variant uppercase tracking-widest opacity-60">Neutre</span>
-                    <span className="text-on-surface">{Math.round((stats.neutral / (avis.length || 1)) * 100)}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                    <div className="h-full bg-on-surface-variant/40 rounded-full" style={{ width: `${(stats.neutral / (avis.length || 1)) * 100}%` }} />
-                  </div>
-               </div>
-               <div>
-                  <div className="flex justify-between font-sans text-[9px] font-black mb-1">
-                    <span className="text-error uppercase tracking-widest">Négatif</span>
-                    <span className="text-on-surface">{Math.round((stats.negative / (avis.length || 1)) * 100)}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                    <div className="h-full bg-error rounded-full" style={{ width: `${(stats.negative / (avis.length || 1)) * 100}%` }} />
-                  </div>
-               </div>
-            </div>
-          </div>
         </div>
 
-        {/* Search & List */}
-        <div className="bg-surface-main border border-outline-variant rounded-xl overflow-hidden flex flex-col shadow-2xl mb-8">
-          <div className="p-6 border-b border-outline-variant bg-surface-container flex items-center justify-between">
-            <h3 className="font-sans text-[12px] font-black text-on-surface uppercase tracking-[0.2em]">Index des Avis Récents</h3>
-            <div className="relative group w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary" />
-              <input 
-                type="text"
-                placeholder="FILTRER LES ENTRÉES..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-9 bg-surface-main border border-outline-variant pl-9 pr-3 rounded font-sans text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all"
-              />
-            </div>
+        <div className="flex-1 bg-surface-container-lowest border border-outline rounded-xl overflow-hidden flex flex-col">
+          
+          {/* Table Header */}
+          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
+            <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3" /> ID</div>
+            <div className="col-span-2">Convive</div>
+            <div className="col-span-5">Commentaire & Témoignage</div>
+            <div className="col-span-2 text-center">Score IA</div>
+            <div className="col-span-2 text-right">Actions</div>
           </div>
 
-          <div className="flex flex-col divide-y divide-outline-variant/30 bg-surface-container-lowest/50">
-            <AnimatePresence mode="popLayout">
-              {filteredAvis.map((a) => (
-                <motion.div 
+          {/* Table Body */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {paginatedAvis.length > 0 ? paginatedAvis.map((a) => (
+                <div 
                   key={a.id}
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="p-6 hover:bg-surface-container-low transition-colors flex flex-col md:flex-row gap-6"
+                  className="grid grid-cols-12 gap-4 px-8 py-6 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-start group"
                 >
-                  <div className="flex-shrink-0 w-36 flex flex-col gap-2">
-                    <div className="flex items-center gap-0.5 text-primary">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-3.5 h-3.5 ${i < a.note ? 'fill-current' : 'opacity-10'}`} />
-                      ))}
-                    </div>
-                    <span className="font-sans text-[13px] font-black text-on-surface uppercase truncate">{a.user_username}</span>
-                    <span className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest opacity-60">{new Date(a.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span>
-                    <div className="mt-1 flex items-center gap-2">
-                       {getSentimentIcon(a.sentiment_score || 0)}
-                       <span className={`font-sans text-[9px] font-black tracking-widest ${(a.sentiment_score || 0) > 10 ? 'text-primary' : (a.sentiment_score || 0) < -10 ? 'text-error' : 'text-on-surface-variant opacity-60'}`}>
-                          {getSentimentLabel(a.sentiment_score || 0)}
-                       </span>
+                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40 pt-2">#{a.id.toString().padStart(6, '0')}</div>
+                  <div className="col-span-2 pt-1">
+                    <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors truncate">@{a.user_username}</h3>
+                    <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-50">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
+                  </div>
+                  <div className="col-span-5">
+                    <div className="relative pl-6 border-l-2 border-primary/20 bg-white/[0.01] p-4 rounded-r-xl">
+                        <Quote className="absolute -left-3 -top-2 w-5 h-5 text-primary/10" strokeWidth={3} />
+                        <p className="text-sm font-bold text-on-surface uppercase italic leading-relaxed tracking-tight select-all">
+                            {a.commentaire}
+                        </p>
                     </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="relative p-6 bg-surface-container border border-outline-variant rounded-lg italic font-body text-base text-on-surface selection:bg-primary/30">
-                       <span className="absolute top-2 left-3 text-4xl text-primary/10 font-serif leading-none select-none">“</span>
-                       <p className="relative z-10 leading-relaxed uppercase tracking-tight">{a.commentaire}</p>
-                       <span className="absolute bottom-2 right-3 text-4xl text-primary/10 font-serif leading-none select-none">”</span>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between">
-                       <div className="flex items-center gap-3">
-                          <span className="font-mono text-[9px] text-on-surface-variant/40">ID_NEURAL: {a.id.toString().padStart(6, '0')}</span>
-                          <div className="w-1 h-1 rounded-full bg-outline-variant" />
-                          <span className="font-sans text-[9px] font-black text-primary uppercase tracking-widest">{a.sentiment_score || 0} UNITÉS</span>
-                       </div>
-                       <button className="font-sans text-[10px] font-black text-on-surface-variant hover:text-primary uppercase tracking-widest transition-colors">Répondre</button>
-                    </div>
+                  <div className="col-span-2 flex flex-col items-center justify-center gap-2 pt-1">
+                    {getSentimentIcon(a.sentiment_score || 0)}
+                    <span className={`text-[10px] font-black tracking-widest font-mono ${
+                        (a.sentiment_score || 0) > 0.2 ? 'text-success' : 
+                        (a.sentiment_score || 0) < -0.2 ? 'text-error' : 
+                        'text-on-surface-variant/40'
+                    }`}>
+                        {((a.sentiment_score || 0) * 100).toFixed(0)}%
+                    </span>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-
-            {filteredAvis.length === 0 && (
-              <div className="py-20 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
-                  <MessageSquare className="w-16 h-16 stroke-[1]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em]">AUCUNE DONNÉE DE RETOUR ENREGISTRÉE</p>
-              </div>
+                  <div className="col-span-2 flex justify-end gap-2 pt-1">
+                    <button className="h-10 px-4 border border-outline rounded text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all">Archiver</button>
+                    <button className="w-10 h-10 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition-all"><TrendingUp className="w-4 h-4" /></button>
+                  </div>
+                </div>
+            )) : (
+                <div className="h-64 flex flex-col items-center justify-center opacity-10">
+                    <Activity className="w-16 h-16 mb-4" strokeWidth={1} />
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Flux de Sentiment Vide</p>
+                </div>
             )}
           </div>
-          
-          {/* Footer Pagination - Centered */}
-          <div className="flex-none px-6 py-3 border-t border-outline-variant bg-surface-container flex justify-center items-center font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
-            <div className="flex items-center gap-4">
-                <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
-                <div className="flex items-center gap-1.5 bg-surface-container-highest px-4 py-1 rounded-full border border-outline-variant/30 text-on-surface">
-                    <span className="text-primary font-bold">1</span>
-                    <span className="opacity-30">/</span>
-                    <span>1</span>
+
+          {/* Table Footer */}
+          <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
+            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+                Analyse basées sur {filteredAvis.length} Témoignages réels
+            </span>
+            {totalPages > 1 && (
+                <div className="flex items-center gap-4">
+                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
+                    <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
+                        <span className="text-primary">{currentPage}</span>
+                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface">{totalPages}</span>
+                    </div>
+                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
                 </div>
-                <button className="p-1 hover:text-primary transition-all disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
-            </div>
+            )}
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

@@ -171,7 +171,7 @@ export const ReservationsPage: React.FC = () => {
                       <button
                           key={f}
                           onClick={() => { setFilter(f); setCurrentPage(1); }}
-                          className={`rounded-md px-3 py-1.5 text-[8px] font-black tracking-widest uppercase transition-all ${filter === f ? 'bg-primary text-on-primary font-black shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'}`}
+                          className={`rounded-md px-3 py-1.5 text-[8px] font-black tracking-widest uppercase transition-all ${filter === f ? 'bg-primary text-on-primary font-black' : 'text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'}`}
                       >
                           {statusLabel(f)}
                       </button>
@@ -187,11 +187,11 @@ export const ReservationsPage: React.FC = () => {
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
-              className="group rounded-lg border border-outline bg-surface-container p-5 md:p-6 transition-colors hover:border-primary/60 shadow-sm relative"
+              className="group rounded-lg border border-outline bg-surface-container p-5 md:p-6 transition-colors hover:border-primary/60 relative"
             >
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full">
                 <div className="flex items-start gap-4 md:gap-5">
-                <div className="w-20 h-14 rounded-md bg-background border border-outline flex flex-col items-center justify-center text-primary shrink-0 shadow-inner">
+                <div className="w-20 h-14 rounded-md bg-background border border-outline flex flex-col items-center justify-center text-primary shrink-0">
                     <Calendar className="w-5 h-5 mb-1"  strokeWidth={2.5}/>
                     <span className="text-[10px] font-black text-primary">
                         {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).toUpperCase()}
@@ -235,7 +235,7 @@ export const ReservationsPage: React.FC = () => {
                   <>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                      className="flex-1 lg:flex-none flex items-center justify-center gap-3 rounded-md px-6 py-3.5 bg-primary text-on-primary border border-primary text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
+                      className="flex-1 lg:flex-none flex items-center justify-center gap-3 rounded-md px-6 py-3.5 bg-primary text-on-primary border border-primary text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
                     >
                       <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
                       CONFIRMER
@@ -277,7 +277,7 @@ export const ReservationsPage: React.FC = () => {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
                                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-                                className="absolute right-0 top-full mt-2 w-56 bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl z-50 overflow-hidden"
+                                className="absolute right-0 top-full mt-2 w-56 bg-surface-container-high border border-outline-variant rounded-xl z-50 overflow-hidden"
                             >
                                 <div className="p-2 space-y-1">
                                     <button 
@@ -323,22 +323,22 @@ export const ReservationsPage: React.FC = () => {
       </main>
 
       {/* Fixed Pagination Controls Footer */}
-      <footer className="flex-none px-staff-margin py-6 border-t border-outline-variant bg-surface-main/80 backdrop-blur-md">
+      <footer className="flex-none px-staff-margin py-6 border-t border-outline-variant bg-surface-container-lowest">
         <div className="max-w-[1400px] mx-auto">
           {totalPages > 1 ? (
             <div className="flex items-center justify-center gap-12">
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container shadow-sm"
+                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container"
                 >
                     <ChevronLeft className="w-4 h-4 text-primary" />
                     Précédent
                 </button>
                 <div className="flex items-center gap-4">
                     <span className="font-sans text-[10px] font-black uppercase tracking-[0.25em] text-on-surface-variant opacity-60">Page</span>
-                    <div className="flex items-center gap-2 bg-surface-container-low border border-outline-variant p-1.5 rounded-lg shadow-inner">
-                        <span className="w-10 h-10 flex items-center justify-center bg-primary text-on-primary rounded-md font-mono text-base font-black shadow-lg shadow-primary/20">
+                    <div className="flex items-center gap-2 bg-surface-container-low border border-outline-variant p-1.5 rounded-lg">
+                        <span className="w-10 h-10 flex items-center justify-center bg-primary text-on-primary rounded-md font-mono text-base font-black">
                             {currentPage}
                         </span>
                         <span className="px-3 font-sans text-[10px] font-black uppercase tracking-[0.1em] text-on-surface-variant opacity-40">/</span>
@@ -350,7 +350,7 @@ export const ReservationsPage: React.FC = () => {
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container shadow-sm"
+                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container"
                 >
                     Suivant
                     <ChevronRight className="w-4 h-4 text-primary" />

@@ -233,7 +233,7 @@ export const OrderingPage: React.FC = () => {
     <div className="fixed inset-0 flex flex-col bg-background p-0 selection:bg-primary/20 selection:text-primary font-body overflow-hidden text-on-background">
       
       {/* Tactical Header */}
-      <header className="flex-none h-20 bg-surface-container-lowest border-b border-outline-variant px-4 md:px-staff-margin flex items-center justify-between shadow-sm z-30">
+      <header className="flex-none h-20 bg-surface-container-lowest border-b border-outline-variant px-4 md:px-staff-margin flex items-center justify-between z-30">
         <div className="flex items-center gap-4 md:gap-8">
           <button onClick={() => navigate('/salle')} className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant hover:text-primary transition-all flex items-center justify-center">
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
@@ -242,7 +242,7 @@ export const OrderingPage: React.FC = () => {
             <div className="flex items-center gap-3">
                <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary italic leading-none">Table {table?.numero}</h1>
                {currentCommande && (
-                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-sans text-[9px] font-black uppercase tracking-widest shadow-sm">
+                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-sans text-[9px] font-black uppercase tracking-widest">
                      <Hash className="w-3 h-3" /> {currentCommande.id}
                    </div>
                )}
@@ -265,7 +265,7 @@ export const OrderingPage: React.FC = () => {
            <button 
              onClick={handleOpenPayModal}
              disabled={!currentCommande || isPaying}
-             className="h-12 md:h-14 px-6 md:px-8 bg-success text-on-success rounded-xl font-sans text-[10px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-success/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-20 disabled:grayscale"
+             className="h-12 md:h-14 px-6 md:px-8 bg-success text-on-success rounded-xl font-sans text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all disabled:opacity-20 disabled:grayscale"
            >
              Encaisser {currentCommande ? `${parseFloat(currentCommande.montant_total).toFixed(0)} DH` : ''}
            </button>
@@ -277,7 +277,7 @@ export const OrderingPage: React.FC = () => {
           {isMobile && (
             <button 
               onClick={() => setShowCart(!showCart)}
-              className={`p-3 rounded-xl relative transition-all border ${showCart ? 'bg-primary border-primary text-on-primary shadow-lg shadow-primary/30' : 'bg-surface-container border-outline-variant text-on-surface'}`}
+              className={`p-3 rounded-xl relative transition-all border ${showCart ? 'bg-primary border-primary text-on-primary' : 'bg-surface-container border-outline-variant text-on-surface'}`}
             >
               {showCart ? <UtensilsCrossed className="w-6 h-6" /> : <ReceiptText className="w-6 h-6" />}
               {(cart.length > 0 || (currentCommande?.lignes?.length || 0) > 0) && !showCart && (
@@ -304,7 +304,7 @@ export const OrderingPage: React.FC = () => {
           <div className="flex-none h-16 border-b border-outline-variant bg-surface-container-lowest flex gap-2.5 p-2 overflow-x-auto no-scrollbar">
             <button
                 onClick={() => setActiveCat(null)}
-                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === null ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/20' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
+                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === null ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
             >
               Tous
             </button>
@@ -312,14 +312,14 @@ export const OrderingPage: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary shadow-lg shadow-primary/20' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
+                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
               >
                 {cat.nom}
               </button>
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[radial-gradient(circle_at_top_right,#1d1b1a,transparent)]">
+          <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-background">
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                {filteredPlats.map(plat => (
                  <button
@@ -339,7 +339,7 @@ export const OrderingPage: React.FC = () => {
                     </div>
                     <div className="flex items-end justify-between mt-auto">
                        <span className="font-sans text-lg md:text-xl font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
-                       <div className="size-10 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all shadow-sm">
+                       <div className="size-10 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
                           <Plus className="w-5 h-5 text-on-surface group-hover:text-on-primary" strokeWidth={4} />
                        </div>
                     </div>
@@ -353,11 +353,11 @@ export const OrderingPage: React.FC = () => {
         <section 
           data-testid="ordering-cart" 
           className={`
-            flex-[3] flex flex-col bg-surface-container border-l border-outline-variant shadow-[-20px_0_40px_rgba(0,0,0,0.4)] z-20 transition-all duration-500 ease-in-out
+            flex-[3] flex flex-col bg-surface-container border-l border-outline-variant z-20 transition-all duration-500 ease-in-out
             ${isMobile ? (showCart ? 'w-full translate-x-0 relative' : 'w-full translate-x-[100%] absolute inset-0 opacity-0 pointer-events-none') : 'min-w-[400px] translate-x-0 relative'}
           `}
         >
-          <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-high shadow-sm">
+          <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-high">
              <div className="flex items-center gap-4">
                 <ShoppingCart className="w-6 h-6 text-primary" />
                 <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Ticket Actuel</h2>
@@ -450,7 +450,7 @@ export const OrderingPage: React.FC = () => {
           </div>
 
           {/* Action Footer */}
-          <div className="flex-none p-8 bg-surface-container-high border-t border-outline-variant space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.5)] z-30">
+          <div className="flex-none p-8 bg-surface-container-high border-t border-outline-variant space-y-6 z-30">
             <div className="space-y-2.5">
               <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant/40 uppercase tracking-widest">
                 <span>Déjà Commandé</span>
@@ -470,7 +470,7 @@ export const OrderingPage: React.FC = () => {
               <button 
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
-                className="w-full h-18 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border-2 border-primary group disabled:opacity-20 disabled:grayscale"
+                className="w-full h-18 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border-2 border-primary group disabled:opacity-20 disabled:grayscale"
               >
                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                   <>
@@ -496,7 +496,7 @@ export const OrderingPage: React.FC = () => {
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-md">
            <button 
              onClick={() => setShowCart(true)}
-             className="w-full h-18 bg-[#0d0b0a] text-primary rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex items-center justify-between px-10 font-sans text-[12px] font-black uppercase tracking-[0.3em] animate-in slide-in-from-bottom-20 fade-in duration-700 border border-primary/30"
+             className="w-full h-18 bg-background text-primary rounded-2xl flex items-center justify-between px-10 font-sans text-[12px] font-black uppercase tracking-[0.3em] border border-primary/30"
            >
              <span className="flex items-center gap-5">
                <ReceiptText className="w-6 h-6" strokeWidth={2.5} />
@@ -513,10 +513,10 @@ export const OrderingPage: React.FC = () => {
       {/* --- Payment Modal --- */}
       <AnimatePresence>
         {isPayModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-8 bg-on-surface/40 backdrop-blur-md">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-8 bg-on-surface/40">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl bg-surface-container border border-outline-variant shadow-2xl rounded-[2.5rem] overflow-hidden relative"
+              className="w-full max-w-xl bg-surface-container border border-outline-variant rounded-[2.5rem] overflow-hidden relative"
             >
               <div className="absolute top-0 left-0 w-full h-1.5 bg-primary" />
               
@@ -539,7 +539,7 @@ export const OrderingPage: React.FC = () => {
                     >
                       <button 
                         onClick={() => handleManualPay('CASH')}
-                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-success/40 hover:bg-success/5 transition-all text-left shadow-lg"
+                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-success/40 hover:bg-success/5 transition-all text-left"
                       >
                          <div className="w-16 h-16 rounded-2xl bg-success/10 flex items-center justify-center text-success group-hover:scale-110 transition-transform">
                             <Banknote className="w-10 h-10" />
@@ -552,7 +552,7 @@ export const OrderingPage: React.FC = () => {
 
                       <button 
                         onClick={() => handleManualPay('CARD')}
-                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-primary/40 hover:bg-primary/5 transition-all text-left shadow-lg"
+                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-primary/40 hover:bg-primary/5 transition-all text-left"
                       >
                          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                             <CreditCard className="w-10 h-10" />
@@ -571,7 +571,7 @@ export const OrderingPage: React.FC = () => {
 
                       <button 
                         onClick={handleGenerateQr}
-                        className="group flex items-center gap-8 p-8 bg-[#0d0b0a] border-2 border-primary/20 rounded-[2rem] hover:scale-[1.02] transition-all text-left shadow-2xl"
+                        className="group flex items-center gap-8 p-8 bg-background border-2 border-primary/20 rounded-[2rem] hover:scale-[1.02] transition-all text-left"
                       >
                          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                             <QrCode className="w-10 h-10" />
@@ -587,7 +587,7 @@ export const OrderingPage: React.FC = () => {
                       key="qr" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                       className="flex flex-col items-center text-center space-y-10"
                     >
-                       <div className="p-10 bg-white rounded-[3rem] shadow-2xl border-8 border-[#151312]">
+                       <div className="p-10 bg-white rounded-[3rem] border-8 border-surface">
                           {qrData && (
                             <QRCodeSVG 
                                 value={qrData.url}
@@ -607,7 +607,7 @@ export const OrderingPage: React.FC = () => {
 
                        <div className="w-full flex gap-6">
                           <button onClick={() => setPaymentStep('CHOICE')} className="flex-1 h-16 border-2 border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px] text-on-surface-variant hover:bg-surface-container-high">Retour</button>
-                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="flex-1 h-16 bg-primary text-on-primary rounded-2xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 shadow-xl shadow-primary/30">Lien Direct <ExternalLink className="w-4 h-4" /></a>
+                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="flex-1 h-16 bg-primary text-on-primary rounded-2xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3">Lien Direct <ExternalLink className="w-4 h-4" /></a>
                        </div>
                     </motion.div>
                   )}
