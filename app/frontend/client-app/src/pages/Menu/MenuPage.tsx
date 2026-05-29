@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
-import { 
-  Search, 
+import { useCartStore } from '../../store/cartStore';
+import {
+  Search,
   X,
   Timer,
   ShoppingBag,
@@ -39,6 +40,7 @@ export const MenuPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
+  const { addItem } = useCartStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -184,6 +186,16 @@ export const MenuPage: React.FC = () => {
                       </div>
                     </div>
                     <p className="font-body text-sm text-on-surface-variant line-clamp-3 italic opacity-70 leading-relaxed flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    {plat.est_disponible && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); addItem(plat); }}
+                        aria-label={`Ajouter ${plat.nom} au panier`}
+                        className="mt-2 w-full h-10 rounded-xl bg-primary text-on-primary font-sans text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        Ajouter au panier
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -213,7 +225,7 @@ export const MenuPage: React.FC = () => {
                exit={{ opacity: 0, scale: 0.95, y: 20 }}
                className="relative w-full max-w-4xl bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button aria-label="Fermer" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
+                <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
                    {selectedPlat.image ? (
@@ -254,6 +266,15 @@ export const MenuPage: React.FC = () => {
                          </div>
                       </div>
                    </div>
+                   <motion.button
+                     onClick={() => { addItem(selectedPlat); setSelectedPlat(null); }}
+                     whileHover={{ scale: 1.02 }}
+                     whileTap={{ scale: 0.98 }}
+                     className="mt-6 w-full h-14 rounded-xl bg-primary text-on-primary font-sans text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
+                   >
+                     <ShoppingBag className="w-4 h-4" />
+                     Ajouter au panier
+                   </motion.button>
                 </div>
              </motion.div>
           </div>

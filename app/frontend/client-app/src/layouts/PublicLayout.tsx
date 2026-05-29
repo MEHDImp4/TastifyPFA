@@ -3,10 +3,13 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useConfigStore } from '../store/configStore';
-import { LogOut, Menu, X, Sparkles } from 'lucide-react';
+import { LogOut, Menu, X, Sparkles, ShoppingBag } from 'lucide-react';
+import { useCartStore } from '../store/cartStore';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
+  const { items } = useCartStore();
+  const cartCount = items.length;
   const { config } = useConfigStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -89,6 +92,16 @@ export const PublicLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 md:gap-8">
+            {cartCount > 0 && (
+              <Link
+                to="/checkout"
+                aria-label={`Voir le panier, ${cartCount} article${cartCount > 1 ? 's' : ''}`}
+                className="hidden md:flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full font-sans text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary/90 transition-colors shadow-md shadow-primary/20"
+              >
+                <ShoppingBag className="w-3.5 h-3.5" />
+                {cartCount}
+              </Link>
+            )}
             <div className="hidden md:block">
               {isAuthenticated ? (
                 <div className="flex items-center gap-6 pl-8 border-l border-[#2D2424]/10">
@@ -113,8 +126,9 @@ export const PublicLayout: React.FC = () => {
               )}
             </div>
 
-            <button 
+            <button
               onClick={toggleMenu}
+              aria-label="Ouvrir la navigation"
               className="lg:hidden p-3 bg-white border border-[#2D2424]/5 rounded-full shadow-sm hover:shadow-md transition-all"
             >
               {isMenuOpen ? <X className="w-5 h-5 text-[#D14D1A]" /> : <Menu className="w-5 h-5 text-[#2D2424]" />}
@@ -125,7 +139,8 @@ export const PublicLayout: React.FC = () => {
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
+            <motion.div
+              id="mobile-navigation"
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.1 }}
@@ -153,6 +168,7 @@ export const PublicLayout: React.FC = () => {
               </div>
               
               <div className="pt-10 border-t border-[#2D2424]/10">
+                {!isAuthenticated && <span className="sr-only">Navigation invitée</span>}
                 {isAuthenticated ? (
                   <div className="flex flex-col gap-6">
                     <Link to="/account" onClick={() => setIsMenuOpen(false)} className="font-sans text-xl font-black text-[#2D2424] uppercase tracking-widest flex items-center gap-3">

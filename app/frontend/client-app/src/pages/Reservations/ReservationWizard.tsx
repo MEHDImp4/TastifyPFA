@@ -162,9 +162,9 @@ export const ReservationWizard: React.FC = () => {
                          <p className="font-body text-[14px] text-[#2D2424]/80 italic">Couverts à prévoir</p>
                       </div>
                       <div className="flex items-center gap-8">
-                         <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Minus className="w-4 h-4" /></button>
+                         <button aria-label="Réduire le nombre de convives" onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Minus className="w-4 h-4" /></button>
                          <span className="font-serif text-5xl font-black text-[#2D2424] italic w-12 text-center">{guests}</span>
-                         <button onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Plus className="w-4 h-4" /></button>
+                         <button aria-label="Augmenter le nombre de convives" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Plus className="w-4 h-4" /></button>
                       </div>
                    </div>
 

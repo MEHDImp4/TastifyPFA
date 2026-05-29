@@ -81,7 +81,8 @@ export const Login: React.FC = () => {
 
         <AnimatePresence mode="wait">
           {error && (
-            <motion.div 
+            <motion.div
+              data-testid="login-error"
               initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="p-4 bg-[#B3261E]/5 border border-[#B3261E]/10 rounded-xl flex items-center gap-3"
             >
@@ -96,6 +97,7 @@ export const Login: React.FC = () => {
             <label htmlFor="username" className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.3em] ml-1">Utilisateur</label>
             <input
               id="username"
+              data-testid="login-username"
               type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
               className="w-full h-14 bg-white border border-[#2D2424]/10 rounded-2xl px-5 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A] outline-none transition-all placeholder:text-[#2D2424]/10"
               placeholder="NOM_UTILISATEUR"
@@ -109,6 +111,7 @@ export const Login: React.FC = () => {
             </div>
             <input
               id="password"
+              data-testid="login-password"
               type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
               className="w-full h-14 bg-white border border-[#2D2424]/10 rounded-2xl px-5 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A] outline-none transition-all placeholder:text-[#2D2424]/10"
               placeholder="••••••••"
@@ -118,6 +121,7 @@ export const Login: React.FC = () => {
           <motion.button
             variants={fadeIn}
             whileTap={{ scale: 0.98 }}
+            data-testid="login-submit"
             type="submit" disabled={isLoading}
             className="w-full h-16 bg-[#2D2424] text-[#FAF9F6] rounded-2xl font-sans text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-[#D14D1A] flex items-center justify-center gap-3 group"
           >
