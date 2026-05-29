@@ -16,9 +16,9 @@ test.describe('contact form', () => {
     await page.getByTestId('contact-submit').click();
 
     await expect(page).toHaveURL('/contact');
-    await expectInvalid(page.getByLabel('Identity'));
-    await expectInvalid(page.getByLabel('Coordinate'));
-    await expectInvalid(page.getByLabel('Subject'));
+    await expectInvalid(page.getByLabel('Identité'));
+    await expectInvalid(page.getByLabel('Coordonnée'));
+    await expectInvalid(page.getByLabel('Sujet'));
     await expectInvalid(page.getByLabel('Message'));
   });
 
@@ -27,16 +27,16 @@ test.describe('contact form', () => {
 
     await page.getByPlaceholder('NOM_COMPLET').fill('Mehdi');
     await page.getByPlaceholder('EMAIL@DOMAIN.COM').fill('mehdi@example.com');
-    await page.getByLabel('Subject').selectOption('partenariat');
-    await page.getByPlaceholder(/DETAIL THE NUANCES/i).fill('Long-term partnership proposal');
+    await page.getByLabel('Sujet').selectOption('partenariat');
+    await page.getByPlaceholder(/DÉTAILLEZ LES NUANCES/i).fill('Long-term partnership proposal');
     const submitButton = page.getByTestId('contact-submit');
     await submitButton.click();
 
     await expect(submitButton).toBeDisabled();
-    await expect(page.getByText('Manifest Transmitted. Our concierge will reach out.')).toBeVisible();
+    await expect(page.getByText('Manifeste Transmis. Notre concierge vous contactera.')).toBeVisible();
     await expect(page.getByPlaceholder('NOM_COMPLET')).toHaveValue('');
-    await expect(page.getByLabel('Subject')).toHaveValue('');
-    await expect(page.getByPlaceholder(/DETAIL THE NUANCES/i)).toHaveValue('');
+    await expect(page.getByLabel('Sujet')).toHaveValue('');
+    await expect(page.getByPlaceholder(/DÉTAILLEZ LES NUANCES/i)).toHaveValue('');
   });
 });
 
@@ -51,8 +51,8 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/bad-token');
-    await expect(page.getByRole('button', { name: /Confirm Payment/i })).toHaveCount(0);
-    await expect(page.getByRole('heading', { name: /Your Bill/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: /Votre Addition/i })).toHaveCount(0);
   });
 
   test('supports full payment, equal split, individual item split, and zero-total guard', async ({ page }) => {
@@ -87,18 +87,18 @@ test.describe('payment portal', () => {
     await page.goto('/pay/live-token');
     await expect(page.getByTestId('payment-session-total')).toHaveText('180.00 DH');
 
-    await page.getByRole('button', { name: /Confirm Payment/i }).click();
-    await expect(page.getByText('Authorization Successful')).toBeVisible();
+    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
+    await expect(page.getByText('Autorisation Réussie')).toBeVisible();
     expect(payPayloads[0]).toMatchObject({ token: 'live-token', montant: '180.00' });
 
     payPayloads = [];
     await page.goto('/pay/live-token');
-    await page.getByRole('button', { name: /^Split$/i }).click();
+    await page.getByRole('button', { name: /^Partager$/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('90.00 DH');
-    await page.getByRole('button', { name: /Increase split count/i }).click();
+    await page.getByRole('button', { name: /Augmenter le nombre de parts/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('60.00 DH');
-    await page.getByRole('button', { name: /Confirm Payment/i }).click();
-    await expect(page.getByText('Authorization Successful')).toBeVisible();
+    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
+    await expect(page.getByText('Autorisation Réussie')).toBeVisible();
 
     expect(payPayloads[0]).toMatchObject({
       token: 'live-token',
@@ -107,14 +107,14 @@ test.describe('payment portal', () => {
 
     payPayloads = [];
     await page.goto('/pay/live-token');
-    await page.getByRole('button', { name: /^Items$/i }).click();
+    await page.getByRole('button', { name: /^Par Article$/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('0.00 DH');
-    await expect(page.getByRole('button', { name: /Confirm Payment/i })).toBeDisabled();
+    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toBeDisabled();
 
     await page.getByRole('button', { name: /Harira/i }).click();
     await page.getByRole('button', { name: /Tagine/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('180.00 DH');
-    await page.getByRole('button', { name: /Confirm Payment/i }).click();
+    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
 
     expect(payPayloads[0]).toMatchObject({
       token: 'live-token',
@@ -151,7 +151,7 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/retry-token');
-    const confirmButton = page.getByRole('button', { name: /Confirm Payment/i });
+    const confirmButton = page.getByRole('button', { name: /Confirmer le Règlement/i });
     await confirmButton.dblclick();
 
     await expect(page.getByText('PAYMENT_RETRY_LATER')).toBeVisible();
@@ -176,10 +176,10 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/success-token');
-    await page.getByRole('button', { name: /Confirm Payment/i }).click();
+    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
 
-    await expect(page.getByRole('heading', { name: /Payment Secured\./i })).toBeVisible();
-    await page.getByRole('button', { name: /Return Home/i }).click();
+    await expect(page.getByRole('heading', { name: /Paiement Sécurisé\./i })).toBeVisible();
+    await page.getByRole('button', { name: /Retour à l'Accueil/i }).click();
     await expect(page).toHaveURL('/');
   });
 });

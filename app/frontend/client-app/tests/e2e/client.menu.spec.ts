@@ -31,30 +31,28 @@ test.beforeEach(async ({ page }) => {
 test.describe('menu catalog', () => {
   test('shows category navigation after load', async ({ page }) => {
     await page.goto('/menu');
-    await expect(page.getByRole('button', { name: /All Selections/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Tous les plats' })).toBeVisible();
     await expect(page.getByRole('button', { name: /Entrées/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Plats/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Plats' })).toBeVisible();
   });
 
   test('shows first category dishes by default', async ({ page }) => {
     await page.goto('/menu');
-    // First category (Entrées) is selected by default
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Briouates')).toBeVisible();
-    // Plats dishes are hidden under the active category filter
     await expect(page.getByText('Tagine Poulet')).toHaveCount(0);
   });
 
   test('All Selections shows all dishes across all categories', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /All Selections/i }).click();
+    await page.getByRole('button', { name: 'Tous les plats' }).click();
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
   });
 
   test('switching category shows only that category dishes', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /Plats/i }).click();
+    await page.getByRole('button', { name: 'Plats' }).click();
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
     await expect(page.getByText('Briouates')).toHaveCount(0);
@@ -62,38 +60,37 @@ test.describe('menu catalog', () => {
 
   test('search filters dishes within the active category', async ({ page }) => {
     await page.goto('/menu');
-    // Default: Entrées active — search within Entrées
-    await page.getByPlaceholder('FIND A CREATION...').fill('harira');
+    await page.getByPlaceholder('RECHERCHER UN PLAT...').fill('harira');
     await expect(page.getByText('Soupe Harira')).toBeVisible();
     await expect(page.getByText('Briouates')).toHaveCount(0);
   });
 
   test('search across All Selections finds dishes in any category', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /All Selections/i }).click();
-    await page.getByPlaceholder('FIND A CREATION...').fill('tagine');
+    await page.getByRole('button', { name: 'Tous les plats' }).click();
+    await page.getByPlaceholder('RECHERCHER UN PLAT...').fill('tagine');
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
   });
 
   test('search matches dish descriptions as well as names', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /All Selections/i }).click();
-    await page.getByPlaceholder('FIND A CREATION...').fill('olives');
+    await page.getByRole('button', { name: 'Tous les plats' }).click();
+    await page.getByPlaceholder('RECHERCHER UN PLAT...').fill('olives');
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
   });
 
   test('shows empty state when no dish matches search', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: /All Selections/i }).click();
-    await page.getByPlaceholder('FIND A CREATION...').fill('doesnotexist12345');
-    await expect(page.getByText('No creations match your query')).toBeVisible();
+    await page.getByRole('button', { name: 'Tous les plats' }).click();
+    await page.getByPlaceholder('RECHERCHER UN PLAT...').fill('doesnotexist12345');
+    await expect(page.getByText('Aucun résultat trouvé')).toBeVisible();
   });
 
   test('clearing search restores category view', async ({ page }) => {
     await page.goto('/menu');
-    const searchInput = page.getByPlaceholder('FIND A CREATION...');
+    const searchInput = page.getByPlaceholder('RECHERCHER UN PLAT...');
     await searchInput.fill('harira');
     await expect(page.getByText('Briouates')).toHaveCount(0);
     await searchInput.fill('');
@@ -105,11 +102,11 @@ test.describe('menu catalog', () => {
     await page.goto('/menu');
     await page.getByText('Soupe Harira').click();
 
-    await expect(page.getByText('GASTRONOMIC RECORD')).toBeVisible();
-    await expect(page.getByRole('button', { name: /Add to Selection/i })).toBeVisible();
+    await expect(page.getByText('DÉTAILS DU PLAT')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Ajouter au panier/i })).toBeVisible();
 
     await page.mouse.click(16, 16);
-    await expect(page.getByText('GASTRONOMIC RECORD')).toHaveCount(0);
+    await expect(page.getByText('DÉTAILS DU PLAT')).toHaveCount(0);
     await expect(page).toHaveURL('/menu');
   });
 
@@ -125,10 +122,10 @@ test.describe('menu catalog', () => {
 
     await page.goto('/menu');
     await expect(page.getByText('Briouates')).toBeVisible();
-    await expect(page.getByRole('button', { name: /Add to cart/i })).toHaveCount(1);
+    await expect(page.getByRole('button', { name: /Ajouter.*au panier/i })).toHaveCount(1);
 
     await page.getByText('Briouates').click();
-    await expect(page.getByText('GASTRONOMIC RECORD')).toHaveCount(0);
+    await expect(page.getByText('DÉTAILS DU PLAT')).toHaveCount(0);
   });
 
   test('renders image-backed dishes safely in both the catalog and detail modal', async ({ page }) => {
@@ -142,7 +139,7 @@ test.describe('menu catalog', () => {
     });
 
     await page.goto('/menu');
-    await page.getByRole('button', { name: /All Selections/i }).click();
+    await page.getByRole('button', { name: 'Tous les plats' }).click();
 
     const tagineCard = page.getByTestId('menu-card-21');
     await expect(page.getByRole('img', { name: 'Tagine Poulet' }).first()).toHaveAttribute(
@@ -151,7 +148,7 @@ test.describe('menu catalog', () => {
     );
 
     await tagineCard.click();
-    await expect(page.getByText('GASTRONOMIC RECORD')).toBeVisible();
+    await expect(page.getByText('DÉTAILS DU PLAT')).toBeVisible();
     await expect(page.getByRole('img', { name: 'Tagine Poulet' }).last()).toHaveAttribute(
       'src',
       /tagine-poulet-hero\.png/,

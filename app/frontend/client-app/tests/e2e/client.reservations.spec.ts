@@ -10,15 +10,15 @@ test.describe('reservation journey', () => {
   test('guest users are gated and sent to login to reserve', async ({ page }) => {
     await page.goto('/reservations');
 
-    await expect(page.getByRole('heading', { name: /Reserved Access\./i })).toBeVisible();
-    await page.getByRole('button', { name: /Authenticate/i }).click();
+    await expect(page.getByRole('heading', { name: /Prenez place\./i })).toBeVisible();
+    await page.getByRole('button', { name: /Se connecter/i }).click();
     await expect(page).toHaveURL('/login');
   });
 
   test.describe('authenticated user flow', () => {
     test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
 
-    test('completes a reservation and exposes the shipped registry quirk', async ({ page }) => {
+    test('completes a reservation and navigates to the account page', async ({ page }) => {
       let availabilityQuery = '';
       let reservationPayload: Record<string, unknown> | null = null;
 
@@ -46,17 +46,17 @@ test.describe('reservation journey', () => {
       await page.goto('/reservations');
       await page.locator('input[type="date"]').fill('2026-06-05');
       await page.locator('input[type="time"]').fill('20:30');
-      await page.getByRole('button', { name: /Analyze Availability/i }).click();
+      await page.getByRole('button', { name: /Voir les tables libres/i }).click();
 
       await expect.poll(() => availabilityQuery).toContain('nombre_personnes=2');
       await expect.poll(() => availabilityQuery).toContain('date=2026-06-05');
-      await expect(page.getByRole('button', { name: /Confirm Placement/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /Confirmer mon choix/i })).toBeVisible();
 
-      await page.getByRole('button', { name: /Confirm Placement/i }).click();
-      await page.getByPlaceholder(/Allergies, architectural preferences/i).fill('Window seat');
-      await page.getByRole('button', { name: /Commit to Registry/i }).click();
+      await page.getByRole('button', { name: /Confirmer mon choix/i }).click();
+      await page.getByPlaceholder(/Allergies, anniversaire, préférences/i).fill('Window seat');
+      await page.getByRole('button', { name: /Valider ma réservation/i }).click();
 
-      await expect(page.getByRole('heading', { name: /Secured\./i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /C.est confirmé\./i })).toBeVisible();
       await expect(reservationPayload).toEqual({
         table: 12,
         date_reservation: '2026-06-05',
@@ -66,10 +66,8 @@ test.describe('reservation journey', () => {
         notes: 'Window seat',
       });
 
-      await page.getByRole('button', { name: /View Registry/i }).click();
-
-      await expect(page.getByText('Une Table Introuvable')).toBeVisible();
-      await expect(page).toHaveURL('/orders');
+      await page.getByRole('button', { name: /Voir mes réservations/i }).click();
+      await expect(page).toHaveURL('/account');
     });
 
     test('shows an error and stays in the flow when availability lookup fails', async ({ page }) => {
@@ -93,14 +91,14 @@ test.describe('reservation journey', () => {
       });
 
       await page.goto('/reservations');
-      await page.getByRole('button', { name: /Analyze Availability/i }).click();
+      await page.getByRole('button', { name: /Voir les tables libres/i }).click();
 
-      await expect(page.getByText('Availability check failed')).toBeVisible();
-      await expect(page.getByRole('button', { name: /Analyze Availability/i })).toBeVisible();
-      await expect(page.getByRole('button', { name: /Confirm Placement/i })).toHaveCount(0);
+      await expect(page.getByText('Échec de la vérification de disponibilité')).toBeVisible();
+      await expect(page.getByRole('button', { name: /Voir les tables libres/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /Confirmer mon choix/i })).toHaveCount(0);
 
-      await page.getByRole('button', { name: /Analyze Availability/i }).click();
-      await expect(page.getByRole('button', { name: /Confirm Placement/i })).toBeVisible();
+      await page.getByRole('button', { name: /Voir les tables libres/i }).click();
+      await expect(page.getByRole('button', { name: /Confirmer mon choix/i })).toBeVisible();
     });
 
     test('shows backend reservation failure and preserves the confirmation step', async ({ page }) => {
@@ -121,14 +119,14 @@ test.describe('reservation journey', () => {
       });
 
       await page.goto('/reservations');
-      await page.getByRole('button', { name: /Analyze Availability/i }).click();
-      await page.getByRole('button', { name: /Confirm Placement/i }).click();
-      await page.getByPlaceholder(/Allergies, architectural preferences/i).fill('Quiet corner');
-      await page.getByRole('button', { name: /Commit to Registry/i }).click();
+      await page.getByRole('button', { name: /Voir les tables libres/i }).click();
+      await page.getByRole('button', { name: /Confirmer mon choix/i }).click();
+      await page.getByPlaceholder(/Allergies, anniversaire, préférences/i).fill('Quiet corner');
+      await page.getByRole('button', { name: /Valider ma réservation/i }).click();
 
       await expect(page.getByText('TABLE_ALREADY_RESERVED')).toBeVisible();
-      await expect(page.getByRole('button', { name: /Commit to Registry/i })).toBeVisible();
-      await expect(page.getByPlaceholder(/Allergies, architectural preferences/i)).toHaveValue('Quiet corner');
+      await expect(page.getByRole('button', { name: /Valider ma réservation/i })).toBeVisible();
+      await expect(page.getByPlaceholder(/Allergies, anniversaire, préférences/i)).toHaveValue('Quiet corner');
     });
   });
 });

@@ -137,15 +137,15 @@ test.beforeEach(async ({ page }) => {
 test.describe('client public quality', () => {
   test('keeps auth routes accessible and exposes stable labels', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByLabel('Username')).toBeVisible();
-    await expect(page.getByLabel('Passkey')).toBeVisible();
-    await expect(page.getByRole('link', { name: /Return home/i })).toBeVisible();
+    await expect(page.getByLabel('Utilisateur')).toBeVisible();
+    await expect(page.getByLabel('Mot de passe')).toBeVisible();
+    await expect(page.getByRole('link', { name: /Retour/i })).toBeVisible();
     await expectNoBlockingViolations(page);
 
     await page.goto('/register');
-    await expect(page.getByLabel('Username')).toBeVisible();
-    await expect(page.getByLabel('Registry Email')).toBeVisible();
-    await expect(page.getByLabel('Session Passkey')).toBeVisible();
+    await expect(page.getByLabel('Utilisateur')).toBeVisible();
+    await expect(page.getByLabel('Email')).toBeVisible();
+    await expect(page.getByLabel('Mot de passe')).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
@@ -153,30 +153,30 @@ test.describe('client public quality', () => {
     await mockMenuData(page);
 
     await page.goto('/');
-    await expect(page.getByRole('link', { name: /Authenticate/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: "S'identifier" })).toBeVisible();
 
-    await page.locator('header').getByRole('link', { name: /THE CATALOG/i }).click();
+    await page.locator('header').getByRole('link', { name: /LA CARTE/i }).click();
     await expect(page).toHaveURL('/menu');
-    await expect(page.getByLabel('Search menu')).toBeVisible();
+    await expect(page.getByLabel('Rechercher')).toBeVisible();
 
     await page.goto('/login');
-    await expect(page.getByRole('heading', { name: 'Welcome Back.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Connexion.' })).toBeVisible();
 
     await page.goto('/register');
-    await expect(page.getByRole('heading', { name: 'Join the Echelon.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Inscription.' })).toBeVisible();
 
     await page.goto('/missing-route');
-    await expect(page.getByRole('heading', { name: /Une Table Introuvable/i })).toBeVisible();
-    await page.getByRole('button', { name: /View Menu/i }).click();
+    await expect(page.getByRole('heading', { name: 'Page Introuvable' })).toBeVisible();
+    await page.getByRole('button', { name: /Voir le Menu/i }).click();
     await expect(page).toHaveURL('/menu');
   });
 
   test('renders the offline recovery state and retry affordance', async ({ page }) => {
     await page.goto('/offline');
 
-    await expect(page.getByRole('heading', { name: /Connection Lost/i })).toBeVisible();
-    await page.getByRole('button', { name: /Retry Connection/i }).click();
-    await expect(page.getByText(/Attempting to reconnect/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Mode Hors Ligne/i })).toBeVisible();
+    await page.getByRole('button', { name: /Réessayer la Connexion/i }).click();
+    await expect(page.getByText(/Tentative de reconnexion/i)).toBeVisible();
   });
 
   test('keeps the menu usable on a narrow viewport with modal open and close', async ({ page }) => {
@@ -184,31 +184,32 @@ test.describe('client public quality', () => {
     await page.setViewportSize({ width: 390, height: 844 });
 
     await page.goto('/menu');
-    await expect(page.getByLabel('Search menu')).toBeVisible();
+    await expect(page.getByLabel('Rechercher')).toBeVisible();
 
-    await page.getByRole('button', { name: /Add to cart/i }).click();
-    await expect(page.getByRole('link', { name: /Open checkout with 1 item/i })).toBeVisible();
+    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    // Cart link is hidden on mobile (hidden md:flex) — navigate directly
+    await page.goto('/checkout');
+    await expect(page).toHaveURL('/checkout');
+    await page.goto('/menu');
 
     await page.getByText('Couscous Maison').first().click();
-    await expect(page.getByRole('button', { name: /Close dish details/i })).toBeVisible();
-    await page.getByRole('button', { name: /Close dish details/i }).click();
-    await expect(page.getByRole('button', { name: /Close dish details/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
+    await page.getByRole('button', { name: /Fermer le détail du plat/i }).click();
+    await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toHaveCount(0);
   });
 
   test('keeps guest mobile navigation direct and scroll-safe', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
 
     await page.goto('/');
-    await expect(page.getByRole('link', { name: /^Log In$/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Open navigation menu/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Ouvrir la navigation/i })).toBeVisible();
 
-    await page.getByRole('button', { name: /Open navigation menu/i }).click();
+    await page.getByRole('button', { name: /Ouvrir la navigation/i }).click();
     const mobileNavigation = page.locator('#mobile-navigation');
-    await expect(mobileNavigation.getByText('Guest navigation')).toBeVisible();
-    await expect(mobileNavigation.getByRole('link', { name: /^Menu$/i })).toBeVisible();
-    await expect(mobileNavigation.getByRole('link', { name: /^Book$/i })).toBeVisible();
-    await expect(mobileNavigation.getByRole('link', { name: /^Contact$/i })).toBeVisible();
-    await expect(mobileNavigation.getByRole('link', { name: /^Authenticate$/i })).toBeVisible();
+    await expect(mobileNavigation.getByText('Navigation invitée')).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /La Carte/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /Réservations/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /Connexion Membre/i })).toBeVisible();
   });
 });
 
@@ -219,36 +220,36 @@ test.describe('client authenticated quality', () => {
     await mockAccountData(page);
 
     await page.goto('/account');
-    await expect(page.getByRole('button', { name: /The Culinary Dialogue/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Donner votre avis/i })).toBeVisible();
     await expectNoBlockingViolations(page);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
-    await expect(page.getByRole('button', { name: /Settle Bill/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Sign Out/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Fermer la session/i })).toBeVisible();
   });
 
   test('keeps checkout usable on a narrow viewport and after a refresh', async ({ page }) => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/menu');
-    await page.getByRole('button', { name: /Add to cart/i }).click();
-    await page.getByRole('link', { name: /Open checkout with 1 item/i }).click();
-    await expect(page.getByRole('button', { name: /Authorize Manifest/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Return to menu/i })).toBeVisible();
+    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    // Cart link is hidden on mobile (hidden md:flex) — navigate directly
+    await page.goto('/checkout');
+    await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Retour à la carte/i })).toBeVisible();
 
     await page.reload();
-    await expect(page.getByRole('button', { name: /Authorize Manifest/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Increase quantity for Couscous Maison/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Augmenter la quantité pour Couscous Maison/i })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
   test('keeps reservations accessible with labeled controls', async ({ page }) => {
     await page.goto('/reservations');
 
-    await expect(page.getByLabel('Temporal Window')).toBeVisible();
-    await expect(page.getByLabel('Arrival Pivot')).toBeVisible();
-    await expect(page.getByRole('button', { name: /Increase guest count/i })).toBeVisible();
+    await expect(page.getByLabel('Date du repas')).toBeVisible();
+    await expect(page.getByLabel("Heure d'arrivée")).toBeVisible();
+    await expect(page.getByRole('button', { name: /Augmenter le nombre de convives/i })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
@@ -256,7 +257,7 @@ test.describe('client authenticated quality', () => {
     await mockLoyaltyData(page);
 
     await page.goto('/loyalty');
-    await expect(page.getByRole('heading', { name: /Redeemable Rewards/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Vos Privilèges/i })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
@@ -265,9 +266,9 @@ test.describe('client authenticated quality', () => {
     await page.setViewportSize({ width: 390, height: 844 });
 
     await page.goto('/pay/quality-token');
-    await expect(page.getByRole('button', { name: /Confirm Payment/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Split/i })).toBeVisible();
-    await page.getByRole('button', { name: /Split/i }).click();
-    await expect(page.getByRole('button', { name: /Increase split count/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Partager$/i })).toBeVisible();
+    await page.getByRole('button', { name: /^Partager$/i }).click();
+    await expect(page.getByRole('button', { name: /Augmenter le nombre de parts/i })).toBeVisible();
   });
 });

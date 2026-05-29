@@ -12,7 +12,7 @@ test.describe('login form — validation', () => {
     await page.waitForLoadState('networkidle');
     await page.getByTestId('login-username').focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
+    await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 
   test('shows error when only username is filled', async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe('login form — validation', () => {
     await page.waitForLoadState('networkidle');
     await page.getByTestId('login-username').fill('testuser');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
+    await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 
   test('shows error when only password is filled', async ({ page }) => {
@@ -28,7 +28,7 @@ test.describe('login form — validation', () => {
     await page.waitForLoadState('networkidle');
     await page.getByTestId('login-password').fill('somepass');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
+    await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 });
 
@@ -46,7 +46,7 @@ test.describe('login form — API responses', () => {
     await page.getByTestId('login-username').fill('wronguser');
     await page.getByTestId('login-password').fill('wrongpass');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('INVALID_PROTOCOL')).toBeVisible();
+    await expect(page.getByText('Identifiants invalides')).toBeVisible();
   });
 
   test('shows error when staff role tries to log in as client', async ({ page }) => {
@@ -65,7 +65,7 @@ test.describe('login form — API responses', () => {
     await page.getByTestId('login-username').fill('gerant_test');
     await page.getByTestId('login-password').fill('password123');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('GUEST_ACCESS_ONLY')).toBeVisible();
+    await expect(page.getByText('Accès réservé aux clients')).toBeVisible();
     await expect(page).toHaveURL('/login');
   });
 
@@ -82,7 +82,7 @@ test.describe('login form — API responses', () => {
     await page.getByTestId('login-username').fill('someuser');
     await page.getByTestId('login-password').fill('somepass');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('SYSTEM_BREACH')).toBeVisible();
+    await expect(page.getByText('Une erreur est survenue')).toBeVisible();
   });
 
   test('successful CLIENT login navigates to home', async ({ page }) => {
@@ -113,10 +113,10 @@ test.describe('register form — API responses', () => {
     });
 
     await page.goto('/register');
-    await page.getByPlaceholder('NOM_DE_PLUME').fill('taken_user');
-    await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('taken@example.com');
-    await page.getByLabel('Session Passkey').fill('password123');
-    await page.getByRole('button', { name: /Commit Registry/i }).click();
+    await page.getByPlaceholder('PSEUDONYME').fill('taken_user');
+    await page.getByPlaceholder('VOTRE@EMAIL.COM').fill('taken@example.com');
+    await page.getByLabel('Mot de passe').fill('password123');
+    await page.getByRole('button', { name: /Créer mon profil/i }).click();
 
     await expect(page).toHaveURL('/register');
     await expect(page.getByText('USERNAME_ALREADY_EXISTS')).toBeVisible();
@@ -139,10 +139,10 @@ test.describe('register form — API responses', () => {
     });
 
     await page.goto('/register');
-    await page.getByPlaceholder('NOM_DE_PLUME').fill('fresh_guest');
-    await page.getByPlaceholder('GUEST@DOMAIN.COM').fill('fresh@example.com');
-    await page.getByLabel('Session Passkey').fill('password123');
-    await page.getByRole('button', { name: /Commit Registry/i }).click();
+    await page.getByPlaceholder('PSEUDONYME').fill('fresh_guest');
+    await page.getByPlaceholder('VOTRE@EMAIL.COM').fill('fresh@example.com');
+    await page.getByLabel('Mot de passe').fill('password123');
+    await page.getByRole('button', { name: /Créer mon profil/i }).click();
 
     await expect(page).toHaveURL('/');
   });
@@ -159,10 +159,10 @@ test.describe('password reset flow — API responses', () => {
     });
 
     await page.goto('/forgot-password');
-    await page.getByLabel('Registry Email').fill('client_test@tastify.ma');
-    await page.getByRole('button', { name: /Send Recovery Link/i }).click();
+    await page.getByLabel("Email d'Enregistrement").fill('client_test@tastify.ma');
+    await page.getByRole('button', { name: /Envoyer le Lien de Récupération/i }).click();
 
-    await expect(page.getByText('Reset instructions sent if the address is registered.')).toBeVisible();
+    await expect(page.getByText("Instructions envoyées si l'adresse est enregistrée.")).toBeVisible();
   });
 
   test('shows invalid state when the reset token cannot be validated', async ({ page }) => {
@@ -175,7 +175,7 @@ test.describe('password reset flow — API responses', () => {
     });
 
     await page.goto('/reset-password?uid=abc&token=broken-token');
-    await expect(page.getByText('This reset link is invalid or expired.')).toBeVisible();
+    await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.')).toBeVisible();
   });
 
   test('completes the reset flow with a valid token', async ({ page }) => {
@@ -195,11 +195,11 @@ test.describe('password reset flow — API responses', () => {
     });
 
     await page.goto('/reset-password?uid=valid-uid&token=valid-token');
-    await page.getByLabel('New Passkey').fill('newpassword123');
-    await page.getByLabel('Confirm Passkey').fill('newpassword123');
-    await page.getByRole('button', { name: /Update Passkey/i }).click();
+    await page.getByLabel("Nouveau Code d'accès").fill('newpassword123');
+    await page.getByLabel('Confirmer le Code').fill('newpassword123');
+    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
 
-    await expect(page.getByText('Your password has been updated.')).toBeVisible();
+    await expect(page.getByText('Votre mot de passe a été mis à jour.')).toBeVisible();
   });
 
   test('surfaces password mismatch and token replay errors during confirmation', async ({ page }) => {
@@ -230,14 +230,14 @@ test.describe('password reset flow — API responses', () => {
     });
 
     await page.goto('/reset-password?uid=valid-uid&token=valid-token');
-    await page.getByLabel('New Passkey').fill('newpassword123');
-    await page.getByLabel('Confirm Passkey').fill('differentpassword123');
-    await page.getByRole('button', { name: /Update Passkey/i }).click();
+    await page.getByLabel("Nouveau Code d'accès").fill('newpassword123');
+    await page.getByLabel('Confirmer le Code').fill('differentpassword123');
+    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
     await expect(page.getByText('PASSWORD_CONFIRM_MISMATCH')).toBeVisible();
 
-    await page.getByLabel('Confirm Passkey').fill('newpassword123');
-    await page.getByRole('button', { name: /Update Passkey/i }).click();
-    await expect(page.getByText('This reset link is invalid or expired.')).toBeVisible();
+    await page.getByLabel('Confirmer le Code').fill('newpassword123');
+    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.')).toBeVisible();
   });
 });
 
