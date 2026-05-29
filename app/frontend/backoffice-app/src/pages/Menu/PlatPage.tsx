@@ -253,12 +253,19 @@ export const PlatPage: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-primary" />
-            <button className="sr-only" aria-label="Filter">Filter</button>
+            <button 
+              type="button"
+              className="h-12 w-12 bg-surface-container-low border border-outline rounded-lg flex items-center justify-center text-primary hover:bg-white/5 transition-all" 
+              aria-label="Filter"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="sr-only">Filter</span>
+            </button>
             <select 
               value={activeFilterCat || ''} 
               onChange={(e) => { setActiveFilterCat(e.target.value ? parseInt(e.target.value) : null); setCurrentPage(1); }}
               className="h-12 bg-surface-container-low border border-outline rounded-lg px-4 text-[10px] font-black uppercase tracking-widest min-w-[160px] text-on-surface"
+              aria-label="Filter by category"
             >
               <option value="">TOUS LES SECTEURS</option>
               {categories.map(c => (
@@ -322,13 +329,14 @@ export const PlatPage: React.FC = () => {
                     <button 
                         onClick={() => toggleAvailability(plat)}
                         className={`w-10 h-5 rounded-full relative transition-all border ${plat.est_disponible ? 'bg-primary' : 'bg-surface-container-high'}`}
+                        aria-label="Toggle availability"
                     >
                         <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white transition-all ${plat.est_disponible ? 'right-0.5' : 'left-0.5'}`} />
                     </button>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button onClick={() => handleOpenEditor(plat)} data-testid={`plat-edit-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete(plat.id)} data-testid={`plat-delete-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => handleOpenEditor(plat)} data-testid={`plat-edit-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all" aria-label="Edit dish"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => handleDelete(plat.id)} data-testid={`plat-delete-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all" aria-label="Delete dish"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
             )) : (
