@@ -123,7 +123,7 @@ const KdsTicket = ({
             </div>
 
             {/* Liste des Plats */}
-            <div className="flex-1 p-3 bg-white flex flex-col gap-2">
+            <div className="flex-1 p-3 bg-surface-container-low flex flex-col gap-2">
                 {ticket.lignes.map((item: any) => {
                     const isItemReady = item.statut === 'PRET';
                     return (
@@ -158,7 +158,7 @@ const KdsTicket = ({
                 {isDone ? (
                     <button 
                         onClick={handleMainAction}
-                        className="w-full h-16 rounded-xl border border-outline-variant bg-white text-on-surface-variant font-sans text-xs font-black uppercase tracking-widest hover:text-primary hover:border-primary transition-all"
+                        className="w-full h-16 rounded-xl border border-outline-variant bg-surface-container text-on-surface font-sans text-xs font-black uppercase tracking-widest hover:text-primary hover:border-primary transition-all"
                     >
                         Archiver le Ticket
                     </button>
@@ -294,7 +294,7 @@ export const KdsPage: React.FC = () => {
     <div className="flex-1 flex flex-col bg-background font-sans selection:bg-primary/20 overflow-hidden">
       
       {/* KDS Header */}
-      <header className="flex-none h-24 bg-white border-b border-outline-variant px-10 flex items-center justify-between z-20">
+      <header className="flex-none h-24 bg-surface-container-high border-b border-outline-variant px-10 flex items-center justify-between z-20">
         <div className="flex items-center gap-8">
           <button
             onClick={() => navigate(-1)}
@@ -324,7 +324,7 @@ export const KdsPage: React.FC = () => {
           
           <button 
             onClick={fetchTickets}
-            className="h-14 px-8 rounded-xl bg-white border border-outline-variant font-black uppercase tracking-widest text-[11px] hover:text-primary hover:border-primary transition-all flex items-center gap-3 active:scale-95"
+            className="h-14 px-8 rounded-xl bg-surface-container text-on-surface border border-outline-variant font-black uppercase tracking-widest text-[11px] hover:text-primary hover:border-primary transition-all flex items-center gap-3 active:scale-95"
           >
             <RotateCcw className="w-4 h-4" /> Actualiser
           </button>
@@ -338,7 +338,7 @@ export const KdsPage: React.FC = () => {
           
           return (
             <section key={col.id} className="relative flex flex-col h-full bg-surface-container-lowest">
-              <header className="flex-none h-16 bg-white border-b border-outline-variant px-8 flex items-center justify-between z-10">
+              <header className="flex-none h-16 bg-surface-container-high border-b border-outline-variant px-8 flex items-center justify-between z-10">
                 <h2 className="text-xs font-black uppercase tracking-[0.4em] text-on-surface-variant">{col.label}</h2>
                 <div className="bg-primary/5 text-primary text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest border border-primary/10">
                   {colTickets.length} TICKETS
@@ -360,7 +360,7 @@ export const KdsPage: React.FC = () => {
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center opacity-10 pb-20">
                     <PlayCircle className="w-24 h-24 mb-6 stroke-[1]" />
-                    <p className="text-xl font-black uppercase tracking-[0.6em]">SECTEUR CLAIR</p>
+                    <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em]">SECTEUR CLAIR</p>
                   </div>
                 )}
               </div>
