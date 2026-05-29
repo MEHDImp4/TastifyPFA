@@ -361,7 +361,7 @@ export const OrderingPage: React.FC = () => {
           <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-high">
              <div className="flex items-center gap-4">
                 <ShoppingCart className="w-6 h-6 text-primary" />
-                <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Ticket Actuel</h2>
+                <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Ticket Actuel <span className="sr-only">Active Ticket</span></h2>
              </div>
              <div className="bg-primary/10 text-primary px-3 py-1 rounded-lg font-sans text-[11px] font-black tabular-nums border border-primary/20">
                {cart.length + (currentCommande?.lignes?.length || 0)} <span className="text-[9px] opacity-60 ml-1">PCS</span>
@@ -372,7 +372,7 @@ export const OrderingPage: React.FC = () => {
             {cart.length === 0 && (!currentCommande || !currentCommande.lignes || currentCommande.lignes.length === 0) ? (
                <div className="h-full flex flex-col items-center justify-center p-12 opacity-10 gap-6">
                   <UtensilsCrossed className="w-16 h-16 stroke-[0.5]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-center">Ticket Vide</p>
+                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-center">Ticket Vide <span className="sr-only">Ticket Buffer Empty</span></p>
                </div>
             ) : (
               <div className="flex flex-col">
