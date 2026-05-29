@@ -37,7 +37,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setError(null);
     if (!username || !password) {
-      setError('IDENTIFIANT_REQUIS');
+      setError('IDENTIFIER_REQUIRED');
       return;
     }
     setIsLoading(true);
@@ -49,7 +49,7 @@ export const Login: React.FC = () => {
       const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'ACCÈS_REFUSÉ' : 'ERREUR_SYSTÈME');
+      setError(err.response?.status === 401 ? 'ACCESS_DENIED' : 'SYSTEM_ERROR');
       toast.error('ÉCHEC_D_AUTHENTIFICATION');
     } finally {
       setIsLoading(false);
