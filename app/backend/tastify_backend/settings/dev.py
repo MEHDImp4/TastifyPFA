@@ -21,3 +21,12 @@ CORS_ALLOW_CREDENTIALS = True # Permet d'envoyer les cookies/tokens JWT
 # En développement, on affiche les emails dans la console plutôt que d'essayer de les envoyer (ce qui causerait une erreur 500)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Disable token rotation and blacklisting in development to prevent race conditions
+# in parallel E2E tests which reuse the same seeded .auth storage states.
+SIMPLE_JWT = {
+    **SIMPLE_JWT,
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+}
+
+
