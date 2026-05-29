@@ -95,11 +95,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav className="flex-1 overflow-y-auto custom-scrollbar">
           {getLinks().map((link) => {
             const Icon = link.icon;
+            const testIds: Record<string, string> = {
+              '/': 'nav-dashboard',
+              '/salle': 'nav-salle',
+              '/reservations': 'nav-reservations',
+              '/menu': 'nav-menu',
+              '/categories': 'nav-categories',
+              '/stock': 'nav-stock',
+              '/hr': 'nav-hr',
+              '/avis': 'nav-avis',
+              '/settings': 'nav-settings',
+              '/kds': 'nav-kds',
+            };
             return (
               <NavLink 
                 key={link.to} 
                 to={link.to} 
                 end={link.exact}
+                data-testid={testIds[link.to]}
                 className={navClass}
                 onClick={() => setMobileOpen(false)}
               >
