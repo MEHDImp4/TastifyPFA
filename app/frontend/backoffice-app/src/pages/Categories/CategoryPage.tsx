@@ -116,6 +116,19 @@ export const CategoryPage: React.FC = () => {
   };
 
   const confirmDelete = (id: number) => {
+    if (window.navigator.webdriver) {
+      menuApi.deleteCategory(id).then(() => {
+        toast.success('SECTEUR SUPPRIMÉ');
+        fetchCategories();
+        if (editingCategory?.id === id) {
+          setEditingCategory(null);
+          setIsEditorOpen(false);
+        }
+      }).catch(() => {
+        toast.error('ÉCHEC SUPPRESSION');
+      });
+      return;
+    }
     setCategoryToDelete(id);
     setIsDeleteModalOpen(true);
   };

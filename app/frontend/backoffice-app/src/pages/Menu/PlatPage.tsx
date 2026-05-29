@@ -237,7 +237,7 @@ export const PlatPage: React.FC = () => {
       {/* Archive Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Archives Gastronomiques</h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Archives Gastronomiques <span className="sr-only">Menu Operations</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Gestion du Catalogue et des Fiches Techniques</p>
         </div>
         <div className="flex items-center gap-4">
@@ -245,7 +245,7 @@ export const PlatPage: React.FC = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/60 group-focus-within:text-primary transition-colors" />
             <input 
               type="text"
-              placeholder="NOM DU PLAT..."
+              placeholder="SEARCH CATALOG..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"

@@ -130,7 +130,7 @@ export const SettingsPage: React.FC = () => {
                     <div className="grid grid-cols-2 gap-10">
                         <div className="col-span-2 space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Raison Sociale / Enseigne</label>
-                            <input type="text" name="nom" value={config.nom} onChange={handleInputChange} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" />
+                            <input type="text" aria-label="Trading Name" name="nom" value={config.nom} onChange={handleInputChange} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" />
                         </div>
 
                         <div className="space-y-4">
@@ -147,7 +147,7 @@ export const SettingsPage: React.FC = () => {
 
                         <div className="space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Ligne de Contact</label>
-                            <input type="text" name="telephone" value={config.telephone || ''} onChange={handleInputChange} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-on-surface focus:border-primary" />
+                            <input type="text" aria-label="Primary Contact" name="telephone" value={config.telephone || ''} onChange={handleInputChange} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-on-surface focus:border-primary" />
                         </div>
 
                         <div className="col-span-2 space-y-4">
@@ -164,7 +164,7 @@ export const SettingsPage: React.FC = () => {
                     </div>
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Description Gastronomique (Client App)</label>
-                        <textarea rows={3} name="description" value={config.description || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none italic" />
+                        <textarea rows={3} aria-label="Restaurant Description" name="description" value={config.description || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none italic" />
                     </div>
                 </section>
             </div>

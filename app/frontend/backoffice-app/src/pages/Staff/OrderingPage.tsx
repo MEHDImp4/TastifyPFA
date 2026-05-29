@@ -256,7 +256,7 @@ export const OrderingPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
             <input 
               type="text"
-              placeholder="SEARCH..."
+              placeholder="SEARCH MENU..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-48 md:w-64 h-11 bg-surface-container border border-outline-variant/50 pl-10 pr-4 rounded-xl font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"

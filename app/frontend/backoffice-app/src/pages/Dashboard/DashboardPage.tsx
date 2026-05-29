@@ -27,10 +27,12 @@ export const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [activeTickets, setActiveTickets] = useState<Commande[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const lastUpdate = useSocketStore(state => state.lastUpdate);
 
   const fetchData = async () => {
     try {
+      setError(false);
       const [dashRes, ticketsRes] = await Promise.all([
         analyticsApi.getDashboardData(),
         kdsApi.getActiveTickets()
@@ -39,6 +41,7 @@ export const DashboardPage: React.FC = () => {
       setActiveTickets(ticketsRes.data);
     } catch (err) {
       console.error('Failed to fetch dashboard data', err);
+      setError(true);
     } finally {
       setIsLoading(false);
     }
@@ -49,6 +52,15 @@ export const DashboardPage: React.FC = () => {
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, [lastUpdate]);
+
+  if (error) return (
+    <div className="h-full flex flex-col items-center justify-center text-error p-8 text-center uppercase tracking-widest font-black">
+      <AlertTriangle className="w-16 h-16 mb-4" />
+      <h2 className="text-2xl">Data registry offline.</h2>
+      <p className="text-xs text-on-surface-variant/40 mt-3 font-bold">Échec de synchronisation avec le registre analytique principal.</p>
+      <button onClick={fetchData} className="mt-8 btn-primary">Réessayer</button>
+    </div>
+  );
 
   if (isLoading || !data) return (
     <div className="h-full flex items-center justify-center text-primary">

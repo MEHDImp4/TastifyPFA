@@ -159,7 +159,7 @@ export const ReservationsPage: React.FC = () => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-primary transition-colors"  strokeWidth={2.5}/>
                   <input 
                       type="text" 
-                      placeholder="RECHERCHER..."
+                      placeholder="SEARCH GUEST IDENTITY..."
                       aria-label="Rechercher client"
                       value={search}
                       onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
