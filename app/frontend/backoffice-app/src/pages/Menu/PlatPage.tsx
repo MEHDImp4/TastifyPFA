@@ -266,7 +266,7 @@ export const PlatPage: React.FC = () => {
             </select>
           </div>
 
-          <button onClick={() => handleOpenEditor()} className="btn-primary">
+          <button onClick={() => handleOpenEditor()} data-testid="plat-create-button" className="btn-primary">
             <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Fiche
           </button>
         </div>
@@ -292,6 +292,7 @@ export const PlatPage: React.FC = () => {
             {paginatedPlats.length > 0 ? paginatedPlats.map((plat) => (
                 <div 
                   key={plat.id}
+                  data-testid={`plat-card-${plat.id}`}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
                   <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{plat.id}</div>
@@ -325,8 +326,8 @@ export const PlatPage: React.FC = () => {
                     </button>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button onClick={() => handleOpenEditor(plat)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete(plat.id)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => handleOpenEditor(plat)} data-testid={`plat-edit-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => handleDelete(plat.id)} data-testid={`plat-delete-${plat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
             )) : (
@@ -375,10 +376,10 @@ export const PlatPage: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-12">
-                    <div className="grid grid-cols-2 gap-8">
-                        <div className="col-span-2 space-y-4">
+                    <div className="grid grid-cols-3 gap-8">
+                        <div className="col-span-3 space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Intitulé du Plat</label>
-                            <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="DÉNOMINATION CULINAIRE" />
+                            <input type="text" required data-testid="plat-name-input" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="DÉNOMINATION CULINAIRE" />
                         </div>
 
                         <div className="space-y-4">
@@ -390,7 +391,12 @@ export const PlatPage: React.FC = () => {
 
                         <div className="space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Tarification (DH)</label>
-                            <input type="number" required value={prix} onChange={(e) => setPrix(e.target.value)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-primary focus:border-primary" placeholder="00" />
+                            <input type="number" required data-testid="plat-price-input" value={prix} onChange={(e) => setPrix(e.target.value)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-primary focus:border-primary" placeholder="00" />
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Temps de Préparation (Min)</label>
+                            <input type="number" required data-testid="plat-time-input" value={temps} onChange={(e) => setTemps(parseInt(e.target.value) || 0)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-primary focus:border-primary" placeholder="15" />
                         </div>
                     </div>
 
@@ -411,13 +417,13 @@ export const PlatPage: React.FC = () => {
                                     <span className="text-[10px] font-black uppercase tracking-[0.3em]">Charger une image haute définition</span>
                                 </div>
                             )}
-                            <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                            <input type="file" data-testid="plat-image-input" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
                         </div>
                     </div>
 
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Récit Culinaire / Ingrédients clés</label>
-                        <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DESCRIPTION DÉTAILLÉE POUR LE CLIENT..." />
+                        <textarea rows={4} data-testid="plat-description-input" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DESCRIPTION DÉTAILLÉE POUR LE CLIENT..." />
                     </div>
 
                     {/* Technical Recipe Section */}
@@ -452,7 +458,7 @@ export const PlatPage: React.FC = () => {
 
                 <div className="flex-none h-24 bg-surface-container-lowest border-t border-outline p-6 flex gap-6">
                     <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 border border-outline rounded-lg text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Annuler</button>
-                    <button onClick={handleSubmit} disabled={isSaving} className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
+                    <button onClick={handleSubmit} disabled={isSaving} data-testid="plat-save-button" className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
                         {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Sauvegarder la Fiche</>}
                     </button>
                 </div>
