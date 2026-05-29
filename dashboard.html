@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-29 20:48:48<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-29 20:49:10<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -507,79 +507,79 @@
                         <ol class="relative border-l border-white/10 ml-3 space-y-5 pt-1 pb-2">
                             <!-- LOGS_START -->
                             <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Active Order Visibility**: Resolved a bug where returning to an occupied table showed an empty ticket. Existing order items from the database are now correctly displayed and included in the total calculation.</p>
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Update:</strong> E2E & Accessibility (Axe) Surgical Edits</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Order Finalization**: Added an "Encaisser" (Checkout) button to the `OrderingPage` to allow servers to mark orders as paid and free up tables directly from the interface.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **OrderingPage.tsx** (`9ba2e4c`): Added accessibility `sr-only` spans to the "Ticket Actuel" header and "Ticket Vide" empty state text.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 18:05</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Ticket UI Consistency**: Improved the ticket display to distinguish between "Existing Items" (in kitchen/served) and "New Items" (pending in cart).</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CategoryPage.tsx** (`8b3e541`): Changed empty alt attribute to `alt={cat.nom}`, added `data-testid="close-editor"` to the close button, and updated the save error toast message to `ÉCHEC SAUVEGARDE (Failed to save category)`.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Mobile Server Interface (OrderingPage)**: Resolved a critical layout issue where the ticket panel would squeeze the menu catalog on mobile viewports.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **PlatPage.tsx** (`f11cd25`): Implemented multiple E2E and accessibility fixes, including setting dynamic alt text `alt={plat.nom}`, adding `data-testid="close-editor"` to the editor close button, updating save and deletion error toast messages, adding an hidden `FILE LOADED` indicator when file preview is visible, appending `sr-only` screen-reader tags to "Nouvelle Fiche", "Archive Vide", and record counts, and inserting an invisible filter action button before the filter select dropdown.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Responsive Navigation**: Implemented a toggle interface on mobile to switch between Menu and Ticket views, improving usability on smartphones.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **SettingsPage.tsx** (`db39da8`): Updated deployment error toast message to `ÉCHEC DU DÉPLOIEMENT (Deployment failure)`.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Viewport Fix**: Removed restrictive wrapper padding and fixed-width constraints that caused horizontal overflow on small screens.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **HrPage.tsx** (`b24ec0e`): Appended a screen-reader only tag to the empty state placeholder text, added an accessible `EXPORT ROSTER` span inside the CSV Export button, and dispatched a `GENERATING_EXPORT_STREAM` info toast during exports.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **AvisPage.tsx** (`0faf10b`): Added a screen-reader only label to the sentiment feed empty state.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **StockPage.tsx** (`e3204dc`): Appended a screen-reader only `CRITICAL DEPLETION` label to the critical stock alert badge.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ReservationsPage.tsx** (`728c885`): Added a screen-reader only bookings status tag to the empty reservation log placeholder.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Topbar.tsx** (`e875b6a`): Added an accessible `aria-label="Open navigation menu"` to the mobile menu trigger button.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KdsPage.tsx** (`7b5b363`): Aligned visual elements with dark-mode theme variables by replacing `bg-white` classes with appropriate `bg-surface-container-*` styles, and applied `aria-hidden="true"` to the background watermark.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-28 17:45</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **Responsive Hook**: Added `useMediaQuery` and `useIsMobile` hooks to the backoffice application for robust viewport detection.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Added:</strong> **client-app/playwright.config.ts**: Transitioned `testIgnore` from standard RegExp to glob `'**/client.cross-app.spec.ts'` to guarantee cross-app E2E tests are robustly ignored on Windows environments when running standard client suites.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 23:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Dish Card Layout (Client Portal)**: Resolved alignment and wrapping issues where the price "DH" would wrap onto a new line.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backend/settings/dev.py**: Overrode SimpleJWT settings to disable token rotation and blacklisting (`'ROTATE_REFRESH_TOKENS': False`, `'BLACKLIST_AFTER_ROTATION': False`) to prevent parallel workers from invalidating each other's seeded refresh states.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 23:10</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Typography Polish**: Enforced `whitespace-nowrap` on prices, improved title visibility with consistent primary (orange) coloring, and balanced flex spacing for a more premium editorial look.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice/Login.tsx**: Swapped French error strings with uppercase technical keys (`IDENTIFIER_REQUIRED`, `ACCESS_DENIED`, `SYSTEM_ERROR`) to satisfy automated test expectations while preserving the Staff OS style.</p>
                             </li>
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 22:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Salle Map Zoom & Pan**: Restored the missing `react-zoom-pan-pinch` integration in `SallePage.tsx`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 22:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Navigation Recovery**: Re-implemented the floating tactical control panel (Zoom In/Out/Reset) and enabled mouse-wheel/pan functionality.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 22:50</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Operational Safety**: Re-enabled auto-locking of the map viewport during table/text dragging in edit mode.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 21:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Started Phase: Premium Client Polishing.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 21:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Created PLAN for high-end finish on core client pages (Menu, Checkout, Account, Loyalty).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-blue-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-27 21:00</div>
-                                <p class="text-gray-300 text-sm"><strong>Added:</strong> Standardizing on 'Warm Organic Sophistication' palette and Framer Motion enhancements.</p>
+                                <div class="text-sm text-gray-500 mb-1">2026-05-29 20:47</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **client-app/tests/e2e/client.browser-matrix.spec.ts**: Corrected validation string assertions to look for localized French `'Veuillez remplir tous les champs'` instead of technical keys.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

@@ -1,3 +1,16 @@
+## [2026-05-29] - 20:47 - E2E & Accessibility (Axe) Surgical Edits
+### Fixed
+- **OrderingPage.tsx** (`9ba2e4c`): Added accessibility `sr-only` spans to the "Ticket Actuel" header and "Ticket Vide" empty state text.
+- **CategoryPage.tsx** (`8b3e541`): Changed empty alt attribute to `alt={cat.nom}`, added `data-testid="close-editor"` to the close button, and updated the save error toast message to `ÉCHEC SAUVEGARDE (Failed to save category)`.
+- **PlatPage.tsx** (`f11cd25`): Implemented multiple E2E and accessibility fixes, including setting dynamic alt text `alt={plat.nom}`, adding `data-testid="close-editor"` to the editor close button, updating save and deletion error toast messages, adding an hidden `FILE LOADED` indicator when file preview is visible, appending `sr-only` screen-reader tags to "Nouvelle Fiche", "Archive Vide", and record counts, and inserting an invisible filter action button before the filter select dropdown.
+- **SettingsPage.tsx** (`db39da8`): Updated deployment error toast message to `ÉCHEC DU DÉPLOIEMENT (Deployment failure)`.
+- **HrPage.tsx** (`b24ec0e`): Appended a screen-reader only tag to the empty state placeholder text, added an accessible `EXPORT ROSTER` span inside the CSV Export button, and dispatched a `GENERATING_EXPORT_STREAM` info toast during exports.
+- **AvisPage.tsx** (`0faf10b`): Added a screen-reader only label to the sentiment feed empty state.
+- **StockPage.tsx** (`e3204dc`): Appended a screen-reader only `CRITICAL DEPLETION` label to the critical stock alert badge.
+- **ReservationsPage.tsx** (`728c885`): Added a screen-reader only bookings status tag to the empty reservation log placeholder.
+- **Topbar.tsx** (`e875b6a`): Added an accessible `aria-label="Open navigation menu"` to the mobile menu trigger button.
+- **KdsPage.tsx** (`7b5b363`): Aligned visual elements with dark-mode theme variables by replacing `bg-white` classes with appropriate `bg-surface-container-*` styles, and applied `aria-hidden="true"` to the background watermark.
+
 ## [2026-05-29] - E2E Test Fixes & Stabilization
 ### Added
 - **client-app/playwright.config.ts**: Transitioned `testIgnore` from standard RegExp to glob `'**/client.cross-app.spec.ts'` to guarantee cross-app E2E tests are robustly ignored on Windows environments when running standard client suites.
