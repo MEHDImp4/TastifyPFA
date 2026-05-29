@@ -91,10 +91,10 @@ export const LoyaltyPage: React.FC = () => {
                  {/* Premium Progress Bar */}
                  <div className="space-y-4">
                     <div className="w-full h-2.5 bg-[#FAF9F6]/5 rounded-full overflow-hidden border border-white/5">
-                       <motion.div 
+                       <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: '65%' }}
-                          transition={{ duration: 2, ease: "easeOut" }}
+                          transition={{ duration: 1.8, ease: [0.23, 1, 0.32, 1] }}
                           className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] relative shadow-[0_0_20px_rgba(209,77,26,0.3)]"
                        />
                     </div>
@@ -121,13 +121,14 @@ export const LoyaltyPage: React.FC = () => {
               {rewards.map((reward, idx) => {
                  const isUnlockable = (loyalty?.points || 0) >= reward.points_requis;
                  return (
-                    <motion.div 
+                    <motion.div
                        key={reward.id}
                        initial={{ opacity: 0, y: 20 }}
                        whileInView={{ opacity: 1, y: 0 }}
                        viewport={{ once: true }}
                        transition={{ delay: idx * 0.1 }}
-                       className={`group relative p-8 rounded-[2.5rem] border transition-all duration-700 overflow-hidden flex flex-col justify-between h-[400px] ${isUnlockable ? 'bg-[#FAF9F6] border-[#2D2424]/10 hover:border-[#C5A059]/40 shadow-xl hover:shadow-2xl' : 'bg-[#F4F1EA]/50 border-transparent grayscale'}`}
+                       whileHover={isUnlockable ? { y: -8, scale: 1.02 } : {}}
+                       className={`group relative p-8 rounded-[2.5rem] border transition-colors duration-700 overflow-hidden flex flex-col justify-between h-[400px] ${isUnlockable ? 'bg-[#FAF9F6] border-[#2D2424]/10 hover:border-[#C5A059]/40 shadow-xl hover:shadow-2xl' : 'bg-[#F4F1EA]/50 border-transparent grayscale'}`}
                     >
                        <div className="space-y-6 relative z-10">
                           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isUnlockable ? 'bg-[#C5A059]/10 text-[#C5A059] group-hover:bg-[#C5A059] group-hover:text-[#FAF9F6]' : 'bg-[#2D2424]/5 text-[#2D2424]/20'}`}>

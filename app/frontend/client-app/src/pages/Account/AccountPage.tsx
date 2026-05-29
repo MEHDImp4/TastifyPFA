@@ -137,7 +137,13 @@ export const AccountPage: React.FC = () => {
               <div className="space-y-6">
                  <h3 className="font-sans text-[11px] font-black text-[#2D2424]/30 uppercase tracking-[0.2em]">STATUT PRIVILÈGE</h3>
                  <div className="w-full h-2 bg-[#FAF9F6] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#D14D1A]" style={{ width: '65%' }} />
+                    <motion.div
+                       initial={{ width: 0 }}
+                       whileInView={{ width: '65%' }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+                       className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] shadow-[0_0_12px_rgba(209,77,26,0.2)]"
+                    />
                  </div>
                  <p className="font-serif text-lg text-[#2D2424] italic">Bientôt le prochain échelon culinaire</p>
               </div>

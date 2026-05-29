@@ -1,3 +1,18 @@
+## [2026-05-29] - Phase 45 Complete
+### Changed
+- **CheckoutPage.tsx**: Success `CheckCircle2` icon now springs in with `type: "spring", damping: 10, stiffness: 180` for a celebratory bounce on order confirmation.
+- **AccountPage.tsx**: Tier progress bar animated with `motion.div` (`whileInView`, 0→65%, `ease: [0.23,1,0.32,1]`) with gold-to-primary gradient and glow shadow — previously static.
+- **LoyaltyPage.tsx**: Progress bar easing upgraded from `"easeOut"` to cubic `[0.23,1,0.32,1]` for a more fluid deceleration. Reward cards gain `whileHover={{ y: -8, scale: 1.02 }}` on unlockable items — `transition-all` replaced with `transition-colors` to prevent CSS fighting Framer Motion transform.
+
+### Validation
+- **Production Build**: `npm run build` — green, 2219 modules, no TypeScript errors.
+
+## [2026-05-28] - 18:05
+### Fixed
+- **Active Order Visibility**: Resolved a bug where returning to an occupied table showed an empty ticket. Existing order items from the database are now correctly displayed and included in the total calculation.
+- **Order Finalization**: Added an "Encaisser" (Checkout) button to the `OrderingPage` to allow servers to mark orders as paid and free up tables directly from the interface.
+- **Ticket UI Consistency**: Improved the ticket display to distinguish between "Existing Items" (in kitchen/served) and "New Items" (pending in cart).
+
 ## [2026-05-28] - 17:45
 ### Fixed
 - **Mobile Server Interface (OrderingPage)**: Resolved a critical layout issue where the ticket panel would squeeze the menu catalog on mobile viewports.

@@ -77,9 +77,14 @@ export const CheckoutPage: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32" />
             
             <div className="relative z-10 flex flex-col items-center gap-12">
-                <div className="w-24 h-24 rounded-full bg-surface-container-highest border border-primary/20 flex items-center justify-center text-primary">
+                <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", damping: 10, stiffness: 180, delay: 0.25 }}
+                    className="w-24 h-24 rounded-full bg-surface-container-highest border border-primary/20 flex items-center justify-center text-primary"
+                >
                     <CheckCircle2 className="w-12 h-12" strokeWidth={1} />
-                </div>
+                </motion.div>
                 
                 <div className="space-y-6">
                     <h2 className="text-display-lg-mobile md:text-display-lg text-primary leading-none italic m-0">Merci pour votre commande</h2>
