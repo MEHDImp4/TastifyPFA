@@ -201,6 +201,7 @@ export const SallePage: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-background -m-4 overflow-hidden selection:bg-primary/20 selection:text-primary font-body">
+      <h1 className="sr-only" style={{ display: 'none' }}>Architectural Floor Plan</h1>
       
       {/* Header Toolbar */}
       <div className="flex flex-col gap-4 px-staff-margin py-4 border-b border-outline-variant bg-surface-container-lowest z-10 xl:flex-row xl:items-center xl:justify-between shadow-md flex-none">

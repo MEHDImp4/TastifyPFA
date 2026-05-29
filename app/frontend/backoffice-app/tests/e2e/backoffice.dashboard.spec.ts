@@ -77,7 +77,7 @@ test.describe('manager dashboard analytics e2e', () => {
     await navigation;
     await expect(page.getByText('4290 DH')).toBeVisible();
     await expect(page.getByText('50%')).toBeVisible();
-    await expect(page.getByText('6')).toBeVisible();
+    await expect(page.getByText('6', { exact: true })).toBeVisible();
     await expect(page.getByText(/^18m$/)).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Client Sentiment Analysis' })).toBeVisible();
     await expect(page.getByText('28 reviews analysed by NLP pipeline')).toBeVisible();
