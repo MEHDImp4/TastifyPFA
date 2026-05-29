@@ -73,7 +73,7 @@ test.describe('client expanded browser matrix smoke', () => {
     await page.goto('/login');
     await page.getByTestId('login-username').focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('login-error')).toContainText('IDENTIFIER_REQUIRED');
+    await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 
   test('keeps category switching and search stable in the public menu', async ({ page }) => {
