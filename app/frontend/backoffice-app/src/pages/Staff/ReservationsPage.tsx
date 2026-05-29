@@ -316,7 +316,7 @@ export const ReservationsPage: React.FC = () => {
             <div className="rounded-lg border border-dashed border-outline py-20 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container/20">
                 <Calendar className="w-16 h-10 mb-6 opacity-20"  strokeWidth={2.5}/>
                 <p className="text-display-lg text-3xl font-black italic tracking-tighter text-on-surface uppercase opacity-20">Aucune Réservation</p>
-                <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné</p>
+                <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné <span className="sr-only">No Bookings Logged</span></p>
             </div>
           )}
         </div>
