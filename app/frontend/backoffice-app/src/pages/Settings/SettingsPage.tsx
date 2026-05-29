@@ -98,7 +98,7 @@ export const SettingsPage: React.FC = () => {
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Console Système <span className="sr-only">System Settings</span></h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Configuration de l'Établissement et Paramètres Globaux</p>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3">Configuration de l'Établissement et Paramètres Globaux</p>
         </div>
         <div className="flex items-center gap-4">
           <button onClick={fetchSettings} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
