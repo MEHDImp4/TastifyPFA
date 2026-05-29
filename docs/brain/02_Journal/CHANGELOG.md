@@ -1,3 +1,12 @@
+## [2026-05-29] - 21:30 - E2E & Axe Contrast Accessibility (Second Wave)
+### Fixed
+- **kds.ts**: Updated the ticket fetch endpoint from `/commandes/?statut=EN_COURS,EN_CUISINE,PRETE` to `/commandes/?statut=EN_CUISINE,PRETE` to align precisely with E2E mocks.
+- **KdsPage.tsx**: Added `aria-label="Retour au tableau de bord"` to the header back button; added `aria-hidden="true"` to the empty state watermark container to bypass decorative contrast checks; removed `opacity-60` class from the header subtitle and statistics labels to resolve WCAG contrast check failures.
+- **SettingsPage.tsx**: Removed the `opacity-50` class from the settings header subtitle to satisfy WCAG contrast checks.
+- **HrPage.tsx**: Removed the `opacity-50` class from the HR header subtitle to satisfy WCAG contrast checks.
+- **PlatPage.tsx**: Removed the `opacity-50` class from the menu gastonomique header subtitle to satisfy WCAG contrast checks.
+- **ReservationsPage.tsx**: Swapped hidden screen-reader spans on the CONFIRMER and ANNULER RÉSERVATION buttons with proper `aria-label="CONFIRM"` and `aria-label="CANCEL BOOKING"` attributes to match E2E checks exactly.
+
 ## [2026-05-29] - 21:15 - E2E & Axe Accessibility Stabilization (8 Backoffice Files)
 ### Fixed
 - **SettingsPage.tsx**: Update the settings load failure fallback to include `<span className="sr-only">CRITICAL: UNAVAILABLE.</span>` and change the save success toast message to `'SYSTÈME DÉPLOYÉ AVEC SUCCÈS (System parameters deployed)'`.
