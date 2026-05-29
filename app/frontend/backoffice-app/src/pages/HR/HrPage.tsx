@@ -46,6 +46,7 @@ export const HrPage: React.FC = () => {
 
   const handleExportCSV = () => {
     try {
+        toast.info("GENERATING_EXPORT_STREAM");
         if (employes.length === 0) return;
         const reportTitle = "REGISTRE DU PERSONNEL TASTIFY OS";
         const headers = ["ID", "PSEUDONYME", "IDENTITÉ", "POSTE", "EMAIL", "TELEPHONE"];
@@ -64,7 +65,6 @@ export const HrPage: React.FC = () => {
         link.setAttribute("href", url);
         link.setAttribute("download", `PERSONNEL_TASTIFY_${new Date().toISOString().split('T')[0]}.csv`);
         link.click();
-        toast.info("GENERATING_EXPORT_STREAM");
         toast.success("REGISTRE EXPORTÉ");
     } catch (err) {
         toast.error("ERREUR EXPORT");
