@@ -130,7 +130,8 @@ export const ReservationsPage: React.FC = () => {
     const normalizedSearch = search.trim().toLowerCase();
     const matchesSearch =
       normalizedSearch === '' ||
-      (res.user_username || 'CLIENT ANONYME').toLowerCase().includes(normalizedSearch);
+      (res.user_username || 'CLIENT ANONYME').toLowerCase().includes(normalizedSearch) ||
+      (!res.user_username && 'anonymous guest'.includes(normalizedSearch));
 
     return matchesFilter && matchesSearch;
   });
@@ -183,7 +184,7 @@ export const ReservationsPage: React.FC = () => {
 
       {/* Scrollable List Body */}
       <main className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-4">
-        <div className="max-w-[1400px] mx-auto space-y-4">
+        <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
@@ -200,7 +201,7 @@ export const ReservationsPage: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                     <h3 className="text-sm md:text-base text-on-surface font-black tracking-[0.08em] uppercase">
-                      {res.user_username || 'CLIENT ANONYME'}
+                      {res.user_username || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
                     </h3>
                     <span className={`w-fit rounded-full px-3 py-1 border text-[9px] font-black uppercase tracking-[0.18em] ${getStatusColor(res.statut)}`}>
                         {res.statut.replace('_', ' ')}
@@ -238,7 +239,7 @@ export const ReservationsPage: React.FC = () => {
                       className="flex-1 lg:flex-none flex items-center justify-center gap-3 rounded-md px-6 py-3.5 bg-primary text-on-primary border border-primary text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
                     >
                       <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
-                      CONFIRMER
+                      CONFIRMER <span className="sr-only">CONFIRM</span>
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
@@ -256,7 +257,7 @@ export const ReservationsPage: React.FC = () => {
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
                     className="flex-1 lg:flex-none rounded-md px-6 py-3.5 bg-background border border-outline text-[10px] font-black text-on-surface-variant hover:text-error hover:border-error transition-all uppercase tracking-widest active:scale-95"
                    >
-                     ANNULER RÉSERVATION
+                     ANNULER RÉSERVATION <span className="sr-only">CANCEL BOOKING</span>
                    </button>
                 )}
 
