@@ -60,10 +60,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-4 px-8 py-4 transition-all duration-200 group relative
+    flex items-center gap-4 px-8 py-4 transition-all duration-200 group relative border-l-4
     ${isActive 
-      ? 'text-primary bg-primary-container/10 font-bold' 
-      : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low'
+      ? 'text-primary bg-primary-container/10 font-bold border-primary' 
+      : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low border-transparent'
     }
   `;
 
@@ -144,6 +144,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             onClick={() => logout()}
+            data-testid="logout-button"
             className="flex items-center gap-3 w-full py-4 border border-outline-variant hover:border-error/40 hover:bg-error/5 text-on-surface-variant hover:text-error transition-all duration-300 rounded-xl group active:scale-95 shadow-sm"
           >
             <LogOut strokeWidth={2} className="h-4 w-4 ml-5 shrink-0" />

@@ -25,7 +25,8 @@ import {
   AlertCircle,
   Hash,
   UtensilsCrossed,
-  ReceiptText
+  ReceiptText,
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -403,7 +404,7 @@ export const OrderingPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <span className="font-sans text-[15px] font-black text-on-surface-variant/40 tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire) * ligne.quantite).toFixed(0)} DH</span>
+                        <span className="font-sans text-[15px] font-black text-on-surface-variant/40 tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire || '0') * ligne.quantite).toFixed(0)} DH</span>
                       </div>
                     ))}
                   </div>
