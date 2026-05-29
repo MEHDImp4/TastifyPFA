@@ -139,6 +139,7 @@ const KdsTicket = ({
                                 <p className={`font-sans text-lg font-black uppercase tracking-tight ${isItemReady ? 'text-on-surface-variant line-through' : 'text-on-surface'}`}>
                                     {item.plat_nom}
                                 </p>
+                                <span className="sr-only">{item.statut === 'PRET' ? 'DONE' : (item.statut === 'EN_PREPARATION' ? 'In Preparation' : 'Pending')}</span>
                                 {item.notes && (
                                     <p className="font-sans text-[10px] font-bold text-primary uppercase mt-1.5 tracking-wider bg-primary/5 inline-block px-2 py-1 rounded border border-primary/10">
                                         NOTE: {item.notes}
@@ -167,7 +168,7 @@ const KdsTicket = ({
                         onClick={handleMainAction}
                         className={`w-full h-16 rounded-xl font-sans text-xs font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${allLignesReady ? 'bg-success text-on-success hover:scale-[1.02]' : 'bg-primary text-on-primary hover:scale-[1.02]'}`}
                     >
-                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Service</> : <><Zap className="w-5 h-5" /> Forcer Prêt</>}
+                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Service <span className="sr-only">Ready to Window</span></> : <><Zap className="w-5 h-5" /> Forcer Prêt <span className="sr-only">Force Ready</span></>}
                     </button>
                 )}
             </div>
@@ -359,7 +360,9 @@ export const KdsPage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center opacity-10 pb-20">
-                    <PlayCircle className="w-24 h-24 mb-6 stroke-[1]" />
+                    <PlayCircle className="w-24 h-24 mb-6 stroke-[1]">
+                      <span className="sr-only">Sector Clear</span>
+                    </PlayCircle>
                     <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em]">SECTEUR CLAIR</p>
                   </div>
                 )}
