@@ -154,7 +154,7 @@ export const CategoryPage: React.FC = () => {
       {/* Registry Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre des Catégories</h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre des Catégories <span className="sr-only">Category Management</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Configuration de l'Architecture du Menu</p>
         </div>
         <div className="flex items-center gap-4">
