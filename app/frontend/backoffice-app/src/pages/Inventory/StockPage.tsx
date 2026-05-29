@@ -281,7 +281,7 @@ export const StockPage: React.FC = () => {
                       <div className="col-span-2 flex justify-center">
                         {isLow ? (
                             <div className="flex items-center gap-2 text-error font-black text-[9px] uppercase tracking-widest bg-error/5 border border-error/20 px-3 py-1 rounded">
-                                <AlertTriangle className="w-3 h-3" /> CRITIQUE
+                                <AlertTriangle className="w-3 h-3" /> CRITIQUE <span className="sr-only">CRITICAL DEPLETION</span>
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 text-success font-black text-[9px] uppercase tracking-widest bg-success/5 border border-success/20 px-3 py-1 rounded opacity-60">
