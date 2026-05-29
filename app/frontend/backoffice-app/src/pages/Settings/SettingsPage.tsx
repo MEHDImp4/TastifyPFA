@@ -80,7 +80,7 @@ export const SettingsPage: React.FC = () => {
       if (res.data.logo) setLogoPreview(res.data.logo);
       setLogoFile(null);
       
-      toast.success('SYSTÈME DÉPLOYÉ AVEC SUCCÈS');
+      toast.success('SYSTÈME DÉPLOYÉ AVEC SUCCÈS (System parameters deployed)');
     } catch (err) {
       toast.error('ÉCHEC DU DÉPLOIEMENT (Deployment failure)');
     } finally {
@@ -89,7 +89,7 @@ export const SettingsPage: React.FC = () => {
   };
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
-  if (!config) return <div className="h-full flex items-center justify-center text-error font-black uppercase tracking-widest">ERREUR SYSTÈME</div>;
+  if (!config) return <div className="h-full flex items-center justify-center text-error font-black uppercase tracking-widest">ERREUR SYSTÈME <span className="sr-only">CRITICAL: UNAVAILABLE.</span></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-sans selection:bg-primary/20 overflow-hidden">
