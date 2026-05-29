@@ -82,7 +82,7 @@ export const SettingsPage: React.FC = () => {
       
       toast.success('SYSTÈME DÉPLOYÉ AVEC SUCCÈS');
     } catch (err) {
-      toast.error('ÉCHEC DU DÉPLOIEMENT');
+      toast.error('ÉCHEC DU DÉPLOIEMENT (Deployment failure)');
     } finally {
       setIsSaving(false);
     }
