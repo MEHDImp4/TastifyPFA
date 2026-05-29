@@ -426,11 +426,11 @@ export const OrderingPage: React.FC = () => {
                           <div className="flex-1 min-w-0 py-0.5">
                             <p className="font-body text-[16px] font-bold text-on-surface truncate uppercase tracking-tight">{item.plat.nom}</p>
                             <div className="flex items-center gap-4 mt-2">
-                              <button onClick={() => updateCartQty(item.plat.id, -1)} className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                              <button onClick={() => updateCartQty(item.plat.id, -1)} data-testid="qty-minus" className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
                                 <Minus className="w-3.5 h-3.5" strokeWidth={3} />
                               </button>
                               <span className="font-sans text-sm font-black text-on-surface tabular-nums">{item.quantite}</span>
-                              <button onClick={() => addToCart(item.plat)} className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                              <button onClick={() => addToCart(item.plat)} data-testid="qty-plus" className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
                                 <Plus className="w-3.5 h-3.5" strokeWidth={3} />
                               </button>
                             </div>
@@ -438,7 +438,7 @@ export const OrderingPage: React.FC = () => {
                         </div>
                         <div className="flex flex-col items-end gap-3 shrink-0 py-0.5">
                           <span className="font-sans text-[17px] font-black text-primary tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
-                          <button onClick={() => removeFromCart(item.plat.id)} className="p-2 rounded-lg bg-error/5 text-error/30 hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
+                          <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-2 rounded-lg bg-error/5 text-error/30 hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
                               <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
@@ -471,6 +471,7 @@ export const OrderingPage: React.FC = () => {
               <button 
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
+                data-testid="order-submit"
                 className="w-full h-18 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border-2 border-primary group disabled:opacity-20 disabled:grayscale"
               >
                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
