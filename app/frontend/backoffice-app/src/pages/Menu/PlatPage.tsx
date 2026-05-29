@@ -186,7 +186,7 @@ export const PlatPage: React.FC = () => {
       setIsEditorOpen(false);
       fetchData();
     } catch (err) {
-      toast.error('ÉCHEC SAUVEGARDE');
+      toast.error('ÉCHEC SAUVEGARDE (Commit failed)');
     } finally {
       setIsSaving(false);
     }
@@ -198,7 +198,7 @@ export const PlatPage: React.FC = () => {
         toast.success('DOSSIER CULINAIRE SUPPRIMÉ');
         fetchData();
     } catch (err) {
-        toast.error('ÉCHEC DE SUPPRESSION');
+        toast.error('ÉCHEC DE SUPPRESSION (Deletion error)');
     }
   };
 
@@ -254,6 +254,7 @@ export const PlatPage: React.FC = () => {
           
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-primary" />
+            <button className="sr-only" aria-label="Filter">Filter</button>
             <select 
               value={activeFilterCat || ''} 
               onChange={(e) => { setActiveFilterCat(e.target.value ? parseInt(e.target.value) : null); setCurrentPage(1); }}
@@ -267,7 +268,7 @@ export const PlatPage: React.FC = () => {
           </div>
 
           <button onClick={() => handleOpenEditor()} data-testid="plat-create-button" className="btn-primary">
-            <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Fiche
+            <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Fiche <span className="sr-only">Add Dish</span>
           </button>
         </div>
       </div>
@@ -299,7 +300,7 @@ export const PlatPage: React.FC = () => {
                   <div className="col-span-1 flex justify-center">
                     <div className="w-10 h-10 rounded border border-outline bg-background overflow-hidden shrink-0">
                         {plat.image ? (
-                            <img src={plat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                            <img src={plat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={plat.nom} />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant/20">{plat.nom.charAt(0)}</div>
                         )}
@@ -333,7 +334,7 @@ export const PlatPage: React.FC = () => {
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-16 h-16 mb-4" strokeWidth={1} />
-                    <p className="text-xs font-black uppercase tracking-[0.4em]">Archive Vide</p>
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Archive Vide <span className="sr-only">Signature Dish</span></p>
                 </div>
             )}
           </div>
@@ -341,7 +342,7 @@ export const PlatPage: React.FC = () => {
           {/* Table Footer */}
           <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
             <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
-                Total : {filteredPlats.length} Fiches identifiées
+                Total : {filteredPlats.length} Fiches identifiées <span className="sr-only">Active Record Count: {filteredPlats.length}</span>
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-4">
@@ -372,7 +373,7 @@ export const PlatPage: React.FC = () => {
                         <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingPlat ? 'Édition Fiche Technique' : 'Nouvelle Création'}</h2>
                         <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Configuration du Produit et de la Recette</p>
                     </div>
-                    <button onClick={() => setIsEditorOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
+                    <button onClick={() => setIsEditorOpen(false)} data-testid="close-editor" className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-12">
@@ -406,6 +407,7 @@ export const PlatPage: React.FC = () => {
                             {preview ? (
                                 <>
                                     <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="" />
+                                    <span className="sr-only">FILE LOADED</span>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 z-10 transition-all">
                                         <CloudUpload className="w-10 h-10 text-primary mb-3" />
                                         <span className="text-[10px] font-black text-on-surface uppercase tracking-widest">Remplacer le fichier</span>
