@@ -27,7 +27,7 @@ export const ResetPassword: React.FC = () => {
       if (!uid || !token) {
         if (active) {
           setTokenStatus('invalid');
-          setError('RESET_TOKEN_INVALID');
+          setError('JETON_DE_RÉINITIALISATION_INVALIDE');
         }
         return;
       }
@@ -40,7 +40,7 @@ export const ResetPassword: React.FC = () => {
       } catch (err: any) {
         if (active) {
           setTokenStatus('invalid');
-          setError(err.response?.data?.token?.[0] || 'RESET_TOKEN_INVALID');
+          setError(err.response?.data?.token?.[0] || 'JETON_DE_RÉINITIALISATION_INVALIDE');
         }
       }
     };
@@ -64,7 +64,7 @@ export const ResetPassword: React.FC = () => {
         password_confirm: passwordConfirm,
       });
       setIsComplete(true);
-      toast.success('RESET_PASSWORD_UPDATED');
+      toast.success('MOT_DE_PASSE_MIS_À_JOUR');
     } catch (err: any) {
       const responseData = err.response?.data;
       const nextError =
@@ -72,12 +72,12 @@ export const ResetPassword: React.FC = () => {
         responseData?.password_confirm?.[0] ||
         responseData?.token?.[0] ||
         responseData?.detail ||
-        'RESET_CONFIRM_FAILURE';
+        'ÉCHEC_RÉINITIALISATION';
       setError(nextError);
       if (responseData?.token) {
         setTokenStatus('invalid');
       }
-      toast.error('RESET_CONFIRM_FAILURE');
+      toast.error('ÉCHEC_RÉINITIALISATION');
     } finally {
       setIsSubmitting(false);
     }
@@ -91,11 +91,11 @@ export const ResetPassword: React.FC = () => {
 
       <Link
         to="/login"
-        aria-label="Back to login"
+        aria-label="Retour à la connexion"
         className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
-        Return
+        Retour
       </Link>
 
       <motion.div
@@ -110,10 +110,10 @@ export const ResetPassword: React.FC = () => {
             </div>
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">
-            Reissue Passkey.
+            Réédition du Code.
           </h1>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">
-            Token-secured password reset
+            Réinitialisation sécurisée par jeton
           </p>
         </div>
 
@@ -136,36 +136,36 @@ export const ResetPassword: React.FC = () => {
           <div className="w-full rounded-2xl border border-outline-variant bg-surface-container-lowest p-8 text-center">
             <Loader2 className="mx-auto h-6 w-6 animate-spin text-primary" />
             <p className="mt-4 font-sans text-xs font-black uppercase tracking-[0.3em] text-on-surface">
-              Validating secure token
+              Validation du jeton sécurisé
             </p>
           </div>
         ) : tokenStatus === 'invalid' ? (
           <div className="w-full rounded-2xl border border-error/20 bg-error/5 p-8 text-center">
             <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-error">
-              This reset link is invalid or expired.
+              Ce lien de réinitialisation est invalide ou expiré.
             </p>
-            <Link to="/forgot-password" className="mt-6 inline-flex text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
-              Request a new link
+            <Link to="/forgot-password" university-link="true" className="mt-6 inline-flex text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
+              Demander un nouveau lien
             </Link>
           </div>
         ) : isComplete ? (
           <div className="w-full rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
             <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-on-surface">
-              Your password has been updated.
+              Votre mot de passe a été mis à jour.
             </p>
             <Link to="/login" className="mt-6 inline-flex text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
-              Return to login
+              Retour à la connexion
             </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="w-full space-y-8">
             <div className="space-y-2">
               <label htmlFor="reset-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
-                New Passkey
+                Nouveau Code d'accès
               </label>
               <input
                 id="reset-password-input"
-                aria-label="New Passkey"
+                aria-label="Nouveau Code d'accès"
                 type="password"
                 required
                 value={password}
@@ -178,11 +178,11 @@ export const ResetPassword: React.FC = () => {
 
             <div className="space-y-2">
               <label htmlFor="reset-password-confirm-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
-                Confirm Passkey
+                Confirmer le Code
               </label>
               <input
                 id="reset-password-confirm-input"
-                aria-label="Confirm Passkey"
+                aria-label="Confirmer le Code"
                 type="password"
                 required
                 value={passwordConfirm}
@@ -199,7 +199,7 @@ export const ResetPassword: React.FC = () => {
               className="w-full h-20 bg-primary-container text-on-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary-container relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Update Passkey</span>}
+              {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Mettre à jour le Code</span>}
             </button>
           </form>
         )}

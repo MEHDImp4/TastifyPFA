@@ -23,7 +23,7 @@ export const ContactPage: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Manifest Transmitted. Our concierge will reach out.');
+    toast.success('Manifeste Transmis. Notre concierge vous contactera.');
     setFormData({ name: '', email: '', subject: '', message: '' });
     setIsSubmitting(false);
   };
@@ -40,10 +40,10 @@ export const ContactPage: React.FC = () => {
         <header className="mb-20 space-y-6">
             <div className="flex items-center gap-3">
                 <span className="h-[1px] w-8 bg-primary" />
-                <span className="editorial-kicker">Direct Liaison</span>
+                <span className="editorial-kicker">Liaison Directe</span>
             </div>
-            <h1 className="font-serif text-4xl md:text-7xl font-black text-on-surface uppercase italic tracking-tighter leading-none m-0">Contact Registry.</h1>
-            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl italic opacity-60 uppercase tracking-tight leading-relaxed">A specialized request or a fragment of feedback? Our digital concierge is at your absolute disposal.</p>
+            <h1 className="font-serif text-4xl md:text-7xl font-black text-on-surface uppercase italic tracking-tighter leading-none m-0">Registre de Contact.</h1>
+            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl italic opacity-60 uppercase tracking-tight leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
@@ -51,15 +51,15 @@ export const ContactPage: React.FC = () => {
             {/* Coordinates & Identity */}
             <aside className="lg:col-span-4 space-y-16">
                 <section className="space-y-10">
-                    <span className="editorial-kicker opacity-40">Coordinates</span>
+                    <span className="editorial-kicker opacity-40">Coordonnées</span>
                     <div className="space-y-8">
                         <div className="flex items-start gap-8 group cursor-default">
                             <div className="w-14 h-14 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center text-primary shrink-0 transition-all duration-700 group-hover:bg-on-surface group-hover:text-background shadow-inner">
                                 <MapPin className="w-6 h-6" strokeWidth={1.5} />
                             </div>
                             <div className="space-y-1">
-                                <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Location</p>
-                                <p className="font-serif text-xl md:text-2xl italic text-on-surface leading-tight uppercase tracking-tight">123 Gastronomic Blvd,<br/>Casablanca, Morocco</p>
+                                <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Localisation</p>
+                                <p className="font-serif text-xl md:text-2xl italic text-on-surface leading-tight uppercase tracking-tight">123 Boulevard Gastronomique,<br/>Casablanca, Maroc</p>
                             </div>
                         </div>
                         
@@ -76,18 +76,18 @@ export const ContactPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-10">
-                    <span className="editorial-kicker opacity-40">Temporal Window</span>
+                    <span className="editorial-kicker opacity-40">Fenêtre Temporelle</span>
                     <div className="flex items-start gap-8">
                         <div className="w-14 h-14 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center text-primary shrink-0 shadow-inner">
                             <Clock className="w-6 h-6" strokeWidth={1.5} />
                         </div>
                         <div className="grid grid-cols-1 gap-4 w-full">
                             <div className="flex justify-between items-end border-b border-outline-variant/10 pb-3">
-                                <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Mon — Fri</span>
+                                <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Lun — Ven</span>
                                 <span className="font-sans text-[10px] font-medium text-on-surface-variant opacity-60">12:00 — 23:30</span>
                             </div>
                             <div className="flex justify-between items-end border-b border-outline-variant/10 pb-3">
-                                <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Sat — Sun</span>
+                                <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Sam — Dim</span>
                                 <span className="font-sans text-[10px] font-medium text-on-surface-variant opacity-60">11:00 — 00:30</span>
                             </div>
                         </div>
@@ -107,27 +107,27 @@ export const ContactPage: React.FC = () => {
                         <div className="space-y-4">
                             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface-container-highest text-primary border border-primary/20">
                                 <Sparkles className="w-4 h-4" />
-                                <span className="font-sans text-[9px] font-black tracking-[0.3em] uppercase">Protocol Active</span>
+                                <span className="font-sans text-[9px] font-black tracking-[0.3em] uppercase">Protocole Actif</span>
                             </div>
-                            <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface italic leading-none m-0">The Manifest.</h2>
+                            <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface italic leading-none m-0">Le Manifeste.</h2>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Identity</label>
+                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Identité</label>
                                     <input 
                                         id="contact-name-input" type="text" name="name" value={formData.name} onChange={handleChange} required
-                                        aria-label="Identity"
+                                        aria-label="Identité"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20"
                                         placeholder="NOM_COMPLET"
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Coordinate</label>
+                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Coordonnée</label>
                                     <input 
                                         id="contact-email-input" type="email" name="email" value={formData.email} onChange={handleChange} required
-                                        aria-label="Coordinate"
+                                        aria-label="Coordonnée"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
                                         placeholder="EMAIL@DOMAIN.COM"
                                     />
@@ -135,16 +135,16 @@ export const ContactPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-3">
-                                <label htmlFor="contact-subject-select" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Subject</label>
+                                <label htmlFor="contact-subject-select" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Sujet</label>
                                 <select 
                                     id="contact-subject-select" name="subject" value={formData.subject} onChange={handleChange} required
-                                    aria-label="Subject"
+                                    aria-label="Sujet"
                                     className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                                 >
-                                    <option value="">SELECT PARAMETER...</option>
-                                    <option value="reservation">PRIVATE BOOKING</option>
-                                    <option value="evenement">EVENT ARCHITECTURE</option>
-                                    <option value="partenariat">PARTNERSHIP</option>
+                                    <option value="">SÉLECTIONNER UN PARAMÈTRE...</option>
+                                    <option value="reservation">RÉSERVATION PRIVÉE</option>
+                                    <option value="evenement">ARCHITECTURE D'ÉVÉNEMENT</option>
+                                    <option value="partenariat">PARTENARIAT</option>
                                 </select>
                             </div>
 
@@ -154,7 +154,7 @@ export const ContactPage: React.FC = () => {
                                     id="contact-message-input" name="message" value={formData.message} onChange={handleChange} required rows={4}
                                     aria-label="Message"
                                     className="w-full p-8 bg-surface-container-lowest border border-outline-variant rounded-[2rem] focus:border-primary outline-none transition-all resize-none font-body text-lg italic text-on-surface uppercase placeholder:text-on-surface-variant/20"
-                                    placeholder="DETAIL THE NUANCES..."
+                                    placeholder="DÉTAILLEZ LES NUANCES..."
                                 />
                             </div>
 
@@ -163,7 +163,7 @@ export const ContactPage: React.FC = () => {
                                 data-testid="contact-submit"
                                 className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-6"
                             >
-                                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Transmit Liaison</span><Send className="w-5 h-5 text-on-primary/60" /></>}
+                                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Transmettre la Liaison</span><Send className="w-5 h-5 text-on-primary/60" /></>}
                             </button>
                         </form>
                     </div>

@@ -20,10 +20,10 @@ export const ForgotPassword: React.FC = () => {
     try {
       await api.post('/users/request-reset/', { email });
       setSubmitted(true);
-      toast.success('RESET_REQUEST_ACCEPTED');
+      toast.success('DEMANDE_DE_REINITIALISATION_ACCEPTEE');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'RESET_REQUEST_FAILURE');
-      toast.error('RESET_REQUEST_FAILURE');
+      setError(err.response?.data?.detail || 'ECHEC_DE_LA_DEMANDE');
+      toast.error('ECHEC_DE_LA_DEMANDE');
     } finally {
       setIsLoading(false);
     }
@@ -37,11 +37,11 @@ export const ForgotPassword: React.FC = () => {
 
       <Link
         to="/login"
-        aria-label="Back to login"
+        aria-label="Retour à la connexion"
         className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
-        Return
+        Retour
       </Link>
 
       <motion.div
@@ -56,10 +56,10 @@ export const ForgotPassword: React.FC = () => {
             </div>
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">
-            Reset Access.
+            Réinitialiser l'Accès.
           </h1>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">
-            Secure account recovery
+            Récupération de compte sécurisée
           </p>
         </div>
 
@@ -81,29 +81,29 @@ export const ForgotPassword: React.FC = () => {
         {submitted ? (
           <div className="w-full rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
             <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-on-surface">
-              Reset instructions sent if the address is registered.
+              Instructions envoyées si l'adresse est enregistrée.
             </p>
             <p className="mt-4 font-sans text-sm text-on-surface-variant">
-              Check your inbox for a secure recovery link.
+              Vérifiez votre boîte de réception pour le lien de récupération sécurisé.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="w-full space-y-10">
             <div className="space-y-2">
               <label htmlFor="forgot-password-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
-                Registry Email
+                Email d'Enregistrement
               </label>
               <div className="relative group">
                 <input
                   id="forgot-password-email-input"
-                  aria-label="Registry Email"
+                  aria-label="Email d'Enregistrement"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
                   className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all tracking-tight"
-                  placeholder="GUEST@DOMAIN.COM"
+                  placeholder="INVITE@DOMAIN.COM"
                 />
                 <Mail className="absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2 text-on-surface-variant" />
               </div>
@@ -115,7 +115,7 @@ export const ForgotPassword: React.FC = () => {
               className="w-full h-20 bg-primary-container text-on-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary-container relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Send Recovery Link</span>}
+              {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Envoyer le Lien de Récupération</span>}
             </button>
           </form>
         )}

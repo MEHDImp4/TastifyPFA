@@ -64,7 +64,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, visual, isReve
                 <motion.div layoutId="auth-back-icon">
                     <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" style={{ color: '#8d4e1c' }} strokeWidth={3} />
                 </motion.div>
-                <motion.span layoutId="auth-back-text" className="text-[11px] font-black uppercase tracking-widest" style={{ color: '#301400' }}>Back</motion.span>
+                <motion.span layoutId="auth-back-text" className="text-[11px] font-black uppercase tracking-widest" style={{ color: '#301400' }}>Retour</motion.span>
             </button>
             <BrandWordmark className="text-3xl font-bold tracking-tighter lg:hidden" style={{ color: '#8d4e1c' }} />
         </div>

@@ -175,12 +175,15 @@ export const MenuPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-6 flex flex-col flex-1 gap-2">
-                    <div className="flex justify-between items-start gap-4">
-                      <h3 className="font-serif text-lg font-black text-on-surface uppercase tracking-tight leading-tight group-hover:text-primary transition-colors">{plat.nom}</h3>
-                      <span className="font-sans text-lg font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
+                  <div className="p-6 flex flex-col flex-1 gap-3">
+                    <div className="flex justify-between items-baseline gap-2">
+                      <h3 className="font-serif text-lg font-black text-primary uppercase tracking-tighter leading-[1.1] flex-1">{plat.nom}</h3>
+                      <div className="flex items-baseline gap-1 whitespace-nowrap shrink-0">
+                        <span className="font-sans text-2xl font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)}</span>
+                        <span className="font-sans text-[11px] font-black text-primary uppercase tracking-widest">DH</span>
+                      </div>
                     </div>
-                    <p className="font-body text-[14px] text-on-surface-variant line-clamp-2 italic opacity-60 flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    <p className="font-body text-sm text-on-surface-variant line-clamp-3 italic opacity-70 leading-relaxed flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
                   </div>
                 </motion.div>
               ))}

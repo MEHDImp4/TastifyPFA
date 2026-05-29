@@ -22,9 +22,9 @@ export const NotFoundPage: React.FC = () => {
         <div className="w-16 h-px bg-outline-variant/30" />
         
         <div className="space-y-6">
-           <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Une Table Introuvable</h2>
+           <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Page Introuvable</h2>
            <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
-              Le goût de l'évasion, littéralement. The page you are looking for has been cleared from our menu or never existed.
+              Le goût de l'évasion, littéralement. La page que vous recherchez a été retirée de notre menu ou n'a jamais existé.
            </p>
         </div>
 
@@ -33,13 +33,13 @@ export const NotFoundPage: React.FC = () => {
               onClick={() => navigate('/')}
               className="px-12 py-5 bg-primary text-on-primary rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20 flex items-center justify-center gap-3"
             >
-              <Home className="w-4 h-4" /> Return Home
+              <Home className="w-4 h-4" /> Retour Accueil
             </button>
             <button 
               onClick={() => navigate('/menu')}
               className="px-12 py-5 border border-outline-variant text-on-surface rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-surface-container-highest active:scale-95 flex items-center justify-center gap-3"
             >
-              <UtensilsCrossed className="w-4 h-4" /> View Menu
+              <UtensilsCrossed className="w-4 h-4" /> Voir le Menu
             </button>
         </div>
       </motion.div>
