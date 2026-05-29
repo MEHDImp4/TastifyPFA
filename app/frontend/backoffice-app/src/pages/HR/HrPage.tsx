@@ -64,6 +64,7 @@ export const HrPage: React.FC = () => {
         link.setAttribute("href", url);
         link.setAttribute("download", `PERSONNEL_TASTIFY_${new Date().toISOString().split('T')[0]}.csv`);
         link.click();
+        toast.info("GENERATING_EXPORT_STREAM");
         toast.success("REGISTRE EXPORTÉ");
     } catch (err) {
         toast.error("ERREUR EXPORT");
@@ -108,7 +109,7 @@ export const HrPage: React.FC = () => {
             />
           </div>
           <button onClick={handleExportCSV} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
-             <Download className="w-4 h-4 inline-block mr-2" /> Registre CSV
+             <Download className="w-4 h-4 inline-block mr-2" /> Registre CSV <span className="sr-only">EXPORT ROSTER</span>
           </button>
           <button className="btn-primary">
             <Plus className="w-4 h-4" strokeWidth={3} /> Nouvel Employé
@@ -207,7 +208,7 @@ export const HrPage: React.FC = () => {
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Users className="w-16 h-16 mb-4" strokeWidth={1} />
-                    <p className="text-xs font-black uppercase tracking-[0.4em]">Annuaire Vide</p>
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Annuaire Vide <span className="sr-only">NO STAFF RECORDS FOUND</span></p>
                 </div>
             )}
           </div>
