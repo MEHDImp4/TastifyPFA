@@ -171,6 +171,7 @@ export const CategoryPage: React.FC = () => {
           <button 
             onClick={startNewCategory}
             className="btn-primary"
+            data-testid="category-create-button"
           >
             <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Catégorie
           </button>
@@ -196,6 +197,7 @@ export const CategoryPage: React.FC = () => {
             {paginatedCategories.length > 0 ? paginatedCategories.map((cat) => (
                 <div 
                   key={cat.id}
+                  data-testid={`category-card-${cat.id}`}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
                   <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{cat.id}</div>
@@ -222,8 +224,8 @@ export const CategoryPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button onClick={() => selectCategory(cat)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
-                    <button onClick={() => confirmDelete(cat.id)} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => selectCategory(cat)} data-testid={`category-edit-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => confirmDelete(cat.id)} data-testid={`category-delete-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
             )) : (
@@ -277,7 +279,7 @@ export const CategoryPage: React.FC = () => {
                         <div className="relative aspect-video rounded-xl border-2 border-dashed border-outline bg-background flex flex-col items-center justify-center overflow-hidden hover:border-primary transition-all group">
                             {preview ? (
                                 <>
-                                    <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="" />
+                                    <img src={preview} data-testid="category-image-preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-20 transition-all duration-700" alt="" />
                                     <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 z-10 transition-all">
                                         <CloudUpload className="w-10 h-10 text-primary mb-3" />
                                         <span className="text-[10px] font-black text-on-surface uppercase tracking-widest">Remplacer le fichier</span>
@@ -289,23 +291,23 @@ export const CategoryPage: React.FC = () => {
                                     <span className="text-[10px] font-black uppercase tracking-[0.3em]">Charger une icône / Image</span>
                                 </div>
                             )}
-                            <input type="file" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                            <input type="file" data-testid="category-image-input" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
                         </div>
                     </div>
 
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Dénomination</label>
-                        <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="NOM DU SECTEUR" />
+                        <input type="text" required data-testid="category-name-input" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="NOM DU SECTEUR" />
                     </div>
 
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Description Technique</label>
-                        <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DÉTAILS OPÉRATIONNELS..." />
+                        <textarea rows={3} data-testid="category-description-input" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DÉTAILS OPÉRATIONNELS..." />
                     </div>
 
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Rang d'Affichage</label>
-                        <input type="number" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-mono text-xl font-black text-primary focus:border-primary" />
+                        <input type="number" data-testid="category-order-input" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-mono text-xl font-black text-primary focus:border-primary" />
                     </div>
 
                     <div className="py-10 border-y border-outline flex items-center justify-between">
@@ -325,7 +327,7 @@ export const CategoryPage: React.FC = () => {
 
                 <div className="flex-none h-24 bg-surface-container-lowest border-t border-outline p-6 flex gap-6">
                     <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 border border-outline rounded-lg text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Annuler</button>
-                    <button onClick={handleSubmit} disabled={isSaving} className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
+                    <button onClick={handleSubmit} disabled={isSaving} data-testid="category-save-button" className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
                         {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Sauvegarder</>}
                     </button>
                 </div>
