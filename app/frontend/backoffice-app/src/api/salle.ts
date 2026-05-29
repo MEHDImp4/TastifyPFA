@@ -16,7 +16,14 @@ export const salleApi = {
 
   getCommandes: (params?: any) => api.get<Commande[]>('/commandes/', { params }),
   getCommandeByTable: (tableId: number) => api.get<Commande[]>(`/commandes/?table=${tableId}&statut=EN_COURS,EN_CUISINE,PRETE`),
-  createCommande: (data: any) => api.post<Commande>('/commandes/', data),
+  createCommande: (data: Partial<Commande>) => api.post<Commande>('/commandes/', data),
   addItemsToCommande: (id: number, items: any[]) => api.post(`/commandes/${id}/add_items/`, { lignes: items }),
   updateCommandeStatut: (id: number, statut: string) => api.patch(`/commandes/${id}/`, { statut }),
-};
+
+  // Payment methods
+  createManualPayment: (data: { commande: number, montant: string, methode: 'CASH' | 'CARD' }) => 
+    api.post('/paiements/', data),
+  getPaymentQr: (tableId: number) => 
+    api.get<{ token: string, payment_url: string }>(`/tables/${tableId}/qr/`),
+  };
+
