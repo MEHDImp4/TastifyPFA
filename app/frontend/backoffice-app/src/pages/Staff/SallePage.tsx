@@ -93,9 +93,9 @@ export const SallePage: React.FC = () => {
       case 'LIBRE': 
         return 'border-outline-variant bg-surface-container-low text-on-surface hover:border-primary transition-all';
       case 'OCCUPEE': 
-        return 'bg-primary border-primary text-on-primary font-black';
+        return 'bg-primary border-primary text-on-primary font-black bg-amber';
       case 'RESERVEE': 
-        return 'bg-surface-container-high border-primary-container text-primary font-black border-dashed';
+        return 'bg-surface-container-high border-primary-container text-primary font-black border-dashed bg-aged-paper';
       case 'ENCAISSEMENT': 
         return 'bg-error border-error text-on-error animate-pulse font-black';
       default: 
@@ -338,9 +338,9 @@ export const SallePage: React.FC = () => {
                       className={`
                         aspect-square rounded-[2.5rem] flex flex-col items-center justify-between p-8 transition-all active:scale-95 border-2 relative overflow-hidden group
                         ${table.statut === 'LIBRE' ? 'bg-surface-container border-outline-variant/40 text-on-surface hover:border-primary/40' : ''}
-                        ${table.statut === 'OCCUPEE' ? 'bg-primary border-primary text-on-primary' : ''}
+                        ${table.statut === 'OCCUPEE' ? 'bg-primary border-primary text-on-primary bg-amber' : ''}
                         ${table.statut === 'ENCAISSEMENT' ? 'bg-error border-error text-on-error animate-pulse' : ''}
-                        ${table.statut === 'RESERVEE' ? 'bg-surface-container-high border-primary-container text-primary border-dashed' : ''}
+                        ${table.statut === 'RESERVEE' ? 'bg-surface-container-high border-primary-container text-primary border-dashed bg-aged-paper' : ''}
                       `}
                     >
                       <div className="w-full flex justify-between items-center opacity-60">
