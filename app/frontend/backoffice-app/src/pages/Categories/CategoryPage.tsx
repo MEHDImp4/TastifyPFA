@@ -109,7 +109,7 @@ export const CategoryPage: React.FC = () => {
       setIsEditorOpen(false);
       setEditingCategory(null);
     } catch (err) {
-      toast.error('ÉCHEC SAUVEGARDE');
+      toast.error('ÉCHEC SAUVEGARDE (Failed to save category)');
     } finally {
       setIsSaving(false);
     }
@@ -217,7 +217,7 @@ export const CategoryPage: React.FC = () => {
                   <div className="col-span-1 flex justify-center">
                     <div className="w-10 h-10 rounded border border-outline bg-background overflow-hidden shrink-0">
                         {cat.image ? (
-                            <img src={cat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                            <img src={cat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={cat.nom} />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant/20">{cat.nom.charAt(0)}</div>
                         )}
@@ -283,7 +283,7 @@ export const CategoryPage: React.FC = () => {
                         <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingCategory ? 'Configuration Secteur' : 'Nouveau Secteur'}</h2>
                         <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Édition des métadonnées structurelles</p>
                     </div>
-                    <button onClick={() => setIsEditorOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
+                    <button onClick={() => setIsEditorOpen(false)} data-testid="close-editor" className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10">
