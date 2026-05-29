@@ -237,8 +237,8 @@ export const CategoryPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button onClick={() => selectCategory(cat)} data-testid={`category-edit-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
-                    <button onClick={() => confirmDelete(cat.id)} data-testid={`category-delete-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => selectCategory(cat)} data-testid={`category-edit-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all" aria-label="Edit category"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => confirmDelete(cat.id)} data-testid={`category-delete-${cat.id}`} className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-error hover:border-error transition-all" aria-label="Delete category"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
             )) : (
