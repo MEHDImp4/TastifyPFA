@@ -123,3 +123,8 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 ## GitHub Actions CI Scope
 - The supported backend CI gate now runs the full Dockerized repo `pytest` suite under `tastify_backend.settings.test`, alongside `manage.py check` and `makemigrations --check --dry-run`.
 - If a future backend test starts failing only in CI, check first that the workflow command and local Docker command still both force the same Django test settings.
+
+### 15. Relaxed Order Ownership for Staff (Collaborative Service)
+- **Issue**: Previously, only the `serveur` assigned to a `Commande` (or a `GERANT`) could update its status or add items. This caused `403 Forbidden` errors when staff members helped each other or when a different server processed a payment.
+- **Quirk**: In the "Tactical Command" architecture, operational fluidity takes precedence over strict individual ownership.
+- **Fix**: The `CommandeViewSet` now allows any authenticated user with the `SERVEUR` or `GERANT` role to modify any active order. `CUISINIER` is restricted to only marking orders as `PRETE`. `CLIENT` remains restricted to their own orders only.

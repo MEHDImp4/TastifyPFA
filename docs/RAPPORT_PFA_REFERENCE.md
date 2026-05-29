@@ -20,9 +20,17 @@ Tastify est un "Ecosystème de Commandement" pour la restauration haut de gamme,
     *   **Montserrat (Sans) :** Corps de texte et étiquettes techniques pour une lisibilité parfaite.
 *   **Effets :** Micro-animations fluides (Framer Motion), textures de bruit subtiles (SVG noise), et dégradés de lueur (glow).
 
-### **Charte Graphique : Backoffice ("Tactical Command")**
-*   **Axe Créatif :** Haute visibilité, contraste extrême, efficacité opérationnelle.
-*   **Style :** Mode sombre profond, typographies grasses (font-black), espacement compact et couleurs de statut vibrantes (Urgent, Nominal).
+### **Charte Graphique : Backoffice ("Intelligent Restaurant OS")**
+*   **Axe Créatif :** Minimalisme de luxe, précision chirurgicale, "Invisible Hand" (gestion discrète et efficace).
+*   **Palette de Couleurs :**
+    *   **Canevas Pur (#FFFFFF / #FCF9F8) :** Fond blanc cassé pour une clarté maximale et un sentiment de propreté.
+    *   **Bleu Cobalt (#0040E0) :** Utilisé exclusivement pour les appels à l'action primaires et les états critiques.
+    *   **Charbon Profond (#1C1B1B) :** Pour la typographie principale, offrant un contraste doux et sophistiqué.
+    *   **Lignes de Structure (#E5E5E5) :** Hairlines ultra-fines de 0.5px pour définir les zones sans encombrement visuel.
+*   **Typographie :**
+    *   **Inter (Standard UI) :** Utilisée pour l'ensemble de l'interface pour garantir une lisibilité maximale et un aspect professionnel neutre ("Normal font").
+    *   **JetBrains Mono :** Exclusivement pour les données chiffrées et chronomètres.
+*   **Concepts Clés :** "Double-Bezel" (doubles bordures pour la profondeur), Glassmorphism (effets de verre pour les modales), et Espacement Généreux (breathing room).
 
 ---
 
@@ -47,6 +55,7 @@ L'application repose sur une stack moderne, conteneurisée et prête pour le tem
 3.  **Orchestration IA :** L'orchestrateur KDS calcule les temps de préparation pour que tous les plats d'une table soient prêts simultanément.
 4.  **Préparation (KDS) :** Le cuisinier voit les tickets. Il marque les plats comme `PRÊT`.
 5.  **Service :** Une fois tous les plats terminés, le ticket passe en `PRÊT AU SERVICE`. Le serveur reçoit une notification audio et visuelle sur son terminal.
+6.  **Encaissement Hybride :** Le personnel dispose d'un module de paiement tactique permettant de choisir entre un règlement physique immédiat (Espèces, Carte/TPE) ou la génération d'un **QR Code Dynamique** permettant au client de régler en autonomie sur son smartphone via son Hub Membre.
 
 ### **B. Le Parcours de Fidélité & Points**
 1.  **Identité :** Le client s'inscrit sur le portail client (Identité Invité Vérifiée).
@@ -83,6 +92,8 @@ L'application repose sur une stack moderne, conteneurisée et prête pour le tem
 
 ## 5. RÈGLES MÉTIERS SPÉCIFIQUES (BUSINESS RULES)
 *   **Gating Sécuritaire :** La page d'accueil et le menu sont publics. La réservation et la fidélité sont privées.
+*   **Service Collaboratif :** Pour garantir une fluidité totale en période de rush, tout membre du personnel authentifié (Serveur, Gérant) a désormais l'autorité technique et l'accès visuel (QuerySet) pour consulter et modifier n'importe quelle commande active ou d'encaisser un règlement, rompant avec le modèle de propriété individuelle strict pour privilégier l'efficacité collective.
 *   **Absence de Panier :** Tastify se concentre sur l'expérience en salle. Pas de vente à emporter directe ou livraison via l'app client.
+*   **Avis Vérifiés :** Seuls les clients ayant un historique de commande payée peuvent publier un retour d'expérience.
 *   **Priorité d'Affichage :** Les recommandations IA sont transversales (cross-category).
 *   **Alertes Tactiques :** Notifications audios et visuelles (toasts) pour les événements critiques en salle et cuisine.
