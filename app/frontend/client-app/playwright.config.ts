@@ -38,7 +38,7 @@ if (includeExpandedMatrix) {
 
 export default defineConfig({
   testDir: './tests/e2e',
-  testIgnore: includeCrossApp ? [] : [/.*client\.cross-app\.spec\.ts/],
+  testIgnore: includeCrossApp ? [] : ['**/client.cross-app.spec.ts'],
   fullyParallel: false,
   retries: process.env.CI ? 2 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
