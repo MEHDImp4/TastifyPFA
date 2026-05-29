@@ -299,24 +299,25 @@ export const KdsPage: React.FC = () => {
         <div className="flex items-center gap-8">
           <button
             onClick={() => navigate(-1)}
+            aria-label="Retour au tableau de bord"
             className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant hover:text-primary transition-all flex items-center justify-center"
           >
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
           <div>
             <h1 className="text-2xl font-black uppercase tracking-tight text-on-surface italic leading-none">Écran Cuisine <span className="sr-only">Kitchen Display System</span></h1>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2 opacity-60">Système de Monitoring de Production</p>
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Système de Monitoring de Production</p>
           </div>
         </div>
         
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-10 bg-surface-container-low px-10 py-3 rounded-2xl border border-outline-variant">
              <div className="text-center border-r border-outline-variant pr-10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60">Units Actives</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Units Actives</p>
                 <p className="text-2xl font-mono font-black text-on-surface leading-none mt-1">{visibleTickets.length}</p>
              </div>
              <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60">Status</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Status</p>
                 <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> LIVE SYNC
                 </p>
@@ -359,7 +360,7 @@ export const KdsPage: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="h-full flex flex-col items-center justify-center opacity-10 pb-20">
+                  <div aria-hidden="true" className="h-full flex flex-col items-center justify-center opacity-10 pb-20">
                     <PlayCircle className="w-24 h-24 mb-6 stroke-[1]">
                       <span className="sr-only">Sector Clear</span>
                     </PlayCircle>
