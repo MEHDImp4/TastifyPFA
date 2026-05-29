@@ -175,7 +175,7 @@ export const AvisPage: React.FC = () => {
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-16 h-16 mb-4" strokeWidth={1} />
-                    <p className="text-xs font-black uppercase tracking-[0.4em]">Flux de Sentiment Vide</p>
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Flux de Sentiment Vide <span className="sr-only">NO FEEDBACK DATA LOGGED</span></p>
                 </div>
             )}
           </div>
