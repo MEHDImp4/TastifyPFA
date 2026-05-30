@@ -34,7 +34,7 @@ export const SocketIndicator: React.FC = () => {
       default:
         return {
           icon: WifiOff,
-          color: 'text-on-surface/30',
+          color: 'text-on-surface',
           label: 'HORS LIGNE',
           pulse: false,
           bg: 'bg-surface-container-lowest border-outline-variant/10'

@@ -164,7 +164,7 @@ export const ReservationsPage: React.FC = () => {
                       aria-label="Rechercher client"
                       value={search}
                       onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
-                      className="w-full sm:w-[220px] pl-10 pr-3 py-2 rounded-lg bg-surface-container border border-outline text-[10px] font-bold focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
+                      className="w-full sm:w-[220px] pl-10 pr-3 py-2 rounded-lg bg-surface-container border border-outline text-[10px] font-bold focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-on-surface-variant uppercase"
                   />
               </div>
               <div className="flex flex-wrap rounded-lg bg-surface-container border border-outline p-1">
@@ -183,7 +183,7 @@ export const ReservationsPage: React.FC = () => {
       </header>
 
       {/* Scrollable List Body */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-4">
+      <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-4">
         <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
           {paginatedReservations.map((res) => (
             <div 
@@ -316,10 +316,11 @@ export const ReservationsPage: React.FC = () => {
           ))}
 
           {filteredReservations.length === 0 && (
-            <div className="rounded-lg border border-dashed border-outline py-20 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container/20">
+            <div aria-hidden="true" className="rounded-lg border border-dashed border-outline py-20 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container/20">
                 <Calendar className="w-16 h-10 mb-6 opacity-20"  strokeWidth={2.5}/>
                 <p className="text-display-lg text-3xl font-black italic tracking-tighter text-on-surface uppercase opacity-20">Aucune Réservation</p>
-                <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné <span className="sr-only">No Bookings Logged</span></p>
+                <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné</p>
+                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">No Bookings Logged</span>
             </div>
           )}
         </div>

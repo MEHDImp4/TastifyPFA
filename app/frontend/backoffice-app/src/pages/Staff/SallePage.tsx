@@ -279,12 +279,11 @@ export const SallePage: React.FC = () => {
                 <TransformWrapper initialScale={1} centerOnInit={true} minScale={0.2} maxScale={3} disabled={isEditMode && draggingItem !== null}>
                     {({ zoomIn, zoomOut, resetTransform }) => (
                     <div className="h-full w-full relative bg-background">
-                        
-                        {/* Map Controls */}
+                                       {/* Map Controls */}
                         <div className="absolute bottom-10 right-10 z-30 flex flex-col gap-4">
-                            <button onClick={() => zoomIn()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><ZoomIn className="w-7 h-7" /></button>
-                            <button onClick={() => zoomOut()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><ZoomOut className="w-7 h-7" /></button>
-                            <button onClick={() => resetTransform()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><RotateCcw className="w-7 h-7" /></button>
+                            <button aria-label="Zoom In" onClick={() => zoomIn()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><ZoomIn className="w-7 h-7" /></button>
+                            <button aria-label="Zoom Out" onClick={() => zoomOut()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><ZoomOut className="w-7 h-7" /></button>
+                            <button aria-label="Reset Zoom" onClick={() => resetTransform()} className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/50 text-primary flex items-center justify-center rounded-2xl hover:bg-primary hover:text-on-primary transition-all active:scale-90"><RotateCcw className="w-7 h-7" /></button>
                         </div>
 
                         <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
@@ -308,12 +307,13 @@ export const SallePage: React.FC = () => {
                                 {tables.filter(t => t.est_active).map(table => (
                                     <motion.div
                                         key={`table-${table.id}`} layout
+                                        aria-label={'Table ' + table.numero}
                                         onPointerDown={(e) => handlePointerDown(e, 'table', table.id)}
-                                        onDoubleClick={() => handleTableClick(table)}
+                                        onClick={() => handleTableClick(table)}
                                         style={{ left: `${table.pos_x}%`, top: `${table.pos_y}%`, transform: 'translate(-50%, -50%)' }}
                                         className={`absolute flex flex-col items-center justify-center border-2 transition-all duration-300 ${isEditMode ? 'cursor-grab touch-none' : 'cursor-pointer'} ${getStatutStyles(table.statut, draggingItem?.id === table.id)} ${table.capacite >= 6 ? 'w-48 h-28 rounded-2xl' : 'w-32 h-32 rounded-3xl'}`}
                                     >
-                                        <span className="font-sans text-3xl font-black tracking-tighter">{table.numero}</span>
+                                        <span className="font-sans text-3xl font-black tracking-tighter"><span className="sr-only">Table </span>{table.numero}</span>
                                         <div className="flex items-center gap-1.5 mt-2.5 opacity-60 font-sans text-[11px] font-black uppercase tracking-widest">
                                             <Users className="w-4 h-4" /> {table.capacite}
                                         </div>
@@ -326,14 +326,15 @@ export const SallePage: React.FC = () => {
                         </TransformComponent>
                     </div>
                     )}
-                </TransformWrapper>
+                 </TransformWrapper>
               </motion.div>
             ) : (
-              <motion.div key="grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full w-full overflow-y-auto custom-scrollbar p-6 bg-background">
+              <motion.div tabIndex={0} key="grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full w-full overflow-y-auto custom-scrollbar p-6 bg-background">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-5">
                   {tables.filter(t => t.est_active).sort((a, b) => a.numero - b.numero).map((table) => (
                     <button
                       key={`grid-table-${table.id}`}
+                      aria-label={'Table ' + table.numero}
                       onClick={() => handleTableClick(table)}
                       className={`
                         aspect-square rounded-[2.5rem] flex flex-col items-center justify-between p-8 transition-all active:scale-95 border-2 relative overflow-hidden group
@@ -347,7 +348,7 @@ export const SallePage: React.FC = () => {
                         <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-widest"><Users className="w-3.5 h-3.5" /> {table.capacite}</div>
                         <span className="font-sans text-[8px] font-black uppercase tracking-[0.2em]">{table.statut}</span>
                       </div>
-                      <span className="font-serif text-6xl font-black italic tracking-tighter">{table.numero}</span>
+                      <span className="font-serif text-6xl font-black italic tracking-tighter"><span className="sr-only">Table </span>{table.numero}</span>
                       <div className="w-full pt-4 border-t border-current/10 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                          <span className="font-sans text-[10px] font-black uppercase tracking-widest">Ouvrir</span>
                          <ArrowRight className="w-5 h-5" />

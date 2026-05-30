@@ -103,12 +103,12 @@ export const MaintenancePage: React.FC = () => {
               <div className="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[11px] space-y-2 bg-surface-container-lowest/50">
                  {logs.map((log, i) => (
                     <div key={i} className="flex gap-6 group">
-                       <span className="text-on-surface-variant/30 w-16 shrink-0">{log.time}</span>
-                       <span className={`w-12 shrink-0 font-bold ${log.status === 'INFO' ? 'text-primary/40' : log.status === 'WARN' ? 'text-primary' : 'text-error'}`}>[{log.status}]</span>
+                       <span className="text-on-surface-variant w-16 shrink-0">{log.time}</span>
+                       <span className={`w-12 shrink-0 font-bold ${log.status === 'INFO' ? 'text-primary' : log.status === 'WARN' ? 'text-primary' : 'text-error'}`}>[{log.status}]</span>
                        <span className="text-on-surface opacity-80 group-hover:opacity-100 transition-opacity uppercase tracking-tight">{log.msg}</span>
                     </div>
                  ))}
-                 <div className="animate-pulse text-primary/40">_</div>
+                 <div className="animate-pulse text-primary">_</div>
               </div>
            </div>
 

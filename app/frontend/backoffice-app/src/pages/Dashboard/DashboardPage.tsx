@@ -57,7 +57,7 @@ export const DashboardPage: React.FC = () => {
     <div className="h-full flex flex-col items-center justify-center text-error p-8 text-center uppercase tracking-widest font-black">
       <AlertTriangle className="w-16 h-16 mb-4" />
       <h2 className="text-2xl">Data registry offline.</h2>
-      <p className="text-xs text-on-surface-variant/40 mt-3 font-bold">Échec de synchronisation avec le registre analytique principal.</p>
+      <p className="text-xs text-on-surface-variant mt-3 font-bold">Échec de synchronisation avec le registre analytique principal.</p>
       <button onClick={fetchData} className="mt-8 btn-primary">Réessayer</button>
     </div>
   );
@@ -102,7 +102,7 @@ export const DashboardPage: React.FC = () => {
         {kpis.map((kpi, i) => (
           <div key={i} className="luxury-card p-8 group transition-all cursor-default">
              <div className="flex justify-between items-center mb-6">
-                <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60">{kpi.label}</span>
+                <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em]">{kpi.label}</span>
                 <div className={`p-2.5 rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10`}>
                     <kpi.icon className={`w-5 h-5 ${kpi.color}`} strokeWidth={2.5} />
                 </div>
@@ -135,7 +135,7 @@ export const DashboardPage: React.FC = () => {
               </button>
            </div>
 
-           <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
+           <div tabIndex={0} className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
               <div className="grid grid-cols-1 gap-4">
                  {activeTickets.length > 0 ? activeTickets.map((ticket, i) => (
                     <motion.div 
@@ -187,7 +187,7 @@ export const DashboardPage: React.FC = () => {
                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Incidents Critiques</h2>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-6">
+            <div tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar space-y-6">
                 <AnimatePresence mode="wait">
                     {groupedTickets.late.length > 0 ? (
                         groupedTickets.late.map((t) => (

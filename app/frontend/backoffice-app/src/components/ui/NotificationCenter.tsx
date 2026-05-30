@@ -67,7 +67,7 @@ export const NotificationCenter: React.FC = () => {
           </div>
           <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
             {allNotifications.length === 0 ? (
-                <div className="p-12 text-center text-on-surface-variant/40">
+                <div className="p-12 text-center text-on-surface-variant">
                     <CheckCircle2 className="w-12 h-12 mx-auto mb-4 opacity-20 text-success" strokeWidth={1.5}/>
                     <p className="font-sans text-[10px] font-black uppercase tracking-[0.2em]">Système Nominal</p>
                 </div>

@@ -93,7 +93,7 @@ export const Login: React.FC = () => {
                   type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                   placeholder="ID_ALPHA_01"
                   data-testid="login-username"
-                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20 uppercase tracking-tight"
+                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant uppercase tracking-tight"
                 />
               </div>
             </div>
@@ -105,7 +105,7 @@ export const Login: React.FC = () => {
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   placeholder="••••••••"
                   data-testid="login-password"
-                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
+                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant"
                 />
                 <button 
                   type="button"
@@ -113,7 +113,7 @@ export const Login: React.FC = () => {
                   aria-label={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
                   title={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
                   data-testid="login-password-visibility"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/40 hover:text-primary transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:text-primary transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -142,12 +142,12 @@ export const Login: React.FC = () => {
 
         {/* System info tags */}
         <motion.div variants={itemVariants} className="mt-12 flex flex-col items-center gap-2">
-            <div className="flex items-center gap-3 text-on-surface-variant/30 font-sans text-[9px] font-black uppercase tracking-[0.4em]">
+            <div className="flex items-center gap-3 text-on-surface-variant font-sans text-[9px] font-black uppercase tracking-[0.4em]">
                <span>Personnel Autorisé Uniquement</span>
                <div className="w-1 h-1 rounded-full bg-outline-variant/30" />
                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> Chiffrement de Bout en Bout</span>
             </div>
-            <span className="font-mono text-[8px] text-on-surface-variant/20 uppercase tracking-widest mt-2">Nœud v4.2.1 • Tastify PFA</span>
+            <span className="font-mono text-[8px] text-on-surface-variant uppercase tracking-widest mt-2">Nœud v4.2.1 • Tastify PFA</span>
         </motion.div>
       </motion.div>
     </div>

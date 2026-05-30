@@ -248,7 +248,7 @@ export const PlatPage: React.FC = () => {
               placeholder="SEARCH CATALOG..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant"
             />
           </div>
           
@@ -285,14 +285,14 @@ export const PlatPage: React.FC = () => {
         <div className="flex-1 bg-surface-container-lowest border border-outline rounded-xl overflow-hidden flex flex-col">
           
           {/* Table Header */}
-          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
-            <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3" /> ID</div>
-            <div className="col-span-1 flex items-center justify-center"><ImageIcon className="w-3 h-3" /></div>
-            <div className="col-span-4">Nomenclature & Description</div>
-            <div className="col-span-2">Secteur</div>
-            <div className="col-span-1 text-center">Valeur</div>
-            <div className="col-span-1 text-center">Stock</div>
-            <div className="col-span-2 text-right">Actions</div>
+          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface uppercase tracking-[0.3em]">
+            <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3 text-primary" /> ID</div>
+            <div className="col-span-1 flex items-center justify-center"><ImageIcon className="w-3 h-3 text-primary" /></div>
+            <div className="col-span-4 text-on-surface">Nomenclature & Description</div>
+            <div className="col-span-2 text-on-surface">Secteur</div>
+            <div className="col-span-1 text-center text-on-surface">Valeur</div>
+            <div className="col-span-1 text-center text-on-surface">Stock</div>
+            <div className="col-span-2 text-right text-on-surface">Actions</div>
           </div>
 
           {/* Table Body */}
@@ -303,22 +303,22 @@ export const PlatPage: React.FC = () => {
                   data-testid={`plat-card-${plat.id}`}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
-                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{plat.id}</div>
+                  <div className="col-span-1 font-mono text-xs font-black text-on-surface">#{plat.id}</div>
                   <div className="col-span-1 flex justify-center">
                     <div className="w-10 h-10 rounded border border-outline bg-background overflow-hidden shrink-0">
                         {plat.image ? (
                             <img src={plat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={plat.nom} />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant/20">{plat.nom.charAt(0)}</div>
+                            <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface">{plat.nom.charAt(0)}</div>
                         )}
                     </div>
                   </div>
                   <div className="col-span-4 min-w-0 pr-4">
                     <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors truncate">{plat.nom}</h3>
-                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-50 truncate">{plat.description || 'AUCUN RÉCIT CULINAIRE'}</p>
+                    <p className="text-[10px] font-black text-on-surface uppercase tracking-widest mt-1 truncate">{plat.description || 'AUCUN RÉCIT CULINAIRE'}</p>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-[9px] font-black uppercase tracking-widest bg-surface-container-low border border-outline px-3 py-1 rounded text-on-surface-variant">
+                    <span className="text-[9px] font-black uppercase tracking-widest bg-surface-container-low border border-outline px-3 py-1 rounded text-on-surface">
                         {getCategoryName(plat.categorie)}
                     </span>
                   </div>
@@ -349,7 +349,7 @@ export const PlatPage: React.FC = () => {
 
           {/* Table Footer */}
           <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
-            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
                 Total : {filteredPlats.length} Fiches identifiées <span className="sr-only">Active Record Count: {filteredPlats.length}</span>
             </span>
             {totalPages > 1 && (
@@ -357,7 +357,7 @@ export const PlatPage: React.FC = () => {
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
                     <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
                         <span className="text-primary">{currentPage}</span>
-                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface-variant">/</span>
                         <span className="text-on-surface">{totalPages}</span>
                     </div>
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
@@ -387,30 +387,30 @@ export const PlatPage: React.FC = () => {
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-12">
                     <div className="grid grid-cols-3 gap-8">
                         <div className="col-span-3 space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Intitulé du Plat</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Intitulé du Plat</label>
                             <input type="text" required data-testid="plat-name-input" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="DÉNOMINATION CULINAIRE" />
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Secteur d'Affichage</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Secteur d'Affichage</label>
                             <select value={selectedCat} onChange={(e) => setSelectedCat(parseInt(e.target.value))} className="w-full h-14 bg-background border border-outline rounded-lg text-on-surface font-bold text-xs uppercase px-4 focus:border-primary">
                                 {categories.map(c => <option key={c.id} value={c.id}>{c.nom.toUpperCase()}</option>)}
                             </select>
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Tarification (DH)</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Tarification (DH)</label>
                             <input type="number" required data-testid="plat-price-input" value={prix} onChange={(e) => setPrix(e.target.value)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-primary focus:border-primary" placeholder="00" />
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Temps de Préparation (Min)</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Temps de Préparation (Min)</label>
                             <input type="number" required data-testid="plat-time-input" value={temps} onChange={(e) => setTemps(parseInt(e.target.value) || 0)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-primary focus:border-primary" placeholder="15" />
                         </div>
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Ressource Visuelle</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Ressource Visuelle</label>
                         <div className="relative aspect-video rounded-xl border-2 border-dashed border-outline bg-background flex flex-col items-center justify-center overflow-hidden hover:border-primary transition-all group">
                             {preview ? (
                                 <>
@@ -432,7 +432,7 @@ export const PlatPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Récit Culinaire / Ingrédients clés</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Récit Culinaire / Ingrédients clés</label>
                         <textarea rows={4} data-testid="plat-description-input" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DESCRIPTION DÉTAILLÉE POUR LE CLIENT..." />
                     </div>
 
@@ -441,7 +441,7 @@ export const PlatPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-black text-on-surface uppercase">Recette Technique & Déductions</h3>
-                                <p className="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest mt-1">Liaison automatique avec les stocks</p>
+                                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Liaison automatique avec les stocks</p>
                             </div>
                             <button type="button" onClick={addIngredientRow} className="px-4 py-2 bg-primary/10 border border-primary/30 rounded text-[9px] font-black text-primary uppercase hover:bg-primary hover:text-on-primary transition-all">+ Lier Ingrédient</button>
                         </div>
@@ -459,7 +459,7 @@ export const PlatPage: React.FC = () => {
                                         type="number" step="0.01" value={item.quantite} onChange={(e) => updateIngredientRow(index, 'quantite', e.target.value)}
                                         className="w-24 bg-background border border-outline rounded-lg px-3 py-2 font-mono text-xs font-black text-primary text-center"
                                     />
-                                    <button type="button" onClick={() => removeIngredientRow(index)} className="p-2 text-on-surface-variant/40 hover:text-error transition-all"><X className="w-4 h-4" /></button>
+                                    <button type="button" onClick={() => removeIngredientRow(index)} className="p-2 text-on-surface-variant hover:text-error transition-all"><X className="w-4 h-4" /></button>
                                 </div>
                             ))}
                         </div>

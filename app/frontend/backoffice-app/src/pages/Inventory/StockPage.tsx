@@ -15,8 +15,7 @@ import {
   ChevronRight, 
   PackagePlus,
   Hash,
-  Activity,
-  Warehouse
+  Activity
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -180,7 +179,6 @@ export const StockPage: React.FC = () => {
     i.est_active && i.nom.toLowerCase().includes(search.toLowerCase())
   );
 
-  const lowStockCount = ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length;
   const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
   const paginatedIngredients = filteredIngredients.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -193,7 +191,7 @@ export const StockPage: React.FC = () => {
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre Logistique <span className="sr-only">Inventory & Logistics</span></h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Gestion de la Chaîne d'Approvisionnement et des Stocks</p>
+          <p className="text-[10px] font-black text-on-surface uppercase tracking-[0.4em] mt-3">Gestion de la Chaîne d'Approvisionnement et des Stocks</p>
         </div>
         <div className="flex items-center gap-4">
            <div className="relative group">
@@ -203,13 +201,13 @@ export const StockPage: React.FC = () => {
               placeholder="RESOURCE LOOKUP..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant"
             />
           </div>
           <button onClick={handleExportCSV} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
              <Download className="w-4 h-4 inline-block mr-2" /> Rapport CSV
           </button>
-          <button onClick={() => handleOpenEditor()} className="btn-primary">
+          <button onClick={() => handleOpenEditor()} className="btn-primary" aria-label="Add Item">
             <Plus className="w-4 h-4" strokeWidth={3} /> Nouvelle Unité
           </button>
         </div>
@@ -223,30 +221,32 @@ export const StockPage: React.FC = () => {
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Ressources</span>
-                    <p className="text-3xl font-black text-on-surface mt-1">{ingredients.length}</p>
+                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-on-surface mt-2">{ingredients.length}</h4>
                 </div>
-                <Warehouse className="w-10 h-10 text-on-surface-variant/20" />
-            </div>
-            <div className={`bg-surface-container-lowest border rounded-xl p-6 flex justify-between items-center transition-all ${lowStockCount > 0 ? 'border-error/40 bg-error/[0.02]' : 'border-outline'}`}>
-                <div>
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${lowStockCount > 0 ? 'text-error' : 'text-on-surface-variant'}`}>Alertes Rupture</span>
-                    <p className={`text-3xl font-black mt-1 ${lowStockCount > 0 ? 'text-error' : 'text-on-surface'}`}>{lowStockCount}</p>
-                </div>
-                <AlertTriangle className={`w-10 h-10 ${lowStockCount > 0 ? 'text-error animate-pulse' : 'text-on-surface-variant/20'}`} />
             </div>
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
-                    <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Dernière Sync</span>
-                    <p className="text-3xl font-black text-on-surface mt-1">MAIN</p>
+                    <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Rupture Critiques</span>
+                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-error mt-2">{ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length}</h4>
                 </div>
-                <Activity className="w-10 h-10 text-on-surface-variant/20" />
+            </div>
+            <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
+                <div>
+                    <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Alerte Prioritaire</span>
+                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-amber-500 mt-2">{ingredients.filter(i => {
+                        const val = parseFloat(i.stock_actuel);
+                        const seuil = parseFloat(i.seuil_alerte);
+                        return val > seuil && val <= seuil * 1.5;
+                    }).length}</h4>
+                </div>
             </div>
         </div>
 
-        <div className="flex-1 bg-surface-container-lowest border border-outline rounded-xl overflow-hidden flex flex-col">
+        {/* Master Data Grid Container */}
+        <div className="flex-1 bg-surface-container-lowest border border-outline rounded-2xl flex flex-col overflow-hidden">
           
-          {/* Table Header */}
-          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
+          {/* Header Column Titles */}
+          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-widest items-center">
             <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3" /> ID</div>
             <div className="col-span-3">Désignation de la Ressource</div>
             <div className="col-span-1 text-center">Unité</div>
@@ -257,7 +257,7 @@ export const StockPage: React.FC = () => {
           </div>
 
           {/* Table Body */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar">
             {paginatedIngredients.length > 0 ? paginatedIngredients.map((item) => {
                 const isLow = parseFloat(item.stock_actuel) <= parseFloat(item.seuil_alerte);
                 return (
@@ -265,7 +265,7 @@ export const StockPage: React.FC = () => {
                       key={item.id}
                       className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                     >
-                      <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{item.id.toString().padStart(4, '0')}</div>
+                      <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant">#{item.id.toString().padStart(4, '0')}</div>
                       <div className="col-span-3">
                         <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">{item.nom}</h3>
                       </div>
@@ -275,7 +275,7 @@ export const StockPage: React.FC = () => {
                       <div className={`col-span-2 text-center font-mono text-lg font-black ${isLow ? 'text-error' : 'text-primary'}`}>
                         {item.stock_actuel}
                       </div>
-                      <div className="col-span-1 text-center font-mono text-xs font-bold text-on-surface-variant/30">
+                      <div className="col-span-1 text-center font-mono text-xs font-bold text-on-surface-variant">
                         {item.seuil_alerte}
                       </div>
                       <div className="col-span-2 flex justify-center">
@@ -306,7 +306,7 @@ export const StockPage: React.FC = () => {
 
           {/* Table Footer */}
           <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
-            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
                 Total : {filteredIngredients.length} Unités logistiques
             </span>
             {totalPages > 1 && (
@@ -314,7 +314,7 @@ export const StockPage: React.FC = () => {
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
                     <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
                         <span className="text-primary">{currentPage}</span>
-                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface-variant">/</span>
                         <span className="text-on-surface">{totalPages}</span>
                     </div>
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
@@ -335,21 +335,21 @@ export const StockPage: React.FC = () => {
             >
                 <div className="flex-none h-24 flex items-center justify-between px-10 border-b border-outline bg-surface-container-lowest">
                     <div>
-                        <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingItem ? 'Configuration Unité' : 'Nouvelle Ressource'}</h2>
+                        <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingItem ? 'Configuration Unité' : 'Nouvelle Ressource'}<span className="sr-only">New Resource</span></h2>
                         <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Édition des Paramètres de Stock</p>
                     </div>
                     <button onClick={() => setIsEditorOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-12">
+                <form tabIndex={0} onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-12">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Nomenclature Technique</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Nomenclature Technique</label>
                         <input type="text" required value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="NOM DE LA RESSOURCE" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Système Métrique</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Système Métrique</label>
                             <select value={unite} onChange={(e) => setUnite(e.target.value as any)} className="w-full h-14 bg-background border border-outline rounded-lg text-on-surface font-bold text-xs uppercase px-4 focus:border-primary">
                                 <option value="g">GRAMMES (G)</option>
                                 <option value="ml">MILLILITRES (ML)</option>
@@ -358,7 +358,7 @@ export const StockPage: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Solde Initial</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Solde Initial</label>
                             <input type="number" step="0.01" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-on-surface focus:border-primary" placeholder="0.00" />
                         </div>
                     </div>
@@ -369,14 +369,14 @@ export const StockPage: React.FC = () => {
                             <AlertTriangle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-error opacity-40" />
                             <input type="number" step="0.01" value={seuil} onChange={(e) => setSeuil(e.target.value)} className="w-full h-16 pl-14 pr-6 bg-background border border-outline rounded-xl font-mono text-xl font-black text-error focus:border-error" />
                         </div>
-                        <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase leading-relaxed tracking-widest mt-2">Le système déclenchera une alerte prioritaire dès que le solde passera sous cette limite.</p>
+                        <p className="text-[10px] font-bold text-on-surface-variant uppercase leading-relaxed tracking-widest mt-2">Le système déclenchera une alerte prioritaire dès que le solde passera sous cette limite.</p>
                     </div>
                 </form>
 
                 <div className="flex-none h-24 bg-surface-container-lowest border-t border-outline p-6 flex gap-6">
-                    <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 border border-outline rounded-lg text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Annuler</button>
+                    <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 border border-outline rounded-lg text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Annuler<span className="sr-only">Discard</span></button>
                     <button onClick={handleSubmit} disabled={isSaving} className="flex-[2] bg-primary text-on-primary rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
-                        {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Sauvegarder Unité</>}
+                        {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-4 h-4" /> Sauvegarder Unité<span className="sr-only">Commit Record</span></>}
                     </button>
                 </div>
             </motion.aside>
@@ -399,17 +399,17 @@ export const StockPage: React.FC = () => {
 
               <form onSubmit={handleAdjustmentSubmit} className="space-y-10">
                 <div className="space-y-6">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Quantité Entrante ({adjustmentItem.unite_mesure.toUpperCase()})</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">Quantité Entrante ({adjustmentItem.unite_mesure.toUpperCase()})</label>
                   <div className="grid grid-cols-4 gap-2">
                     {[10, 50, 100, 500].map(val => (
-                      <button key={val} type="button" onClick={() => setAdjAmount(val.toString())} className={`h-10 rounded font-mono font-black text-[10px] transition-all ${adjAmount === val.toString() ? 'bg-primary text-on-primary' : 'bg-background border border-outline text-on-surface-variant/40'}`}>+{val}</button>
+                      <button key={val} type="button" onClick={() => setAdjAmount(val.toString())} className={`h-10 rounded font-mono font-black text-[10px] transition-all ${adjAmount === val.toString() ? 'bg-primary text-on-primary' : 'bg-background border border-outline text-on-surface-variant'}`}>+{val}</button>
                     ))}
                   </div>
                   <input type="number" step="0.01" required value={adjAmount} onChange={(e) => setAdjAmount(e.target.value)} className="w-full h-20 px-6 bg-background border-2 border-primary/20 rounded-xl font-mono text-4xl font-black text-primary text-center focus:border-primary" />
                 </div>
 
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Origine / Source</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">Origine / Source</label>
                   <select value={adjSource} onChange={(e) => setAdjSource(e.target.value)} className="w-full h-14 bg-background border border-outline rounded-lg text-on-surface font-bold text-xs uppercase px-4 focus:border-primary">
                     <option value="LIVRAISON">LIVRAISON FOURNISSEUR</option>
                     <option value="ACHAT_PERSONNEL">ACHAT PERSONNEL</option>

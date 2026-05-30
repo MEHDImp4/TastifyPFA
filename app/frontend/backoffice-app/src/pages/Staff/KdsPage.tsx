@@ -99,7 +99,7 @@ const KdsTicket = ({
     };
 
     return (
-        <div className={`luxury-card flex flex-col overflow-hidden shrink-0 mb-6 transition-all ${isCritical && !isDone ? 'ring-2 ring-error/20 border-error/30' : 'border-outline-variant'}`}>
+        <div data-testid={`kds-ticket-${ticket.id}`} className={`luxury-card flex flex-col overflow-hidden shrink-0 mb-6 transition-all ${isCritical && !isDone ? 'ring-2 ring-error/20 border-error/30' : 'border-outline-variant'}`}>
             
             {/* En-tête du Ticket */}
             <div className={`p-5 ${statusBg} border-b border-outline-variant flex justify-between items-start`}>
@@ -109,15 +109,16 @@ const KdsTicket = ({
                             TABLE {ticket.table_numero || '??'}
                         </span>
                         {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
+                        {isDone && <span className="sr-only">DONE</span>}
                     </div>
-                    <h3 className="font-mono text-sm font-bold text-on-surface-variant opacity-60">ID-NEURAL: #{ticket.id}</h3>
+                    <h3 className="font-mono text-sm font-bold text-on-surface opacity-80">ID-NEURAL: #{ticket.id}</h3>
                 </div>
                 
                 <div className="text-right flex flex-col items-end">
                     <TicketTimer createdAt={ticket.created_at} onCritical={setIsCritical} />
-                    <div className="flex items-center gap-1.5 mt-2 opacity-40">
+                    <div className="flex items-center gap-1.5 mt-2 opacity-80">
                         <Timer className="w-3.5 h-3.5" />
-                        <span className="font-sans text-[9px] font-bold uppercase tracking-widest">Temps réel</span>
+                        <span className="font-sans text-[9px] font-bold uppercase tracking-widest text-on-surface">Temps réel</span>
                     </div>
                 </div>
             </div>
@@ -130,7 +131,7 @@ const KdsTicket = ({
                         <button 
                             key={item.id}
                             onClick={() => onUpdateItem(item.id, item.statut)}
-                            className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-5 ${isItemReady ? 'bg-success/5 border-success/20 opacity-40' : 'bg-surface-container-lowest border-outline-variant hover:border-primary active:scale-[0.98]'}`}
+                            className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-5 ${isItemReady ? 'bg-success/5 border-success/20 opacity-60' : 'bg-surface-container-lowest border-outline-variant hover:border-primary active:scale-[0.98]'}`}
                         >
                             <span className={`font-mono text-3xl font-black w-10 text-center ${isItemReady ? 'text-success' : 'text-primary'}`}>
                                 {item.quantite}
@@ -139,15 +140,19 @@ const KdsTicket = ({
                                 <p className={`font-sans text-lg font-black uppercase tracking-tight ${isItemReady ? 'text-on-surface-variant line-through' : 'text-on-surface'}`}>
                                     {item.plat_nom}
                                 </p>
-                                <span className="sr-only">{item.statut === 'PRET' ? 'DONE' : (item.statut === 'EN_PREPARATION' ? 'In Preparation' : 'Pending')}</span>
-                                {item.notes && (
-                                    <p className="font-sans text-[10px] font-bold text-primary uppercase mt-1.5 tracking-wider bg-primary/5 inline-block px-2 py-1 rounded border border-primary/10">
-                                        NOTE: {item.notes}
-                                    </p>
-                                )}
+                                <div className="flex gap-2 items-center mt-1">
+                                    <span className="text-[10px] font-black px-2 py-0.5 rounded bg-primary text-on-primary uppercase">
+                                        {item.statut === 'PRET' ? 'DONE' : (item.statut === 'EN_PREPARATION' ? 'In Preparation' : 'Pending')}
+                                    </span>
+                                    {item.notes && (
+                                        <p className="font-sans text-[10px] font-black text-primary bg-primary/20 uppercase tracking-wider inline-block px-2 py-0.5 rounded border border-primary/30">
+                                            NOTE: {item.notes}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
-                            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center shrink-0 ${isItemReady ? 'bg-success border-success' : 'border-outline-variant group-hover:border-primary'}`}>
-                                {isItemReady && <Check className="w-6 h-6 text-white" strokeWidth={4} />}
+                            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center shrink-0 ${isItemReady ? 'bg-success border-success' : 'border-outline group-hover:border-primary'}`}>
+                                {isItemReady && <Check className="w-6 h-6 text-on-success" strokeWidth={4} />}
                             </div>
                         </button>
                     );
@@ -245,8 +250,9 @@ export const KdsPage: React.FC = () => {
 
   const handleUpdateItem = async (ligneId: number, currentStatut: string) => {
     let nextStatut = '';
-    if (currentStatut === 'EN_ATTENTE' || currentStatut === 'EN_PREPARATION') nextStatut = 'PRET';
-    else if (currentStatut === 'PRET') nextStatut = 'EN_PREPARATION';
+    if (currentStatut === 'EN_ATTENTE') nextStatut = 'EN_PREPARATION';
+    else if (currentStatut === 'EN_PREPARATION') nextStatut = 'PRET';
+    else if (currentStatut === 'PRET') nextStatut = 'EN_ATTENTE';
     else return;
 
     updateLigneStatut(ligneId, nextStatut);
@@ -306,72 +312,71 @@ export const KdsPage: React.FC = () => {
           </button>
           <div>
             <h1 className="text-2xl font-black uppercase tracking-tight text-on-surface italic leading-none">Écran Cuisine <span className="sr-only">Kitchen Display System</span></h1>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Système de Monitoring de Production</p>
+            <p className="text-[10px] font-bold text-on-surface uppercase tracking-[0.3em] mt-2">Système de Monitoring de Production</p>
           </div>
         </div>
         
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-10 bg-surface-container-low px-10 py-3 rounded-2xl border border-outline-variant">
              <div className="text-center border-r border-outline-variant pr-10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Units Actives</p>
-                <p className="text-2xl font-mono font-black text-on-surface leading-none mt-1">{visibleTickets.length}</p>
+             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Units Actives</p>
+             <p className="text-2xl font-mono font-black text-on-surface leading-none mt-1">{visibleTickets.length}</p>
              </div>
              <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Status</p>
-                <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> LIVE SYNC
-                </p>
+             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Status</p>
+             <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
+             <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> LIVE SYNC
+             </p>
              </div>
-          </div>
-          
-          <button 
-            onClick={fetchTickets}
-            className="h-14 px-8 rounded-xl bg-surface-container text-on-surface border border-outline-variant font-black uppercase tracking-widest text-[11px] hover:text-primary hover:border-primary transition-all flex items-center gap-3 active:scale-95"
-          >
-            <RotateCcw className="w-4 h-4" /> Actualiser
-          </button>
-        </div>
-      </header>
+             </div>
 
-      {/* Kanban Grid */}
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-px bg-outline-variant overflow-hidden">
-        {columns.map((col) => {
-          const colTickets = visibleTickets.filter(t => t.statut === col.id);
-          
-          return (
-            <section key={col.id} className="relative flex flex-col h-full bg-surface-container-lowest">
-              <header className="flex-none h-16 bg-surface-container-high border-b border-outline-variant px-8 flex items-center justify-between z-10">
-                <h2 className="text-xs font-black uppercase tracking-[0.4em] text-on-surface-variant">{col.label}</h2>
-                <div className="bg-primary/5 text-primary text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest border border-primary/10">
-                  {colTickets.length} TICKETS
-                </div>
-              </header>
+             <button 
+             onClick={fetchTickets}
+             className="h-14 px-8 rounded-xl bg-surface-container text-on-surface border border-outline-variant font-black uppercase tracking-widest text-[11px] hover:text-primary hover:border-primary transition-all flex items-center gap-3 active:scale-95"
+             >
+             <RotateCcw className="w-4 h-4" /> Actualiser
+             </button>
+             </div>
+             </header>
 
-              <div className="absolute top-16 left-0 right-0 bottom-0 overflow-y-auto p-10 custom-scrollbar">
-                {colTickets.length > 0 ? (
-                  <div className="flex flex-col">
-                    {colTickets.map((ticket) => (
-                      <KdsTicket 
-                        key={ticket.id} 
-                        ticket={ticket} 
-                        onUpdateItem={handleUpdateItem} 
-                        onUpdateCommand={handleUpdateCommand} 
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div aria-hidden="true" className="h-full flex flex-col items-center justify-center opacity-10 pb-20">
-                    <PlayCircle className="w-24 h-24 mb-6 stroke-[1]">
-                      <span className="sr-only">Sector Clear</span>
-                    </PlayCircle>
-                    <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em]">SECTEUR CLAIR</p>
-                  </div>
-                )}
-              </div>
-            </section>
-          );
-        })}
-      </main>
+             {/* Kanban Grid */}
+             <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-px bg-outline-variant overflow-hidden">
+             {columns.map((col) => {
+             const colTickets = visibleTickets.filter(t => t.statut === col.id);
+
+             return (
+             <section key={col.id} className="relative flex flex-col h-full bg-surface-container-lowest">
+             <header className="flex-none h-16 bg-surface-container-high border-b border-outline-variant px-8 flex items-center justify-between z-10">
+             <h2 className="text-xs font-black uppercase tracking-[0.4em] text-on-surface">{col.label}</h2>
+             <div className="bg-primary text-on-primary text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest border border-primary">
+             {colTickets.length} TICKETS
+             </div>
+             </header>
+
+             <div tabIndex={0} className="absolute top-16 left-0 right-0 bottom-0 overflow-y-auto p-10 custom-scrollbar">
+             {colTickets.length > 0 ? (
+             <div className="flex flex-col">
+             {colTickets.map((ticket) => (
+               <KdsTicket 
+                 key={ticket.id} 
+                 ticket={ticket} 
+                 onUpdateItem={handleUpdateItem} 
+                 onUpdateCommand={handleUpdateCommand} 
+               />
+             ))}
+             </div>
+             ) : (
+             <div className="h-full flex flex-col items-center justify-center pb-20">
+             <PlayCircle aria-hidden="true" className="w-24 h-24 mb-6 stroke-[2] text-primary" />
+             <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em] text-on-surface">SECTEUR CLAIR</p>
+             <span aria-hidden="true" className="text-sm font-black uppercase tracking-widest text-on-surface mt-2">Sector Clear</span>
+             </div>
+             )}
+             </div>
+             </section>
+             );
+             })}
+             </main>
     </div>
   );
 };

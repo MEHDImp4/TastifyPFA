@@ -178,7 +178,7 @@ export const CategoryPage: React.FC = () => {
               placeholder="FILTRER PAR NOM..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant"
             />
           </div>
           <button 
@@ -213,13 +213,13 @@ export const CategoryPage: React.FC = () => {
                   data-testid={`category-card-${cat.id}`}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
-                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{cat.id}</div>
+                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant">#{cat.id}</div>
                   <div className="col-span-1 flex justify-center">
                     <div className="w-10 h-10 rounded border border-outline bg-background overflow-hidden shrink-0">
                         {cat.image ? (
                             <img src={cat.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={cat.nom} />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant/20">{cat.nom.charAt(0)}</div>
+                            <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-on-surface-variant">{cat.nom.charAt(0)}</div>
                         )}
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export const CategoryPage: React.FC = () => {
                     <span className="font-mono text-xs font-black text-primary bg-primary/5 px-3 py-1 rounded border border-primary/20">{cat.ordre_affichage.toString().padStart(2, '0')}</span>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded border ${cat.est_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant/40'}`}>
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded border ${cat.est_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'}`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${cat.est_active ? 'bg-success' : 'bg-outline-variant'}`} />
                       <span className="text-[9px] font-black uppercase tracking-widest">{cat.est_active ? 'ACTIF' : 'INACTIF'}</span>
                     </div>
@@ -251,7 +251,7 @@ export const CategoryPage: React.FC = () => {
 
           {/* Table Footer / Pagination */}
           <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
-            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
                 Total : {filteredCategories.length} Secteurs identifiés
             </span>
             {totalPages > 1 && (
@@ -259,7 +259,7 @@ export const CategoryPage: React.FC = () => {
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
                     <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
                         <span className="text-primary">{currentPage}</span>
-                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface-variant">/</span>
                         <span className="text-on-surface">{totalPages}</span>
                     </div>
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
@@ -288,7 +288,7 @@ export const CategoryPage: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Ressource Visuelle</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Ressource Visuelle</label>
                         <div className="relative aspect-video rounded-xl border-2 border-dashed border-outline bg-background flex flex-col items-center justify-center overflow-hidden hover:border-primary transition-all group">
                             {preview ? (
                                 <>
@@ -309,24 +309,24 @@ export const CategoryPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Dénomination</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Dénomination</label>
                         <input type="text" required data-testid="category-name-input" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" placeholder="NOM DU SECTEUR" />
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Description Technique</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Description Technique</label>
                         <textarea rows={3} data-testid="category-description-input" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" placeholder="DÉTAILS OPÉRATIONNELS..." />
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Rang d'Affichage</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Rang d'Affichage</label>
                         <input type="number" data-testid="category-order-input" value={ordre} onChange={(e) => setOrdre(parseInt(e.target.value) || 0)} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-mono text-xl font-black text-primary focus:border-primary" />
                     </div>
 
                     <div className="py-10 border-y border-outline flex items-center justify-between">
                         <div>
                             <span className="text-sm font-black text-on-surface uppercase tracking-tight">Statut de Visibilité</span>
-                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest mt-1">Actif sur le TPV et Menu Digital</p>
+                            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Actif sur le TPV et Menu Digital</p>
                         </div>
                         <button 
                             type="button"

@@ -156,6 +156,7 @@ export const OrderingPage: React.FC = () => {
         toast.success('Articles envoyés');
         setCart([]);
         await fetchData(true);
+        navigate('/salle');
       } else {
         const orderRes = await salleApi.createCommande({
           table: Number(tableId),
@@ -259,7 +260,7 @@ export const OrderingPage: React.FC = () => {
               placeholder="SEARCH MENU..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-48 md:w-64 h-11 bg-surface-container border border-outline-variant/50 pl-10 pr-4 rounded-xl font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
+              className="w-48 md:w-64 h-11 bg-surface-container border border-outline-variant/50 pl-10 pr-4 rounded-xl font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant"
             />
           </div>
           
@@ -380,7 +381,7 @@ export const OrderingPage: React.FC = () => {
                 {currentCommande && currentCommande.lignes && currentCommande.lignes.length > 0 && (
                   <div className="flex flex-col border-b border-outline-variant">
                     <div className="px-8 py-3 bg-surface-container-highest/30 flex items-center justify-between border-b border-outline-variant/10">
-                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">Enregistré</span>
+                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Enregistré</span>
                        <span className="font-sans text-[10px] font-bold text-primary italic uppercase tracking-tighter">ID: #{currentCommande.id}</span>
                     </div>
                     {currentCommande.lignes.map(ligne => (
@@ -404,7 +405,7 @@ export const OrderingPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <span className="font-sans text-[15px] font-black text-on-surface-variant/40 tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire || '0') * ligne.quantite).toFixed(0)} DH</span>
+                        <span className="font-sans text-[15px] font-black text-on-surface-variant tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire || '0') * ligne.quantite).toFixed(0)} DH</span>
                       </div>
                     ))}
                   </div>
@@ -438,7 +439,7 @@ export const OrderingPage: React.FC = () => {
                         </div>
                         <div className="flex flex-col items-end gap-3 shrink-0 py-0.5">
                           <span className="font-sans text-[17px] font-black text-primary tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
-                          <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-2 rounded-lg bg-error/5 text-error/30 hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
+                          <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-2 rounded-lg bg-error/5 text-error hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
                               <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
@@ -453,7 +454,7 @@ export const OrderingPage: React.FC = () => {
           {/* Action Footer */}
           <div className="flex-none p-8 bg-surface-container-high border-t border-outline-variant space-y-6 z-30">
             <div className="space-y-2.5">
-              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                 <span>Déjà Commandé</span>
                 <span className="tabular-nums">{existingTotal.toFixed(0)} DH</span>
               </div>
@@ -484,8 +485,8 @@ export const OrderingPage: React.FC = () => {
               
               {currentCommande && cart.length > 0 && (
                  <div className="flex items-center justify-center gap-2 py-2 px-4 rounded bg-surface-container border border-outline-variant/30">
-                    <AlertCircle className="w-3.5 h-3.5 text-on-surface-variant/40" />
-                    <p className="font-sans text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">Envoyer la suite pour encaisser</p>
+                    <AlertCircle className="w-3.5 h-3.5 text-on-surface-variant" />
+                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Envoyer la suite pour encaisser</p>
                  </div>
               )}
             </div>
@@ -567,7 +568,7 @@ export const OrderingPage: React.FC = () => {
 
                       <div className="flex items-center gap-6 py-4">
                           <div className="h-px flex-1 bg-outline-variant/20" />
-                          <span className="text-[9px] font-black text-on-surface-variant/30 uppercase tracking-widest">Ou client scanne</span>
+                          <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Ou client scanne</span>
                           <div className="h-px flex-1 bg-outline-variant/20" />
                       </div>
 

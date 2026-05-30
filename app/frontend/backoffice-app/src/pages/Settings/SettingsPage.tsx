@@ -129,12 +129,12 @@ export const SettingsPage: React.FC = () => {
                     
                     <div className="grid grid-cols-2 gap-10">
                         <div className="col-span-2 space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Raison Sociale / Enseigne</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Raison Sociale / Enseigne</label>
                             <input type="text" aria-label="Trading Name" name="nom" value={config.nom} onChange={handleInputChange} className="w-full h-16 px-6 bg-background border border-outline rounded-xl font-black text-2xl text-on-surface uppercase focus:border-primary" />
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Devise Opérationnelle</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Devise Opérationnelle</label>
                             <div className="relative">
                                 <Coins className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                                 <select name="devise" value={config.devise} onChange={handleInputChange} className="w-full h-14 pl-12 pr-6 bg-background border border-outline rounded-lg text-on-surface font-bold text-xs uppercase focus:border-primary">
@@ -146,12 +146,12 @@ export const SettingsPage: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Ligne de Contact</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Ligne de Contact</label>
                             <input type="text" aria-label="Primary Contact" name="telephone" value={config.telephone || ''} onChange={handleInputChange} className="w-full h-14 px-6 bg-background border border-outline rounded-lg font-mono text-lg font-black text-on-surface focus:border-primary" />
                         </div>
 
                         <div className="col-span-2 space-y-4">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Adresse Physique de l'Établissement</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Adresse Physique de l'Établissement</label>
                             <textarea rows={2} name="adresse" value={config.adresse || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none" />
                         </div>
                     </div>
@@ -163,7 +163,7 @@ export const SettingsPage: React.FC = () => {
                         <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.2em]">Présence Digitale</h2>
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Description Gastronomique (Client App)</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Description Gastronomique (Client App)</label>
                         <textarea rows={3} aria-label="Restaurant Description" name="description" value={config.description || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none italic" />
                     </div>
                 </section>
@@ -192,7 +192,7 @@ export const SettingsPage: React.FC = () => {
                         >
                             <div className="text-left">
                                 <p className="text-[11px] font-black text-on-surface uppercase tracking-tight">Séquençage Auto</p>
-                                <p className="text-[9px] font-bold text-on-surface-variant/40 uppercase mt-1">Envoi automatique en cuisine</p>
+                                <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1">Envoi automatique en cuisine</p>
                             </div>
                             <div className={`w-10 h-5 rounded-full relative transition-all ${config.auto_send_main_course ? 'bg-primary' : 'bg-surface-container-high'}`}>
                                 <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${config.auto_send_main_course ? 'right-1' : 'left-1'}`} />
@@ -208,7 +208,7 @@ export const SettingsPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40 ml-1">Sceau de l'Établissement (Logo)</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Sceau de l'Établissement (Logo)</label>
                         <div className="relative group aspect-square bg-background border-2 border-dashed border-outline rounded-xl flex flex-col items-center justify-center overflow-hidden hover:border-primary transition-all">
                             {logoPreview ? (
                                 <>

@@ -139,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="w-2 h-2 rounded-full bg-success"></div>
               <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">System Ready</span>
             </div>
-            <span className="font-mono text-[9px] text-on-surface-variant/40">V1.4.2</span>
+            <span className="font-mono text-[9px] text-on-surface-variant">V1.4.2</span>
           </div>
 
           <button

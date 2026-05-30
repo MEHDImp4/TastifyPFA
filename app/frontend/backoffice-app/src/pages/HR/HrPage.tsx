@@ -105,7 +105,7 @@ export const HrPage: React.FC = () => {
               placeholder="SEARCH BY NAME, ROLE, OR ID..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant"
             />
           </div>
           <button onClick={handleExportCSV} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
@@ -164,7 +164,7 @@ export const HrPage: React.FC = () => {
                   key={emp.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
                 >
-                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant/40">#{emp.id.toString().padStart(4, '0')}</div>
+                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant">#{emp.id.toString().padStart(4, '0')}</div>
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-10 h-10 rounded bg-background border border-outline flex items-center justify-center shrink-0">
                         <span className="font-serif text-sm font-black text-on-surface">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
@@ -175,7 +175,7 @@ export const HrPage: React.FC = () => {
                             ? `${emp.user_details.first_name} ${emp.user_details.last_name}`
                             : emp.user_details?.username || 'Inconnu'}
                         </h3>
-                        <p className="text-[9px] font-mono font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-50">@{emp.user_details?.username || 'no_user'}</p>
+                        <p className="text-[9px] font-mono font-black text-on-surface uppercase tracking-widest mt-1">@{emp.user_details?.username || 'no_user'}</p>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
@@ -185,7 +185,7 @@ export const HrPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${emp.user_details?.is_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant/40'}`}>
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${emp.user_details?.is_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface'}`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${emp.user_details?.is_active ? 'bg-success' : 'bg-outline-variant'}`} />
                       <span className="text-[9px] font-black uppercase tracking-widest">{emp.user_details?.is_active ? 'OPÉRATIONNEL' : 'HORS SERVICE'}</span>
                     </div>
@@ -206,16 +206,17 @@ export const HrPage: React.FC = () => {
                   </div>
                 </div>
             )) : (
-                <div className="h-64 flex flex-col items-center justify-center opacity-10">
+                <div aria-hidden="true" className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Users className="w-16 h-16 mb-4" strokeWidth={1} />
-                    <p className="text-xs font-black uppercase tracking-[0.4em]">Annuaire Vide <span className="sr-only">NO STAFF RECORDS FOUND</span></p>
+                    <p className="text-xs font-black uppercase tracking-[0.4em]">Annuaire Vide</p>
+                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">NO STAFF RECORDS FOUND</span>
                 </div>
             )}
           </div>
 
           {/* Table Footer */}
           <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
-            <span className="text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
                 Total : {filteredEmployes.length} Dossiers Personnel
             </span>
             {totalPages > 1 && (
@@ -223,7 +224,7 @@ export const HrPage: React.FC = () => {
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
                     <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
                         <span className="text-primary">{currentPage}</span>
-                        <span className="text-on-surface-variant/30">/</span>
+                        <span className="text-on-surface-variant">/</span>
                         <span className="text-on-surface">{totalPages}</span>
                     </div>
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
