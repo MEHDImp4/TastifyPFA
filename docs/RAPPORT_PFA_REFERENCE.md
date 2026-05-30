@@ -1,12 +1,17 @@
 # RÉFÉRENTIEL TECHNIQUE ET FONCTIONNEL : TASTIFY (RAPPORT PFA)
 *Ce document constitue la source de vérité pour la rédaction du rapport de Projet de Fin d'Études.*
-*Dernière mise à jour : 28 Mai 2026*
+*Dernière mise à jour : 1er Juin 2026*
 
 ---
 
 ## 1. VISION ET IDENTITÉ VISUELLE
 
 Tastify est un "Ecosystème de Commandement" pour la restauration haut de gamme, fusionnant une interface client luxueuse et organique avec un centre d'opérations tactique ultra-efficace.
+
+### **Mandat "Absolute Visibility" & "Zero Transparency"**
+*   **Philosophie :** L'information fonctionnelle (Login, KDS, Dashboard) doit être lisible instantanément sans aucune ambiguïté.
+*   **Zéro Transparence :** Interdiction stricte des calques semi-transparents, des flous de fond (backdrop blur) et des couleurs de texte à faible opacité (opacity < 60%) pour le contenu critique.
+*   **Contraste Élevé :** Utilisation systématique de graisses de police "Extra Bold" et de couleurs à fort contraste (ex: `#301400` sur fond clair ou blanc pur sur fond sombre) pour les données d'exploitation.
 
 ### **Charte Graphique : Portail Client ("Warm Organic Sophistication")**
 *   **Axe Créatif :** Chaleureux, haut de gamme, minimaliste et appétissant.

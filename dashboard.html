@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-30 01:51:52<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-05-30 01:52:59<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -508,6 +508,26 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 10:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Update:</strong> Absolute Visibility Overhaul (Text Contrast)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 10:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Batch Refactor**: Removed all low-opacity text colors (opacity < 60%) across 14 backoffice files to ensure perfect legibility and compliance with the "Zero Transparency" mandate.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 10:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Affected Files**: `NotificationCenter`, `SocketIndicator`, `Sidebar`, `Login`, `AvisPage`, `CategoryPage`, `DashboardPage`, `HrPage`, `StockPage`, `PlatPage`, `SettingsPage`, `OrderingPage`, `ReservationsPage`, `MaintenancePage`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 10:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Styling**: Standardized on 100% opaque `text-on-surface`, `text-on-surface-variant`, and functional color tokens (`text-primary`, `text-error`, etc.) to resolve accessibility failures and align with high-end operational standards.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-29 21:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Update:</strong> E2E & Axe Contrast Accessibility (Second Wave)</p>
                             </li>
@@ -560,26 +580,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **PlatPage.tsx**: Replaced the filter visual icon + hidden button with a visible, styled button wrapping `<Filter>` and added correct aria-labels: `"Filter"` (Filter button), `"Filter by category"` (select sector dropdown), `"Toggle availability"` (Toggle button), `"Edit dish"` (Edit button), `"Delete dish"` (Delete button).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **CategoryPage.tsx**: Added accessible `"Edit category"` and `"Delete category"` aria-labels to the edit/delete list buttons.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **KdsPage.tsx**: Appended `<span className="sr-only">Sector Clear</span>` within the empty state PlayCircle container, added `<span className="sr-only">` status labels to items list plat names (DONE/In Preparation/Pending), and added `"Ready to Window"` and `"Force Ready"` screen-reader labels to action buttons.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ReservationsPage.tsx**: Applied grid layout classes `grid grid-cols-1 gap-4` to the main list container, added `"CONFIRM"` and `"CANCEL BOOKING"` screen-reader spans to action buttons, updated `filteredReservations` search filter logic to support `"guest"` and `"anonymous"` fallbacks, and added `"ANONYMOUS GUEST"` screen-reader fallback inside anonymous client name headers.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **OrderingPage.tsx**: Added `data-testid="qty-minus"`, `data-testid="qty-plus"`, and `data-testid="remove-item"` to cart line item action buttons, and added `data-testid="order-submit"` to the main kitchen send button.</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>

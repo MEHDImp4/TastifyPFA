@@ -1,3 +1,9 @@
+## [2026-06-01] - 10:30 - Absolute Visibility Overhaul (Text Contrast)
+### Fixed
+- **Batch Refactor**: Removed all low-opacity text colors (opacity < 60%) across 14 backoffice files to ensure perfect legibility and compliance with the "Zero Transparency" mandate.
+- **Affected Files**: `NotificationCenter`, `SocketIndicator`, `Sidebar`, `Login`, `AvisPage`, `CategoryPage`, `DashboardPage`, `HrPage`, `StockPage`, `PlatPage`, `SettingsPage`, `OrderingPage`, `ReservationsPage`, `MaintenancePage`.
+- **Styling**: Standardized on 100% opaque `text-on-surface`, `text-on-surface-variant`, and functional color tokens (`text-primary`, `text-error`, etc.) to resolve accessibility failures and align with high-end operational standards.
+
 ## [2026-05-29] - 21:30 - E2E & Axe Contrast Accessibility (Second Wave)
 ### Fixed
 - **kds.ts**: Updated the ticket fetch endpoint from `/commandes/?statut=EN_COURS,EN_CUISINE,PRETE` to `/commandes/?statut=EN_CUISINE,PRETE` to align precisely with E2E mocks.
