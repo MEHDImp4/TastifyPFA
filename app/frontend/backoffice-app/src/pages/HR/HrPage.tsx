@@ -92,7 +92,7 @@ export const HrPage: React.FC = () => {
       {/* Header */}
       <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
+          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel <span className="sr-only">Human Resources</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion des effectifs et accès opérationnels</p>
         </div>
         <div className="flex items-center gap-4">
@@ -100,14 +100,14 @@ export const HrPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input 
               type="text"
-              placeholder="rechercher..."
+              placeholder="SEARCH BY NAME, ROLE, OR ID..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
             />
           </div>
           <button onClick={handleExportCSV} className="btn-ghost h-10 px-4">
-             <Download className="w-3.5 h-3.5" /> <span>Export CSV</span>
+             <Download className="w-3.5 h-3.5" /> <span>EXPORT ROSTER</span>
           </button>
           <button className="btn-primary h-10 px-6">
             <Plus className="w-4 h-4" /> <span>Nouvel Employé</span>
@@ -206,7 +206,7 @@ export const HrPage: React.FC = () => {
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Users className="w-12 h-12 mb-4" strokeWidth={1} />
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucun personnel</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">NO STAFF RECORDS FOUND</p>
                 </div>
             )}
           </div>

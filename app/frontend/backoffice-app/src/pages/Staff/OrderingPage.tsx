@@ -226,26 +226,26 @@ export const OrderingPage: React.FC = () => {
 
   if (isLoading) return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50">
-      <Loader2 className="w-12 h-12 animate-spin text-primary" strokeWidth={3}/>
-      <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-primary mt-8 animate-pulse">Chargement...</p>
+      <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1}/>
+      <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-on-surface-variant mt-8">Chargement...</p>
     </div>
   );
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-background p-0 selection:bg-primary/20 selection:text-primary font-body overflow-hidden text-on-background">
+    <div className="fixed inset-0 flex flex-col bg-background p-0 selection:bg-on-background/10 font-body overflow-hidden text-on-background">
       
       {/* Tactical Header */}
-      <header className="flex-none h-20 bg-surface-container-lowest border-b border-outline-variant px-4 md:px-staff-margin flex items-center justify-between z-30">
+      <header className="flex-none h-20 bg-surface border-b border-outline px-4 md:px-staff-margin flex items-center justify-between z-30">
         <div className="flex items-center gap-4 md:gap-8">
-          <button onClick={() => navigate('/salle')} className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant hover:text-primary transition-all flex items-center justify-center">
-            <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
+          <button onClick={() => navigate('/salle')} className="w-12 h-12 rounded-lg bg-surface border border-outline hover:text-on-background transition-all flex items-center justify-center active:scale-95">
+            <ArrowLeft className="w-6 h-6" strokeWidth={1.5} />
           </button>
           <div>
             <div className="flex items-center gap-3">
-               <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary  leading-none">Table {table?.numero}</h1>
+               <h1 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-on-background leading-none">Table {table?.numero}</h1>
                {currentCommande && (
-                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-sans text-[9px] font-black uppercase tracking-widest">
-                     <Hash className="w-3 h-3" /> {currentCommande.id}
+                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface-container-high text-on-background border border-outline font-mono text-[9px] font-bold uppercase tracking-widest">
+                     <Hash className="w-3 h-3 opacity-20" /> {currentCommande.id}
                    </div>
                )}
             </div>
@@ -254,36 +254,36 @@ export const OrderingPage: React.FC = () => {
         
         <div className="flex items-center gap-3 md:gap-6">
           <div className="relative group hidden sm:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background" />
             <input 
               type="text"
               placeholder="SEARCH MENU..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-48 md:w-64 h-11 bg-surface-container border border-outline-variant/50 pl-10 pr-4 rounded-xl font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant"
+              className="w-48 md:w-64 h-11 bg-background border border-outline pl-10 pr-4 rounded-md font-sans text-xs font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
             />
           </div>
           
            <button 
              onClick={handleOpenPayModal}
              disabled={!currentCommande || isPaying}
-             className="h-12 md:h-14 px-6 md:px-8 bg-success text-on-success rounded-xl font-sans text-[10px] md:text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all disabled:opacity-20 disabled:grayscale"
+             className="btn-primary h-12 md:h-14 px-6 md:px-8 bg-success text-on-success border-success hover:brightness-110 disabled:opacity-20"
            >
              Encaisser {currentCommande ? `${parseFloat(currentCommande.montant_total).toFixed(0)} DH` : ''}
            </button>
            
-           <button onClick={() => fetchData(true)} className="p-3 rounded-xl bg-surface-container border border-outline-variant text-primary hover:bg-primary hover:text-on-primary transition-all">
-            <RefreshCcw className="w-5 h-5" />
+           <button onClick={() => fetchData(true)} className="p-3 rounded-lg bg-surface border border-outline text-on-surface-variant hover:text-on-background transition-all active:rotate-180 duration-500">
+            <RefreshCcw className="w-5 h-5" strokeWidth={1.5} />
           </button>
 
           {isMobile && (
             <button 
               onClick={() => setShowCart(!showCart)}
-              className={`p-3 rounded-xl relative transition-all border ${showCart ? 'bg-primary border-primary text-on-primary' : 'bg-surface-container border-outline-variant text-on-surface'}`}
+              className={`p-3 rounded-lg relative transition-all border ${showCart ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-background'}`}
             >
               {showCart ? <UtensilsCrossed className="w-6 h-6" /> : <ReceiptText className="w-6 h-6" />}
               {(cart.length > 0 || (currentCommande?.lignes?.length || 0) > 0) && !showCart && (
-                <span className="absolute -top-1.5 -right-1.5 bg-error text-on-error text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
+                <span className="absolute -top-1.5 -right-1.5 bg-error text-on-error text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
                   {cart.length + (currentCommande?.lignes?.length || 0)}
                 </span>
               )}
@@ -298,15 +298,15 @@ export const OrderingPage: React.FC = () => {
         <section 
           data-testid="menu-catalog" 
           className={`
-            flex-[7] flex flex-col min-w-0 border-r border-outline-variant bg-background transition-all duration-500 ease-in-out
+            flex-[7] flex flex-col min-w-0 border-r border-outline bg-background transition-all duration-500 ease-in-out
             ${isMobile && showCart ? 'translate-x-[-100%] absolute inset-0 z-0 opacity-0 pointer-events-none' : 'translate-x-0 relative z-10'}
           `}
         >
           {/* Categories */}
-          <div className="flex-none h-16 border-b border-outline-variant bg-surface-container-lowest flex gap-2.5 p-2 overflow-x-auto no-scrollbar">
+          <div className="flex-none h-16 border-b border-outline bg-surface flex gap-2.5 p-2 overflow-x-auto no-scrollbar">
             <button
                 onClick={() => setActiveCat(null)}
-                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === null ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
+                className={`px-6 rounded-md font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === null ? 'bg-on-background text-background border-on-background' : 'bg-background border-outline text-on-surface-variant hover:border-on-background hover:text-on-background'}`}
             >
               Tous
             </button>
@@ -314,7 +314,7 @@ export const OrderingPage: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`px-6 rounded-lg font-sans text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === cat.id ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container border-outline-variant text-on-surface-variant hover:border-primary/40'}`}
+                className={`px-6 rounded-md font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap border ${activeCat === cat.id ? 'bg-on-background text-background border-on-background' : 'bg-background border-outline text-on-surface-variant hover:border-on-background hover:text-on-background'}`}
               >
                 {cat.nom}
               </button>
@@ -328,21 +328,21 @@ export const OrderingPage: React.FC = () => {
                    key={plat.id}
                    onClick={() => { addToCart(plat); if (isMobile) toast.success(`${plat.nom} +1`, { duration: 600, position: 'bottom-center' }); }}
                    className={`
-                     group bg-surface-container border-2 border-outline-variant rounded-2xl p-4 md:p-6 text-left transition-all hover:border-primary hover:bg-surface-container-high active:scale-[0.96] relative overflow-hidden h-40 md:h-48
-                     ${!plat.est_disponible ? 'opacity-40 grayscale cursor-not-allowed border-dashed' : ''}
+                     group atelier-card p-4 md:p-6 text-left transition-all hover:border-on-background active:scale-[0.96] relative overflow-hidden h-40 md:h-48
+                     ${!plat.est_disponible ? 'opacity-20 grayscale cursor-not-allowed border-dashed' : ''}
                    `}
                    disabled={!plat.est_disponible}
                  >
                     <div className="flex flex-col gap-1">
-                       <h3 className=" text-base md:text-lg font-black text-on-surface uppercase tracking-tight leading-tight line-clamp-2 ">{plat.nom}</h3>
-                       <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">
+                       <h3 className="text-base md:text-lg font-bold text-on-surface uppercase tracking-tight leading-tight line-clamp-2">{plat.nom}</h3>
+                       <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
                          {categories.find(c => c.id === plat.categorie)?.nom}
                        </span>
                     </div>
                     <div className="flex items-end justify-between mt-auto">
-                       <span className="font-sans text-lg md:text-xl font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
-                       <div className="size-10 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
-                          <Plus className="w-5 h-5 text-on-surface group-hover:text-on-primary" strokeWidth={4} />
+                       <span className="font-mono text-lg md:text-xl font-bold text-on-background tabular-nums">{parseFloat(plat.prix).toFixed(0)} DH</span>
+                       <div className="size-10 rounded-md bg-background border border-outline flex items-center justify-center group-hover:bg-on-background group-hover:border-on-background transition-all">
+                          <Plus className="w-5 h-5 text-on-surface group-hover:text-background" strokeWidth={3} />
                        </div>
                     </div>
                  </button>
@@ -355,17 +355,17 @@ export const OrderingPage: React.FC = () => {
         <section 
           data-testid="ordering-cart" 
           className={`
-            flex-[3] flex flex-col bg-surface-container border-l border-outline-variant z-20 transition-all duration-500 ease-in-out
+            flex-[3] flex flex-col bg-surface border-l border-outline z-20 transition-all duration-500 ease-in-out
             ${isMobile ? (showCart ? 'w-full translate-x-0 relative' : 'w-full translate-x-[100%] absolute inset-0 opacity-0 pointer-events-none') : 'min-w-[400px] translate-x-0 relative'}
           `}
         >
-          <div className="flex-none p-8 border-b border-outline-variant flex items-center justify-between bg-surface-container-high">
+          <div className="flex-none p-8 border-b border-outline flex items-center justify-between bg-surface-container-high">
              <div className="flex items-center gap-4">
-                <ShoppingCart className="w-6 h-6 text-primary" />
-                <h2 className="text-sm font-black text-on-surface uppercase tracking-[0.3em]">Ticket Actuel <span className="sr-only">Active Ticket</span></h2>
+                <ShoppingCart className="w-6 h-6 text-on-background opacity-20" strokeWidth={1.5}/>
+                <h2 className="text-sm font-bold text-on-surface uppercase tracking-[0.3em]">Ticket Actuel <span className="sr-only">Active Ticket</span></h2>
              </div>
-             <div className="bg-primary/10 text-primary px-3 py-1 rounded-lg font-sans text-[11px] font-black tabular-nums border border-primary/20">
-               {cart.length + (currentCommande?.lignes?.length || 0)} <span className="text-[9px] opacity-60 ml-1">PCS</span>
+             <div className="bg-on-background text-background px-3 py-1 rounded-md font-mono text-[10px] font-bold tabular-nums">
+               {cart.length + (currentCommande?.lignes?.length || 0)} <span className="text-[9px] opacity-40 ml-1 uppercase">PCS</span>
             </div>
           </div>
 
@@ -373,30 +373,30 @@ export const OrderingPage: React.FC = () => {
             {cart.length === 0 && (!currentCommande || !currentCommande.lignes || currentCommande.lignes.length === 0) ? (
                <div className="h-full flex flex-col items-center justify-center p-12 opacity-10 gap-6">
                   <UtensilsCrossed className="w-16 h-16 stroke-[0.5]" />
-                  <p className="font-sans text-[10px] font-black uppercase tracking-[0.5em] text-center">Ticket Vide <span className="sr-only">Ticket Buffer Empty</span></p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-center">Ticket Vide <span className="sr-only">Ticket Buffer Empty</span></p>
                </div>
             ) : (
               <div className="flex flex-col">
                 {/* Existing Commanded Items */}
                 {currentCommande && currentCommande.lignes && currentCommande.lignes.length > 0 && (
-                  <div className="flex flex-col border-b border-outline-variant">
-                    <div className="px-8 py-3 bg-surface-container-highest/30 flex items-center justify-between border-b border-outline-variant/10">
-                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Enregistré</span>
-                       <span className="font-sans text-[10px] font-bold text-primary  uppercase tracking-tighter">ID: #{currentCommande.id}</span>
+                  <div className="flex flex-col border-b border-outline">
+                    <div className="px-8 py-3 bg-surface-container-high/50 flex items-center justify-between border-b border-outline">
+                       <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-40">Enregistré</span>
+                       <span className="font-mono text-[10px] font-bold text-on-background uppercase">ID: #{currentCommande.id}</span>
                     </div>
                     {currentCommande.lignes.map(ligne => (
-                      <div key={ligne.id} className="px-8 py-5 border-b border-outline-variant/10 bg-surface-container-low/20 flex justify-between items-start group">
+                      <div key={ligne.id} className="px-8 py-5 border-b border-outline/5 bg-background flex justify-between items-start group">
                         <div className="flex gap-4 min-w-0 flex-1">
-                          <div className="h-10 w-10 rounded-xl bg-surface-container-highest flex items-center justify-center font-sans text-sm font-black text-on-surface-variant/60 tabular-nums border border-outline-variant/20">
+                          <div className="h-10 w-10 rounded-md bg-surface-container-high flex items-center justify-center font-mono text-sm font-bold text-on-surface-variant tabular-nums border border-outline">
                             {ligne.quantite}x
                           </div>
                           <div className="flex-1 min-w-0 py-0.5">
-                            <p className="font-body text-[15px] font-bold text-on-surface/80 truncate uppercase tracking-tight">{ligne.plat_nom || 'Item'}</p>
+                            <p className="text-[15px] font-bold text-on-surface truncate uppercase tracking-tight">{ligne.plat_nom || 'Item'}</p>
                             <div className="flex items-center gap-2.5 mt-1.5">
-                               <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full font-sans text-[8px] font-black uppercase tracking-widest border transition-colors ${
-                                 ligne.statut === 'SERVI' ? 'bg-success/10 text-success border-success/20' : 
-                                 ligne.statut === 'PRET' ? 'bg-primary/10 text-primary border-primary/20 animate-pulse' : 
-                                 'bg-surface-container-highest text-on-surface-variant/60 border-outline-variant/30'
+                               <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[8px] font-bold uppercase tracking-widest transition-colors ${
+                                 ligne.statut === 'SERVI' ? 'bg-success/5 text-success border-success/20' : 
+                                 ligne.statut === 'PRET' ? 'bg-on-background text-background border-on-background' : 
+                                 'bg-surface-container-high text-on-surface-variant border-outline'
                                }`}>
                                  {ligne.statut === 'PRET' && <CheckCircle2 className="w-2.5 h-2.5" />}
                                  {ligne.statut === 'EN_PREPARATION' && <Clock className="w-2.5 h-2.5 animate-spin" />}
@@ -405,7 +405,7 @@ export const OrderingPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <span className="font-sans text-[15px] font-black text-on-surface-variant tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire || '0') * ligne.quantite).toFixed(0)} DH</span>
+                        <span className="font-mono text-[14px] font-bold text-on-surface-variant tabular-nums mt-1">{(parseFloat(ligne.prix_unitaire || '0') * ligne.quantite).toFixed(0)} DH</span>
                       </div>
                     ))}
                   </div>
@@ -414,33 +414,33 @@ export const OrderingPage: React.FC = () => {
                 {/* New Cart Items */}
                 {cart.length > 0 && (
                   <div className="flex flex-col">
-                    <div className="px-8 py-3 bg-primary/5 flex items-center gap-3 border-b border-primary/10">
-                       <Plus className="w-3.5 h-3.5 text-primary" strokeWidth={3} />
-                       <span className="font-sans text-[10px] font-black uppercase tracking-widest text-primary">Nouveaux Articles</span>
+                    <div className="px-8 py-3 bg-on-background/5 flex items-center gap-3 border-b border-outline">
+                       <Plus className="w-3.5 h-3.5 text-on-background" strokeWidth={3} />
+                       <span className="text-[10px] font-bold uppercase tracking-widest text-on-background">Nouveaux Articles</span>
                     </div>
                     {cart.map((item, idx) => (
-                      <div key={`new-${item.plat.id}-${idx}`} data-testid={`cart-item-${item.plat.id}`} className="px-8 py-5 border-b border-outline-variant hover:bg-surface-container-high transition-all group bg-primary/[0.02] flex justify-between items-start">
+                      <div key={`new-${item.plat.id}-${idx}`} data-testid={`cart-item-${item.plat.id}`} className="px-8 py-5 border-b border-outline hover:bg-surface-container-high transition-all group bg-surface-container-low/30 flex justify-between items-start">
                         <div className="flex gap-4 min-w-0 flex-1">
-                          <div className="h-11 w-11 rounded-xl bg-primary/20 flex items-center justify-center font-sans text-base font-black text-primary tabular-nums border border-primary/30">
+                          <div className="h-11 w-11 rounded-md bg-on-background text-background flex items-center justify-center font-mono text-base font-bold tabular-nums">
                              {item.quantite}x
                           </div>
                           <div className="flex-1 min-w-0 py-0.5">
-                            <p className="font-body text-[16px] font-bold text-on-surface truncate uppercase tracking-tight">{item.plat.nom}</p>
+                            <p className="text-[16px] font-bold text-on-surface truncate uppercase tracking-tight">{item.plat.nom}</p>
                             <div className="flex items-center gap-4 mt-2">
-                              <button onClick={() => updateCartQty(item.plat.id, -1)} data-testid="qty-minus" className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                              <button onClick={() => updateCartQty(item.plat.id, -1)} data-testid="qty-minus" className="p-1.5 rounded border border-outline bg-background hover:bg-on-background hover:text-background transition-all">
                                 <Minus className="w-3.5 h-3.5" strokeWidth={3} />
                               </button>
-                              <span className="font-sans text-sm font-black text-on-surface tabular-nums">{item.quantite}</span>
-                              <button onClick={() => addToCart(item.plat)} data-testid="qty-plus" className="p-1.5 rounded-lg bg-surface-container border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+                              <span className="font-mono text-sm font-bold text-on-surface tabular-nums">{item.quantite}</span>
+                              <button onClick={() => addToCart(item.plat)} data-testid="qty-plus" className="p-1.5 rounded border border-outline bg-background hover:bg-on-background hover:text-background transition-all">
                                 <Plus className="w-3.5 h-3.5" strokeWidth={3} />
                               </button>
                             </div>
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-3 shrink-0 py-0.5">
-                          <span className="font-sans text-[17px] font-black text-primary tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
-                          <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-2 rounded-lg bg-error/5 text-error hover:bg-error/10 hover:text-error transition-all opacity-0 group-hover:opacity-100">
-                              <Trash2 className="w-5 h-5" />
+                          <span className="font-mono text-[17px] font-bold text-on-background tabular-nums">{(parseFloat(item.plat.prix) * item.quantite).toFixed(0)} DH</span>
+                          <button onClick={() => removeFromCart(item.plat.id)} data-testid="remove-item" className="p-2 rounded-md bg-error/5 text-error hover:bg-error/10 transition-all opacity-0 group-hover:opacity-100">
+                              <Trash2 className="w-5 h-5" strokeWidth={1.5} />
                           </button>
                         </div>
                       </div>
@@ -452,19 +452,19 @@ export const OrderingPage: React.FC = () => {
           </div>
 
           {/* Action Footer */}
-          <div className="flex-none p-8 bg-surface-container-high border-t border-outline-variant space-y-6 z-30">
+          <div className="flex-none p-8 bg-surface-container-high border-t border-outline space-y-6 z-30">
             <div className="space-y-2.5">
-              <div className="flex justify-between items-center font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
-                <span>Déjà Commandé</span>
-                <span className="tabular-nums">{existingTotal.toFixed(0)} DH</span>
+              <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
+                <span>Enregistré</span>
+                <span className="font-mono tabular-nums">{existingTotal.toFixed(0)} DH</span>
               </div>
-              <div className="flex justify-between items-center font-sans text-[11px] font-black text-primary uppercase tracking-widest">
-                <span>En attente</span>
-                <span className="tabular-nums">{cartTotal.toFixed(0)} DH</span>
+              <div className="flex justify-between items-center text-[11px] font-bold text-on-background uppercase tracking-widest">
+                <span>Nouveaux</span>
+                <span className="font-mono tabular-nums">{cartTotal.toFixed(0)} DH</span>
               </div>
-              <div className="pt-4 border-t border-outline-variant border-dashed flex justify-between items-center">
-                <span className=" text-2xl font-black text-on-surface  tracking-tight uppercase">TOTAL</span>
-                <span className="font-sans text-3xl font-black text-primary tabular-nums tracking-tighter">{grandTotal.toFixed(0)} DH</span>
+              <div className="pt-4 border-t border-outline border-dashed flex justify-between items-center">
+                <span className="text-2xl font-bold text-on-surface tracking-tight uppercase">TOTAL</span>
+                <span className="font-mono text-3xl font-bold text-on-background tabular-nums tracking-tighter">{grandTotal.toFixed(0)} DH</span>
               </div>
             </div>
 
@@ -473,20 +473,20 @@ export const OrderingPage: React.FC = () => {
                 onClick={handleSubmitOrder}
                 disabled={cart.length === 0 || isSubmitting}
                 data-testid="order-submit"
-                className="w-full h-18 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border-2 border-primary group disabled:opacity-20 disabled:grayscale"
+                className="w-full h-18 btn-primary rounded-xl text-[11px] uppercase tracking-[0.4em] gap-4 disabled:opacity-20"
               >
                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                   <>
-                    <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" strokeWidth={3} />
+                    <Send className="w-5 h-5" strokeWidth={2} />
                     <span>Envoyer en cuisine</span>
                   </>
                 )}
               </button>
               
               {currentCommande && cart.length > 0 && (
-                 <div className="flex items-center justify-center gap-2 py-2 px-4 rounded bg-surface-container border border-outline-variant/30">
-                    <AlertCircle className="w-3.5 h-3.5 text-on-surface-variant" />
-                    <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Envoyer la suite pour encaisser</p>
+                 <div className="flex items-center justify-center gap-2 py-2 px-4 rounded bg-background border border-outline">
+                    <AlertCircle className="w-3.5 h-3.5 text-on-surface-variant opacity-40" />
+                    <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Envoyer la suite pour encaisser</p>
                  </div>
               )}
             </div>
@@ -499,15 +499,15 @@ export const OrderingPage: React.FC = () => {
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-md">
            <button 
              onClick={() => setShowCart(true)}
-             className="w-full h-18 bg-background text-primary rounded-2xl flex items-center justify-between px-10 font-sans text-[12px] font-black uppercase tracking-[0.3em] border border-primary/30"
+             className="w-full h-18 bg-surface-container-high text-on-background rounded-2xl flex items-center justify-between px-8 font-bold text-[11px] uppercase tracking-[0.2em] border border-outline shadow-2xl"
            >
-             <span className="flex items-center gap-5">
-               <ReceiptText className="w-6 h-6" strokeWidth={2.5} />
+             <span className="flex items-center gap-4">
+               <ReceiptText className="w-5 h-5" strokeWidth={1.5} />
                <span>TICKET ({cart.length + (currentCommande?.lignes?.length || 0)})</span>
              </span>
              <div className="flex items-center gap-3">
-                <span className="bg-primary/10 px-5 py-2 rounded-full border border-primary/20 tabular-nums">{grandTotal.toFixed(0)} DH</span>
-                <ChevronRight className="w-5 h-5 opacity-30" />
+                <span className="bg-on-background text-background px-4 py-1.5 rounded font-mono tabular-nums">{grandTotal.toFixed(0)} DH</span>
+                <ChevronRight className="w-4 h-4 opacity-20" />
              </div>
            </button>
         </div>
@@ -516,20 +516,18 @@ export const OrderingPage: React.FC = () => {
       {/* --- Payment Modal --- */}
       <AnimatePresence>
         {isPayModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-8 bg-on-surface/40">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 md:p-8 bg-on-background/10 backdrop-blur-sm">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl bg-surface-container border border-outline-variant rounded-[2.5rem] overflow-hidden relative"
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+              className="w-full max-w-xl bg-surface border border-outline rounded-xl overflow-hidden relative shadow-2xl"
             >
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-primary" />
-              
-              <div className="p-10 md:p-12 border-b border-outline-variant bg-surface-container-high flex justify-between items-center">
+              <div className="p-10 md:p-12 border-b border-outline bg-surface-container-high flex justify-between items-center">
                 <div>
-                  <h3 className=" text-3xl font-black text-on-surface uppercase tracking-tight  leading-none">Règlement</h3>
-                  <p className="text-[10px] font-bold text-primary uppercase mt-3 tracking-[0.4em]">Table {table?.numero} • Total : {parseFloat(currentCommande?.montant_total || '0').toFixed(0)} DH</p>
+                  <h3 className="text-3xl font-bold text-on-surface uppercase tracking-tight leading-none">Règlement</h3>
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase mt-3 tracking-[0.4em]">Table {table?.numero} • Total : {parseFloat(currentCommande?.montant_total || '0').toFixed(0)} DH</p>
                 </div>
-                <button onClick={() => setIsPayModalOpen(false)} className="p-3 bg-surface-container-low hover:bg-surface-container-highest border border-outline-variant rounded-full transition-all text-on-surface-variant hover:text-primary">
-                  <X className="w-7 h-7" />
+                <button onClick={() => setIsPayModalOpen(false)} className="p-2 border border-outline rounded hover:bg-background transition-all text-on-surface-variant">
+                  <X className="w-6 h-6" strokeWidth={1.5}/>
                 </button>
               </div>
 
@@ -537,80 +535,80 @@ export const OrderingPage: React.FC = () => {
                 <AnimatePresence mode="wait">
                   {paymentStep === 'CHOICE' ? (
                     <motion.div 
-                      key="choice" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
+                      key="choice" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
                       className="flex flex-col gap-6"
                     >
                       <button 
                         onClick={() => handleManualPay('CASH')}
-                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-success/40 hover:bg-success/5 transition-all text-left"
+                        className="group flex items-center gap-6 p-8 bg-background border border-outline rounded-lg hover:border-on-background transition-all text-left"
                       >
-                         <div className="w-16 h-16 rounded-2xl bg-success/10 flex items-center justify-center text-success group-hover:scale-110 transition-transform">
-                            <Banknote className="w-10 h-10" />
+                         <div className="w-14 h-14 rounded bg-success/5 flex items-center justify-center text-success">
+                            <Banknote className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Espèces</p>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-60">Validation physique immédiate</p>
+                            <p className="text-lg font-bold text-on-surface uppercase tracking-widest">Espèces</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-40">Validation physique immédiate</p>
                          </div>
                       </button>
 
                       <button 
                         onClick={() => handleManualPay('CARD')}
-                        className="group flex items-center gap-8 p-8 bg-surface-container-low border-2 border-outline-variant/30 rounded-[2rem] hover:border-primary/40 hover:bg-primary/5 transition-all text-left"
+                        className="group flex items-center gap-6 p-8 bg-background border border-outline rounded-lg hover:border-on-background transition-all text-left"
                       >
-                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                            <CreditCard className="w-10 h-10" />
+                         <div className="w-14 h-14 rounded bg-on-background/5 flex items-center justify-center text-on-background">
+                            <CreditCard className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-black text-on-surface uppercase tracking-widest">Carte Bancaire</p>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-60">Utilisation Terminal Externe</p>
+                            <p className="text-lg font-bold text-on-surface uppercase tracking-widest">Carte Bancaire</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest opacity-40">Utilisation Terminal Externe</p>
                          </div>
                       </button>
 
                       <div className="flex items-center gap-6 py-4">
-                          <div className="h-px flex-1 bg-outline-variant/20" />
-                          <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Ou client scanne</span>
-                          <div className="h-px flex-1 bg-outline-variant/20" />
+                          <div className="h-px flex-1 bg-outline" />
+                          <span className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-30">Ou client scanne</span>
+                          <div className="h-px flex-1 bg-outline" />
                       </div>
 
                       <button 
                         onClick={handleGenerateQr}
-                        className="group flex items-center gap-8 p-8 bg-background border-2 border-primary/20 rounded-[2rem] hover:scale-[1.02] transition-all text-left"
+                        className="group flex items-center gap-6 p-8 bg-on-background text-background rounded-lg hover:brightness-110 transition-all text-left"
                       >
-                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                            <QrCode className="w-10 h-10" />
+                         <div className="w-14 h-14 rounded bg-background/10 flex items-center justify-center text-background">
+                            <QrCode className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-black text-primary uppercase tracking-widest ">Lien de Paiement QR</p>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Apple Pay, Google Pay, Carte</p>
+                            <p className="text-lg font-bold uppercase tracking-widest">Lien de Paiement QR</p>
+                            <p className="text-[9px] font-bold uppercase mt-1 tracking-widest opacity-60">Apple Pay, Google Pay, Carte</p>
                          </div>
                       </button>
                     </motion.div>
                   ) : (
                     <motion.div 
-                      key="qr" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                      key="qr" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
                       className="flex flex-col items-center text-center space-y-10"
                     >
-                       <div className="p-10 bg-white rounded-[3rem] border-8 border-surface">
+                       <div className="p-8 bg-white rounded-lg border border-outline">
                           {qrData && (
                             <QRCodeSVG 
                                 value={qrData.url}
-                                size={260}
+                                size={240}
                                 level="H"
-                                fgColor="#151312"
+                                fgColor="#111111"
                             />
                           )}
                        </div>
                        
                        <div className="space-y-4">
-                          <p className=" text-2xl  text-on-surface leading-tight px-4 uppercase font-black tracking-tighter">Code de Règlement Sécurisé</p>
-                          <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed opacity-60">
+                          <p className="text-2xl text-on-surface uppercase font-bold tracking-tight">Code de Règlement Sécurisé</p>
+                          <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.4em] opacity-40">
                             Session: {qrData?.token?.substring(0, 8)}...
                           </p>
                        </div>
 
-                       <div className="w-full flex gap-6">
-                          <button onClick={() => setPaymentStep('CHOICE')} className="flex-1 h-16 border-2 border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px] text-on-surface-variant hover:bg-surface-container-high">Retour</button>
-                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="flex-1 h-16 bg-primary text-on-primary rounded-2xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3">Lien Direct <ExternalLink className="w-4 h-4" /></a>
+                       <div className="w-full flex gap-4">
+                          <button onClick={() => setPaymentStep('CHOICE')} className="flex-1 h-14 border border-outline rounded-md font-bold uppercase tracking-widest text-[10px] text-on-surface-variant hover:bg-background transition-all">Retour</button>
+                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="btn-primary flex-1 h-14 uppercase text-[10px] gap-3">Lien Direct <ExternalLink className="w-4 h-4" /></a>
                        </div>
                     </motion.div>
                   )}

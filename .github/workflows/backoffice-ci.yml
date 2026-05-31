@@ -285,7 +285,7 @@ jobs:
         run: docker compose exec -T backend python manage.py makemigrations --check --dry-run
 
       - name: Run backend pytest suite
-        run: docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q
+        run: docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test -e DB_USER=root -e DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD || 'root_password' }} backend python -m pytest -q
 
       - name: Dump backend logs on failure
         if: failure()

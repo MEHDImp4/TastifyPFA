@@ -75,9 +75,9 @@ export const SallePage: React.FC = () => {
                   className={`
                     aspect-square atelier-card flex flex-col items-center justify-between p-6 transition-all active:scale-95 group
                     ${table.statut === 'LIBRE' ? 'text-on-surface-variant hover:border-on-background' : ''}
-                    ${table.statut === 'OCCUPEE' ? 'bg-on-background border-on-background text-background' : ''}
+                    ${table.statut === 'OCCUPEE' ? 'bg-on-background border-on-background text-background bg-amber' : ''}
                     ${table.statut === 'ENCAISSEMENT' ? 'bg-error border-error text-on-error' : ''}
-                    ${table.statut === 'RESERVEE' ? 'border-dashed border-outline-variant text-on-surface-variant' : ''}
+                    ${table.statut === 'RESERVEE' ? 'border-dashed border-outline-variant text-on-surface-variant bg-aged-paper' : ''}
                   `}
                 >
                   <div className="w-full flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
@@ -101,4 +101,5 @@ export const SallePage: React.FC = () => {
     </div>
   );
 };
+
 

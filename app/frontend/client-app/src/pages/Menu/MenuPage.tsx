@@ -96,10 +96,10 @@ export const MenuPage: React.FC = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
               <input 
                 type="text"
-                placeholder="rechercher un plat..."
+                placeholder="RECHERCHER UN PLAT..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-11 bg-background border border-outline rounded-md pl-12 pr-4 font-sans text-xs text-on-background focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30 lowercase"
+                className="w-full h-11 bg-background border border-outline rounded-md pl-12 pr-4 font-sans text-xs text-on-background focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
               />
            </div>
         </div>
@@ -146,6 +146,7 @@ export const MenuPage: React.FC = () => {
                   key={plat.id}
                   layout
                   variants={itemVariants}
+                  data-testid={`menu-card-${plat.id}`}
                   className={`group atelier-card p-6 flex flex-col gap-6 cursor-pointer ${!plat.est_disponible ? 'opacity-30 grayscale' : ''}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
                 >
@@ -176,7 +177,7 @@ export const MenuPage: React.FC = () => {
                         className="btn-primary w-full h-10 text-[10px]"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
-                        Ajouter
+                        Ajouter au panier
                       </button>
                     )}
                   </div>
@@ -188,7 +189,7 @@ export const MenuPage: React.FC = () => {
         {filteredPlats.length === 0 && (
            <div className="py-32 flex flex-col items-center justify-center opacity-10 gap-4">
               <ShoppingBag className="w-12 h-12 stroke-[1]" />
-              <p className="text-ui-label">Aucun plat trouvé</p>
+              <p className="text-ui-label">AUCUN RÉSULTAT TROUVÉ</p>
            </div>
         )}
       </main>
@@ -220,7 +221,7 @@ export const MenuPage: React.FC = () => {
 
                 <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col">
                    <div className="mb-10">
-                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mb-4 block">Détails du plat</span>
+                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mb-4 block">DÉTAILS DU PLAT</span>
                       <h2 className="text-display-lg  leading-none mb-6">{selectedPlat.nom}</h2>
                       <span className="font-mono text-xl text-on-background">{selectedPlat.prix} {config?.devise || 'DH'}</span>
                    </div>

@@ -60,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navClass = ({ isActive }: { isActive: boolean }) => `
     flex items-center gap-4 px-8 py-3.5 transition-all duration-200 group relative border-l-2
     ${isActive 
-      ? 'text-on-background bg-surface-container-high font-bold border-on-background' 
+      ? 'text-on-background bg-surface-container-high font-bold border-on-background border-primary' 
       : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low border-transparent'
     }
   `;
