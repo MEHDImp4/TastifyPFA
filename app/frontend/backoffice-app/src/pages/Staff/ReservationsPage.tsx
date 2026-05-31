@@ -19,7 +19,6 @@ import {
 import { Skeleton } from '../../components/ui/Skeleton';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const ReservationsPage: React.FC = () => {
@@ -62,7 +61,7 @@ export const ReservationsPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 p-8 space-y-8 animate-in fade-in duration-500">
+      <div className="flex-1 p-8 space-y-8">
         <div className="flex items-center justify-between">
             <div className="space-y-2">
                 <Skeleton className="w-48 h-8" />
@@ -71,9 +70,9 @@ export const ReservationsPage: React.FC = () => {
             <Skeleton className="w-32 h-10 rounded-xl" />
         </div>
         <div className="grid grid-cols-1 gap-2">
-            <Skeleton className="h-20 rounded-[2rem]" />
-            <Skeleton className="h-20 rounded-[2rem]" />
-            <Skeleton className="h-20 rounded-[2rem]" />
+            <Skeleton className="h-20 rounded-lg" />
+            <Skeleton className="h-20 rounded-lg" />
+            <Skeleton className="h-20 rounded-lg" />
         </div>
       </div>
     );
@@ -117,11 +116,11 @@ export const ReservationsPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'CONFIRMEE': return 'bg-primary text-on-primary border-on-surface';
-      case 'ANNULEE': return 'bg-error text-on-error border-on-surface';
-      case 'EN_ATTENTE': return 'bg-secondary text-on-secondary border-on-surface';
-      case 'TERMINEE': return 'bg-surface-container-highest text-on-surface border-on-surface opacity-50';
-      default: return 'bg-surface-container text-on-surface border-on-surface';
+      case 'CONFIRMEE': return 'bg-on-background text-background border-on-background';
+      case 'ANNULEE': return 'bg-error text-on-error border-error';
+      case 'EN_ATTENTE': return 'bg-surface-container-highest text-on-surface-variant border-outline';
+      case 'TERMINEE': return 'bg-surface-container text-on-surface opacity-30 border-outline';
+      default: return 'bg-surface-container text-on-surface border-outline';
     }
   };
 
@@ -146,33 +145,33 @@ export const ReservationsPage: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 -m-4 bg-background font-body animate-in fade-in duration-500 overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-0 bg-background font-body overflow-hidden">
       
-      {/* Fixed Header Section - Ultra Compact */}
-      <header className="flex-none px-staff-margin pt-6 pb-2 space-y-4">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
-          <div className="space-y-1.5">
-            <h1 className="text-xl md:text-2xl text-on-surface leading-none uppercase font-black  tracking-tighter">Gestion Réservations <span className="sr-only">Reservations Admin</span></h1>
+      {/* Header */}
+      <header className="flex-none px-staff-margin h-20 border-b border-outline bg-surface">
+        <div className="max-w-[1400px] mx-auto h-full flex items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="text-sm font-bold text-on-background uppercase tracking-widest">Gestion Réservations</h1>
           </div>
           
-          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
+          <div className="flex items-center gap-3">
               <div className="relative group">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-primary transition-colors"  strokeWidth={2.5}/>
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors"  strokeWidth={2}/>
                   <input 
                       type="text" 
-                      placeholder="SEARCH GUEST IDENTITY..."
+                      placeholder="RECHERCHER..."
                       aria-label="Rechercher client"
                       value={search}
                       onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
-                      className="w-full sm:w-[220px] pl-10 pr-3 py-2 rounded-lg bg-surface-container border border-outline text-[10px] font-bold focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-on-surface-variant uppercase"
+                      className="w-48 pl-10 pr-3 h-10 rounded border border-outline bg-background text-[10px] font-bold focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant uppercase"
                   />
               </div>
-              <div className="flex flex-wrap rounded-lg bg-surface-container border border-outline p-1">
+              <div className="flex rounded border border-outline bg-background p-0.5">
                   {['ALL', 'EN_ATTENTE', 'CONFIRMEE', 'ANNULEE'].map(f => (
                       <button
                           key={f}
                           onClick={() => { setFilter(f); setCurrentPage(1); }}
-                          className={`rounded-md px-3 py-1.5 text-[8px] font-black tracking-widest uppercase transition-all ${filter === f ? 'bg-primary text-on-primary font-black' : 'text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'}`}
+                          className={`rounded px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase transition-all ${filter === f ? 'bg-on-background text-background' : 'text-on-surface-variant hover:text-on-background'}`}
                       >
                           {statusLabel(f)}
                       </button>
@@ -182,53 +181,50 @@ export const ReservationsPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Scrollable List Body */}
-      <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-4">
-        <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
+      {/* List Body */}
+      <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-8">
+        <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1">
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
-              className="group rounded-lg border border-outline bg-surface-container p-5 md:p-6 transition-colors hover:border-primary/60 relative"
+              className="group atelier-card p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full">
-                <div className="flex items-start gap-4 md:gap-5">
-                <div className="w-20 h-14 rounded-md bg-background border border-outline flex flex-col items-center justify-center text-primary shrink-0">
-                    <Calendar className="w-5 h-5 mb-1"  strokeWidth={2.5}/>
-                    <span className="text-[10px] font-black text-primary">
-                        {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).toUpperCase()}
-                    </span>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                    <h3 className="text-sm md:text-base text-on-surface font-black tracking-[0.08em] uppercase">
-                      {res.user_username || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
-                    </h3>
-                    <span className={`w-fit rounded-full px-3 py-1 border text-[9px] font-black uppercase tracking-[0.18em] ${getStatusColor(res.statut)}`}>
-                        {res.statut.replace('_', ' ')}
-                    </span>
+                <div className="flex items-start gap-6">
+                  <div className="w-20 h-16 rounded border border-outline bg-surface-container-high flex flex-col items-center justify-center text-on-background shrink-0">
+                      <Calendar className="w-5 h-5 mb-1 opacity-20"  strokeWidth={1.5}/>
+                      <span className="text-[10px] font-bold">
+                          {new Date(res.date_reservation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).toUpperCase()}
+                      </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                    <div className="flex items-center gap-2 rounded-full border border-outline bg-background px-3 py-2 text-[10px] font-black text-on-surface uppercase">
-                        <Clock className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
-                        <span>{res.heure_debut} — {res.heure_fin}</span>
+                  <div className="space-y-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+                      <h3 className="text-base text-on-background font-bold tracking-wider uppercase">
+                        {res.user_username || <>CLIENT ANONYME</>}
+                      </h3>
+                      <span className={`w-fit rounded px-3 py-1 border text-[9px] font-bold uppercase tracking-widest ${getStatusColor(res.statut)}`}>
+                          {res.statut.replace('_', ' ')}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-full border border-outline bg-background px-3 py-2 text-[10px] font-black text-on-surface uppercase">
-                        <Users className="w-3.5 h-3.5 text-primary"  strokeWidth={2.5}/>
-                        <span>{res.nombre_personnes} COUVERTS</span>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-full border border-outline bg-background px-3 py-2 text-[10px] font-black text-on-surface uppercase">
-                        <div className="w-3.5 h-3.5 border-2 border-primary flex items-center justify-center">
-                            <div className="w-1 h-1 bg-primary" />
-                        </div>
-                        <span>UNITÉ #{res.table_numero || res.table}</span>
-                    </div>
-                  </div>
-                  {res.notes && (
-                      <div className="rounded-md bg-background px-4 py-3 border border-outline text-[11px] font-bold text-on-surface-variant  uppercase tracking-tight">
-                        “{res.notes}”
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                          <Clock className="w-3.5 h-3.5 opacity-20" strokeWidth={2}/>
+                          <span>{res.heure_debut} — {res.heure_fin}</span>
                       </div>
-                  )}
-                </div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                          <Users className="w-3.5 h-3.5 opacity-20" strokeWidth={2}/>
+                          <span>{res.nombre_personnes} COUVERTS</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                          <TableIcon className="w-3.5 h-3.5 opacity-20" strokeWidth={2}/>
+                          <span>UNITÉ #{res.table_numero || res.table}</span>
+                      </div>
+                    </div>
+                    {res.notes && (
+                        <div className="rounded border border-outline bg-background/50 px-4 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                          {res.notes}
+                        </div>
+                    )}
+                  </div>
                 </div>
 
               <div className="flex items-center gap-3 w-full lg:w-auto lg:justify-end">
@@ -236,19 +232,16 @@ export const ReservationsPage: React.FC = () => {
                   <>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                      aria-label="CONFIRM"
-                      className="flex-1 lg:flex-none flex items-center justify-center gap-3 rounded-md px-6 py-3.5 bg-primary text-on-primary border border-primary text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
+                      className="btn-primary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px]"
                     >
-                      <CheckCircle2 className="w-4 h-4"  strokeWidth={2.5}/>
+                      <CheckCircle2 className="w-4 h-4" />
                       CONFIRMER
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                      aria-label={`Annuler réservation pour ${res.user_username || 'client anonyme'}`}
-                      title={`Annuler réservation pour ${res.user_username || 'client anonyme'}`}
-                      className="rounded-md p-3.5 bg-background border border-outline text-error hover:border-error hover:bg-error/10 transition-all active:scale-90"
+                      className="h-10 w-10 border border-outline rounded flex items-center justify-center text-error hover:bg-error/5 transition-all"
                     >
-                      <XCircle className="w-5 h-5"  strokeWidth={2.5}/>
+                      <XCircle className="w-5 h-5" />
                     </button>
                   </>
                 )}
@@ -256,128 +249,109 @@ export const ReservationsPage: React.FC = () => {
                 {res.statut === 'CONFIRMEE' && (
                    <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    aria-label="CANCEL BOOKING"
-                    className="flex-1 lg:flex-none rounded-md px-6 py-3.5 bg-background border border-outline text-[10px] font-black text-on-surface-variant hover:text-error hover:border-error transition-all uppercase tracking-widest active:scale-95"
+                    className="btn-secondary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px] text-error hover:border-error"
                    >
-                     ANNULER RÉSERVATION
+                     ANNULER
                    </button>
                 )}
 
                 <div className="relative">
                     <button
                         onClick={(e) => { e.stopPropagation(); setActiveMenuId(activeMenuId === res.id ? null : res.id); }}
-                        aria-label={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
-                        title={`Ouvrir actions pour ${res.user_username || 'client anonyme'}`}
-                        className={`rounded-md p-3 transition-colors ${activeMenuId === res.id ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:bg-background hover:text-primary'}`}
+                        className={`w-10 h-10 border border-outline rounded flex items-center justify-center transition-colors ${activeMenuId === res.id ? 'bg-on-background text-background' : 'text-on-surface-variant hover:text-on-background'}`}
                     >
-                        <MoreVertical className="w-5 h-5"  strokeWidth={2.5}/>
+                        <MoreVertical className="w-4 h-4" />
                     </button>
 
-                    <AnimatePresence>
-                        {activeMenuId === res.id && (
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-                                className="absolute right-0 top-full mt-2 w-56 bg-surface-container-high border border-outline-variant rounded-xl z-50 overflow-hidden"
-                            >
-                                <div className="p-2 space-y-1">
-                                    <button 
-                                        onClick={() => { setActiveMenuId(null); toast.info('FONCTIONNALITÉ DÉTAILS EN COURS...'); }}
-                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 hover:text-primary transition-all font-sans text-[11px] font-black uppercase tracking-widest text-on-surface-variant"
-                                    >
-                                        <Eye className="w-4 h-4" />
-                                        Voir Détails
-                                    </button>
-                                    <button 
-                                        onClick={() => { setActiveMenuId(null); navigate('/salle'); }}
-                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 hover:text-primary transition-all font-sans text-[11px] font-black uppercase tracking-widest text-on-surface-variant"
-                                    >
-                                        <TableIcon className="w-4 h-4" />
-                                        Associer Table
-                                    </button>
-                                    <div className="h-px bg-outline-variant/30 my-1" />
-                                    <button 
-                                        onClick={(e) => confirmDelete(e, res.id)}
-                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-error/10 hover:text-error transition-all font-sans text-[11px] font-black uppercase tracking-widest text-error/70"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                        Supprimer
-                                    </button>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {activeMenuId === res.id && (
+                        <div 
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute right-0 top-full mt-2 w-56 bg-surface border border-outline rounded-lg z-50 overflow-hidden shadow-2xl"
+                        >
+                            <div className="p-2 space-y-1">
+                                <button 
+                                    onClick={() => { setActiveMenuId(null); toast.info('DETAILS...'); }}
+                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-all"
+                                >
+                                    <Eye className="w-4 h-4" />
+                                    Voir Détails
+                                </button>
+                                <button 
+                                    onClick={() => { setActiveMenuId(null); navigate('/salle'); }}
+                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-all"
+                                >
+                                    <TableIcon className="w-4 h-4" />
+                                    Associer Table
+                                </button>
+                                <div className="h-px bg-outline my-1" />
+                                <button 
+                                    onClick={(e) => confirmDelete(e, res.id)}
+                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-error/5 text-[10px] font-bold uppercase tracking-widest text-error transition-all"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                    Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-              </div>
               </div>
             </div>
           ))}
 
           {filteredReservations.length === 0 && (
-            <div aria-hidden="true" className="rounded-lg border border-dashed border-outline py-20 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container/20">
-                <Calendar className="w-16 h-10 mb-6 opacity-20"  strokeWidth={2.5}/>
-                <p className="text-display-lg text-3xl font-black  tracking-tighter text-on-surface uppercase opacity-20">Aucune Réservation</p>
-                <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné</p>
-                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">No Bookings Logged</span>
+            <div className="rounded border border-dashed border-outline py-32 flex flex-col items-center justify-center opacity-20">
+                <Calendar className="w-12 h-12 mb-4" strokeWidth={1}/>
+                <p className="text-xl font-bold uppercase tracking-widest">Aucune Réservation</p>
             </div>
           )}
         </div>
       </main>
 
-      {/* Fixed Pagination Controls Footer */}
-      <footer className="flex-none px-staff-margin py-6 border-t border-outline-variant bg-surface-container-lowest">
-        <div className="max-w-[1400px] mx-auto">
+      {/* Pagination Footer */}
+      <footer className="flex-none px-staff-margin h-20 border-t border-outline bg-surface">
+        <div className="max-w-[1400px] mx-auto h-full flex items-center justify-center">
           {totalPages > 1 ? (
-            <div className="flex items-center justify-center gap-12">
+            <div className="flex items-center gap-8">
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container"
+                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background disabled:opacity-10 transition-all"
                 >
-                    <ChevronLeft className="w-4 h-4 text-primary" />
-                    Précédent
+                    <ChevronLeft className="w-4 h-4" /> Précédent
                 </button>
-                <div className="flex items-center gap-4">
-                    <span className="font-sans text-[10px] font-black uppercase tracking-[0.25em] text-on-surface-variant opacity-60">Page</span>
-                    <div className="flex items-center gap-2 bg-surface-container-low border border-outline-variant p-1.5 rounded-lg">
-                        <span className="w-10 h-10 flex items-center justify-center bg-primary text-on-primary rounded-md font-mono text-base font-black">
-                            {currentPage}
-                        </span>
-                        <span className="px-3 font-sans text-[10px] font-black uppercase tracking-[0.1em] text-on-surface-variant opacity-40">/</span>
-                        <span className="w-10 h-10 flex items-center justify-center font-mono text-base font-black text-on-surface opacity-60">
-                            {totalPages}
-                        </span>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant">
+                    <span className="opacity-40 uppercase tracking-widest">Page</span>
+                    <div className="flex items-center gap-2 font-mono text-sm">
+                        <span className="text-on-background font-bold">{currentPage}</span>
+                        <span className="opacity-20">/</span>
+                        <span>{totalPages}</span>
                     </div>
                 </div>
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2.5 px-8 py-3.5 border border-outline-variant rounded-xl font-sans text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all disabled:opacity-10 active:scale-95 bg-surface-container"
+                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background disabled:opacity-10 transition-all"
                 >
-                    Suivant
-                    <ChevronRight className="w-4 h-4 text-primary" />
+                    Suivant <ChevronRight className="w-4 h-4" />
                 </button>
             </div>
           ) : (
-             <div className="flex justify-center">
-                <p className="font-sans text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-30">Fin du registre de réservations</p>
-             </div>
+             <p className="text-[9px] font-bold uppercase tracking-widest opacity-20">Fin du registre</p>
           )}
         </div>
       </footer>
 
-      {/* Custom Confirmation Modal */}
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={executeDelete}
         title="Supprimer Réservation"
-        message="Êtes-vous sûr de vouloir supprimer définitivement cette réservation ? Cette action est irréversible."
+        message="Confirmez-vous la suppression définitive de cette réservation ?"
         confirmLabel="SUPPRIMER"
         variant="danger"
       />
     </div>
   );
 };
+
