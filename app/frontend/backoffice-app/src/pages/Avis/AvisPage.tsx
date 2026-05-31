@@ -71,7 +71,7 @@ export const AvisPage: React.FC = () => {
       {/* Sentiment Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Intelligence Émotionnelle <span className="sr-only">Client Sentiment</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase  leading-none">Intelligence Émotionnelle <span className="sr-only">Client Sentiment</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Analyse de la Perception de Marque et Satisfaction Convives</p>
         </div>
         <div className="flex items-center gap-4">
@@ -152,7 +152,7 @@ export const AvisPage: React.FC = () => {
                   <div className="col-span-5">
                     <div className="relative pl-6 border-l-2 border-primary/20 bg-white/[0.01] p-4 rounded-r-xl">
                         <Quote className="absolute -left-3 -top-2 w-5 h-5 text-primary" strokeWidth={3} />
-                        <p className="text-sm font-bold text-on-surface uppercase italic leading-relaxed tracking-tight select-all">
+                        <p className="text-sm font-bold text-on-surface uppercase  leading-relaxed tracking-tight select-all">
                             {a.commentaire}
                         </p>
                     </div>

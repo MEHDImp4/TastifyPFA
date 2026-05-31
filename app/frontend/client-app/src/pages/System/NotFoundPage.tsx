@@ -17,12 +17,12 @@ export const NotFoundPage: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-2xl text-center flex flex-col items-center gap-10"
       >
-        <h1 className="text-display-lg text-6xl md:text-[120px] text-primary-container leading-none m-0 italic font-black opacity-20">404</h1>
+        <h1 className="text-display-lg text-6xl md:text-[120px] text-primary-container leading-none m-0  font-black opacity-20">404</h1>
         
         <div className="w-16 h-px bg-outline-variant/30" />
         
         <div className="space-y-6">
-           <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Page Introuvable</h2>
+           <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Page Introuvable</h2>
            <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
               Le goût de l'évasion, littéralement. La page que vous recherchez a été retirée de notre menu ou n'a jamais existé.
            </p>

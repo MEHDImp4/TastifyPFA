@@ -42,8 +42,8 @@ export const ContactPage: React.FC = () => {
                 <span className="h-[1px] w-8 bg-primary" />
                 <span className="editorial-kicker">Liaison Directe</span>
             </div>
-            <h1 className="font-serif text-4xl md:text-7xl font-black text-on-surface uppercase italic tracking-tighter leading-none m-0">Registre de Contact.</h1>
-            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl italic opacity-60 uppercase tracking-tight leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
+            <h1 className="font-serif text-4xl md:text-7xl font-black text-on-surface uppercase  tracking-tighter leading-none m-0">Registre de Contact.</h1>
+            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl  opacity-60 uppercase tracking-tight leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
@@ -59,7 +59,7 @@ export const ContactPage: React.FC = () => {
                             </div>
                             <div className="space-y-1">
                                 <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Localisation</p>
-                                <p className="font-serif text-xl md:text-2xl italic text-on-surface leading-tight uppercase tracking-tight">123 Boulevard Gastronomique,<br/>Casablanca, Maroc</p>
+                                <p className="font-serif text-xl md:text-2xl  text-on-surface leading-tight uppercase tracking-tight">123 Boulevard Gastronomique,<br/>Casablanca, Maroc</p>
                             </div>
                         </div>
                         
@@ -69,7 +69,7 @@ export const ContactPage: React.FC = () => {
                             </div>
                             <div className="space-y-1">
                                 <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Assistance</p>
-                                <p className="font-serif text-xl md:text-2xl italic text-on-surface leading-tight tabular-nums">+212 5 22 00 00 00</p>
+                                <p className="font-serif text-xl md:text-2xl  text-on-surface leading-tight tabular-nums">+212 5 22 00 00 00</p>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@ export const ContactPage: React.FC = () => {
                                 <Sparkles className="w-4 h-4" />
                                 <span className="font-sans text-[9px] font-black tracking-[0.3em] uppercase">Protocole Actif</span>
                             </div>
-                            <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface italic leading-none m-0">Le Manifeste.</h2>
+                            <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface  leading-none m-0">Le Manifeste.</h2>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-10">
@@ -153,7 +153,7 @@ export const ContactPage: React.FC = () => {
                                 <textarea 
                                     id="contact-message-input" name="message" value={formData.message} onChange={handleChange} required rows={4}
                                     aria-label="Message"
-                                    className="w-full p-8 bg-surface-container-lowest border border-outline-variant rounded-[2rem] focus:border-primary outline-none transition-all resize-none font-body text-lg italic text-on-surface uppercase placeholder:text-on-surface-variant/20"
+                                    className="w-full p-8 bg-surface-container-lowest border border-outline-variant rounded-[2rem] focus:border-primary outline-none transition-all resize-none font-body text-lg  text-on-surface uppercase placeholder:text-on-surface-variant/20"
                                     placeholder="DÉTAILLEZ LES NUANCES..."
                                 />
                             </div>

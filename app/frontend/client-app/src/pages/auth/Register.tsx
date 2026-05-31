@@ -67,7 +67,7 @@ export const Register: React.FC = () => {
         className="w-full max-w-md space-y-12"
       >
         <motion.div variants={fadeIn} className="text-center space-y-2">
-          <h1 className="font-serif text-5xl font-medium text-[#2D2424] italic tracking-tight m-0">Inscription.</h1>
+          <h1 className="font-serif text-5xl font-medium text-[#2D2424]  tracking-tight m-0">Inscription.</h1>
           <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">Créez votre compte pour commencer</p>
         </motion.div>
 

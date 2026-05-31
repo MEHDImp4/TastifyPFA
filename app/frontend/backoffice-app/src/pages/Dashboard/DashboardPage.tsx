@@ -128,7 +128,7 @@ export const DashboardPage: React.FC = () => {
                  <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
                     <Activity className="w-5 h-5 text-primary" strokeWidth={2.5} />
                  </div>
-                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Flux Opérationnel</h2>
+                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Flux Opérationnel</h2>
               </div>
               <button onClick={() => navigate('/salle')} className="h-10 px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-primary hover:border-primary transition-all flex items-center gap-2">
                 Accéder au Plan <ChevronRight className="w-4 h-4" />
@@ -184,7 +184,7 @@ export const DashboardPage: React.FC = () => {
                 <div className="w-10 h-10 rounded-lg bg-error/5 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
-                <h2 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Incidents Critiques</h2>
+                <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Incidents Critiques</h2>
             </div>
 
             <div tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar space-y-6">

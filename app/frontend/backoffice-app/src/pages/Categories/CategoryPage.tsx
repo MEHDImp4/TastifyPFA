@@ -167,7 +167,7 @@ export const CategoryPage: React.FC = () => {
       {/* Registry Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre des Catégories <span className="sr-only">Category Management</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase  leading-none">Registre des Catégories <span className="sr-only">Category Management</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-50">Configuration de l'Architecture du Menu</p>
         </div>
         <div className="flex items-center gap-4">
@@ -280,7 +280,7 @@ export const CategoryPage: React.FC = () => {
             >
                 <div className="flex-none h-24 flex items-center justify-between px-10 border-b border-outline bg-surface-container-lowest">
                     <div>
-                        <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingCategory ? 'Configuration Secteur' : 'Nouveau Secteur'}</h2>
+                        <h2 className="text-2xl font-black text-on-surface  tracking-tighter uppercase">{editingCategory ? 'Configuration Secteur' : 'Nouveau Secteur'}</h2>
                         <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Édition des métadonnées structurelles</p>
                     </div>
                     <button onClick={() => setIsEditorOpen(false)} data-testid="close-editor" className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>

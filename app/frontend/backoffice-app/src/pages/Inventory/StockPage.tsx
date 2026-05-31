@@ -190,7 +190,7 @@ export const StockPage: React.FC = () => {
       {/* Logistics Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Registre Logistique <span className="sr-only">Inventory & Logistics</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase  leading-none">Registre Logistique <span className="sr-only">Inventory & Logistics</span></h1>
           <p className="text-[10px] font-black text-on-surface uppercase tracking-[0.4em] mt-3">Gestion de la Chaîne d'Approvisionnement et des Stocks</p>
         </div>
         <div className="flex items-center gap-4">
@@ -221,19 +221,19 @@ export const StockPage: React.FC = () => {
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Ressources</span>
-                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-on-surface mt-2">{ingredients.length}</h4>
+                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-on-surface mt-2">{ingredients.length}</h4>
                 </div>
             </div>
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Rupture Critiques</span>
-                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-error mt-2">{ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length}</h4>
+                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-error mt-2">{ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length}</h4>
                 </div>
             </div>
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Alerte Prioritaire</span>
-                    <h4 className="text-[2rem] font-serif font-black italic tracking-tighter text-amber-500 mt-2">{ingredients.filter(i => {
+                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-amber-500 mt-2">{ingredients.filter(i => {
                         const val = parseFloat(i.stock_actuel);
                         const seuil = parseFloat(i.seuil_alerte);
                         return val > seuil && val <= seuil * 1.5;
@@ -335,7 +335,7 @@ export const StockPage: React.FC = () => {
             >
                 <div className="flex-none h-24 flex items-center justify-between px-10 border-b border-outline bg-surface-container-lowest">
                     <div>
-                        <h2 className="text-2xl font-black text-on-surface italic tracking-tighter uppercase">{editingItem ? 'Configuration Unité' : 'Nouvelle Ressource'}<span className="sr-only">New Resource</span></h2>
+                        <h2 className="text-2xl font-black text-on-surface  tracking-tighter uppercase">{editingItem ? 'Configuration Unité' : 'Nouvelle Ressource'}<span className="sr-only">New Resource</span></h2>
                         <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-2">Édition des Paramètres de Stock</p>
                     </div>
                     <button onClick={() => setIsEditorOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>
@@ -391,7 +391,7 @@ export const StockPage: React.FC = () => {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface-container-low border border-outline p-12 max-w-md w-full rounded-2xl">
               <div className="flex justify-between items-start mb-12">
                 <div>
-                  <h3 className="text-3xl font-black text-on-surface italic tracking-tighter uppercase">Réapprovisionnement</h3>
+                  <h3 className="text-3xl font-black text-on-surface  tracking-tighter uppercase">Réapprovisionnement</h3>
                   <p className="text-[10px] font-bold text-primary uppercase mt-2 tracking-[0.3em]">{adjustmentItem.nom}</p>
                 </div>
                 <button onClick={() => setIsAdjustmentOpen(false)} className="p-3 bg-surface-container-high rounded-lg hover:text-primary transition-all"><X className="w-7 h-7" /></button>

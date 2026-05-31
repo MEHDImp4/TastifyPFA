@@ -88,7 +88,7 @@ export const MenuPage: React.FC = () => {
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-12">
            <div className="space-y-4">
               <span className="text-ui-label text-on-surface-variant">L'Atelier</span>
-              <h1 className="text-display-lg italic lowercase">notre carte.</h1>
+              <h1 className="text-display-lg  lowercase">notre carte.</h1>
            </div>
            <div className="relative group w-full md:w-80">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
@@ -151,7 +151,7 @@ export const MenuPage: React.FC = () => {
                     {plat.image ? (
                        <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} />
                     ) : (
-                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 font-serif italic text-4xl">{plat.nom.charAt(0)}</div>
+                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 font-serif  text-4xl">{plat.nom.charAt(0)}</div>
                     )}
                     
                     {!plat.est_disponible && (
@@ -166,7 +166,7 @@ export const MenuPage: React.FC = () => {
                       <h3 className="text-xl font-medium tracking-tight flex-1">{plat.nom}</h3>
                       <span className="font-mono text-xs text-on-surface-variant whitespace-nowrap">{parseFloat(plat.prix).toFixed(0)} {config?.devise || 'DH'}</span>
                     </div>
-                    <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed flex-1 italic">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed flex-1 ">{plat.description || 'Une création culinaire d\'exception.'}</p>
                     
                     {plat.est_disponible && (
                       <button
@@ -212,18 +212,18 @@ export const MenuPage: React.FC = () => {
                    {selectedPlat.image ? (
                       <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={selectedPlat.nom} />
                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center font-serif italic text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
+                      <div className="absolute inset-0 flex items-center justify-center font-serif  text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
                    )}
                 </div>
 
                 <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col">
                    <div className="mb-10">
                       <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mb-4 block">Détails du plat</span>
-                      <h2 className="text-display-lg italic leading-none mb-6">{selectedPlat.nom}</h2>
+                      <h2 className="text-display-lg  leading-none mb-6">{selectedPlat.nom}</h2>
                       <span className="font-mono text-xl text-on-background">{selectedPlat.prix} {config?.devise || 'DH'}</span>
                    </div>
 
-                   <p className="text-base text-on-surface-variant leading-relaxed mb-12 italic">
+                   <p className="text-base text-on-surface-variant leading-relaxed mb-12 ">
                      {selectedPlat.description || 'Une création signature préparée avec soin par nos chefs.'}
                    </p>
 

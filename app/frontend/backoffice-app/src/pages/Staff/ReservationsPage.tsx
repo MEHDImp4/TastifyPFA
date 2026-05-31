@@ -152,7 +152,7 @@ export const ReservationsPage: React.FC = () => {
       <header className="flex-none px-staff-margin pt-6 pb-2 space-y-4">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
           <div className="space-y-1.5">
-            <h1 className="text-xl md:text-2xl text-on-surface leading-none uppercase font-black italic tracking-tighter">Gestion Réservations <span className="sr-only">Reservations Admin</span></h1>
+            <h1 className="text-xl md:text-2xl text-on-surface leading-none uppercase font-black  tracking-tighter">Gestion Réservations <span className="sr-only">Reservations Admin</span></h1>
           </div>
           
           <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
@@ -224,7 +224,7 @@ export const ReservationsPage: React.FC = () => {
                     </div>
                   </div>
                   {res.notes && (
-                      <div className="rounded-md bg-background px-4 py-3 border border-outline text-[11px] font-bold text-on-surface-variant italic uppercase tracking-tight">
+                      <div className="rounded-md bg-background px-4 py-3 border border-outline text-[11px] font-bold text-on-surface-variant  uppercase tracking-tight">
                         “{res.notes}”
                       </div>
                   )}
@@ -318,7 +318,7 @@ export const ReservationsPage: React.FC = () => {
           {filteredReservations.length === 0 && (
             <div aria-hidden="true" className="rounded-lg border border-dashed border-outline py-20 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container/20">
                 <Calendar className="w-16 h-10 mb-6 opacity-20"  strokeWidth={2.5}/>
-                <p className="text-display-lg text-3xl font-black italic tracking-tighter text-on-surface uppercase opacity-20">Aucune Réservation</p>
+                <p className="text-display-lg text-3xl font-black  tracking-tighter text-on-surface uppercase opacity-20">Aucune Réservation</p>
                 <p className="text-[10px] font-black mt-4 tracking-[0.24em] uppercase opacity-40">Registre vide pour le filtre sélectionné</p>
                 <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">No Bookings Logged</span>
             </div>

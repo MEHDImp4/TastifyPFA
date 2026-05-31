@@ -87,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
                 <Box className="w-6 h-6 text-on-primary" strokeWidth={2.5} />
             </div>
-            <h1 className="text-2xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Tastify OS</h1>
+            <h1 className="text-2xl font-black tracking-tighter text-on-surface uppercase  leading-none">Tastify OS</h1>
           </div>
           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-50 ml-1">Intelligent Restaurant OS</p>
         </div>

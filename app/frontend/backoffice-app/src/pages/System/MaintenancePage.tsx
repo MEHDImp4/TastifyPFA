@@ -126,7 +126,7 @@ export const MaintenancePage: React.FC = () => {
 
               <div className="bg-surface-container-high border border-outline-variant rounded-lg p-8 space-y-6 flex-1">
                  <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] flex items-center gap-2"><Database className="w-4 h-4" /> Technical Support</h3>
-                 <p className="font-body text-[13px] text-on-surface-variant italic opacity-60 uppercase tracking-tight leading-relaxed">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
+                 <p className="font-body text-[13px] text-on-surface-variant  opacity-60 uppercase tracking-tight leading-relaxed">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
                  <div className="space-y-3 pt-4">
                     <button className="w-full flex items-center gap-4 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-container-highest transition-all group">
                        <Phone className="w-4 h-4 text-primary" />

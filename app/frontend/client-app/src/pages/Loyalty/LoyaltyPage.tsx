@@ -70,7 +70,7 @@ export const LoyaltyPage: React.FC = () => {
                  >
                     PROGRAMME ÉCHELON
                  </motion.span>
-                 <h1 className="font-serif text-5xl md:text-7xl text-[#FAF9F6] italic tracking-tighter leading-none m-0">Votre Fidélité <br/> <span className="not-italic uppercase font-black text-[#C5A059]">Récompensée.</span></h1>
+                 <h1 className="font-serif text-5xl md:text-7xl text-[#FAF9F6]  tracking-tighter leading-none m-0">Votre Fidélité <br/> <span className="not- uppercase font-black text-[#C5A059]">Récompensée.</span></h1>
               </div>
 
               <div className="max-w-xl mx-auto space-y-10">
@@ -79,7 +79,7 @@ export const LoyaltyPage: React.FC = () => {
                        <p className="font-sans text-[10px] font-black text-[#FAF9F6]/40 uppercase tracking-widest mb-1">Grade Actuel</p>
                        <div className="flex items-center gap-3">
                           <Award className="w-6 h-6 text-[#C5A059]" />
-                          <span className="font-serif text-3xl font-black italic text-[#FAF9F6] tracking-tight">{loyalty?.tier_display}</span>
+                          <span className="font-serif text-3xl font-black  text-[#FAF9F6] tracking-tight">{loyalty?.tier_display}</span>
                        </div>
                     </div>
                     <div className="text-right">
@@ -98,7 +98,7 @@ export const LoyaltyPage: React.FC = () => {
                           className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] relative shadow-[0_0_20px_rgba(209,77,26,0.3)]"
                        />
                     </div>
-                    <p className="font-body text-[13px] text-[#FAF9F6]/60 italic">Bientôt le prochain échelon</p>
+                    <p className="font-body text-[13px] text-[#FAF9F6]/60 ">Bientôt le prochain échelon</p>
                  </div>
               </div>
            </div>
@@ -108,7 +108,7 @@ export const LoyaltyPage: React.FC = () => {
         <section className="space-y-12">
            <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
               <div>
-                 <h2 className="font-serif text-4xl font-black text-[#2D2424] italic tracking-tighter m-0 uppercase">Vos Privilèges</h2>
+                 <h2 className="font-serif text-4xl font-black text-[#2D2424]  tracking-tighter m-0 uppercase">Vos Privilèges</h2>
                  <p className="font-sans text-[10px] font-black text-[#2D2424]/40 uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
               </div>
               <div className="flex items-center gap-3 text-[#D14D1A]">
@@ -135,8 +135,8 @@ export const LoyaltyPage: React.FC = () => {
                              <Gift className="w-6 h-6" />
                           </div>
                           <div className="space-y-3">
-                             <h4 className="font-serif text-2xl font-black text-[#2D2424] uppercase italic tracking-tight">{reward.nom}</h4>
-                             <p className="font-body text-sm text-[#2D2424]/70 leading-relaxed italic">{reward.description}</p>
+                             <h4 className="font-serif text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{reward.nom}</h4>
+                             <p className="font-body text-sm text-[#2D2424]/70 leading-relaxed ">{reward.description}</p>
                           </div>
                        </div>
 

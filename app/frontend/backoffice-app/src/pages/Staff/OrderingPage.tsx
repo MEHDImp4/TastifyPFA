@@ -242,7 +242,7 @@ export const OrderingPage: React.FC = () => {
           </button>
           <div>
             <div className="flex items-center gap-3">
-               <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary italic leading-none">Table {table?.numero}</h1>
+               <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-primary  leading-none">Table {table?.numero}</h1>
                {currentCommande && (
                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-sans text-[9px] font-black uppercase tracking-widest">
                      <Hash className="w-3 h-3" /> {currentCommande.id}
@@ -334,7 +334,7 @@ export const OrderingPage: React.FC = () => {
                    disabled={!plat.est_disponible}
                  >
                     <div className="flex flex-col gap-1">
-                       <h3 className="font-serif text-base md:text-lg font-black text-on-surface uppercase tracking-tight leading-tight line-clamp-2 italic">{plat.nom}</h3>
+                       <h3 className="font-serif text-base md:text-lg font-black text-on-surface uppercase tracking-tight leading-tight line-clamp-2 ">{plat.nom}</h3>
                        <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">
                          {categories.find(c => c.id === plat.categorie)?.nom}
                        </span>
@@ -382,7 +382,7 @@ export const OrderingPage: React.FC = () => {
                   <div className="flex flex-col border-b border-outline-variant">
                     <div className="px-8 py-3 bg-surface-container-highest/30 flex items-center justify-between border-b border-outline-variant/10">
                        <span className="font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Enregistré</span>
-                       <span className="font-sans text-[10px] font-bold text-primary italic uppercase tracking-tighter">ID: #{currentCommande.id}</span>
+                       <span className="font-sans text-[10px] font-bold text-primary  uppercase tracking-tighter">ID: #{currentCommande.id}</span>
                     </div>
                     {currentCommande.lignes.map(ligne => (
                       <div key={ligne.id} className="px-8 py-5 border-b border-outline-variant/10 bg-surface-container-low/20 flex justify-between items-start group">
@@ -463,7 +463,7 @@ export const OrderingPage: React.FC = () => {
                 <span className="tabular-nums">{cartTotal.toFixed(0)} DH</span>
               </div>
               <div className="pt-4 border-t border-outline-variant border-dashed flex justify-between items-center">
-                <span className="font-serif text-2xl font-black text-on-surface italic tracking-tight uppercase">TOTAL</span>
+                <span className="font-serif text-2xl font-black text-on-surface  tracking-tight uppercase">TOTAL</span>
                 <span className="font-sans text-3xl font-black text-primary tabular-nums tracking-tighter">{grandTotal.toFixed(0)} DH</span>
               </div>
             </div>
@@ -525,7 +525,7 @@ export const OrderingPage: React.FC = () => {
               
               <div className="p-10 md:p-12 border-b border-outline-variant bg-surface-container-high flex justify-between items-center">
                 <div>
-                  <h3 className="font-serif text-3xl font-black text-on-surface uppercase tracking-tight italic leading-none">Règlement</h3>
+                  <h3 className="font-serif text-3xl font-black text-on-surface uppercase tracking-tight  leading-none">Règlement</h3>
                   <p className="text-[10px] font-bold text-primary uppercase mt-3 tracking-[0.4em]">Table {table?.numero} • Total : {parseFloat(currentCommande?.montant_total || '0').toFixed(0)} DH</p>
                 </div>
                 <button onClick={() => setIsPayModalOpen(false)} className="p-3 bg-surface-container-low hover:bg-surface-container-highest border border-outline-variant rounded-full transition-all text-on-surface-variant hover:text-primary">
@@ -580,7 +580,7 @@ export const OrderingPage: React.FC = () => {
                             <QrCode className="w-10 h-10" />
                          </div>
                          <div>
-                            <p className="text-lg font-black text-primary uppercase tracking-widest italic">Lien de Paiement QR</p>
+                            <p className="text-lg font-black text-primary uppercase tracking-widest ">Lien de Paiement QR</p>
                             <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Apple Pay, Google Pay, Carte</p>
                          </div>
                       </button>
@@ -602,7 +602,7 @@ export const OrderingPage: React.FC = () => {
                        </div>
                        
                        <div className="space-y-4">
-                          <p className="font-serif text-2xl italic text-on-surface leading-tight px-4 uppercase font-black tracking-tighter">Code de Règlement Sécurisé</p>
+                          <p className="font-serif text-2xl  text-on-surface leading-tight px-4 uppercase font-black tracking-tighter">Code de Règlement Sécurisé</p>
                           <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed opacity-60">
                             Session: {qrData?.token?.substring(0, 8)}...
                           </p>

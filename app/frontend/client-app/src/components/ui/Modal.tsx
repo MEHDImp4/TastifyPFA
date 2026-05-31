@@ -26,7 +26,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
             className="relative w-full max-w-xl bg-surface-container border border-outline-variant rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
           >
             <div className="flex items-center justify-between p-8 md:p-12 pb-6 border-b border-outline-variant/10">
-              <h3 className="font-serif text-2xl md:text-3xl font-black italic tracking-tighter text-primary leading-none m-0 uppercase">{title}</h3>
+              <h3 className="font-serif text-2xl md:text-3xl font-black  tracking-tighter text-primary leading-none m-0 uppercase">{title}</h3>
               <button 
                 onClick={onClose}
                 className="p-2 rounded-full hover:bg-surface-container-highest text-on-surface-variant transition-colors"

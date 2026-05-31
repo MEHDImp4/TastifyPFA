@@ -41,7 +41,7 @@ export const SallePage: React.FC = () => {
       {/* Header */}
       <div className="flex-none flex items-center justify-between px-staff-margin py-4 border-b border-outline-variant bg-surface-container-lowest shadow-md">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-black tracking-tight text-on-surface uppercase italic">Plan de Salle</h1>
+          <h1 className="text-xl font-black tracking-tight text-on-surface uppercase ">Plan de Salle</h1>
           <div className="hidden sm:flex items-center gap-6 border-l border-outline-variant/20 pl-6">
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 border-2 border-outline-variant bg-surface-container-low rounded-md"></div>
@@ -85,7 +85,7 @@ export const SallePage: React.FC = () => {
                     <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-widest"><Users className="w-3.5 h-3.5" /> {table.capacite}</div>
                     <span className="font-sans text-[8px] font-black uppercase tracking-[0.2em]">{table.statut}</span>
                   </div>
-                  <span className="font-serif text-6xl font-black italic tracking-tighter"><span className="sr-only">Table </span>{table.numero}</span>
+                  <span className="font-serif text-6xl font-black  tracking-tighter"><span className="sr-only">Table </span>{table.numero}</span>
                   <div className="w-full pt-4 border-t border-current/10 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className="font-sans text-[10px] font-black uppercase tracking-widest">Ouvrir</span>
                      <ArrowRight className="w-5 h-5" />

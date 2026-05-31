@@ -97,7 +97,7 @@ export const SettingsPage: React.FC = () => {
       {/* Settings Header */}
       <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase italic leading-none">Console Système <span className="sr-only">System Settings</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase  leading-none">Console Système <span className="sr-only">System Settings</span></h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3">Configuration de l'Établissement et Paramètres Globaux</p>
         </div>
         <div className="flex items-center gap-4">
@@ -164,7 +164,7 @@ export const SettingsPage: React.FC = () => {
                     </div>
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant ml-1">Description Gastronomique (Client App)</label>
-                        <textarea rows={3} aria-label="Restaurant Description" name="description" value={config.description || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none italic" />
+                        <textarea rows={3} aria-label="Restaurant Description" name="description" value={config.description || ''} onChange={handleInputChange} className="w-full p-6 bg-background border border-outline rounded-xl font-bold text-sm text-on-surface uppercase focus:border-primary resize-none " />
                     </div>
                 </section>
             </div>

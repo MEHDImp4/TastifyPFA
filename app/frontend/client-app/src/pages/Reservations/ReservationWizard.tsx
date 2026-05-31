@@ -90,7 +90,7 @@ export const ReservationWizard: React.FC = () => {
                 </div>
 
                 <div className="space-y-6 pt-4">
-                    <h2 className="font-serif text-5xl md:text-6xl text-[#2D2424] italic tracking-tight m-0">Prenez place.</h2>
+                    <h2 className="font-serif text-5xl md:text-6xl text-[#2D2424]  tracking-tight m-0">Prenez place.</h2>
                     <p className="text-lg text-[#2D2424]/60 font-medium leading-relaxed max-w-md mx-auto">
                         Pour garantir un service d'exception et suivre vos réservations, la création d'un compte est nécessaire.
                     </p>
@@ -129,8 +129,8 @@ export const ReservationWizard: React.FC = () => {
           
           {/* Header */}
           <div className="px-10 py-12 border-b border-[#2D2424]/5 bg-white text-center">
-                <h2 className="font-serif text-4xl md:text-5xl font-black text-[#2D2424] italic tracking-tight m-0">Réserver une Table</h2>
-                <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em] mt-3 italic">Étape {step} sur 3</p>
+                <h2 className="font-serif text-4xl md:text-5xl font-black text-[#2D2424]  tracking-tight m-0">Réserver une Table</h2>
+                <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em] mt-3 ">Étape {step} sur 3</p>
           </div>
 
           {/* Stepper */}
@@ -159,11 +159,11 @@ export const ReservationWizard: React.FC = () => {
                    <div className="p-8 bg-[#FAF9F6] border border-[#2D2424]/5 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-[#C5A059]/30 transition-all">
                       <div className="text-center sm:text-left">
                          <h3 className="font-sans text-[10px] font-black text-[#2D2424]/40 uppercase tracking-[0.2em] mb-1">Nombre de personnes</h3>
-                         <p className="font-body text-[14px] text-[#2D2424]/80 italic">Couverts à prévoir</p>
+                         <p className="font-body text-[14px] text-[#2D2424]/80 ">Couverts à prévoir</p>
                       </div>
                       <div className="flex items-center gap-8">
                          <button aria-label="Réduire le nombre de convives" onClick={() => setGuests(Math.max(1, guests - 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Minus className="w-4 h-4" /></button>
-                         <span className="font-serif text-5xl font-black text-[#2D2424] italic w-12 text-center">{guests}</span>
+                         <span className="font-serif text-5xl font-black text-[#2D2424]  w-12 text-center">{guests}</span>
                          <button aria-label="Augmenter le nombre de convives" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-12 h-12 rounded-2xl bg-white border border-[#2D2424]/5 flex items-center justify-center text-[#2D2424] hover:text-[#D14D1A] shadow-sm active:scale-90 transition-all"><Plus className="w-4 h-4" /></button>
                       </div>
                    </div>
@@ -195,12 +195,12 @@ export const ReservationWizard: React.FC = () => {
                         <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`p-8 rounded-[2rem] border-2 flex flex-col items-center gap-4 transition-all duration-500 ${selectedTable === t.id ? 'bg-[#D14D1A] border-[#D14D1A] text-white shadow-xl scale-105' : 'bg-white border-[#2D2424]/5 text-[#2D2424] hover:border-[#D14D1A]'}`}>
                            <TableIcon className={`w-8 h-8 ${selectedTable === t.id ? 'text-white' : 'text-[#D14D1A] opacity-20'}`} />
                            <div className="text-center">
-                              <span className="block font-serif text-2xl font-black italic">Table {t.numero}</span>
+                              <span className="block font-serif text-2xl font-black ">Table {t.numero}</span>
                               <span className={`font-sans text-[9px] font-black uppercase tracking-widest ${selectedTable === t.id ? 'text-white/80' : 'text-[#2D2424]/40'}`}>{t.capacite} PERS</span>
                            </div>
                         </button>
                       )) : (
-                        <div className="col-span-full py-10 text-center opacity-40 font-body italic">Aucune table disponible pour ce créneau.</div>
+                        <div className="col-span-full py-10 text-center opacity-40 font-body ">Aucune table disponible pour ce créneau.</div>
                       )}
                    </div>
                    <div className="flex flex-col sm:flex-row gap-6 pt-6">
@@ -216,16 +216,16 @@ export const ReservationWizard: React.FC = () => {
                       <div className="grid grid-cols-2 gap-10 border-b border-[#2D2424]/5 pb-10">
                          <div>
                             <p className="font-sans text-[9px] font-black text-[#2D2424]/30 uppercase tracking-widest mb-2">Quand</p>
-                            <p className="font-serif text-2xl text-[#2D2424] italic">{new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' })} <br/> à {startTime}</p>
+                            <p className="font-serif text-2xl text-[#2D2424] ">{new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' })} <br/> à {startTime}</p>
                          </div>
                          <div className="text-right">
                             <p className="font-sans text-[9px] font-black text-[#2D2424]/30 uppercase tracking-widest mb-2">Convives</p>
-                            <p className="font-serif text-2xl text-[#2D2424] italic">{guests} Personnes</p>
+                            <p className="font-serif text-2xl text-[#2D2424] ">{guests} Personnes</p>
                          </div>
                       </div>
                       <div className="space-y-4">
                          <label htmlFor="res-notes" className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-widest ml-1">Une demande particulière ?</label>
-                         <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="w-full p-6 bg-white border border-[#2D2424]/5 rounded-2xl font-body text-base italic text-[#2D2424] focus:border-[#D14D1A]/30 outline-none transition-all resize-none" rows={4} />
+                         <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="w-full p-6 bg-white border border-[#2D2424]/5 rounded-2xl font-body text-base  text-[#2D2424] focus:border-[#D14D1A]/30 outline-none transition-all resize-none" rows={4} />
                       </div>
                    </div>
                    <div className="flex flex-col sm:flex-row gap-6 pt-6">
@@ -247,8 +247,8 @@ export const ReservationWizard: React.FC = () => {
                        <div className="absolute inset-0 bg-[#D14D1A]/10 rounded-full animate-ping opacity-10" />
                     </div>
                     <div className="space-y-6">
-                       <h2 className="font-serif text-5xl md:text-6xl font-black text-[#2D2424] italic leading-none m-0">C'est confirmé.</h2>
-                       <p className="font-serif text-xl md:text-2xl text-[#2D2424]/60 italic max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
+                       <h2 className="font-serif text-5xl md:text-6xl font-black text-[#2D2424]  leading-none m-0">C'est confirmé.</h2>
+                       <p className="font-serif text-xl md:text-2xl text-[#2D2424]/60  max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
                     </div>
                     <div className="pt-8 flex flex-col sm:flex-row gap-6 justify-center">
                        <button onClick={() => navigate('/')} className="px-14 py-6 bg-[#2D2424] text-[#FAF9F6] rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl hover:bg-[#D14D1A] transition-all">Retour à l'accueil</button>

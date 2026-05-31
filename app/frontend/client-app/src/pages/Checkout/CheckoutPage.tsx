@@ -87,18 +87,18 @@ export const CheckoutPage: React.FC = () => {
                 </motion.div>
                 
                 <div className="space-y-6">
-                    <h2 className="text-display-lg-mobile md:text-display-lg text-primary leading-none italic m-0">Merci pour votre commande</h2>
+                    <h2 className="text-display-lg-mobile md:text-display-lg text-primary leading-none  m-0">Merci pour votre commande</h2>
                     <p className="text-lg text-on-surface-variant uppercase tracking-[0.1em] font-medium leading-relaxed max-w-sm mx-auto">Votre commande a été transmise à la cuisine.</p>
                 </div>
 
                 <div className="w-full grid grid-cols-2 gap-8 py-10 border-y border-outline-variant/30">
                     <div className="text-center space-y-2">
                         <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Réf. Commande</span>
-                        <p className="font-serif text-2xl text-on-surface italic">#CMD-8924</p>
+                        <p className="font-serif text-2xl text-on-surface ">#CMD-8924</p>
                     </div>
                     <div className="text-center space-y-2 border-l border-outline-variant/30">
                         <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Temps Estimé</span>
-                        <div className="flex items-center justify-center gap-2 text-primary font-serif text-2xl italic">
+                        <div className="flex items-center justify-center gap-2 text-primary font-serif text-2xl ">
                            <Timer className="w-5 h-5" />
                            <span>25 min</span>
                         </div>
@@ -121,7 +121,7 @@ export const CheckoutPage: React.FC = () => {
                 <ShoppingBag className="w-10 h-10" />
             </div>
             <div className="space-y-6">
-                <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight italic">Votre panier <br /><span className="text-on-surface-variant">est vide.</span></h2>
+                <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight ">Votre panier <br /><span className="text-on-surface-variant">est vide.</span></h2>
                 <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed">Ajoutez des plats de notre carte pour commencer.</p>
             </div>
             <button 
@@ -146,8 +146,8 @@ export const CheckoutPage: React.FC = () => {
         >
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-90"><ChevronLeft className="w-5 h-5" /></button>
             <div>
-               <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase italic m-0">Votre Panier</h1>
-               <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3 italic opacity-60">Validation de votre commande</p>
+               <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase  m-0">Votre Panier</h1>
+               <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3  opacity-60">Validation de votre commande</p>
             </div>
         </motion.div>
 
@@ -174,11 +174,11 @@ export const CheckoutPage: React.FC = () => {
                                     {item.plat.image ? (
                                         <img src={item.plat.image} className="w-full h-full object-cover transition-all duration-700 grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-110" alt={item.plat.nom} />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center font-serif italic text-3xl text-on-surface-variant/10">{item.plat.nom.charAt(0)}</div>
+                                        <div className="w-full h-full flex items-center justify-center font-serif  text-3xl text-on-surface-variant/10">{item.plat.nom.charAt(0)}</div>
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0 text-center sm:text-left">
-                                    <h3 className="font-serif text-xl font-black text-on-surface uppercase italic tracking-tight">{item.plat.nom}</h3>
+                                    <h3 className="font-serif text-xl font-black text-on-surface uppercase  tracking-tight">{item.plat.nom}</h3>
                                     <p className="font-sans text-xs font-black text-primary uppercase mt-2 tracking-widest">{item.plat.prix} DH</p>
                                 </div>
                                 <div className="flex items-center gap-6">
@@ -211,7 +211,7 @@ export const CheckoutPage: React.FC = () => {
                 >
                     <div>
                         <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Ajouter un pourboire</h3>
-                        <p className="font-body text-[14px] text-on-surface-variant italic mt-1 font-medium">Pour soutenir nos équipes en cuisine et en salle</p>
+                        <p className="font-body text-[14px] text-on-surface-variant  mt-1 font-medium">Pour soutenir nos équipes en cuisine et en salle</p>
                     </div>
                     <div className="grid grid-cols-4 gap-4">
                         {[10, 15, 20, 25].map(p => (
@@ -251,9 +251,9 @@ export const CheckoutPage: React.FC = () => {
                             )}
                             
                             <div className="pt-8 border-t border-outline-variant/30 flex justify-between items-end">
-                                <span className="font-serif text-2xl text-on-surface italic m-0 lowercase">Total</span>
+                                <span className="font-serif text-2xl text-on-surface  m-0 lowercase">Total</span>
                                 <div className="text-right">
-                                    <span className="font-serif text-5xl font-black text-primary italic leading-none tabular-nums tracking-tighter">{grandTotal.toFixed(0)}</span>
+                                    <span className="font-serif text-5xl font-black text-primary  leading-none tabular-nums tracking-tighter">{grandTotal.toFixed(0)}</span>
                                     <span className="ml-2 text-xs font-black text-on-surface-variant">DH</span>
                                 </div>
                             </div>
