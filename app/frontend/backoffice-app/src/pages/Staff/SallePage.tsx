@@ -36,7 +36,7 @@ export const SallePage: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background -m-4 overflow-hidden selection:bg-on-background/10 font-body">
+    <div className="h-full flex flex-col bg-background overflow-hidden selection:bg-on-background/10 font-body">
       
       {/* Header */}
       <div className="flex-none flex items-center justify-between px-staff-margin h-16 border-b border-outline bg-surface">
