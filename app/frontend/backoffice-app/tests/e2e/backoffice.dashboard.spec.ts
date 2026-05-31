@@ -52,7 +52,7 @@ const emptyDashboardPayload: DashboardPayload = {
 };
 
 test.describe('manager dashboard analytics e2e', () => {
-  test.beforeEach(async ({}, testInfo) => {
+  test.beforeEach(async (_, testInfo) => {
     test.skip(testInfo.project.name !== 'gerant-chromium');
   });
 

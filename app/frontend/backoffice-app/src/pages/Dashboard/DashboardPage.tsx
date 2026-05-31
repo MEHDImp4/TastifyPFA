@@ -53,6 +53,17 @@ export const DashboardPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [lastUpdate]);
 
+  const groupedTickets = React.useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
+    const now = Date.now();
+    return {
+      late: activeTickets.filter(t => {
+        const elapsed = (now - new Date(t.created_at).getTime()) / 60000;
+        return (t.statut === 'EN_CUISINE') && elapsed > 20;
+      })
+    };
+  }, [activeTickets]);
+
   if (error) return (
     <div className="h-full flex flex-col items-center justify-center text-error p-8 text-center uppercase tracking-widest font-black">
       <AlertTriangle className="w-16 h-16 mb-4" />
@@ -74,13 +85,6 @@ export const DashboardPage: React.FC = () => {
     { label: "Tickets Actifs", value: data.pendingOrders, icon: ShoppingBag, trend: "En Cuisine / Prêts", color: "text-primary" },
     { label: "Service Cuisine", value: `${data.avgPrepTime}m`, icon: Timer, trend: "Objectif: 15m", color: "text-success" },      
   ];
-
-  const groupedTickets = {
-    late: activeTickets.filter(t => {
-        const elapsed = (Date.now() - new Date(t.created_at).getTime()) / 60000;
-        return (t.statut === 'EN_CUISINE') && elapsed > 20;
-    })
-  };
 
   return (
     <div className="flex-1 flex flex-col gap-10 overflow-hidden font-sans">

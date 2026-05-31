@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight,
   Sparkles,
-  MessageSquare,
   TrendingUp,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';

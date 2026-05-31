@@ -10,7 +10,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Hash,
-  Quote,
   TrendingUp,
   AlertCircle,
   Activity

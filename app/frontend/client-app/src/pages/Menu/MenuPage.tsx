@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
 import { useCartStore } from '../../store/cartStore';
+import { useConfigStore } from '../../store/configStore';
 import {
   Search,
   X,
@@ -41,6 +42,7 @@ export const MenuPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
   const { addItem } = useCartStore();
+  const { config } = useConfigStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -259,4 +261,5 @@ export const MenuPage: React.FC = () => {
     </div>
   );
 };
+
 

@@ -6,7 +6,6 @@ import {
   ChevronRight, 
   Loader2,
   Table as TableIcon,
-  ArrowLeft,
   ShieldCheck,
   Plus,
   Minus,
@@ -25,7 +24,6 @@ export const ReservationWizard: React.FC = () => {
   // Form state
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('19:00');
-  const [endTime, setEndTime] = useState('21:00');
   const [guests, setGuests] = useState(2);
   const [availableTables, setAvailableTables] = useState<any[]>([]);
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
@@ -40,7 +38,7 @@ export const ReservationWizard: React.FC = () => {
       const res = await reservationApi.getAvailableTables({
         date,
         heure_debut: startTime,
-        heure_fin: endTime,
+        heure_fin: '23:00', // Default end time
         nombre_personnes: guests
       });
       const filtered = res.data.filter((t: any) => t.est_disponible);
@@ -62,7 +60,7 @@ export const ReservationWizard: React.FC = () => {
         table: selectedTable,
         date_reservation: date,
         heure_debut: startTime,
-        heure_fin: endTime,
+        heure_fin: '23:00', // Default end time
         nombre_personnes: guests,
         notes: notes
       });
