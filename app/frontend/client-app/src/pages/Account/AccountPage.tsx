@@ -115,7 +115,7 @@ export const AccountPage: React.FC = () => {
 
               <div className="flex-1 text-center md:text-left space-y-6 z-10">
                  <div>
-                    <h1 className="font-serif text-4xl md:text-6xl font-black text-[#2D2424] uppercase  tracking-tighter m-0 leading-none">{username}</h1>
+                    <h1 className=" text-4xl md:text-6xl font-black text-[#2D2424] uppercase  tracking-tighter m-0 leading-none">{username}</h1>
                     <p className="font-sans text-[11px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em] mt-4">Identité Vérifiée</p>
                  </div>
                  
@@ -145,7 +145,7 @@ export const AccountPage: React.FC = () => {
                        className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] shadow-[0_0_12px_rgba(209,77,26,0.2)]"
                     />
                  </div>
-                 <p className="font-serif text-lg text-[#2D2424] ">Bientôt le prochain échelon culinaire</p>
+                 <p className=" text-lg text-[#2D2424] ">Bientôt le prochain échelon culinaire</p>
               </div>
            </div>
         </section>
@@ -154,7 +154,7 @@ export const AccountPage: React.FC = () => {
         <section className="space-y-12">
             <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
                 <div>
-                    <h2 className="font-serif text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Privilèges</h2>
+                    <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Privilèges</h2>
                     <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
                 </div>
                 <div className="flex items-center gap-3 text-[#C5A059]">
@@ -179,7 +179,7 @@ export const AccountPage: React.FC = () => {
                                     <Gift className="w-5 h-5" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="font-serif text-xl font-black text-[#2D2424] uppercase ">{reward.nom}</h4>
+                                    <h4 className=" text-xl font-black text-[#2D2424] uppercase ">{reward.nom}</h4>
                                     <p className="font-body text-xs text-[#2D2424]/60  leading-relaxed">{reward.description}</p>
                                 </div>
                             </div>
@@ -205,7 +205,7 @@ export const AccountPage: React.FC = () => {
               <div className="space-y-10">
                  <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
                     <div>
-                        <h2 className="font-serif text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Historique</h2>
+                        <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Historique</h2>
                         <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
                     </div>
                     <div className="flex items-center gap-3 text-[#D14D1A]">
@@ -228,7 +228,7 @@ export const AccountPage: React.FC = () => {
                                     <ShoppingBag className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className="font-serif text-2xl font-black text-[#2D2424] uppercase  tracking-tight">Commande #{order.id}</h4>
+                                    <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">Commande #{order.id}</h4>
                                     <p className="font-body text-sm text-[#2D2424]/60 ">
                                         {new Date(order.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })} • {order.montant_total} DH
                                     </p>
@@ -253,7 +253,7 @@ export const AccountPage: React.FC = () => {
               {/* Reservations */}
               <div className="space-y-10">
                  <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
-                    <h2 className="font-serif text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Réservations</h2>
+                    <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Réservations</h2>
                     <Link to="/reservations" className="font-sans text-[10px] font-black text-[#D14D1A] hover:text-[#2D2424] transition-colors uppercase tracking-[0.2em] border-b border-[#D14D1A]/20 pb-1">Réserver une table</Link>
                  </div>
 
@@ -270,7 +270,7 @@ export const AccountPage: React.FC = () => {
                                     <Calendar className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className="font-serif text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{res.date_reservation}</h4>
+                                    <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{res.date_reservation}</h4>
                                     <p className="font-body text-sm text-[#2D2424]/60 ">{res.heure_debut} • Table {res.table}</p>
                                 </div>
                             </div>
@@ -292,7 +292,7 @@ export const AccountPage: React.FC = () => {
                  <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
                  
                  <div className="space-y-4 relative z-10">
-                    <h3 className="font-serif text-3xl  tracking-tight m-0">Menu Privé</h3>
+                    <h3 className=" text-3xl  tracking-tight m-0">Menu Privé</h3>
                     <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-[#FAF9F6]/40">Gestion du compte & Assistance</p>
                  </div>
 
@@ -342,13 +342,13 @@ export const AccountPage: React.FC = () => {
                  <div className="w-20 h-20 bg-[#D14D1A]/5 rounded-full flex items-center justify-center text-[#D14D1A] mb-10 border border-[#D14D1A]/10">
                     <Quote className="w-8 h-8" />
                  </div>
-                 <h3 className="font-serif text-5xl font-black text-[#2D2424]  tracking-tighter mb-4">Votre avis nous est précieux.</h3>
+                 <h3 className=" text-5xl font-black text-[#2D2424]  tracking-tighter mb-4">Votre avis nous est précieux.</h3>
                  <p className="text-[#2D2424]/60 font-body  mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
                  
                  <form onSubmit={handleReviewSubmit} className="w-full space-y-10">
                     <textarea 
                         required value={comment} onChange={(e) => setComment(e.target.value)}
-                        className="w-full p-8 bg-[#FAF9F6] border border-[#2D2424]/10 rounded-3xl font-serif text-2xl  text-[#2D2424] focus:border-[#D14D1A]/30 outline-none transition-all resize-none h-48 placeholder:text-[#2D2424]/10"
+                        className="w-full p-8 bg-[#FAF9F6] border border-[#2D2424]/10 rounded-3xl  text-2xl  text-[#2D2424] focus:border-[#D14D1A]/30 outline-none transition-all resize-none h-48 placeholder:text-[#2D2424]/10"
                         placeholder="Écrivez ici..."
                     />
 

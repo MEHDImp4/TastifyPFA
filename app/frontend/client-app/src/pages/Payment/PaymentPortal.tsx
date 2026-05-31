@@ -117,7 +117,7 @@ export const PaymentPortal: React.FC = () => {
         <div className="w-full max-w-xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[80px] -mr-24 -mt-24" />
             <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-10" strokeWidth={1} />
-            <h2 className="font-serif text-4xl font-black text-on-surface  mb-4 leading-none">Paiement Sécurisé.</h2>
+            <h2 className=" text-4xl font-black text-on-surface  mb-4 leading-none">Paiement Sécurisé.</h2>
             <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed mb-12">Merci de votre visite chez {brandName}. Votre session a été réglée avec succès.</p>
             <button onClick={() => navigate('/')} className="px-16 py-6 bg-on-surface text-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-primary cinematic-shadow">Retour à l'Accueil</button>
         </div>
@@ -131,7 +131,7 @@ export const PaymentPortal: React.FC = () => {
             {/* Header Section */}
             <div className="text-center space-y-4">
                 <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Table {session.table_numero || '00'} • Règlement</span>
-                <h1 className="font-serif text-4xl md:text-6xl font-black text-on-surface  leading-none m-0">Votre Addition</h1>
+                <h1 className=" text-4xl md:text-6xl font-black text-on-surface  leading-none m-0">Votre Addition</h1>
                 <div
                   className="text-5xl md:text-7xl font-sans font-black text-primary tracking-tighter tabular-nums mt-6"
                   data-testid="payment-session-total"
@@ -185,7 +185,7 @@ export const PaymentPortal: React.FC = () => {
                             <span aria-hidden="true">—</span>
                             <span className="sr-only">Diminuer le nombre de parts</span>
                           </button>
-                          <span className="font-serif text-5xl font-black  text-on-surface">{splitCount}</span>
+                          <span className=" text-5xl font-black  text-on-surface">{splitCount}</span>
                           <button aria-label="Augmenter le nombre de parts" onClick={() => setSplitCount(splitCount + 1)} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
                             <span aria-hidden="true">+</span>
                             <span className="sr-only">Augmenter le nombre de parts</span>

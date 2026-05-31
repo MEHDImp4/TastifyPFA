@@ -22,7 +22,7 @@ export const NotFoundPage: React.FC = () => {
         <div className="w-16 h-px bg-outline-variant/30" />
         
         <div className="space-y-6">
-           <h2 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Page Introuvable</h2>
+           <h2 className=" text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Page Introuvable</h2>
            <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
               Le goût de l'évasion, littéralement. La page que vous recherchez a été retirée de notre menu ou n'a jamais existé.
            </p>

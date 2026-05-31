@@ -29,7 +29,7 @@ export const MaintenancePage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
         <div>
-          <h1 className="font-serif text-3xl font-black text-on-surface tracking-tighter uppercase">System Health</h1>
+          <h1 className=" text-3xl font-black text-on-surface tracking-tighter uppercase">System Health</h1>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Real-time telemetry and module status</p>
         </div>
         <div className="flex gap-unit-md items-center">
@@ -52,7 +52,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
               </div>
               <div className="mt-auto">
-                 <div className="font-serif text-3xl font-black text-on-surface">Online</div>
+                 <div className=" text-3xl font-black text-on-surface">Online</div>
                  <div className="flex justify-between font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mt-2">
                     <span>Lat: 12ms</span>
                     <span>Up: 99.9%</span>
@@ -66,7 +66,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
               </div>
               <div className="mt-auto">
-                 <div className="font-serif text-3xl font-black text-on-surface">Online</div>
+                 <div className=" text-3xl font-black text-on-surface">Online</div>
                  <div className="flex justify-between font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mt-2">
                     <span>Lat: 8ms</span>
                     <span>Nodes: 14</span>
@@ -80,7 +80,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               </div>
               <div className="mt-auto">
-                 <div className="font-serif text-3xl font-black text-primary">Degraded</div>
+                 <div className=" text-3xl font-black text-primary">Degraded</div>
                  <div className="flex justify-between font-sans text-[9px] font-black text-primary/60 uppercase tracking-widest mt-2">
                     <span>Lat: 145ms</span>
                     <span>Err: 2.1%</span>

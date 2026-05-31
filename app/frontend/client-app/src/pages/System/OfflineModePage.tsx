@@ -31,7 +31,7 @@ export const OfflineModePage: React.FC = () => {
         </div>
 
         <div className="space-y-6">
-           <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Mode Hors Ligne</h1>
+           <h1 className=" text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Mode Hors Ligne</h1>
            <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
               Connexion interrompue. Votre menu et vos préférences de profil sont sécurisés en cache. La synchronisation en direct est temporairement suspendue.
            </p>

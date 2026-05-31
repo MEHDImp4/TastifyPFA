@@ -71,7 +71,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
                 transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
                 className="flex flex-col items-center relative z-10"
             >
-                <h1 className="font-serif text-6xl md:text-7xl font-black text-[#D14D1A]  tracking-tighter mb-10 leading-none">
+                <h1 className=" text-6xl md:text-7xl font-black text-[#D14D1A]  tracking-tighter mb-10 leading-none">
                     Tastify.
                 </h1>
                 <div className="flex flex-col items-center gap-4">

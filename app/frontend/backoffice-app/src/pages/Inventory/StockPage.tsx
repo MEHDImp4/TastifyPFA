@@ -221,19 +221,19 @@ export const StockPage: React.FC = () => {
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Total Ressources</span>
-                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-on-surface mt-2">{ingredients.length}</h4>
+                    <h4 className="text-[2rem]  font-black  tracking-tighter text-on-surface mt-2">{ingredients.length}</h4>
                 </div>
             </div>
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Rupture Critiques</span>
-                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-error mt-2">{ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length}</h4>
+                    <h4 className="text-[2rem]  font-black  tracking-tighter text-error mt-2">{ingredients.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte)).length}</h4>
                 </div>
             </div>
             <div className="bg-surface-container-lowest border border-outline rounded-xl p-6 flex justify-between items-center">
                 <div>
                     <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Alerte Prioritaire</span>
-                    <h4 className="text-[2rem] font-serif font-black  tracking-tighter text-amber-500 mt-2">{ingredients.filter(i => {
+                    <h4 className="text-[2rem]  font-black  tracking-tighter text-amber-500 mt-2">{ingredients.filter(i => {
                         const val = parseFloat(i.stock_actuel);
                         const seuil = parseFloat(i.seuil_alerte);
                         return val > seuil && val <= seuil * 1.5;

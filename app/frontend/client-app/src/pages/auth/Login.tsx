@@ -75,7 +75,7 @@ export const Login: React.FC = () => {
         className="w-full max-w-md space-y-12"
       >
         <motion.div variants={fadeIn} className="text-center space-y-2">
-          <h1 className="font-serif text-5xl font-medium text-[#2D2424]  tracking-tight m-0">Connexion.</h1>
+          <h1 className=" text-5xl font-medium text-[#2D2424]  tracking-tight m-0">Connexion.</h1>
           <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">Identifiez-vous pour continuer</p>
         </motion.div>
 

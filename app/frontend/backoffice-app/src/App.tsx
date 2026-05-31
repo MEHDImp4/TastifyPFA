@@ -63,7 +63,7 @@ function App() {
   return (
     <AuthBootstrap>
       <WebSocketProvider>
-        <div className="selection:bg-primary/20 selection:text-primary">
+        <div className="selection:bg-on-background/10 selection:text-on-background">
           <Toaster position="top-right" richColors theme="dark" />
           <BrowserRouter>
             <Routes>

@@ -167,7 +167,7 @@ export const HrPage: React.FC = () => {
                   <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant">#{emp.id.toString().padStart(4, '0')}</div>
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-10 h-10 rounded bg-background border border-outline flex items-center justify-center shrink-0">
-                        <span className="font-serif text-sm font-black text-on-surface">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
+                        <span className=" text-sm font-black text-on-surface">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
                     </div>
                     <div className="min-w-0">
                         <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors truncate">

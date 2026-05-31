@@ -151,7 +151,7 @@ export const MenuPage: React.FC = () => {
                     {plat.image ? (
                        <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} />
                     ) : (
-                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 font-serif  text-4xl">{plat.nom.charAt(0)}</div>
+                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10   text-4xl">{plat.nom.charAt(0)}</div>
                     )}
                     
                     {!plat.est_disponible && (
@@ -212,7 +212,7 @@ export const MenuPage: React.FC = () => {
                    {selectedPlat.image ? (
                       <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={selectedPlat.nom} />
                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center font-serif  text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
+                      <div className="absolute inset-0 flex items-center justify-center   text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
                    )}
                 </div>
 

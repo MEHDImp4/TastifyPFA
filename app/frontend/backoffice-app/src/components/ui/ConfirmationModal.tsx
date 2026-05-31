@@ -52,7 +52,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                   <div className={`p-2 rounded-lg ${variant === 'danger' ? 'bg-error/10' : 'bg-primary/10'}`}>
                     <AlertTriangle className={`w-5 h-5 ${accentColor}`} />
                   </div>
-                  <h2 className="font-serif text-xl font-black text-on-surface uppercase  tracking-tight">{title}</h2>
+                  <h2 className=" text-xl font-black text-on-surface uppercase  tracking-tight">{title}</h2>
                 </div>
                 <button onClick={onClose} className="p-1 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
                   <X className="w-5 h-5" />

@@ -109,7 +109,7 @@ export const ResetPassword: React.FC = () => {
               <Sparkles className="w-6 h-6" strokeWidth={1.5} />
             </div>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">
+          <h1 className=" text-4xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">
             Réédition du Code.
           </h1>
           <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] leading-relaxed">

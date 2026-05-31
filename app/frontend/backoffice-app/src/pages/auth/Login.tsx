@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
             <div className="w-12 h-12 rounded-full border border-outline flex items-center justify-center mb-6">
                <User className="w-5 h-5 text-on-surface-variant" strokeWidth={1} />
             </div>
-            <h1 className="text-4xl font-serif  tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
+            <h1 className="text-4xl   tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
         </motion.div>
 

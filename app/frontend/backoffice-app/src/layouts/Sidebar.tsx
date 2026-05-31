@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   UtensilsCrossed, 
@@ -13,8 +12,7 @@ import {
   Star,
   LogOut,
   Settings,
-  Activity,
-  Box
+  Activity
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -60,10 +58,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-4 px-8 py-4 transition-all duration-200 group relative border-l-4
+    flex items-center gap-4 px-8 py-3.5 transition-all duration-200 group relative border-l-2
     ${isActive 
-      ? 'text-primary bg-primary-container/10 font-bold border-primary' 
-      : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low border-transparent'
+      ? 'text-on-background bg-surface-container-high font-bold border-on-background' 
+      : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low border-transparent'
     }
   `;
 
@@ -71,61 +69,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/40 z-40 md:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-background/80 z-40 md:hidden backdrop-blur-md"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside className={`
-        fixed inset-y-0 left-0 z-50 bg-surface-container-lowest border-r border-outline-variant
-        transform transition-all duration-500 ease-out-expo
-        md:relative md:flex md:flex-col md:translate-x-0 md:w-72
+        fixed inset-y-0 left-0 z-50 bg-surface border-r border-outline
+        transform transition-all duration-300
+        md:relative md:flex md:flex-col md:translate-x-0 md:w-64
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-8 pb-12">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
-                <Box className="w-6 h-6 text-on-primary" strokeWidth={2.5} />
-            </div>
-            <h1 className="text-2xl font-black tracking-tighter text-on-surface uppercase  leading-none">Tastify OS</h1>
+        <div className="p-8 pb-10">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl font-bold tracking-tighter text-on-background uppercase">Tastify.</span>
           </div>
-          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-50 ml-1">Intelligent Restaurant OS</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/40">Professional OS</p>
         </div>
 
         <nav className="flex-1 overflow-y-auto custom-scrollbar">
           {getLinks().map((link) => {
             const Icon = link.icon;
-            const testIds: Record<string, string> = {
-              '/': 'nav-dashboard',
-              '/salle': 'nav-salle',
-              '/reservations': 'nav-reservations',
-              '/menu': 'nav-menu',
-              '/categories': 'nav-categories',
-              '/stock': 'nav-stock',
-              '/hr': 'nav-hr',
-              '/avis': 'nav-avis',
-              '/settings': 'nav-settings',
-              '/kds': 'nav-kds',
-            };
             return (
               <NavLink 
                 key={link.to} 
                 to={link.to} 
                 end={link.exact}
-                data-testid={testIds[link.to]}
                 className={navClass}
                 onClick={() => setMobileOpen(false)}
               >
                 {({ isActive }) => (
                   <>
-                    {isActive && (
-                        <motion.div 
-                            layoutId="active-nav"
-                            className="absolute left-0 w-1 h-8 bg-primary rounded-r-full"
-                        />
-                    )}
-                    <Icon strokeWidth={isActive ? 2.5 : 1.5} className={`h-5 w-5 shrink-0 transition-all duration-300 ${isActive ? 'text-primary' : 'text-on-surface-variant group-hover:text-primary'}`} />
-                    <span className="text-[12px] font-bold uppercase tracking-widest">{link.label}</span>
+                    <Icon strokeWidth={isActive ? 2 : 1.5} className={`h-4 w-4 shrink-0 transition-colors ${isActive ? 'text-on-background' : 'text-on-surface-variant group-hover:text-on-background'}`} />
+                    <span className="text-[11px] font-bold uppercase tracking-widest">{link.label}</span>
                   </>
                 )}
               </NavLink>
@@ -133,22 +109,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        <div className="p-8 border-t border-outline-variant space-y-6 bg-surface-container-lowest">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-success"></div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">System Ready</span>
+        <div className="p-8 border-t border-outline space-y-4 bg-surface">
+          <div className="flex items-center justify-between opacity-30">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
+              <span className="text-[9px] font-bold uppercase tracking-widest">Active</span>
             </div>
-            <span className="font-mono text-[9px] text-on-surface-variant">V1.4.2</span>
+            <span className="font-mono text-[8px]">V4.2</span>
           </div>
 
           <button
             onClick={() => logout()}
-            data-testid="logout-button"
-            className="flex items-center gap-3 w-full py-4 border border-outline-variant hover:border-error/40 hover:bg-error/5 text-on-surface-variant hover:text-error transition-all duration-300 rounded-xl group active:scale-95 shadow-sm"
+            className="flex items-center gap-3 w-full py-3 border border-outline hover:border-error text-on-surface-variant hover:text-error transition-all duration-200 rounded-md group"
           >
-            <LogOut strokeWidth={2} className="h-4 w-4 ml-5 shrink-0" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Fermer Session</span>
+            <LogOut strokeWidth={1.5} className="h-4 w-4 ml-4 shrink-0" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Fermer Session</span>
           </button>
         </div>
       </aside>
