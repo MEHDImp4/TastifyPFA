@@ -14,36 +14,36 @@ export const Topbar: React.FC<TopbarProps> = ({
   const { username, role } = useAuthStore();
 
   return (
-    <header className="h-20 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-10 sticky top-0 z-40">
+    <header className="h-16 bg-surface border-b border-outline flex items-center justify-between px-8 sticky top-0 z-40">
       <div className="flex items-center gap-6">
         <button 
           onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation menu"
-          className="flex h-12 w-12 items-center justify-center border border-outline-variant text-on-surface-variant hover:text-primary hover:bg-primary/5 md:hidden rounded-lg transition-all"
+          className="flex h-10 w-10 items-center justify-center border border-outline text-on-surface-variant hover:text-on-background hover:bg-background md:hidden rounded transition-all"
         >
-          <Menu strokeWidth={2.5} className="w-6 h-6" />
+          <Menu strokeWidth={2} className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="flex items-center gap-10">
-        <div className="flex items-center gap-6 border-r border-outline-variant pr-10 h-10">
+      <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6 border-r border-outline pr-8 h-8">
           <SocketIndicator />
           <NotificationCenter />
-          <div className="text-on-surface-variant hover:text-success transition-all cursor-help hover:scale-110">
-            <ShieldCheck className="w-6 h-6" strokeWidth={2} />
+          <div className="text-on-surface-variant hover:text-success transition-all cursor-help opacity-40 hover:opacity-100">
+            <ShieldCheck className="w-5 h-5" strokeWidth={1.5} />
           </div>
         </div>
         
-        <div className="flex items-center gap-5 group cursor-pointer pl-2">
+        <div className="flex items-center gap-4 group pl-2">
           <div className="text-right hidden sm:block">
-            <p className="text-[13px] font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">{username}</p>
-            <p className="text-[9px] font-bold text-on-surface-variant tracking-[0.25em] mt-1 uppercase opacity-60">{role}</p>
+            <p className="text-[11px] font-bold text-on-background uppercase tracking-wider">{username}</p>
+            <p className="text-[8px] font-bold text-on-surface-variant tracking-widest mt-1 uppercase opacity-40">{role}</p>
           </div>
-          <div className="w-12 h-12 border border-outline-variant bg-surface-container-low flex items-center justify-center rounded-xl transition-all group-hover:border-primary group-hover:bg-primary/5 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/10">
-            <User strokeWidth={2} className="w-6 h-6 text-on-surface-variant group-hover:text-primary" />
+          <div className="w-10 h-10 border border-outline bg-background flex items-center justify-center rounded transition-all group-hover:border-on-background">
+            <User strokeWidth={1.5} className="w-5 h-5 text-on-surface-variant group-hover:text-on-background" />
           </div>
         </div>
       </div>
     </header>
   );
 };
+

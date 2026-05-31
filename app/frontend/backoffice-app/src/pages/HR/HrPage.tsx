@@ -46,24 +46,22 @@ export const HrPage: React.FC = () => {
 
   const handleExportCSV = () => {
     try {
-        toast.info("GENERATING_EXPORT_STREAM");
         if (employes.length === 0) return;
-        const reportTitle = "REGISTRE DU PERSONNEL TASTIFY OS";
         const headers = ["ID", "PSEUDONYME", "IDENTITÉ", "POSTE", "EMAIL", "TELEPHONE"];
         const rows = employes.map(e => [
-            `#${e.id.toString().padStart(4, '0')}`,
-            e.user_details?.username?.toUpperCase() || 'N/A',
-            `${e.user_details?.first_name || ''} ${e.user_details?.last_name || ''}`.toUpperCase().trim() || 'N/A',
-            e.poste.toUpperCase(),
+            `#${e.id}`,
+            e.user_details?.username || 'N/A',
+            `${e.user_details?.first_name || ''} ${e.user_details?.last_name || ''}`.trim() || 'N/A',
+            e.poste,
             e.user_details?.email || 'N/A',
             e.telephone || 'N/A'
         ]);
-        const csvContent = "\uFEFF" + [`"${reportTitle}"`, "", headers.join(";"), ...rows.map(row => row.join(";"))].join("\n");
+        const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(row => row.join(";"))].join("\n");
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", `PERSONNEL_TASTIFY_${new Date().toISOString().split('T')[0]}.csv`);
+        link.setAttribute("download", `PERSONNEL_TASTIFY.csv`);
         link.click();
         toast.success("REGISTRE EXPORTÉ");
     } catch (err) {
@@ -86,74 +84,74 @@ export const HrPage: React.FC = () => {
   const totalPages = Math.ceil(filteredEmployes.length / itemsPerPage);
   const paginatedEmployes = filteredEmployes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-primary"><Loader2 className="w-12 h-12 animate-spin" /></div>;
+  if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-background font-sans selection:bg-primary/20 overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       
-      {/* HR Header */}
-      <div className="flex-none flex justify-between items-end px-8 py-8 border-b border-outline bg-surface-container-lowest">
+      {/* Header */}
+      <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-on-surface uppercase  leading-none">Capital Humain <span className="sr-only">Human Resources</span></h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-3">Gestion du Registre du Personnel et des Accès Staff</p>
+          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion des effectifs et accès opérationnels</p>
         </div>
         <div className="flex items-center gap-4">
            <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input 
               type="text"
-              placeholder="SEARCH BY NAME, ROLE, OR ID..."
+              placeholder="rechercher..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-64 h-12 bg-surface-container-low border border-outline pl-12 pr-4 rounded-lg text-[10px] font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant"
+              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
             />
           </div>
-          <button onClick={handleExportCSV} className="h-12 px-6 border border-outline rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
-             <Download className="w-4 h-4 inline-block mr-2" /> Registre CSV <span className="sr-only">EXPORT ROSTER</span>
+          <button onClick={handleExportCSV} className="btn-ghost h-10 px-4">
+             <Download className="w-3.5 h-3.5" /> <span>Export CSV</span>
           </button>
-          <button className="btn-primary">
-            <Plus className="w-4 h-4" strokeWidth={3} /> Nouvel Employé
+          <button className="btn-primary h-10 px-6">
+            <Plus className="w-4 h-4" /> <span>Nouvel Employé</span>
           </button>
         </div>
       </div>
 
       {/* Main Grid Content */}
-      <div className="flex-1 overflow-hidden flex flex-col p-8 min-h-0">
+      <div className="flex-1 overflow-hidden flex flex-col p-8 gap-8 min-h-0">
         
         {/* Top Status Bar */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between">
             <div className="flex gap-2">
                 {['ALL', 'GERANT', 'CUISINIER', 'SERVEUR'].map(tab => (
                     <button 
                         key={tab}
                         onClick={() => { setActiveFilter(tab); setCurrentPage(1); }}
-                        className={`px-6 h-10 rounded-lg font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-primary text-on-primary' : 'bg-surface-container-low border border-outline text-on-surface-variant/60 hover:text-on-surface'}`}
+                        className={`px-4 h-9 rounded font-bold text-[9px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-on-background text-background' : 'bg-surface border border-outline text-on-surface-variant hover:text-on-background'}`}
                     >
                         {tab === 'ALL' ? 'Tout l\'Effectif' : tab}
                     </button>
                 ))}
             </div>
-            <div className="flex items-center gap-8 bg-surface-container-lowest border border-outline px-8 py-3 rounded-xl">
+            <div className="flex items-center gap-8 bg-surface border border-outline px-6 py-2.5 rounded-lg">
                 <div className="text-center border-r border-outline pr-8">
-                    <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Effectif Actif</p>
-                    <p className="text-lg font-black text-on-surface mt-1">{employes.filter(e => e.user_details?.is_active).length}</p>
+                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Effectif Actif</p>
+                    <p className="text-lg font-bold text-on-background mt-0.5">{employes.filter(e => e.user_details?.is_active).length}</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Postes Ouverts</p>
-                    <p className="text-lg font-black text-primary mt-1">GRILL, SALLE</p>
+                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Opérationnel</p>
+                    <p className="text-lg font-bold text-success mt-0.5">READY</p>
                 </div>
             </div>
         </div>
 
-        <div className="flex-1 bg-surface-container-lowest border border-outline rounded-xl overflow-hidden flex flex-col">
+        <div className="flex-1 atelier-card overflow-hidden flex flex-col">
           
           {/* Table Header */}
-          <div className="flex-none grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline bg-surface-container-low text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em]">
-            <div className="col-span-1 flex items-center gap-2"><Hash className="w-3 h-3" /> ID</div>
-            <div className="col-span-3">Identité de l'Employé</div>
-            <div className="col-span-2 text-center">Poste / Rôle</div>
+          <div className="flex-none grid grid-cols-12 gap-4 px-8 h-12 items-center border-b border-outline bg-surface-container-high text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
+            <div className="col-span-1 flex items-center gap-2"><Hash className="w-2.5 h-2.5" /> ID</div>
+            <div className="col-span-3">Identité</div>
+            <div className="col-span-2 text-center">Rôle</div>
             <div className="col-span-2 text-center">Statut</div>
-            <div className="col-span-2">Contact Direct</div>
+            <div className="col-span-2">Contact</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
 
@@ -162,72 +160,71 @@ export const HrPage: React.FC = () => {
             {paginatedEmployes.length > 0 ? paginatedEmployes.map((emp) => (
                 <div 
                   key={emp.id}
-                  className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant hover:bg-white/[0.02] transition-colors items-center group"
+                  className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-center group"
                 >
-                  <div className="col-span-1 font-mono text-xs font-bold text-on-surface-variant">#{emp.id.toString().padStart(4, '0')}</div>
+                  <div className="col-span-1 font-mono text-[10px] font-bold text-on-surface-variant">#{emp.id.toString().slice(-4)}</div>
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
-                    <div className="w-10 h-10 rounded bg-background border border-outline flex items-center justify-center shrink-0">
-                        <span className=" text-sm font-black text-on-surface">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
+                    <div className="w-9 h-9 rounded bg-background border border-outline flex items-center justify-center shrink-0">
+                        <span className="text-[11px] font-bold text-on-background">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
                     </div>
                     <div className="min-w-0">
-                        <h3 className="text-sm font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors truncate">
+                        <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider truncate">
                             {emp.user_details?.first_name && emp.user_details?.last_name 
                             ? `${emp.user_details.first_name} ${emp.user_details.last_name}`
                             : emp.user_details?.username || 'Inconnu'}
                         </h3>
-                        <p className="text-[9px] font-mono font-black text-on-surface uppercase tracking-widest mt-1">@{emp.user_details?.username || 'no_user'}</p>
+                        <p className="text-[8px] font-mono text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">@{emp.user_details?.username || 'no_user'}</p>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-low border border-outline rounded text-on-surface">
-                        <Briefcase className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{emp.poste}</span>
+                    <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high border border-outline rounded text-on-background">
+                        <Briefcase className="w-3 h-3 opacity-20" />
+                        <span className="text-[9px] font-bold uppercase tracking-widest">{emp.poste}</span>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${emp.user_details?.is_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface'}`}>
-                      <div className={`w-1.5 h-1.5 rounded-full ${emp.user_details?.is_active ? 'bg-success' : 'bg-outline-variant'}`} />
-                      <span className="text-[9px] font-black uppercase tracking-widest">{emp.user_details?.is_active ? 'OPÉRATIONNEL' : 'HORS SERVICE'}</span>
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${emp.user_details?.is_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'}`}>
+                      <div className={`w-1 h-1 rounded-full ${emp.user_details?.is_active ? 'bg-success' : 'bg-outline-variant'}`} />
+                      <span className="text-[8px] font-bold uppercase tracking-widest">{emp.user_details?.is_active ? 'ACTIF' : 'OFF'}</span>
                     </div>
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity">
-                      <Mail className="w-3 h-3 text-primary" />
-                      <span className="text-[10px] font-bold truncate">{emp.user_details?.email || 'N/A'}</span>
+                    <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
+                      <Mail className="w-3 h-3 opacity-20" />
+                      <span className="text-[9px] font-bold truncate">{emp.user_details?.email || 'N/A'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity">
-                      <Phone className="w-3 h-3 text-primary" />
-                      <span className="text-[10px] font-bold">{emp.telephone || 'N/A'}</span>
+                    <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
+                      <Phone className="w-3 h-3 opacity-20" />
+                      <span className="text-[9px] font-bold">{emp.telephone || 'N/A'}</span>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-on-surface transition-all"><Edit2 className="w-4 h-4" /></button>
-                    <button className="w-9 h-9 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition-all"><MoreVertical className="w-4 h-4" /></button>
+                    <button className="w-8 h-8 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-background transition-all"><Edit2 className="w-3.5 h-3.5" /></button>
+                    <button className="w-8 h-8 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-background transition-all"><MoreVertical className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
             )) : (
-                <div aria-hidden="true" className="h-64 flex flex-col items-center justify-center opacity-10">
-                    <Users className="w-16 h-16 mb-4" strokeWidth={1} />
-                    <p className="text-xs font-black uppercase tracking-[0.4em]">Annuaire Vide</p>
-                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">NO STAFF RECORDS FOUND</span>
+                <div className="h-64 flex flex-col items-center justify-center opacity-10">
+                    <Users className="w-12 h-12 mb-4" strokeWidth={1} />
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucun personnel</p>
                 </div>
             )}
           </div>
 
           {/* Table Footer */}
-          <div className="flex-none px-8 py-5 border-t border-outline bg-surface-container-low flex justify-between items-center">
-            <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
-                Total : {filteredEmployes.length} Dossiers Personnel
+          <div className="flex-none px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center">
+            <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
+                Total : {filteredEmployes.length} Dossiers
             </span>
             {totalPages > 1 && (
-                <div className="flex items-center gap-4">
-                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronLeft className="w-4 h-4" /></button>
-                    <div className="flex items-center gap-2 font-mono text-xs font-black bg-background border border-outline px-4 py-2 rounded">
-                        <span className="text-primary">{currentPage}</span>
-                        <span className="text-on-surface-variant">/</span>
-                        <span className="text-on-surface">{totalPages}</span>
+                <div className="flex items-center gap-3">
+                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronLeft className="w-3.5 h-3.5" /></button>
+                    <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
+                        <span className="text-on-background">{currentPage}</span>
+                        <span>/</span>
+                        <span>{totalPages}</span>
                     </div>
-                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 border border-outline rounded hover:bg-white/5 disabled:opacity-10 transition-all"><ChevronRight className="w-4 h-4" /></button>
+                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronRight className="w-3.5 h-3.5" /></button>
                 </div>
             )}
           </div>
@@ -236,3 +233,4 @@ export const HrPage: React.FC = () => {
     </div>
   );
 };
+
