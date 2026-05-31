@@ -39,7 +39,7 @@ export const SallePage: React.FC = () => {
     <div className="h-full flex flex-col bg-background overflow-hidden selection:bg-on-background/10 font-body">
       
       {/* Header */}
-      <div className="flex-none flex items-center justify-between px-staff-margin h-16 border-b border-outline bg-surface">
+      <div className="flex-none flex items-center justify-center px-staff-margin h-16 border-b border-outline bg-surface">
         <div className="flex items-center gap-8">
           <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Plan de Salle</h1>
           <div className="hidden sm:flex items-center gap-6 border-l border-outline pl-8">
