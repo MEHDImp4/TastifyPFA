@@ -85,13 +85,14 @@ L'application repose sur une stack moderne, conteneurisée et prête pour le tem
 *   **Réservation Gérée :** Système de réservation intelligent (nécessite un compte).
 *   **Hub Membre :** Centralisation du profil, historique des commandes, réservations actives et privilèges de fidélité.
 
-### **Backoffice (Tastify OS)**
+### Backoffice (Tastify OS)
 *   **Tableau de Bord :** Analytics en temps réel sur les ventes, les couverts et les KPI.
-*   **Plan de Salle :** Gestion visuelle des tables (drag & drop) et occupation en direct.
+*   **Plan de Salle :** Gestion visuelle des tables (drag & drop) et occupation en direct. Optimisation des interactions (Single-Tap) et robustesse des sélecteurs pour la fiabilité opérationnelle.
 *   **Système KDS :** Écran de cuisine optimisé pour la lecture rapide, chronométré et réactif.
 *   **Gestion des Ressources Humaines (RH) :** Registre du personnel, rôles et contacts opérationnels.
 *   **Gestion de l'Inventaire :** Suivi des stocks avec système de réapprovisionnement rapide et alertes de rupture critique.
 *   **Paramètres Système :** Configuration globale (nom, adresse, horaires, devise) synchronisée en temps réel avec le front-end client.
+*   **Absolute Contrast Overhaul :** Refonte complète de la typographie fonctionnelle pour éliminer les opacités réduites et garantir une lisibilité maximale (Zero Transparency).
 
 ---
 

@@ -1,46 +1,45 @@
-@import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;1,400&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
-  /* Tactical Command Center - Staff OS Core Palette */
-  --color-background: #0d0b0a;
-  --color-on-background: #e8e1de;
+  /* Atelier Minimalist Palette - Refined Professional */
+  --color-background: #FBFBFA;
+  --color-on-background: #111111;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #111111;
+  --color-on-surface-variant: #71717A;
   
-  --color-surface: #151312;
-  --color-on-surface: #e8e1de;
-  --color-on-surface-variant: #d8c2b6;
+  --color-surface-dim: #F5F5F4;
+  --color-surface-bright: #FFFFFF;
+  --color-surface-container: #FBFBFA;
+  --color-surface-container-low: #FFFFFF;
+  --color-surface-container-high: #F5F5F4;
+  --color-surface-container-highest: #EAEAEA;
+  --color-surface-container-lowest: #FFFFFF;
   
-  --color-surface-dim: #151312;
-  --color-surface-bright: #3c3937;
-  --color-surface-container: #221f1e;
-  --color-surface-container-low: #1d1b1a;
-  --color-surface-container-high: #2c2928;
-  --color-surface-container-highest: #373432;
-  --color-surface-container-lowest: #100e0c;
-  
-  --color-outline: #a08d81;
-  --color-outline-variant: #53443a;
+  --color-outline: #EAEAEA;
+  --color-outline-variant: #D4D4D8;
 
-  /* Amber & Sienna Tactical Accents */
-  --color-primary: #ffb785;
-  --color-on-primary: #301400;
-  --color-primary-container: #8d4e1c;
-  --color-on-primary-container: #ffceaf;
+  /* Monochrome Primary */
+  --color-primary: #111111;
+  --color-on-primary: #FBFBFA;
+  --color-primary-container: #EAEAEA;
+  --color-on-primary-container: #111111;
 
-  --color-secondary: #ffb785;
-  --color-on-secondary: #502400;
+  --color-secondary: #71717A;
+  --color-on-secondary: #FFFFFF;
 
   /* Operational Status */
-  --color-success: #00E676;
-  --color-on-success: #000000;
-  --color-error: #ffb4ab;
-  --color-on-error: #690005;
-  --color-warning: #f2bb96;
+  --color-success: #15803D;
+  --color-on-success: #FFFFFF;
+  --color-error: #B91C1C;
+  --color-on-error: #FFFFFF;
+  --color-warning: #D97706;
 
-  /* High-Contrast Professional Typography */
-  --font-sans: "Rethink Sans", system-ui, sans-serif;
-  --font-serif: "Public Sans", system-ui, serif;
-  --font-body: "Inclusive Sans", system-ui, sans-serif;
+  /* High-End Professional Typography */
+  --font-sans: "Public Sans", system-ui, sans-serif;
+  --font-serif: "Newsreader", system-ui, serif;
+  --font-body: "Public Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   /* Geometric Spacing */
@@ -51,15 +50,18 @@
   --spacing-staff-gutter: 1rem;
   --spacing-staff-margin: 1.5rem;
 
-  /* Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
+  /* Radius - Precise & Geometric */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
   --radius-full: 9999px;
 }
 
 @layer base {
+  html {
+    font-size: 14px;
+  }
   body {
     font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh] overflow-hidden;
@@ -67,7 +69,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    @apply tracking-tight font-black text-on-surface uppercase italic;
+    @apply tracking-tight font-medium text-on-surface;
   }
 
   button, input, select, textarea {
@@ -82,35 +84,30 @@
     @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-outline-variant/30 rounded-full hover:bg-outline/50;
+    @apply bg-outline rounded-full hover:bg-outline-variant transition-colors;
   }
 }
 
 @layer components {
-  .luxury-card {
-    @apply bg-surface-container-low border border-outline-variant/30 rounded-xl relative;
+  .atelier-card {
+    @apply bg-surface border border-outline rounded-xl relative;
   }
 
   .btn-primary {
-    @apply h-12 px-8 bg-primary text-on-primary rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-[0.2em] hover:brightness-110 active:scale-95 transition-all;
+    @apply h-12 px-8 bg-on-background text-background rounded-md flex items-center justify-center gap-3 font-sans text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all;
   }
 
-  .btn-tactical {
-    @apply h-12 px-6 bg-surface-container border border-outline-variant/50 rounded-md flex items-center justify-center gap-3 font-sans text-xs font-black uppercase tracking-widest text-on-surface hover:border-primary hover:text-primary active:scale-95 transition-all;
+  .btn-ghost {
+    @apply h-12 px-6 bg-transparent border border-outline rounded-md flex items-center justify-center gap-3 font-sans text-xs font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] transition-all;
   }
 }
 
-/* Operational Pulse: pulse the hard outline, not a soft glow (DESIGN.md:157-158 "no shadows") */
-@keyframes pulse-border-error {
-  0%, 100% { border-color: var(--color-error); }
-  50% { border-color: var(--color-on-error-container); }
+/* Minimal Entry Animation */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-pulse-error {
-  animation: pulse-border-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.blueprint-grid {
-  background-image: radial-gradient(circle at 1px 1px, rgba(255, 183, 133, 0.05) 1px, transparent 0);
-  background-size: 40px 40px;
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }

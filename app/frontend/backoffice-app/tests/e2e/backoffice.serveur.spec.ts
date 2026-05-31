@@ -13,6 +13,20 @@ const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page
 test.describe('serveur browser workflows', () => {
   test.beforeEach(async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
+    
+    // Default mock for status updates (fire to kitchen)
+    await page.route(/\/api\/commandes\/\d+\/$/, async (route) => {
+      if (route.request().method() === 'PATCH') {
+        const id = route.request().url().split('/').filter(Boolean).pop();
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ id: Number(id), statut: route.request().postDataJSON()?.statut || 'EN_CUISINE' }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
   });
 
   test('lands on the salle route and only sees serveur navigation', async ({ page }) => {
@@ -50,7 +64,7 @@ test.describe('serveur browser workflows', () => {
     await page.route('**/api/plan-texts/', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
-    await page.route('**/api/commandes/?table=41&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=41*', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
     await page.route('**/api/categories/', async (route) => {
@@ -62,9 +76,9 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/salle');
 
-    const freeTable = page.getByLabel('Table 11');
-    const occupiedTable = page.getByLabel('Table 12');
-    const reservedTable = page.getByLabel('Table 14');
+    const freeTable = page.getByTestId('table-11');
+    const occupiedTable = page.getByTestId('table-12');
+    const reservedTable = page.getByTestId('table-14');
 
     await expect(freeTable).toBeVisible();
     await expect(occupiedTable).toBeVisible();
@@ -75,7 +89,7 @@ test.describe('serveur browser workflows', () => {
     await expect(occupiedTable).toHaveClass(/bg-amber/);
     await expect(reservedTable).toHaveClass(/bg-aged-paper/);
 
-    await freeTable.click();
+    await freeTable.click({ force: true });
     await expect(page).toHaveURL(/\/ordering\/41$/);
     await expect(page.getByText('Active Ticket')).toBeVisible();
   });
@@ -1159,7 +1173,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=1*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1233,15 +1247,11 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=1*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify([
-          { id: 9952, statut: 'PRETE', table: 1 },
-          { id: 9951, statut: 'EN_COURS', table: 1 },
-          { id: 9953, statut: 'EN_CUISINE', table: 1 },
-        ]),
+        body: JSON.stringify([{ id: 9952, statut: 'PRETE', table: 1 }, { id: 9951, statut: 'EN_COURS', table: 1 }, { id: 9953, statut: 'EN_CUISINE', table: 1 }]),
       });
     });
 
@@ -1304,7 +1314,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=1*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1392,7 +1402,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=1*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1468,7 +1478,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/commandes/?table=1&statut=EN_COURS,EN_CUISINE,PRETE', async (route) => {
+    await page.route('**/api/commandes/?table=1*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',

@@ -8,9 +8,8 @@ import {
   ShieldAlert, 
   ShieldCheck, 
   Eye, 
-  EyeOff, 
-  Terminal,
-  Fingerprint
+  EyeOff,
+  User
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -20,8 +19,8 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 90, damping: 20 } },
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
 };
 
 export const Login: React.FC = () => {
@@ -37,7 +36,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setError(null);
     if (!username || !password) {
-      setError('IDENTIFIER_REQUIRED');
+      setError('Identifiants requis');
       return;
     }
     setIsLoading(true);
@@ -45,112 +44,92 @@ export const Login: React.FC = () => {
       const response = await api.post('/users/login/', { username, password });
       const { access, role, username: resUsername } = response.data;
       setAuth(access, role, resUsername);
-      toast.success('ACCÈS_AUTORISÉ');
+      toast.success('Accès autorisé');
       const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'ACCESS_DENIED' : 'SYSTEM_ERROR');
-      toast.error('ÉCHEC_D_AUTHENTIFICATION');
+      setError(err.response?.status === 401 ? 'Accès refusé' : 'Erreur système');
+      toast.error('Échec de l\'authentification');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-[100dvh] bg-background flex items-center justify-center p-6 md:p-12 overflow-hidden selection:bg-primary/20 blueprint-grid font-body">
+    <div className="relative min-h-[100dvh] bg-background flex items-center justify-center p-6 overflow-hidden selection:bg-on-background/10 font-body">
       <motion.div
         variants={containerVariants} initial="hidden" animate="visible"
-        className="relative z-10 w-full max-w-lg"
+        className="relative z-10 w-full max-w-md"
       >
-        {/* Terminal Header */}
+        {/* Header */}
         <motion.div variants={itemVariants} className="flex flex-col items-center mb-12">
-            <div className="w-16 h-16 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center mb-6 relative overflow-hidden group">
-               <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-               <Terminal className="w-8 h-8 text-primary relative z-10" strokeWidth={1.5} />
+            <div className="w-12 h-12 rounded-full border border-outline flex items-center justify-center mb-6">
+               <User className="w-5 h-5 text-on-surface-variant" strokeWidth={1} />
             </div>
-            <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface uppercase italic tracking-tighter m-0">Tastify Staff OS</h1>
-            <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3 opacity-60">Connexion Centre de Commande</p>
+            <h1 className="text-4xl font-serif italic tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
         </motion.div>
 
-        {/* Command Card */}
-        <div className="bg-surface-container border border-outline-variant rounded-xl p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-          
+        {/* Login Card */}
+        <div className="atelier-card p-10 md:p-12">
           <AnimatePresence mode="wait">
             {error && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mb-8 p-4 bg-error/10 border border-error/20 rounded flex items-center gap-3">
-                 <ShieldAlert className="w-4 h-4 text-error" />
-                 <span className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</span>
+              <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mb-8 p-4 border border-error/10 bg-error/[0.02] rounded-md flex items-center gap-3">
+                 <ShieldAlert className="w-4 h-4 text-error" strokeWidth={1.5} />
+                 <span className="text-[10px] font-bold text-error uppercase tracking-widest">{error}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-3">
-              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">ID Opérateur</label>
-              <div className="relative group">
-                <input 
-                  type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
-                  placeholder="ID_ALPHA_01"
-                  data-testid="login-username"
-                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant uppercase tracking-tight"
-                />
-              </div>
+              <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Opérateur</label>
+              <input 
+                type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
+                placeholder="Identifiant"
+                className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
+              />
             </div>
 
             <div className="space-y-3">
-              <label className="block font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Code d'Accès</label>
-              <div className="relative group">
+              <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Code Secret</label>
+              <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   placeholder="••••••••"
-                  data-testid="login-password"
-                  className="w-full h-14 bg-surface-main border border-outline-variant rounded-lg px-5 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant"
+                  className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 pr-12 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
-                  title={showPassword ? 'Masquer le code d\'accès' : 'Afficher le code d\'accès'}
-                  data-testid="login-password-visibility"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:text-primary transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/50 hover:text-on-background transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
                 </button>
               </div>
             </div>
 
             <button 
               type="submit" disabled={isLoading}
-              data-testid="login-submit"
-              className="w-full h-16 bg-primary text-on-primary rounded-lg font-sans text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary relative overflow-hidden group"
+              className="btn-primary w-full h-14"
             >
-              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-                <>
-                  <span>S'authentifier</span>
-                  <Fingerprint className="w-5 h-5 text-on-primary/60 group-hover:text-on-primary transition-colors" />
-                </>
-              )}
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Connexion</span>}
             </button>
           </form>
-
-          <div className="mt-10 text-center">
-             <button className="font-sans text-[10px] font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Récupération de Protocole / ID Perdu ?</button>
-          </div>
         </div>
 
-        {/* System info tags */}
-        <motion.div variants={itemVariants} className="mt-12 flex flex-col items-center gap-2">
-            <div className="flex items-center gap-3 text-on-surface-variant font-sans text-[9px] font-black uppercase tracking-[0.4em]">
-               <span>Personnel Autorisé Uniquement</span>
-               <div className="w-1 h-1 rounded-full bg-outline-variant/30" />
-               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> Chiffrement de Bout en Bout</span>
+        {/* Footer info */}
+        <motion.div variants={itemVariants} className="mt-12 flex flex-col items-center gap-4">
+            <div className="flex items-center gap-3 text-on-surface-variant/40 font-bold text-[9px] uppercase tracking-widest">
+               <span>Accès Sécurisé</span>
+               <div className="w-1 h-1 rounded-full bg-outline" />
+               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> SSL Encryption</span>
             </div>
-            <span className="font-mono text-[8px] text-on-surface-variant uppercase tracking-widest mt-2">Nœud v4.2.1 • Tastify PFA</span>
+            <Link to="/" className="text-[10px] font-bold text-on-surface-variant/40 hover:text-on-background transition-colors uppercase tracking-[0.2em]">Retour au portail</Link>
         </motion.div>
       </motion.div>
     </div>
   );
 };
+
 

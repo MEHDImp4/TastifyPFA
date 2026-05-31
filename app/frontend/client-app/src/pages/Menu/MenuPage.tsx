@@ -22,12 +22,12 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 },
   visible: { 
     opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.6,
       ease: [0.23, 1, 0.32, 1] as any
     }
   }
@@ -68,85 +68,75 @@ export const MenuPage: React.FC = () => {
   );
 
   if (isLoading) return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-[#FAF9F6] relative overflow-hidden">
+    <div className="flex-1 flex flex-col items-center justify-center bg-background">
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center gap-6 relative z-10"
+            className="flex flex-col items-center gap-4"
         >
-            <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Chargement de la carte</span>
+            <Loader2 className="w-8 h-8 animate-spin text-on-background" strokeWidth={1}/>
+            <span className="text-ui-label text-on-surface-variant">Chargement de la carte</span>
         </motion.div>
-        <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
     </div>
   );
 
   return (
-    <div className="flex-1 flex flex-col bg-background font-body selection:bg-primary/20">
+    <div className="flex-1 flex flex-col bg-background font-body selection:bg-on-background/10">
       
-      {/* Search & Header */}
-      <div className="flex-none px-client-margin py-unit-lg border-b border-outline-variant bg-surface-main">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">
-           <div>
-              <h1 className="font-serif text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase italic">Notre Carte</h1>
-              <p className="font-body text-sm text-on-surface-variant mt-2 uppercase tracking-widest opacity-60">Découvrez nos créations culinaires</p>
+      {/* Header */}
+      <div className="flex-none px-client-margin py-20 border-b border-outline bg-surface">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-12">
+           <div className="space-y-4">
+              <span className="text-ui-label text-on-surface-variant">L'Atelier</span>
+              <h1 className="text-display-lg italic lowercase">notre carte.</h1>
            </div>
-           <div className="relative group w-full md:w-96">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
-              <label htmlFor="menu-search-input" className="sr-only">Rechercher</label>
+           <div className="relative group w-full md:w-80">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
               <input 
-                id="menu-search-input"
                 type="text"
-                aria-label="Rechercher"
-                placeholder="RECHERCHER UN PLAT..."
+                placeholder="rechercher un plat..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-12 bg-surface-container border border-outline-variant rounded-xl pl-12 pr-4 font-sans text-xs font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+                className="w-full h-11 bg-background border border-outline rounded-md pl-12 pr-4 font-sans text-xs text-on-background focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30 lowercase"
               />
            </div>
         </div>
       </div>
 
       {/* Category Navigation */}
-      <div className="flex-none bg-surface-container-low border-b border-outline-variant">
-        <div className="max-w-7xl mx-auto px-client-margin py-4 flex gap-3 overflow-x-auto no-scrollbar relative">
+      <div className="flex-none bg-surface border-b border-outline">
+        <div className="max-w-[1200px] mx-auto px-client-margin py-6 flex gap-8 overflow-x-auto no-scrollbar relative">
            <button
              onClick={() => setActiveCat(null)}
-             className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all relative z-10 ${activeCat === null ? 'text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+             className={`text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === null ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
            >
-             {activeCat === null && (
-                <motion.div 
-                    layoutId="active-cat-bg"
-                    className="absolute inset-0 bg-primary rounded-full -z-10 shadow-lg shadow-primary/20"
-                />
-             )}
              Tous les plats
+             {activeCat === null && (
+                <motion.div layoutId="active-cat-indicator" className="absolute -bottom-6 left-0 right-0 h-[2px] bg-on-background" />
+             )}
            </button>
            {categories.map(cat => (
              <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`px-6 py-2.5 rounded-full border font-sans text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all relative z-10 ${activeCat === cat.id ? 'text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-outline'}`}
+                className={`text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === cat.id ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
              >
-                {activeCat === cat.id && (
-                    <motion.div 
-                        layoutId="active-cat-bg"
-                        className="absolute inset-0 bg-primary rounded-full -z-10 shadow-lg shadow-primary/20"
-                    />
-                )}
                 {cat.nom}
+                {activeCat === cat.id && (
+                    <motion.div layoutId="active-cat-indicator" className="absolute -bottom-6 left-0 right-0 h-[2px] bg-on-background" />
+                )}
              </button>
            ))}
         </div>
       </div>
 
       {/* Grid Canvas */}
-      <main className="flex-1 overflow-y-auto p-client-margin bg-background custom-scrollbar">
+      <main className="flex-1 overflow-y-auto py-24 px-client-margin bg-background custom-scrollbar">
         <motion.div 
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-24"
+            className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pb-24"
         >
            <AnimatePresence mode="popLayout">
               {filteredPlats.map((plat) => (
@@ -154,46 +144,37 @@ export const MenuPage: React.FC = () => {
                   key={plat.id}
                   layout
                   variants={itemVariants}
-                  data-testid={`menu-card-${plat.id}`}
-                  className={`group flex flex-col bg-surface-container-low rounded-3xl border transition-all duration-700 overflow-hidden cursor-pointer ${!plat.est_disponible ? 'opacity-40 grayscale border-outline-variant/30' : 'border-outline-variant hover:border-primary/40 hover:bg-surface-bright shadow-sm hover:shadow-2xl'}`}
+                  className={`group atelier-card p-6 flex flex-col gap-6 cursor-pointer ${!plat.est_disponible ? 'opacity-30 grayscale' : ''}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
-                  whileHover={{ y: -8 }}
                 >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-highest">
+                  <div className="relative aspect-video rounded-lg overflow-hidden border border-outline grayscale group-hover:grayscale-0 transition-all duration-700">
                     {plat.image ? (
-                       <img src={plat.image} data-testid={`menu-card-image-${plat.id}`} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt={plat.nom} />
+                       <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} />
                     ) : (
-                       <div className="w-full h-full flex items-center justify-center font-serif italic text-6xl text-on-surface-variant/10">{plat.nom.charAt(0)}</div>
+                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 font-serif italic text-4xl">{plat.nom.charAt(0)}</div>
                     )}
                     
-                    <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                       <div className="bg-background/80 backdrop-blur-md border border-outline-variant/30 px-3 py-1 rounded-lg flex items-center gap-2">
-                          <Timer className="w-3.5 h-3.5 text-primary" />
-                          <span className="font-sans text-[11px] font-black text-on-surface tabular-nums">{plat.temps_preparation} min</span>
-                       </div>
-                       {!plat.est_disponible && (
-                          <span className="bg-error text-on-error px-3 py-1 rounded font-sans text-[9px] font-black uppercase tracking-widest">Épuisé</span>
-                       )}
-                    </div>
+                    {!plat.est_disponible && (
+                      <div className="absolute inset-0 bg-background/50 flex items-center justify-center">
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Épuisé</span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="p-6 flex flex-col flex-1 gap-3">
-                    <div className="flex justify-between items-baseline gap-2">
-                      <h3 className="font-serif text-lg font-black text-primary uppercase tracking-tighter leading-[1.1] flex-1">{plat.nom}</h3>
-                      <div className="flex items-baseline gap-1 whitespace-nowrap shrink-0">
-                        <span className="font-sans text-2xl font-black text-primary tabular-nums">{parseFloat(plat.prix).toFixed(0)}</span>
-                        <span className="font-sans text-[11px] font-black text-primary uppercase tracking-widest">DH</span>
-                      </div>
+                  <div className="flex flex-col flex-1 gap-4">
+                    <div className="flex justify-between items-baseline gap-4">
+                      <h3 className="text-xl font-medium tracking-tight flex-1">{plat.nom}</h3>
+                      <span className="font-mono text-xs text-on-surface-variant whitespace-nowrap">{parseFloat(plat.prix).toFixed(0)} {config?.devise || 'DH'}</span>
                     </div>
-                    <p className="font-body text-sm text-on-surface-variant line-clamp-3 italic opacity-70 leading-relaxed flex-1">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed flex-1 italic">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    
                     {plat.est_disponible && (
                       <button
                         onClick={(e) => { e.stopPropagation(); addItem(plat); }}
-                        aria-label={`Ajouter ${plat.nom} au panier`}
-                        className="mt-2 w-full h-10 rounded-xl bg-primary text-on-primary font-sans text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+                        className="btn-primary w-full h-10 text-[10px]"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
-                        Ajouter au panier
+                        Ajouter
                       </button>
                     )}
                   </div>
@@ -203,78 +184,73 @@ export const MenuPage: React.FC = () => {
         </motion.div>
 
         {filteredPlats.length === 0 && (
-           <div className="py-32 flex flex-col items-center justify-center text-on-surface-variant/10 gap-4">
-              <ShoppingBag className="w-16 h-16 stroke-[0.5]" />
-              <p className="font-sans text-[11px] font-black uppercase tracking-[0.5em]">Aucun résultat trouvé</p>
+           <div className="py-32 flex flex-col items-center justify-center opacity-10 gap-4">
+              <ShoppingBag className="w-12 h-12 stroke-[1]" />
+              <p className="text-ui-label">Aucun plat trouvé</p>
            </div>
         )}
       </main>
 
-      {/* Detailed Modal Overlay */}
+      {/* Detailed Modal */}
       <AnimatePresence>
         {selectedPlat && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
              <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-               className="absolute inset-0 bg-background/95 backdrop-blur-xl"
+               className="absolute inset-0 bg-background/80 backdrop-blur-xl"
                onClick={() => setSelectedPlat(null)}
              />
              <motion.div 
-               initial={{ opacity: 0, scale: 0.95, y: 20 }}
-               animate={{ opacity: 1, scale: 1, y: 0 }}
-               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-               className="relative w-full max-w-4xl bg-surface-container border border-outline-variant rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+               initial={{ opacity: 0, scale: 0.98 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 0.98 }}
+               className="relative w-full max-w-4xl bg-surface border border-outline rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 rounded-full bg-background/50 border border-outline-variant/30 text-on-surface hover:bg-background transition-colors"><X className="w-5 h-5" /></button>
+                <button onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 text-on-surface-variant hover:text-on-background transition-colors"><X className="w-5 h-5" strokeWidth={1.5} /></button>
                 
-                <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-highest relative">
+                <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-high relative border-r border-outline">
                    {selectedPlat.image ? (
-                      <img src={selectedPlat.image} data-testid={`menu-detail-image-${selectedPlat.id}`} className="absolute inset-0 w-full h-full object-cover" alt={selectedPlat.nom} />
+                      <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={selectedPlat.nom} />
                    ) : (
                       <div className="absolute inset-0 flex items-center justify-center font-serif italic text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
                    )}
-                   <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
                 </div>
 
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
-                   <div className="mb-8">
-                      <span className="editorial-kicker mb-3">DÉTAILS DU PLAT</span>
-                      <h2 className="font-serif text-3xl md:text-5xl font-black text-primary uppercase italic tracking-tighter leading-none mb-4">{selectedPlat.nom}</h2>
-                      <div className="flex items-baseline gap-4">
-                         <span className="font-sans text-4xl font-black text-on-surface tabular-nums">{selectedPlat.prix} DH</span>
-                      </div>
+                <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col">
+                   <div className="mb-10">
+                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mb-4 block">Détails du plat</span>
+                      <h2 className="text-display-lg italic leading-none mb-6">{selectedPlat.nom}</h2>
+                      <span className="font-mono text-xl text-on-background">{selectedPlat.prix} {config?.devise || 'DH'}</span>
                    </div>
 
-                   <p className="font-body text-lg md:text-xl text-on-surface-variant italic leading-relaxed mb-10 flex-1 uppercase tracking-tight">
+                   <p className="text-base text-on-surface-variant leading-relaxed mb-12 italic">
                      {selectedPlat.description || 'Une création signature préparée avec soin par nos chefs.'}
                    </p>
 
-                   <div className="space-y-8 pt-8 border-t border-outline-variant">
-                      <div className="flex items-center gap-8">
+                   <div className="space-y-8 pt-8 border-t border-outline mt-auto">
+                      <div className="flex items-center gap-12">
                          <div className="space-y-1">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Préparation</p>
-                            <div className="flex items-center gap-2 font-sans font-bold text-on-surface uppercase text-sm">
-                               <Timer className="w-4 h-4 text-primary" />
-                               {selectedPlat.temps_preparation} min
+                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Préparation</p>
+                            <div className="flex items-center gap-2 font-mono text-sm text-on-surface">
+                               <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
+                               {selectedPlat.temps_preparation}m
                             </div>
                          </div>
                          <div className="space-y-1">
-                            <p className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest opacity-60">Catégorie</p>
-                            <div className="font-sans font-bold text-on-surface uppercase text-sm">
+                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Catégorie</p>
+                            <div className="text-[11px] font-bold text-on-surface uppercase tracking-wider">
                                {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Plat'}
                             </div>
                          </div>
                       </div>
+                      <button
+                        onClick={() => { addItem(selectedPlat); setSelectedPlat(null); }}
+                        className="btn-primary w-full h-14"
+                      >
+                        <ShoppingBag className="w-4 h-4" />
+                        Ajouter au panier
+                      </button>
                    </div>
-                   <motion.button
-                     onClick={() => { addItem(selectedPlat); setSelectedPlat(null); }}
-                     whileHover={{ scale: 1.02 }}
-                     whileTap={{ scale: 0.98 }}
-                     className="mt-6 w-full h-14 rounded-xl bg-primary text-on-primary font-sans text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
-                   >
-                     <ShoppingBag className="w-4 h-4" />
-                     Ajouter au panier
-                   </motion.button>
                 </div>
              </motion.div>
           </div>
@@ -283,3 +259,4 @@ export const MenuPage: React.FC = () => {
     </div>
   );
 };
+

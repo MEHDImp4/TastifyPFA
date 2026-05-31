@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useConfigStore } from '../store/configStore';
-import { LogOut, Menu, X, Sparkles, ShoppingBag } from 'lucide-react';
+import { LogOut, Menu, X, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 
 export const PublicLayout: React.FC = () => {
@@ -31,95 +31,72 @@ export const PublicLayout: React.FC = () => {
     if (isMenuOpen) setIsMenuOpen(false);
   };
 
-  // Base links visible to everyone
   const navLinks = [
-    { to: '/menu', label: 'LA CARTE' },
+    { to: '/menu', label: 'CARTE' },
     { to: '/reservations', label: 'RESERVER' },
   ];
 
-  // Add Loyalty link only if authenticated
   if (isAuthenticated) {
     navLinks.splice(2, 0, { to: '/loyalty', label: 'ECHO' });
   }
 
-  // Mobile navigation links
-  const mobileLinks = [
-    { to: '/menu', label: 'La Carte' },
-    { to: '/reservations', label: 'Réservations' },
-  ];
-  if (isAuthenticated) {
-    mobileLinks.push({ to: '/loyalty', label: 'Privilèges' });
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-[#2D2424] selection:bg-[#C5A059]/20 selection:text-[#2D2424] overflow-x-hidden font-body">
-      <header className="sticky top-0 z-50 bg-[#FAF9F6]/80 backdrop-blur-xl border-b border-[#2D2424]/5 shrink-0">
-        <div className="max-w-[1400px] mx-auto px-client-margin h-20 flex items-center justify-between">
-          <div className="flex items-center gap-16">
+    <div className="min-h-screen flex flex-col bg-background text-on-background overflow-x-hidden font-body selection:bg-on-background selection:text-background">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-outline shrink-0">
+        <div className="max-w-[1200px] mx-auto px-client-margin h-20 flex items-center justify-between">
+          <div className="flex items-center gap-12">
             <Link 
               to="/" 
               onClick={handleLogoClick}
-              className="flex items-center gap-3 group transition-all active:scale-95 z-50"
+              className="flex items-center group transition-all active:scale-95 z-50"
             >
-              {config?.logo ? (
-                <img src={config.logo} alt={config.nom} className="h-10 w-auto object-contain" />
-              ) : (
-                <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex flex-col min-w-[120px]"
-                >
-                    <span className="text-3xl font-serif italic font-black tracking-tight text-[#2D2424] leading-none group-hover:text-[#D14D1A] transition-colors whitespace-nowrap">
-                        {config?.nom || "Tastify"}
-                    </span>
-                    <span className="text-[8px] font-sans font-black uppercase tracking-[0.4em] text-[#C5A059] mt-1">Établissement</span>
-                </motion.div>
-              )}
+              <span className="text-2xl font-serif italic text-on-background tracking-tighter group-hover:opacity-70 transition-opacity">
+                  {config?.nom || "tastify."}
+              </span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className="text-ui-label-bold text-[9px] font-black text-[#2D2424]/60 hover:text-[#2D2424] transition-all duration-300 relative group/link uppercase tracking-[0.4em]"
+                  className={`text-ui-label text-[10px] transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#D14D1A] transition-all duration-300 group-hover/link:w-full" />
                 </Link>
               ))}
             </nav>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-8">
+          <div className="flex items-center gap-4">
             {cartCount > 0 && (
               <Link
                 to="/checkout"
-                aria-label={`Voir le panier, ${cartCount} article${cartCount > 1 ? 's' : ''}`}
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full font-sans text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary/90 transition-colors shadow-md shadow-primary/20"
+                className="flex items-center gap-2 px-4 py-2 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 {cartCount}
               </Link>
             )}
-            <div className="hidden md:block">
+            
+            <div className="hidden md:flex items-center gap-6">
               {isAuthenticated ? (
-                <div className="flex items-center gap-6 pl-8 border-l border-[#2D2424]/10">
+                <div className="flex items-center gap-6 pl-6 border-l border-outline">
                   <Link to="/account" className="flex flex-col items-end group leading-none">
-                    <p className="font-sans text-[11px] font-black text-[#2D2424] uppercase tracking-wider group-hover:text-[#D14D1A] transition-colors">{username}</p>
-                    <p className="font-sans text-[8px] font-bold text-[#C5A059] tracking-[0.2em] uppercase mt-1">Privilège</p>
+                    <p className="text-[11px] font-bold uppercase tracking-wider">{username}</p>
+                    <p className="text-[8px] font-bold text-on-surface-variant tracking-widest uppercase mt-1">Membre</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-2 text-[#2D2424]/30 hover:text-error transition-colors active:scale-75"
+                    className="p-2 text-on-surface-variant hover:text-error transition-colors"
                   >
-                    <LogOut className="w-4 h-4" strokeWidth={2} />
+                    <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
                 <Link 
                   to="/login"
-                  className="px-8 py-3 bg-[#2D2424] text-[#FAF9F6] rounded-full font-sans text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:bg-[#D14D1A] active:scale-95 shadow-xl shadow-[#2D2424]/10"
+                  className="text-ui-label text-[10px] text-on-surface-variant hover:text-on-background transition-colors"
                 >
                   S'identifier
                 </Link>
@@ -128,58 +105,46 @@ export const PublicLayout: React.FC = () => {
 
             <button
               onClick={toggleMenu}
-              aria-label="Ouvrir la navigation"
-              className="lg:hidden p-3 bg-white border border-[#2D2424]/5 rounded-full shadow-sm hover:shadow-md transition-all"
+              className="lg:hidden p-2 text-on-background"
             >
-              {isMenuOpen ? <X className="w-5 h-5 text-[#D14D1A]" /> : <Menu className="w-5 h-5 text-[#2D2424]" />}
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              id="mobile-navigation"
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.1 }}
-              className="fixed inset-0 bg-[#FAF9F6] z-40 lg:hidden pt-32 px-10 flex flex-col justify-between pb-12"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-10 flex flex-col"
             >
-              <div className="space-y-16">
-                <div className="flex flex-col gap-8">
-                  {mobileLinks.map((link, i) => (
-                    <motion.div 
-                        key={link.to}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                    >
-                        <Link 
-                            to={link.to} 
-                            onClick={() => setIsMenuOpen(false)} 
-                            className="font-serif text-5xl font-black italic text-[#2D2424] hover:text-[#D14D1A] transition-colors tracking-tight"
-                        >
-                            {link.label}
-                        </Link>
-                    </motion.div>
-                  ))}
-                </div>
+              <div className="flex flex-col gap-10">
+                {navLinks.map((link, i) => (
+                  <motion.div 
+                      key={link.to}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                  >
+                      <Link 
+                          to={link.to} 
+                          onClick={() => setIsMenuOpen(false)} 
+                          className="text-5xl font-serif italic text-on-background"
+                      >
+                          {link.label}
+                      </Link>
+                  </motion.div>
+                ))}
               </div>
               
-              <div className="pt-10 border-t border-[#2D2424]/10">
-                {!isAuthenticated && <span className="sr-only">Navigation invitée</span>}
+              <div className="mt-auto py-12 border-t border-outline flex flex-col gap-6">
                 {isAuthenticated ? (
-                  <div className="flex flex-col gap-6">
-                    <Link to="/account" onClick={() => setIsMenuOpen(false)} className="font-sans text-xl font-black text-[#2D2424] uppercase tracking-widest flex items-center gap-3">
-                        <Sparkles className="w-5 h-5 text-[#C5A059]" />
-                        Espace Membre
-                    </Link>
-                    <button onClick={handleLogout} className="font-sans text-lg font-black text-error text-left uppercase tracking-widest opacity-50">Se Déconnecter</button>
-                  </div>
+                  <button onClick={handleLogout} className="text-ui-label text-error text-left">Se Déconnecter</button>
                 ) : (
-                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="inline-block w-full py-6 bg-[#2D2424] text-[#FAF9F6] text-center font-sans text-xs font-black uppercase tracking-[0.4em] rounded-full shadow-2xl">
-                    Connexion Membre
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full">
+                    Connexion
                   </Link>
                 )}
               </div>
@@ -188,11 +153,10 @@ export const PublicLayout: React.FC = () => {
         </AnimatePresence>
       </header>
 
-      <main className="flex-1 min-h-0 flex flex-col relative">
-        <div key={location.pathname} className="flex-1 flex flex-col">
-          <Outlet />
-        </div>
+      <main className="flex-1 flex flex-col relative">
+        <Outlet />
       </main>
     </div>
   );
 };
+
