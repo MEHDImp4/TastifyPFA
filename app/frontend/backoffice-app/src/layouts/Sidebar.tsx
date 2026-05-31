@@ -81,10 +81,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-8 pb-10">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2">
             <span className="text-xl font-bold tracking-tighter text-on-background uppercase">Tastify.</span>
           </div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/40">Professional OS</p>
         </div>
 
         <nav className="flex-1 overflow-y-auto custom-scrollbar">
