@@ -1,113 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
-  /* Atelier Minimalist Palette - Refined Professional */
+  /* Professional Simple Palette */
   --color-background: #FBFBFA;
   --color-on-background: #111111;
   --color-surface: #FFFFFF;
   --color-on-surface: #111111;
   --color-on-surface-variant: #71717A;
   
-  --color-surface-dim: #F5F5F4;
-  --color-surface-bright: #FFFFFF;
-  --color-surface-container: #FBFBFA;
-  --color-surface-container-low: #FFFFFF;
-  --color-surface-container-high: #F5F5F4;
-  --color-surface-container-highest: #EAEAEA;
-  --color-surface-container-lowest: #FFFFFF;
-  
   --color-outline: #EAEAEA;
   --color-outline-variant: #D4D4D8;
 
-  /* Monochrome Primary */
   --color-primary: #111111;
   --color-on-primary: #FBFBFA;
-  --color-primary-container: #EAEAEA;
-  --color-on-primary-container: #111111;
 
-  --color-secondary: #71717A;
-  --color-on-secondary: #FFFFFF;
-
-  /* Operational Status */
   --color-success: #15803D;
-  --color-on-success: #FFFFFF;
   --color-error: #B91C1C;
-  --color-on-error: #FFFFFF;
-  --color-warning: #D97706;
 
-  /* High-End Professional Typography */
+  /* Pure Sans Typography */
   --font-sans: "Public Sans", system-ui, sans-serif;
-  --font-serif: "Newsreader", system-ui, serif;
   --font-body: "Public Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Geometric Spacing */
-  --spacing-unit-xs: 4px;
-  --spacing-unit-sm: 8px;
-  --spacing-unit-md: 16px;
-  --spacing-unit-lg: 24px;
-  --spacing-staff-gutter: 1rem;
-  --spacing-staff-margin: 1.5rem;
-
-  /* Radius - Precise & Geometric */
-  --radius-sm: 2px;
   --radius-md: 4px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-full: 9999px;
 }
 
 @layer base {
-  html {
-    font-size: 14px;
-  }
+  html { font-size: 14px; }
   body {
     font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh] overflow-hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
-    @apply tracking-tight font-medium text-on-surface;
-  }
-
-  button, input, select, textarea {
-    @apply transition-all duration-200 outline-none;
-  }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-outline rounded-full hover:bg-outline-variant transition-colors;
+    @apply tracking-tight font-semibold text-on-background;
   }
 }
 
 @layer components {
   .atelier-card {
-    @apply bg-surface border border-outline rounded-xl relative;
+    @apply bg-surface border border-outline rounded-md;
   }
 
   .btn-primary {
-    @apply h-12 px-8 bg-on-background text-background rounded-md flex items-center justify-center gap-3 font-sans text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all;
+    @apply h-10 px-6 bg-on-background text-background rounded-md flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all;
   }
 
   .btn-ghost {
-    @apply h-12 px-6 bg-transparent border border-outline rounded-md flex items-center justify-center gap-3 font-sans text-xs font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] transition-all;
+    @apply h-10 px-6 bg-transparent border border-outline rounded-md flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] transition-all;
   }
-}
-
-/* Minimal Entry Animation */
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-up {
-  animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }

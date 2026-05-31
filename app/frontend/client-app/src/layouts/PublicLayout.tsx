@@ -37,30 +37,30 @@ export const PublicLayout: React.FC = () => {
   ];
 
   if (isAuthenticated) {
-    navLinks.splice(2, 0, { to: '/loyalty', label: 'ECHO' });
+    navLinks.splice(2, 0, { to: '/loyalty', label: 'PRIVILEGES' });
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-on-background overflow-x-hidden font-body selection:bg-on-background selection:text-background">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-outline shrink-0">
-        <div className="max-w-[1200px] mx-auto px-client-margin h-20 flex items-center justify-between">
-          <div className="flex items-center gap-12">
+      <header className="sticky top-0 z-50 bg-background border-b border-outline shrink-0">
+        <div className="max-w-[1200px] mx-auto px-client-margin h-16 flex items-center justify-between">
+          <div className="flex items-center gap-10">
             <Link 
               to="/" 
               onClick={handleLogoClick}
               className="flex items-center group transition-all active:scale-95 z-50"
             >
-              <span className="text-2xl font-serif italic text-on-background tracking-tighter group-hover:opacity-70 transition-opacity">
+              <span className="text-xl font-bold tracking-tighter text-on-background">
                   {config?.nom || "tastify."}
               </span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className={`text-ui-label text-[10px] transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
+                  className={`text-[10px] font-bold tracking-widest transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
                 >
                   {link.label}
                 </Link>
@@ -72,23 +72,22 @@ export const PublicLayout: React.FC = () => {
             {cartCount > 0 && (
               <Link
                 to="/checkout"
-                className="flex items-center gap-2 px-4 py-2 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider"
+                className="flex items-center gap-2 px-3 py-1.5 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 {cartCount}
               </Link>
             )}
             
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-4">
               {isAuthenticated ? (
-                <div className="flex items-center gap-6 pl-6 border-l border-outline">
+                <div className="flex items-center gap-4 pl-4 border-l border-outline">
                   <Link to="/account" className="flex flex-col items-end group leading-none">
-                    <p className="text-[11px] font-bold uppercase tracking-wider">{username}</p>
-                    <p className="text-[8px] font-bold text-on-surface-variant tracking-widest uppercase mt-1">Membre</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider">{username}</p>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="p-2 text-on-surface-variant hover:text-error transition-colors"
+                    className="p-1 text-on-surface-variant hover:text-error transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -96,7 +95,7 @@ export const PublicLayout: React.FC = () => {
               ) : (
                 <Link 
                   to="/login"
-                  className="text-ui-label text-[10px] text-on-surface-variant hover:text-on-background transition-colors"
+                  className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
                 >
                   S'identifier
                 </Link>
@@ -115,33 +114,27 @@ export const PublicLayout: React.FC = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="fixed inset-0 bg-background z-40 lg:hidden pt-32 px-10 flex flex-col"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-10 flex flex-col"
             >
-              <div className="flex flex-col gap-10">
-                {navLinks.map((link, i) => (
-                  <motion.div 
+              <div className="flex flex-col gap-8">
+                {navLinks.map((link) => (
+                  <Link 
                       key={link.to}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
+                      to={link.to} 
+                      onClick={() => setIsMenuOpen(false)} 
+                      className="text-4xl font-bold tracking-tight text-on-background"
                   >
-                      <Link 
-                          to={link.to} 
-                          onClick={() => setIsMenuOpen(false)} 
-                          className="text-5xl font-serif italic text-on-background"
-                      >
-                          {link.label}
-                      </Link>
-                  </motion.div>
+                      {link.label}
+                  </Link>
                 ))}
               </div>
               
-              <div className="mt-auto py-12 border-t border-outline flex flex-col gap-6">
+              <div className="mt-auto py-10 border-t border-outline flex flex-col gap-6">
                 {isAuthenticated ? (
-                  <button onClick={handleLogout} className="text-ui-label text-error text-left">Se Déconnecter</button>
+                  <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-error text-left">Se Déconnecter</button>
                 ) : (
                   <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full">
                     Connexion
@@ -159,4 +152,5 @@ export const PublicLayout: React.FC = () => {
     </div>
   );
 };
+
 
