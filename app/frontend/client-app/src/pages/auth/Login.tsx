@@ -46,16 +46,15 @@ export const Login: React.FC = () => {
   };
 
   const staggerContainer = {
-    hidden: { opacity: 0 },
+    hidden: {},
     visible: {
-      opacity: 1,
       transition: { staggerChildren: 0.05 }
     }
   };
 
   const fadeIn = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+    hidden: { y: 10 },
+    visible: { y: 0, transition: { duration: 0.4 } }
   };
 
   return (
@@ -137,7 +136,7 @@ export const Login: React.FC = () => {
         <motion.div variants={fadeIn} className="pt-8 border-t border-outline text-center">
           <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em]">
             Pas de compte ? {' '}
-            <Link to="/register" className="text-on-background hover:opacity-70 ml-1 transition-colors border-b border-outline pb-0.5">S'inscrire</Link>
+            <Link to="/register" className="text-on-background hover:text-on-surface-variant ml-1 transition-colors border-b border-outline pb-0.5">S'inscrire</Link>
           </p>
         </motion.div>
       </motion.div>

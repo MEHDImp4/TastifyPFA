@@ -94,7 +94,7 @@ export const AccountPage: React.FC = () => {
             className="flex flex-col items-center gap-6 relative z-10"
         >
             <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Chargement de votre univers</span>
+            <span className="font-sans text-[9px] font-black text-[#6B6767] uppercase tracking-[0.4em]">Chargement de votre univers</span>
         </motion.div>
         <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
     </div>
@@ -116,13 +116,13 @@ export const AccountPage: React.FC = () => {
               <div className="flex-1 text-center md:text-left space-y-6 z-10">
                  <div>
                     <h1 className=" text-4xl md:text-6xl font-black text-[#2D2424] uppercase  tracking-tighter m-0 leading-none">{username}</h1>
-                    <p className="font-sans text-[11px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em] mt-4">Identité Vérifiée</p>
+                    <p className="font-sans text-[11px] font-black text-[#6B6767] uppercase tracking-[0.4em] mt-4">Identité Vérifiée</p>
                  </div>
                  
                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                     <div className="bg-[#D14D1A]/5 border border-[#D14D1A]/10 px-4 py-2 rounded-xl flex items-center gap-3">
                        <Award className="w-4 h-4 text-[#D14D1A]" />
-                       <span className="font-sans text-[10px] font-black text-[#D14D1A] uppercase tracking-widest">{loyalty?.tier_display || 'OR'}</span>
+                       <span className="font-sans text-[10px] font-black text-[#2D2424] uppercase tracking-widest">{loyalty?.tier_display || 'OR'}</span>
                     </div>
                     <div className="bg-[#FAF9F6] border border-[#2D2424]/5 px-4 py-2 rounded-xl flex items-center gap-3">
                        <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
@@ -135,7 +135,7 @@ export const AccountPage: React.FC = () => {
            {/* Tier Progress Bento */}
            <div className="lg:col-span-4 bg-white border border-[#2D2424]/5 rounded-[3rem] p-10 flex flex-col justify-between shadow-lg">
               <div className="space-y-6">
-                 <h3 className="font-sans text-[11px] font-black text-[#2D2424]/30 uppercase tracking-[0.2em]">STATUT PRIVILÈGE</h3>
+                 <h3 className="font-sans text-[11px] font-black text-[#6B6767] uppercase tracking-[0.2em]">STATUT PRIVILÈGE</h3>
                  <div className="w-full h-2 bg-[#FAF9F6] rounded-full overflow-hidden">
                     <motion.div
                        initial={{ width: 0 }}
@@ -155,9 +155,9 @@ export const AccountPage: React.FC = () => {
             <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
                 <div>
                     <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Privilèges</h2>
-                    <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
+                    <p className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
                 </div>
-                <div className="flex items-center gap-3 text-[#C5A059]">
+                <div className="flex items-center gap-3 text-[#7A6228]">
                     <Zap className="w-4 h-4 fill-current" />
                     <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres Membres</span>
                 </div>
@@ -180,13 +180,13 @@ export const AccountPage: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <h4 className=" text-xl font-black text-[#2D2424] uppercase ">{reward.nom}</h4>
-                                    <p className="font-body text-xs text-[#2D2424]/60  leading-relaxed">{reward.description}</p>
+                                    <p className="font-body text-xs text-[#6B6767]  leading-relaxed">{reward.description}</p>
                                 </div>
                             </div>
                             <div className="flex justify-between items-center border-t border-[#2D2424]/5 pt-6">
-                                <span className="font-sans text-[10px] font-black text-[#C5A059] uppercase tracking-widest">{reward.points_requis} PTS</span>
+                                <span className="font-sans text-[10px] font-black text-[#7A6228] uppercase tracking-widest">{reward.points_requis} PTS</span>
                                 {isUnlockable ? (
-                                    <button className="text-[#D14D1A] font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
+                                    <button className="text-[#B83D12] font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
                                 ) : (
                                     <span className="font-sans text-[9px] font-black text-[#2D2424]/20 uppercase tracking-widest">Verrouillé</span>
                                 )}
@@ -206,9 +206,9 @@ export const AccountPage: React.FC = () => {
                  <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
                     <div>
                         <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Historique</h2>
-                        <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
+                        <p className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
                     </div>
-                    <div className="flex items-center gap-3 text-[#D14D1A]">
+                    <div className="flex items-center gap-3 text-[#B83D12]">
                         <History className="w-4 h-4" />
                         <span className="font-sans text-[10px] font-black uppercase tracking-widest">Suivi d'Expérience</span>
                     </div>
@@ -229,7 +229,7 @@ export const AccountPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">Commande #{order.id}</h4>
-                                    <p className="font-body text-sm text-[#2D2424]/60 ">
+                                    <p className="font-body text-sm text-[#6B6767] ">
                                         {new Date(order.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })} • {order.montant_total} DH
                                     </p>
                                 </div>
@@ -254,7 +254,7 @@ export const AccountPage: React.FC = () => {
               <div className="space-y-10">
                  <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
                     <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Réservations</h2>
-                    <Link to="/reservations" className="font-sans text-[10px] font-black text-[#D14D1A] hover:text-[#2D2424] transition-colors uppercase tracking-[0.2em] border-b border-[#D14D1A]/20 pb-1">Réserver une table</Link>
+                    <Link to="/reservations" className="font-sans text-[10px] font-black text-[#B83D12] hover:text-[#2D2424] transition-colors uppercase tracking-[0.2em] border-b border-[#B83D12]/20 pb-1">Réserver une table</Link>
                  </div>
 
                  <div className="space-y-6">
@@ -271,10 +271,10 @@ export const AccountPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{res.date_reservation}</h4>
-                                    <p className="font-body text-sm text-[#2D2424]/60 ">{res.heure_debut} • Table {res.table}</p>
+                                    <p className="font-body text-sm text-[#6B6767] ">{res.heure_debut} • Table {res.table}</p>
                                 </div>
                             </div>
-                            <span className="bg-[#FAF9F6] border border-[#2D2424]/5 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-[#2D2424]/40">{res.statut}</span>
+                            <span className="bg-[#FAF9F6] border border-[#2D2424]/5 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-[#6B6767]">{res.statut}</span>
                         </motion.div>
                     )) : (
                         <div className="py-20 text-center opacity-20">
@@ -292,8 +292,8 @@ export const AccountPage: React.FC = () => {
                  <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
                  
                  <div className="space-y-4 relative z-10">
-                    <h3 className=" text-3xl  tracking-tight m-0">Menu Privé</h3>
-                    <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-[#FAF9F6]/40">Gestion du compte & Assistance</p>
+                    <h3 className=" text-3xl text-[#FAF9F6] tracking-tight m-0">Menu Privé</h3>
+                    <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-[#C4C1C1]">Gestion du compte & Assistance</p>
                  </div>
 
                  <div className="space-y-2 relative z-10">
@@ -301,8 +301,9 @@ export const AccountPage: React.FC = () => {
                        { icon: Settings, label: 'Paramètres du Profil', action: () => {} },
                        { icon: MessageCircle, label: 'Donner votre avis', action: () => setIsReviewModalOpen(true), highlight: hasPaidOrders }
                     ].map((item, i) => (
-                       <button 
-                        key={i} onClick={item.action} 
+                       <button
+                        key={i} onClick={item.action}
+                        aria-disabled={item.highlight === false ? true : undefined}
                         className={`w-full flex items-center justify-between p-3 rounded-2xl transition-all group ${item.highlight === false ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white/5'}`}
                        >
                           <div className="flex items-center gap-4">
@@ -315,7 +316,7 @@ export const AccountPage: React.FC = () => {
                  </div>
 
                  <div className="pt-10 border-t border-white/5 relative z-10">
-                    <button onClick={() => logout()} className="w-full flex items-center gap-4 text-[#D14D1A] p-3 rounded-2xl hover:bg-[#D14D1A]/5 transition-all font-sans text-[11px] font-black uppercase tracking-[0.4em]">
+                    <button onClick={() => logout()} className="w-full flex items-center gap-4 text-[#F28155] p-3 rounded-2xl hover:bg-[#F28155]/10 transition-all font-sans text-[11px] font-black uppercase tracking-[0.4em]">
                        <LogOut className="w-4 h-4" />
                        Fermer la session
                     </button>
@@ -343,7 +344,7 @@ export const AccountPage: React.FC = () => {
                     <Quote className="w-8 h-8" />
                  </div>
                  <h3 className=" text-5xl font-black text-[#2D2424]  tracking-tighter mb-4">Votre avis nous est précieux.</h3>
-                 <p className="text-[#2D2424]/60 font-body  mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
+                 <p className="text-[#6B6767] font-body  mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
                  
                  <form onSubmit={handleReviewSubmit} className="w-full space-y-10">
                     <textarea 

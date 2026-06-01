@@ -147,7 +147,7 @@ export const CheckoutPage: React.FC = () => {
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-90"><ChevronLeft className="w-5 h-5" /></button>
             <div>
                <h1 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase  m-0">Votre Panier</h1>
-               <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3  opacity-60">Validation de votre commande</p>
+               <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3">Validation de votre commande</p>
             </div>
         </motion.div>
 

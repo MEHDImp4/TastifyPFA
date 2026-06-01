@@ -76,7 +76,7 @@ export const LoyaltyPage: React.FC = () => {
               <div className="max-w-xl mx-auto space-y-10">
                  <div className="flex justify-between items-end">
                     <div className="text-left">
-                       <p className="font-sans text-[10px] font-black text-[#FAF9F6]/40 uppercase tracking-widest mb-1">Grade Actuel</p>
+                       <p className="font-sans text-[10px] font-black text-[#C4C1C1] uppercase tracking-widest mb-1">Grade Actuel</p>
                        <div className="flex items-center gap-3">
                           <Award className="w-6 h-6 text-[#C5A059]" />
                           <span className=" text-3xl font-black  text-[#FAF9F6] tracking-tight">{loyalty?.tier_display}</span>
@@ -84,7 +84,7 @@ export const LoyaltyPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                        <span className="font-sans text-4xl font-black text-[#C5A059] tabular-nums">{loyalty?.points}</span>
-                       <span className="font-sans text-[10px] font-black text-[#FAF9F6]/40 uppercase tracking-widest ml-3">Points Cumulés</span>
+                       <span className="font-sans text-[10px] font-black text-[#C4C1C1] uppercase tracking-widest ml-3">Points Cumulés</span>
                     </div>
                  </div>
 
@@ -98,7 +98,7 @@ export const LoyaltyPage: React.FC = () => {
                           className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] relative shadow-[0_0_20px_rgba(209,77,26,0.3)]"
                        />
                     </div>
-                    <p className="font-body text-[13px] text-[#FAF9F6]/60 ">Bientôt le prochain échelon</p>
+                    <p className="font-body text-[13px] text-[#C4C1C1] ">Bientôt le prochain échelon</p>
                  </div>
               </div>
            </div>
@@ -142,13 +142,13 @@ export const LoyaltyPage: React.FC = () => {
 
                        <div className="space-y-6 relative z-10">
                           <div className="flex justify-between items-center border-t border-[#2D2424]/5 pt-6">
-                             <span className="font-sans text-[11px] font-black text-[#C5A059] uppercase tracking-widest">{reward.points_requis} PTS</span>
+                             <span className="font-sans text-[11px] font-black text-[#7A6228] uppercase tracking-widest">{reward.points_requis} PTS</span>
                              {isUnlockable ? (
-                                <button className="flex items-center gap-2 text-[#D14D1A] font-sans text-[10px] font-black uppercase tracking-widest hover:translate-x-2 transition-all">
+                                <button className="flex items-center gap-2 text-[#B83D12] font-sans text-[10px] font-black uppercase tracking-widest hover:translate-x-2 transition-all">
                                    En profiter <ChevronRight className="w-3.5 h-3.5" />
                                 </button>
                              ) : (
-                                <span className="font-sans text-[10px] font-black text-[#2D2424]/20 uppercase tracking-widest">Verrouillé</span>
+                                <span className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest">Verrouillé</span>
                              )}
                           </div>
                        </div>

@@ -96,7 +96,7 @@ export const PublicLayout: React.FC = () => {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    aria-label="Fermer la session"
+                    aria-label="Se déconnecter"
                     className="p-1 text-on-surface-variant hover:text-error transition-colors"
                   >
                     <LogOut className="w-4 h-4" />

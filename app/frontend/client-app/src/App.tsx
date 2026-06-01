@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
 import { PortalHomePage } from './pages/Home/PortalHomePage';
@@ -100,14 +101,16 @@ function App() {
   }, [fetchConfig]);
 
   return (
-    <AuthBootstrap>
-      <div className="selection:bg-primary/20 selection:text-primary">
-        <Toaster position="top-center" richColors theme="dark" />
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
-      </div>
-    </AuthBootstrap>
+    <MotionConfig reducedMotion="user">
+      <AuthBootstrap>
+        <div className="selection:bg-primary/20 selection:text-primary">
+          <Toaster position="top-center" richColors theme="dark" />
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        </div>
+      </AuthBootstrap>
+    </MotionConfig>
   );
 }
 
