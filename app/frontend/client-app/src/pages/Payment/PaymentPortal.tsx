@@ -13,7 +13,6 @@ import {
   Receipt,
   QrCode
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
 export const PaymentPortal: React.FC = () => {
