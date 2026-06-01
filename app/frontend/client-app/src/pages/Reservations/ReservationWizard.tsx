@@ -167,11 +167,11 @@ export const ReservationWizard: React.FC = () => {
 
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                         <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas</label>
+                         <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas <span className="sr-only">Temporal Window</span></label>
                          <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
                       </div>
                       <div className="space-y-2">
-                         <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée</label>
+                         <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée <span className="sr-only">Arrival Pivot</span></label>
                          <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
                       </div>
                    </div>

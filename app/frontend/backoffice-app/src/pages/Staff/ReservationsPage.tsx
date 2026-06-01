@@ -187,7 +187,7 @@ export const ReservationsPage: React.FC = () => {
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
-              className="group atelier-card p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
+              className="group atelier-card rounded-lg p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
             >
                 <div className="flex items-start gap-6">
                   <div className="w-20 h-16 rounded border border-outline bg-surface-container-high flex flex-col items-center justify-center text-on-background shrink-0">
@@ -251,7 +251,7 @@ export const ReservationsPage: React.FC = () => {
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
                     className="btn-secondary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px] text-error hover:border-error"
                    >
-                     ANNULER
+                     ANNULER <span className="sr-only">CANCEL BOOKING</span>
                    </button>
                 )}
 
