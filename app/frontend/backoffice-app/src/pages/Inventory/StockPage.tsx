@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { stockApi } from '../../api/inventory_hr';
 import type { Ingredient } from '../../types/inventory';
-import { 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  Loader2, 
-  AlertTriangle, 
-  Download, 
-  Search, 
-  X, 
-  Save, 
-  ChevronLeft, 
-  ChevronRight, 
-  PackagePlus,
-  Hash,
-  Activity
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Loader2,
+  Download,
+  Search
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
@@ -29,15 +21,14 @@ export const StockPage: React.FC = () => {
   const [search, setSearch] = useState('');
   
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+  const [, setItemToDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
-  
+
   const [nom, setNom] = useState('');
-  const [unite, setUnite] = useState<'g' | 'ml' | 'pcs'>('g');
-  const [stock, setStock] = useState('0');
-  const [seuil, setSeuil] = useState('0');
-  const [isSaving, setIsSaving] = useState(false);
+  const [, setUnite] = useState<'g' | 'ml' | 'pcs'>('g');
+  const [, setStock] = useState('0');
+  const [, setSeuil] = useState('0');
 
   const fetchStock = async () => {
     try {
@@ -93,7 +84,6 @@ export const StockPage: React.FC = () => {
     i.est_active && i.nom.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
   const paginatedIngredients = filteredIngredients.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;

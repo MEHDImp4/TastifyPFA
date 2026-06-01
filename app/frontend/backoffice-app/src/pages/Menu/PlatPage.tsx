@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
-import type { Plat, Categorie } from '../../types/menu';
-import { 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  Loader2, 
+import type { Plat } from '../../types/menu';
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Loader2,
   Search,
-  X,
-  Hash,
-  Activity,
   Image as ImageIcon
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
 export const PlatPage: React.FC = () => {
   const [plats, setPlats] = useState<Plat[]>([]);
-  const [categories, setCategories] = useState<Categorie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   
   const fetchPlats = async () => {
     try {
-      const [platsRes, catsRes] = await Promise.all([
-        menuApi.getPlats(),
-        menuApi.getCategories(),
-      ]);
+      const platsRes = await menuApi.getPlats();
       setPlats(platsRes.data);
-      setCategories(catsRes.data);
     } catch (err) {
       console.error(err);
       toast.error('Erreur chargement catalogue');

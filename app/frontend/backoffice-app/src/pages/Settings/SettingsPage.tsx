@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { configurationApi } from '../../api/configuration';
 import type { RestaurantConfiguration } from '../../api/configuration';
-import { 
-  Building2, 
-  Save, 
+import {
+  Building2,
+  Save,
   Loader2,
-  MapPin,
-  Mail,
-  Phone,
-  Coins,
-  ShieldCheck,
   RotateCcw
 } from 'lucide-react';
 import { toast } from 'sonner';

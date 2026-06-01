@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Categorie } from '../../types/menu';
-import { 
-  Plus, 
-  Trash2, 
-  Loader2, 
+import {
+  Plus,
+  Trash2,
+  Loader2,
   Search,
-  X,
-  Edit2,
-  Hash,
-  ChevronLeft,
-  ChevronRight,
-  Package
+  Edit2
 } from 'lucide-react';
 import { toast } from 'sonner';
 

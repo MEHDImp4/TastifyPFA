@@ -26,7 +26,7 @@ class TestPaiementModels:
             montant=Decimal('0.00'),
             methode=Paiement.Methode.ESPECES
         )
-        with pytest.raises((IntegrityError, serializers.ValidationError, Exception)):
+        with pytest.raises((IntegrityError, Exception)):
             # full_clean will raise ValidationError if validators are present
             # save will raise IntegrityError if DB constraints are enforced
             paiement.full_clean()
