@@ -151,7 +151,7 @@ export const ReservationsPage: React.FC = () => {
       <header className="flex-none px-staff-margin h-20 border-b border-outline bg-surface">
         <div className="max-w-[1400px] mx-auto h-full flex items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-sm font-bold text-on-background uppercase tracking-widest">Gestion Réservations</h1>
+            <h1 aria-label="Reservations Admin" className="text-sm font-bold text-on-background uppercase tracking-widest">Gestion Réservations</h1>
           </div>
           
           <div className="flex items-center gap-3">

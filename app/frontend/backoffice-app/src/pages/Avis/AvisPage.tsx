@@ -69,9 +69,8 @@ export const AvisPage: React.FC = () => {
       
       {/* Header */}
       <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
-        <h2 className="sr-only">Client Sentiment</h2>
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
+          <h1 aria-label="Client Sentiment" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Perception de marque et satisfaction convives</p>
         </div>
         <div className="flex items-center gap-4">

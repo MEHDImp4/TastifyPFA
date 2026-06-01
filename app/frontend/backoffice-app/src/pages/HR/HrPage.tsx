@@ -92,7 +92,7 @@ export const HrPage: React.FC = () => {
       {/* Header */}
       <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel <span className="sr-only">Human Resources</span></h1>
+          <h1 aria-label="Human Resources" className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion des effectifs et accès opérationnels</p>
         </div>
         <div className="flex items-center gap-4">

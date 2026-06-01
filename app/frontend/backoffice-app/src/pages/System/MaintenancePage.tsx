@@ -29,9 +29,8 @@ export const MaintenancePage: React.FC = () => {
       
       {/* Page Header */}
       <header className="flex-none flex items-center justify-between px-8 h-20 border-b border-outline bg-surface">
-        <h2 className="sr-only">System Health</h2>
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
+          <h1 aria-label="System Health" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et statut des modules</p>
         </div>
         <div className="flex gap-4 items-center">

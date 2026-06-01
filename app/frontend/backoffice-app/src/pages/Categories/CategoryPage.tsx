@@ -132,9 +132,8 @@ export const CategoryPage: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
-        <h2 className="sr-only">Category Management</h2>
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Secteurs & Catégories</h1>
+          <h1 aria-label="Category Management" className="text-sm font-bold tracking-widest text-on-background uppercase">Secteurs & Catégories</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Organisation hiérarchique du menu</p>
         </div>
         <div className="flex items-center gap-4">

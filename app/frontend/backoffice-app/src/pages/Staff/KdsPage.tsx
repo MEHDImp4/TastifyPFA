@@ -311,7 +311,7 @@ export const KdsPage: React.FC = () => {
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
           <div>
-            <h1 className="text-2xl font-black uppercase tracking-tight text-on-surface  leading-none">Écran Cuisine <span className="sr-only">Kitchen Display System</span></h1>
+            <h1 aria-label="Kitchen Display System" className="text-2xl font-black uppercase tracking-tight text-on-surface  leading-none">Écran Cuisine</h1>
             <p className="text-[10px] font-bold text-on-surface uppercase tracking-[0.3em] mt-2">Système de Monitoring de Production</p>
           </div>
         </div>
