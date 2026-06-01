@@ -238,7 +238,7 @@ export const AccountPage: React.FC = () => {
                                 <span className={`px-4 py-1.5 rounded-full font-sans text-[9px] font-black uppercase tracking-widest ${order.statut === 'PAYEE' ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'}`}>
                                     {order.statut}
                                 </span>
-                                <button className="p-2 text-[#2D2424]/20 hover:text-[#2D2424] transition-all"><MoreVertical className="w-5 h-5" /></button>
+                                <button aria-label="Options de commande" className="p-2 text-[#2D2424]/20 hover:text-[#2D2424] transition-all"><MoreVertical className="w-5 h-5" /></button>
                             </div>
                         </motion.div>
                     )) : (

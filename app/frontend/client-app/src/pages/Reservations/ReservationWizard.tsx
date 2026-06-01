@@ -134,17 +134,17 @@ export const ReservationWizard: React.FC = () => {
           {/* Stepper */}
           <div className="px-12 py-6 bg-surface-container-high border-b border-outline flex items-center justify-center gap-10">
              <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-on-background text-background' : 'bg-outline text-on-surface-variant/40'}`}>1</div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 1 ? 'text-on-background' : 'text-on-surface-variant/40'}`}>Détails</span>
+                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>1</div>
+                <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 1 ? 'text-on-background' : 'text-on-surface-variant'}`}>Détails</span>
              </div>
              <div className="h-px w-8 bg-outline" />
              <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-on-background text-background' : 'bg-outline text-on-surface-variant/40'}`}>2</div>
+                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>2</div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 2 ? 'text-on-background' : 'text-on-surface-variant'}`}>Table</span>
              </div>
              <div className="h-px w-8 bg-outline" />
              <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-on-background text-background' : 'bg-outline text-on-surface-variant/40'}`}>3</div>
+                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>3</div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 3 ? 'text-on-background' : 'text-on-surface-variant'}`}>Confirmation</span>
              </div>
           </div>
