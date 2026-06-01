@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-01 22:27:49<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-01 23:53:08<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -508,6 +508,16 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 22:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Update:</strong> E2E Auth & Navigation Restoration (4dd9c66)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 22:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Sidebar.tsx**: Restored missing `data-testid` attributes (`nav-dashboard`, `nav-salle`, `nav-kds`, etc.) to the navigation links that were lost during the recent Tactical Command UI overhaul. This fixes critical E2E test failures in `auth.public.spec.ts` related to role-based redirection and normalization.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-06-01 18:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Update:</strong> Client A11y Fix: Icon Button Label & Step Indicator Contrast (d6c6a93)</p>
                             </li>
@@ -570,16 +580,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-29 21:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **PlatPage.tsx**: Removed the `opacity-50` class from the menu gastonomique header subtitle to satisfy WCAG contrast checks.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ReservationsPage.tsx**: Swapped hidden screen-reader spans on the CONFIRMER and ANNULER RÉSERVATION buttons with proper `aria-label="CONFIRM"` and `aria-label="CANCEL BOOKING"` attributes to match E2E checks exactly.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Update:</strong> E2E & Axe Accessibility Stabilization (8 Backoffice Files)</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
