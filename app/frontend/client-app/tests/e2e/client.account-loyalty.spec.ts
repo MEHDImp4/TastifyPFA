@@ -32,6 +32,9 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 980, tier: 'SILVER', tier_display: 'Silver Member' }),
         });
       });
+      await page.route('**/api/loyalty/rewards/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
       await page.route('**/api/commandes/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
@@ -60,6 +63,9 @@ test.describe('account journey', () => {
           contentType: 'application/json',
           body: JSON.stringify({ points: 120, tier: 'BRONZE', tier_display: 'Bronze Member' }),
         });
+      });
+      await page.route('**/api/loyalty/rewards/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
@@ -103,6 +109,9 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 12450, tier: 'GOLD', tier_display: 'Gold Member' }),
         });
       });
+      await page.route('**/api/loyalty/rewards/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
       await page.route('**/api/commandes/', async (route) => {
         await route.fulfill({
           status: 200,
@@ -145,6 +154,9 @@ test.describe('account journey', () => {
           contentType: 'application/json',
           body: JSON.stringify({ points: 450, tier: 'SILVER', tier_display: 'Silver Member' }),
         });
+      });
+      await page.route('**/api/loyalty/rewards/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
         await route.fulfill({

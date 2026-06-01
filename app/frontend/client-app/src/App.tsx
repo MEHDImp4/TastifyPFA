@@ -10,6 +10,8 @@ import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { ResetPassword } from './pages/auth/ResetPassword';
+import { CheckoutPage } from './pages/Checkout/CheckoutPage';
+import { ContactPage } from './pages/Contact/ContactPage';
 import { PaymentPortal } from './pages/Payment/PaymentPortal';
 import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
 import { NotFoundPage } from './pages/System/NotFoundPage';
@@ -79,7 +81,8 @@ const AnimatedRoutes = () => {
         } />
 
         {/* Global Helpers */}
-        <Route path="/checkout" element={<Navigate to="/menu" replace />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/pay/:token" element={<PaymentPortal />} />
         <Route path="/offline" element={<OfflineModePage />} />
         <Route path="*" element={<NotFoundPage />} />

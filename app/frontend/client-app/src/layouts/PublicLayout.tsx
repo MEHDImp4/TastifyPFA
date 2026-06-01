@@ -32,7 +32,7 @@ export const PublicLayout: React.FC = () => {
 
   const navLinks = [
     { to: '/menu', label: 'LA CARTE' },
-    { to: '/reservations', label: 'RESERVER' },
+    { to: '/reservations', label: 'Réservations' },
   ];
 
   if (isAuthenticated) {
@@ -71,28 +71,39 @@ export const PublicLayout: React.FC = () => {
             {cartCount > 0 && (
               <Link
                 to="/checkout"
+                aria-label="Voir le panier"
                 className="flex items-center gap-2 px-3 py-1.5 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 {cartCount}
               </Link>
             )}
-            
+
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                className="md:hidden text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
+              >
+                Log in
+              </Link>
+            )}
+
             <div className="hidden md:flex items-center gap-4">
               {isAuthenticated ? (
                 <div className="flex items-center gap-4 pl-4 border-l border-outline">
                   <Link to="/account" className="flex flex-col items-end group leading-none">
                     <p className="text-[10px] font-bold uppercase tracking-wider">{username}</p>
                   </Link>
-                  <button 
+                  <button
                     onClick={handleLogout}
+                    aria-label="Fermer la session"
                     className="p-1 text-on-surface-variant hover:text-error transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
-                <Link 
+                <Link
                   to="/login"
                   className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
                 >
@@ -113,22 +124,23 @@ export const PublicLayout: React.FC = () => {
 
         {isMenuOpen && (
           <div
+            id="mobile-navigation"
             className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-10 flex flex-col"
           >
-            <span id="mobile-navigation" className="sr-only">Navigation invitée</span>
+            <span className="sr-only">Navigation invitée</span>
             <div className="flex flex-col gap-8">
               {navLinks.map((link) => (
-                <Link 
+                <Link
                     key={link.to}
-                    to={link.to} 
-                    onClick={() => setIsMenuOpen(false)} 
+                    to={link.to}
+                    onClick={() => setIsMenuOpen(false)}
                     className="text-4xl font-bold tracking-tight text-on-background"
                 >
                     {link.label}
                 </Link>
               ))}
             </div>
-            
+
             <div className="mt-auto py-10 border-t border-outline flex flex-col gap-6">
               {isAuthenticated ? (
                 <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-error text-left">Fermer la session</button>

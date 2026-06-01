@@ -94,8 +94,9 @@ export const MenuPage: React.FC = () => {
            </div>
            <div className="relative group w-full md:w-80">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
-              <input 
+              <input
                 type="text"
+                aria-label="Rechercher"
                 placeholder="RECHERCHER UN PLAT..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -173,6 +174,7 @@ export const MenuPage: React.FC = () => {
                     
                     {plat.est_disponible && (
                       <button
+                        aria-label={`Ajouter ${plat.nom} au panier`}
                         onClick={(e) => { e.stopPropagation(); addItem(plat); }}
                         className="btn-primary w-full h-10 text-[10px]"
                       >
@@ -209,7 +211,7 @@ export const MenuPage: React.FC = () => {
                exit={{ opacity: 0, scale: 0.98 }}
                className="relative w-full max-w-4xl bg-surface border border-outline rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 text-on-surface-variant hover:text-on-background transition-colors"><X className="w-5 h-5" strokeWidth={1.5} /></button>
+                <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 text-on-surface-variant hover:text-on-background transition-colors"><X className="w-5 h-5" strokeWidth={1.5} /></button>
                 
                 <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-high relative border-r border-outline">
                    {selectedPlat.image ? (

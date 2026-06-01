@@ -59,7 +59,7 @@ export const PortalHomePage = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link to="/menu" className="btn-primary">
-                Explorer la Carte
+                Voir la Carte
                 </Link>
                 <Link to="/reservations" className="btn-secondary">
                 Réserver une table
@@ -98,7 +98,11 @@ export const PortalHomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {isLoading ? [1, 2].map(i => (
                <div key={i} className="aspect-video bg-surface-container-high animate-pulse rounded-lg border border-outline" />
-            )) : topDishes.map((dish, idx) => (
+            )) : topDishes.length === 0 ? (
+              <div className="col-span-full py-16 text-center opacity-40">
+                <p className="text-sm font-bold uppercase tracking-widest">Sélection indisponible pour le moment</p>
+              </div>
+            ) : topDishes.map((dish, idx) => (
               <motion.div 
                 key={dish.id}
                 initial={{ opacity: 0, y: 5 }}

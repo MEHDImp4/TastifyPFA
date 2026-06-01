@@ -109,10 +109,10 @@ export const LoyaltyPage: React.FC = () => {
            <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
               <div>
                  <h2 className=" text-4xl font-black text-[#2D2424]  tracking-tighter m-0 uppercase">Vos Privilèges</h2>
-                 <p className="font-sans text-[10px] font-black text-[#2D2424]/40 uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
+                 <p className="font-sans text-[10px] font-black text-[#2D2424]/70 uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
               </div>
-              <div className="flex items-center gap-3 text-[#D14D1A]">
-                 <Zap className="w-4 h-4 fill-current" />
+              <div className="flex items-center gap-3 text-[#2D2424]">
+                 <Zap className="w-4 h-4 fill-current text-[#D14D1A]" />
                  <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres Exclusives</span>
               </div>
            </div>

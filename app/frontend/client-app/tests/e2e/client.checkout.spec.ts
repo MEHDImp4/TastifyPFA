@@ -45,7 +45,7 @@ async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['pa
   await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
   await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
 
-  await page.getByRole('button', { name: 'Plats' }).click();
+  await page.getByRole('button', { name: 'Plats', exact: true }).click();
   await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
 
   await page.getByRole('link', { name: /Voir le panier/i }).click();

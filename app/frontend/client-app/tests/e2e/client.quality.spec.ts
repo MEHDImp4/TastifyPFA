@@ -40,6 +40,15 @@ const mockAccountData = async (page: Page) => {
       body: JSON.stringify({ points: 1240, tier: 'SILVER', tier_display: 'Silver Member' }),
     });
   });
+  await page.route('**/api/loyalty/rewards/', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        { id: 1, nom: 'Apéritif', description: 'Bienvenue', points_requis: 500, is_available: true, image: null },
+      ]),
+    });
+  });
   await page.route('**/api/commandes/', async (route) => {
     await route.fulfill({
       status: 200,

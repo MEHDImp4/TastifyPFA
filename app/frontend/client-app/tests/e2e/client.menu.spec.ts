@@ -33,7 +33,7 @@ test.describe('menu catalog', () => {
     await page.goto('/menu');
     await expect(page.getByRole('button', { name: 'Tous les plats' })).toBeVisible();
     await expect(page.getByRole('button', { name: /Entrées/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Plats' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Plats', exact: true })).toBeVisible();
   });
 
   test('shows first category dishes by default', async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe('menu catalog', () => {
 
   test('switching category shows only that category dishes', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByRole('button', { name: 'Plats' }).click();
+    await page.getByRole('button', { name: 'Plats', exact: true }).click();
     await expect(page.getByText('Tagine Poulet')).toBeVisible();
     await expect(page.getByText('Soupe Harira')).toHaveCount(0);
     await expect(page.getByText('Briouates')).toHaveCount(0);
