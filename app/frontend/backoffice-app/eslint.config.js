@@ -23,7 +23,10 @@ export default defineConfig([
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/set-state-in-effect': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      'no-useless-assignment': 'off'
+      'no-useless-assignment': 'off',
+      // Playwright requires `async ({}, testInfo)` destructuring in beforeEach;
+      // allow empty object patterns as function parameters.
+      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }]
     }
   },
 ])
