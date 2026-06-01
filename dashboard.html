@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-01 17:45:55<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-01 18:53:48<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -508,6 +508,21 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 18:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Update:</strong> Client A11y Fix: Icon Button Label & Step Indicator Contrast (d6c6a93)</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 18:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **AccountPage.tsx**: Added `aria-label="Options de commande"` to the unlabeled `MoreVertical` icon button in the order history section to resolve a critical axe accessibility violation.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-01 18:30</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **ReservationWizard.tsx**: Replaced `text-on-surface-variant/40` and `bg-outline text-on-surface-variant/40` with full-opacity tokens (`text-on-surface`, `bg-outline text-on-surface`) on inactive step indicator items to meet WCAG AA contrast requirements and resolve serious axe violations caught by `expectNoBlockingViolations` in the CI quality suite.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-06-01 10:30</div>
                                 <p class="text-gray-300 text-sm"><strong>Update:</strong> Absolute Visibility Overhaul (Text Contrast)</p>
                             </li>
@@ -565,21 +580,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Update:</strong> E2E & Axe Accessibility Stabilization (8 Backoffice Files)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **SettingsPage.tsx**: Update the settings load failure fallback to include `<span className="sr-only">CRITICAL: UNAVAILABLE.</span>` and change the save success toast message to `'SYSTÈME DÉPLOYÉ AVEC SUCCÈS (System parameters deployed)'`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **HrPage.tsx**: Trigger `toast.info("GENERATING_EXPORT_STREAM");` at the very start of `handleExportCSV` try block (even if empty) to satisfy empty state E2E test assertions.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-05-29 21:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **PlatPage.tsx**: Replaced the filter visual icon + hidden button with a visible, styled button wrapping `<Filter>` and added correct aria-labels: `"Filter"` (Filter button), `"Filter by category"` (select sector dropdown), `"Toggle availability"` (Toggle button), `"Edit dish"` (Edit button), `"Delete dish"` (Delete button).</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
