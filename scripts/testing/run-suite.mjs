@@ -320,8 +320,9 @@ const suites = {
         '--',
         '--project=guest-firefox-smoke',
         '--project=gerant-mobile-smoke',
-        'tests/e2e/auth.public.spec.ts',
-        'tests/e2e/backoffice.quality.spec.ts',
+        // No file filters — testMatch per project handles selection, and the
+        // implicit 'setup' dependency runs auth.setup.ts to create .auth/*.json
+        // before gerant-mobile-smoke loads its storageState.
       ],
       files: ['docker-compose.yml'],
     });
