@@ -1,3 +1,8 @@
+## [2026-06-01] - 18:30 - Client A11y Fix: Icon Button Label & Step Indicator Contrast (d6c6a93)
+### Fixed
+- **AccountPage.tsx**: Added `aria-label="Options de commande"` to the unlabeled `MoreVertical` icon button in the order history section to resolve a critical axe accessibility violation.
+- **ReservationWizard.tsx**: Replaced `text-on-surface-variant/40` and `bg-outline text-on-surface-variant/40` with full-opacity tokens (`text-on-surface`, `bg-outline text-on-surface`) on inactive step indicator items to meet WCAG AA contrast requirements and resolve serious axe violations caught by `expectNoBlockingViolations` in the CI quality suite.
+
 ## [2026-06-01] - 10:30 - Absolute Visibility Overhaul (Text Contrast)
 ### Fixed
 - **Batch Refactor**: Removed all low-opacity text colors (opacity < 60%) across 14 backoffice files to ensure perfect legibility and compliance with the "Zero Transparency" mandate.
