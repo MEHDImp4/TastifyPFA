@@ -35,20 +35,21 @@ export const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!username || !password) {
-      setError('Identifiants requis');
+    const normalized = username.trim().toLowerCase();
+    if (!normalized || !password) {
+      setError('IDENTIFIER_REQUIRED');
       return;
     }
     setIsLoading(true);
     try {
-      const response = await api.post('/users/login/', { username, password });
+      const response = await api.post('/users/login/', { username: normalized, password });
       const { access, role, username: resUsername } = response.data;
       setAuth(access, role, resUsername);
       toast.success('Accès autorisé');
       const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'Accès refusé' : 'Erreur système');
+      setError(err.response?.status === 401 ? 'ACCESS_DENIED' : 'SYSTEM_ERROR');
       toast.error('Échec de l\'authentification');
     } finally {
       setIsLoading(false);
@@ -66,7 +67,7 @@ export const Login: React.FC = () => {
             <div className="w-12 h-12 rounded-full border border-outline flex items-center justify-center mb-6">
                <User className="w-5 h-5 text-on-surface-variant" strokeWidth={1} />
             </div>
-            <h1 className="text-4xl   tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
+            <h1 aria-label="Tastify Staff OS" className="text-4xl   tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
         </motion.div>
 
@@ -84,7 +85,8 @@ export const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-3">
               <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Opérateur</label>
-              <input 
+              <input
+                data-testid="login-username"
                 type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                 placeholder="Identifiant"
                 className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
@@ -94,12 +96,14 @@ export const Login: React.FC = () => {
             <div className="space-y-3">
               <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Code Secret</label>
               <div className="relative">
-                <input 
+                <input
+                  data-testid="login-password"
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   placeholder="••••••••"
                   className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 pr-12 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
                 />
-                <button 
+                <button
+                  data-testid="login-password-visibility"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/50 hover:text-on-background transition-colors"
@@ -109,7 +113,8 @@ export const Login: React.FC = () => {
               </div>
             </div>
 
-            <button 
+            <button
+              data-testid="login-submit"
               type="submit" disabled={isLoading}
               className="btn-primary w-full h-14"
             >
