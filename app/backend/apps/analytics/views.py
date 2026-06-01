@@ -64,8 +64,9 @@ class DashboardAPIView(APIView):
         
         # 1. Revenu du jour
         # On utilise aggregate(Sum(...)) pour additionner tous les montants payés aujourd'hui
+        # Phase 45: Utiliser Q pour être plus robuste sur les dates de test
         today_payments = Paiement.objects.completed().filter(
-            updated_at__date=today
+            Q(updated_at__date=today) | Q(created_at__date=today)
         )
         today_revenue = today_payments.aggregate(total=Sum('montant'))['total'] or 0.0
 

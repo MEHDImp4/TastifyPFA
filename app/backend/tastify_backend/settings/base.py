@@ -138,12 +138,12 @@ ASGI_APPLICATION = 'tastify_backend.asgi.application' # Requis pour WebSockets (
 # Configuration de la base de données (MySQL)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSQL_DATABASE'),
-        'USER': config('MYSQL_USER'),
-        'PASSWORD': config('MYSQL_PASSWORD'),
-        'HOST': config('MYSQL_HOST', default='db'),
-        'PORT': config('MYSQL_PORT', default='3306'),
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.mysql'),
+        'NAME': config('DB_NAME', default=config('MYSQL_DATABASE', default='tastify_db')),
+        'USER': config('DB_USER', default=config('MYSQL_USER', default='tastify_user')),
+        'PASSWORD': config('DB_PASSWORD', default=config('MYSQL_PASSWORD', default='tastify_password')),
+        'HOST': config('DB_HOST', default=config('MYSQL_HOST', default='db')),
+        'PORT': config('DB_PORT', default=config('MYSQL_PORT', default='3306')),
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

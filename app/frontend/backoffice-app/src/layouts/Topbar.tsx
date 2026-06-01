@@ -18,6 +18,7 @@ export const Topbar: React.FC<TopbarProps> = ({
       <div className="flex items-center gap-6">
         <button 
           onClick={() => setMobileOpen(true)}
+          aria-label="Open navigation menu"
           className="flex h-10 w-10 items-center justify-center border border-outline text-on-surface-variant hover:text-on-background hover:bg-background md:hidden rounded transition-all"
         >
           <Menu strokeWidth={2} className="w-5 h-5" />

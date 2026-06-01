@@ -70,11 +70,10 @@ class CommandeAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.serveur2)
         self.client.post(self.url, {'table': table2.id, 'lignes': []}, format='json')
         
-        # Serveur1 should only see 1 order
+        # Collaborative Service: Serveur1 should see both orders
         self.client.force_authenticate(user=self.serveur1)
         response = self.client.get(self.url)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['serveur'], self.serveur1.id)
+        self.assertEqual(len(response.data), 2)
         
         # Gerant should see 2 orders
         self.client.force_authenticate(user=self.gerant)
@@ -215,17 +214,17 @@ class FireOrderPatchTestCase(APITestCase):
         self.commande.refresh_from_db()
         self.assertEqual(self.commande.statut, Commande.Statut.EN_CUISINE)
 
-    def test_fire_order_non_owner_serveur_forbidden(self):
-        """T-16-01: A different SERVEUR cannot fire someone else's order — must 403."""
+    def test_fire_order_non_owner_serveur_allowed(self):
+        """Collaborative Service: A different SERVEUR can fire someone else's order."""
         self.client.force_authenticate(user=self.serveur_other)
         response = self.client.patch(
             self._detail_url(self.commande.pk),
             {'statut': Commande.Statut.EN_CUISINE},
             format='json',
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.commande.refresh_from_db()
-        self.assertEqual(self.commande.statut, Commande.Statut.EN_COURS)
+        self.assertEqual(self.commande.statut, Commande.Statut.EN_CUISINE)
 
     def test_fire_order_gerant_can_override_ownership(self):
         """T-16-01: GERANT bypasses ownership check by design."""

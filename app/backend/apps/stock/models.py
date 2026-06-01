@@ -33,8 +33,13 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ingrédients'
         ordering = ['nom']
 
+    def delete(self, using=None, keep_parents=False):
+        """Soft delete: set est_active=False instead of hard deleting."""
+        self.est_active = False
+        self.save()
+
     def __str__(self):
-        return f"{self.nom} ({self.stock_actuel} {self.unite_mesure})"
+        return self.nom
 
 
 # Cette classe est la "Recette" : elle lie un plat à ses ingrédients

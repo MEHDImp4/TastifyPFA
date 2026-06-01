@@ -1,5 +1,7 @@
+from decimal import Decimal
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
 
 
 class PaiementQuerySet(models.QuerySet):
@@ -43,7 +45,11 @@ class Paiement(models.Model):
         blank=True,
         related_name='paiements',
     )
-    montant = models.DecimalField(max_digits=10, decimal_places=2)
+    montant = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.01'))]
+    )
     methode = models.CharField(
         max_length=20,
         choices=Methode.choices,
@@ -65,6 +71,12 @@ class Paiement(models.Model):
         verbose_name = _('Paiement')
         verbose_name_plural = _('Paiements')
         ordering = ['-created_at']
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(montant__gt=0),
+                name='paiements_paiement_amount_gt_zero'
+            )
+        ]
 
     def __str__(self):
         return f"Paiement {self.pk} - Commande {self.commande_id} ({self.montant}€)"

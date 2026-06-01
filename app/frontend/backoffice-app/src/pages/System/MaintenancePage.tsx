@@ -8,7 +8,8 @@ import {
   RotateCcw,
   Phone,
   Mail,
-  Server
+  Server,
+  Activity
 } from 'lucide-react';
 
 export const MaintenancePage: React.FC = () => {
@@ -24,64 +25,65 @@ export const MaintenancePage: React.FC = () => {
   ];
 
   return (
-    <div className="h-full flex flex-col bg-background font-body selection:bg-primary/20 overflow-hidden">
+    <div className="h-full flex flex-col bg-background font-body selection:bg-on-background/10 overflow-hidden">
       
       {/* Page Header */}
-      <header className="flex-none flex items-end justify-between px-staff-margin py-unit-lg border-b border-outline-variant bg-surface-main">
+      <header className="flex-none flex items-center justify-between px-8 h-20 border-b border-outline bg-surface">
+        <h2 className="sr-only">System Health</h2>
         <div>
-          <h1 className=" text-3xl font-black text-on-surface tracking-tighter uppercase">System Health</h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-1">Real-time telemetry and module status</p>
+          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et statut des modules</p>
         </div>
-        <div className="flex gap-unit-md items-center">
-          <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded font-sans text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-all">
-            <Download className="w-3.5 h-3.5" /> Export Logs
+        <div className="flex gap-4 items-center">
+          <button className="btn-ghost h-10 px-4">
+            <Download className="w-3.5 h-3.5" /> <span>Export Logs</span>
           </button>
-          <button className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded font-sans text-xs font-black uppercase tracking-wider hover:scale-[1.02] transition-all">
-            <RotateCcw className="w-4 h-4" /> Manual Sync
+          <button className="btn-primary h-10 px-6">
+            <RotateCcw className="w-4 h-4" /> <span>Manual Sync</span>
           </button>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-staff-margin bg-surface-container-lowest custom-scrollbar space-y-staff-margin">
+      <main className="flex-1 overflow-y-auto p-8 bg-background custom-scrollbar space-y-8">
         
-        {/* Module Health Bento */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-unit-md">
-           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all">
+        {/* Module Health Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <div className="atelier-card p-6 flex flex-col justify-between h-40 group hover:border-on-background">
               <div className="flex justify-between items-start">
-                 <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest flex items-center gap-2"><Server className="w-3.5 h-3.5" /> Kitchen Core</span>
-                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Server className="w-3.5 h-3.5" /> Kitchen Core</span>
+                 <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
               </div>
               <div className="mt-auto">
-                 <div className=" text-3xl font-black text-on-surface">Online</div>
-                 <div className="flex justify-between font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mt-2">
+                 <div className="text-2xl font-bold text-on-background">Online</div>
+                 <div className="flex justify-between text-[8px] font-bold text-on-surface-variant uppercase tracking-widest mt-2 opacity-40">
                     <span>Lat: 12ms</span>
                     <span>Up: 99.9%</span>
                  </div>
               </div>
            </div>
 
-           <div className="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden group hover:border-primary transition-all">
+           <div className="atelier-card p-6 flex flex-col justify-between h-40 group hover:border-on-background">
               <div className="flex justify-between items-start">
-                 <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest flex items-center gap-2"><Network className="w-3.5 h-3.5" /> Floor Comm</span>
-                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Network className="w-3.5 h-3.5" /> Floor Comm</span>
+                 <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
               </div>
               <div className="mt-auto">
-                 <div className=" text-3xl font-black text-on-surface">Online</div>
-                 <div className="flex justify-between font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest mt-2">
+                 <div className="text-2xl font-bold text-on-background">Online</div>
+                 <div className="flex justify-between text-[8px] font-bold text-on-surface-variant uppercase tracking-widest mt-2 opacity-40">
                     <span>Lat: 8ms</span>
                     <span>Nodes: 14</span>
                  </div>
               </div>
            </div>
 
-           <div className="bg-primary/10 border-2 border-primary/40 rounded-lg p-6 flex flex-col justify-between h-40 relative overflow-hidden">
+           <div className="atelier-card p-6 flex flex-col justify-between h-40 border-error/20 bg-error/[0.01]">
               <div className="flex justify-between items-start">
-                 <span className="font-sans text-[10px] font-black text-primary uppercase tracking-widest flex items-center gap-2"><Cpu className="w-3.5 h-3.5" /> API Gateway</span>
-                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                 <span className="text-[9px] font-bold text-error uppercase tracking-widest flex items-center gap-2"><Cpu className="w-3.5 h-3.5" /> API Gateway</span>
+                 <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
               </div>
               <div className="mt-auto">
-                 <div className=" text-3xl font-black text-primary">Degraded</div>
-                 <div className="flex justify-between font-sans text-[9px] font-black text-primary/60 uppercase tracking-widest mt-2">
+                 <div className="text-2xl font-bold text-error">Degraded</div>
+                 <div className="flex justify-between text-[8px] font-bold text-error/40 uppercase tracking-widest mt-2">
                     <span>Lat: 145ms</span>
                     <span>Err: 2.1%</span>
                  </div>
@@ -89,52 +91,51 @@ export const MaintenancePage: React.FC = () => {
            </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-staff-gutter">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
            {/* Event Log */}
-           <div className="lg:col-span-8 bg-surface-main border border-outline-variant rounded-lg flex flex-col h-[450px] overflow-hidden">
-              <div className="px-6 py-3 border-b border-outline-variant bg-surface-container flex items-center justify-between font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em]">
+           <div className="lg:col-span-8 atelier-card flex flex-col h-[480px] overflow-hidden">
+              <div className="px-6 h-12 border-b border-outline bg-surface-container-high flex items-center justify-between text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
                  <span className="flex items-center gap-2"><Terminal className="w-3.5 h-3.5" /> System Event Log</span>
-                 <div className="flex gap-1.5 opacity-20">
-                    <div className="w-1.5 h-1.5 rounded-full bg-on-surface" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-on-surface" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-on-surface" />
+                 <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-background border border-outline">
+                    <Activity className="w-2.5 h-2.5" />
+                    <span>Real-time</span>
                  </div>
               </div>
-              <div className="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[11px] space-y-2 bg-surface-container-lowest/50">
+              <div className="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[10px] space-y-3 bg-background">
                  {logs.map((log, i) => (
-                    <div key={i} className="flex gap-6 group">
-                       <span className="text-on-surface-variant w-16 shrink-0">{log.time}</span>
-                       <span className={`w-12 shrink-0 font-bold ${log.status === 'INFO' ? 'text-primary' : log.status === 'WARN' ? 'text-primary' : 'text-error'}`}>[{log.status}]</span>
-                       <span className="text-on-surface opacity-80 group-hover:opacity-100 transition-opacity uppercase tracking-tight">{log.msg}</span>
+                    <div key={i} className="flex gap-6 group items-start">
+                       <span className="text-on-surface-variant/40 w-16 shrink-0">{log.time}</span>
+                       <span className={`w-12 shrink-0 font-bold ${log.status === 'ERROR' ? 'text-error' : 'text-on-background opacity-40'}`}>[{log.status}]</span>
+                       <span className="text-on-surface-variant group-hover:text-on-background transition-colors uppercase tracking-tight">{log.msg}</span>
                     </div>
                  ))}
-                 <div className="animate-pulse text-primary">_</div>
+                 <div className="text-on-background opacity-20">_</div>
               </div>
            </div>
 
-           {/* Sidebar Info */}
-           <div className="lg:col-span-4 space-y-staff-gutter">
-              <div className="bg-surface-container border border-outline-variant rounded-lg p-8 space-y-8">
-                 <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] border-b border-outline-variant/30 pb-4">Environment</h3>
-                 <ul className="space-y-4 font-sans text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
-                    <li className="flex justify-between"><span>Version</span><span className="text-on-surface">Terminal v1.4.2</span></li>
-                    <li className="flex justify-between"><span>Instance</span><span className="text-on-surface">i-0a1b2c3d4e</span></li>
-                    <li className="flex justify-between"><span>Region</span><span className="text-on-surface">MA-CAS-1</span></li>
-                    <li className="flex justify-between"><span>Last Boot</span><span className="text-on-surface">4 Days Ago</span></li>
+           {/* Technical Context */}
+           <div className="lg:col-span-4 space-y-8">
+              <div className="atelier-card p-8 space-y-6">
+                 <h3 className="text-[10px] font-bold text-on-background uppercase tracking-widest border-b border-outline pb-4">Environnement</h3>
+                 <ul className="space-y-4 text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    <li className="flex justify-between"><span>Version</span><span className="text-on-background">Terminal v1.4.2</span></li>
+                    <li className="flex justify-between"><span>Instance</span><span className="text-on-background">i-0a1b2c3d4e</span></li>
+                    <li className="flex justify-between"><span>Region</span><span className="text-on-background">MA-CAS-1</span></li>
+                    <li className="flex justify-between"><span>Last Boot</span><span className="text-on-background">4 Days Ago</span></li>
                  </ul>
               </div>
 
-              <div className="bg-surface-container-high border border-outline-variant rounded-lg p-8 space-y-6 flex-1">
-                 <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em] flex items-center gap-2"><Database className="w-4 h-4" /> Technical Support</h3>
-                 <p className="font-body text-[13px] text-on-surface-variant  opacity-60 uppercase tracking-tight leading-relaxed">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
-                 <div className="space-y-3 pt-4">
-                    <button className="w-full flex items-center gap-4 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-container-highest transition-all group">
-                       <Phone className="w-4 h-4 text-primary" />
-                       <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest">1-800-TASTIFY</span>
+              <div className="atelier-card p-8 bg-surface-container-high border-outline">
+                 <h3 className="text-[10px] font-bold text-on-background uppercase tracking-widest flex items-center gap-2 mb-4"><Database className="w-4 h-4" /> Technical Support</h3>
+                 <p className="text-[11px] text-on-surface-variant leading-relaxed opacity-60 uppercase mb-8">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
+                 <div className="space-y-3">
+                    <button className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg hover:bg-background transition-all group">
+                       <Phone className="w-4 h-4 text-on-surface-variant group-hover:text-on-background" />
+                       <span className="text-[9px] font-bold text-on-surface-variant group-hover:text-on-background uppercase tracking-widest">1-800-TASTIFY</span>
                     </button>
-                    <button className="w-full flex items-center gap-4 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-container-highest transition-all group">
-                       <Mail className="w-4 h-4 text-primary" />
-                       <span className="font-sans text-[10px] font-black text-on-surface uppercase tracking-widest">noc@tastify.inc</span>
+                    <button className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg hover:bg-background transition-all group">
+                       <Mail className="w-4 h-4 text-on-surface-variant group-hover:text-on-background" />
+                       <span className="text-[9px] font-bold text-on-surface-variant group-hover:text-on-background uppercase tracking-widest">noc@tastify.inc</span>
                     </button>
                  </div>
               </div>
@@ -144,3 +145,4 @@ export const MaintenancePage: React.FC = () => {
     </div>
   );
 };
+

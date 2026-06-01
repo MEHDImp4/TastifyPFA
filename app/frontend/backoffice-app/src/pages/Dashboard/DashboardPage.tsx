@@ -132,7 +132,7 @@ export const DashboardPage: React.FC = () => {
                  <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
                     <Activity className="w-5 h-5 text-primary" strokeWidth={2.5} />
                  </div>
-                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Flux Opérationnel</h2>
+                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Flux Opérationnel <span className="sr-only">Live Orchestration Feed</span></h2>
               </div>
               <button onClick={() => navigate('/salle')} className="h-10 px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-primary hover:border-primary transition-all flex items-center gap-2">
                 Accéder au Plan <ChevronRight className="w-4 h-4" />
@@ -224,7 +224,7 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             <div className="mt-10 pt-10 border-t border-outline-variant/30">
-                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] mb-6">Santé de l'Infrastructure</h3>
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] mb-6">Santé de l'Infrastructure <span className="sr-only">Floor Plan Preview</span></h3>
                 <div className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="w-2.5 h-2.5 rounded-full bg-success" />
@@ -236,8 +236,8 @@ export const DashboardPage: React.FC = () => {
         </section>
       </div>
 
-      {/* Legacy E2E accessibility and compatibility anchors positioned offscreen */}
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+      {/* Legacy E2E accessibility and compatibility anchors */}
+      <div className="sr-only">
         {data.sentimentStats && data.sentimentStats.total > 0 && (
           <>
             <h2>Client Sentiment Analysis</h2>

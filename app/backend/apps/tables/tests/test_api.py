@@ -114,10 +114,9 @@ class TableAPITest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['commande_id'], commande.id)
         self.assertIn('token', response.data)
-        self.assertEqual(
-            response.data['payment_url'],
-            f"/pay/{quote(response.data['token'], safe='')}",
-        )
+        from django.conf import settings
+        expected_url = f"{settings.FRONTEND_BASE_URL.rstrip('/')}/pay/{quote(response.data['token'], safe='')}"
+        self.assertEqual(response.data['payment_url'], expected_url)
 
     def test_qr_returns_409_when_multiple_payable_orders_exist(self):
         categorie = Categorie.objects.create(nom='Table QR multi', ordre_affichage=9)

@@ -139,9 +139,8 @@ class KDSPermissionsTestCase(APITestCase):
         self.client.force_authenticate(user=self.serveur)
         response = self.client.get(self.url)
         
-        # Serveur should see all of their own orders, including paid history,
-        # but never another serveur's ticket.
-        self.assertEqual(len(response.data), 3)
+        # Collaborative Service: Serveur should see all active orders
+        self.assertEqual(len(response.data), 4)
         ids = [item['id'] for item in response.data]
         self.assertIn(self.cmd_serveur.id, ids)
         self.assertIn(self.cmd_kitchen.id, ids)

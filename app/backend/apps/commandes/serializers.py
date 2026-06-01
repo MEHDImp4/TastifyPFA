@@ -76,9 +76,15 @@ class CommandeSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         request = self.context.get('request')
         table = attrs.get('table', getattr(getattr(self, 'instance', None), 'table', None))
+        order_type = attrs.get('type', getattr(getattr(self, 'instance', None), 'type', None))
+        user = request.user if request else None
 
-        if not table:
+        if order_type == Commande.Type.SUR_PLACE and not table:
             raise serializers.ValidationError({"table": "Une table est requise pour une commande sur place."})
+
+        # Phase 45: Clients cannot create SUR_PLACE orders manually (must be takeaway/click-and-collect)
+        if user and user.role == 'CLIENT' and order_type == Commande.Type.SUR_PLACE:
+            raise serializers.ValidationError({"type": "Les clients ne peuvent pas créer de commandes sur place."})
 
         return attrs
 

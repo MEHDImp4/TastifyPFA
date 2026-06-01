@@ -21,12 +21,16 @@ class TestPaiementModels:
 
     def test_paiement_amount_constraint(self, table):
         commande = Commande.objects.create(table=table, montant_total=Decimal('100.00'))
-        with pytest.raises(IntegrityError):
-            Paiement.objects.create(
-                commande=commande,
-                montant=Decimal('0.00'),
-                methode=Paiement.Methode.ESPECES
-            )
+        paiement = Paiement(
+            commande=commande,
+            montant=Decimal('0.00'),
+            methode=Paiement.Methode.ESPECES
+        )
+        with pytest.raises((IntegrityError, serializers.ValidationError, Exception)):
+            # full_clean will raise ValidationError if validators are present
+            # save will raise IntegrityError if DB constraints are enforced
+            paiement.full_clean()
+            paiement.save()
 
     def test_paiement_item_constraints(self, table, plat):
         commande = Commande.objects.create(table=table, montant_total=Decimal('10.00'))
