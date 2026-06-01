@@ -30,28 +30,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const links = [];
     
     if (role === 'GERANT') {
-      links.push({ to: '/', icon: LayoutDashboard, label: 'Tableau de Bord', exact: true });
+      links.push({ to: '/', icon: LayoutDashboard, label: 'Tableau de Bord', exact: true, testid: 'nav-dashboard' });
     }
 
     if (role === 'GERANT' || role === 'SERVEUR') {
-      links.push({ to: '/salle', icon: MapIcon, label: 'Plan de Salle' });
-      links.push({ to: '/reservations', icon: CalendarDays, label: 'Réservations' });
+      links.push({ to: '/salle', icon: MapIcon, label: 'Plan de Salle', testid: 'nav-salle' });
+      links.push({ to: '/reservations', icon: CalendarDays, label: 'Réservations', testid: 'nav-reservations' });
     }
 
     if (role === 'GERANT' || role === 'CUISINIER') {
-      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'La Carte' });
+      links.push({ to: '/menu', icon: UtensilsCrossed, label: 'La Carte', testid: 'nav-menu' });
     }
     
     if (role === 'GERANT') {
-      links.push({ to: '/categories', icon: Package, label: 'Catégories' });
-      links.push({ to: '/stock', icon: Activity, label: 'Stock & Logistique' });
-      links.push({ to: '/hr', icon: Users, label: 'Registre Personnel' });
-      links.push({ to: '/avis', icon: Star, label: 'Avis & Sentiments' });
-      links.push({ to: '/settings', icon: Settings, label: 'Paramètres' });
+      links.push({ to: '/categories', icon: Package, label: 'Catégories', testid: 'nav-categories' });
+      links.push({ to: '/stock', icon: Activity, label: 'Stock & Logistique', testid: 'nav-stock' });
+      links.push({ to: '/hr', icon: Users, label: 'Registre Personnel', testid: 'nav-hr' });
+      links.push({ to: '/avis', icon: Star, label: 'Avis & Sentiments', testid: 'nav-avis' });
+      links.push({ to: '/settings', icon: Settings, label: 'Paramètres', testid: 'nav-settings' });
     }
 
     if (role === 'GERANT' || role === 'CUISINIER') {
-      links.push({ to: '/kds', icon: ChefHat, label: 'Cuisine (KDS)' });
+      links.push({ to: '/kds', icon: ChefHat, label: 'Cuisine (KDS)', testid: 'nav-kds' });
     }
 
     return links;
@@ -94,6 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={link.to} 
                 to={link.to} 
                 end={link.exact}
+                data-testid={link.testid}
                 className={navClass}
                 onClick={() => setMobileOpen(false)}
               >
