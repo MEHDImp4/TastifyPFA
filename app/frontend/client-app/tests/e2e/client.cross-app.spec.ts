@@ -76,6 +76,46 @@ async function findPayableTableSession(request: APIRequestContext, staffAccessTo
   throw new Error('No payable table session was available in the seeded Docker dataset.');
 }
 
+async function setupPayableOrder(request: APIRequestContext, staffAccessToken: string) {
+  // 1. Get an available table
+  const tablesResponse = await request.get(buildApiUrl('/api/tables/'), {
+    headers: { Authorization: `Bearer ${staffAccessToken}` }
+  });
+  const tables = await tablesResponse.json();
+  const table = tables.find((t: any) => t.est_active && t.statut !== 'OCCUPEE') || tables[0];
+
+  // 2. Get a plat
+  const platsResponse = await request.get(buildApiUrl('/api/plats/'), {
+    headers: { Authorization: `Bearer ${staffAccessToken}` }
+  });
+  const plats = await platsResponse.json();
+  const plat = plats[0];
+
+  // 3. Create order
+  const orderResponse = await request.post(buildApiUrl('/api/commandes/'), {
+    headers: { Authorization: `Bearer ${staffAccessToken}` },
+    data: {
+      table: table.id,
+      type: 'SUR_PLACE',
+      statut: 'EN_COURS',
+      lignes: [
+        {
+          plat: plat.id,
+          quantite: 1
+        }
+      ]
+    }
+  });
+  expect(orderResponse.ok()).toBeTruthy();
+
+  // 4. Get QR session
+  const qrResponse = await request.get(buildApiUrl(`/api/tables/${table.id}/qr/`), {
+    headers: { Authorization: `Bearer ${staffAccessToken}` }
+  });
+  expect(qrResponse.ok()).toBeTruthy();
+  return (await qrResponse.json()) as PayableQrSession;
+}
+
 test.describe('cross-app realism', () => {
   test('creates a reservation in the client portal, lets staff cancel it in backoffice, and preserves the real status after reload', async ({
     browser,
@@ -140,7 +180,14 @@ test.describe('cross-app realism', () => {
       username: 'gerant_test',
       password: 'password123',
     });
-    const payableSession = await findPayableTableSession(request, gerantLogin.access);
+    
+    let payableSession: PayableQrSession;
+    try {
+      payableSession = await findPayableTableSession(request, gerantLogin.access);
+    } catch (e) {
+      // Fallback: create one if none found in seed
+      payableSession = await setupPayableOrder(request, gerantLogin.access);
+    }
 
     const paymentContext = await browser.newContext();
     const paymentPage = await paymentContext.newPage();
