@@ -601,6 +601,10 @@ jobs:
         working-directory: app/frontend/client-app
         run: npm ci
 
+      - name: Install Playwright browser
+        working-directory: app/frontend/client-app
+        run: npx playwright install --with-deps chromium
+
       - name: Create .env for CI
         run: cp .env.example .env
 
