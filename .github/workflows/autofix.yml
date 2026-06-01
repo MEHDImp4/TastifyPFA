@@ -1,0 +1,53 @@
+name: autofix.ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  autofix:
+    name: ESLint auto-fix
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            app/frontend/backoffice-app/package-lock.json
+            app/frontend/client-app/package-lock.json
+
+      - name: Install backoffice dependencies
+        working-directory: app/frontend/backoffice-app
+        run: npm ci
+
+      - name: Install client dependencies
+        working-directory: app/frontend/client-app
+        run: npm ci
+
+      - name: ESLint fix — backoffice
+        working-directory: app/frontend/backoffice-app
+        run: npx eslint . --fix --max-warnings=0 || true
+
+      - name: ESLint fix — client
+        working-directory: app/frontend/client-app
+        run: npx eslint . --fix --max-warnings=0 || true
+
+      - uses: autofix-ci/action@c5b2d67aa2274e7b5a18224e8171550871fc7e4a
