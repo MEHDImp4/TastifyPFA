@@ -32,13 +32,19 @@ export const ReservationWizard: React.FC = () => {
   const nextStep = () => setStep(prev => prev + 1);
   const prevStep = () => setStep(prev => prev - 1);
 
+  function computeEndTime(start: string): string {
+    const [h, m] = start.split(':').map(Number);
+    const total = h * 60 + m + 30;
+    return `${String(Math.floor(total / 60) % 24).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+  }
+
   const fetchAvailableTables = async () => {
     setIsLoading(true);
     try {
       const res = await reservationApi.getAvailableTables({
         date,
         heure_debut: startTime,
-        heure_fin: '23:00', // Default end time
+        heure_fin: computeEndTime(startTime),
         nombre_personnes: guests
       });
       const filtered = res.data.filter((t: any) => t.est_disponible);
@@ -60,7 +66,7 @@ export const ReservationWizard: React.FC = () => {
         table: selectedTable,
         date_reservation: date,
         heure_debut: startTime,
-        heure_fin: '23:00', // Default end time
+        heure_fin: computeEndTime(startTime),
         nombre_personnes: guests,
         notes: notes
       });
@@ -242,7 +248,7 @@ export const ReservationWizard: React.FC = () => {
                     </div>
                     <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
                        <button onClick={() => navigate('/')} className="btn-primary px-12 h-14 uppercase">Accueil</button>
-                       <button onClick={() => navigate('/account')} className="btn-secondary px-12 h-14 uppercase">Mes réservations</button>
+                       <button onClick={() => navigate('/account')} className="btn-secondary px-12 h-14 uppercase">Voir mes réservations</button>
                     </div>
                  </div>
               )}

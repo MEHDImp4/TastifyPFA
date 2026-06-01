@@ -204,7 +204,7 @@ const mockKds = async (page: Parameters<typeof test>[0]['page']) => {
 
 test.describe('authenticated backoffice quality coverage', () => {
   test.describe('gerant', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async (_fixtures, testInfo) => {
       test.skip(testInfo.project.name !== 'gerant-chromium');
     });
 
@@ -299,7 +299,7 @@ test.describe('authenticated backoffice quality coverage', () => {
   });
 
   test.describe('serveur', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async (_fixtures, testInfo) => {
       test.skip(testInfo.project.name !== 'serveur-chromium');
     });
 
@@ -354,7 +354,7 @@ test.describe('authenticated backoffice quality coverage', () => {
   });
 
   test.describe('cuisinier', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async (_fixtures, testInfo) => {
       test.skip(testInfo.project.name !== 'cuisinier-chromium');
     });
 

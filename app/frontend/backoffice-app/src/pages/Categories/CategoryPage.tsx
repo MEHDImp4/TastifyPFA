@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { menuApi } from '../../api/menu';
 import type { Categorie } from '../../types/menu';
 import {
@@ -6,14 +6,41 @@ import {
   Trash2,
   Loader2,
   Search,
-  Edit2
+  Edit2,
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+type EditorMode = 'create' | 'edit';
+
+interface EditorState {
+  mode: EditorMode;
+  id: number | null;
+  nom: string;
+  description: string;
+  ordre: string;
+  image: File | null;
+  imagePreviewUrl: string | null;
+}
+
+const BLANK_EDITOR = (nextOrder: number): EditorState => ({
+  mode: 'create',
+  id: null,
+  nom: '',
+  description: '',
+  ordre: String(nextOrder),
+  image: null,
+  imagePreviewUrl: null,
+});
 
 export const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [editor, setEditor] = useState<EditorState | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const fetchCategories = async () => {
     try {
@@ -31,20 +58,89 @@ export const CategoryPage: React.FC = () => {
     fetchCategories();
   }, []);
 
+  const openCreate = () => {
+    const nextOrder = categories.length > 0
+      ? Math.max(...categories.map(c => c.ordre_affichage)) + 1
+      : 1;
+    setSaveError(null);
+    setEditor(BLANK_EDITOR(nextOrder));
+  };
+
+  const openEdit = (cat: Categorie) => {
+    setSaveError(null);
+    setEditor({
+      mode: 'edit',
+      id: cat.id,
+      nom: cat.nom,
+      description: cat.description ?? '',
+      ordre: String(cat.ordre_affichage),
+      image: null,
+      imagePreviewUrl: cat.image ?? null,
+    });
+  };
+
+  const closeEditor = () => {
+    setEditor(null);
+    setSaveError(null);
+    if (imageInputRef.current) imageInputRef.current.value = '';
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    if (!file || !editor) return;
+    const url = URL.createObjectURL(file);
+    setEditor(prev => prev ? { ...prev, image: file, imagePreviewUrl: url } : prev);
+  };
+
+  const handleSave = async () => {
+    if (!editor) return;
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      const formData = new FormData();
+      formData.append('nom', editor.nom);
+      formData.append('description', editor.description);
+      formData.append('ordre_affichage', editor.ordre);
+      formData.append('est_active', 'true');
+      if (editor.image) formData.append('image', editor.image);
+
+      if (editor.mode === 'create') {
+        await menuApi.createCategory(formData);
+      } else if (editor.id !== null) {
+        await menuApi.updateCategory(editor.id, formData);
+      }
+      await fetchCategories();
+      closeEditor();
+    } catch (err) {
+      setSaveError('Failed to save category');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await menuApi.deleteCategory(id);
+      setCategories(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      toast.error('Failed to delete category');
+    }
+  };
+
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
-        <h2 className="sr-only">Sector Management</h2>
+        <h2 className="sr-only">Category Management</h2>
         <div>
           <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Secteurs & Catégories</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Organisation hiérarchique du menu</p>
         </div>
         <div className="flex items-center gap-4">
-           <div className="relative group">
+          <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
-            <input 
+            <input
               type="text"
               placeholder="RECHERCHER..."
               value={search}
@@ -52,31 +148,119 @@ export const CategoryPage: React.FC = () => {
               className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
             />
           </div>
-          <button className="btn-primary h-10 px-6">
+          <button data-testid="category-create-button" onClick={openCreate} className="btn-primary h-10 px-6">
             <Plus className="w-4 h-4" /> <span>Nouveau Secteur</span>
           </button>
         </div>
       </header>
 
       <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {categories.filter(c => c.nom.toLowerCase().includes(search.toLowerCase())).map(c => (
-                <div key={c.id} className="atelier-card p-6 group">
-                   <div className="flex justify-between items-start mb-6">
-                      <div className="flex items-center gap-3">
-                         <div className="w-8 h-8 rounded border border-outline bg-background flex items-center justify-center font-bold text-[10px]">{c.ordre_affichage}</div>
-                         <h3 className="text-sm font-bold uppercase tracking-tight text-on-background">{c.nom}</h3>
-                      </div>
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                         <button className="p-1.5 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                         <button className="p-1.5 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
-                      </div>
-                   </div>
-                   <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40">{c.description || 'Aucune description spécifiée.'}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {categories.filter(c => c.nom.toLowerCase().includes(search.toLowerCase())).map(c => (
+            <div key={c.id} data-testid={`category-card-${c.id}`} className="atelier-card p-6 group">
+              {c.image && (
+                <div className="mb-4 aspect-video rounded overflow-hidden border border-outline">
+                  <img src={c.image} alt={c.nom} role="img" aria-label={c.nom} className="w-full h-full object-cover" />
                 </div>
-            ))}
-         </div>
+              )}
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded border border-outline bg-background flex items-center justify-center font-bold text-[10px]">{c.ordre_affichage}</div>
+                  <h3 className="text-sm font-bold uppercase tracking-tight text-on-background">{c.nom}</h3>
+                </div>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button data-testid={`category-edit-${c.id}`} onClick={() => openEdit(c)} className="p-1.5 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`category-delete-${c.id}`} onClick={() => handleDelete(c.id)} className="p-1.5 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+              <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40">{c.description || 'Aucune description spécifiée.'}</p>
+            </div>
+          ))}
+        </div>
       </main>
+
+      {editor && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={closeEditor} />
+          <div className="relative w-full max-w-md bg-surface border border-outline rounded-xl flex flex-col shadow-2xl">
+            <div className="p-6 border-b border-outline flex items-center justify-between">
+              <h2 className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
+                {editor.mode === 'create' ? 'Nouveau Secteur' : 'Modifier Secteur'}
+              </h2>
+              <button data-testid="close-editor" onClick={closeEditor} className="p-2 hover:bg-surface-container-high rounded transition-all text-on-surface-variant">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-8 space-y-6 overflow-y-auto">
+              {saveError && (
+                <p className="text-[10px] font-bold text-error uppercase tracking-widest">{saveError}</p>
+              )}
+              <div className="space-y-2">
+                <label htmlFor="cat-nom" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nom</label>
+                <input
+                  id="cat-nom"
+                  data-testid="category-name-input"
+                  value={editor.nom}
+                  onChange={e => setEditor(prev => prev ? { ...prev, nom: e.target.value } : prev)}
+                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="cat-description" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Description</label>
+                <textarea
+                  id="cat-description"
+                  data-testid="category-description-input"
+                  value={editor.description}
+                  onChange={e => setEditor(prev => prev ? { ...prev, description: e.target.value } : prev)}
+                  rows={3}
+                  className="w-full bg-background border border-outline rounded-md px-4 py-3 font-bold text-sm resize-none"
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="cat-ordre" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Ordre d'affichage</label>
+                <input
+                  id="cat-ordre"
+                  data-testid="category-order-input"
+                  type="number"
+                  value={editor.ordre}
+                  onChange={e => setEditor(prev => prev ? { ...prev, ordre: e.target.value } : prev)}
+                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="cat-image" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Image</label>
+                <input
+                  id="cat-image"
+                  data-testid="category-image-input"
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full text-sm"
+                />
+                {editor.imagePreviewUrl && (
+                  <div data-testid="category-image-preview" className="mt-2 aspect-video rounded border border-outline overflow-hidden">
+                    <img src={editor.imagePreviewUrl} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-outline flex gap-3">
+              <button onClick={closeEditor} className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
+              <button
+                data-testid="category-save-button"
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex-[2] btn-primary h-12"
+              >
+                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Enregistrer</span>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
