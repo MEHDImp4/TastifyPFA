@@ -221,7 +221,7 @@ export const ReservationsPage: React.FC = () => {
                     </div>
                     {res.notes && (
                         <div className="rounded border border-outline bg-background/50 px-4 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                          {res.notes}
+                          "{res.notes}"
                         </div>
                     )}
                   </div>

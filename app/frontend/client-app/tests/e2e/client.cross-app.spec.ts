@@ -191,7 +191,7 @@ test.describe('cross-app realism', () => {
 
     const paymentContext = await browser.newContext();
     const paymentPage = await paymentContext.newPage();
-    await paymentPage.goto(`${CROSS_APP_ORIGINS.client}${payableSession.payment_url}`);
+    await paymentPage.goto(payableSession.payment_url);
     await expect(paymentPage.getByRole('button', { name: /Confirm Payment/i })).toBeEnabled();
     await paymentPage.getByRole('button', { name: /Confirm Payment/i }).click();
     await expect(paymentPage.getByRole('heading', { name: /Payment Secured\./i })).toBeVisible();
