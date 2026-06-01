@@ -115,19 +115,19 @@ jobs:
           backoffice=false
           ci=false
 
-          if match_any '^(app/frontend/|package\.json|package-lock\.json|scripts/testing/run-suite\.mjs|docker-compose\.yml|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^app/frontend/' || match_any '^(package\.json|package-lock\.json|scripts/testing/run-suite\.mjs|docker-compose\.yml|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             frontend=true
           fi
-          if match_any '^(app/backend/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^app/backend/' || match_any '^(docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             backend=true
           fi
-          if match_any '^(app/frontend/client-app/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^app/frontend/client-app/' || match_any '^(docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             client=true
           fi
-          if match_any '^(app/frontend/backoffice-app/|docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
+          if match_any '^app/frontend/backoffice-app/' || match_any '^(docker-compose(\.ci|\.preview)?\.yml|scripts/testing/run-suite\.mjs|\.github/workflows/backoffice-ci\.yml|TESTING\.md)$'; then
             backoffice=true
           fi
-          if match_any '^(\.github/workflows/|scripts/testing/run-suite\.mjs|package\.json|package-lock\.json|docker-compose(\.ci|\.preview)?\.yml|TESTING\.md)$'; then
+          if match_any '^\.github/workflows/' || match_any '^(scripts/testing/run-suite\.mjs|package\.json|package-lock\.json|docker-compose(\.ci|\.preview)?\.yml|TESTING\.md)$'; then
             ci=true
           fi
 
