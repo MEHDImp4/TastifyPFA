@@ -1,10 +1,11 @@
+from decimal import Decimal
 from rest_framework import serializers
 from .models import Ingredient, PlatIngredient, MouvementStock
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    stock_actuel = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0)
-    seuil_alerte = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    stock_actuel = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0'))
+    seuil_alerte = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0'))
 
     class Meta:
         model = Ingredient
@@ -22,7 +23,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class PlatIngredientSerializer(serializers.ModelSerializer):
-    quantite_requise = serializers.DecimalField(max_digits=10, decimal_places=3, min_value=0)
+    quantite_requise = serializers.DecimalField(max_digits=10, decimal_places=3, min_value=Decimal('0'))
 
     class Meta:
         model = PlatIngredient

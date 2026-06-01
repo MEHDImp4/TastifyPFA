@@ -1,3 +1,4 @@
+from decimal import Decimal
 from rest_framework import serializers
 from .models import Categorie, Plat
 from apps.avis.models import Avis
@@ -61,7 +62,7 @@ class PlatSerializer(serializers.ModelSerializer):
     categorie = serializers.PrimaryKeyRelatedField(queryset=Categorie.objects.all())
     
     # On ajoute des validations simples (ex: prix positif)
-    prix = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0)
+    prix = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0'))
     temps_preparation = serializers.IntegerField(min_value=1)
 
     # Sentiment analysis & reviews for recommendations

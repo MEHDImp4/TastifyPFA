@@ -51,10 +51,10 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-[#FAF9F6] font-body selection:bg-[#C5A059]/20 flex flex-col items-center justify-center p-6">
+    <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center justify-center p-6">
       <Link 
         to="/" 
-        className="fixed top-8 left-8 group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#2D2424]/40 hover:text-[#D14D1A] transition-all"
+        className="fixed top-8 left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all"
       >
         <ChevronLeft className="w-3.5 h-3.5" />
         Retour
@@ -67,49 +67,52 @@ export const Register: React.FC = () => {
         className="w-full max-w-md space-y-12"
       >
         <motion.div variants={fadeIn} className="text-center space-y-2">
-          <h1 className=" text-5xl font-medium text-[#2D2424]  tracking-tight m-0">Inscription.</h1>
-          <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">Créez votre compte pour commencer</p>
+          <h1 className="text-5xl font-bold text-on-background tracking-tight m-0">Inscription.</h1>
+          <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em]">Créez votre accès membre</p>
         </motion.div>
 
         <AnimatePresence mode="wait">
           {error && (
             <motion.div 
               initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="p-4 bg-[#B3261E]/5 border border-[#B3261E]/10 rounded-xl flex items-center gap-3"
+              className="p-4 bg-error/5 border border-error/10 rounded-xl flex items-center gap-3"
             >
-              <ShieldAlert className="w-4 h-4 text-[#B3261E]" />
-              <p className="font-sans text-[10px] font-bold text-[#B3261E] uppercase tracking-widest">{error}</p>
+              <ShieldAlert className="w-4 h-4 text-error" />
+              <p className="font-sans text-[10px] font-bold text-error uppercase tracking-widest">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <motion.div variants={fadeIn} className="space-y-1.5">
-            <label htmlFor="username" className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.3em] ml-1">Utilisateur</label>
+            <label htmlFor="username" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em] ml-1">Utilisateur</label>
             <input
               id="username"
+              data-testid="register-username"
               type="text" required value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
-              className="w-full h-14 bg-white border border-[#2D2424]/10 rounded-2xl px-5 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A] outline-none transition-all placeholder:text-[#2D2424]/10"
+              className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
               placeholder="PSEUDONYME"
             />
           </motion.div>
 
           <motion.div variants={fadeIn} className="space-y-1.5">
-            <label htmlFor="email" className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.3em] ml-1">Email</label>
+            <label htmlFor="email" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em] ml-1">Email</label>
             <input
               id="email"
+              data-testid="register-email"
               type="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading}
-              className="w-full h-14 bg-white border border-[#2D2424]/10 rounded-2xl px-5 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A] outline-none transition-all placeholder:text-[#2D2424]/10"
+              className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
               placeholder="VOTRE@EMAIL.COM"
             />
           </motion.div>
 
           <motion.div variants={fadeIn} className="space-y-1.5">
-            <label htmlFor="password" className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.3em] ml-1">Mot de passe</label>
+            <label htmlFor="password" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em] ml-1">Mot de passe</label>
             <input
               id="password"
+              data-testid="register-password"
               type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
-              className="w-full h-14 bg-white border border-[#2D2424]/10 rounded-2xl px-5 font-sans font-bold text-[#2D2424] focus:border-[#D14D1A] outline-none transition-all placeholder:text-[#2D2424]/10"
+              className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
               placeholder="••••••••"
             />
           </motion.div>
@@ -118,7 +121,7 @@ export const Register: React.FC = () => {
             variants={fadeIn}
             whileTap={{ scale: 0.98 }}
             type="submit" disabled={isLoading}
-            className="w-full h-16 bg-[#2D2424] text-[#FAF9F6] rounded-2xl font-sans text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-[#D14D1A] flex items-center justify-center gap-3 group mt-4"
+            className="w-full h-16 bg-on-background text-background rounded-xl font-sans text-[10px] font-bold uppercase tracking-[0.4em] transition-all hover:brightness-110 flex items-center justify-center gap-3 group mt-4"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <>
@@ -129,10 +132,10 @@ export const Register: React.FC = () => {
           </motion.button>
         </form>
 
-        <motion.div variants={fadeIn} className="pt-8 border-t border-[#2D2424]/5 text-center">
-          <p className="font-sans text-[10px] font-black text-[#2D2424]/30 uppercase tracking-[0.4em]">
+        <motion.div variants={fadeIn} className="pt-8 border-t border-outline text-center">
+          <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em]">
             Déjà membre ? {' '}
-            <Link to="/login" className="text-[#D14D1A] hover:text-[#2D2424] ml-1 transition-colors border-b border-[#D14D1A]/10 pb-0.5">Se connecter</Link>
+            <Link to="/login" className="text-on-background hover:opacity-70 ml-1 transition-colors border-b border-outline pb-0.5">Se connecter</Link>
           </p>
         </motion.div>
       </motion.div>

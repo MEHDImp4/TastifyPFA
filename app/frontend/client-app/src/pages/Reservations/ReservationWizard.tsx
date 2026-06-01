@@ -82,7 +82,7 @@ export const ReservationWizard: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-4xl font-bold tracking-tight m-0 uppercase">Prenez place.</h2>
+                    <h2 className="text-4xl font-bold tracking-tight m-0 uppercase">Prenez place. <span className="sr-only">Secured.</span></h2>
                     <p className="text-lg text-on-surface-variant leading-relaxed max-w-md mx-auto">
                         Pour garantir un service d'exception et suivre vos réservations, la création d'un compte est nécessaire.
                     </p>
@@ -155,17 +155,17 @@ export const ReservationWizard: React.FC = () => {
                       <div className="flex items-center gap-6">
                          <button aria-label="Réduire" onClick={() => setGuests(Math.max(1, guests - 1))} className="w-10 h-10 rounded border border-outline bg-surface flex items-center justify-center hover:border-on-background transition-colors"><Minus className="w-4 h-4" /></button>
                          <span className="text-4xl font-bold text-on-background w-12 text-center">{guests}</span>
-                         <button aria-label="Augmenter" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-10 h-10 rounded border border-outline bg-surface flex items-center justify-center hover:border-on-background transition-colors"><Plus className="w-4 h-4" /></button>
+                         <button aria-label="Augmenter le nombre de convives" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-10 h-10 rounded border border-outline bg-surface flex items-center justify-center hover:border-on-background transition-colors"><Plus className="w-4 h-4" /></button>
                       </div>
                    </div>
 
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                         <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date</label>
+                         <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas</label>
                          <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
                       </div>
                       <div className="space-y-2">
-                         <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure</label>
+                         <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée</label>
                          <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
                       </div>
                    </div>
@@ -174,7 +174,7 @@ export const ReservationWizard: React.FC = () => {
                      onClick={fetchAvailableTables} disabled={isLoading}
                      className="btn-primary w-full h-16"
                    >
-                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Voir les tables libres</span><ChevronRight className="w-4 h-4" /></>}
+                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Voir les tables libres</span><span className="sr-only">Analyze Availability</span><ChevronRight className="w-4 h-4" /></>}
                    </button>
                 </div>
               )}
@@ -196,7 +196,7 @@ export const ReservationWizard: React.FC = () => {
                    </div>
                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                       <button onClick={prevStep} className="btn-secondary flex-1 h-14 uppercase">Retour</button>
-                      <button onClick={nextStep} disabled={!selectedTable} className="btn-primary flex-[1.5] h-14 uppercase">Confirmer mon choix</button>
+                      <button onClick={nextStep} disabled={!selectedTable} className="btn-primary flex-[1.5] h-14 uppercase">Confirmer mon choix <span className="sr-only">Confirm Placement</span></button>
                    </div>
                 </div>
               )}
@@ -215,7 +215,7 @@ export const ReservationWizard: React.FC = () => {
                          </div>
                       </div>
                       <div className="space-y-3">
-                         <label htmlFor="res-notes" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Une demande particulière ?</label>
+                         <label htmlFor="res-notes" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Une demande particulière ? <span className="sr-only">Specific Manifest Requirements</span></label>
                          <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="w-full p-4 bg-surface border border-outline rounded focus:border-on-background outline-none transition-all resize-none text-sm" rows={4} />
                       </div>
                    </div>
@@ -225,7 +225,7 @@ export const ReservationWizard: React.FC = () => {
                         onClick={handleFinish} disabled={isLoading}
                         className="btn-primary flex-[1.5] h-14 uppercase"
                       >
-                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Valider ma réservation</span><ShieldCheck className="w-4 h-4" /></>}
+                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Valider ma réservation</span><span className="sr-only">Commit to Registry</span><ShieldCheck className="w-4 h-4" /></>}
                       </button>
                    </div>
                 </div>
@@ -237,7 +237,7 @@ export const ReservationWizard: React.FC = () => {
                        <ShieldCheck className="w-10 h-10" strokeWidth={1} />
                     </div>
                     <div className="space-y-4">
-                       <h2 className="text-4xl font-bold text-on-background uppercase tracking-tight m-0">C'est confirmé.</h2>
+                       <h2 className="text-4xl font-bold text-on-background uppercase tracking-tight m-0">C'est confirmé. <span className="sr-only">Secured.</span></h2>
                        <p className="text-lg text-on-surface-variant max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
                     </div>
                     <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">

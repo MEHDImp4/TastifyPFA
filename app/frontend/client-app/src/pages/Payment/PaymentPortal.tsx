@@ -9,9 +9,9 @@ import {
   ListOrdered,
   ArrowRight,
   ShieldCheck,
-  QrCode,
   PieChart,
-  Receipt
+  Receipt,
+  QrCode
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -99,125 +99,118 @@ export const PaymentPortal: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF9F6] relative overflow-hidden">
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center gap-6 relative z-10"
-        >
-            <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Initialisation du terminal de paiement</span>
-        </motion.div>
-        <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
+        <div className="flex flex-col items-center gap-6 relative z-10">
+            <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1}/>
+            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em]">Initialisation du terminal de paiement</span>
+        </div>
     </div>
   );
 
   if (isSuccess) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center animate-in zoom-in-95 duration-1000 font-body">
-        <div className="w-full max-w-xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[80px] -mr-24 -mt-24" />
-            <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-10" strokeWidth={1} />
-            <h2 className=" text-4xl font-black text-on-surface  mb-4 leading-none">Paiement Sécurisé.</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center font-body">
+        <div className="w-full max-w-xl atelier-card p-12 relative overflow-hidden">
+            <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-10" strokeWidth={1} />
+            <h2 className="text-4xl font-bold text-on-surface mb-4 leading-none">Paiement Sécurisé. <span className="sr-only">Payment Secured.</span></h2>
             <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed mb-12">Merci de votre visite chez {brandName}. Votre session a été réglée avec succès.</p>
-            <button onClick={() => navigate('/')} className="px-16 py-6 bg-on-surface text-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] transition-all hover:bg-primary cinematic-shadow">Retour à l'Accueil</button>
+            <button onClick={() => navigate('/')} className="btn-primary mx-auto w-fit px-16 h-14">Retour à l'Accueil</button>
         </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background font-body selection:bg-primary/20 flex flex-col items-center py-12 md:py-24 px-6 overflow-x-hidden">
+    <div className="min-h-screen bg-background font-body selection:bg-on-background/10 flex flex-col items-center py-12 md:py-24 px-6 overflow-x-hidden">
         <main className="w-full max-w-2xl flex flex-col gap-12">
             
             {/* Header Section */}
             <div className="text-center space-y-4">
-                <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Table {session.table_numero || '00'} • Règlement</span>
-                <h1 className=" text-4xl md:text-6xl font-black text-on-surface  leading-none m-0">Votre Addition</h1>
+                <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em]">Table {session.table_numero || '00'} • Règlement</span>
+                <h1 className="text-4xl md:text-6xl font-bold text-on-surface leading-none m-0 uppercase tracking-tight">Votre Addition</h1>
                 <div
-                  className="text-5xl md:text-7xl font-sans font-black text-primary tracking-tighter tabular-nums mt-6"
+                  className="text-5xl md:text-7xl font-mono font-bold text-on-background tracking-tighter tabular-nums mt-6"
                   data-testid="payment-session-total"
                 >
                   {session.montant_restant} DH
                 </div>
-                <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Inclut les frais de service automatisés</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Inclut les frais de service automatisés</p>
             </div>
 
-            {/* Split Options Bento */}
+            {/* Split Options */}
             <div className="grid grid-cols-3 gap-4">
-                <button onClick={() => setSplitMode('ALL')} className={`p-6 rounded-2xl border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-low border-outline-variant/30 text-on-surface-variant hover:border-primary/50'}`}>
-                   <Receipt className="w-5 h-5" />
-                   <span className="font-sans text-[10px] font-black uppercase tracking-widest">Tout Régler</span>
+                <button onClick={() => setSplitMode('ALL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                   <Receipt className="w-5 h-5" strokeWidth={1.5}/>
+                   <span className="text-[10px] font-bold uppercase tracking-widest">Tout Régler</span>
                 </button>
-                <button onClick={() => setSplitMode('EQUAL')} className={`p-6 rounded-2xl border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'EQUAL' ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-low border-outline-variant/30 text-on-surface-variant hover:border-primary/50'}`}>
-                   <PieChart className="w-5 h-5" />
-                   <span className="font-sans text-[10px] font-black uppercase tracking-widest">Partager</span>
+                <button onClick={() => setSplitMode('EQUAL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'EQUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                   <PieChart className="w-5 h-5" strokeWidth={1.5}/>
+                   <span className="text-[10px] font-bold uppercase tracking-widest">Partager</span>
                 </button>
-                <button onClick={() => setSplitMode('INDIVIDUAL')} className={`p-6 rounded-2xl border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'INDIVIDUAL' ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-low border-outline-variant/30 text-on-surface-variant hover:border-primary/50'}`}>
-                   <ListOrdered className="w-5 h-5" />
-                   <span className="font-sans text-[10px] font-black uppercase tracking-widest">Par Article</span>
+                <button onClick={() => setSplitMode('INDIVIDUAL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'INDIVIDUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                   <ListOrdered className="w-5 h-5" strokeWidth={1.5}/>
+                   <span className="text-[10px] font-bold uppercase tracking-widest">Par Article</span>
                 </button>
             </div>
 
-            <AnimatePresence mode="wait">
-                {splitMode === 'INDIVIDUAL' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="bg-surface-container border border-outline-variant rounded-[2rem] p-8 space-y-6">
-                        <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Détail par Article</label>
-                        <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
-                           {session.lignes.map((l: any) => (
-                               <button 
-                                 key={l.id} onClick={() => toggleItem(l.id)}
-                                 className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all ${selectedItems.includes(l.id) ? 'bg-primary/10 border-primary text-on-surface' : 'bg-surface-container-lowest border-outline-variant/20 text-on-surface-variant'}`}
-                               >
-                                  <div className="text-left">
-                                     <span className="font-sans text-[13px] font-black uppercase block tracking-tight">{l.plat_nom}</span>
-                                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">Qté {l.quantite}</span>
-                                  </div>
-                                  <span className="font-sans font-bold text-primary">{l.montant_restant} DH</span>
-                               </button>
-                           ))}
-                        </div>
-                    </motion.div>
-                )}
-                {splitMode === 'EQUAL' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="bg-surface-container border border-outline-variant rounded-[2rem] p-10 flex flex-col items-center gap-6">
-                       <label className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Nombre de Parts</label>
-                       <div className="flex items-center gap-12 bg-surface-container-lowest rounded-full p-3 border border-outline-variant/30">
-                          <button aria-label="Diminuer le nombre de parts" onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
-                            <span aria-hidden="true">—</span>
-                            <span className="sr-only">Diminuer le nombre de parts</span>
-                          </button>
-                          <span className=" text-5xl font-black  text-on-surface">{splitCount}</span>
-                          <button aria-label="Augmenter le nombre de parts" onClick={() => setSplitCount(splitCount + 1)} className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-on-surface hover:text-background transition-all">
-                            <span aria-hidden="true">+</span>
-                            <span className="sr-only">Augmenter le nombre de parts</span>
-                          </button>
-                       </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {splitMode === 'INDIVIDUAL' && (
+                <div className="atelier-card p-8 space-y-6">
+                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Détail par Article</label>
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                        {session.lignes.map((l: any) => (
+                            <button 
+                                key={l.id} onClick={() => toggleItem(l.id)}
+                                className={`w-full p-4 rounded border flex items-center justify-between transition-all ${selectedItems.includes(l.id) ? 'bg-on-background text-background border-on-background' : 'bg-background border-outline text-on-surface-variant'}`}
+                            >
+                                <div className="text-left">
+                                    <span className="text-[13px] font-bold uppercase block tracking-tight">{l.plat_nom}</span>
+                                    <span className="font-mono text-[10px] opacity-40 uppercase">Qté {l.quantite}</span>
+                                </div>
+                                <span className="font-mono font-bold">{l.montant_restant} DH</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+            
+            {splitMode === 'EQUAL' && (
+                <div className="atelier-card p-10 flex flex-col items-center gap-6">
+                    <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre de Parts</label>
+                    <div className="flex items-center gap-12 bg-background rounded-md p-3 border border-outline">
+                        <button aria-label="Diminuer le nombre de parts" onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-12 h-12 rounded bg-surface border border-outline flex items-center justify-center hover:bg-on-background hover:text-background transition-all">
+                        <span aria-hidden="true">—</span>
+                        <span className="sr-only">Diminuer le nombre de parts</span>
+                        </button>
+                        <span className="text-5xl font-bold text-on-background">{splitCount}</span>
+                        <button aria-label="Augmenter le nombre de parts" onClick={() => setSplitCount(splitCount + 1)} className="w-12 h-12 rounded bg-surface border border-outline flex items-center justify-center hover:bg-on-background hover:text-background transition-all">
+                        <span aria-hidden="true">+</span>
+                        <span className="sr-only">Augmenter le nombre de parts</span>
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Action / QR Section */}
-            <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-10 flex flex-col items-center gap-8 shadow-sm">
+            <div className="atelier-card p-10 flex flex-col items-center gap-8 shadow-sm">
                 <div className="text-center space-y-2">
-                   <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Autoriser l'Allocation Individuelle</p>
-                   <p className="font-sans text-3xl font-black text-on-surface tabular-nums" data-testid="payment-payable-amount">{payableAmount} DH</p>
+                   <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Autoriser l'Allocation Individuelle</p>
+                   <p className="font-mono text-3xl font-bold text-on-background tabular-nums" data-testid="payment-payable-amount">{payableAmount} DH</p>
                 </div>
                 
-                <div className="p-6 bg-primary/5 rounded-3xl border-2 border-primary/20 shadow-inner group cursor-pointer hover:border-primary transition-all">
-                   <QrCode className="w-40 h-40 text-primary stroke-[1] group-hover:scale-105 transition-all duration-700" />
+                <div className="p-6 bg-surface-container-high rounded-xl border border-outline shadow-inner group cursor-pointer">
+                   <QrCode className="w-40 h-40 text-on-background stroke-[1] group-hover:scale-105 transition-all duration-700" />
                 </div>
                 
-                <p className="font-body text-[14px] text-on-surface-variant  max-w-xs text-center uppercase tracking-tight">Scannez pour une autorisation biométrique sécurisée via Apple Pay ou Google Pay</p>
+                <p className="text-[14px] text-on-surface-variant max-w-xs text-center uppercase tracking-tight opacity-40">Scannez pour une autorisation biométrique sécurisée via Apple Pay ou Google Pay</p>
                 
                 <div className="w-full space-y-4">
                     <button 
                         onClick={handlePay} disabled={isPaying || parseFloat(payableAmount) <= 0}
-                        className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4"
+                        className="btn-primary w-full h-16 uppercase tracking-[0.4em] gap-4"
                     >
-                        {isPaying ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Confirmer le Règlement</span><ArrowRight className="w-4 h-4" /></>}
+                        {isPaying ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Confirmer le Règlement</span><span className="sr-only">Confirm Payment</span><ArrowRight className="w-4 h-4" /></>}
                     </button>
                     <div className="flex items-center justify-center gap-2 opacity-20">
                        <ShieldCheck className="w-3 h-3" />
-                       <span className="font-sans text-[8px] font-black uppercase tracking-[0.3em]">Centre de Sécurité Cryptographique de Bout en Bout</span>
+                       <span className="text-[8px] font-bold uppercase tracking-[0.3em]">Centre de Sécurité Cryptographique de Bout en Bout</span>
                     </div>
                 </div>
             </div>
@@ -225,4 +218,3 @@ export const PaymentPortal: React.FC = () => {
     </div>
   );
 };
-

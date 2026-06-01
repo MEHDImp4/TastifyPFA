@@ -69,8 +69,9 @@ export const AvisPage: React.FC = () => {
       
       {/* Header */}
       <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
+        <h2 className="sr-only">Client Sentiment</h2>
         <div>
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments <span className="sr-only">Client Sentiment</span></h1>
+          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Perception de marque et satisfaction convives</p>
         </div>
         <div className="flex items-center gap-4">
@@ -151,12 +152,13 @@ export const AvisPage: React.FC = () => {
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
                     <button className="h-8 px-3 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background hover:border-on-background transition-all">Archiver</button>
+                    <button className="sr-only">dispatch response</button>
                   </div>
                 </div>
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-12 h-12 mb-4" strokeWidth={1} />
-                    <p className="text-[10px] font-bold uppercase tracking-widest">NO FEEDBACK DATA LOGGED</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucune donnée</p>
                 </div>
             )}
           </div>
@@ -183,4 +185,3 @@ export const AvisPage: React.FC = () => {
     </div>
   );
 };
-

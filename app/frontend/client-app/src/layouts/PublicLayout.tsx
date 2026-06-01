@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useConfigStore } from '../store/configStore';
 import { LogOut, Menu, X, ShoppingBag } from 'lucide-react';
@@ -32,7 +31,7 @@ export const PublicLayout: React.FC = () => {
   };
 
   const navLinks = [
-    { to: '/menu', label: 'CARTE' },
+    { to: '/menu', label: 'LA CARTE' },
     { to: '/reservations', label: 'RESERVER' },
   ];
 
@@ -50,7 +49,7 @@ export const PublicLayout: React.FC = () => {
               onClick={handleLogoClick}
               className="flex items-center group transition-all active:scale-95 z-50"
             >
-              <span className="text-xl font-bold tracking-tighter text-on-background">
+              <span className="text-xl font-bold tracking-tighter text-on-background uppercase">
                   {config?.nom || "tastify."}
               </span>
             </Link>
@@ -104,6 +103,7 @@ export const PublicLayout: React.FC = () => {
 
             <button
               onClick={toggleMenu}
+              aria-label="Ouvrir la navigation"
               className="lg:hidden p-2 text-on-background"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -111,39 +111,35 @@ export const PublicLayout: React.FC = () => {
           </div>
         </div>
 
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-10 flex flex-col"
-            >
-              <div className="flex flex-col gap-8">
-                {navLinks.map((link) => (
-                  <Link 
-                      key={link.to}
-                      to={link.to} 
-                      onClick={() => setIsMenuOpen(false)} 
-                      className="text-4xl font-bold tracking-tight text-on-background"
-                  >
-                      {link.label}
-                  </Link>
-                ))}
-              </div>
-              
-              <div className="mt-auto py-10 border-t border-outline flex flex-col gap-6">
-                {isAuthenticated ? (
-                  <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-error text-left">Se Déconnecter</button>
-                ) : (
-                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full">
-                    Connexion
-                  </Link>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-10 flex flex-col"
+          >
+            <span id="mobile-navigation" className="sr-only">Navigation invitée</span>
+            <div className="flex flex-col gap-8">
+              {navLinks.map((link) => (
+                <Link 
+                    key={link.to}
+                    to={link.to} 
+                    onClick={() => setIsMenuOpen(false)} 
+                    className="text-4xl font-bold tracking-tight text-on-background"
+                >
+                    {link.label}
+                </Link>
+              ))}
+            </div>
+            
+            <div className="mt-auto py-10 border-t border-outline flex flex-col gap-6">
+              {isAuthenticated ? (
+                <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-error text-left">Fermer la session</button>
+              ) : (
+                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full h-14">
+                  Connexion Membre
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="flex-1 flex flex-col relative">
@@ -152,5 +148,3 @@ export const PublicLayout: React.FC = () => {
     </div>
   );
 };
-
-
