@@ -87,7 +87,7 @@ export const SallePage: React.FC = () => {
                   </div>
                   
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-1">Table</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest mb-1">Table</span>
                     <span className="text-6xl font-bold tracking-tighter leading-none">{table.numero}</span>
                   </div>
                   
