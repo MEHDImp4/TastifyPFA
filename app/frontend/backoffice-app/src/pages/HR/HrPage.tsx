@@ -46,14 +46,15 @@ export const HrPage: React.FC = () => {
 
   const handleExportCSV = () => {
     try {
+        toast.info("GENERATING_EXPORT_STREAM");
         if (employes.length === 0) return;
         const headers = ["ID", "PSEUDONYME", "IDENTITÉ", "POSTE", "EMAIL", "TELEPHONE"];
         const rows = employes.map(e => [
             `#${e.id}`,
-            e.user_details?.username || 'N/A',
-            `${e.user_details?.first_name || ''} ${e.user_details?.last_name || ''}`.trim() || 'N/A',
+            e.user_details?.username || e.username || 'N/A',
+            `${e.user_details?.first_name || e.first_name || ''} ${e.user_details?.last_name || e.last_name || ''}`.trim() || 'N/A',
             e.poste,
-            e.user_details?.email || 'N/A',
+            e.user_details?.email || e.email || 'N/A',
             e.telephone || 'N/A'
         ]);
         const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(row => row.join(";"))].join("\n");
@@ -70,8 +71,8 @@ export const HrPage: React.FC = () => {
   };
 
   const filteredEmployes = employes.filter(emp => {
-    const fullName = `${emp.user_details?.first_name || ''} ${emp.user_details?.last_name || ''}`.trim();
-    const u = emp.user_details?.username || '';
+    const fullName = `${emp.user_details?.first_name || emp.first_name || ''} ${emp.user_details?.last_name || emp.last_name || ''}`.trim();
+    const u = emp.user_details?.username || emp.username || '';
     const matchesSearch = 
       u.toLowerCase().includes(search.toLowerCase()) || 
       fullName.toLowerCase().includes(search.toLowerCase()) ||
@@ -134,7 +135,7 @@ export const HrPage: React.FC = () => {
             <div className="flex items-center gap-8 bg-surface border border-outline px-6 py-2.5 rounded-lg">
                 <div className="text-center border-r border-outline pr-8">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Effectif Actif</p>
-                    <p className="text-lg font-bold text-on-background mt-0.5">{employes.filter(e => e.user_details?.is_active).length}</p>
+                    <p className="text-lg font-bold text-on-background mt-0.5">{employes.filter(e => e.user_details?.is_active ?? e.is_active ?? true).length}</p>
                 </div>
                 <div className="text-center">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Opérationnel</p>
@@ -165,15 +166,15 @@ export const HrPage: React.FC = () => {
                   <div className="col-span-1 font-mono text-[10px] font-bold text-on-surface-variant">#{emp.id.toString().slice(-4)}</div>
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-9 h-9 rounded bg-background border border-outline flex items-center justify-center shrink-0">
-                        <span className="text-[11px] font-bold text-on-background">{(emp.user_details?.first_name || emp.user_details?.username || 'U').charAt(0).toUpperCase()}</span>
+                        <span className="text-[11px] font-bold text-on-background">{(emp.user_details?.first_name || emp.first_name || emp.user_details?.username || emp.username || 'U').charAt(0).toUpperCase()}</span>
                     </div>
                     <div className="min-w-0">
                         <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider truncate">
-                            {emp.user_details?.first_name && emp.user_details?.last_name 
-                            ? `${emp.user_details.first_name} ${emp.user_details.last_name}`
-                            : emp.user_details?.username || 'Inconnu'}
+                            {(emp.user_details?.first_name || emp.first_name) && (emp.user_details?.last_name || emp.last_name)
+                            ? `${emp.user_details?.first_name || emp.first_name} ${emp.user_details?.last_name || emp.last_name}`
+                            : emp.user_details?.username || emp.username || 'Inconnu'}
                         </h3>
-                        <p className="text-[8px] font-mono text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">@{emp.user_details?.username || 'no_user'}</p>
+                        <p className="text-[8px] font-mono text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">@{emp.user_details?.username || emp.username || 'no_user'}</p>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
@@ -183,15 +184,15 @@ export const HrPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${emp.user_details?.is_active ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'}`}>
-                      <div className={`w-1 h-1 rounded-full ${emp.user_details?.is_active ? 'bg-success' : 'bg-outline-variant'}`} />
-                      <span className="text-[8px] font-bold uppercase tracking-widest">{emp.user_details?.is_active ? 'ACTIF' : 'OFF'}</span>
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'}`}>
+                      <div className={`w-1 h-1 rounded-full ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success' : 'bg-outline-variant'}`} />
+                      <span className="text-[8px] font-bold uppercase tracking-widest}{(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'ACTIF' : 'OFF'}</span>
                     </div>
                   </div>
                   <div className="col-span-2 space-y-1">
                     <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
                       <Mail className="w-3 h-3 opacity-20" />
-                      <span className="text-[9px] font-bold truncate">{emp.user_details?.email || 'N/A'}</span>
+                      <span className="text-[9px] font-bold truncate">{emp.user_details?.email || emp.email || 'N/A'}</span>
                     </div>
                     <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
                       <Phone className="w-3 h-3 opacity-20" />

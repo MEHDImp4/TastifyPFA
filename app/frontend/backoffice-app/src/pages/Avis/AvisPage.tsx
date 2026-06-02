@@ -157,7 +157,7 @@ export const AvisPage: React.FC = () => {
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-12 h-12 mb-4" strokeWidth={1} />
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucune donnée</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucune donnée <span className="sr-only">NO FEEDBACK DATA LOGGED</span></p>
                 </div>
             )}
           </div>

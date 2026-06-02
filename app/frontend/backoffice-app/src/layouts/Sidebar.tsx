@@ -120,6 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             onClick={() => logout()}
+            data-testid="logout-button"
             className="flex items-center gap-3 w-full py-3 border border-outline hover:border-error text-on-surface-variant hover:text-error transition-all duration-200 rounded-md group"
           >
             <LogOut strokeWidth={1.5} className="h-4 w-4 ml-4 shrink-0" />

@@ -74,6 +74,9 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('sends stale gerant session storage back to login safely', async ({ page }) => {
+    await page.route('**/api/users/refresh/', async route => {
+      await route.fulfill({ status: 401 });
+    });
     await page.context().clearCookies();
     await page.addInitScript(() => {
       window.localStorage.setItem(

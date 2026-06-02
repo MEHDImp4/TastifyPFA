@@ -245,8 +245,6 @@ export const DashboardPage: React.FC = () => {
             <span>{data.sentimentStats.positif_pct}%</span>
           </>
         )}
-        <h2>Live Orchestration Feed</h2>
-        <h2>Floor Plan Preview</h2>
       </div>
 
     </div>
