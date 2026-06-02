@@ -232,10 +232,11 @@ export const ReservationsPage: React.FC = () => {
                   <>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'confirm')}
+                      aria-label="CONFIRM"
                       className="btn-primary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px]"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      CONFIRMER <span className="sr-only">CONFIRM</span>
+                      CONFIRMER
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
@@ -249,9 +250,10 @@ export const ReservationsPage: React.FC = () => {
                 {res.statut === 'CONFIRMEE' && (
                    <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
+                    aria-label="CANCEL BOOKING"
                     className="btn-secondary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px] text-error hover:border-error"
                    >
-                     ANNULER <span className="sr-only">CANCEL BOOKING</span>
+                     ANNULER
                    </button>
                 )}
 
