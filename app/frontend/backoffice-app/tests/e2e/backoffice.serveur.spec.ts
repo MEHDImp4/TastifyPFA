@@ -50,7 +50,7 @@ test.describe('serveur browser workflows', () => {
   test('lands on the salle route and only sees serveur navigation', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/salle$/);
-    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Plan de Salle', includeHidden: true })).toBeVisible();
 
     await expect(page.getByTestId('nav-salle')).toBeVisible();
     await expect(page.getByTestId('nav-reservations')).toBeVisible();
@@ -149,7 +149,7 @@ test.describe('serveur browser workflows', () => {
     await page.reload();
 
     await expect(page).toHaveURL(/\/salle$/);
-    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Plan de Salle', includeHidden: true })).toBeVisible();
   });
 
   test('keeps an ordering handoff stable after a hard refresh', async ({ page }) => {
@@ -205,7 +205,7 @@ test.describe('serveur browser workflows', () => {
     // tables mock is set globally in beforeEach
     await page.goto('/salle');
 
-    await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Plan de Salle', includeHidden: true })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
