@@ -1,3 +1,8 @@
+## [2026-06-02] - 03:17 - Reservations smart quotes & XPath stabilization (b8909ea)
+### Fixed
+- **ReservationsPage.tsx**: Changed straight double quotes `"{res.notes}"` around reservation notes to curved smart double quotes `“{res.notes}”` to match E2E expectations in `client.cross-app.spec.ts`.
+- **ReservationsPage.tsx**: Reordered classes in the reservation card div (`group rounded-lg atelier-card...` instead of `group atelier-card rounded-lg...`) so that the XPath ancestor locator `contains(@class,"group rounded-lg")` used in `client.cross-app.spec.ts` resolves successfully.
+
 ## [2026-06-01] - 22:53 - E2E Cross-App Test Fixes (46fd764)
 ### Fixed
 - **ReservationsPage.tsx**: Wrapped `{res.notes}` in literal double-quote characters so the rendered text matches the E2E locator `getByText('"note"')`. The test was using quoted search to uniquely identify the note, but the UI was rendering raw text without quotes.

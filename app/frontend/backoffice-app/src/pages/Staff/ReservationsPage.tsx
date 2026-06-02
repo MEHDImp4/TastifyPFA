@@ -187,7 +187,7 @@ export const ReservationsPage: React.FC = () => {
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
-              className="group atelier-card rounded-lg p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
+              className="group rounded-lg atelier-card p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
             >
                 <div className="flex items-start gap-6">
                   <div className="w-20 h-16 rounded border border-outline bg-surface-container-high flex flex-col items-center justify-center text-on-background shrink-0">
@@ -221,7 +221,7 @@ export const ReservationsPage: React.FC = () => {
                     </div>
                     {res.notes && (
                         <div className="rounded border border-outline bg-background/50 px-4 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                          "{res.notes}"
+                          “{res.notes}”
                         </div>
                     )}
                   </div>

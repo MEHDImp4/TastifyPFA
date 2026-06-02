@@ -75,7 +75,7 @@ class TableViewSet(viewsets.ModelViewSet):
 
         # On génère un "Token" (une clé secrète temporaire) pour sécuriser le lien de paiement
         token = issue_payment_token(table_id=session.table_id, commande_id=session.commande_id)
-        
+
         from django.conf import settings
         base_url = settings.FRONTEND_BASE_URL.rstrip('/')
         full_url = f"{base_url}/pay/{quote(token, safe='')}"
