@@ -29,15 +29,17 @@ Tastify a évolué vers une esthétique **"Ultra-Minimaliste"** (Atelier Numéri
 
 ## 2. ARCHITECTURE TECHNIQUE
 
-L'application repose sur une stack moderne, conteneurisée et robuste, validée par une pipeline de tests automatisés.
+L'application repose sur une stack moderne, conteneurisée et robuste, validée par une pipeline de tests automatisés et une synchronisation d'intégrité en temps réel.
 
-*   **Backend :** Django 5.x avec Django REST Framework (API) et Django Channels (WebSockets).
+*   **Runtimes & Environnements :** Standardisation sur **Node.js 24 (LTS)** natif pour tous les pipelines CI/CD, conteneurs Docker, et runtimes de test, éliminant toute dépréciation héritée.
+*   **Backend :** Django 5.x avec Django REST Framework (API) et Django Channels (WebSockets) conteneurisé.
 *   **Frontend :** Deux applications React (Client & Backoffice) bâties avec Vite 8.x et Tailwind CSS 4.0.
 *   **Qualité & CI/CD :** 
     *   Linting ESLint et Typechecking TypeScript systématiques.
     *   Tests Unitaires via Vitest.
-    *   Tests E2E (End-to-End) via Playwright couvrant les parcours critiques.
-    *   Pipeline GitHub Actions avec exécution containerisée (Docker).
+    *   Tests E2E (End-to-End) robustes via Playwright. La suite de tests interdit tout appel réseau externe non mocké. Des mocks rigoureux pour les requêtes système transversales (`POST /api/users/logout/` et `POST /api/users/refresh/`) préviennent les dérives opérationnelles et garantissent une exécution rapide (<3s par test).
+    *   Pipeline GitHub Actions avec exécution containerisée (Docker) et filtrage sélectif par surface modifiée.
+    *   Suivi d'intégrité via un Tableau de bord GSD (`dashboard.html`) mis à jour en continu.
 
 ---
 
