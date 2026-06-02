@@ -183,7 +183,7 @@ export const ReservationsPage: React.FC = () => {
 
       {/* List Body */}
       <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-8">
-        <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1">
+        <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
           {paginatedReservations.map((res) => (
             <div 
               key={res.id} 
@@ -199,7 +199,7 @@ export const ReservationsPage: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
                       <h3 className="text-base text-on-background font-bold tracking-wider uppercase">
-                        {res.user_username || <>CLIENT ANONYME</>}
+                        {res.user_username || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
                       </h3>
                       <span className={`w-fit rounded px-3 py-1 border text-[9px] font-bold uppercase tracking-widest ${getStatusColor(res.statut)}`}>
                           {res.statut.replace('_', ' ')}
