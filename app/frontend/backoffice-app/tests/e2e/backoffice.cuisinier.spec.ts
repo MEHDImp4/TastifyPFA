@@ -42,6 +42,20 @@ const installMockStaffWebSocket = async (page: Parameters<typeof test>[0]['page'
         this.onclose?.({ code, reason });
       }
 
+      addEventListener(event: string, callback: any) {
+        if (event === 'open') this.onopen = callback;
+        if (event === 'message') this.onmessage = callback;
+        if (event === 'close') this.onclose = callback;
+        if (event === 'error') this.onerror = callback;
+      }
+
+      removeEventListener(event: string, callback: any) {
+        if (event === 'open' && this.onopen === callback) this.onopen = null;
+        if (event === 'message' && this.onmessage === callback) this.onmessage = null;
+        if (event === 'close' && this.onclose === callback) this.onclose = null;
+        if (event === 'error' && this.onerror === callback) this.onerror = null;
+      }
+
       emit(payload: unknown) {
         this.onmessage?.({ data: JSON.stringify(payload) });
       }
@@ -197,7 +211,7 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/menu');
 
-    await expect(page.getByRole('heading', { name: 'Catalogue des Plats' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
     await expect(page.getByPlaceholder('SEARCH CATALOG...')).toBeVisible();
     await expect(page.getByTestId('plat-create-button')).toBeVisible();
   });
@@ -734,7 +748,7 @@ test.describe('cuisinier browser workflows', () => {
     const newTicket = page.getByTestId('kds-ticket-9902');
     await expect(newTicket.getByText('Wrap falafel')).toBeVisible();
     await expect(newTicket.getByText('Sauce a part')).toBeVisible();
-    await expect(newTicket.getByText('Table #24')).toBeVisible();
+    await expect(newTicket.getByText('TABLE 24')).toBeVisible();
 
     await expect(existingTicket.getByText('Harira royale')).toBeVisible();
   });
