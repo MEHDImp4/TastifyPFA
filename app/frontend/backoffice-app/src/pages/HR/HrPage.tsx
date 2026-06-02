@@ -184,8 +184,8 @@ export const HrPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'`}`}>
-                      <div className={`w-1 h-1 rounded-full ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success' : 'bg-outline-variant'`}`} />
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success/5 border-success/30 text-success' : 'bg-surface-container-low border-outline text-on-surface-variant'}`}>
+                      <div className={`w-1 h-1 rounded-full ${(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'bg-success' : 'bg-outline-variant'}`} />
                       <span className="text-[8px] font-bold uppercase tracking-widest">{(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'ACTIF' : 'OFF'}</span>
                     </div>
                   </div>
