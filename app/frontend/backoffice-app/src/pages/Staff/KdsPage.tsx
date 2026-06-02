@@ -109,7 +109,7 @@ const KdsTicket = ({
                             TABLE {ticket.table_numero || '??'}
                         </span>
                         {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
-                        {isDone && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">DONE</span>}
+                        {(isDone || allLignesReady) && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">DONE</span>}
                     </div>
                     <h3 className="font-mono text-sm font-bold text-on-surface opacity-80">ID-NEURAL: #{ticket.id}</h3>
                 </div>
