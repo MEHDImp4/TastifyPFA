@@ -26,7 +26,11 @@ test.describe('serveur browser workflows', () => {
     });
     // Default tables mock so any test that navigates to /salle (serveur home) doesn't hang
     await page.route('**/api/tables/', async route => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, numero: 1, capacite: 4, statut: 'LIBRE', est_active: true }]),
+      });
     });
     await page.route('**/api/plan-texts/', async route => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
