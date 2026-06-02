@@ -13,7 +13,25 @@ const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page
 test.describe('serveur browser workflows', () => {
   test.beforeEach(async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
-    
+
+    await page.route('**/api/users/logout/', async route => {
+      await route.fulfill({ status: 200 });
+    });
+    await page.route('**/api/users/refresh/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'test-token', role: 'SERVEUR', username: 'serveur_test' }),
+      });
+    });
+    // Default tables mock so any test that navigates to /salle (serveur home) doesn't hang
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/plan-texts/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
     // Default mock for status updates (fire to kitchen)
     await page.route(/\/api\/commandes\/\d+\/$/, async (route) => {
       if (route.request().method() === 'PATCH') {
@@ -42,6 +60,9 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps the reservations nav active after a direct route load', async ({ page }) => {
+    await page.route('**/api/reservations/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
     await page.goto('/reservations');
 
     await expect(page).toHaveURL(/\/reservations$/);
@@ -181,6 +202,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('has no critical or serious axe violations on the salle page', async ({ page }) => {
+    // tables mock is set globally in beforeEach
     await page.goto('/salle');
 
     await expect(page.getByRole('heading', { name: 'Architectural Floor Plan', includeHidden: true })).toBeVisible();

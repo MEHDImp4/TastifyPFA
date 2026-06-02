@@ -1,3 +1,17 @@
+## [2026-06-02] - 17:20 - Fix 41 Failing E2E Tests — Missing Route Mocks
+### Fixed
+- **backoffice.gerant.spec.ts**: Added `beforeEach` mocks for `POST /api/users/logout/` and `POST /api/users/refresh/` to prevent 1-minute logout timeouts and 12-second auth bootstrap hangs. Added `GET /api/commandes/*` and `GET /api/tables/` mocks to all 4 dashboard tests (`renders manager dashboard KPIs`, `shows the dashboard fallback state`, `has no critical or serious axe violations on the manager dashboard`, `keeps the dashboard usable on a narrow viewport`) — `DashboardPage` calls `Promise.all([analytics, kdsApi.getActiveTickets()])` so both endpoints must be mocked.
+- **backoffice.dashboard.spec.ts**: Added `beforeEach` with `logout`, `refresh`, `commandes`, and `tables` mocks to the `manager dashboard analytics e2e` describe block. All 4 dashboard spec tests were missing the KDS commandes mock.
+- **backoffice.serveur.spec.ts**: Added `logout`, `refresh`, `GET /api/tables/`, and `GET /api/plan-texts/` mocks to the global `beforeEach`. Serveur's home route is `/salle` which calls `GET /api/tables/` — any test navigating to the default route would hang without a mock. Also added `GET /api/reservations/` mock to the reservations nav test.
+- **backoffice.cuisinier.spec.ts**: Added `beforeEach` with `logout` and `refresh` mocks to fix the `keeps cuisinier logout working after visiting a secondary route` test.
+- **backoffice.quality.spec.ts**: Added `logout`, `refresh`, `commandes`, and `tables` mocks to gerant `beforeEach`; added `logout`, `refresh`, `tables`, and `plan-texts` mocks to serveur `beforeEach`; added `logout` and `refresh` mocks to cuisinier `beforeEach`. Added `plan-texts` to `mockSalle` helper. Added `analytics/dashboard/` mock to the gerant axe violations test.
+
+### Root Cause Analysis
+- **1-minute timeouts**: `useAuthStore.logout()` fires `POST /api/users/logout/` (no mock) → hangs for full 60s `timeout`.
+- **12-second timeouts on data pages**: Pages (`HrPage`, `AvisPage`, `SallePage`) use `isLoading=true` until API resolves; no axios timeout configured (default: wait forever); expect timeout of 10s expired.
+- **12-second timeouts on static `/maintenance`**: `AuthBootstrap` attempts `POST /api/users/refresh/` when stored token is stale/expired → hangs → bootstrap spinner shown indefinitely.
+- **Dashboard KPI failures**: `DashboardPage.tsx` uses `Promise.all([analyticsApi.getDashboardData(), kdsApi.getActiveTickets()])` — tests mocked analytics but not the KDS commandes call.
+
 ## [2026-06-02] - 16:55 - GitHub Actions Node.js 24 Upgrade (CI Fix) (83bb9eb)
 ### Changed
 - **backoffice-ci.yml**: Upgraded official GitHub Actions to Node 24 compatible major releases (`actions/checkout@v5`, `actions/setup-node@v6`, `actions/dependency-review-action@v5`, `actions/setup-python@v6`, and `actions/upload-artifact@v6`) to resolve runner deprecation warnings.

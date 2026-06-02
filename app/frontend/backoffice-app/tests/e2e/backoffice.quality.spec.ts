@@ -151,6 +151,9 @@ const mockSalle = async (page: Parameters<typeof test>[0]['page']) => {
       body: JSON.stringify(salleRows),
     });
   });
+  await page.route('**/api/plan-texts/', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+  });
 };
 
 const mockReservations = async (page: Parameters<typeof test>[0]['page']) => {
@@ -204,12 +207,34 @@ const mockKds = async (page: Parameters<typeof test>[0]['page']) => {
 
 test.describe('authenticated backoffice quality coverage', () => {
   test.describe('gerant', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async ({ page }, testInfo) => {
       test.skip(testInfo.project.name !== 'gerant-chromium');
+      await page.route('**/api/users/logout/', async route => {
+        await route.fulfill({ status: 200 });
+      });
+      await page.route('**/api/users/refresh/', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
+        });
+      });
+      await page.route('**/api/commandes/*', async route => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+      await page.route('**/api/tables/', async route => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
     });
 
     test('keeps dashboard, menu operations, and settings free of blocking axe violations', async ({ page }) => {
       await mockManagerSettings(page);
+      await page.route('**/api/analytics/dashboard/', async route => {
+        await route.fulfill({
+          status: 200, contentType: 'application/json',
+          body: JSON.stringify({ todayRevenue: 0, activeTables: 0, pendingOrders: 0, avgPrepTime: 0, revenue7Days: [], topDishes: [] }),
+        });
+      });
 
       await page.goto('/');
       await expect(page.getByText('Live Orchestration Feed')).toBeVisible();
@@ -299,8 +324,24 @@ test.describe('authenticated backoffice quality coverage', () => {
   });
 
   test.describe('serveur', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async ({ page }, testInfo) => {
       test.skip(testInfo.project.name !== 'serveur-chromium');
+      await page.route('**/api/users/logout/', async route => {
+        await route.fulfill({ status: 200 });
+      });
+      await page.route('**/api/users/refresh/', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ access: 'test-token', role: 'SERVEUR', username: 'serveur_test' }),
+        });
+      });
+      await page.route('**/api/tables/', async route => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+      await page.route('**/api/plan-texts/', async route => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
     });
 
     test('keeps salle and reservations free of blocking axe violations', async ({ page }) => {
@@ -354,8 +395,18 @@ test.describe('authenticated backoffice quality coverage', () => {
   });
 
   test.describe('cuisinier', () => {
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async ({ page }, testInfo) => {
       test.skip(testInfo.project.name !== 'cuisinier-chromium');
+      await page.route('**/api/users/logout/', async route => {
+        await route.fulfill({ status: 200 });
+      });
+      await page.route('**/api/users/refresh/', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ access: 'test-token', role: 'CUISINIER', username: 'cuisinier_test' }),
+        });
+      });
     });
 
     test('keeps kds and menu operations free of blocking axe violations', async ({ page }) => {

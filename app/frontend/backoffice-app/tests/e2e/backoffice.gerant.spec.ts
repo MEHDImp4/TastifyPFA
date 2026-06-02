@@ -22,6 +22,16 @@ const uploadedPng = {
 test.describe('gerant browser workflows', () => {
   test.beforeEach(async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
+    await page.route('**/api/users/logout/', async route => {
+      await route.fulfill({ status: 200 });
+    });
+    await page.route('**/api/users/refresh/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
+      });
+    });
   });
 
   test('shows the manager navigation surface and can logout', async ({ page }) => {
@@ -1077,6 +1087,12 @@ test.describe('gerant browser workflows', () => {
         }),
       });
     });
+    await page.route('**/api/commandes/*', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
 
     await page.goto('/');
     await expect(page.getByText('4290 DH')).toBeVisible();
@@ -1095,6 +1111,12 @@ test.describe('gerant browser workflows', () => {
         body: JSON.stringify({ detail: 'analytics offline' }),
       });
     });
+    await page.route('**/api/commandes/*', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
 
     await page.goto('/');
     await expect(page.getByText('Data registry offline.')).toBeVisible();
@@ -1102,6 +1124,8 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps maintenance controls available for gerant users', async ({ page }) => {
+    // /maintenance is static but AuthBootstrap may attempt a refresh if the stored token has expired
+    // The refresh mock in beforeEach shields this test from a network hang.
     await page.goto('/maintenance');
 
     await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
@@ -1113,6 +1137,20 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('has no critical or serious axe violations on the manager dashboard', async ({ page }) => {
+    await page.route('**/api/analytics/dashboard/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ todayRevenue: 0, activeTables: 0, pendingOrders: 0, avgPrepTime: 0, revenue7Days: [], topDishes: [] }),
+      });
+    });
+    await page.route('**/api/commandes/*', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
     await page.goto('/');
 
     await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
@@ -1120,6 +1158,20 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps the dashboard usable on a narrow viewport', async ({ page }) => {
+    await page.route('**/api/analytics/dashboard/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ todayRevenue: 0, activeTables: 0, pendingOrders: 0, avgPrepTime: 0, revenue7Days: [], topDishes: [] }),
+      });
+    });
+    await page.route('**/api/commandes/*', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 

@@ -96,6 +96,19 @@ const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page'], 
 };
 
 test.describe('cuisinier browser workflows', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/api/users/logout/', async route => {
+      await route.fulfill({ status: 200 });
+    });
+    await page.route('**/api/users/refresh/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'test-token', role: 'CUISINIER', username: 'cuisinier_test' }),
+      });
+    });
+  });
+
   test('lands on the kds route and only sees kitchen navigation', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/kds$/);

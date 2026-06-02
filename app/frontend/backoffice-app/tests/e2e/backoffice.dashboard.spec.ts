@@ -52,8 +52,24 @@ const emptyDashboardPayload: DashboardPayload = {
 };
 
 test.describe('manager dashboard analytics e2e', () => {
-  test.beforeEach(async ({}, testInfo) => {
+  test.beforeEach(async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'gerant-chromium');
+    await page.route('**/api/users/logout/', async route => {
+      await route.fulfill({ status: 200 });
+    });
+    await page.route('**/api/users/refresh/', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
+      });
+    });
+    await page.route('**/api/commandes/*', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
+    await page.route('**/api/tables/', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+    });
   });
 
   test('renders loading, success KPIs, and analytics syntheses from deterministic data', async ({ page }) => {
