@@ -81,7 +81,7 @@ export const SallePage: React.FC = () => {
                     ${table.statut === 'RESERVEE' ? 'border-dashed border-outline-variant text-on-surface-variant bg-aged-paper' : ''}
                   `}
                 >
-                  <div className="w-full flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                  <div className="w-full flex justify-between items-center">
                     <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest"><Users className="w-3 h-3" strokeWidth={2} /> {table.capacite}</div>
                     <span className="text-[8px] font-bold uppercase tracking-widest">{table.statut}</span>
                   </div>
