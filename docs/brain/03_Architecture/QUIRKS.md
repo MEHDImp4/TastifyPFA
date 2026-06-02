@@ -41,6 +41,11 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Quirk**: Installing only the playwright browsers via node modules is not always sufficient on bare Linux hosts.
 - **Fix**: The `npm run test:e2e:install` command has been upgraded to include `--with-deps` (e.g., `playwright install --with-deps chromium firefox webkit`), which instructs Playwright to automatically invoke the host package manager and fetch all necessary system libraries.
 
+### 9. POST /api/users/logout/ and /api/users/refresh/ Unmocked E2E Hangs
+- **Issue**: During E2E tests, clicking logout or navigating to static pages (like `/maintenance`) can cause severe 1-minute and 12-second hangs.
+- **Quirk**: The fronted auth bootstrap intercepts stale storage sessions and fires a `POST /api/users/refresh/` request. Similarly, the logout flow triggers a `POST /api/users/logout/` call. If either of these endpoints is unmocked, the API calls hang indefinitely, halting test execution.
+- **Fix**: Always mock `POST /api/users/logout/` (status 200) and `POST /api/users/refresh/` (returning valid token structure) in the `beforeEach` block of backoffice spec suites.
+
 ## Backend (Django / Docker)
 
 ### 1. CRLF vs LF (entrypoint.sh)
