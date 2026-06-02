@@ -93,7 +93,7 @@ export const DashboardPage: React.FC = () => {
       <div className="flex-none flex justify-between items-end">
         <div>
            <h1 className="text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
-           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-2 opacity-60">Intelligence Opérationnelle & Monitoring Direct</p>
+           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-2">Intelligence Opérationnelle & Monitoring Direct</p>
         </div>
         <div className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-8 py-3.5 rounded-xl">
            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
@@ -173,9 +173,9 @@ export const DashboardPage: React.FC = () => {
                         </div>
                     </motion.div>
                  )) : (
-                    <div className="h-64 border-2 border-dashed border-outline-variant rounded-[2rem] flex flex-col items-center justify-center opacity-10">
-                        <History className="w-12 h-12 mb-4" />
-                        <p className="text-xs font-black uppercase tracking-[0.4em]">Aucune transaction active</p>
+                    <div className="h-64 border-2 border-dashed border-outline-variant rounded-[2rem] flex flex-col items-center justify-center text-on-surface-variant">
+                        <History className="w-12 h-12 mb-4 opacity-40" />
+                        <p className="text-xs font-black uppercase tracking-[0.4em] opacity-80">Aucune transaction active</p>
                     </div>
                  )}
               </div>

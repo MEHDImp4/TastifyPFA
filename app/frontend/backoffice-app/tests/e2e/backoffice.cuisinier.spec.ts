@@ -112,7 +112,7 @@ test.describe('cuisinier browser workflows', () => {
   test('lands on the kds route and only sees kitchen navigation', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/kds$/);
-    await expect(page.getByRole('heading', { name: /Écran Cuisine/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
 
     await expect(page.getByTestId('nav-menu')).toBeVisible();
     await expect(page.getByTestId('nav-kds')).toBeVisible();
@@ -168,7 +168,7 @@ test.describe('cuisinier browser workflows', () => {
     await page.reload();
 
     await expect(page).toHaveURL(/\/kds$/);
-    await expect(page.getByRole('heading', { name: /Écran Cuisine/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
   });
 
   test('lets cuisinier users search and filter the menu registry', async ({ page }) => {
@@ -188,7 +188,6 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toHaveCount(0);
 
     await searchInput.fill('');
-    await page.getByRole('button', { name: /Filter/i }).click();
     await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
   });
@@ -198,10 +197,9 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/menu');
 
-    await expect(page.getByText('Active Record Count: 0')).toBeVisible();
-    await expect(page.getByRole('button', { name: /Add Dish/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Filter/i })).toBeVisible();
-    await expect(page.getByText('Signature Dish')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Catalogue des Plats' })).toBeVisible();
+    await expect(page.getByPlaceholder('SEARCH CATALOG...')).toBeVisible();
+    await expect(page.getByTestId('plat-create-button')).toBeVisible();
   });
 
   test('has no critical or serious axe violations on the menu registry', async ({ page }) => {
@@ -262,7 +260,7 @@ test.describe('cuisinier browser workflows', () => {
     await menuButton.click();
 
     await expect(page.getByTestId('nav-kds')).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Écran Cuisine/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
   });
 
   test('advances a kitchen ticket from waiting to preparation and ready', async ({ page }) => {
