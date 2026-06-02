@@ -159,7 +159,7 @@ export const ReservationsPage: React.FC = () => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors"  strokeWidth={2}/>
                   <input 
                       type="text" 
-                      placeholder="RECHERCHER..."
+                      placeholder="SEARCH GUEST IDENTITY..."
                       aria-label="Rechercher client"
                       value={search}
                       onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
@@ -235,7 +235,7 @@ export const ReservationsPage: React.FC = () => {
                       className="btn-primary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px]"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      CONFIRMER
+                      CONFIRMER <span className="sr-only">CONFIRM</span>
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
@@ -303,6 +303,7 @@ export const ReservationsPage: React.FC = () => {
             <div className="rounded border border-dashed border-outline py-32 flex flex-col items-center justify-center opacity-20">
                 <Calendar className="w-12 h-12 mb-4" strokeWidth={1}/>
                 <p className="text-xl font-bold uppercase tracking-widest">Aucune Réservation</p>
+                <span className="sr-only">No Bookings Logged</span>
             </div>
           )}
         </div>
