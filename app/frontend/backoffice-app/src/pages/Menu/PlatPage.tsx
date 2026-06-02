@@ -149,7 +149,7 @@ export const PlatPage: React.FC = () => {
       <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
         <div>
           <h1 aria-label="Menu Operations" className="text-sm font-bold tracking-widest text-on-background uppercase">Catalogue des Plats</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion de l'offre gastronomique</p>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Gestion de l'offre gastronomique</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="relative group">
@@ -186,8 +186,8 @@ export const PlatPage: React.FC = () => {
               <div className="mt-4 flex justify-between items-end">
                 <span className="font-mono text-sm font-bold text-on-background">{parseFloat(p.prix).toFixed(0)} DH</span>
                 <div className="flex gap-2">
-                  <button data-testid={`plat-edit-${p.id}`} onClick={() => openEdit(p)} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button data-testid={`plat-delete-${p.id}`} onClick={() => handleDelete(p.id)} className="p-2 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-edit-${p.id}`} aria-label="Modifier" onClick={() => openEdit(p)} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-delete-${p.id}`} aria-label="Supprimer" onClick={() => handleDelete(p.id)} className="p-2 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
             </div>
