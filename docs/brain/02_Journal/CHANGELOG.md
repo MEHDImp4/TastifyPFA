@@ -1,3 +1,8 @@
+## [2026-06-02] - 16:55 - GitHub Actions Node.js 24 Upgrade (CI Fix) (83bb9eb)
+### Changed
+- **backoffice-ci.yml**: Upgraded official GitHub Actions to Node 24 compatible major releases (`actions/checkout@v5`, `actions/setup-node@v6`, `actions/dependency-review-action@v5`, `actions/setup-python@v6`, and `actions/upload-artifact@v6`) to resolve runner deprecation warnings.
+- **autofix.yml**: Upgraded `actions/checkout@v5` and `actions/setup-node@v6` to native Node 24 support.
+
 ## [2026-06-02] - 16:15 - Backend PyJWT Security Upgrade (CVE Fix)
 ### Fixed
 - **requirements.txt**: Upgraded `PyJWT` dependency from `2.12.0` to `2.13.0` to resolve critical actionable CVEs.
