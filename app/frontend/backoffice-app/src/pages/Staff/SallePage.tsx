@@ -71,6 +71,7 @@ export const SallePage: React.FC = () => {
               {tables.filter(t => t.est_active).sort((a, b) => a.numero - b.numero).map((table) => (
                 <button
                   key={`grid-table-${table.id}`}
+                  data-testid={`table-${table.numero}`}
                   onClick={() => handleTableClick(table)}
                   className={`
                     aspect-square atelier-card flex flex-col items-center justify-between p-6 transition-all active:scale-95 group
