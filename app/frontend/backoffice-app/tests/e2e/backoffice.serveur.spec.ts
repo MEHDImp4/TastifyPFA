@@ -213,7 +213,7 @@ test.describe('serveur browser workflows', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/salle');
 
-    const menuButton = page.getByRole('button').filter({ has: page.locator('svg.lucide-menu') }).first();
+    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
     await menuButton.click();
 
     await expect(page.getByTestId('nav-salle')).toBeVisible();
