@@ -1,3 +1,9 @@
+## [2026-06-02] - 16:15 - Backend PyJWT Security Upgrade (CVE Fix)
+### Fixed
+- **requirements.txt**: Upgraded `PyJWT` dependency from `2.12.0` to `2.13.0` to resolve critical actionable CVEs.
+- **pip-audit.json**: Re-generated dependency audit logs showing full convergence after the upgrade.
+- **Integration Tests**: Successfully ran all 320 backend Django & SimpleJWT tests inside the updated container to confirm zero regressions in authentication behavior.
+
 ## [2026-06-02] - 15:30 - French language lock & Playwright E2E deps (Phase D)
 ### Changed
 - **OrderingPage.tsx**: Replaced menu search placeholder `SEARCH MENU...` with `RECHERCHER...`.
