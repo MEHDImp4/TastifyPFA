@@ -86,7 +86,10 @@ export const SallePage: React.FC = () => {
                     <span className="text-[8px] font-bold uppercase tracking-widest">{table.statut}</span>
                   </div>
                   
-                  <span className="text-6xl font-bold tracking-tighter leading-none">{table.numero}</span>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-1">Table</span>
+                    <span className="text-6xl font-bold tracking-tighter leading-none">{table.numero}</span>
+                  </div>
                   
                   <div className="w-full pt-4 border-t border-current/10 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className="text-[9px] font-bold uppercase tracking-widest">Ouvrir</span>

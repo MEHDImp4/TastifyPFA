@@ -1,3 +1,8 @@
+## [2026-06-03] - 00:05 - Visual and accessibility updates for E2E tests
+### Fixed
+- **ReservationsPage.tsx**: Set proper `aria-label` accessible names on reservation confirmation and cancellation buttons.
+- **SallePage.tsx**: Added a text label "Table" above the table number on the floor plan buttons to pass E2E viewport and visual testing.
+
 ## [2026-06-02] - 17:20 - Fix 41 Failing E2E Tests — Missing Route Mocks
 ### Fixed
 - **backoffice.gerant.spec.ts**: Added `beforeEach` mocks for `POST /api/users/logout/` and `POST /api/users/refresh/` to prevent 1-minute logout timeouts and 12-second auth bootstrap hangs. Added `GET /api/commandes/*` and `GET /api/tables/` mocks to all 4 dashboard tests (`renders manager dashboard KPIs`, `shows the dashboard fallback state`, `has no critical or serious axe violations on the manager dashboard`, `keeps the dashboard usable on a narrow viewport`) — `DashboardPage` calls `Promise.all([analytics, kdsApi.getActiveTickets()])` so both endpoints must be mocked.
