@@ -96,7 +96,7 @@ export const AvisPage: React.FC = () => {
         {/* Stats */}
         <div className="grid grid-cols-4 gap-6">
             {[
-              { label: 'Satisfaction Global', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
+              { label: 'Satisfaction Globale', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
               { label: 'Positifs', val: stats.positive, sub: '', icon: Smile, color: 'text-success' },
               { label: 'Neutres', val: stats.neutral, sub: '', icon: Meh, color: 'text-on-surface-variant' },
               { label: 'Négatifs', val: stats.negative, sub: '', icon: AlertCircle, color: 'text-error' },

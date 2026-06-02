@@ -319,13 +319,13 @@ export const KdsPage: React.FC = () => {
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-10 bg-surface-container-low px-10 py-3 rounded-2xl border border-outline-variant">
              <div className="text-center border-r border-outline-variant pr-10">
-             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Units Actives</p>
+             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Unités Actives</p>
              <p className="text-2xl font-mono font-black text-on-surface leading-none mt-1">{visibleTickets.length}</p>
              </div>
              <div className="text-center">
-             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Status</p>
+             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Statut</p>
              <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> LIVE SYNC
+             <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> SYNC EN DIRECT
              </p>
              </div>
              </div>

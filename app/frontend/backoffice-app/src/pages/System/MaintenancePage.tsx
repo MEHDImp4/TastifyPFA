@@ -30,15 +30,15 @@ export const MaintenancePage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-center justify-between px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 aria-label="System Health" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et statut des modules</p>
+          <h1 aria-label="Santé Système" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et état des modules</p>
         </div>
         <div className="flex gap-4 items-center">
           <button className="btn-ghost h-10 px-4">
-            <Download className="w-3.5 h-3.5" /> <span>Export Logs</span>
+            <Download className="w-3.5 h-3.5" /> <span>Exporter Logs</span>
           </button>
           <button className="btn-primary h-10 px-6">
-            <RotateCcw className="w-4 h-4" /> <span>Manual Sync</span>
+            <RotateCcw className="w-4 h-4" /> <span>Sync Manuelle</span>
           </button>
         </div>
       </header>
@@ -49,11 +49,11 @@ export const MaintenancePage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            <div className="atelier-card p-6 flex flex-col justify-between h-40 group hover:border-on-background">
               <div className="flex justify-between items-start">
-                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Server className="w-3.5 h-3.5" /> Kitchen Core</span>
+                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Server className="w-3.5 h-3.5" /> Noyau Cuisine</span>
                  <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
               </div>
               <div className="mt-auto">
-                 <div className="text-2xl font-bold text-on-background">Online</div>
+                 <div className="text-2xl font-bold text-on-background">En Ligne</div>
                  <div className="flex justify-between text-[8px] font-bold text-on-surface-variant uppercase tracking-widest mt-2 opacity-40">
                     <span>Lat: 12ms</span>
                     <span>Up: 99.9%</span>
@@ -63,11 +63,11 @@ export const MaintenancePage: React.FC = () => {
 
            <div className="atelier-card p-6 flex flex-col justify-between h-40 group hover:border-on-background">
               <div className="flex justify-between items-start">
-                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Network className="w-3.5 h-3.5" /> Floor Comm</span>
+                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2"><Network className="w-3.5 h-3.5" /> Comm. Salle</span>
                  <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
               </div>
               <div className="mt-auto">
-                 <div className="text-2xl font-bold text-on-background">Online</div>
+                 <div className="text-2xl font-bold text-on-background">En Ligne</div>
                  <div className="flex justify-between text-[8px] font-bold text-on-surface-variant uppercase tracking-widest mt-2 opacity-40">
                     <span>Lat: 8ms</span>
                     <span>Nodes: 14</span>
@@ -81,7 +81,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
               </div>
               <div className="mt-auto">
-                 <div className="text-2xl font-bold text-error">Degraded</div>
+                 <div className="text-2xl font-bold text-error">Dégradé</div>
                  <div className="flex justify-between text-[8px] font-bold text-error/40 uppercase tracking-widest mt-2">
                     <span>Lat: 145ms</span>
                     <span>Err: 2.1%</span>
@@ -94,10 +94,10 @@ export const MaintenancePage: React.FC = () => {
            {/* Event Log */}
            <div className="lg:col-span-8 atelier-card flex flex-col h-[480px] overflow-hidden">
               <div className="px-6 h-12 border-b border-outline bg-surface-container-high flex items-center justify-between text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
-                 <span className="flex items-center gap-2"><Terminal className="w-3.5 h-3.5" /> System Event Log</span>
+                 <span className="flex items-center gap-2"><Terminal className="w-3.5 h-3.5" /> Journal Événements</span>
                  <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-background border border-outline">
                     <Activity className="w-2.5 h-2.5" />
-                    <span>Real-time</span>
+                    <span>Temps réel</span>
                  </div>
               </div>
               <div className="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[10px] space-y-3 bg-background">
@@ -120,13 +120,13 @@ export const MaintenancePage: React.FC = () => {
                     <li className="flex justify-between"><span>Version</span><span className="text-on-background">Terminal v1.4.2</span></li>
                     <li className="flex justify-between"><span>Instance</span><span className="text-on-background">i-0a1b2c3d4e</span></li>
                     <li className="flex justify-between"><span>Region</span><span className="text-on-background">MA-CAS-1</span></li>
-                    <li className="flex justify-between"><span>Last Boot</span><span className="text-on-background">4 Days Ago</span></li>
+                    <li className="flex justify-between"><span>Dernier Démarrage</span><span className="text-on-background">Il y a 4 jours</span></li>
                  </ul>
               </div>
 
               <div className="atelier-card p-8 bg-surface-container-high border-outline">
-                 <h3 className="text-[10px] font-bold text-on-background uppercase tracking-widest flex items-center gap-2 mb-4"><Database className="w-4 h-4" /> Technical Support</h3>
-                 <p className="text-[11px] text-on-surface-variant leading-relaxed opacity-60 uppercase mb-8">For critical outages or hardware failures that cannot be resolved via restart, contact Level 2 support immediately.</p>
+                 <h3 className="text-[10px] font-bold text-on-background uppercase tracking-widest flex items-center gap-2 mb-4"><Database className="w-4 h-4" /> Support Technique</h3>
+                 <p className="text-[11px] text-on-surface-variant leading-relaxed opacity-60 uppercase mb-8">Pour les pannes critiques ou matérielles ne pouvant être résolues par un redémarrage, contactez le support de niveau 2 immédiatement.</p>
                  <div className="space-y-3">
                     <button className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg hover:bg-background transition-all group">
                        <Phone className="w-4 h-4 text-on-surface-variant group-hover:text-on-background" />

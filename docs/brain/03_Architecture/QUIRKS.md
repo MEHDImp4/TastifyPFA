@@ -36,6 +36,11 @@ This document tracks non-obvious technical behaviors, edge cases, and "quirks" d
 - **Quirk**: The shipped UI has no stable invalid-link screen yet, so browser coverage must assert the current crash-like state rather than invent a fallback.
 - **Fix**: Preserve this as an explicit test assertion until the product gets a dedicated error state, then update both the UI and the tests together.
 
+### 8. Playwright Missing Host Dependencies (Linux/WSL)
+- **Issue**: When running E2E tests on Linux/WSL or clean host environments, Playwright sometimes fails due to missing OS-level system browser dependencies (Webkit/Chromium library requirements).
+- **Quirk**: Installing only the playwright browsers via node modules is not always sufficient on bare Linux hosts.
+- **Fix**: The `npm run test:e2e:install` command has been upgraded to include `--with-deps` (e.g., `playwright install --with-deps chromium firefox webkit`), which instructs Playwright to automatically invoke the host package manager and fetch all necessary system libraries.
+
 ## Backend (Django / Docker)
 
 ### 1. CRLF vs LF (entrypoint.sh)

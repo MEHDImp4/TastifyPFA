@@ -54,6 +54,9 @@ L'application repose sur une stack moderne, conteneurisée et robuste, validée 
 ### **C. Service Collaboratif (Modèle de Gestion)**
 *   **Efficacité Collective :** Tout membre du personnel (Serveur, Gérant) peut consulter, modifier ou encaisser n'importe quelle commande active. Ce modèle rompt avec la propriété individuelle pour maximiser la fluidité en période de forte affluence.
 
+### **D. Localisation Linguistique Rigide (Français Unique)**
+*   **Verrouillage de la Langue :** L'interface utilisateur du Backoffice et du personnel (Staff) est strictement verrouillée en français. Toutes les chaînes de texte, boutons, indicateurs d'état (ex: En Ligne, Dégradé, Actif, Unités Actives), messages système et informations de support technique sont affichés exclusivement en français pour garantir l'uniformité linguistique et opérationnelle.
+
 ---
 
 ## 4. PARCOURS UTILISATEURS PRINCIPAUX

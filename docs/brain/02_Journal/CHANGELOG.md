@@ -1,3 +1,14 @@
+## [2026-06-02] - 15:30 - French language lock & Playwright E2E deps (Phase D)
+### Changed
+- **OrderingPage.tsx**: Replaced menu search placeholder `SEARCH MENU...` with `RECHERCHER...`.
+- **KdsPage.tsx**: Translated KDS header statistics labels (`Units Actives` -> `Unités Actives`, `Status` -> `Statut`, `LIVE SYNC` -> `SYNC EN DIRECT`).
+- **AvisPage.tsx**: Fixed French grammatical agreement (`Satisfaction Global` -> `Satisfaction Globale`).
+- **MaintenancePage.tsx**: Localized all technical support, system health, buttons, logs, event titles, and support text descriptions to French.
+- **Sidebar.tsx**: Translated `Active` status label in sidebar footer to `Actif`.
+- **index.html**: Set HTML document language to `fr` and update title to `Tastify Staff - OS Restauration Intelligent`.
+- **package.json (client-app & backoffice-app)**: Upgraded E2E test installation scripts (`test:e2e:install`) to include `--with-deps` option (`playwright install --with-deps chromium firefox webkit`).
+- **RAPPORT_PFA_REFERENCE.md**: Documented the French language lock as a critical business/functional rule under Section 3.
+
 ## [2026-06-02] - 03:17 - Reservations smart quotes & XPath stabilization (b8909ea)
 ### Fixed
 - **ReservationsPage.tsx**: Changed straight double quotes `"{res.notes}"` around reservation notes to curved smart double quotes `“{res.notes}”` to match E2E expectations in `client.cross-app.spec.ts`.

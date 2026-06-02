@@ -113,7 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="flex items-center justify-between opacity-30">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest">Active</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest">Actif</span>
             </div>
             <span className="font-mono text-[8px]">V4.2</span>
           </div>
