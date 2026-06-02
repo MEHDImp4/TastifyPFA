@@ -68,7 +68,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">TastifyPFA</h1>
-                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-02 17:10:45<!-- UPDATED_AT_END --></p>
+                    <p class="text-sm text-gray-400">Tableau de Bord du Projet | Mis à jour : <!-- UPDATED_AT_START -->2026-06-02 17:43:27<!-- UPDATED_AT_END --></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- STATUS_BADGE_START -->
@@ -508,6 +508,56 @@
                             <!-- LOGS_START -->
                             <li class="ml-6">
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Update:</strong> Fix 41 Failing E2E Tests — Missing Route Mocks</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice.gerant.spec.ts**: Added `beforeEach` mocks for `POST /api/users/logout/` and `POST /api/users/refresh/` to prevent 1-minute logout timeouts and 12-second auth bootstrap hangs. Added `GET /api/commandes/*` and `GET /api/tables/` mocks to all 4 dashboard tests (`renders manager dashboard KPIs`, `shows the dashboard fallback state`, `has no critical or serious axe violations on the manager dashboard`, `keeps the dashboard usable on a narrow viewport`) — `DashboardPage` calls `Promise.all([analytics, kdsApi.getActiveTickets()])` so both endpoints must be mocked.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice.dashboard.spec.ts**: Added `beforeEach` with `logout`, `refresh`, `commandes`, and `tables` mocks to the `manager dashboard analytics e2e` describe block. All 4 dashboard spec tests were missing the KDS commandes mock.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice.serveur.spec.ts**: Added `logout`, `refresh`, `GET /api/tables/`, and `GET /api/plan-texts/` mocks to the global `beforeEach`. Serveur's home route is `/salle` which calls `GET /api/tables/` — any test navigating to the default route would hang without a mock. Also added `GET /api/reservations/` mock to the reservations nav test.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice.cuisinier.spec.ts**: Added `beforeEach` with `logout` and `refresh` mocks to fix the `keeps cuisinier logout working after visiting a secondary route` test.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **backoffice.quality.spec.ts**: Added `logout`, `refresh`, `commandes`, and `tables` mocks to gerant `beforeEach`; added `logout`, `refresh`, `tables`, and `plan-texts` mocks to serveur `beforeEach`; added `logout` and `refresh` mocks to cuisinier `beforeEach`. Added `plan-texts` to `mockSalle` helper. Added `analytics/dashboard/` mock to the gerant axe violations test.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Root Cause Analysis:</strong> **1-minute timeouts**: `useAuthStore.logout()` fires `POST /api/users/logout/` (no mock) → hangs for full 60s `timeout`.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Root Cause Analysis:</strong> **12-second timeouts on data pages**: Pages (`HrPage`, `AvisPage`, `SallePage`) use `isLoading=true` until API resolves; no axios timeout configured (default: wait forever); expect timeout of 10s expired.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Root Cause Analysis:</strong> **12-second timeouts on static `/maintenance`**: `AuthBootstrap` attempts `POST /api/users/refresh/` when stored token is stale/expired → hangs → bootstrap spinner shown indefinitely.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
+                                <div class="text-sm text-gray-500 mb-1">2026-06-02 17:20</div>
+                                <p class="text-gray-300 text-sm"><strong>Root Cause Analysis:</strong> **Dashboard KPI failures**: `DashboardPage.tsx` uses `Promise.all([analyticsApi.getDashboardData(), kdsApi.getActiveTickets()])` — tests mocked analytics but not the KDS commandes call.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-06-02 16:55</div>
                                 <p class="text-gray-300 text-sm"><strong>Update:</strong> GitHub Actions Node.js 24 Upgrade (CI Fix) (83bb9eb)</p>
                             </li>
@@ -530,56 +580,6 @@
                                 <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
                                 <div class="text-sm text-gray-500 mb-1">2026-06-02 16:15</div>
                                 <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **requirements.txt**: Upgraded `PyJWT` dependency from `2.12.0` to `2.13.0` to resolve critical actionable CVEs.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 16:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **pip-audit.json**: Re-generated dependency audit logs showing full convergence after the upgrade.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-red-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 16:15</div>
-                                <p class="text-gray-300 text-sm"><strong>Fixed:</strong> **Integration Tests**: Successfully ran all 320 backend Django & SimpleJWT tests inside the updated container to confirm zero regressions in authentication behavior.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-green-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Update:</strong> French language lock & Playwright E2E deps (Phase D)</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **OrderingPage.tsx**: Replaced menu search placeholder `SEARCH MENU...` with `RECHERCHER...`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **KdsPage.tsx**: Translated KDS header statistics labels (`Units Actives` -> `Unités Actives`, `Status` -> `Statut`, `LIVE SYNC` -> `SYNC EN DIRECT`).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **AvisPage.tsx**: Fixed French grammatical agreement (`Satisfaction Global` -> `Satisfaction Globale`).</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **MaintenancePage.tsx**: Localized all technical support, system health, buttons, logs, event titles, and support text descriptions to French.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **Sidebar.tsx**: Translated `Active` status label in sidebar footer to `Actif`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **index.html**: Set HTML document language to `fr` and update title to `Tastify Staff OS Restauration Intelligent`.</p>
-                            </li>
-                            <li class="ml-6">
-                                <span class="absolute w-3 h-3 rounded-full -left-[6.5px] mt-1.5 bg-surface border-2 border-teal-500 ring-4 ring-surface"></span>
-                                <div class="text-sm text-gray-500 mb-1">2026-06-02 15:30</div>
-                                <p class="text-gray-300 text-sm"><strong>Changed:</strong> **package.json (client-app & backoffice-app)**: Upgraded E2E test installation scripts (`test:e2e:install`) to include `--with-deps` option (`playwright install --with-deps chromium firefox webkit`).</p>
                             </li>
                         <!-- LOGS_END -->
                         </ol>
