@@ -68,9 +68,9 @@ L'application repose sur une stack moderne, conteneurisée et robuste, validée 
 2.  **Préparation :** Orchestration KDS chronométrée.
 3.  **Encaissement :** Module hybride (Physique ou QR Code dynamique pour paiement autonome client).
 
-### **B. Le Système d'Avis IA (Feedback Loop)**
+### **B. Le Système d'Avis Déterministe (Feedback Loop)**
 1.  **Vérification :** Avis réservés aux clients ayant réglé une commande.
-2.  **Analyse IA :** Score de sentiment généré par un modèle NLP pour chaque retour textuel.
+2.  **Règle de Sentiment :** Score de sentiment généré par une règle métier basée sur la note d'évaluation client (1 à 5 étoiles).
 3.  **Promotion Dynamique :** Les plats les mieux notés montent automatiquement en "Top Tendances" sur l'accueil.
 
 ---
