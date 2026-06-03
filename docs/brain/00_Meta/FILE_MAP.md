@@ -62,12 +62,7 @@ tastify-pfa/
 ├── docs/                          # Obsidian Brain
 │   ├── brain/                     # Knowledge base
 │   └── cahier_de_charge_tastify.md
-├── .planning/                     # GSD framework
-│   ├── ROADMAP.md                 # Current phase tracking
-│   ├── STATE.md                   # Current execution state
-│   └── phases/                    # Phase-specific files
 ├── scripts/
-│   ├── update_dashboard.py        # Dashboard synchronizer after every state shift
 │   ├── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
 │   ├── locustfile.py              # Locust scenarios for auth, recommendations, reservations, payments, and analytics load checks
 │   └── testing/
@@ -81,8 +76,7 @@ tastify-pfa/
 ├── TESTING.md                     # Pragmatic test strategy, commands, and coverage map
 ├── docker-compose.yml             # Default dev/test Compose stack
 ├── docker-compose.ci.yml          # QA add-ons (Locust load tester + CI-only load harness)
-├── docker-compose.preview.yml     # Preview-stack overrides for vite preview smoke
-└── dashboard.html                 # Live project health dashboard
+└── docker-compose.preview.yml     # Preview-stack overrides for vite preview smoke
 ```
 
 ## Service routing (direct host ports)

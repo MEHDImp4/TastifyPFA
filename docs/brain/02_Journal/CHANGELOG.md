@@ -1,12 +1,3 @@
-## [2026-06-03] - 16:45 - Removal of All AI/ML Components
-### Removed
-- **AI Recommender System**: Deleted SVD-based collaborative filtering recommender engine (`recommender.py`), menu Celery update task, recommendations cache lookup logic, and associated unit tests.
-- **AI Sentiment Analysis**: Deleted scikit-learn local LinearSVC pipeline (`sentiment_service.py`) and associated HuggingFace APIs. Deleted multilingual language detection test.
-- **AI Demand Forecasting**: Removed weather-aware `RandomForestRegressor` model from analytics demand predictor.
-
-### Changed
-- **Rule-Based Fallbacks**: Implemented standard DB-driven ORM queries for popular plat recommendations, a simple rating-based mapping for review sentiments, and historical daily averages for stock demand forecasts.
-
 ## [2026-06-03] - 15:07 - Extended Unimportant File Cleanup
 ### Removed
 - **Redundant Documentation**: Removed `docs/rapport_tastify_v27_logo.docx` (Word report document), as the living PFA report is managed in markdown format.

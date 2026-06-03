@@ -36,5 +36,6 @@ export const menuApi = {
   getCategories: () => axiosInstance.get<Categorie[]>('/categories/'),
   getPlats: () => axiosInstance.get<Plat[]>('/plats/'),
   getPlat: (id: number) => axiosInstance.get<Plat>(`/plats/${id}/`),
+  getRecommendations: (id: number) => axiosInstance.get<Plat[]>(`/plats/${id}/recommendations/`),
   getTopRecommendations: () => axiosInstance.get<Plat[]>('/plats/top-recommendations/'),
 };

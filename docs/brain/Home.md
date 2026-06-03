@@ -5,11 +5,10 @@ Welcome to the central Obsidian Brain for TastifyPFA.
 This repository of markdown files serves as the ultimate source of truth for the project, tracking architecture, features, research, and technical decisions.
 
 ## Core Structure
-- `/` - Root directory, contains configuration files, mandates, and the dashboard.
+- `/` - Root directory, contains configuration files, mandates, and documentation.
 - `/docs/cahier_de_charge_tastify.md` - The master project specifications.
 - `/docs/brain/` - Obsidian knowledge base for architecture, features, notes, and journals.
   - `00_Meta/PROJECT_OVERVIEW.md` - High-level summary of the tech stack and modules.
-- `/.planning/` - GSD framework directory for agent planning.
 
 ## Directory Guide
 

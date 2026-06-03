@@ -65,10 +65,6 @@ Both frontend entrypoints now bootstrap persisted auth through `app/frontend/sha
 Public QR payment pages are intentionally excluded from that bootstrap and call payment endpoints through `app/frontend/shared/auth/publicClient.ts`, which keeps the client portal header without requiring a logged-in session.
 The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separate refresh cookies for the staff and client portals, allowing simultaneous logins on both SPAs without cross-logout.
 
-## Planning
-See `.planning/ROADMAP.md` and `.planning/phases/`.
-Current planning artifacts now extend through `.planning/phases/26-qr-payment-split-bill/`, with Phase 26 split into two backend waves for the payment domain and the later QR/API contract.
-Infrastructure amendment `01-DIRECT-PORTS-AMENDMENT.md` records the removal of the Nginx Compose service and the direct-port routing model.
 
 ## Backend domains
 - `apps.users` — custom users and RBAC.
@@ -113,7 +109,7 @@ Client authentication now also includes a first-class password-reset flow backed
 
 ## GitHub Actions
 - `.github/workflows/backoffice-ci.yml` runs on pull requests, pushes to `main`/`master`, nightly schedule, and manual `workflow_dispatch`.
-- The workflow first detects impacted surfaces so docs-only or planning-only pushes do not burn the full QA budget.
+- The workflow first detects impacted surfaces so docs-only pushes do not burn the full QA budget.
 - `frontend-quality` installs both SPAs, then runs lint, typecheck, build, and unit tests.
 - `backend-pytest` brings up `db`, `redis`, and `backend` with Docker Compose, then runs `python manage.py check`, `makemigrations --check --dry-run`, and the full Dockerized backend `pytest` suite.
 - `dependency-review` blocks risky dependency additions on pull requests, while `dependency-security-audits` runs `npm audit` on both frontends and enforces backend `pip-audit` through an explicit allowlist gate.

@@ -1,42 +1,84 @@
-import logging
-from datetime import date, timedelta
+import pandas as pd
+import numpy as np
 from django.db import models
-from apps.menu.models import Plat
+from sklearn.ensemble import RandomForestRegressor
 from apps.commandes.models import CommandeLigne
-
-logger = logging.getLogger(__name__)
+from apps.menu.models import Plat
+from ..models import WeatherData
+from datetime import date, timedelta
 
 class DemandPredictor:
+    @classmethod
+    def get_training_data(cls):
+        """
+        Gathers historical sales and weather data.
+        """
+        # Get sales aggregated by day and plat
+        sales = CommandeLigne.objects.filter(
+            commande__statut='PAYEE'
+        ).values('commande__created_at__date', 'plat_id').annotate(
+            qty=models.Sum('quantite')
+        )
+        
+        if not sales:
+            return None
+            
+        df = pd.DataFrame(list(sales))
+        df.columns = ['date', 'plat_id', 'qty']
+        
+        # Get weather
+        weather = WeatherData.objects.all().values('date', 'temp_max', 'rain_mm')
+        w_df = pd.DataFrame(list(weather))
+        
+        if w_df.empty:
+            return None
+            
+        # Merge
+        merged = pd.merge(df, w_df, on='date', how='left')
+        
+        # Feature Engineering
+        merged['date'] = pd.to_datetime(merged['date'])
+        merged['day_of_week'] = merged['date'].dt.dayofweek
+        merged['month'] = merged['date'].dt.month
+        
+        return merged
+
     @classmethod
     def predict_next_week(cls):
         """
         Returns a dictionary {plat_id: {date: predicted_qty}}
-        calculated using simple historical average (rule-based database query).
-        Removes scikit-learn RandomForest regression.
         """
+        data = cls.get_training_data()
+        
+        # If not enough data, return a baseline (avg sales)
+        if data is None or len(data) < 10:
+            return cls.get_baseline_forecast()
+            
         predictions = {}
         forecast_dates = [date.today() + timedelta(days=i) for i in range(1, 8)]
         
-        # Calculate a simple average daily quantity sold per plat in the last 30 days
-        # If no sales history, default to a sensible base daily rate (e.g. 1.0 unit)
-        thirty_days_ago = date.today() - timedelta(days=30)
+        # Fetch weather forecast
+        w_forecast = WeatherData.objects.filter(date__in=forecast_dates)
+        w_map = {w.date: w for w in w_forecast}
         
         for plat in Plat.objects.filter(est_active=True):
-            total_qty = CommandeLigne.objects.filter(
-                plat=plat,
-                commande__statut='PAYEE',
-                commande__created_at__date__gte=thirty_days_ago
-            ).aggregate(total=models.Sum('quantite'))['total'] or 0
-            
-            daily_avg = float(total_qty) / 30.0
-            
-            # Ensure a reasonable minimum default baseline if sales are low/zero
-            if daily_avg <= 0.05:
-                daily_avg = 1.0
+            p_data = data[data['plat_id'] == plat.id]
+            if len(p_data) < 3:
+                predictions[plat.id] = {d: 5 for d in forecast_dates} # Dummy baseline
+                continue
                 
+            X = p_data[['day_of_week', 'month', 'temp_max', 'rain_mm']].fillna(0)
+            y = p_data['qty']
+            
+            model = RandomForestRegressor(n_estimators=50)
+            model.fit(X, y)
+            
             plat_preds = {}
             for d in forecast_dates:
-                plat_preds[d.isoformat()] = daily_avg
+                w = w_map.get(d)
+                feat = np.array([[d.weekday(), d.month, float(w.temp_max if w else 25), float(w.rain_mm if w else 0)]])
+                plat_preds[d.isoformat()] = float(model.predict(feat)[0])
+            
             predictions[plat.id] = plat_preds
             
         return predictions
