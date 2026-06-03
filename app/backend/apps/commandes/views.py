@@ -22,6 +22,8 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated, IsCuisinierOrGerant | IsServeurOrGerant]
 
     def partial_update(self, request, *args, **kwargs):
+        # Cette méthode gère le changement de statut d'une ligne de commande.
+        # Exemple: EN_ATTENTE -> EN_PREPARATION -> PRET -> SERVI.
         instance = self.get_object()
         new_statut = request.data.get('statut')
         user = request.user
@@ -29,7 +31,7 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         if not new_statut:
             return super().partial_update(request, *args, **kwargs)
 
-        # Role-based status transition logic
+        # Chaque rôle a le droit de faire seulement certaines actions.
         if user.role == 'CUISINIER':
             allowed = [CommandeLigne.Statut.EN_PREPARATION, CommandeLigne.Statut.PRET]
             if new_statut not in allowed:
@@ -57,7 +59,7 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        # Deduction if manually starting preparation (Phase 20 parity)
+        # Quand la cuisine démarre un plat, on retire les ingrédients du stock.
         if new_statut == CommandeLigne.Statut.EN_PREPARATION and instance.statut == CommandeLigne.Statut.EN_ATTENTE:
             try:
                 StockService.deduct_ingredients_for_plat(instance.plat, instance.quantite)
@@ -97,6 +99,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsServeurOrGerant | IsCuisinierOrGerant | IsClient]
 
     def get_queryset(self):
+        # Le même endpoint renvoie des commandes différentes selon le rôle connecté.
         user = self.request.user
         statut = self.request.query_params.get('statut')
         scope = self.request.query_params.get('scope')
@@ -121,9 +124,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
         table_id = self.request.query_params.get('table')
         if table_id and user.role != 'CLIENT':
-            # Table-specific lookup: any staff member can see which order is on a given table.
-            # We exclude terminal statuses (PAYEE, ANNULEE) so that a newly 'freed' table 
-            # doesn't show the previous order.
+            # Le staff peut voir la commande active d'une table.
             qs = qs.filter(table_id=table_id).exclude(
                 statut__in=[Commande.Statut.PAYEE, Commande.Statut.ANNULEE]
             )
@@ -132,18 +133,15 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 completed_paid_total__gte=models.F('montant_total')
             )
         elif user.role == 'CUISINIER':
-            # Phase 16: KDS shows only fired tickets. Manual-fire workflow flips
-            # EN_COURS -> EN_CUISINE via PATCH; only EN_CUISINE and PRETE are
-            # actionable for the kitchen. Drafts (EN_COURS) stay invisible until
-            # a server explicitly fires them.
+            # Le cuisinier voit uniquement les commandes envoyées en cuisine.
             qs = qs.filter(statut__in=kitchen_statuses).exclude(
                 completed_paid_total__gte=models.F('montant_total')
             )
         elif user.role == 'CLIENT':
-            # Phase 45: Clients only see their own orders
+            # Un client ne voit que ses propres commandes.
             qs = qs.filter(client=user)
         elif user.role == 'SERVEUR':
-            # Phase 45: Servers see all active orders (collaborative service)
+            # Les serveurs travaillent ensemble, donc ils voient toutes les commandes actives.
             pass
         # GERANT and CUISINIER (handled in elif/if above or falling through) see the full/scoped set
 
@@ -157,22 +155,22 @@ class CommandeViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def _check_ownership_or_cuisinier_ready(self, request, instance):
-        """Helper to enforce Phase 16/17 ownership & role rules."""
+        """Vérifie si l'utilisateur a le droit de modifier cette commande."""
         user = request.user
         
-        # Managers have full authority
+        # Le gérant peut tout gérer.
         if user.role == 'GERANT':
             return True
             
-        # Servers can manage any order (collaborative service)
+        # Un serveur peut gérer les commandes en salle.
         if user.role == 'SERVEUR':
             return True
             
-        # Cooks can only mark orders as PRETE
+        # Le cuisinier ne peut que signaler qu'une commande est prête.
         if user.role == 'CUISINIER':
             return request.data.get('statut') == Commande.Statut.PRETE
             
-        # Clients can only manage their own orders
+        # Un client ne peut agir que sur ses propres commandes.
         return instance.client == user
 
     def update(self, request, *args, **kwargs):
@@ -200,7 +198,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # Phase 20: stock deduction when firing an order
+        # Quand une commande part en cuisine, on retire le stock des plats en attente.
         new_statut = request.data.get('statut')
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
             lignes_to_deduct = instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE)
@@ -214,7 +212,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def add_items(self, request, pk=None):
-        """CMD-API-05: Add items to an existing order."""
+        """Ajoute des plats à une commande existante."""
         commande = get_object_or_404(
             Commande.objects.active().select_related('serveur'),
             pk=pk,
@@ -232,7 +230,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # Handle both {"lignes": [...]} and [...] formats
+        # On accepte deux formats: {"lignes": [...]} ou directement une liste.
         data = request.data
         if isinstance(data, dict) and 'lignes' in data:
             data = data['lignes']
@@ -256,7 +254,7 @@ class CommandeViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        """Soft delete — sets est_active=False instead of hard-deleting."""
+        """Suppression logique: on cache la commande au lieu de supprimer la ligne SQL."""
         if request.user.role == 'CLIENT':
             return Response(
                 {"error": "Les clients ne peuvent pas supprimer une commande."},

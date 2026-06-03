@@ -4,95 +4,112 @@ from celery import current_app
 from django.db import transaction
 from django.utils import timezone
 
-from apps.commandes.models import CommandeLigne
+from apps.commandes.models import Commande, CommandeLigne
 
-
-# L'Orchestrateur KDS (Kitchen Display System)
-# C'est le "cerveau" de la cuisine. Il décide quand lancer chaque plat.
 
 class KdsOrchestrator:
     """
-    Logique "Just-In-Time" (Juste à Temps) :
-    L'objectif est que TOUS les plats d'une même commande finissent de cuire en même temps.
-    Si une Pizza prend 15 min et une Salade 5 min, l'orchestrateur va attendre 10 min 
-    avant de demander au cuisinier de préparer la salade.
+    Petit planificateur de cuisine.
+    Son but est simple: lancer les plats au bon moment pour qu'ils soient prêts ensemble.
     """
-
-    IDLE_STATUSES = {CommandeLigne.Statut.EN_ATTENTE}
-    RUNNING_STATUSES = {CommandeLigne.Statut.EN_PREPARATION}
 
     @classmethod
     def reorchestrate_order(cls, commande):
-        # Cette méthode recalcule le planning de la cuisine pour une commande donnée
         from apps.commandes.tasks import launch_item_task
-        from apps.commandes.models import Commande as _Commande
 
-        # On n'orchestre que si la commande est officiellement "En Cuisine"
-        if commande.statut != _Commande.Statut.EN_CUISINE:
+        # On planifie uniquement les commandes déjà envoyées en cuisine.
+        if commande.statut != Commande.Statut.EN_CUISINE:
             return
 
-        now = timezone.now()
+        lignes_a_prevoir = []
+        lignes_en_cours = []
 
-        # transaction.atomic() assure que si une erreur survient, rien n'est modifié en base
         with transaction.atomic():
-            lines = list(
+            lignes = (
                 commande.lignes.select_related('plat')
                 .select_for_update()
-                .filter(statut__in=list(cls.IDLE_STATUSES | cls.RUNNING_STATUSES))
+                .filter(
+                    statut__in=[
+                        CommandeLigne.Statut.EN_ATTENTE,
+                        CommandeLigne.Statut.EN_PREPARATION,
+                    ]
+                )
             )
 
-            idle_lines = [l for l in lines if l.statut in cls.IDLE_STATUSES]
-            running_lines = [l for l in lines if l.statut in cls.RUNNING_STATUSES]
+            for ligne in lignes:
+                if ligne.statut == CommandeLigne.Statut.EN_ATTENTE:
+                    lignes_a_prevoir.append(ligne)
+                if ligne.statut == CommandeLigne.Statut.EN_PREPARATION:
+                    lignes_en_cours.append(ligne)
 
-            if not idle_lines:
+            if not lignes_a_prevoir:
                 return
 
-            # On cherche le plat qui prend le plus de temps (le "goulot d'étranglement")
-            max_prep_minutes = max(l.plat.temps_preparation for l in idle_lines)
-            target_ready = now + timedelta(minutes=max_prep_minutes)
+            heure_fin_commune = cls._calculer_heure_fin_commune(
+                lignes_a_prevoir,
+                lignes_en_cours,
+            )
 
-            # Si des plats sont déjà en cours de cuisson et finissent plus tard, on s'aligne sur eux
-            for running in running_lines:
-                if running.heure_fin_estimee and running.heure_fin_estimee > target_ready:
-                    target_ready = running.heure_fin_estimee
-
-            updates = []
-            for line in idle_lines:
-                # Si une tâche était déjà prévue, on l'annule pour la replanifier proprement
-                if line.celery_task_id:
-                    try:
-                        current_app.control.revoke(line.celery_task_id)
-                    except Exception:
-                        pass
-
-                # Calcul du moment idéal pour lancer la cuisson
-                launch_time = target_ready - timedelta(minutes=line.plat.temps_preparation)
-                
-                try:
-                    # On programme la tâche Celery pour s'exécuter à 'launch_time' (ETA)
-                    async_result = launch_item_task.apply_async(args=[line.id], eta=launch_time)
-                    updates.append({
-                        'pk': line.pk,
-                        'heure_lancement': launch_time,
-                        'heure_fin_estimee': target_ready,
-                        'temps_preparation_snapshot': line.plat.temps_preparation,
-                        'celery_task_id': async_result.id,
-                    })
-                except Exception:
-                    pass
-
-            # Mise à jour finale de toutes les lignes en une seule fois
-            for update in updates:
-                CommandeLigne.objects.filter(pk=update['pk']).update(
-                    heure_lancement=update['heure_lancement'],
-                    heure_fin_estimee=update['heure_fin_estimee'],
-                    temps_preparation_snapshot=update['temps_preparation_snapshot'],
-                    celery_task_id=update['celery_task_id'],
-                )
+            for ligne in lignes_a_prevoir:
+                cls._programmer_ligne(ligne, heure_fin_commune, launch_item_task)
 
     @classmethod
     def schedule_reorchestration_after_commit(cls, commande_id):
-        """Helper to run reorchestration after the database transaction is finished."""
-        from apps.commandes.models import Commande
-        # Execute directly if no specific Celery task wrapper exists for the entire order
-        transaction.on_commit(lambda: cls.reorchestrate_order(Commande.objects.get(pk=commande_id)))
+        """
+        Attend la fin de l'enregistrement en base avant de recalculer la cuisine.
+        C'est plus sûr car la commande et ses lignes sont alors vraiment sauvegardées.
+        """
+
+        def recalculer():
+            commande = Commande.objects.get(pk=commande_id)
+            cls.reorchestrate_order(commande)
+
+        transaction.on_commit(recalculer)
+
+    @staticmethod
+    def _calculer_heure_fin_commune(lignes_a_prevoir, lignes_en_cours):
+        maintenant = timezone.now()
+        temps_max = 0
+
+        for ligne in lignes_a_prevoir:
+            if ligne.plat.temps_preparation > temps_max:
+                temps_max = ligne.plat.temps_preparation
+
+        heure_fin_commune = maintenant + timedelta(minutes=temps_max)
+
+        # Si un plat est déjà en préparation et finit plus tard, on s'aligne dessus.
+        for ligne in lignes_en_cours:
+            if ligne.heure_fin_estimee and ligne.heure_fin_estimee > heure_fin_commune:
+                heure_fin_commune = ligne.heure_fin_estimee
+
+        return heure_fin_commune
+
+    @staticmethod
+    def _programmer_ligne(ligne, heure_fin_commune, launch_item_task):
+        # Si cette ligne avait déjà une tâche Celery, on l'annule avant d'en créer une nouvelle.
+        if ligne.celery_task_id:
+            try:
+                current_app.control.revoke(ligne.celery_task_id)
+            except Exception:
+                pass
+
+        heure_lancement = heure_fin_commune - timedelta(minutes=ligne.plat.temps_preparation)
+
+        try:
+            resultat = launch_item_task.apply_async(args=[ligne.id], eta=heure_lancement)
+        except Exception:
+            return
+
+        ligne.heure_lancement = heure_lancement
+        ligne.heure_fin_estimee = heure_fin_commune
+        ligne.temps_preparation_snapshot = ligne.plat.temps_preparation
+        ligne.celery_task_id = resultat.id
+        ligne.save(
+            update_fields=[
+                'heure_lancement',
+                'heure_fin_estimee',
+                'temps_preparation_snapshot',
+                'celery_task_id',
+                'updated_at',
+            ]
+        )

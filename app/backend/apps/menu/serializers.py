@@ -65,9 +65,9 @@ class PlatSerializer(serializers.ModelSerializer):
     prix = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0'))
     temps_preparation = serializers.IntegerField(min_value=1)
 
-    # Sentiment analysis & reviews for recommendations
-    sentiment_score = serializers.FloatField(read_only=True, default=0.0)
-    top_avis = AvisMinimalSerializer(many=True, read_only=True)
+    # Champs calculés simplement pour afficher les avis dans le frontend.
+    sentiment_score = serializers.SerializerMethodField()
+    top_avis = serializers.SerializerMethodField()
 
     class Meta:
         model = Plat
@@ -95,3 +95,16 @@ class PlatSerializer(serializers.ModelSerializer):
             if image_url.startswith('http'):
                 ret['image'] = urlparse(image_url).path
         return ret
+
+    def get_sentiment_score(self, instance):
+        avis = Avis.objects.filter(plat=instance, sentiment_score__isnull=False)
+        scores = [item.sentiment_score for item in avis]
+
+        if not scores:
+            return 0.0
+
+        return sum(scores) / len(scores)
+
+    def get_top_avis(self, instance):
+        derniers_avis = Avis.objects.filter(plat=instance).order_by('-created_at')[:3]
+        return AvisMinimalSerializer(derniers_avis, many=True).data
