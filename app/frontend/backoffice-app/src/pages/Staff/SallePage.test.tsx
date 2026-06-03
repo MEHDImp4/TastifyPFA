@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { SallePage } from './SallePage';
@@ -79,7 +78,6 @@ describe('SallePage component', () => {
     });
 
     // Check sorted table numbers
-    const buttons = screen.getAllByRole('button');
     // Button 1 is Table 2, Button 2 is Table 5 (sorted by numero: 2, 5)
     // Find Table numbers in buttons
     expect(screen.getByTestId('table-2')).toBeDefined();

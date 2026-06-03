@@ -1,8 +1,8 @@
-import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { SettingsPage } from './SettingsPage';
 import { configurationApi } from '../../api/configuration';
+import type { RestaurantConfiguration } from '../../api/configuration';
 import { toast } from 'sonner';
 
 vi.mock('../../api/configuration', () => ({
@@ -31,14 +31,26 @@ describe('SettingsPage component', () => {
   });
 
   it('renders settings fields and saves successfully', async () => {
-    const mockConfig = {
+    const mockConfig: RestaurantConfiguration = {
       id: 1,
       nom: 'Tastify Restaurant',
       description: 'Gourmet experience',
       telephone: '0522446688',
       adresse: 'Casablanca',
-      devise: 'MAD',
+      email: 'contact@tastify.com',
+      logo: null,
+      facebook: null,
+      instagram: null,
+      twitter: null,
       horaires: {},
+      devise: 'MAD',
+      tax_rate: '20.00',
+      gratuity_threshold: 0,
+      default_gratuity_rate: '0.00',
+      primary_color: '#ff5722',
+      prep_target_minutes: 15,
+      auto_send_main_course: false,
+      updated_at: '2026-06-03T12:00:00Z',
     };
 
     vi.mocked(configurationApi.getSettings).mockResolvedValue({

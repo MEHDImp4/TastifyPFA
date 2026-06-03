@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { HrPage } from './HrPage';
@@ -27,6 +26,8 @@ describe('HrPage component', () => {
     const mockEmployes: Employe[] = [
       {
         id: 1,
+        user: 10,
+        salaire: '2500.00',
         poste: 'GERANT',
         telephone: '0612345678',
         cin: 'AB12345',
@@ -37,6 +38,7 @@ describe('HrPage component', () => {
           first_name: 'John',
           last_name: 'Doe',
           email: 'john.doe@tastify.com',
+          role: 'GERANT',
           is_active: true,
         },
       },
@@ -66,6 +68,8 @@ describe('HrPage component', () => {
     const mockEmployes: Employe[] = [
       {
         id: 2,
+        user: 20,
+        salaire: '2000.00',
         poste: 'SERVEUR',
         telephone: '0687654321',
         cin: 'CD98765',
