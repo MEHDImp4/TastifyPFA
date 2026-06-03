@@ -69,23 +69,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def recommendations(self, request, pk=None):
         plat = self.get_object()
-        similarities = cache.get('plat_similarities') or {}
-        recommended_ids = similarities.get(plat.id, [])
-
-        if recommended_ids:
-            plats = Plat.objects.filter(id__in=recommended_ids, est_active=True, est_disponible=True).annotate(
-                sentiment_score=Avg('avis__sentiment_score')
-            ).prefetch_related(
-                Prefetch('avis', queryset=Avis.objects.order_by('-created_at')[:3], to_attr='top_avis')
-            )
-            plats_dict = {p.id: p for p in plats}
-            ordered_plats = [plats_dict[rid] for rid in recommended_ids if rid in plats_dict]
-            
-            if ordered_plats:
-                serializer = self.get_serializer(ordered_plats, many=True)
-                return Response(serializer.data)
-
-        # Fallback to popular plats
+        # Simple DB-driven recommendation: popular dishes in the same category, or overall popular dishes
         popular_plats = Plat.objects.filter(
             est_active=True, est_disponible=True
         ).exclude(
@@ -95,8 +79,14 @@ class PlatViewSet(viewsets.ModelViewSet):
             sentiment_score=Avg('avis__sentiment_score')
         ).prefetch_related(
             Prefetch('avis', queryset=Avis.objects.order_by('-created_at')[:3], to_attr='top_avis')
-        ).order_by('-lignes_count', 'nom')[:5]
+        )
 
+        category_plats = popular_plats.filter(categorie=plat.categorie).order_by('-lignes_count', 'nom')[:5]
+        if category_plats.count() >= 3:
+            serializer = self.get_serializer(category_plats, many=True)
+            return Response(serializer.data)
+
+        popular_plats = popular_plats.order_by('-lignes_count', 'nom')[:5]
         serializer = self.get_serializer(popular_plats, many=True)
         return Response(serializer.data)
 
