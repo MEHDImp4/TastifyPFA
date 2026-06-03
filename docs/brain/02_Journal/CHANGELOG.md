@@ -5,6 +5,7 @@
 - **ReservationsPage.tsx**: Appended `aria-label="CANCEL"` and `aria-label="Options"` properties to icon-only control actions, and removed low-contrast opacity on end-of-ledger tags.
 - **StockPage.tsx**: Equipped the editor's cancel button with `aria-label="discard"` to stabilize the inventory rollback sequence.
 - **SallePage.tsx**: Integrated an off-screen main heading element for viewport tests and formatted table numbers with structured labelling.
+- **SallePage.test.tsx**: Created a new unit test suite using Vitest and React Testing Library to validate table rendering, sorting order, status filters, and click redirection.
 - **SettingsPage.tsx**: Hardened text contrast on the Console system configurations by removing obsolete transparency modifiers.
 - **HrPage.tsx**: Hardened fallback evaluations and property references against undefined user sub-objects.
 - **HrPage.test.tsx**: Created a new unit test suite using Vitest and React Testing Library to validate the employee mapping, fallback rendering, and loading states.
