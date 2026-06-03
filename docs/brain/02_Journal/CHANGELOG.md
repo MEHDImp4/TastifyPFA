@@ -1,3 +1,8 @@
+## [2026-06-03] - 15:07 - Extended Unimportant File Cleanup
+### Removed
+- **Redundant Documentation**: Removed `docs/rapport_tastify_v27_logo.docx` (Word report document), as the living PFA report is managed in markdown format.
+- **Obsolete Scripts**: Removed `scripts/sync_uat_docs.py` (legacy script for syncing UATs of archived phases).
+
 ## [2026-06-03] - 14:48 - Additional Unimportant File Cleanup
 ### Removed
 - **Unused Scripts**: Deleted temporary QuerySet testing script (`app/backend/test_qs.py`).
