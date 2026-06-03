@@ -29,7 +29,7 @@ This command seeds:
 - **Ingredients**: 51 cooking ingredients (vegetables, proteins, grains, spices, oils, nuts, beverages)
 - **Recipes**: 129 dish-ingredient mappings with realistic quantities
 
-See `user.md` for all test account credentials (default password: `password123`).
+See `docs/user.md` for all test account credentials (default password: `password123`).
 
 Then visit:
 - `http://localhost:3003/` → Portail Client SPA
@@ -101,7 +101,7 @@ docker compose up -d --build backend
 - `npm run test:preview`
 - `npm run test:load`
 
-For the curated, student-friendly QA entrypoint introduced for this repo, see `TESTING.md`.
+For the curated, student-friendly QA entrypoint introduced for this repo, see `docs/TESTING.md`.
 
 The root QA runner now waits for both the backoffice shell and the proxied auth API before starting Playwright, which keeps Docker startup races from turning into false-negative browser runs. The supported automation surface is green for full backend `pytest`, full backoffice Playwright, full client Playwright, the dedicated cross-app realism suite, the expanded browser matrix smoke, preview smoke, and the Dockerized Locust campaign with threshold checks on p95, average latency, failure ratio, and minimum request volume.
 

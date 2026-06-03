@@ -59,9 +59,14 @@ tastify-pfa/
 │               ├── Menu/          # Cinematic Catalog
 │               ├── Reservations/  # Multi-step booking wizard
 │               └── auth/          # Login, forgot-password, and reset-password flows
-├── docs/                          # Obsidian Brain
+├── docs/                          # Documents and Obsidian Brain
 │   ├── brain/                     # Knowledge base
-│   └── cahier_de_charge_tastify.md
+│   ├── cahier_de_charge_tastify.md
+│   ├── DESIGN.md                  # Project design rules and choices
+│   ├── RAPPORT_PFA_REFERENCE.md   # Living report reference (validation metrics)
+│   ├── SECURITY.md                # Project security posture and CVE fixes
+│   ├── TESTING.md                 # Pragmatic test strategy, commands, and coverage map
+│   └── user.md                    # Credentials sheet for seeded demo users
 ├── scripts/
 │   ├── run_full_stack_tests.ps1   # Docker rebuild + backend pytest + backoffice Playwright
 │   ├── locustfile.py              # Locust scenarios for auth, recommendations, reservations, payments, and analytics load checks
@@ -73,7 +78,6 @@ tastify-pfa/
 ├── artifacts/
 │   └── load-tests/                # Locust smoke reports archived by CI/manual load runs
 ├── package.json                   # Root QA command hub (lint, typecheck, build, unit, integration, E2E)
-├── TESTING.md                     # Pragmatic test strategy, commands, and coverage map
 ├── docker-compose.yml             # Default dev/test Compose stack
 ├── docker-compose.ci.yml          # QA add-ons (Locust load tester + CI-only load harness)
 └── docker-compose.preview.yml     # Preview-stack overrides for vite preview smoke
