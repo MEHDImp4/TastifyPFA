@@ -1,6 +1,11 @@
+## [2026-06-03] - 01:28 - Fix TypeScript typecheck errors in HrPage
+### Fixed
+- **HrPage.tsx**: Resolved compiler errors by removing direct root-level accesses of user properties on the `Employe` type, replacing them with optional chaining on `user_details` (commit `56180fa`).
+
 ## [2026-06-03] - 01:26 - Fix timezone-dependent dashboard calculation test
 ### Fixed
 - **DashboardAPIView (views.py)**: Replaced `timezone.now().date()` with `timezone.localdate()` (commit `fae20eb`) to fix the midnight UTC crossover test failure in `test_dashboard_calculations`.
+
 
 ## [2026-06-03] - 00:05 - Visual and accessibility updates for E2E tests
 ### Fixed
