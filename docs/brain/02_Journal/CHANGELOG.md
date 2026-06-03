@@ -7,6 +7,7 @@
 - **SallePage.tsx**: Integrated an off-screen main heading element for viewport tests and formatted table numbers with structured labelling.
 - **SettingsPage.tsx**: Hardened text contrast on the Console system configurations by removing obsolete transparency modifiers.
 - **HrPage.tsx**: Hardened fallback evaluations and property references against undefined user sub-objects.
+- **HrPage.test.tsx**: Created a new unit test suite using Vitest and React Testing Library to validate the employee mapping, fallback rendering, and loading states.
 - **types/inventory.ts**: Expanded the `Employe` structure with optional user details to fix compiler typecheck concerns.
 
 ## [2026-06-03] - 01:28 - Fix TypeScript typecheck errors in HrPage
