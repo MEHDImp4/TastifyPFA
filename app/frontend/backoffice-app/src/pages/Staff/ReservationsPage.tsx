@@ -240,6 +240,7 @@ export const ReservationsPage: React.FC = () => {
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
+                      aria-label="CANCEL"
                       className="h-10 w-10 border border-outline rounded flex items-center justify-center text-error hover:bg-error/5 transition-all"
                     >
                       <XCircle className="w-5 h-5" />
@@ -261,6 +262,7 @@ export const ReservationsPage: React.FC = () => {
                     <button
                         onClick={(e) => { e.stopPropagation(); setActiveMenuId(activeMenuId === res.id ? null : res.id); }}
                         className={`w-10 h-10 border border-outline rounded flex items-center justify-center transition-colors ${activeMenuId === res.id ? 'bg-on-background text-background' : 'text-on-surface-variant hover:text-on-background'}`}
+                        aria-label="Options"
                     >
                         <MoreVertical className="w-4 h-4" />
                     </button>
@@ -340,7 +342,7 @@ export const ReservationsPage: React.FC = () => {
                 </button>
             </div>
           ) : (
-             <p className="text-[9px] font-bold uppercase tracking-widest opacity-20">Fin du registre</p>
+             <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Fin du registre</p>
           )}
         </div>
       </footer>

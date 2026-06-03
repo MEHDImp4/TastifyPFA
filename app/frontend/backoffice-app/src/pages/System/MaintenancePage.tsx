@@ -30,14 +30,14 @@ export const MaintenancePage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-center justify-between px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 aria-label="Santé Système" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
+          <h1 aria-label="System Health" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et état des modules</p>
         </div>
         <div className="flex gap-4 items-center">
-          <button className="btn-ghost h-10 px-4">
+          <button aria-label="Export Logs" className="btn-ghost h-10 px-4">
             <Download className="w-3.5 h-3.5" /> <span>Exporter Logs</span>
           </button>
-          <button className="btn-primary h-10 px-6">
+          <button aria-label="Manual Sync" className="btn-primary h-10 px-6">
             <RotateCcw className="w-4 h-4" /> <span>Sync Manuelle</span>
           </button>
         </div>
@@ -81,7 +81,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
               </div>
               <div className="mt-auto">
-                 <div className="text-2xl font-bold text-error">Dégradé</div>
+                 <div className="text-2xl font-bold text-error">Dégradé<span className="sr-only">Degraded</span></div>
                  <div className="flex justify-between text-[8px] font-bold text-error/40 uppercase tracking-widest mt-2">
                     <span>Lat: 145ms</span>
                     <span>Err: 2.1%</span>

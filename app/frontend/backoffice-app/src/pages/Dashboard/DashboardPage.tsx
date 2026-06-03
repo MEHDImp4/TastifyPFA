@@ -153,14 +153,14 @@ export const DashboardPage: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="text-lg font-black text-on-surface uppercase tracking-tight">Commande #{ticket.id}</h4>
-                                <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mt-1.5 opacity-50">
+                                <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mt-1.5">
                                     {ticket.lignes.length} Articles • {ticket.type.replace('_', ' ')}
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-10">
                             <div className="text-right hidden sm:block">
-                                <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Durée</p>
+                                <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Durée</p>
                                 <p className="font-sans text-sm font-bold text-on-surface mt-1 uppercase tracking-tight">
                                     {formatDistanceToNow(new Date(ticket.created_at), { locale: fr })}
                                 </p>
@@ -175,7 +175,7 @@ export const DashboardPage: React.FC = () => {
                  )) : (
                     <div className="h-64 border-2 border-dashed border-outline-variant rounded-[2rem] flex flex-col items-center justify-center text-on-surface-variant">
                         <History className="w-12 h-12 mb-4 opacity-40" />
-                        <p className="text-xs font-black uppercase tracking-[0.4em] opacity-80">Aucune transaction active</p>
+                        <p className="text-xs font-black uppercase tracking-[0.4em] text-on-surface">Aucune transaction active</p>
                     </div>
                  )}
               </div>

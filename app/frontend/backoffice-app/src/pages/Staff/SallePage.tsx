@@ -41,7 +41,7 @@ export const SallePage: React.FC = () => {
       {/* Header */}
       <div className="flex-none flex items-center justify-center px-staff-margin h-16 border-b border-outline bg-surface">
         <div className="flex items-center gap-8">
-          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Plan de Salle</h1>
+          <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Plan de Salle <span className="sr-only">Main Dining Area</span></h1>
           <div className="hidden sm:flex items-center gap-6 border-l border-outline pl-8">
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 border border-outline bg-background rounded-sm"></div>

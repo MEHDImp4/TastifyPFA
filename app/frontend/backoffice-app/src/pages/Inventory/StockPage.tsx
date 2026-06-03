@@ -178,7 +178,7 @@ export const StockPage: React.FC = () => {
                 </div>
               </div>
               <div className="p-8 border-t border-outline bg-surface-container-high flex gap-4">
-                <button type="button" onClick={() => setIsEditorOpen(false)} className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
+                <button type="button" onClick={() => setIsEditorOpen(false)} aria-label="discard" className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
                 <button className="flex-[2] btn-primary h-12">
                   <span>Commit Record</span>
                 </button>
