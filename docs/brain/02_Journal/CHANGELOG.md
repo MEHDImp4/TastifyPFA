@@ -1,8 +1,13 @@
+## [2026-06-03] - 01:26 - Fix timezone-dependent dashboard calculation test
+### Fixed
+- **DashboardAPIView (views.py)**: Replaced `timezone.now().date()` with `timezone.localdate()` (commit `fae20eb`) to fix the midnight UTC crossover test failure in `test_dashboard_calculations`.
+
 ## [2026-06-03] - 00:05 - Visual and accessibility updates for E2E tests
 ### Fixed
 - **ReservationsPage.tsx**: Set proper `aria-label` accessible names on reservation confirmation and cancellation buttons (commit `1b7940d`).
 - **ReservationsPage.tsx**: Restored the `gap-4` layout to the grid container and the hidden `ANONYMOUS GUEST` text locator inside `CLIENT ANONYME` fallback headers to align with E2E search/filter expectations (commit `b7e6533`).
 - **SallePage.tsx**: Added a text label "Table" above the table number on the floor plan buttons to pass E2E viewport and visual testing (commit `18b815a`), and removed `opacity-40` to resolve WCAG AA color contrast violations (commit `6ad4c22`).
+
 
 
 ## [2026-06-02] - 17:20 - Fix 41 Failing E2E Tests — Missing Route Mocks
