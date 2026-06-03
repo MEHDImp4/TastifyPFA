@@ -60,7 +60,7 @@ class DashboardAPIView(APIView):
     @extend_schema(responses={200: DashboardResponseSerializer})
     def get(self, request, *args, **kwargs):
         # On récupère la date d'aujourd'hui pour filtrer les données
-        today = timezone.now().date()
+        today = timezone.localdate()
         
         # 1. Revenu du jour
         # On utilise aggregate(Sum(...)) pour additionner tous les montants payés aujourd'hui
