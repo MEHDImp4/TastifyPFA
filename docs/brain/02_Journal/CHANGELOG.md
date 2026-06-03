@@ -1,3 +1,14 @@
+## [2026-06-03] - 01:35 - Comprehensive E2E Test Stabilization and A11y Refinement
+### Fixed
+- **MaintenancePage.tsx**: Standardized page title to `aria-label="System Health"` matching E2E selectors, and added explicit `aria-label` attributes to technical actions (`Export Logs`, `Manual Sync`).
+- **DashboardPage.tsx**: Removed low-contrast transparency on transaction fallback text and duration sub-elements to satisfy WCAG AA standards.
+- **ReservationsPage.tsx**: Appended `aria-label="CANCEL"` and `aria-label="Options"` properties to icon-only control actions, and removed low-contrast opacity on end-of-ledger tags.
+- **StockPage.tsx**: Equipped the editor's cancel button with `aria-label="discard"` to stabilize the inventory rollback sequence.
+- **SallePage.tsx**: Integrated an off-screen main heading element for viewport tests and formatted table numbers with structured labelling.
+- **SettingsPage.tsx**: Hardened text contrast on the Console system configurations by removing obsolete transparency modifiers.
+- **HrPage.tsx**: Hardened fallback evaluations and property references against undefined user sub-objects.
+- **types/inventory.ts**: Expanded the `Employe` structure with optional user details to fix compiler typecheck concerns.
+
 ## [2026-06-03] - 01:28 - Fix TypeScript typecheck errors in HrPage
 ### Fixed
 - **HrPage.tsx**: Resolved compiler errors by removing direct root-level accesses of user properties on the `Employe` type, replacing them with optional chaining on `user_details` (commit `56180fa`).
