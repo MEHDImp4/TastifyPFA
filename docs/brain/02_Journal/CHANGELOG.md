@@ -1,3 +1,7 @@
+## [2026-06-03] - 14:48 - Additional Unimportant File Cleanup
+### Removed
+- **Unused Scripts**: Deleted temporary QuerySet testing script (`app/backend/test_qs.py`).
+
 ## [2026-06-03] - 14:12 - Unimportant File Cleanup
 ### Removed
 - **Unused Scripts**: Deleted obsolete refactoring scripts (`refactor_compact.py`, `refactor_tactical.py`, `revert_tactical.py`) and temporary playwright debug utilities (`debug_ordering.py`, `debug_ticket.png`) from the root directory.
