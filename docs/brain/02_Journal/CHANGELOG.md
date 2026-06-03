@@ -1,3 +1,8 @@
+## [2026-06-03] - 14:04 - Repository Cleanup and Planning Archive
+### Changed
+- **Planning Archive**: Relocated completed milestone v1.0 planning directories (`01-*` to `39-*`) from `.planning/phases/` to `.planning/milestones/v1.0-phases/` to organize the GSD structure (commit `1096da8`).
+- **Artifact Cleanup**: Cleaned up stale test logs (`client-e2e.log`), overleaf archive files (`rapport_latex_overleaf.zip`), and root/app-level temporary test result directories (`test-results/`, `playwright-report/`).
+
 ## [2026-06-03] - 01:35 - Comprehensive E2E Test Stabilization and A11y Refinement
 ### Fixed
 - **MaintenancePage.tsx**: Standardized page title to `aria-label="System Health"` matching E2E selectors, and added explicit `aria-label` attributes to technical actions (`Export Logs`, `Manual Sync`).
