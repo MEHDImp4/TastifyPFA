@@ -1,0 +1,66 @@
+\chapter{Tests, validation et résultats}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+La qualité d'une application se mesure aussi à sa capacité à être validée. Ce chapitre présente la stratégie de tests adoptée pour Tastify : tests backend, tests frontend et end-to-end, validation fonctionnelle et limites identifiées. L'objectif est de vérifier que les règles métier sont respectées et que les parcours principaux fonctionnent comme attendu.
+
+\section{Stratégie de validation}
+La validation du projet repose sur plusieurs niveaux complémentaires :
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item tests backend avec pytest pour vérifier les modèles, permissions, API et services ;
+  \item tests unitaires frontend avec Vitest pour vérifier certains composants et stores ;
+  \item tests end-to-end avec Playwright pour simuler les parcours utilisateurs ;
+  \item vérification manuelle des interfaces principales pendant le développement.
+\end{itemize}
+
+\section{Tests backend}
+Les tests backend couvrent notamment l'authentification, les permissions, les réservations, les paiements, le KDS, les commandes, les stocks, les utilisateurs et la configuration. Ils servent à vérifier que les règles métier sont respectées côté serveur.
+
+\begin{table}[H]
+\centering
+\caption{Exemples de familles de tests backend}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Domaine} & \textbf{Objectif de validation} \\
+\midrule
+Authentification & Connexion, refresh token, logout, cookies séparés staff/client. \\
+Permissions & Accès RBAC selon les rôles gérant, serveur, cuisinier et client. \\
+Réservations & Conflits de créneaux, capacité des tables et statuts. \\
+Commandes/KDS & Création de commandes, lignes, transitions de statut et orchestration. \\
+Paiements & Tokens de paiement, split bill, contraintes de montant et signaux. \\
+Stocks & Mouvements, seuils d'alerte et intégration avec les commandes. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tests frontend et end-to-end}
+Les tests frontend vérifient des comportements d'interface : rendu initial, navigation, formulaires, états de chargement et persistance après rechargement. Les tests Playwright couvrent les parcours clés des deux applications React.
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item côté client : menu, réservation, authentification, compte, fidélité, paiement et accessibilité ;
+  \item côté staff : tableau de bord, gérant, serveur, cuisinier, qualité d'interface et navigation ;
+  \item scénarios croisés : interaction entre portail client et back-office.
+\end{itemize}
+
+\section{Tests de charge}
+Le projet prévoit une surface de test de charge. Cependant, dans l'arborescence actuellement disponible, le fichier de campagne Locust n'est pas présent. Le rapport ne présente donc pas de résultat chiffré de charge. Cette partie pourra être complétée ultérieurement par l'ajout et l'exécution d'une campagne Locust.
+
+\section{Validation fonctionnelle}
+La validation fonctionnelle confirme que les principaux objectifs sont couverts :
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item le gérant peut gérer les données principales du restaurant ;
+  \item le serveur peut utiliser le plan de salle et créer des commandes ;
+  \item le cuisinier peut suivre les plats dans le KDS ;
+  \item le client peut consulter le menu, réserver, payer et laisser un avis ;
+  \item les avis peuvent être analysés de manière asynchrone ;
+  \item les données critiques sont protégées par authentification et permissions.
+\end{itemize}
+
+\section{Limites}
+Certaines fonctionnalités restent perfectibles. La recommandation de plats n'est pas encore un modèle personnalisé complet basé sur l'historique client. La prévision de demande repose sur une moyenne simple et non sur un modèle statistique avancé. Enfin, les résultats de performance doivent être consolidés par une campagne de charge complète.
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+Les différents niveaux de tests mis en place couvrent les règles métier essentielles et les parcours principaux des deux applications. Ils confirment que le cœur fonctionnel de Tastify est opérationnel, tout en identifiant clairement les points à renforcer, notamment les tests de charge et la sophistication des modules d'intelligence applicative.

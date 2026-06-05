@@ -1,0 +1,317 @@
+\chapter{Analyse et conception}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+Ce chapitre présente la conception du système : identification des acteurs, cas d'utilisation, diagramme de classes et règles métier. La modélisation s'appuie sur le langage UML, standard de modélisation objet \cite{uml}, et sert de référence directe à l'implémentation des modèles Django et des tables relationnelles. Les schémas présentés ici sont conservés depuis la modélisation initiale du projet.
+
+\section{Acteurs du système}
+Tastify repose sur quatre acteurs principaux : le gérant, le serveur, le cuisinier et le client. Les droits d'accès sont contrôlés par rôle afin que chaque utilisateur accède uniquement aux fonctionnalités nécessaires.
+
+\begin{table}[H]
+\centering
+\caption{Acteurs et responsabilités}
+\begin{tabular}{p{3cm}p{10cm}}
+\toprule
+\textbf{Acteur} & \textbf{Responsabilités principales} \\
+\midrule
+Gérant & Administration du restaurant, menu, stocks, employés, configuration, tableaux de bord. \\
+Serveur & Gestion du plan de salle, prise de commande, suivi des tables et déclenchement du paiement. \\
+Cuisinier & Consultation des commandes cuisine, changement d'état des plats, disponibilité du menu. \\
+Client & Consultation du menu, réservation, paiement, fidélité, avis et gestion du compte. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Diagrammes de cas d'utilisation}
+Les cas d'utilisation définissent les interactions attendues entre chaque acteur et le système. Ils sont regroupés par module : administration, salle et cuisine, puis portail client.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figure_08.jpeg}
+\caption{Diagramme de cas d'utilisation du module administration}
+\label{fig:uc-admin}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figure_05.png}
+\caption{Diagramme de cas d'utilisation des modules salle et cuisine}
+\label{fig:uc-salle-cuisine}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figure_02.png}
+\caption{Diagramme de cas d'utilisation du portail client}
+\label{fig:uc-client}
+\end{figure}
+
+\section{Diagramme de classes}
+Le diagramme de classes met en évidence les entités principales : utilisateurs, plats, catégories, tables, commandes, lignes de commande, réservations, stocks, paiements, avis et éléments de fidélité. Cette modélisation est transposée en modèles Django et en tables relationnelles.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figure_03.png}
+\caption{Diagramme de classes de Tastify}
+\label{fig:classes}
+\end{figure}
+
+Le tableau suivant résume les principales entités métier et leur rôle dans le modèle de données.
+
+\begin{table}[H]
+\centering
+\caption{Principales entités du modèle de données}
+\begin{tabular}{p{3.2cm}p{10cm}}
+\toprule
+\textbf{Entité} & \textbf{Rôle} \\
+\midrule
+Utilisateur & Compte applicatif et rôle RBAC (gérant, serveur, cuisinier, client). \\
+Catégorie / Plat & Structure du menu, prix, disponibilité et temps de préparation. \\
+Ingrédient / Stock & Suivi des quantités, seuils d'alerte et mouvements. \\
+Table & Plan de salle, capacité et statut opérationnel. \\
+Commande / Ligne de commande & Commande d'une table et détail des plats avec statut individuel. \\
+Réservation & Demande client avec date, créneau, couverts et statut. \\
+Paiement & Encaissement d'une commande, méthode et partage de l'addition. \\
+Avis / Analyse de sentiment & Commentaire client et résultat de l'analyse automatique. \\
+Profil de fidélité & Points, paliers et récompenses du client. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Modèle logique de données (MLD)}
+Le diagramme de classes est transposé en tables relationnelles MySQL. Chaque classe devient une table, les associations deviennent des clés étrangères (FK) ou des tables de liaison, et les attributs deviennent des colonnes typées. Les tables ci-dessous reflètent les modèles Django réellement implémentés. Conventions : PK = clé primaire, FK = clé étrangère, ENUM = liste de valeurs contrôlées.
+
+\textbf{Note.} La plupart des entités possèdent un champ \texttt{est\_active} (suppression logique, ou \emph{soft delete}) ainsi que les horodatages \texttt{created\_at} et \texttt{updated\_at}. Ils ne sont rappelés qu'une fois pour alléger la lecture.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Table \texttt{utilisateur} (extension de l'utilisateur Django)}
+\begin{tabular}{p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+id & INT & PK, auto-incrément \\
+username & VARCHAR(150) & UNIQUE, identifiant de connexion \\
+password & VARCHAR(128) & Hash du mot de passe (jamais en clair) \\
+email & VARCHAR(254) & Adresse e-mail \\
+role & ENUM & GERANT, SERVEUR, CUISINIER, CLIENT (défaut CLIENT) \\
+is\_active & BOOLEAN & Compte actif \\
+date\_joined & DATETIME & Date d'inscription \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tables \texttt{categorie} et \texttt{plat}}
+\begin{tabular}{p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+\multicolumn{3}{l}{\textit{categorie}} \\
+id & INT & PK \\
+nom & VARCHAR(100) & UNIQUE \\
+description & TEXT & Optionnelle \\
+ordre\_affichage & INT UNSIGNED & Tri d'affichage (défaut 0) \\
+image & VARCHAR(255) & Chemin de l'image \\
+\midrule
+\multicolumn{3}{l}{\textit{plat}} \\
+id & INT & PK \\
+categorie\_id & INT & FK $\rightarrow$ categorie(id) \\
+nom & VARCHAR(100) & NOT NULL \\
+description & TEXT & Description du plat \\
+prix & DECIMAL(10,2) & Prix de vente \\
+temps\_preparation & INT & Minutes (défaut 15) \\
+est\_disponible & BOOLEAN & Disponibilité temps réel \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tables \texttt{ingredient} et \texttt{plat\_ingredient} (recette, N:M)}
+\begin{tabular}{p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+\multicolumn{3}{l}{\textit{ingredient}} \\
+id & INT & PK \\
+nom & VARCHAR(100) & UNIQUE \\
+unite\_mesure & ENUM & g, ml, pcs \\
+stock\_actuel & DECIMAL(10,2) & $\geq 0$ \\
+seuil\_alerte & DECIMAL(10,2) & $\geq 0$, déclenche l'alerte \\
+\midrule
+\multicolumn{3}{l}{\textit{plat\_ingredient}} \\
+id & INT & PK \\
+plat\_id & INT & FK $\rightarrow$ plat(id) \\
+ingredient\_id & INT & FK $\rightarrow$ ingredient(id) \\
+quantite\_necessaire & DECIMAL & Quantité consommée par plat \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Table \texttt{table\_restaurant}}
+\begin{tabular}{p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+id & INT & PK \\
+numero & INT UNSIGNED & UNIQUE, numéro affiché \\
+capacite & INT UNSIGNED & Nombre de couverts \\
+statut & ENUM & LIBRE, OCCUPEE, RESERVEE, ENCAISSEMENT \\
+pos\_x, pos\_y & DOUBLE & Position sur le plan de salle \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tables \texttt{commande} et \texttt{commande\_ligne}}
+\begin{tabular}{p{3.8cm}p{3.7cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+\multicolumn{3}{l}{\textit{commande}} \\
+id & INT & PK \\
+table\_id & INT & FK $\rightarrow$ table\_restaurant(id), nullable \\
+serveur\_id & INT & FK $\rightarrow$ utilisateur(id), nullable \\
+client\_id & INT & FK $\rightarrow$ utilisateur(id), nullable \\
+statut & ENUM & EN\_COURS, EN\_CUISINE, PRETE, PAYEE, ANNULEE \\
+montant\_total & DECIMAL(10,2) & Calculé (défaut 0) \\
+\midrule
+\multicolumn{3}{l}{\textit{commande\_ligne}} \\
+id & INT & PK \\
+commande\_id & INT & FK $\rightarrow$ commande(id) \\
+plat\_id & INT & FK $\rightarrow$ plat(id) \\
+quantite & INT UNSIGNED & Défaut 1 \\
+prix\_unitaire & DECIMAL(10,2) & Prix figé à la commande \\
+statut & ENUM & EN\_ATTENTE, EN\_PREPARATION, PRET, SERVI, ANNULE \\
+heure\_lancement & DATETIME & Calculée par l'orchestrateur (nullable) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Table \texttt{reservation}}
+\begin{tabular}{p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+id & INT & PK \\
+client\_id & INT & FK $\rightarrow$ utilisateur(id) \\
+table\_id & INT & FK $\rightarrow$ table\_restaurant(id) \\
+date\_reservation & DATE & Jour réservé \\
+heure\_debut & TIME & Heure d'arrivée \\
+heure\_fin & TIME & Heure de départ prévue \\
+nombre\_personnes & INT UNSIGNED & Couverts demandés \\
+statut & ENUM & CONFIRMEE, ANNULEE, PRESENTE, ABSENTE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tables \texttt{paiement} et \texttt{paiement\_item} (split bill)}
+\begin{tabular}{p{3.8cm}p{3.7cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+\multicolumn{3}{l}{\textit{paiement}} \\
+id & INT & PK \\
+commande\_id & INT & FK $\rightarrow$ commande(id) \\
+client\_id & INT & FK $\rightarrow$ utilisateur(id), nullable \\
+montant & DECIMAL(10,2) & CHECK montant $>0$ \\
+methode & ENUM & ESPECES, CARTE, QR \\
+statut & ENUM & EN\_ATTENTE, COMPLETE, ECHOUE \\
+reference\_transaction & VARCHAR(255) & Référence externe \\
+\midrule
+\multicolumn{3}{l}{\textit{paiement\_item}} \\
+id & INT & PK \\
+paiement\_id & INT & FK $\rightarrow$ paiement(id) \\
+commande\_ligne\_id & INT & FK $\rightarrow$ commande\_ligne(id) \\
+montant\_contribue & DECIMAL(10,2) & CHECK $>0$, UNIQUE(paiement, ligne) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Tables \texttt{avis}, \texttt{analyse\_sentiment} et \texttt{profil\_fidelite}}
+\begin{tabular}{p{3.8cm}p{3.7cm}p{6cm}}
+\toprule
+\textbf{Colonne} & \textbf{Type SQL} & \textbf{Contrainte / Description} \\
+\midrule
+\multicolumn{3}{l}{\textit{avis}} \\
+id & INT & PK \\
+user\_id & INT & FK $\rightarrow$ utilisateur(id) \\
+plat\_id & INT & FK $\rightarrow$ plat(id), nullable \\
+commande\_id & INT & FK $\rightarrow$ commande(id), nullable \\
+commentaire & TEXT & Commentaire libre \\
+note & SMALLINT & 1 à 5 (nullable) \\
+sentiment\_score & INT & Score de suivi ($+15$ / $0$ / $-15$) \\
+\midrule
+\multicolumn{3}{l}{\textit{analyse\_sentiment}} \\
+id & INT & PK \\
+avis\_id & INT & FK $\rightarrow$ avis(id) \\
+label & VARCHAR & POSITIF, NEUTRE, NEGATIF \\
+score\_brut & FLOAT & Confiance retournée \\
+modele\_utilise & VARCHAR & Modèle ou méthode de secours \\
+\midrule
+\multicolumn{3}{l}{\textit{profil\_fidelite}} \\
+id & INT & PK \\
+user\_id & INT & FK $\rightarrow$ utilisateur(id), UNIQUE (OneToOne) \\
+points & DECIMAL & Solde de points (palier calculé) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Récapitulatif des relations principales}
+\begin{tabular}{p{5.5cm}p{2cm}p{6cm}}
+\toprule
+\textbf{Relation} & \textbf{Card.} & \textbf{Implémentation} \\
+\midrule
+utilisateur $\rightarrow$ commande (serveur) & 1..N & commande.serveur\_id \\
+table $\rightarrow$ commande & 1..N & commande.table\_id \\
+commande $\rightarrow$ commande\_ligne & 1..N & commande\_ligne.commande\_id \\
+plat $\rightarrow$ commande\_ligne & 1..N & commande\_ligne.plat\_id \\
+plat $\leftrightarrow$ ingredient & N..M & table plat\_ingredient \\
+utilisateur $\rightarrow$ reservation & 1..N & reservation.client\_id \\
+commande $\rightarrow$ paiement & 1..N & paiement.commande\_id \\
+paiement $\rightarrow$ paiement\_item & 1..N & paiement\_item.paiement\_id \\
+utilisateur $\rightarrow$ profil\_fidelite & 1..1 & profil\_fidelite.user\_id (UNIQUE) \\
+avis $\rightarrow$ analyse\_sentiment & 1..1 & analyse\_sentiment.avis\_id \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Principales règles métier}
+Les règles métier suivantes structurent le fonctionnement de l'application :
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item une commande peut contenir plusieurs lignes, chaque ligne correspondant à un plat et une quantité ;
+  \item le prix unitaire est enregistré au moment de la commande afin de conserver l'historique même si le menu change ;
+  \item une table possède un statut opérationnel : libre, occupée, réservée ou en encaissement ;
+  \item un plat peut être masqué sans suppression physique grâce au \emph{soft delete} ;
+  \item un avis client peut être lié à un plat ou à une commande ;
+  \item le contrôle d'accès dépend du rôle utilisateur : gérant, serveur, cuisinier ou client.
+\end{itemize}
+
+\section{Conception des interfaces}
+La conception distingue les usages selon le contexte : l'interface gérant privilégie les indicateurs, les tableaux et les actions d'administration ; l'interface serveur met en avant le plan de salle ; l'interface cuisine adopte une vue KDS orientée production ; le portail client présente le menu et les actions publiques. Les interfaces réellement développées et leurs captures sont présentées au chapitre~\ref{chap:realisation}.
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+La conception présentée dans ce chapitre définit les acteurs, les cas d'utilisation, les entités et les règles métier de Tastify. Elle offre une vue claire et structurée du système, directement exploitable pour l'implémentation. Le chapitre suivant détaille l'architecture technique et la réalisation effective de ces choix.

@@ -1,0 +1,64 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{titlesec}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\onehalfspacing
+\setlength{\parindent}{0.8cm}
+\setlength{\parskip}{0.2cm}
+\graphicspath{{assets/figures/}}
+
+\definecolor{tastifygreen}{HTML}{2A9D8F}
+\definecolor{tastifynavy}{HTML}{264653}
+\definecolor{tastifygold}{HTML}{E9C46A}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=tastifynavy,
+  citecolor=tastifygreen,
+  urlcolor=tastifygreen,
+  pdftitle={Rapport PFA Tastify},
+  pdfauthor={Diouri Mehdi et El Kharrazi Ibtihal}
+}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{tastifynavy}}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}{\normalfont\Large\bfseries\color{tastifynavy}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{tastifygreen}}{\thesubsection}{1em}{}
+
+\begin{document}
+
+\input{chapters/00_frontmatter}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\input{chapters/01_introduction}
+\input{chapters/02_contexte}
+\input{chapters/03_conception}
+\input{chapters/04_realisation}
+\input{chapters/05_tests}
+\input{chapters/06_conclusion}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

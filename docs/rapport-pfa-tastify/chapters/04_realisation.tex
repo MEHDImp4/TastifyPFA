@@ -1,0 +1,219 @@
+\chapter{Architecture technique et réalisation}
+\label{chap:realisation}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+Ce chapitre décrit la réalisation effective de Tastify : l'architecture générale, la stack technique, l'organisation du backend Django, la sécurité, les deux applications React, le Kitchen Display System, les paiements, la fidélité, l'analyse de sentiment des avis et le déploiement conteneurisé. Les choix présentés correspondent à l'implémentation réelle du projet.
+
+\section{Architecture générale}
+Tastify adopte une architecture web découplée. Le backend, construit avec Django et Django REST Framework \cite{django,drf}, expose des API REST et des canaux WebSocket. Les interfaces frontend, développées avec React \cite{react}, consomment ces services via HTTP et WebSocket. Cette séparation permet de faire évoluer indépendamment le backend et les interfaces, et facilite les tests de chaque couche.
+
+\begin{table}[H]
+\centering
+\caption{Stack technique réelle du projet}
+\begin{tabular}{p{4cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Couche} & \textbf{Technologie} & \textbf{Rôle} \\
+\midrule
+Backend & Python, Django 5, DRF & API REST, logique métier, ORM et authentification. \\
+Temps réel & Django Channels, Daphne, Redis & WebSocket pour KDS et notifications staff \cite{channels}. \\
+Base de données & MySQL 8 & Stockage relationnel des données métier \cite{mysql}. \\
+Tâches asynchrones & Celery, Celery Beat, Redis & Traitements de fond et planification \cite{celery,redis}. \\
+Frontend staff & React, Vite, TypeScript, Tailwind & Back-office gérant, serveur et cuisine \cite{vite,tailwind}. \\
+Frontend client & React, Vite, TypeScript, Tailwind & Portail public client. \\
+Tests & pytest, Vitest, Playwright & Validation backend, composants et scénarios e2e. \\
+Conteneurisation & Docker Compose & Déploiement local et orchestration des services \cite{docker}. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Backend Django}
+Le backend est organisé en applications Django spécialisées, chacune responsable d'un domaine métier. Cette séparation facilite la maintenance et rend chaque domaine plus lisible.
+
+\begin{longtable}{p{4cm}p{10cm}}
+\caption{Modules backend réalisés}\\
+\toprule
+\textbf{Module} & \textbf{Responsabilité} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Module} & \textbf{Responsabilité} \\
+\midrule
+\endhead
+users & Utilisateurs, rôles, authentification JWT, cookies de refresh et réinitialisation de mot de passe. \\
+menu & Catégories, plats, images, disponibilité et recommandations simples. \\
+tables & Plan de salle, tables, positions et statuts. \\
+commandes & Commandes, lignes de commande, statuts cuisine et orchestration KDS. \\
+stock & Ingrédients, recettes, mouvements de stock et besoins prévisionnels simples. \\
+hr & Employés, shifts, offres d'emploi et candidatures. \\
+reservations & Réservations clients avec contrôle de conflits et capacité des tables. \\
+paiements & Paiements, paiement par QR code et partage de l'addition. \\
+avis & Avis clients et analyse de sentiment. \\
+analytics & Indicateurs de tableau de bord, revenus, plats populaires et statistiques de sentiment. \\
+loyalty & Profils de fidélité, points, transactions et récompenses. \\
+configuration & Informations de configuration et identité du restaurant. \\
+\bottomrule
+\end{longtable}
+
+\section{Authentification et sécurité}
+L'authentification repose sur JSON Web Token, via la bibliothèque \emph{djangorestframework-simplejwt} \cite{simplejwt}. À la connexion, le backend émet un \emph{access token} de courte durée et un \emph{refresh token} stocké dans un cookie HttpOnly. La vérification du rôle s'effectue côté DRF à l'aide de permissions, ce qui protège les routes et actions sensibles selon le profil de l'utilisateur (gérant, serveur, cuisinier, client).
+
+\begin{table}[H]
+\centering
+\caption{Paramétrage JWT de l'environnement de base}
+\begin{tabular}{p{6cm}p{7cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} \\
+\midrule
+Durée de vie de l'access token & 15 minutes \\
+Durée de vie du refresh token & 1 jour (base), 7 jours en développement \\
+Algorithme de signature & HS256 \\
+Type d'en-tête & Bearer \\
+Rotation des refresh tokens & Activée (base) \\
+Stockage du refresh token & Cookie HttpOnly \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En production, la configuration active les cookies sécurisés et restreint les origines autorisées via CORS. Les variables sensibles (clé secrète, accès base de données, jetons d'API) sont externalisées dans l'environnement et ne sont jamais versionnées.
+
+\section{Frontend staff et portail client}
+L'application staff regroupe les espaces gérant, serveur et cuisinier. Elle utilise React Router pour organiser les routes et applique des protections selon les rôles : le gérant accède aux modules de gestion, le serveur au plan de salle et à la prise de commande, et le cuisinier au KDS.
+
+Le portail client est séparé dans une deuxième application React. Il couvre l'accueil, le menu, les réservations, le compte client, la fidélité, le paiement et les avis.
+
+Les deux frontends sont configurés comme \emph{Progressive Web Apps} via Vite PWA. Le cache est principalement utilisé pour les assets statiques et certaines ressources publiques ; les actions critiques restent dépendantes du backend afin d'éviter les incohérences de données.
+
+\section{Kitchen Display System et flux temps réel}
+Le KDS permet au personnel de cuisine de visualiser les commandes envoyées depuis la salle. Les lignes de commande disposent de statuts distincts : en attente, en préparation, prêt, servi ou annulé. Un orchestrateur calcule un horaire commun de fin de préparation à partir des temps de préparation des plats, et des tâches Celery peuvent déclencher le lancement d'une ligne au bon moment. Cette logique améliore la synchronisation entre les plats d'une même commande.
+
+Le tableau suivant décrit le flux d'une prise de commande, depuis l'action du serveur jusqu'à la mise à jour temps réel de l'écran cuisine.
+
+\begin{table}[H]
+\centering
+\caption{Flux temps réel d'une prise de commande}
+\begin{tabular}{p{1cm}p{4cm}p{8cm}}
+\toprule
+\textbf{Étape} & \textbf{Composant} & \textbf{Action} \\
+\midrule
+1 & App React serveur & Envoi de la commande via une requête API REST. \\
+2 & DRF (backend) & Vérification du rôle, validation des données et création des lignes de commande. \\
+3 & ORM / base MySQL & Persistance de la commande et mise à jour des statuts. \\
+4 & Channels / Redis & Publication de l'événement dans le groupe WebSocket de la cuisine. \\
+5 & Consumer WebSocket & Diffusion du message aux clients KDS connectés. \\
+6 & App React cuisine & Réception du message et rafraîchissement automatique de l'affichage. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Paiement et fidélité}
+Le module paiement gère les encaissements liés aux commandes. Il prend en charge trois méthodes : espèces, carte et QR code. Le partage de l'addition (\emph{split bill}) repose sur des contributions liées aux lignes de commande, ce qui permet à plusieurs clients de régler différentes parties de la même commande.
+
+Le module fidélité attribue des points à un profil client et le classe automatiquement dans un palier en fonction de son solde. Les récompenses peuvent être configurées selon un nombre de points requis, ce qui encourage le retour des clients.
+
+\begin{table}[H]
+\centering
+\caption{Paliers de fidélité selon le solde de points}
+\begin{tabular}{p{4cm}p{6cm}}
+\toprule
+\textbf{Palier} & \textbf{Condition (solde de points)} \\
+\midrule
+Bronze & moins de 500 points \\
+Argent & de 500 à moins de 1500 points \\
+Or & 1500 points ou plus \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Analyse de sentiment des avis clients}
+L'analyse de sentiment relève du traitement automatique du langage naturel (NLP), domaine de l'intelligence artificielle qui vise à interpréter le langage humain. Appliquée aux avis, elle consiste à déterminer la polarité d'un commentaire — positive, neutre ou négative \cite{huggingface}. Deux familles d'approches coexistent : les méthodes lexicales, qui s'appuient sur des dictionnaires de mots porteurs de sentiment, et les méthodes à base de modèles d'apprentissage, notamment les transformeurs pré-entraînés comme BERT, plus robustes face aux nuances de la langue.
+
+Tastify combine les deux approches pour rester fonctionnel en toute circonstance :
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item \textbf{Méthode principale --- API Hugging Face.} À la création d'un commentaire, une tâche Celery interroge l'API d'inférence Hugging Face. Le modèle \texttt{nlptown/bert-base-multilingual-uncased-sentiment} est utilisé pour les avis multilingues (dont le français) \cite{nlptown} ; un modèle dédié à l'arabe (\texttt{MARBERT}) est sollicité lorsque le commentaire est détecté en arabe \cite{marbert}.
+  \item \textbf{Mécanisme de secours --- analyse lexicale locale.} Si aucun jeton d'API n'est configuré ou si l'API ne répond pas, une analyse lexicale simple, fondée sur des listes de mots positifs et négatifs, prend le relais. Le traitement reste ainsi disponible en environnement local.
+\end{itemize}
+
+Le résultat est normalisé sous la forme d'un label (positif, neutre ou négatif) et d'un score associé, puis persisté et exploité par le tableau de bord du gérant. Le pipeline est résumé ci-dessous.
+
+\begin{table}[H]
+\centering
+\caption{Pipeline de traitement d'un avis client}
+\begin{tabular}{p{1cm}p{4cm}p{8cm}}
+\toprule
+\textbf{Étape} & \textbf{Composant} & \textbf{Action} \\
+\midrule
+1 & Portail client & Soumission d'un avis avec commentaire textuel. \\
+2 & Backend / Celery & Mise en file d'une tâche asynchrone d'analyse. \\
+3 & Détection de langue & Choix du modèle (multilingue ou arabe). \\
+4 & API Hugging Face & Inférence et obtention de la polarité ; secours lexical si indisponible. \\
+5 & Base de données & Enregistrement du label, du score et du modèle utilisé. \\
+6 & Tableau de bord gérant & Agrégation des sentiments par plat et suivi de la satisfaction. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Le label obtenu est converti en un score numérique simple, utilisé pour le suivi de la satisfaction.
+
+\begin{table}[H]
+\centering
+\caption{Conversion du label de sentiment en score de suivi}
+\begin{tabular}{p{4cm}p{4cm}p{5cm}}
+\toprule
+\textbf{Label} & \textbf{Score} & \textbf{Lecture côté gérant} \\
+\midrule
+Positif & $+15$ & Retour favorable, plat valorisé. \\
+Neutre & $0$ & Retour sans signal fort. \\
+Négatif & $-15$ & Retour défavorable, plat à surveiller. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Recommandation et prévision}
+La recommandation de plats reste volontairement simple dans l'état actuel : elle s'appuie principalement sur la catégorie du plat et sur les plats disponibles. Elle constitue une base évolutive vers une personnalisation fondée sur l'historique client. De même, la prévision des besoins en stock repose sur la moyenne des ventes récentes, la météo pouvant être simulée lorsque aucune API réelle n'est configurée. Ces approches sont suffisantes pour un prototype académique et restent faciles à expliquer et à justifier.
+
+\section{Déploiement}
+L'environnement Docker Compose orchestre l'ensemble des services dans des conteneurs isolés communiquant via un réseau interne, avec des volumes persistants pour la base de données et le cache.
+
+\begin{table}[H]
+\centering
+\caption{Services Docker Compose de l'infrastructure}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Service} & \textbf{Rôle} \\
+\midrule
+db & Base de données MySQL (volume persistant). \\
+redis & Broker Celery et channel layer WebSocket (volume persistant). \\
+backend & Serveur applicatif Daphne (API REST et WebSocket). \\
+celery-worker & Exécution des tâches asynchrones. \\
+celery-beat & Planification des tâches périodiques. \\
+backoffice-app & Application React staff (gérant, serveur, cuisine). \\
+client-app & Application React du portail client. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cette organisation facilite le lancement local et prépare une éventuelle mise en production sur un serveur Linux.
+
+\section{Présentation des interfaces réalisées}
+Cette section illustre les interfaces effectivement développées à partir de captures d'écran de l'application en fonctionnement. Chaque capture correspond à un rôle et à un module décrits précédemment.
+
+% Pour insérer vos captures réelles : déposez les fichiers dans assets/figures/
+% sous les noms capture_dashboard.png, capture_salle.png, capture_kds.png, capture_client.png
+\newcommand{\capturefig}[2]{%
+  \begin{figure}[H]
+  \centering
+  \IfFileExists{#1}{\includegraphics[width=0.95\textwidth]{#1}}{%
+    \fbox{\parbox[c][5cm][c]{0.9\textwidth}{\centering\itshape Capture à insérer : \texttt{#1}}}}
+  \caption{#2}
+  \end{figure}}
+
+\capturefig{capture_dashboard.png}{Tableau de bord du gérant (back-office)}
+\capturefig{capture_salle.png}{Interface serveur — plan de salle et prise de commande}
+\capturefig{capture_kds.png}{Kitchen Display System (cuisine)}
+\capturefig{capture_client.png}{Portail client — menu et commande}
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+Ce chapitre a présenté la réalisation concrète de Tastify : une architecture découplée DRF / React, un backend modulaire, une authentification JWT, un Kitchen Display System temps réel, des paiements avec partage d'addition, un module de fidélité, une analyse de sentiment combinant API Hugging Face et secours lexical, et un déploiement conteneurisé. Le chapitre suivant décrit la stratégie de tests mise en place pour valider ces fonctionnalités.

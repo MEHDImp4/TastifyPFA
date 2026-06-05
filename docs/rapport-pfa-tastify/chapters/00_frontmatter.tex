@@ -1,0 +1,81 @@
+\begin{titlepage}
+\centering
+{\Large Ecole Marocaine des Sciences de l'Ingénieur}\\[0.4cm]
+{\large Département Informatique}\\[1.5cm]
+
+\includegraphics[width=0.45\textwidth]{figure_06.png}\\[1.2cm]
+
+{\Huge \bfseries Rapport de Projet de Fin d'Année}\\[0.7cm]
+{\LARGE Tastify}\\[0.3cm]
+{\Large Application ERP de gestion de restaurant avec analyse de sentiment}\\[1.4cm]
+
+\begin{tabular}{rl}
+\textbf{Réalisé par :} & Diouri Mehdi \\
+                       & El Kharrazi Ibtihal \\
+\textbf{Année universitaire :} & 2025--2026 \\
+\textbf{Projet :} & Application web full-stack \\
+\textbf{Etablissement :} & EMSI \\
+\end{tabular}
+
+\vfill
+{\large Juin 2026}
+\end{titlepage}
+
+\chapter*{Dédicaces}
+\addcontentsline{toc}{chapter}{Dédicaces}
+Nous dédions ce travail à nos familles, pour leur soutien constant, leur patience et leurs encouragements tout au long de cette année. Leur présence nous a permis de poursuivre ce projet avec sérieux, même pendant les périodes les plus chargées.
+
+Nous le dédions également à nos enseignants, qui nous ont transmis les bases nécessaires pour concevoir, développer et défendre une solution informatique complète. Enfin, nous adressons cette dédicace à nos camarades, avec qui nous avons partagé les efforts, les difficultés et les apprentissages de ce parcours.
+
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+Avant de présenter notre projet, nous souhaitons exprimer notre gratitude à toutes les personnes qui ont contribué, directement ou indirectement, à sa réalisation. Nous remercions nos familles pour leur accompagnement et leur confiance.
+
+Nous remercions également nos enseignants de l'EMSI pour les connaissances acquises en génie logiciel, développement web, bases de données, modélisation UML et gestion de projet. Ces enseignements ont constitué le socle technique et méthodologique de Tastify.
+
+Nos remerciements s'adressent enfin à toutes les personnes qui nous ont aidés à mieux comprendre les besoins opérationnels d'un restaurant : gestion de salle, suivi de cuisine, stocks, réservations et relation client.
+
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+Tastify est une application web full-stack destinée à faciliter la gestion quotidienne d'un restaurant. Le projet répond à plusieurs difficultés fréquemment rencontrées dans les établissements de restauration : coordination entre la salle et la cuisine, suivi des commandes, gestion des stocks, réservations, paiements, fidélisation et analyse des avis clients.
+
+La solution repose sur un backend Django REST Framework, une base de données MySQL, Redis pour le temps réel et les tâches asynchrones, ainsi que deux applications React : une interface back-office destinée au personnel et un portail client. Tastify intègre également un Kitchen Display System permettant de suivre l'avancement des plats en cuisine, un module de paiement avec partage de l'addition et une analyse de sentiment des avis clients via l'API Hugging Face, avec un mécanisme de secours local.
+
+Ce rapport présente le contexte du projet, l'étude de l'existant, la conception UML, l'architecture technique, les principales fonctionnalités réalisées et les tests mis en place pour valider la solution.
+
+\textbf{Mots-clés :} ERP, restaurant, Django, React, MySQL, Redis, Celery, WebSocket, KDS, analyse de sentiment, PFA.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Tastify is a full-stack web application designed to support the daily management of a restaurant. The project addresses common operational issues such as communication between waiters and kitchen staff, order tracking, stock management, reservations, payments, loyalty and customer feedback analysis.
+
+The solution is built with a Django REST Framework backend, a MySQL database, Redis for real-time communication and asynchronous tasks, and two React applications: a staff back-office and a customer portal. Tastify also includes a Kitchen Display System, split-bill payment support and sentiment analysis for customer reviews using the Hugging Face API with a local fallback.
+
+This report presents the project context, existing solutions, UML design, technical architecture, implemented features and validation tests.
+
+\chapter*{Liste des abréviations}
+\addcontentsline{toc}{chapter}{Liste des abréviations}
+\begin{longtable}{p{3cm}p{11cm}}
+\toprule
+\textbf{Abréviation} & \textbf{Signification} \\
+\midrule
+ERP & Enterprise Resource Planning, ou progiciel de gestion intégré. \\
+UML & Unified Modeling Language, langage de modélisation unifié. \\
+API & Application Programming Interface. \\
+REST & Representational State Transfer. \\
+DRF & Django REST Framework. \\
+JWT & JSON Web Token. \\
+RBAC & Role-Based Access Control, contrôle d'accès basé sur les rôles. \\
+KDS & Kitchen Display System, écran de suivi des commandes en cuisine. \\
+PWA & Progressive Web App. \\
+ORM & Object-Relational Mapping. \\
+ML & Machine Learning. \\
+NLP & Natural Language Processing, traitement automatique du langage naturel. \\
+BERT & Bidirectional Encoder Representations from Transformers. \\
+SPA & Single Page Application. \\
+CRUD & Create, Read, Update, Delete. \\
+CORS & Cross-Origin Resource Sharing. \\
+SQL & Structured Query Language. \\
+CI & Continuous Integration. \\
+\bottomrule
+\end{longtable}
