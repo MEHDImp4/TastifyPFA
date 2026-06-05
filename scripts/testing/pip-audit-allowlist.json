@@ -1,0 +1,11 @@
+[
+  {
+    "package": "django",
+    "vulnerabilities": [
+      "PYSEC-2025-47",
+      "CVE-2025-57833",
+      "CVE-2025-64458",
+      "CVE-2025-64459"
+    ]
+  }
+]
