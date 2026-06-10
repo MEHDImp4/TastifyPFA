@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: tastify-db
     restart: unless-stopped
-    env_file: .env.unraid
+    env_file: .env
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -37,13 +37,11 @@ services:
       - tastify-network
 
   backend:
-    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    image: ${BACKEND_IMAGE:?Set BACKEND_IMAGE in your Unraid .env file}
     container_name: tastify-backend
     restart: unless-stopped
-    build:
-      context: ./app/backend
     command: daphne -b 0.0.0.0 -p 8000 --proxy-headers tastify_backend.asgi:application
-    env_file: .env.unraid
+    env_file: .env
     environment:
       COLLECTSTATIC_ON_STARTUP: "1"
       SEED_ON_STARTUP: "${SEED_ON_STARTUP:-0}"
@@ -60,10 +58,10 @@ services:
       - tastify-network
 
   celery-worker:
-    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    image: ${BACKEND_IMAGE:?Set BACKEND_IMAGE in your Unraid .env file}
     container_name: tastify-celery-worker
     restart: unless-stopped
-    env_file: .env.unraid
+    env_file: .env
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
     volumes:
       - /mnt/user/appdata/tastify/media:/app/media
@@ -79,10 +77,10 @@ services:
       - tastify-network
 
   celery-beat:
-    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    image: ${BACKEND_IMAGE:?Set BACKEND_IMAGE in your Unraid .env file}
     container_name: tastify-celery-beat
     restart: unless-stopped
-    env_file: .env.unraid
+    env_file: .env
     command: celery -A tastify_backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - /mnt/user/appdata/tastify/media:/app/media
@@ -98,14 +96,13 @@ services:
       - tastify-network
 
   backoffice-app:
-    image: ${BACKOFFICE_IMAGE:-tastifypfa-backoffice-unraid}
+    image: ${BACKOFFICE_IMAGE:?Set BACKOFFICE_IMAGE in your Unraid .env file}
     container_name: tastify-backoffice
     restart: unless-stopped
-    build:
-      context: ./app/frontend/backoffice-app
-      dockerfile: Dockerfile.prod
     ports:
       - "${BACKOFFICE_PORT:-3000}:80"
+    volumes:
+      - /mnt/user/appdata/tastify/media:/usr/share/nginx/media:ro
     depends_on:
       backend:
         condition: service_started
@@ -113,14 +110,13 @@ services:
       - tastify-network
 
   client-app:
-    image: ${CLIENT_IMAGE:-tastifypfa-client-unraid}
+    image: ${CLIENT_IMAGE:?Set CLIENT_IMAGE in your Unraid .env file}
     container_name: tastify-client
     restart: unless-stopped
-    build:
-      context: ./app/frontend/client-app
-      dockerfile: Dockerfile.prod
     ports:
       - "${CLIENT_PORT:-3003}:80"
+    volumes:
+      - /mnt/user/appdata/tastify/media:/usr/share/nginx/media:ro
     depends_on:
       backend:
         condition: service_started

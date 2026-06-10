@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.conf import settings
 from apps.tables.models import Table
 from apps.menu.models import Categorie, Plat
 from apps.hr.models import Employe
 from apps.stock.models import Ingredient, PlatIngredient
 from django.db import transaction
+from PIL import Image, ImageDraw
 
 class Command(BaseCommand):
     help = 'Seed the database with users, tables, menu, and HR data.'
@@ -284,8 +286,11 @@ class Command(BaseCommand):
         ]
 
         total_categories = total_plats = 0
+        image_paths = []
         for entry in SEED_DATA:
             cat_info = entry['categorie']
+            if cat_info.get('image'):
+                image_paths.append(cat_info['image'])
             cat, was_created = Categorie.objects.update_or_create(
                 nom=cat_info['nom'],
                 defaults={
@@ -300,6 +305,8 @@ class Command(BaseCommand):
                 self.stdout.write(f'  Updated category: {cat.nom}')
 
             for plat_data in entry['plats']:
+                if plat_data.get('image'):
+                    image_paths.append(plat_data['image'])
                 plat, was_created = Plat.objects.update_or_create(
                     nom=plat_data['nom'],
                     defaults={
@@ -316,7 +323,38 @@ class Command(BaseCommand):
                 else:
                     self.stdout.write(f'    Updated dish: {plat.nom}')
 
+        created_images = self.ensure_seed_media(image_paths)
+        if created_images:
+            self.stdout.write(self.style.SUCCESS(f'Created {created_images} missing seed media file(s).'))
+
         self.stdout.write(self.style.SUCCESS(f'\nSeeding complete: {total_categories} new categories, {total_plats} new dishes.'))
+
+    def ensure_seed_media(self, image_paths):
+        created = 0
+        colors = [
+            ((121, 84, 45), (242, 228, 208)),
+            ((28, 83, 75), (218, 240, 232)),
+            ((126, 54, 45), (246, 221, 214)),
+            ((64, 75, 112), (224, 229, 246)),
+        ]
+
+        for index, image_path in enumerate(dict.fromkeys(image_paths)):
+            target = settings.MEDIA_ROOT / image_path
+            if target.exists():
+                continue
+
+            target.parent.mkdir(parents=True, exist_ok=True)
+            primary, secondary = colors[index % len(colors)]
+            image = Image.new('RGB', (900, 600), primary)
+            draw = ImageDraw.Draw(image)
+            draw.rectangle((0, 400, 900, 600), fill=secondary)
+            draw.ellipse((620, 70, 820, 270), fill=secondary)
+            draw.rectangle((90, 110, 550, 150), fill=secondary)
+            draw.rectangle((90, 180, 430, 215), fill=secondary)
+            image.save(target, format='PNG')
+            created += 1
+
+        return created
 
     def seed_ingredients(self):
         SEED_DATA = [

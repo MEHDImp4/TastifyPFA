@@ -1,0 +1,14 @@
+services:
+  backend:
+    build:
+      context: ./app/backend
+
+  backoffice-app:
+    build:
+      context: ./app/frontend/backoffice-app
+      dockerfile: Dockerfile.prod
+
+  client-app:
+    build:
+      context: ./app/frontend/client-app
+      dockerfile: Dockerfile.prod

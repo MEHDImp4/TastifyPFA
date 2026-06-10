@@ -73,16 +73,17 @@ The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separa
 This repository includes a production-oriented Compose file for Unraid:
 
 ```bash
-cp .env.unraid.example .env.unraid
-# edit .env.unraid: replace UNRAID_IP, domains, SECRET_KEY, and passwords
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d --build
+cp .env.unraid.example .env
+# edit .env: replace UNRAID_IP, YOUR_GITHUB_OWNER, domains, SECRET_KEY, and passwords
+docker compose -f docker-compose.unraid.yml pull
+docker compose -f docker-compose.unraid.yml up -d
 ```
 
 After the CI/CD pipeline has published images to GHCR, deploy updates on Unraid with:
 
 ```bash
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml pull
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d
+docker compose -f docker-compose.unraid.yml pull
+docker compose -f docker-compose.unraid.yml up -d
 ```
 
 Default URLs after deployment:
@@ -102,11 +103,17 @@ When you put the app behind HTTPS, update `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_
 Useful Unraid maintenance commands:
 
 ```bash
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml logs -f backend
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml exec backend python manage.py createsuperuser
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml exec backend python manage.py seed_all
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml pull
-docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d --build
+docker compose -f docker-compose.unraid.yml logs -f backend
+docker compose -f docker-compose.unraid.yml exec backend python manage.py createsuperuser
+docker compose -f docker-compose.unraid.yml exec backend python manage.py seed_all
+docker compose -f docker-compose.unraid.yml pull
+docker compose -f docker-compose.unraid.yml up -d
+```
+
+If you intentionally want to build images directly on Unraid instead of pulling GHCR images, add the build override:
+
+```bash
+docker compose -f docker-compose.unraid.yml -f docker-compose.unraid.build.yml up -d --build
 ```
 
 ## GHCR CI/CD
@@ -122,7 +129,7 @@ The workflow runs on pull requests as a build check, and pushes images on `main`
 - version tags
 - immutable commit tags like `sha-abc1234...`
 
-On Unraid, set `BACKEND_IMAGE`, `BACKOFFICE_IMAGE`, and `CLIENT_IMAGE` in `.env.unraid` to the GHCR image names you want to deploy.
+On Unraid Compose Manager, set `BACKEND_IMAGE`, `BACKOFFICE_IMAGE`, and `CLIENT_IMAGE` in the project `.env` file to the GHCR image names you want to deploy. The Compose `env_file:` setting passes variables into containers, but Compose image interpolation uses the shell environment or `.env`; that is why the file should be named `.env` in Compose Manager.
 
 
 ## Backend domains
