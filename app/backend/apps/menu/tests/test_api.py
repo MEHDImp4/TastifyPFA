@@ -62,6 +62,16 @@ class CategorieAPITest(TestCase):
         self.assertIsNotNone(response.data['image'])
         self.assertTrue(response.data['image'].startswith('/media/categories/'))
 
+    def test_list_category_with_missing_image_returns_null(self):
+        self.categorie.image = 'categories/missing-category.png'
+        self.categorie.save(update_fields=['image', 'updated_at'])
+
+        response = self.client.get('/api/categories/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        payload = next(item for item in response.data if item['id'] == self.categorie.id)
+        self.assertIsNone(payload['image'])
+
     def test_partial_update_category_replaces_existing_image(self):
         self.categorie.image = make_test_image('initial-category.png')
         self.categorie.save(update_fields=['image', 'updated_at'])

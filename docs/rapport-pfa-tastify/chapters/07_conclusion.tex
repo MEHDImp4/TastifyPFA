@@ -1,0 +1,13 @@
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+\label{chap:conclusion}
+
+Le projet Tastify a permis de concevoir une application web complète pour la gestion d'un restaurant. Le périmètre confirmé par le dépôt couvre les fonctions essentielles : menu, tables, commandes, cuisine, stocks, ressources humaines, réservations, paiements, fidélité, avis clients, tableaux de bord et configuration.
+
+Sur le plan technique, Tastify met en oeuvre une architecture moderne : backend Django REST Framework, base MySQL, Redis, Celery, Django Channels, deux applications React et Docker Compose. Cette architecture répond à un besoin central du domaine : faire circuler l'information rapidement entre les acteurs du restaurant, tout en conservant une séparation claire entre logique métier, interface staff et portail client.
+
+L'analyse de sentiment constitue une valeur ajoutée importante. Elle transforme les commentaires clients en indicateurs simples à suivre par le gérant. Le rapport a volontairement décrit cette fonctionnalité de manière rigoureuse : modèle Hugging Face réellement utilisé, modèle arabe, fallback local par mots-clés, données exploitées, conversion des labels et limites de validation.
+
+Le projet reste perfectible, comme tout prototype académique ambitieux. Les priorités d'amélioration concernent l'évaluation quantitative du sentiment, la consolidation des tests de charge, l'amélioration de la recommandation de plats, l'enrichissement des prévisions de stock et la préparation d'un déploiement de production plus robuste.
+
+En conclusion, Tastify représente une solution cohérente, modulaire et défendable pour un Projet de Fin d'Année. Il démontre la capacité à concevoir un système full-stack réaliste, à articuler plusieurs modules métier, à intégrer du temps réel et de l'asynchronisme, et à documenter les choix techniques avec honnêteté.

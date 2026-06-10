@@ -1,104 +1,114 @@
-\chapter{Contexte général et étude de l'existant}
+\chapter{Contexte général}
+\label{chap:contexte}
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-Ce premier chapitre situe le projet dans son contexte métier. Il présente la problématique de la gestion d'un restaurant, analyse les solutions existantes sur le marché, puis dégage les objectifs et le périmètre fonctionnel retenus pour Tastify. Ces éléments servent de fondation à la conception détaillée présentée au chapitre suivant.
+Ce chapitre situe Tastify dans son environnement métier. Il présente les difficultés rencontrées dans la gestion d'un restaurant, formule la problématique, analyse brièvement les solutions existantes et définit les objectifs retenus pour le projet.
+
+\section{Contexte métier}
+Un restaurant fonctionne autour de flux courts et interdépendants. Une table se libère, une commande est prise, des plats sont envoyés en cuisine, des ingrédients sont consommés, un paiement est enregistré, puis le client peut laisser un avis. Ces actions mobilisent des rôles différents : le gérant, le serveur, le cuisinier et le client.
+
+Lorsque ces informations sont gérées avec des outils séparés, le risque d'incohérence augmente. Le serveur peut ne pas connaître la disponibilité réelle d'un plat, la cuisine peut recevoir une commande incomplète, le gérant peut découvrir une rupture de stock trop tard et les avis clients peuvent rester dispersés. La numérisation d'un restaurant devient donc utile lorsqu'elle centralise les données et réduit les frictions entre les acteurs.
 
 \section{Problématique}
-Dans un restaurant, plusieurs acteurs interviennent simultanément : le gérant, les serveurs, les cuisiniers et les clients. Chacun manipule des informations différentes, mais toutes ces informations sont liées. Une commande prise en salle concerne une table, des plats, des ingrédients, un paiement et parfois un avis client.
-
-Lorsque ces informations sont gérées séparément, le restaurant perd en efficacité. Une rupture de stock peut être découverte trop tard, une commande peut être mal transmise, une réservation peut entrer en conflit avec une table déjà occupée, et les retours clients peuvent rester inexploités. La problématique principale est donc la suivante :
+La problématique principale du projet peut être formulée ainsi :
 
 \begin{quote}
-Comment concevoir une solution web centralisée, accessible et maintenable permettant de gérer les opérations d'un restaurant tout en améliorant la coordination entre les acteurs ?
+Comment concevoir une application web centralisée, maintenable et accessible permettant de piloter les opérations d'un restaurant, tout en améliorant la coordination entre la salle, la cuisine, la gestion administrative et l'expérience client ?
 \end{quote}
 
-\section{Etude de l'existant}
-Plusieurs solutions commerciales existent pour la gestion de restaurant. Parmi les plus connues, on retrouve Lightspeed Restaurant, Toast POS, Revel Systems et L'Addition. Ces outils proposent des fonctionnalités avancées de caisse, de commande ou de reporting. Cependant, ils présentent souvent des limites pour les petites et moyennes structures : coût mensuel élevé, dépendance à du matériel spécifique, disponibilité limitée selon les pays, ou faible adaptation aux besoins locaux.
+Cette problématique se décline en plusieurs questions opérationnelles :
 
-Tastify se positionne comme une solution web modulaire, open-source dans son approche technique, et conçue pour couvrir les besoins principaux sans imposer d'infrastructure lourde.
+\begin{itemize}
+  \item comment séparer les accès selon les rôles sans multiplier inutilement les applications ;
+  \item comment transmettre rapidement les commandes vers la cuisine ;
+  \item comment relier commandes, stocks, paiements et fidélité ;
+  \item comment exploiter les avis clients sans bloquer l'expérience utilisateur ;
+  \item comment rendre l'ensemble testable et déployable avec une architecture claire.
+\end{itemize}
+
+\section{Etude de l'existant}
+Le marché propose plusieurs solutions de gestion de restaurant ou de caisse connectée. Elles couvrent souvent une partie du besoin : prise de commande, caisse, stocks ou reporting. Le tableau~\ref{tab:existant} synthétise leur positionnement face aux besoins de Tastify.
 
 \begin{table}[H]
 \centering
 \caption{Comparaison synthétique des solutions existantes}
-\begin{tabular}{p{3cm}p{4cm}p{4cm}p{3cm}}
+\label{tab:existant}
+\begin{tabularx}{\textwidth}{p{2.8cm}YYY}
 \toprule
-\textbf{Solution} & \textbf{Points forts} & \textbf{Limites} & \textbf{Positionnement} \\
+\textbf{Solution} & \textbf{Points forts} & \textbf{Limites fréquentes} & \textbf{Lecture pour Tastify} \\
 \midrule
-Lightspeed & Caisse, stocks, rapports & Coût élevé, dépendance commerciale & Solution cloud complète \\
-Toast POS & Commandes et cuisine & Peu adapté au marché local & Solution orientée POS \\
-Revel Systems & ERP riche & Complexité et coût & Solution entreprise \\
-L'Addition & Caisse restaurant & Couverture fonctionnelle variable & Solution spécialisée \\
-Tastify & Modules intégrés, web, temps réel & Projet académique évolutif & Solution PFA adaptée PME \\
+Lightspeed Restaurant & Caisse, menu, commandes, reporting. & Coût récurrent, dépendance à un écosystème commercial. & Confirme l'intérêt d'une solution intégrée. \\
+Toast POS & Orientation restaurant, commande et paiement. & Disponibilité et adaptation au marché local variables. & Met en évidence l'importance du lien salle-cuisine. \\
+Revel Systems & Couverture ERP large, gestion multi-sites. & Complexité et coût élevés pour une petite structure. & Montre l'intérêt d'un périmètre modulaire. \\
+L'Addition & Solution spécialisée restauration, caisse et service. & Couverture variable selon les offres et les intégrations. & Sert de référence pour les besoins opérationnels. \\
+Tastify & Projet web modulaire, deux portails, temps réel, avis et fidélité. & Prototype académique, données de production non disponibles. & Solution adaptée au périmètre pédagogique du PFA. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-À l'issue de cette analyse, deux constats orientent le projet. D'une part, aucune des solutions étudiées ne combine, à un coût accessible, la gestion intégrée salle-cuisine, la réservation en ligne et l'exploitation des avis clients. D'autre part, l'adaptation au contexte local (devise, langue, simplicité de déploiement) reste limitée. Tastify cherche à répondre à ces deux points.
+L'étude de l'existant montre que les solutions commerciales sont puissantes, mais parfois coûteuses ou dépendantes d'un environnement matériel et contractuel. Tastify se positionne comme un projet académique complet, focalisé sur la compréhension des flux et sur une architecture réutilisable.
 
 \section{Objectifs du projet}
-Les objectifs principaux de Tastify sont les suivants :
+Les objectifs du projet sont les suivants :
 
-\begin{itemize}[leftmargin=1.2cm]
-  \item centraliser la gestion du menu, des tables, des commandes, des stocks et des employés ;
-  \item améliorer la coordination entre les serveurs et la cuisine grâce au temps réel ;
-  \item proposer un portail client pour consulter le menu, réserver, payer et suivre la fidélité ;
-  \item analyser les avis clients afin d'aider le gérant à suivre la satisfaction ;
-  \item construire une architecture maintenable, testable et déployable avec Docker.
+\begin{itemize}
+  \item centraliser la gestion des menus, catégories, plats, tables, commandes et réservations ;
+  \item offrir une interface staff adaptée aux rôles gérant, serveur et cuisinier ;
+  \item offrir un portail client pour consulter le menu, réserver, payer et suivre la fidélité ;
+  \item améliorer la coordination cuisine grâce à un Kitchen Display System et aux WebSocket ;
+  \item gérer les stocks, les ingrédients, les recettes et les mouvements associés ;
+  \item exploiter les avis clients grâce à une analyse de sentiment asynchrone ;
+  \item produire une architecture testable, documentée et déployable avec Docker Compose.
 \end{itemize}
 
-\section{Périmètre fonctionnel}
-Le périmètre retenu couvre quatre espaces d'usage :
-
-\begin{itemize}[leftmargin=1.2cm]
-  \item le back-office gérant : menu, stocks, ressources humaines, configuration et tableaux de bord ;
-  \item l'espace serveur : plan de salle, prise de commande, suivi des tables et encaissement ;
-  \item l'espace cuisine : Kitchen Display System et suivi de préparation des plats ;
-  \item le portail client : menu public, réservation, compte client, fidélité, paiement et avis.
-\end{itemize}
-
-Dans l'implémentation actuelle, ces quatre espaces sont organisés autour de \textbf{deux applications React} : une application \emph{back-office} (staff) qui regroupe les rôles gérant, serveur et cuisinier, et une application \emph{client} dédiée au portail public. Ce choix réduit la duplication de code et simplifie le déploiement, tout en conservant une séparation claire des accès par rôle.
-
-\section{Gestion des risques du projet}
-Le développement d'un système couvrant autant de modules présente des risques techniques et organisationnels qu'il convient d'anticiper. Le tableau suivant recense les principaux risques identifiés ainsi que leur plan d'atténuation.
+\section{Périmètre fonctionnel retenu}
+Le périmètre confirmé par le dépôt couvre les modules listés dans le tableau~\ref{tab:perimetre}.
 
 \begin{table}[H]
 \centering
-\small
-\caption{Matrice des risques du projet}
-\begin{tabular}{p{2.6cm}p{4.2cm}p{1.6cm}p{4.6cm}}
+\caption{Périmètre fonctionnel confirmé}
+\label{tab:perimetre}
+\begin{tabularx}{\textwidth}{p{3.2cm}Y}
 \toprule
-\textbf{Catégorie} & \textbf{Description} & \textbf{Niveau} & \textbf{Atténuation} \\
+\textbf{Domaine} & \textbf{Fonctions couvertes} \\
 \midrule
-Technique & Latence ou coupures réseau dégradant la synchronisation WebSocket du KDS. & Moyen & Reconnexion automatique côté client et affichage du dernier état connu. \\
-Adoption & Réticence du personnel à abandonner les procédures manuelles. & Moyen & Interfaces simples (parcours en peu de clics) et accompagnement à la prise en main. \\
-Intelligence applicative & Historique de données insuffisant au lancement pour des recommandations pertinentes. & Faible & Démarrage par règles simples (catégorie, disponibilité), enrichissement progressif. \\
-Organisationnel & Complexité cumulée des modules pouvant entraîner un dépassement du calendrier. & Élevé & Périmètre MVP priorisé ; modules avancés traités en second. \\
-Sécurité & Accès non autorisé entre rôles. & Moyen & Authentification JWT, permissions par rôle et tests dédiés. \\
+Menu & Catégories, plats, images, disponibilité et liens avec les ingrédients. \\
+Salle & Tables, plan de salle, statut de table et prise de commande. \\
+Cuisine & KDS, lignes de commande, statuts de préparation et synchronisation temps réel. \\
+Stock & Ingrédients, seuils d'alerte, recettes et mouvements de stock. \\
+RH & Employés, shifts, offres d'emploi et candidatures. \\
+Réservations & Création, disponibilité, conflits de créneaux et gestion côté client/staff. \\
+Paiements & Paiement d'une commande, contribution par ligne et lien avec le client. \\
+Fidélité & Profil, points, transactions et récompenses. \\
+Avis & Commentaires, note optionnelle et analyse de sentiment. \\
+Analytics & Indicateurs de tableau de bord et statistiques de sentiment. \\
+Configuration & Informations du restaurant, devise, couleurs, paramètres de service. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-\section{Méthodologie et planification}
-Le projet a été conduit de manière itérative, chaque itération livrant un périmètre fonctionnel testable. Cette approche a permis de garder le contrôle sur un système multi-modules sans perdre la cohérence d'ensemble.
+\section{Planification}
+Le dépôt ne contient pas de journal de projet complet permettant de prouver une planification datée. Le tableau~\ref{tab:planification} présente donc une planification pédagogique cohérente avec la structure du projet, à considérer comme une reconstitution documentaire et non comme un relevé historique certifié.
 
 \begin{table}[H]
 \centering
-\caption{Phases de réalisation du projet}
-\begin{tabular}{p{2cm}p{9cm}p{2.5cm}}
+\caption{Planification pédagogique du projet}
+\label{tab:planification}
+\begin{tabularx}{\textwidth}{p{2.2cm}Yp{2.4cm}}
 \toprule
-\textbf{Phase} & \textbf{Contenu} & \textbf{Durée} \\
+\textbf{Phase} & \textbf{Contenu} & \textbf{Durée indicative} \\
 \midrule
-Phase 1 & Fondations : environnement, modèles Django, API REST de base, authentification JWT et rôles. & 2 semaines \\
-Phase 2 & Back-office gérant : menu, stocks, employés et tableaux de bord. & 2 semaines \\
-Phase 3 & Salle et cuisine : prise de commande, plan de salle, KDS temps réel via WebSocket. & 2 semaines \\
-Phase 4 & Portail client : menu en ligne, réservation, paiement et partage de l'addition. & 2 semaines \\
-Phase 5 & Fidélité et avis : points, paliers, récompenses et analyse de sentiment. & 2 semaines \\
-Phase 6 & Tests, intégration, conteneurisation Docker et finalisation. & 1 semaine \\
+Phase 1 & Initialisation du dépôt, environnement Docker, modèles principaux, authentification et rôles. & 2 semaines \\
+Phase 2 & Modules gérant : menu, catégories, stocks, ressources humaines et configuration. & 2 semaines \\
+Phase 3 & Salle et cuisine : tables, commandes, KDS, statuts et WebSocket. & 2 semaines \\
+Phase 4 & Portail client : menu public, réservation, compte, panier et paiement. & 2 semaines \\
+Phase 5 & Fidélité, avis, analyse de sentiment et indicateurs analytics. & 2 semaines \\
+Phase 6 & Tests, documentation, conteneurisation et préparation du rapport. & 1 semaine \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-L'étude de l'existant a confirmé l'intérêt d'une solution intégrée, accessible et adaptée aux petites et moyennes structures. Les objectifs et le périmètre définis dans ce chapitre délimitent précisément ce que Tastify doit couvrir. Le chapitre suivant traduit ces besoins en une conception fonctionnelle et objet à l'aide d'UML.
+Le contexte étudié justifie la création d'une solution centralisée et modulaire pour les restaurants. Tastify répond à cette problématique par une architecture full-stack couvrant les flux essentiels. Le chapitre suivant formalise les besoins, les acteurs et la conception du système.

@@ -74,6 +74,17 @@ class PlatAPITest(TestCase):
         self.assertIsNotNone(response.data['image'])
         self.assertTrue(response.data['image'].startswith('/media/plats/'))
 
+    def test_list_plat_with_missing_image_returns_null(self):
+        self.client.force_authenticate(user=self.serveur)
+        self.plat.image = 'plats/missing-plat.png'
+        self.plat.save(update_fields=['image', 'updated_at'])
+
+        response = self.client.get('/api/plats/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        payload = next(item for item in response.data if item['id'] == self.plat.id)
+        self.assertIsNone(payload['image'])
+
     def test_create_plat_as_serveur_forbidden(self):
         """Non-GERANT cannot create a dish (403)."""
         self.client.force_authenticate(user=self.serveur)

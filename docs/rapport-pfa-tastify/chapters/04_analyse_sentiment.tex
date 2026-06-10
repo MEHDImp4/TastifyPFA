@@ -1,0 +1,152 @@
+\chapter{Analyse de sentiment et choix du modèle}
+\label{chap:sentiment}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+L'analyse de sentiment est la fonctionnalité d'intelligence applicative la plus explicite du projet. Elle ne remplace pas l'analyse humaine d'un gérant, mais elle transforme les avis textuels en indicateurs exploitables : polarité positive, neutre ou négative, score de confiance et modèle utilisé.
+
+\section{Rôle de l'analyse de sentiment dans Tastify}
+Dans Tastify, les avis clients constituent une source de retour direct sur l'expérience au restaurant. Un commentaire peut signaler un plat apprécié, un service lent, une mauvaise température, une attente trop longue ou une satisfaction globale. Sans traitement automatique, ces informations restent difficiles à suivre lorsque le volume augmente.
+
+Le rôle de l'analyse de sentiment est donc double :
+
+\begin{itemize}
+  \item \textbf{opérationnel}, car elle aide le gérant à repérer rapidement les tendances défavorables ;
+  \item \textbf{analytique}, car elle alimente les statistiques de satisfaction affichées dans le tableau de bord.
+\end{itemize}
+
+Le dépôt confirme que les statistiques de sentiment sont agrégées dans le module \code{analytics}, à partir du modèle \code{AnalyseSentiment}. Le score stocké dans \code{Avis.sentiment\_score} vaut $+15$ pour un avis positif, $0$ pour un avis neutre et $-15$ pour un avis négatif.
+
+\section{Données réellement utilisées}
+Le projet ne contient pas de jeu de données local entraînant un modèle propriétaire. Les données utilisées par Tastify sont les avis saisis par les utilisateurs de l'application.
+
+\begin{table}[H]
+\centering
+\caption{Données utilisées par le pipeline de sentiment}
+\label{tab:donnees-sentiment}
+\begin{tabularx}{\textwidth}{p{3.4cm}Y}
+\toprule
+\textbf{Champ} & \textbf{Utilisation} \\
+\midrule
+\code{Avis.commentaire} & Texte libre analysé par le pipeline. C'est l'entrée principale du modèle. \\
+\code{Avis.note} & Note optionnelle entre 1 et 5. Elle est stockée mais le code d'analyse actuel se base sur le commentaire. \\
+\code{Avis.lang\_code} & Langue détectée simplement : \code{ar} si le texte contient des caractères arabes, \code{en} sinon. \\
+\code{AnalyseSentiment.label} & Résultat normalisé : \code{POSITIF}, \code{NEUTRE} ou \code{NEGATIF}. \\
+\code{AnalyseSentiment.score\_brut} & Score de confiance renvoyé par Hugging Face ou par le fallback local. \\
+\code{AnalyseSentiment.modele\_utilise} & Nom du modèle distant ou de la méthode locale réellement utilisée. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Le texte transmis à Hugging Face est tronqué à 512 caractères dans la tâche Celery, ce qui correspond à une prudence technique adaptée aux avis courts et aux limites usuelles des modèles de classification.
+
+\section{Pipeline technique}
+Le pipeline est déclenché à la création d'un avis dans le \code{AvisViewSet}. La création de l'avis reste rapide, car l'analyse est déléguée à une tâche Celery.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.0cm and 0.7cm]
+  \node[box, text width=2.8cm] (client) {Portail client\\saisie d'un avis};
+  \node[box, right=of client, text width=2.7cm] (api) {API \code{/api/avis/}\\création};
+  \node[box, right=of api, text width=2.7cm] (task) {Tâche Celery\\\code{analyze\_review\_sentiment}};
+  \node[external, below=of task, text width=2.9cm] (hf) {Hugging Face\\modèle distant};
+  \node[box, right=of task, text width=2.7cm] (fallback) {Fallback local\\\code{mots-cles-simple}};
+  \node[store, below=of api, text width=2.9cm] (db) {MySQL\\\code{Avis}, \code{AnalyseSentiment}};
+  \node[box, right=of fallback, text width=2.7cm] (dash) {Dashboard\\statistiques};
+
+  \draw[flow] (client) -- (api);
+  \draw[flow] (api) -- (task);
+  \draw[flow] (api) -- (db);
+  \draw[flow] (task) -- (hf);
+  \draw[dashedflow] (hf) -- node[right, font=\scriptsize]{si indisponible} (fallback);
+  \draw[flow] (task) |- (db);
+  \draw[flow] (fallback) -- (dash);
+  \draw[flow] (db) -| (dash);
+\end{tikzpicture}
+\caption{Pipeline technique de l'analyse de sentiment}
+\label{fig:pipeline-sentiment}
+\end{figure}
+
+La figure~\ref{fig:pipeline-sentiment} résume le flux : l'utilisateur soumet un avis, le backend l'enregistre, Celery effectue l'analyse, puis le résultat est persisté et agrégé.
+
+\section{Modèle réellement utilisé}
+Le code du fichier \code{apps/avis/tasks.py} définit explicitement les modèles suivants :
+
+\begin{itemize}
+  \item \code{nlptown/bert-base-multilingual-uncased-sentiment} pour les avis non arabes ;
+  \item \code{moussaKam/MARBERT-sentiment} pour les textes contenant des caractères arabes ;
+  \item \code{nlptown/bert-base-multilingual-uncased-sentiment} comme modèle de secours si le modèle arabe ne répond pas ;
+  \item \code{mots-cles-simple} comme secours local lorsque l'API Hugging Face n'est pas disponible ou lorsqu'aucun jeton n'est configuré.
+\end{itemize}
+
+Le modèle principal \code{nlptown/bert-base-multilingual-uncased-sentiment} est un BERT multilingue affiné pour l'analyse de sentiment sur des avis produits en six langues, dont le français \cite{nlptown}. Il renvoie une prédiction sous forme d'étoiles de 1 à 5, que le code convertit ensuite en trois classes : négatif, neutre ou positif. Ce choix est cohérent avec un projet de restaurant, car les avis clients ressemblent à des avis courts de produits ou services.
+
+La base scientifique de ce type de modèle vient de BERT, qui apprend des représentations contextuelles bidirectionnelles et peut être adapté à des tâches de classification avec une couche de sortie \cite{bert}. Pour les textes arabes, le code s'appuie sur MARBERT, famille de modèles spécialisés dans l'arabe et ses variantes dialectales \cite{marbert}.
+
+\section{Conversion des sorties}
+Les sorties du modèle ne sont pas exposées directement au reste de l'application. Elles sont normalisées afin de simplifier l'exploitation métier.
+
+\begin{table}[H]
+\centering
+\caption{Normalisation des sorties de sentiment}
+\label{tab:normalisation-sentiment}
+\begin{tabularx}{\textwidth}{p{3.2cm}p{3.4cm}Y}
+\toprule
+\textbf{Sortie modèle} & \textbf{Label Tastify} & \textbf{Score métier} \\
+\midrule
+\code{5 stars}, \code{4 stars}, \code{POSITIVE}, \code{LABEL\_2} & \code{POSITIF} & $+15$, avis favorable. \\
+\code{3 stars}, \code{NEUTRAL}, \code{LABEL\_1} & \code{NEUTRE} & $0$, signal sans polarité forte. \\
+\code{1 star}, \code{2 stars}, \code{NEGATIVE}, \code{LABEL\_0} & \code{NEGATIF} & $-15$, avis défavorable à surveiller. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Cette conversion rend l'indicateur lisible pour le tableau de bord, tout en conservant dans \code{score\_brut} la confiance renvoyée par le modèle.
+
+\section{Comparaison avec des alternatives}
+Le tableau~\ref{tab:comparaison-modeles} compare le modèle principal avec plusieurs alternatives pertinentes.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Comparaison des approches de sentiment}
+\label{tab:comparaison-modeles}
+\begin{tabularx}{\textwidth}{p{3.2cm}p{2.5cm}YYY}
+\toprule
+\textbf{Approche} & \textbf{Statut dans Tastify} & \textbf{Forces} & \textbf{Limites} & \textbf{Pertinence} \\
+\midrule
+\code{nlptown/bert-base-multilingual-uncased-sentiment} & Modèle principal & Supporte le français, l'anglais, l'espagnol, l'italien, l'allemand et le néerlandais ; entraîné sur des avis ; utilisable via API \cite{nlptown,hftextclassification}. & Moins spécialisé qu'un modèle français pur ; dépend d'un service externe si utilisé via API. & Très adapté aux avis courts de restaurant multilingues. \\
+DistilCamemBERT sentiment & Alternative française & Spécialisé français ; modèle plus léger ; résultats documentés sur Amazon Reviews et Allociné \cite{distilcamembert,camembert}. & Ne couvre pas naturellement l'arabe ou l'anglais ; nécessite une logique de routage par langue. & Excellent si le périmètre devient majoritairement francophone. \\
+XLM-R / XLM-T & Alternative multilingue & Très bonne base de transfert multilingue ; XLM-R est conçu pour de nombreux langages \cite{xlmroberta}; XLM-T est orienté textes sociaux multilingues \cite{xlmt}. & Demande un choix de modèle fine-tuné et des validations supplémentaires. & Intéressant pour une version avancée multi-langues. \\
+\code{moussaKam/MARBERT-sentiment} & Modèle arabe utilisé & Appuyé sur la famille MARBERT, adaptée aux variétés arabes et au texte social \cite{marbert}. & Spécifique aux textes arabes ; ne remplace pas le modèle multilingue pour le français. & Pertinent pour des avis en arabe ou dialecte marocain. \\
+Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback actuel par mots-clés est déjà implémenté. & Moins robuste face à l'ironie, aux négations et au vocabulaire varié ; TF-IDF n'est pas implémenté dans le dépôt. & Utile comme secours, mais insuffisant comme moteur principal. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Justification du choix}
+Le choix du modèle \code{nlptown/bert-base-multilingual-uncased-sentiment} est défendable pour quatre raisons :
+
+\begin{enumerate}
+  \item \textbf{Adéquation au domaine des avis.} Le modèle est affiné sur des avis, ce qui se rapproche des commentaires laissés sur des plats ou un restaurant.
+  \item \textbf{Support du français.} La fiche du modèle indique un entraînement incluant le français, ce qui correspond au contexte du rapport et aux interfaces francophones.
+  \item \textbf{Intégration rapide.} L'API Hugging Face permet de déléguer l'inférence sans embarquer un modèle lourd dans le backend.
+  \item \textbf{Robustesse opérationnelle.} Le fallback local permet de continuer à produire un résultat même sans jeton Hugging Face ou en cas d'erreur réseau.
+\end{enumerate}
+
+Ce choix reste toutefois perfectible. Pour une version de production, il faudrait mesurer la qualité du modèle sur des avis réels du restaurant, constituer un petit jeu de validation local, puis comparer objectivement les scores entre le modèle multilingue, un modèle français spécialisé et un modèle arabe.
+
+\section{Limites de la fonctionnalité}
+Les limites suivantes sont explicitement identifiées :
+
+\begin{itemize}
+  \item la détection de langue est volontairement simple : elle détecte l'arabe par présence de caractères arabes et classe le reste comme \code{en} ;
+  \item le fallback local est basé sur des listes de mots positifs et négatifs, pas sur un modèle statistique entraîné ;
+  \item le projet ne fournit pas de métriques d'évaluation sur un corpus d'avis Tastify ;
+  \item la note de 1 à 5 n'est pas combinée avec le commentaire pour améliorer la prédiction ;
+  \item l'utilisation de Hugging Face suppose une configuration correcte du jeton \code{HUGGINGFACE\_API\_TOKEN}.
+\end{itemize}
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+L'analyse de sentiment de Tastify est correctement intégrée à l'architecture applicative : elle est asynchrone, persistée, exploitable dans les tableaux de bord et accompagnée d'un mécanisme de secours. Le modèle principal est adapté au contexte des avis clients, mais une évaluation locale reste nécessaire pour passer d'un prototype académique à une validation de production.

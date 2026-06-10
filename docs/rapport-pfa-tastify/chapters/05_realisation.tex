@@ -1,0 +1,239 @@
+\chapter{Architecture technique et réalisation}
+\label{chap:realisation}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+Ce chapitre décrit la réalisation effective de Tastify. Il présente la stack technique, l'organisation du backend, les deux applications React, les mécanismes de sécurité, le temps réel, les modules métier, les interfaces et le déploiement.
+
+\section{Stack technique}
+Le projet adopte une architecture web découplée. Le backend expose des API REST et un canal WebSocket ; les frontends consomment ces services depuis deux applications React.
+
+\begin{table}[H]
+\centering
+\caption{Stack technique confirmée}
+\label{tab:stack}
+\begin{tabularx}{\textwidth}{p{3.3cm}p{3.8cm}Y}
+\toprule
+\textbf{Couche} & \textbf{Technologies} & \textbf{Rôle} \\
+\midrule
+Backend & Python, Django, Django REST Framework & API REST, modèles, permissions, logique métier et documentation OpenAPI \cite{django,drf}. \\
+Serveur ASGI & Daphne, Django Channels & Exécution asynchrone et WebSocket pour les événements staff \cite{channels}. \\
+Base de données & MySQL & Persistance relationnelle des données métier \cite{mysql}. \\
+Cache et messages & Redis & Channel layer WebSocket et broker Celery \cite{redis}. \\
+Tâches asynchrones & Celery, Celery Beat & Analyse de sentiment, traitements de stock, orchestration et tâches planifiées \cite{celery}. \\
+Frontends & React, Vite, TypeScript, Tailwind CSS & Applications SPA staff et client \cite{react,vite,tailwind}. \\
+Tests & pytest, Vitest, Playwright & Validation backend, unitaire frontend et end-to-end. \\
+Déploiement & Docker Compose & Orchestration des services locaux et préparation au déploiement \cite{docker}. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Architecture globale}
+La figure~\ref{fig:architecture-technique} présente l'organisation technique de la solution.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.0cm and 0.8cm]
+  \node[box, text width=2.9cm] (backoffice) {Back-office React\\port 3000};
+  \node[box, below=of backoffice, text width=2.9cm] (client) {Portail client React\\port 3003};
+  \node[box, right=1.6cm of $(backoffice)!0.5!(client)$, text width=3.2cm] (backend) {Backend Django ASGI\\REST + WebSocket\\port 8000};
+  \node[store, right=1.4cm of backend, yshift=1.0cm, text width=2.7cm] (mysql) {MySQL 8\\volume persistant};
+  \node[store, right=1.4cm of backend, yshift=-0.2cm, text width=2.7cm] (redis) {Redis 7\\DB WebSocket et broker};
+  \node[box, right=1.4cm of backend, yshift=-1.4cm, text width=2.7cm] (worker) {Celery worker\\tâches de fond};
+  \node[box, below=of worker, text width=2.7cm] (beat) {Celery Beat\\planification};
+
+  \draw[flow] (backoffice) -- node[above, font=\scriptsize]{HTTP / WS} (backend);
+  \draw[flow] (client) -- node[below, font=\scriptsize]{HTTP} (backend);
+  \draw[flow] (backend) -- (mysql);
+  \draw[flow] (backend) -- (redis);
+  \draw[flow] (backend) -- (worker);
+  \draw[flow] (beat) -- (worker);
+  \draw[dashedflow] (worker) -- (mysql);
+  \draw[dashedflow] (worker) -- (redis);
+\end{tikzpicture}
+\caption{Architecture technique de Tastify}
+\label{fig:architecture-technique}
+\end{figure}
+
+Cette architecture a deux avantages principaux : elle sépare les responsabilités et elle rend le projet déployable par services. Le backend reste le point d'entrée métier ; les frontends se concentrent sur l'expérience utilisateur.
+
+\section{Organisation du backend}
+Le backend est organisé en applications Django spécialisées. Ce découpage limite la complexité d'un domaine et facilite les tests.
+
+\begin{longtable}{p{3.5cm}p{10cm}}
+\caption{Modules backend réalisés}
+\label{tab:modules-backend}\\
+\toprule
+\textbf{Module} & \textbf{Responsabilité} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Module} & \textbf{Responsabilité} \\
+\midrule
+\endhead
+\code{users} & Utilisateur personnalisé, rôles, authentification JWT, refresh cookies et réinitialisation de mot de passe. \\
+\code{menu} & Catégories, plats, disponibilité, images, liens avec les ingrédients et recommandations simples. \\
+\code{tables} & Tables, capacités, positions, statuts et textes de plan. \\
+\code{commandes} & Commandes, lignes, prix figés, statuts cuisine, signaux et orchestration KDS. \\
+\code{stock} & Ingrédients, recettes, mouvements, seuils d'alerte et services d'approvisionnement. \\
+\code{hr} & Employés, shifts, offres d'emploi et candidatures. \\
+\code{reservations} & Réservations, disponibilité, conflits de créneaux, statuts et notifications. \\
+\code{paiements} & Paiements, contributions par ligne, tokens de paiement et réconciliation commande-paiement. \\
+\code{avis} & Avis clients, tâche d'analyse de sentiment et stockage du résultat. \\
+\code{analytics} & Tableau de bord, revenus, plats populaires, statistiques de sentiment et données météo. \\
+\code{loyalty} & Profils, transactions, points et récompenses. \\
+\code{configuration} & Identité du restaurant, devise, couleurs et paramètres de service. \\
+\bottomrule
+\end{longtable}
+
+\section{API REST et documentation}
+Les routes principales sont regroupées dans un routeur DRF. Le dépôt expose notamment les ressources suivantes : catégories, plats, tables, plan-texts, commandes, lignes de commande, employés, shifts, offres, candidatures, réservations, avis, fidélité, récompenses, paramètres et paiements.
+
+La documentation OpenAPI est générée avec \code{drf-spectacular}. Les routes \code{/api/schema/}, \code{/api/docs/} et \code{/api/redoc/} permettent de consulter le schéma et de tester l'API pendant le développement.
+
+\section{Authentification et sécurité}
+L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le dépôt contient également une séparation staff/client afin d'éviter qu'une session d'un portail écrase l'autre.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm and 0.8cm]
+  \node[box, text width=2.5cm] (user) {Utilisateur};
+  \node[box, right=of user, text width=2.7cm] (front) {Frontend\\staff ou client};
+  \node[box, right=of front, text width=2.8cm] (auth) {API auth\\Django};
+  \node[store, right=of auth, text width=2.6cm] (db) {Base\\Utilisateur};
+
+  \draw[flow] (user) -- node[above, font=\scriptsize]{identifiants} (front);
+  \draw[flow] (front) -- node[above, font=\scriptsize]{login} (auth);
+  \draw[flow] (auth) -- node[above, font=\scriptsize]{vérification} (db);
+  \draw[flow] (auth) to[bend left=18] node[below, font=\scriptsize]{access token + cookie refresh} (front);
+  \draw[dashedflow] (front) to[bend left=18] node[below, font=\scriptsize]{refresh} (auth);
+\end{tikzpicture}
+\caption{Séquence simplifiée d'authentification JWT}
+\label{fig:auth-jwt}
+\end{figure}
+
+Les accès sensibles sont protégés par les permissions DRF et par les gardes de rôles côté frontend. Le gérant accède aux écrans d'administration, le serveur aux fonctions de salle, le cuisinier au KDS, et le client au portail public et à son espace personnel.
+
+\section{Temps réel et Kitchen Display System}
+Le temps réel est assuré par Django Channels et Redis. Le canal WebSocket \code{/ws/staff/} accepte uniquement les rôles internes : gérant, serveur et cuisinier. Les événements staff permettent de mettre à jour les écrans sans rechargement complet.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.0cm and 0.75cm]
+  \node[box, text width=2.6cm] (server) {Serveur\\prise de commande};
+  \node[box, right=of server, text width=2.8cm] (api) {API commandes\\validation};
+  \node[store, right=of api, text width=2.6cm] (db) {MySQL\\commande};
+  \node[store, below=of api, text width=2.6cm] (redis) {Redis\\staff group};
+  \node[box, right=of db, text width=2.6cm] (kds) {KDS cuisine\\affichage};
+  \node[box, below=of kds, text width=2.6cm] (cook) {Cuisinier\\statut plat};
+
+  \draw[flow] (server) -- (api);
+  \draw[flow] (api) -- (db);
+  \draw[flow] (api) -- (redis);
+  \draw[dashedflow] (redis) -| (kds);
+  \draw[flow] (cook) -- (api);
+  \draw[dashedflow] (redis) -- (server);
+\end{tikzpicture}
+\caption{Flux temps réel entre prise de commande et KDS}
+\label{fig:flux-kds}
+\end{figure}
+
+La figure~\ref{fig:flux-kds} montre le flux principal : le serveur crée la commande, le backend la persiste, puis publie un événement vers le groupe staff. Le cuisinier peut ensuite modifier les statuts de préparation.
+
+\section{Applications frontend}
+Le dépôt contient deux applications React.
+
+\begin{table}[H]
+\centering
+\caption{Applications frontend}
+\label{tab:frontends}
+\begin{tabularx}{\textwidth}{p{3.3cm}p{3cm}Y}
+\toprule
+\textbf{Application} & \textbf{Port local} & \textbf{Fonction} \\
+\midrule
+Back-office staff & 3000 & Tableau de bord, menu, catégories, salle, réservations, KDS, stocks, RH, avis et paramètres. \\
+Portail client & 3003 & Accueil, menu, réservation, compte, inscription, connexion, paiement, contact, fidélité et mode hors ligne. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Les routes frontend confirment la séparation des usages. Dans le back-office, les routes sont protégées par rôle. Dans le portail client, certaines pages sont publiques et d'autres nécessitent une authentification.
+
+\section{Paiement et fidélité}
+Le module de paiement associe chaque paiement à une commande et peut relier des contributions aux lignes de commande. Cette structure permet de représenter un paiement global ou un partage de l'addition. Les méthodes présentes dans le modèle couvrent notamment les espèces, la carte et le QR.
+
+Le module fidélité repose sur un profil lié à l'utilisateur, des transactions de points et des récompenses. Les paliers calculés à partir du solde de points permettent d'ajouter une dimension relation client sans complexifier le parcours principal.
+
+\section{Stocks et prévision simple}
+Le module stock relie les plats à leurs ingrédients via une table de recette. Les mouvements de stock permettent de suivre les entrées, sorties et ajustements. Des seuils d'alerte sont présents afin d'identifier les ingrédients à surveiller.
+
+Le dépôt contient également un service d'approvisionnement et des éléments analytics liés à la météo. Aucune preuve d'un modèle prédictif avancé entraîné localement n'a été trouvée ; le rapport présente donc cette partie comme une estimation ou une logique métier simple, et non comme un système d'intelligence artificielle complet.
+
+\section{Interfaces réalisées}
+Les captures existantes du dépôt sont intégrées comme preuves visuelles des modules principaux. Elles ne sont pas générées artificiellement.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_dashboard.png}
+\caption{Tableau de bord gérant du back-office}
+\label{fig:capture-dashboard}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_salle.png}
+\caption{Interface serveur : plan de salle}
+\label{fig:capture-salle}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_kds.png}
+\caption{Kitchen Display System côté cuisine}
+\label{fig:capture-kds}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_client.png}
+\caption{Portail client : consultation du menu}
+\label{fig:capture-client}
+\end{figure}
+
+Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds} et \ref{fig:capture-client} couvrent les quatre espaces essentiels : pilotage, salle, cuisine et client. Les captures complémentaires à fournir sont listées en annexe.
+
+\section{Déploiement Docker Compose}
+Le fichier \code{docker-compose.yml} orchestre les services de développement : base de données, Redis, backend, worker, beat, back-office et portail client.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.9cm and 0.8cm]
+  \node[box, text width=2.4cm] (compose) {Docker Compose};
+  \node[store, below left=of compose, text width=2.2cm] (db) {\code{db}\\MySQL};
+  \node[store, below=of compose, text width=2.2cm] (redis) {\code{redis}};
+  \node[box, below right=of compose, text width=2.2cm] (backend) {\code{backend}\\Daphne};
+  \node[box, below=of backend, text width=2.2cm] (worker) {\code{celery-worker}};
+  \node[box, right=of worker, text width=2.2cm] (beat) {\code{celery-beat}};
+  \node[box, right=of backend, text width=2.2cm] (staff) {\code{backoffice-app}};
+  \node[box, right=of staff, text width=2.2cm] (client) {\code{client-app}};
+
+  \draw[flow] (compose) -- (db);
+  \draw[flow] (compose) -- (redis);
+  \draw[flow] (compose) -- (backend);
+  \draw[flow] (backend) -- (db);
+  \draw[flow] (backend) -- (redis);
+  \draw[flow] (worker) -- (redis);
+  \draw[flow] (worker) -- (db);
+  \draw[flow] (beat) -- (worker);
+  \draw[flow] (staff) -- (backend);
+  \draw[flow] (client) -- (backend);
+\end{tikzpicture}
+\caption{Organisation du déploiement Docker Compose}
+\label{fig:docker-compose}
+\end{figure}
+
+Cette organisation prépare le projet à un déploiement sur serveur, tout en conservant un lancement reproductible en environnement de développement.
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+La réalisation de Tastify s'appuie sur une architecture moderne et cohérente : backend Django modulaire, API REST, WebSocket, tâches asynchrones, deux frontends React et déploiement Docker Compose. Les choix techniques répondent directement aux besoins métier formulés dans les chapitres précédents.

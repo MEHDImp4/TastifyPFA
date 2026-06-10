@@ -7,6 +7,20 @@ from urllib.parse import urlparse
 
 # Les Serializers du Menu servent à transformer les données SQL en format JSON pour le frontend.
 
+def existing_image_url(image_field, serialized_value):
+    if not serialized_value:
+        return None
+
+    try:
+        if not image_field or not image_field.storage.exists(image_field.name):
+            return None
+    except Exception:
+        return None
+
+    if serialized_value.startswith('http'):
+        return urlparse(serialized_value).path
+    return serialized_value
+
 class AvisMinimalSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='user.username')
     
@@ -43,11 +57,7 @@ class CategorieSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # Cette méthode permet de personnaliser la sortie JSON finale
         ret = super().to_representation(instance)
-        if ret.get('image'):
-            image_url = ret['image']
-            # On s'assure que le chemin de l'image est relatif pour éviter les problèmes de domaine
-            if image_url.startswith('http'):
-                ret['image'] = urlparse(image_url).path
+        ret['image'] = existing_image_url(instance.image, ret.get('image'))
         return ret
 
 
@@ -90,10 +100,7 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        if ret.get('image'):
-            image_url = ret['image']
-            if image_url.startswith('http'):
-                ret['image'] = urlparse(image_url).path
+        ret['image'] = existing_image_url(instance.image, ret.get('image'))
         return ret
 
     def get_sentiment_score(self, instance):

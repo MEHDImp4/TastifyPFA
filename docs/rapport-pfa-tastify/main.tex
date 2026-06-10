@@ -10,22 +10,29 @@
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{tabularx}
 \usepackage{array}
+\usepackage{ragged2e}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{caption}
 \usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
 
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \onehalfspacing
 \setlength{\parindent}{0.8cm}
 \setlength{\parskip}{0.2cm}
 \graphicspath{{assets/figures/}}
+\emergencystretch=2em
 
 \definecolor{tastifygreen}{HTML}{2A9D8F}
 \definecolor{tastifynavy}{HTML}{264653}
 \definecolor{tastifygold}{HTML}{E9C46A}
+\definecolor{softgray}{HTML}{F4F6F8}
+\definecolor{alertred}{HTML}{D62828}
 
 \hypersetup{
   colorlinks=true,
@@ -33,7 +40,7 @@
   citecolor=tastifygreen,
   urlcolor=tastifygreen,
   pdftitle={Rapport PFA Tastify},
-  pdfauthor={Diouri Mehdi et El Kharrazi Ibtihal}
+  pdfauthor={A confirmer}
 }
 
 \titleformat{\chapter}[display]
@@ -41,6 +48,23 @@
   {\chaptertitlename\ \thechapter}{20pt}{\Huge}
 \titleformat{\section}{\normalfont\Large\bfseries\color{tastifynavy}}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalfont\large\bfseries\color{tastifygreen}}{\thesubsection}{1em}{}
+
+\captionsetup{labelfont=bf,font=small}
+\setlist[itemize]{leftmargin=1.2cm}
+\setlist[enumerate]{leftmargin=1.2cm}
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\aconfirmer}[1]{\textcolor{alertred}{\textbf{A confirmer :} #1}}
+\newcommand{\placeholder}[1]{\textit{\textcolor{alertred}{#1}}}
+
+\tikzset{
+  box/.style={draw=tastifynavy, rounded corners=3pt, fill=softgray, align=center, minimum height=0.9cm, text width=3.0cm, font=\small},
+  store/.style={draw=tastifygreen, rounded corners=3pt, fill=tastifygreen!8, align=center, minimum height=0.9cm, text width=2.8cm, font=\small},
+  external/.style={draw=tastifygold!80!black, rounded corners=3pt, fill=tastifygold!16, align=center, minimum height=0.9cm, text width=3.0cm, font=\small},
+  flow/.style={-{Latex[length=2.5mm]}, thick, draw=tastifynavy},
+  dashedflow/.style={-{Latex[length=2.5mm]}, thick, dashed, draw=tastifygreen}
+}
 
 \begin{document}
 
@@ -53,11 +77,13 @@
 \input{chapters/01_introduction}
 \input{chapters/02_contexte}
 \input{chapters/03_conception}
-\input{chapters/04_realisation}
-\input{chapters/05_tests}
-\input{chapters/06_conclusion}
+\input{chapters/04_analyse_sentiment}
+\input{chapters/05_realisation}
+\input{chapters/06_tests}
+\input{chapters/07_conclusion}
+\appendix
+\input{chapters/08_annexes}
 
-\nocite{*}
 \bibliographystyle{plain}
 \bibliography{references}
 
