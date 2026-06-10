@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Loader2
 } from 'lucide-react';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -43,6 +44,7 @@ export const MenuPage: React.FC = () => {
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
   const { addItem } = useCartStore();
   const { config } = useConfigStore();
+  useBodyScrollLock(Boolean(selectedPlat));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,10 +85,10 @@ export const MenuPage: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 flex flex-col bg-background font-body selection:bg-on-background/10">
+    <div className="page-shell flex flex-col">
       
       {/* Header */}
-      <div className="flex-none px-client-margin py-20 border-b border-outline bg-surface">
+      <div className="flex-none px-client-margin py-12 md:py-20 border-b border-outline bg-surface">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-12">
            <div className="space-y-4">
               <span className="text-ui-label text-on-surface-variant">L'Atelier</span>
@@ -108,7 +110,7 @@ export const MenuPage: React.FC = () => {
 
       {/* Category Navigation */}
       <div className="flex-none bg-surface border-b border-outline">
-        <div className="max-w-[1200px] mx-auto px-client-margin py-6 flex gap-8 overflow-x-auto no-scrollbar relative">
+        <div className="max-w-[1200px] mx-auto px-client-margin py-4 md:py-6 flex gap-4 md:gap-8 overflow-x-auto no-scrollbar relative">
            <button
              onClick={() => setActiveCat(null)}
              className={`text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === null ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
@@ -134,7 +136,7 @@ export const MenuPage: React.FC = () => {
       </div>
 
       {/* Grid Canvas */}
-      <main className="flex-1 overflow-y-auto py-24 px-client-margin bg-background custom-scrollbar">
+      <main className="flex-1 py-12 md:py-24 px-client-margin bg-background">
         <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -153,7 +155,7 @@ export const MenuPage: React.FC = () => {
                 >
                   <div className="relative aspect-video rounded-lg overflow-hidden border border-outline grayscale group-hover:grayscale-0 transition-all duration-700">
                     {plat.image ? (
-                       <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} />
+                       <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} loading="lazy" decoding="async" />
                     ) : (
                        <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10   text-4xl">{plat.nom.charAt(0)}</div>
                     )}
@@ -199,7 +201,7 @@ export const MenuPage: React.FC = () => {
       {/* Detailed Modal */}
       <AnimatePresence>
         {selectedPlat && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
              <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                className="absolute inset-0 bg-background/80 backdrop-blur-xl"
@@ -209,31 +211,31 @@ export const MenuPage: React.FC = () => {
                initial={{ opacity: 0, scale: 0.98 }}
                animate={{ opacity: 1, scale: 1 }}
                exit={{ opacity: 0, scale: 0.98 }}
-               className="relative w-full max-w-4xl bg-surface border border-outline rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+               className="relative w-full max-w-4xl max-h-[calc(100dvh-2rem)] bg-surface border border-outline rounded-lg overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
                 <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 text-on-surface-variant hover:text-on-background transition-colors"><X className="w-5 h-5" strokeWidth={1.5} /></button>
                 
-                <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-container-high relative border-r border-outline">
+                <div className="w-full md:w-1/2 aspect-[4/3] md:aspect-auto bg-surface-container-high relative border-b md:border-b-0 md:border-r border-outline shrink-0">
                    {selectedPlat.image ? (
-                      <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={selectedPlat.nom} />
+                      <img src={selectedPlat.image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={selectedPlat.nom} loading="lazy" decoding="async" />
                    ) : (
                       <div className="absolute inset-0 flex items-center justify-center   text-8xl text-on-surface-variant/10">{selectedPlat.nom.charAt(0)}</div>
                    )}
                 </div>
 
-                <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col">
-                   <div className="mb-10">
-                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mb-4 block">DÉTAILS DU PLAT</span>
-                      <h2 className="text-display-lg  leading-none mb-6">{selectedPlat.nom}</h2>
+                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col overflow-y-auto custom-scrollbar">
+                   <div className="mb-8">
+                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4 block">DÉTAILS DU PLAT</span>
+                      <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6 break-words">{selectedPlat.nom}</h2>
                       <span className="font-mono text-xl text-on-background">{selectedPlat.prix} {config?.devise || 'DH'}</span>
                    </div>
 
-                   <p className="text-base text-on-surface-variant leading-relaxed mb-12 ">
+                   <p className="text-base text-on-surface-variant leading-relaxed mb-10">
                      {selectedPlat.description || 'Une création signature préparée avec soin par nos chefs.'}
                    </p>
 
                    <div className="space-y-8 pt-8 border-t border-outline mt-auto">
-                      <div className="flex items-center gap-12">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-12">
                          <div className="space-y-1">
                             <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Préparation</p>
                             <div className="flex items-center gap-2 font-mono text-sm text-on-surface">

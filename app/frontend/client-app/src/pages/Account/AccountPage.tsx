@@ -27,6 +27,7 @@ import {
   Zap
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 export const AccountPage: React.FC = () => {
   const { username, logout } = useAuthStore();
@@ -38,6 +39,8 @@ export const AccountPage: React.FC = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasPaidOrders = orders.some(o => o.statut === 'PAYEE');
+  useBodyScrollLock(isReviewModalOpen && hasPaidOrders);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,8 +68,6 @@ export const AccountPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const hasPaidOrders = orders.some(o => o.statut === 'PAYEE');
-
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasPaidOrders) {
@@ -87,79 +88,79 @@ export const AccountPage: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-[#FAF9F6] relative overflow-hidden">
+    <div className="page-shell flex flex-col items-center justify-center relative overflow-hidden">
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col items-center gap-6 relative z-10"
         >
-            <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#6B6767] uppercase tracking-[0.4em]">Chargement de votre univers</span>
+            <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1.5}/>
+            <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Chargement de votre espace</span>
         </motion.div>
-        <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
+        <div className="absolute inset-0 bg-on-background/5 blur-[100px] rounded-full" />
     </div>
   );
 
   return (
-    <div className="flex-1 bg-background font-body selection:bg-primary/20 overflow-y-auto custom-scrollbar">
-      <main className="max-w-7xl mx-auto px-client-margin py-12 md:py-24 space-y-24">
+    <div className="page-shell">
+      <main className="max-w-7xl mx-auto px-client-margin py-8 md:py-24 space-y-16 md:space-y-24">
         
         {/* Profile Hero Section */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-           <div className="lg:col-span-8 bg-white border border-[#2D2424]/5 rounded-[3rem] p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden shadow-xl group">
+           <div className="lg:col-span-8 bg-surface border border-outline rounded-lg p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 md:gap-10 relative overflow-hidden shadow-sm group">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
               
-              <div className="w-32 h-32 rounded-full border-4 border-[#D14D1A] bg-surface-container-highest flex items-center justify-center overflow-hidden shrink-0 shadow-2xl relative">
-                 <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=300" className="w-full h-full object-cover grayscale-[0.3]" alt="Avatar" />
+              <div className="w-32 h-32 rounded-full border-4 border-outline-variant bg-surface-container-highest flex items-center justify-center overflow-hidden shrink-0 shadow-2xl relative">
+                 <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=300" className="w-full h-full object-cover grayscale-[0.3]" alt="Avatar" loading="lazy" decoding="async" />
               </div>
 
               <div className="flex-1 text-center md:text-left space-y-6 z-10">
                  <div>
-                    <h1 className=" text-4xl md:text-6xl font-black text-[#2D2424] uppercase  tracking-tighter m-0 leading-none">{username}</h1>
-                    <p className="font-sans text-[11px] font-black text-[#6B6767] uppercase tracking-[0.4em] mt-4">Identité Vérifiée</p>
+                    <h1 className="text-4xl md:text-6xl font-black text-on-background uppercase tracking-tight m-0 leading-none break-words">{username}</h1>
+                    <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest mt-4">Identité Vérifiée</p>
                  </div>
                  
                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                    <div className="bg-[#D14D1A]/5 border border-[#D14D1A]/10 px-4 py-2 rounded-xl flex items-center gap-3">
-                       <Award className="w-4 h-4 text-[#D14D1A]" />
-                       <span className="font-sans text-[10px] font-black text-[#2D2424] uppercase tracking-widest">{loyalty?.tier_display || 'OR'}</span>
+                    <div className="bg-surface-container-high border border-outline px-4 py-2 rounded-lg flex items-center gap-3">
+                       <Award className="w-4 h-4 text-on-background" />
+                       <span className="font-sans text-[10px] font-black text-on-background uppercase tracking-widest">{loyalty?.tier_display || 'OR'}</span>
                     </div>
-                    <div className="bg-[#FAF9F6] border border-[#2D2424]/5 px-4 py-2 rounded-xl flex items-center gap-3">
-                       <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
-                       <span className="font-sans text-[10px] font-black text-[#2D2424] uppercase tracking-widest">{loyalty?.points || 0} POINTS</span>
+                    <div className="bg-surface-container-high border border-outline px-4 py-2 rounded-lg flex items-center gap-3">
+                       <ShieldCheck className="w-4 h-4 text-success" />
+                       <span className="font-sans text-[10px] font-black text-on-background uppercase tracking-widest">{loyalty?.points || 0} points</span>
                     </div>
                  </div>
               </div>
            </div>
 
            {/* Tier Progress Bento */}
-           <div className="lg:col-span-4 bg-white border border-[#2D2424]/5 rounded-[3rem] p-10 flex flex-col justify-between shadow-lg">
+           <div className="lg:col-span-4 bg-surface border border-outline rounded-lg p-8 flex flex-col justify-between shadow-sm">
               <div className="space-y-6">
-                 <h3 className="font-sans text-[11px] font-black text-[#6B6767] uppercase tracking-[0.2em]">STATUT PRIVILÈGE</h3>
-                 <div className="w-full h-2 bg-[#FAF9F6] rounded-full overflow-hidden">
+                 <h3 className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Statut privilège</h3>
+                 <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
                     <motion.div
                        initial={{ width: 0 }}
                        whileInView={{ width: '65%' }}
                        viewport={{ once: true }}
                        transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-                       className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] shadow-[0_0_12px_rgba(209,77,26,0.2)]"
+                       className="h-full bg-on-background"
                     />
                  </div>
-                 <p className=" text-lg text-[#2D2424] ">Bientôt le prochain échelon culinaire</p>
+                 <p className="text-lg text-on-background">Bientôt le prochain avantage membre</p>
               </div>
            </div>
         </section>
 
         {/* Privileges & Rewards Section */}
         <section className="space-y-12">
-            <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
+            <div className="flex justify-between items-end border-b border-outline pb-6">
                 <div>
-                    <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Privilèges</h2>
-                    <p className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
+                    <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Privilèges</h2>
+                    <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
                 </div>
-                <div className="flex items-center gap-3 text-[#7A6228]">
+                <div className="flex items-center gap-3 text-on-surface-variant">
                     <Zap className="w-4 h-4 fill-current" />
-                    <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres Membres</span>
+                    <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres membres</span>
                 </div>
             </div>
 
@@ -172,23 +173,23 @@ export const AccountPage: React.FC = () => {
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
-                            className={`p-8 rounded-[2.5rem] border transition-all duration-700 flex flex-col justify-between min-h-[300px] ${isUnlockable ? 'bg-white border-[#2D2424]/5 shadow-xl hover:border-[#C5A059]/30' : 'bg-[#F4F1EA]/50 border-transparent grayscale'}`}
+                            className={`p-6 md:p-8 rounded-lg border transition-all duration-300 flex flex-col justify-between min-h-[260px] ${isUnlockable ? 'bg-surface border-outline shadow-sm hover:border-on-background/20' : 'bg-surface-container-high border-transparent grayscale'}`}
                         >
                             <div className="space-y-6">
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isUnlockable ? 'bg-[#C5A059]/10 text-[#C5A059]' : 'bg-[#2D2424]/5 text-[#2D2424]/20'}`}>
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isUnlockable ? 'bg-surface-container-high text-on-background' : 'bg-surface-container-high text-on-surface-variant/40'}`}>
                                     <Gift className="w-5 h-5" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className=" text-xl font-black text-[#2D2424] uppercase ">{reward.nom}</h4>
-                                    <p className="font-body text-xs text-[#6B6767]  leading-relaxed">{reward.description}</p>
+                                    <h4 className="text-xl font-black text-on-background uppercase">{reward.nom}</h4>
+                                    <p className="font-body text-xs text-on-surface-variant leading-relaxed">{reward.description}</p>
                                 </div>
                             </div>
-                            <div className="flex justify-between items-center border-t border-[#2D2424]/5 pt-6">
-                                <span className="font-sans text-[10px] font-black text-[#7A6228] uppercase tracking-widest">{reward.points_requis} PTS</span>
+                            <div className="flex justify-between items-center border-t border-outline pt-6">
+                                <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">{reward.points_requis} pts</span>
                                 {isUnlockable ? (
-                                    <button className="text-[#B83D12] font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
+                                    <button className="text-on-background font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
                                 ) : (
-                                    <span className="font-sans text-[9px] font-black text-[#2D2424]/20 uppercase tracking-widest">Verrouillé</span>
+                                    <span className="font-sans text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">Verrouillé</span>
                                 )}
                             </div>
                         </motion.div>
@@ -203,14 +204,14 @@ export const AccountPage: React.FC = () => {
               
               {/* Recent Orders */}
               <div className="space-y-10">
-                 <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
+                 <div className="flex justify-between items-end border-b border-outline pb-6">
                     <div>
-                        <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Historique</h2>
-                        <p className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
+                        <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Historique</h2>
+                        <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
                     </div>
-                    <div className="flex items-center gap-3 text-[#B83D12]">
+                    <div className="flex items-center gap-3 text-on-surface-variant">
                         <History className="w-4 h-4" />
-                        <span className="font-sans text-[10px] font-black uppercase tracking-widest">Suivi d'Expérience</span>
+                        <span className="font-sans text-[10px] font-black uppercase tracking-widest">Suivi d'expérience</span>
                     </div>
                  </div>
 
@@ -221,15 +222,15 @@ export const AccountPage: React.FC = () => {
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.05 }}
-                            className="p-8 bg-white border border-[#2D2424]/5 rounded-[2rem] flex flex-col sm:flex-row items-center justify-between gap-8 hover:border-[#D14D1A]/20 transition-all group shadow-sm"
+                            className="p-6 md:p-8 bg-surface border border-outline rounded-lg flex flex-col sm:flex-row items-center justify-between gap-6 md:gap-8 hover:border-on-background/20 transition-all group shadow-sm"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="w-14 h-14 bg-[#FAF9F6] rounded-2xl flex items-center justify-center text-[#D14D1A] border border-[#2D2424]/5 group-hover:bg-[#D14D1A] group-hover:text-white transition-all duration-500">
+                                <div className="w-14 h-14 bg-surface-container-high rounded-lg flex items-center justify-center text-on-background border border-outline group-hover:bg-on-background group-hover:text-background transition-all duration-500">
                                     <ShoppingBag className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">Commande #{order.id}</h4>
-                                    <p className="font-body text-sm text-[#6B6767] ">
+                                    <h4 className="text-2xl font-black text-on-background uppercase tracking-tight">Commande #{order.id}</h4>
+                                    <p className="font-body text-sm text-on-surface-variant">
                                         {new Date(order.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })} • {order.montant_total} DH
                                     </p>
                                 </div>
@@ -238,7 +239,7 @@ export const AccountPage: React.FC = () => {
                                 <span className={`px-4 py-1.5 rounded-full font-sans text-[9px] font-black uppercase tracking-widest ${order.statut === 'PAYEE' ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'}`}>
                                     {order.statut}
                                 </span>
-                                <button aria-label="Options de commande" className="p-2 text-[#2D2424]/20 hover:text-[#2D2424] transition-all"><MoreVertical className="w-5 h-5" /></button>
+                                <button aria-label="Options de commande" className="p-2 text-on-surface-variant/40 hover:text-on-background transition-all"><MoreVertical className="w-5 h-5" /></button>
                             </div>
                         </motion.div>
                     )) : (
@@ -252,9 +253,9 @@ export const AccountPage: React.FC = () => {
 
               {/* Reservations */}
               <div className="space-y-10">
-                 <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
-                    <h2 className=" text-4xl font-black text-[#2D2424]  uppercase tracking-tighter m-0">Réservations</h2>
-                    <Link to="/reservations" className="font-sans text-[10px] font-black text-[#B83D12] hover:text-[#2D2424] transition-colors uppercase tracking-[0.2em] border-b border-[#B83D12]/20 pb-1">Réserver une table</Link>
+                 <div className="flex justify-between items-end border-b border-outline pb-6">
+                    <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Réservations</h2>
+                    <Link to="/reservations" className="font-sans text-[10px] font-black text-on-background hover:text-on-surface-variant transition-colors uppercase tracking-[0.2em] border-b border-outline pb-1">Réserver une table</Link>
                  </div>
 
                  <div className="space-y-6">
@@ -263,18 +264,18 @@ export const AccountPage: React.FC = () => {
                             key={idx} 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="p-8 bg-white border border-[#2D2424]/5 rounded-[2rem] flex items-center justify-between hover:border-[#C5A059]/30 transition-all shadow-sm"
+                            className="p-6 md:p-8 bg-surface border border-outline rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:border-on-background/20 transition-all shadow-sm"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="w-14 h-14 bg-[#FAF9F6] rounded-2xl flex items-center justify-center text-[#C5A059] border border-[#2D2424]/5">
+                                <div className="w-14 h-14 bg-surface-container-high rounded-lg flex items-center justify-center text-on-background border border-outline">
                                     <Calendar className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{res.date_reservation}</h4>
-                                    <p className="font-body text-sm text-[#6B6767] ">{res.heure_debut} • Table {res.table}</p>
+                                    <h4 className="text-2xl font-black text-on-background uppercase tracking-tight">{res.date_reservation}</h4>
+                                    <p className="font-body text-sm text-on-surface-variant">{res.heure_debut} • Table {res.table}</p>
                                 </div>
                             </div>
-                            <span className="bg-[#FAF9F6] border border-[#2D2424]/5 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-[#6B6767]">{res.statut}</span>
+                            <span className="bg-surface-container-high border border-outline px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest text-on-surface-variant">{res.statut}</span>
                         </motion.div>
                     )) : (
                         <div className="py-20 text-center opacity-20">
@@ -288,12 +289,12 @@ export const AccountPage: React.FC = () => {
 
            {/* Quick Actions & Support */}
            <div className="lg:col-span-4 space-y-10">
-              <div className="bg-[#2D2424] text-[#FAF9F6] rounded-[3rem] p-10 space-y-12 shadow-2xl relative overflow-hidden">
+              <div className="bg-on-background text-background rounded-lg p-8 md:p-10 space-y-10 shadow-xl relative overflow-hidden">
                  <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
                  
                  <div className="space-y-4 relative z-10">
-                    <h3 className=" text-3xl text-[#FAF9F6] tracking-tight m-0">Menu Privé</h3>
-                    <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-[#C4C1C1]">Gestion du compte & Assistance</p>
+                    <h3 className="text-3xl text-background tracking-tight m-0">Menu privé</h3>
+                    <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-background/70">Gestion du compte & assistance</p>
                  </div>
 
                  <div className="space-y-2 relative z-10">
@@ -303,11 +304,11 @@ export const AccountPage: React.FC = () => {
                     ].map((item, i) => (
                        <button
                         key={i} onClick={item.action}
-                        aria-disabled={item.highlight === false ? true : undefined}
+                        disabled={item.highlight === false}
                         className={`w-full flex items-center justify-between p-3 rounded-2xl transition-all group ${item.highlight === false ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white/5'}`}
                        >
                           <div className="flex items-center gap-4">
-                             <item.icon className={`w-4 h-4 ${item.highlight ? 'text-[#D14D1A]' : ''}`} />
+                             <item.icon className={`w-4 h-4 ${item.highlight ? 'text-background' : ''}`} />
                              <span className="font-sans text-[11px] font-bold uppercase tracking-widest">{item.label}</span>
                           </div>
                           {item.highlight !== false && <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />}
@@ -316,7 +317,7 @@ export const AccountPage: React.FC = () => {
                  </div>
 
                  <div className="pt-10 border-t border-white/5 relative z-10">
-                    <button onClick={() => logout()} className="w-full flex items-center gap-4 text-[#F28155] p-3 rounded-2xl hover:bg-[#F28155]/10 transition-all font-sans text-[11px] font-black uppercase tracking-[0.4em]">
+                    <button onClick={() => logout()} className="w-full flex items-center gap-4 text-background p-3 rounded-2xl hover:bg-white/10 transition-all font-sans text-[11px] font-black uppercase tracking-[0.4em]">
                        <LogOut className="w-4 h-4" />
                        Fermer la session
                     </button>
@@ -324,9 +325,9 @@ export const AccountPage: React.FC = () => {
               </div>
 
               {!hasPaidOrders && (
-                <div className="p-8 bg-[#D14D1A]/5 border border-[#D14D1A]/20 rounded-[2.5rem] flex items-center gap-5">
-                    <CheckCircle2 className="w-8 h-8 text-[#D14D1A] shrink-0" strokeWidth={1} />
-                    <p className="font-body text-xs text-[#2D2424]/70  leading-relaxed">
+                <div className="p-6 bg-error/5 border border-error/20 rounded-lg flex items-center gap-5">
+                    <CheckCircle2 className="w-8 h-8 text-error shrink-0" strokeWidth={1} />
+                    <p className="font-body text-xs text-on-surface-variant leading-relaxed">
                         Le partage d'avis est réservé à nos convives ayant déjà réglé une commande.
                     </p>
                 </div>
@@ -337,23 +338,25 @@ export const AccountPage: React.FC = () => {
         {/* Unified Review Modal */}
         <AnimatePresence>
         {isReviewModalOpen && hasPaidOrders && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#FAF9F6]/95 backdrop-blur-xl" onClick={() => setIsReviewModalOpen(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-xl bg-white border border-[#2D2424]/5 rounded-[4rem] p-12 md:p-20 shadow-2xl flex flex-col items-center text-center">
-                 <div className="w-20 h-20 bg-[#D14D1A]/5 rounded-full flex items-center justify-center text-[#D14D1A] mb-10 border border-[#D14D1A]/10">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-background/95 backdrop-blur-xl" onClick={() => setIsReviewModalOpen(false)} />
+            <motion.div role="dialog" aria-modal="true" aria-labelledby="review-dialog-title" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-xl max-h-[calc(100dvh-2rem)] overflow-y-auto custom-scrollbar bg-surface border border-outline rounded-lg p-8 md:p-12 shadow-2xl flex flex-col items-center text-center">
+                 <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center text-on-background mb-10 border border-outline">
                     <Quote className="w-8 h-8" />
                  </div>
-                 <h3 className=" text-5xl font-black text-[#2D2424]  tracking-tighter mb-4">Votre avis nous est précieux.</h3>
-                 <p className="text-[#6B6767] font-body  mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
+                 <h3 id="review-dialog-title" className="text-3xl md:text-5xl font-black text-on-background tracking-tight mb-4">Votre avis nous est précieux.</h3>
+                 <p className="text-on-surface-variant font-body mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
                  
                  <form onSubmit={handleReviewSubmit} className="w-full space-y-10">
+                    <label htmlFor="review-comment" className="sr-only">Votre avis</label>
                     <textarea 
+                        id="review-comment"
                         required value={comment} onChange={(e) => setComment(e.target.value)}
-                        className="w-full p-8 bg-[#FAF9F6] border border-[#2D2424]/10 rounded-3xl  text-2xl  text-[#2D2424] focus:border-[#D14D1A]/30 outline-none transition-all resize-none h-48 placeholder:text-[#2D2424]/10"
+                        className="w-full p-8 bg-surface-container-high border border-outline rounded-lg text-2xl text-on-background focus:border-on-background outline-none transition-all resize-none h-48 placeholder:text-on-surface-variant/40"
                         placeholder="Écrivez ici..."
                     />
 
-                    <button disabled={isSubmitting} type="submit" className="w-full py-7 bg-[#2D2424] text-[#FAF9F6] rounded-3xl font-sans text-xs font-black uppercase tracking-[0.5em] shadow-2xl hover:bg-[#D14D1A] transition-all flex items-center justify-center gap-4">
+                    <button disabled={isSubmitting} type="submit" className="btn-primary w-full min-h-14 gap-4">
                        {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Transmettre mon avis</span>}
                     </button>
                  </form>

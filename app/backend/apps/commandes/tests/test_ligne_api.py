@@ -104,8 +104,6 @@ class CommandeLigneAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.cuisinier)
         order_url = reverse('commande-detail', kwargs={'pk': self.commande.pk})
         response = self.client.patch(order_url, {'statut': Commande.Statut.PRETE})
-        if response.status_code != 200:
-            print(f"DEBUG RESPONSE: {response.data}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.commande.refresh_from_db()
         self.assertEqual(self.commande.statut, Commande.Statut.PRETE)

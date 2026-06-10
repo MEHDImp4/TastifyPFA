@@ -33,7 +33,7 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-background font-body selection:bg-primary/20 min-h-[85vh] overflow-y-auto custom-scrollbar">
+    <div className="page-shell min-h-[85vh]">
       <div className="max-w-7xl mx-auto px-client-margin py-12 md:py-24">
         
         {/* Editorial Header */}
@@ -42,8 +42,8 @@ export const ContactPage: React.FC = () => {
                 <span className="h-[1px] w-8 bg-primary" />
                 <span className="editorial-kicker">Liaison Directe</span>
             </div>
-            <h1 className=" text-4xl md:text-7xl font-black text-on-surface uppercase  tracking-tighter leading-none m-0">Registre de Contact.</h1>
-            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl  opacity-60 uppercase tracking-tight leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
+            <h1 className="text-4xl md:text-7xl font-black text-on-surface uppercase tracking-tight leading-none m-0">Registre de Contact.</h1>
+            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl opacity-80 leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
@@ -99,7 +99,7 @@ export const ContactPage: React.FC = () => {
             <main className="lg:col-span-8">
                 <motion.div 
                     initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="bg-surface-container border border-outline-variant rounded-[3rem] p-10 md:p-20 relative overflow-hidden shadow-2xl"
+                    className="bg-surface-container border border-outline-variant rounded-lg p-6 md:p-12 relative overflow-hidden shadow-xl"
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 blur-[100px] -mr-40 -mt-40 pointer-events-none" />
                     
@@ -120,7 +120,7 @@ export const ContactPage: React.FC = () => {
                                         id="contact-name-input" type="text" name="name" value={formData.name} onChange={handleChange} required
                                         aria-label="Identité"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all uppercase placeholder:text-on-surface-variant/20"
-                                        placeholder="NOM_COMPLET"
+                                        placeholder="Votre nom"
                                     />
                                 </div>
                                 <div className="space-y-3">
@@ -129,7 +129,7 @@ export const ContactPage: React.FC = () => {
                                         id="contact-email-input" type="email" name="email" value={formData.email} onChange={handleChange} required
                                         aria-label="Coordonnée"
                                         className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/20"
-                                        placeholder="EMAIL@DOMAIN.COM"
+                                        placeholder="votre@email.com"
                                     />
                                 </div>
                             </div>
@@ -154,14 +154,14 @@ export const ContactPage: React.FC = () => {
                                     id="contact-message-input" name="message" value={formData.message} onChange={handleChange} required rows={4}
                                     aria-label="Message"
                                     className="w-full p-8 bg-surface-container-lowest border border-outline-variant rounded-[2rem] focus:border-primary outline-none transition-all resize-none font-body text-lg  text-on-surface uppercase placeholder:text-on-surface-variant/20"
-                                    placeholder="DÉTAILLEZ LES NUANCES..."
+                                    placeholder="Votre message..."
                                 />
                             </div>
 
                             <button 
                                 type="submit" disabled={isSubmitting}
                                 data-testid="contact-submit"
-                                className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-6"
+                                className="btn-primary w-full min-h-14 gap-4"
                             >
                                 {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Transmettre la Liaison</span><Send className="w-5 h-5 text-on-primary/60" /></>}
                             </button>

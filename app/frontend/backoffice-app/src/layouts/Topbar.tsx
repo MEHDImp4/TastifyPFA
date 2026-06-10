@@ -6,20 +6,23 @@ import { SocketIndicator } from '../components/ui/SocketIndicator';
 
 interface TopbarProps {
   setMobileOpen: (open: boolean) => void;
+  isMobileOpen: boolean;
 }
 
 export const Topbar: React.FC<TopbarProps> = ({
   setMobileOpen,
+  isMobileOpen,
 }) => {
   const { username, role } = useAuthStore();
 
   return (
-    <header className="h-16 bg-surface border-b border-outline flex items-center justify-between px-8 sticky top-0 z-40">
+    <header className="h-16 bg-surface border-b border-outline flex items-center justify-between px-4 md:px-8 sticky top-0 z-40">
       <div className="flex items-center gap-6">
-        <button 
+        <button
           onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation menu"
-          className="flex h-10 w-10 items-center justify-center border border-outline text-on-surface-variant hover:text-on-background hover:bg-background md:hidden rounded transition-all"
+          aria-label="Ouvrir le menu de navigation"
+          aria-expanded={isMobileOpen}
+          className="flex h-11 w-11 items-center justify-center border border-outline text-on-surface-variant hover:text-on-background hover:bg-background md:hidden rounded transition-all"
         >
           <Menu strokeWidth={2} className="w-5 h-5" />
         </button>
@@ -30,7 +33,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           <SocketIndicator />
           <NotificationCenter />
           <div className="text-on-surface-variant hover:text-success transition-all cursor-help opacity-40 hover:opacity-100">
-            <ShieldCheck className="w-5 h-5" strokeWidth={1.5} />
+            <ShieldCheck className="w-5 h-5" strokeWidth={1.5} aria-hidden="true" />
           </div>
         </div>
         
@@ -40,7 +43,7 @@ export const Topbar: React.FC<TopbarProps> = ({
             <p className="text-[8px] font-bold text-on-surface-variant tracking-widest mt-1 uppercase opacity-40">{role}</p>
           </div>
           <div className="w-10 h-10 border border-outline bg-background flex items-center justify-center rounded transition-all group-hover:border-on-background">
-            <User strokeWidth={1.5} className="w-5 h-5 text-on-surface-variant group-hover:text-on-background" />
+            <User strokeWidth={1.5} className="w-5 h-5 text-on-surface-variant group-hover:text-on-background" aria-hidden="true" />
           </div>
         </div>
       </div>

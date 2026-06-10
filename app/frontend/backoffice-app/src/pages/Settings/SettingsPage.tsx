@@ -36,9 +36,9 @@ export const SettingsPage: React.FC = () => {
     setIsSaving(true);
     try {
       await configurationApi.updateSettings(config);
-      toast.success('System parameters deployed');
+      toast.success('Paramètres enregistrés');
     } catch (err) {
-      toast.error('Deployment failure');
+      toast.error('Enregistrement impossible');
     } finally {
       setIsSaving(false);
     }
@@ -48,9 +48,9 @@ export const SettingsPage: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
-      <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
+      <header className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="System Settings" className="text-sm font-bold tracking-widest text-on-background uppercase">Console Système</h1>
+          <h1 aria-label="Paramètres système" className="text-sm font-bold tracking-widest text-on-background uppercase">Console Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Configuration globale de l'établissement</p>
         </div>
         <div className="flex items-center gap-4">
@@ -60,18 +60,18 @@ export const SettingsPage: React.FC = () => {
           <button
             onClick={handleSave}
             disabled={isSaving || !config}
-            aria-label="Deploy Changes"
+            aria-label="Enregistrer les paramètres"
             className="btn-primary h-10 px-6"
           >
-            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4" /> <span>Deploy Changes</span></>}
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4" /> <span>Enregistrer</span></>}
           </button>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
         {!config ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-sm font-bold text-error uppercase tracking-widest">CRITICAL: UNAVAILABLE.</p>
+            <p className="text-sm font-bold text-error uppercase tracking-widest">Service indisponible.</p>
           </div>
         ) : (
           <div className="max-w-4xl mx-auto space-y-8">
@@ -82,11 +82,11 @@ export const SettingsPage: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <label htmlFor="settings-nom" className="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">
-                  Nom de l'enseigne <span className="sr-only">Trading Name</span>
+                  Nom de l'enseigne
                 </label>
                 <input
                   id="settings-nom"
-                  aria-label="Trading Name"
+                  aria-label="Nom de l'enseigne"
                   value={config.nom ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, nom: e.target.value } : null)}
                   className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm uppercase"
@@ -94,11 +94,11 @@ export const SettingsPage: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <label htmlFor="settings-description" className="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">
-                  Description <span className="sr-only">Restaurant Description</span>
+                  Description
                 </label>
                 <textarea
                   id="settings-description"
-                  aria-label="Restaurant Description"
+                  aria-label="Description"
                   value={config.description ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, description: e.target.value } : null)}
                   rows={3}
@@ -107,11 +107,11 @@ export const SettingsPage: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <label htmlFor="settings-telephone" className="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">
-                  Téléphone <span className="sr-only">Primary Contact</span>
+                  Téléphone
                 </label>
                 <input
                   id="settings-telephone"
-                  aria-label="Primary Contact"
+                  aria-label="Téléphone"
                   value={config.telephone ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, telephone: e.target.value } : null)}
                   className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"

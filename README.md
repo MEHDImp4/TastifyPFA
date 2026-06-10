@@ -48,22 +48,81 @@ The Docker backend, Celery worker, and Celery beat now share the same named back
 Celery now uses Redis DB `1` for broker traffic and `django-celery-results` for task results, leaving Redis DB `0` available for Channels/WebSocket traffic.
 
 ## Layout
-See `docs/brain/00_Meta/FILE_MAP.md`.
+Current source layout:
+- `app/backend/` - Django API, ASGI, Channels, Celery, and domain apps.
+- `app/frontend/backoffice-app/` - Staff SPA for GERANT, SERVEUR, and CUISINIER workflows.
+- `app/frontend/client-app/` - Public and authenticated client portal SPA.
+- `docs/` - Project and report documentation.
 
-The back-office SPA keeps Vite runtime config in `app/frontend/backoffice/vite.config.ts` and test-only settings in `app/frontend/backoffice/vitest.config.ts`.
+The back-office SPA keeps Vite runtime config in `app/frontend/backoffice-app/vite.config.ts` and test-only settings in `app/frontend/backoffice-app/vitest.config.ts`.
 The client portail now follows a public-first access model: `/`, `/menu`, `/reservations`, and `/fidelite` are visible without authentication, while the live reservation wizard remains behind client login at `/reservations/new`, `/reservations/table`, and `/reservations/confirm`.
-The public portail shell and gated notices now live in `app/frontend/portail/src/App.tsx`, `app/frontend/portail/src/components/ProtectedFeatureNotice.tsx`, and `app/frontend/portail/src/pages/Home/PortalHomePage.tsx`, while the authenticated booking flow stays backed by `app/frontend/portail/src/pages/Reservations/` and `app/frontend/portail/src/api/reservations.ts`.
-The portail test surface now mirrors the backoffice setup through `app/frontend/portail/vitest.config.ts` and `app/frontend/portail/src/test/setup.ts`.
+The public portail shell now lives in `app/frontend/client-app/src/App.tsx`, `app/frontend/client-app/src/layouts/PublicLayout.tsx`, and `app/frontend/client-app/src/pages/Home/PortalHomePage.tsx`, while the authenticated booking flow stays backed by `app/frontend/client-app/src/pages/Reservations/` and `app/frontend/client-app/src/api/reservations.ts`.
+The portail test surface now mirrors the backoffice setup through `app/frontend/client-app/vitest.config.ts` and `app/frontend/client-app/tests/unit/setup.ts`.
 The back-office SPA now hosts GERANT, SERVEUR, and CUISINIER workflows under `/categories`, `/plats`, `/tables`, `/salle`, `/tables/:id/order`, and `/kds`.
 The back-office browser automation suite now lives under `app/frontend/backoffice-app/tests/e2e/`, with `playwright.config.ts` defining guest, GERANT, SERVEUR, and CUISINIER projects plus authenticated storage-state bootstrap.
-Dense back-office list views now use a shared client-side pagination surface in `app/frontend/backoffice/src/components/ui/Pagination.tsx`, currently wired into dishes, stock, and HR screens.
-Cross-frontend role gates live in `app/frontend/shared/auth/roleAccess.ts`, with focused coverage in `app/frontend/backoffice/src/roleAccess.test.ts`.
+Dense back-office list views live under `app/frontend/backoffice-app/src/pages/`, currently covering dishes, stock, and HR screens.
+Cross-frontend role gates are implemented in each portal auth flow, with focused coverage in `app/frontend/backoffice-app/src/store/authStore.test.ts` and client auth tests.
 Shared auth refreshes now also resynchronize `username` and `role` from the backend response, preventing cross-portal staff/client identity drift inside the persisted Zustand store.
 Persisted auth bootstrap now has a hard render deadline and transient proxy-error tolerance, so a slow backend startup cannot leave the staff SPA frozen on a blank or theme-colored shell.
 If Zustand hydration itself stalls, the staff SPA now falls back to rendering after a short watchdog delay instead of waiting forever on `hasHydrated`.
 Both frontend entrypoints now bootstrap persisted auth through `app/frontend/shared/auth/AuthBootstrap.tsx`, keeping reload behavior aligned between the back-office and portail client.
 Public QR payment pages are intentionally excluded from that bootstrap and call payment endpoints through `app/frontend/shared/auth/publicClient.ts`, which keeps the client portal header without requiring a logged-in session.
 The backend JWT views in `app/backend/apps/users/views/auth.py` now issue separate refresh cookies for the staff and client portals, allowing simultaneous logins on both SPAs without cross-logout.
+
+## Unraid deployment
+This repository includes a production-oriented Compose file for Unraid:
+
+```bash
+cp .env.unraid.example .env.unraid
+# edit .env.unraid: replace UNRAID_IP, domains, SECRET_KEY, and passwords
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d --build
+```
+
+After the CI/CD pipeline has published images to GHCR, deploy updates on Unraid with:
+
+```bash
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml pull
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d
+```
+
+Default URLs after deployment:
+- `http://UNRAID_IP:3003/` -> client portal
+- `http://UNRAID_IP:3000/` -> staff backoffice
+
+The Unraid stack stores persistent data under:
+- `/mnt/user/appdata/tastify/mysql`
+- `/mnt/user/appdata/tastify/redis`
+- `/mnt/user/appdata/tastify/media`
+- `/mnt/user/appdata/tastify/staticfiles`
+
+For direct LAN HTTP, keep `DJANGO_COOKIE_SECURE=False` and `DJANGO_SECURE_SSL_REDIRECT=False`.
+When you put the app behind HTTPS, update `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`,
+`CSRF_TRUSTED_ORIGINS`, `FRONTEND_BASE_URL`, then switch those two security flags to `True`.
+
+Useful Unraid maintenance commands:
+
+```bash
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml logs -f backend
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml exec backend python manage.py createsuperuser
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml exec backend python manage.py seed_all
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml pull
+docker compose --env-file .env.unraid -f docker-compose.unraid.yml up -d --build
+```
+
+## GHCR CI/CD
+`.github/workflows/publish-ghcr.yml` builds and publishes three images to GitHub Container Registry:
+
+- `ghcr.io/<owner>/tastifypfa-backend`
+- `ghcr.io/<owner>/tastifypfa-backoffice`
+- `ghcr.io/<owner>/tastifypfa-client`
+
+The workflow runs on pull requests as a build check, and pushes images on `main`, `master`, version tags like `v1.0.0`, or manual dispatch. Published tags include:
+- `latest` on the default branch
+- branch names such as `main`
+- version tags
+- immutable commit tags like `sha-abc1234...`
+
+On Unraid, set `BACKEND_IMAGE`, `BACKOFFICE_IMAGE`, and `CLIENT_IMAGE` in `.env.unraid` to the GHCR image names you want to deploy.
 
 
 ## Backend domains
@@ -123,8 +182,8 @@ Client authentication now also includes a first-class password-reset flow backed
 ## Realtime staff channel
 - `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
 - `app/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
-- `app/frontend/shared/websocket/` owns the shared staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
-- `app/frontend/shared/ui/` owns the shared render crash boundary used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
+- `app/frontend/backoffice-app/src/contexts/WebSocketProvider.tsx` owns the staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
+- `app/frontend/backoffice-app/src/components/ui/ErrorBoundary.tsx` and `app/frontend/client-app/src/components/ui/ErrorBoundary.tsx` own the render crash boundaries used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
 
 ## Salle order-taking
-- `app/frontend/backoffice/src/pages/Staff/Ordering/` contains the table-specific order route, menu browser, per-table Zustand cart store, floating cart, review drawer, and commandes API submission flow.
+- `app/frontend/backoffice-app/src/pages/Staff/OrderingPage.tsx` contains the table-specific order route, menu browser, order cart, review drawer, and commandes API submission flow.

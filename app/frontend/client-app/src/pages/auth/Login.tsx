@@ -61,7 +61,8 @@ export const Login: React.FC = () => {
     <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center justify-center p-6">
       <Link 
         to="/" 
-        className="fixed top-8 left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all"
+        aria-label="Retour à l'accueil"
+        className="fixed top-6 left-4 sm:top-8 sm:left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all min-h-[44px] min-w-[44px] justify-center"
       >
         <ChevronLeft className="w-3.5 h-3.5" />
         Retour
@@ -91,15 +92,17 @@ export const Login: React.FC = () => {
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <motion.div variants={fadeIn} className="space-y-1.5">
             <label htmlFor="username" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em] ml-1">Utilisateur</label>
             <input
               id="username"
               data-testid="login-username"
               type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
+              required aria-required="true"
+              autoComplete="username"
               className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
-              placeholder="NOM_UTILISATEUR"
+              placeholder="Nom d'utilisateur"
             />
           </motion.div>
 
@@ -112,6 +115,8 @@ export const Login: React.FC = () => {
               id="password"
               data-testid="login-password"
               type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
+              required aria-required="true"
+              autoComplete="current-password"
               className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
               placeholder="••••••••"
             />

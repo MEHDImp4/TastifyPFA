@@ -73,7 +73,7 @@ class Paiement(models.Model):
         ordering = ['-created_at']
         constraints = [
             models.CheckConstraint(
-                check=models.Q(montant__gt=0),
+                condition=models.Q(montant__gt=0),
                 name='paiements_paiement_amount_gt_zero'
             )
         ]
@@ -108,7 +108,7 @@ class PaiementItem(models.Model):
         ]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(montant_contribue__gt=0),
+                condition=models.Q(montant_contribue__gt=0),
                 name='paiements_paiementitem_amount_gt_zero'
             ),
             models.UniqueConstraint(

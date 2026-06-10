@@ -49,8 +49,8 @@ describe('Register page', () => {
     );
 
     const user = userEvent.setup();
-    await user.type(screen.getByPlaceholderText('PSEUDONYME'), 'fresh_client');
-    await user.type(screen.getByPlaceholderText('VOTRE@EMAIL.COM'), 'fresh@tastify.ma');
+    await user.type(screen.getByPlaceholderText("Nom d'utilisateur"), 'fresh_client');
+    await user.type(screen.getByPlaceholderText('votre@email.com'), 'fresh@tastify.ma');
     await user.type(screen.getByPlaceholderText('••••••••'), 'password123');
     await user.click(screen.getByRole('button', { name: /Créer mon profil/i }));
 
@@ -86,8 +86,8 @@ describe('Register page', () => {
     );
 
     const user = userEvent.setup();
-    await user.type(screen.getByPlaceholderText('PSEUDONYME'), 'duplicate');
-    await user.type(screen.getByPlaceholderText('VOTRE@EMAIL.COM'), 'duplicate@tastify.ma');
+    await user.type(screen.getByPlaceholderText("Nom d'utilisateur"), 'duplicate');
+    await user.type(screen.getByPlaceholderText('votre@email.com'), 'duplicate@tastify.ma');
     await user.type(screen.getByPlaceholderText('••••••••'), 'password123');
     await user.click(screen.getByRole('button', { name: /Créer mon profil/i }));
 

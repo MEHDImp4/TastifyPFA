@@ -39,7 +39,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
       const hasSession = persistedAuth.hasSession;
       
       if (!isAuthenticated) {
-        if (hasPersistedToken && persistedAuth.accessToken && persistedAuth.role && persistedAuth.username) {
+        if (hasSession && hasPersistedToken && persistedAuth.accessToken && persistedAuth.role && persistedAuth.username) {
           setAuth(persistedAuth.accessToken, persistedAuth.role, persistedAuth.username);
         } else if (hasSession) {
           const data = await attemptRefresh();
@@ -63,7 +63,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
 
   if (isBootstrapping) {
     return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-[#FAF9F6] p-6 font-body overflow-hidden">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 font-body overflow-hidden">
         <div className="relative">
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -71,7 +71,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
                 transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
                 className="flex flex-col items-center relative z-10"
             >
-                <h1 className=" text-6xl md:text-7xl font-black text-[#D14D1A]  tracking-tighter mb-10 leading-none">
+                <h1 className="text-6xl md:text-7xl font-black text-on-background tracking-tight mb-10 leading-none">
                     Tastify.
                 </h1>
                 <div className="flex flex-col items-center gap-4">
@@ -89,16 +89,16 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
                                     delay: i * 0.2,
                                     ease: "easeInOut"
                                 }}
-                                className="w-1.5 h-1.5 rounded-full bg-[#C5A059]"
+                                className="w-1.5 h-1.5 rounded-full bg-on-background"
                             />
                         ))}
                     </div>
-                    <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.5em] ml-1">L'Excellence se prépare</span>
+                    <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest ml-1">L'Excellence se prépare</span>
                 </div>
             </motion.div>
             
             {/* Soft Luminous Glow */}
-            <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] -z-0 rounded-full" />
+            <div className="absolute inset-0 bg-on-background/5 blur-[100px] -z-0 rounded-full" />
         </div>
         
         {/* Fine texture overlay */}

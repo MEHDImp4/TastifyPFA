@@ -42,7 +42,7 @@ export const SocketIndicator: React.FC = () => {
   const Icon = config.icon;
 
   return (
-    <div className={`flex items-center gap-2 px-3 py-1 border rounded transition-all ${config.bg}`}>
+    <div className={`flex items-center gap-2 px-3 py-1 border rounded transition-all ${config.bg}`} role="status" aria-label={`Statut de connexion: ${config.label}`}>
       <Icon strokeWidth={2} className={`w-3.5 h-3.5 ${config.color} ${status === 'connecting' ? 'animate-spin' : ''}`} />
       <span className={`text-[9px] font-bold uppercase tracking-widest ${config.color}`}>
         {config.label}

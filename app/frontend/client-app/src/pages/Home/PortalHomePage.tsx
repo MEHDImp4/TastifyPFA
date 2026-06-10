@@ -31,11 +31,11 @@ export const PortalHomePage = () => {
   }, []);
 
   return (
-    <div className="h-full bg-background text-on-background overflow-y-auto custom-scrollbar font-body scroll-smooth">
+    <div className="page-shell text-on-background">
       
       {/* Simple Minimal Hero */}
-      <section className="relative min-h-[70vh] w-full flex flex-col justify-center border-b border-outline">
-        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <section className="relative w-full flex flex-col justify-center border-b border-outline">
+        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-16 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
           <motion.div
              initial={{ opacity: 0, y: 10 }}
              animate={{ opacity: 1, y: 0 }}
@@ -46,7 +46,7 @@ export const PortalHomePage = () => {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Gastronomie Contemporaine</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+            <h1 className="text-[clamp(3rem,12vw,5.75rem)] font-bold tracking-tight leading-[0.95]">
               {config?.nom ? config.nom : "Tastify"} <br/>
               <span className="text-on-surface-variant">Cuisine de terroir.</span>
             </h1>
@@ -70,8 +70,10 @@ export const PortalHomePage = () => {
           <div className="lg:col-span-5 hidden lg:block">
             <div className="aspect-[4/5] bg-surface-container-high rounded-lg overflow-hidden border border-outline">
                 <img 
-                    src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200" 
-                    alt="Atmosphere" 
+                    src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
+                    alt="Atmosphere"
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-full object-cover opacity-90"
                 />
             </div>
@@ -80,9 +82,9 @@ export const PortalHomePage = () => {
       </section>
 
       {/* Recommended Selection - Clean Grid */}
-      <section className="py-24">
+      <section className="py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto px-client-margin">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-on-surface-variant">
                  <Sparkles className="w-4 h-4" />
@@ -145,7 +147,7 @@ export const PortalHomePage = () => {
                             )}
                         </div>
 
-                        <Link 
+                        <Link
                             to="/menu"
                             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
                         >
@@ -195,5 +197,4 @@ export const PortalHomePage = () => {
     </div>
   );
 };
-
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
@@ -19,6 +19,7 @@ import { NotFoundPage } from './pages/System/NotFoundPage';
 import { OfflineModePage } from './pages/System/OfflineModePage';
 import { useAuthStore } from './store/authStore';
 import { useConfigStore } from './store/configStore';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 import { Toaster } from 'sonner';
 
@@ -34,8 +35,33 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const routeTitles: Record<string, string> = {
+  '/': 'Tastify — Accueil',
+  '/menu': 'Tastify — La Carte',
+  '/reservations': 'Tastify — Réservations',
+  '/account': 'Tastify — Mon Compte',
+  '/login': 'Tastify — Connexion',
+  '/register': 'Tastify — Inscription',
+  '/forgot-password': 'Tastify — Mot de passe oublié',
+  '/reset-password': 'Tastify — Réinitialisation',
+  '/checkout': 'Tastify — Panier',
+  '/contact': 'Tastify — Contact',
+  '/loyalty': 'Tastify — Privilèges',
+};
+
+const RouteTitle = () => {
+  const location = useLocation();
+  useEffect(() => {
+    const title = routeTitles[location.pathname];
+    if (title) document.title = title;
+  }, [location.pathname]);
+  return null;
+};
+
 const AnimatedRoutes = () => {
   return (
+    <>
+    <RouteTitle />
     <Routes>
       <Route element={<PublicLayout />}>
         {/* Public Showcase Pages */}
@@ -89,6 +115,7 @@ const AnimatedRoutes = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
+    </>
   );
 };
 
@@ -101,6 +128,7 @@ function App() {
   }, [fetchConfig]);
 
   return (
+    <ErrorBoundary>
     <MotionConfig reducedMotion="user">
       <AuthBootstrap>
         <div className="selection:bg-primary/20 selection:text-primary">
@@ -111,6 +139,7 @@ function App() {
         </div>
       </AuthBootstrap>
     </MotionConfig>
+    </ErrorBoundary>
   );
 }
 

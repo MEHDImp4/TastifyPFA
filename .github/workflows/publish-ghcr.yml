@@ -1,0 +1,107 @@
+name: Publish GHCR Images
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+    paths:
+      - ".github/workflows/publish-ghcr.yml"
+      - "app/backend/**"
+      - "app/frontend/backoffice-app/**"
+      - "app/frontend/client-app/**"
+      - "docker-compose.unraid.yml"
+      - "package*.json"
+  pull_request:
+    paths:
+      - ".github/workflows/publish-ghcr.yml"
+      - "app/backend/**"
+      - "app/frontend/backoffice-app/**"
+      - "app/frontend/client-app/**"
+      - "docker-compose.unraid.yml"
+      - "package*.json"
+  workflow_dispatch:
+
+concurrency:
+  group: ghcr-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  docker:
+    name: Build and publish ${{ matrix.service }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: backend
+            image: tastifypfa-backend
+            context: app/backend
+            dockerfile: app/backend/Dockerfile
+          - service: backoffice
+            image: tastifypfa-backoffice
+            context: app/frontend/backoffice-app
+            dockerfile: app/frontend/backoffice-app/Dockerfile.prod
+          - service: client
+            image: tastifypfa-client
+            context: app/frontend/client-app
+            dockerfile: app/frontend/client-app/Dockerfile.prod
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Normalize image owner
+        id: owner
+        run: echo "value=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ steps.owner.outputs.value }}/${{ matrix.image }}
+          tags: |
+            type=sha,prefix=sha-
+            type=ref,event=branch
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Tastify ${{ matrix.service }}
+            org.opencontainers.image.description=TastifyPFA ${{ matrix.service }} container
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}

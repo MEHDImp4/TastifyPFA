@@ -20,12 +20,14 @@ const composeEnv = {
   CI: process.env.CI ?? 'true',
 };
 
+const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: repoRoot,
     env: options.env ?? process.env,
     stdio: 'inherit',
-    shell: false,
+    shell: process.platform === 'win32',
   });
 
   if (result.error) {
@@ -39,7 +41,7 @@ function run(command, args, options = {}) {
 }
 
 function runNpm(prefix, args, env = {}) {
-  run('npm', ['--prefix', prefix, ...args], {
+  run(npmCommand, ['--prefix', prefix, ...args], {
     env: {
       ...process.env,
       ...env,

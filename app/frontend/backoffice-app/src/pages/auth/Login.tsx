@@ -37,7 +37,7 @@ export const Login: React.FC = () => {
     setError(null);
     const normalized = username.trim().toLowerCase();
     if (!normalized || !password) {
-      setError('IDENTIFIER_REQUIRED');
+      setError('Identifiant et mot de passe requis.');
       return;
     }
     setIsLoading(true);
@@ -49,7 +49,7 @@ export const Login: React.FC = () => {
       const roleHome: Record<string, string> = { SERVEUR: '/salle', CUISINIER: '/kds' };
       navigate(roleHome[role] ?? '/', { replace: true });
     } catch (err: any) {
-      setError(err.response?.status === 401 ? 'ACCESS_DENIED' : 'SYSTEM_ERROR');
+      setError(err.response?.status === 401 ? 'Identifiants incorrects.' : 'Connexion impossible pour le moment.');
       toast.error('Échec de l\'authentification');
     } finally {
       setIsLoading(false);
@@ -82,30 +82,37 @@ export const Login: React.FC = () => {
             )}
           </AnimatePresence>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} noValidate className="space-y-8">
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Opérateur</label>
+              <label htmlFor="staff-login-username" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Opérateur</label>
               <input
+                id="staff-login-username"
                 data-testid="login-username"
                 type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                 placeholder="Identifiant"
+                required aria-required="true"
+                autoComplete="username"
                 className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Code Secret</label>
+              <label htmlFor="staff-login-password" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Code secret</label>
               <div className="relative">
                 <input
+                  id="staff-login-password"
                   data-testid="login-password"
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   placeholder="••••••••"
+                  required aria-required="true"
+                  autoComplete="current-password"
                   className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 pr-12 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
                 />
                 <button
                   data-testid="login-password-visibility"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/50 hover:text-on-background transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
@@ -128,7 +135,7 @@ export const Login: React.FC = () => {
             <div className="flex items-center gap-3 text-on-surface-variant/40 font-bold text-[9px] uppercase tracking-widest">
                <span>Accès Sécurisé</span>
                <div className="w-1 h-1 rounded-full bg-outline" />
-               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> SSL Encryption</span>
+               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> Connexion sécurisée</span>
             </div>
             <Link to="/" className="text-[10px] font-bold text-on-surface-variant/40 hover:text-on-background transition-colors uppercase tracking-[0.2em]">Retour au portail</Link>
         </motion.div>

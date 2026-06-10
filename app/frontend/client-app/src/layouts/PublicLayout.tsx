@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import { useConfigStore } from '../store/configStore';
 import { LogOut, Menu, X, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
@@ -13,6 +14,7 @@ export const PublicLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useBodyScrollLock(isMenuOpen);
 
   const handleLogout = async () => {
     await logout();
@@ -36,20 +38,23 @@ export const PublicLayout: React.FC = () => {
   ];
 
   if (isAuthenticated) {
-    navLinks.splice(2, 0, { to: '/loyalty', label: 'PRIVILEGES' });
+    navLinks.splice(2, 0, { to: '/loyalty', label: 'Privilèges' });
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-on-background overflow-x-hidden font-body selection:bg-on-background selection:text-background">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-on-background focus:text-background focus:rounded-md focus:text-[11px] focus:font-bold focus:uppercase focus:tracking-widest focus:no-underline">
+        Aller au contenu principal
+      </a>
       <header className="sticky top-0 z-50 bg-background border-b border-outline shrink-0">
-        <div className="max-w-[1200px] mx-auto px-client-margin h-16 flex items-center justify-between">
-          <div className="flex items-center gap-10">
+        <div className="max-w-[1200px] mx-auto px-client-margin h-16 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-6 min-w-0">
             <Link 
               to="/" 
               onClick={handleLogoClick}
-              className="flex items-center group transition-all active:scale-95 z-50"
+              className="flex items-center group transition-all active:scale-95 z-50 min-w-0"
             >
-              <span className="text-xl font-bold tracking-tighter text-on-background uppercase">
+              <span className="text-xl font-bold tracking-tighter text-on-background uppercase truncate max-w-[42vw] sm:max-w-none">
                   {config?.nom || "tastify."}
               </span>
             </Link>
@@ -67,12 +72,12 @@ export const PublicLayout: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {cartCount > 0 && (
               <Link
                 to="/checkout"
                 aria-label="Voir le panier"
-                className="flex items-center gap-2 px-3 py-1.5 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider"
+                className="flex items-center gap-2 px-3 py-2 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider min-h-10"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 {cartCount}
@@ -114,8 +119,9 @@ export const PublicLayout: React.FC = () => {
 
             <button
               onClick={toggleMenu}
-              aria-label="Ouvrir la navigation"
-              className="lg:hidden p-2 text-on-background"
+              aria-label={isMenuOpen ? "Fermer la navigation" : "Ouvrir la navigation"}
+              aria-expanded={isMenuOpen}
+              className="relative z-50 lg:hidden p-2 text-on-background min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -125,16 +131,19 @@ export const PublicLayout: React.FC = () => {
         {isMenuOpen && (
           <div
             id="mobile-navigation"
-            className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-10 flex flex-col"
+            role="navigation"
+            aria-label="Navigation principale"
+            className="fixed inset-0 bg-background z-40 lg:hidden pt-24 px-client-margin flex flex-col h-dvh overflow-y-auto custom-scrollbar"
+            style={{ overscrollBehavior: 'contain' }}
           >
             <span className="sr-only">Navigation invitée</span>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {navLinks.map((link) => (
                 <Link
                     key={link.to}
                     to={link.to}
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-4xl font-bold tracking-tight text-on-background"
+                    className="text-3xl sm:text-4xl font-bold tracking-tight text-on-background break-words"
                 >
                     {link.label}
                 </Link>
@@ -154,7 +163,7 @@ export const PublicLayout: React.FC = () => {
         )}
       </header>
 
-      <main className="flex-1 flex flex-col relative">
+      <main id="main-content" className="flex-1 flex flex-col relative min-w-0">
         <Outlet />
       </main>
     </div>

@@ -81,8 +81,8 @@ export const ReservationWizard: React.FC = () => {
   // Invitation state for guests
   if (!isAuthenticated && step < 4) {
       return (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 bg-background font-body overflow-hidden min-h-[85vh]">
-              <div className="max-w-2xl w-full bg-surface border border-outline rounded-xl p-12 md:p-20 text-center space-y-12 relative">
+          <div className="page-shell flex flex-col items-center justify-center p-6 min-h-[85vh]">
+              <div className="max-w-2xl w-full bg-surface border border-outline rounded-lg p-8 md:p-14 text-center space-y-10 relative">
                 <div className="mx-auto w-20 h-20 bg-background rounded-full flex items-center justify-center border border-outline">
                     <Calendar className="w-8 h-8 text-on-background" strokeWidth={1.5} />
                 </div>
@@ -119,30 +119,30 @@ export const ReservationWizard: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 bg-background font-body selection:bg-on-background/10 overflow-y-auto custom-scrollbar">
-      <main className="max-w-4xl mx-auto px-6 py-12 md:py-20">
+    <div className="page-shell">
+      <main className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-20">
         
         {/* Reservation Wizard Card */}
         <div className="w-full bg-surface border border-outline rounded-xl flex flex-col overflow-hidden relative">
           
           {/* Header */}
-          <div className="px-10 py-10 border-b border-outline bg-surface text-center">
-                <h2 className="text-3xl font-bold text-on-background tracking-widest uppercase m-0">Réserver une Table</h2>
+          <div className="px-6 md:px-10 py-8 md:py-10 border-b border-outline bg-surface text-center">
+                <h2 className="text-2xl md:text-3xl font-bold text-on-background tracking-tight uppercase m-0">Réserver une Table</h2>
                 <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-3">Étape {step} sur 3</p>
           </div>
 
           {/* Stepper */}
-          <div className="px-12 py-6 bg-surface-container-high border-b border-outline flex items-center justify-center gap-10">
+          <div className="px-5 md:px-12 py-5 md:py-6 bg-surface-container-high border-b border-outline flex flex-wrap items-center justify-center gap-3 md:gap-10">
              <div className="flex items-center gap-2">
                 <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>1</div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 1 ? 'text-on-background' : 'text-on-surface-variant'}`}>Détails</span>
              </div>
-             <div className="h-px w-8 bg-outline" />
+             <div className="hidden sm:block h-px w-8 bg-outline" />
              <div className="flex items-center gap-2">
                 <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>2</div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 2 ? 'text-on-background' : 'text-on-surface-variant'}`}>Table</span>
              </div>
-             <div className="h-px w-8 bg-outline" />
+             <div className="hidden sm:block h-px w-8 bg-outline" />
              <div className="flex items-center gap-2">
                 <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>3</div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 3 ? 'text-on-background' : 'text-on-surface-variant'}`}>Confirmation</span>
@@ -150,7 +150,7 @@ export const ReservationWizard: React.FC = () => {
           </div>
 
           {/* Content */}
-          <div className="p-10 md:p-14">
+          <div className="p-6 md:p-12">
               {step === 1 && (
                 <div className="space-y-10">
                    <div className="p-8 bg-background border border-outline rounded-lg flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -187,7 +187,7 @@ export const ReservationWizard: React.FC = () => {
 
               {step === 2 && (
                 <div className="space-y-10">
-                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {availableTables.length > 0 ? availableTables.map(t => (
                         <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`p-6 rounded-lg border-2 flex flex-col items-center gap-3 transition-all ${selectedTable === t.id ? 'bg-on-background border-on-background text-background' : 'bg-background border-outline text-on-background hover:border-on-background'}`}>
                            <TableIcon className="w-6 h-6 opacity-20" />
@@ -210,12 +210,12 @@ export const ReservationWizard: React.FC = () => {
               {step === 3 && (
                 <div className="space-y-10">
                    <div className="bg-background border border-outline rounded-lg p-8 space-y-8">
-                      <div className="grid grid-cols-2 gap-8 border-b border-outline pb-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 border-b border-outline pb-8">
                          <div>
                             <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mb-2 opacity-40">Quand</p>
                             <p className="text-xl font-bold text-on-background uppercase">{new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' })} <br/> à {startTime}</p>
                          </div>
-                         <div className="text-right">
+                         <div className="sm:text-right">
                             <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mb-2 opacity-40">Convives</p>
                             <p className="text-xl font-bold text-on-background uppercase">{guests} Personnes</p>
                          </div>

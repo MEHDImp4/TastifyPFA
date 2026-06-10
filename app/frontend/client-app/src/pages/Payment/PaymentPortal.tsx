@@ -135,7 +135,7 @@ export const PaymentPortal: React.FC = () => {
             </div>
 
             {/* Split Options */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <button onClick={() => setSplitMode('ALL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
                    <Receipt className="w-5 h-5" strokeWidth={1.5}/>
                    <span className="text-[10px] font-bold uppercase tracking-widest">Tout Régler</span>
@@ -203,7 +203,7 @@ export const PaymentPortal: React.FC = () => {
                 <div className="w-full space-y-4">
                     <button 
                         onClick={handlePay} disabled={isPaying || parseFloat(payableAmount) <= 0}
-                        className="btn-primary w-full h-16 uppercase tracking-[0.4em] gap-4"
+                        className="btn-primary w-full min-h-14 gap-4"
                     >
                         {isPaying ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Confirmer le Règlement</span><span className="sr-only">Confirm Payment</span><ArrowRight className="w-4 h-4" /></>}
                     </button>

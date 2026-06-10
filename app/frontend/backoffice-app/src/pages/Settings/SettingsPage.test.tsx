@@ -75,9 +75,9 @@ describe('SettingsPage component', () => {
       expect(screen.getByText('Console Système')).toBeDefined();
     });
 
-    const nomInput = screen.getByLabelText('Trading Name') as HTMLInputElement;
-    const descInput = screen.getByLabelText('Restaurant Description') as HTMLTextAreaElement;
-    const phoneInput = screen.getByLabelText('Primary Contact') as HTMLInputElement;
+    const nomInput = screen.getByLabelText("Nom de l'enseigne") as HTMLInputElement;
+    const descInput = screen.getByLabelText('Description') as HTMLTextAreaElement;
+    const phoneInput = screen.getByLabelText('Téléphone') as HTMLInputElement;
 
     expect(nomInput.value).toBe('Tastify Restaurant');
     expect(descInput.value).toBe('Gourmet experience');
@@ -87,8 +87,8 @@ describe('SettingsPage component', () => {
     fireEvent.change(nomInput, { target: { value: 'New Tastify' } });
     expect(nomInput.value).toBe('New Tastify');
 
-    // Click Deploy Changes
-    const deployButton = screen.getByRole('button', { name: 'Deploy Changes' });
+    // Save changes
+    const deployButton = screen.getByRole('button', { name: 'Enregistrer les paramètres' });
     fireEvent.click(deployButton);
 
     await waitFor(() => {
@@ -97,7 +97,7 @@ describe('SettingsPage component', () => {
       );
     });
 
-    expect(toast.success).toHaveBeenCalledWith('System parameters deployed');
+    expect(toast.success).toHaveBeenCalledWith('Paramètres enregistrés');
   });
 
   it('renders critical fallback state when fetch fails', async () => {
@@ -106,7 +106,7 @@ describe('SettingsPage component', () => {
     render(<SettingsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('CRITICAL: UNAVAILABLE.')).toBeDefined();
+      expect(screen.getByText('Service indisponible.')).toBeDefined();
     });
   });
 });

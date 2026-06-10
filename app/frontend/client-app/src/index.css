@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Ultra-Minimalist Palette */
+  /* Sober restaurant palette */
   --color-background: #FBFBFA;
   --color-on-background: #111111;
   --color-surface: #FFFFFF;
@@ -10,13 +10,19 @@
   --color-on-surface-variant: #64646B;
   
   --color-surface-container-low: #FFFFFF;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container: #FFFFFF;
   --color-surface-container-high: #F5F5F4;
+  --color-surface-container-highest: #EFEFEB;
+  --color-surface-bright: #FFFFFF;
   
   --color-outline: #EAEAEA;
   --color-outline-variant: #D4D4D8;
 
   --color-primary: #111111;
   --color-on-primary: #FBFBFA;
+  --color-primary-container: #EFEFEB;
+  --color-on-primary-container: #111111;
 
   --color-success: #15803D;
   --color-error: #B91C1C;
@@ -28,30 +34,108 @@
 
   --radius-md: 4px;
   --radius-lg: 8px;
+
+  --spacing-client-margin: clamp(1rem, 4vw, 2rem);
+  --text-ui-label: 0.6875rem;
+  --text-display-lg: clamp(2.75rem, 9vw, 5.75rem);
+  --text-display-lg-mobile: clamp(2.25rem, 12vw, 4rem);
 }
 
 @layer base {
+  html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
   body {
     font-family: var(--font-body);
-    @apply bg-background text-on-background antialiased min-h-[100dvh];
+    @apply bg-background text-on-background antialiased min-h-[100dvh] overflow-x-hidden;
+  }
+
+  #root {
+    min-height: 100dvh;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold text-on-background;
   }
+
+  /* Focus-visible: keyboard navigation affordance without visual impact on mouse users */
+  *:focus-visible {
+    outline: 2px solid var(--color-on-background);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Performance: paint containment for off-screen animated cards */
+  .atelier-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+  }
+
+  /* Prevent unwanted pull-to-refresh on mobile while allowing scroll */
+  .custom-scrollbar {
+    overscroll-behavior: contain;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
 }
 
 @layer components {
+  .page-shell {
+    @apply flex-1 bg-background font-body selection:bg-on-background/10;
+  }
+
+  .page-container {
+    @apply w-full max-w-[1200px] mx-auto px-client-margin;
+  }
+
+  .page-section {
+    @apply py-12 md:py-20;
+  }
+
+  .editorial-kicker,
+  .text-ui-label {
+    @apply text-[10px] font-bold uppercase tracking-widest;
+  }
+
+  .text-display-lg {
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+
+  .text-display-lg-mobile {
+    font-size: clamp(2.25rem, 11vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+
   .atelier-card {
     @apply rounded-lg border border-outline bg-surface transition-all duration-200;
   }
 
   .btn-primary {
-    @apply h-11 px-8 bg-on-background text-background rounded-md flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all active:scale-[0.98];
+    @apply min-h-11 px-6 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all active:scale-[0.98] text-center leading-tight;
   }
 
   .btn-secondary {
-    @apply h-11 px-8 bg-transparent border border-outline text-on-background rounded-md flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all hover:bg-surface-container-high active:scale-[0.98];
+    @apply min-h-11 px-6 bg-transparent border border-outline text-on-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all hover:bg-surface-container-high active:scale-[0.98] text-center leading-tight;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
   ::-webkit-scrollbar { width: 4px; height: 4px; }

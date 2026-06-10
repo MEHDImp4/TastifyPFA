@@ -1,0 +1,132 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: tastify-db
+    restart: unless-stopped
+    env_file: .env.unraid
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - /mnt/user/appdata/tastify/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - tastify-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: tastify-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - /mnt/user/appdata/tastify/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - tastify-network
+
+  backend:
+    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    container_name: tastify-backend
+    restart: unless-stopped
+    build:
+      context: ./app/backend
+    command: daphne -b 0.0.0.0 -p 8000 --proxy-headers tastify_backend.asgi:application
+    env_file: .env.unraid
+    environment:
+      COLLECTSTATIC_ON_STARTUP: "1"
+      SEED_ON_STARTUP: "${SEED_ON_STARTUP:-0}"
+      SEED_COMMAND: "seed_all"
+    volumes:
+      - /mnt/user/appdata/tastify/media:/app/media
+      - /mnt/user/appdata/tastify/staticfiles:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tastify-network
+
+  celery-worker:
+    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    container_name: tastify-celery-worker
+    restart: unless-stopped
+    env_file: .env.unraid
+    command: celery -A tastify_backend worker --loglevel=info --concurrency=2
+    volumes:
+      - /mnt/user/appdata/tastify/media:/app/media
+      - /mnt/user/appdata/tastify/staticfiles:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - tastify-network
+
+  celery-beat:
+    image: ${BACKEND_IMAGE:-tastifypfa-backend-unraid}
+    container_name: tastify-celery-beat
+    restart: unless-stopped
+    env_file: .env.unraid
+    command: celery -A tastify_backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - /mnt/user/appdata/tastify/media:/app/media
+      - /mnt/user/appdata/tastify/staticfiles:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - tastify-network
+
+  backoffice-app:
+    image: ${BACKOFFICE_IMAGE:-tastifypfa-backoffice-unraid}
+    container_name: tastify-backoffice
+    restart: unless-stopped
+    build:
+      context: ./app/frontend/backoffice-app
+      dockerfile: Dockerfile.prod
+    ports:
+      - "${BACKOFFICE_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - tastify-network
+
+  client-app:
+    image: ${CLIENT_IMAGE:-tastifypfa-client-unraid}
+    container_name: tastify-client
+    restart: unless-stopped
+    build:
+      context: ./app/frontend/client-app
+      dockerfile: Dockerfile.prod
+    ports:
+      - "${CLIENT_PORT:-3003}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - tastify-network
+
+networks:
+  tastify-network:
+    driver: bridge

@@ -38,27 +38,27 @@ export const LoyaltyPage: React.FC = () => {
   }, []);
 
   if (isLoading) return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-[#FAF9F6] relative overflow-hidden">
+    <div className="page-shell flex flex-col items-center justify-center relative overflow-hidden">
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col items-center gap-6 relative z-10"
         >
-            <Loader2 className="w-12 h-12 animate-spin text-[#D14D1A]" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-[#2D2424]/40 uppercase tracking-[0.4em]">Chargement des privilèges</span>
+            <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1.5}/>
+            <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Chargement des privilèges</span>
         </motion.div>
-        <div className="absolute inset-0 bg-[#C5A059]/5 blur-[100px] rounded-full" />
+        <div className="absolute inset-0 bg-on-background/5 blur-[100px] rounded-full" />
     </div>
   );
 
   return (
-    <div className="flex-1 bg-background font-body selection:bg-primary/20 overflow-y-auto custom-scrollbar">
+    <div className="page-shell">
       <main className="max-w-7xl mx-auto px-client-margin py-12 md:py-24 space-y-20">
         
         {/* Hero Loyalty Status */}
-        <section className="relative rounded-[3rem] overflow-hidden bg-[#2D2424] p-12 md:p-24 text-center shadow-2xl">
+        <section className="relative rounded-lg overflow-hidden bg-on-background p-8 md:p-16 text-center shadow-xl">
            <div className="absolute inset-0 opacity-10 mix-blend-overlay">
-              <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="" />
+              <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="" loading="lazy" decoding="async" />
            </div>
            
            <div className="relative z-10 space-y-12">
@@ -66,39 +66,39 @@ export const LoyaltyPage: React.FC = () => {
                  <motion.span 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="font-sans text-[11px] font-black uppercase tracking-[0.5em] text-[#C5A059]"
+                    className="font-sans text-[11px] font-black uppercase tracking-widest text-background/70"
                  >
                     PROGRAMME ÉCHELON
                  </motion.span>
-                 <h1 className=" text-5xl md:text-7xl text-[#FAF9F6]  tracking-tighter leading-none m-0">Votre Fidélité <br/> <span className="not- uppercase font-black text-[#C5A059]">Récompensée.</span></h1>
+                 <h1 className="text-4xl md:text-7xl text-background tracking-tight leading-none m-0">Votre Fidélité <br/> <span className="uppercase font-black text-background/70">Récompensée.</span></h1>
               </div>
 
               <div className="max-w-xl mx-auto space-y-10">
                  <div className="flex justify-between items-end">
                     <div className="text-left">
-                       <p className="font-sans text-[10px] font-black text-[#C4C1C1] uppercase tracking-widest mb-1">Grade Actuel</p>
+                       <p className="font-sans text-[10px] font-black text-background/70 uppercase tracking-widest mb-1">Grade actuel</p>
                        <div className="flex items-center gap-3">
-                          <Award className="w-6 h-6 text-[#C5A059]" />
-                          <span className=" text-3xl font-black  text-[#FAF9F6] tracking-tight">{loyalty?.tier_display}</span>
+                          <Award className="w-6 h-6 text-background" />
+                          <span className="text-3xl font-black text-background tracking-tight">{loyalty?.tier_display}</span>
                        </div>
                     </div>
                     <div className="text-right">
-                       <span className="font-sans text-4xl font-black text-[#C5A059] tabular-nums">{loyalty?.points}</span>
-                       <span className="font-sans text-[10px] font-black text-[#C4C1C1] uppercase tracking-widest ml-3">Points Cumulés</span>
+                       <span className="font-sans text-4xl font-black text-background tabular-nums">{loyalty?.points}</span>
+                       <span className="font-sans text-[10px] font-black text-background/70 uppercase tracking-widest ml-3">Points cumulés</span>
                     </div>
                  </div>
 
                  {/* Premium Progress Bar */}
                  <div className="space-y-4">
-                    <div className="w-full h-2.5 bg-[#FAF9F6]/5 rounded-full overflow-hidden border border-white/5">
+                    <div className="w-full h-2.5 bg-background/10 rounded-full overflow-hidden border border-white/10">
                        <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: '65%' }}
                           transition={{ duration: 1.8, ease: [0.23, 1, 0.32, 1] }}
-                          className="h-full bg-gradient-to-r from-[#C5A059] to-[#D14D1A] relative shadow-[0_0_20px_rgba(209,77,26,0.3)]"
+                          className="h-full bg-background relative"
                        />
                     </div>
-                    <p className="font-body text-[13px] text-[#C4C1C1] ">Bientôt le prochain échelon</p>
+                    <p className="font-body text-[13px] text-background/70">Bientôt le prochain avantage</p>
                  </div>
               </div>
            </div>
@@ -106,14 +106,14 @@ export const LoyaltyPage: React.FC = () => {
 
         {/* Rewards Grid */}
         <section className="space-y-12">
-           <div className="flex justify-between items-end border-b border-[#2D2424]/10 pb-6">
+           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 border-b border-outline pb-6">
               <div>
-                 <h2 className=" text-4xl font-black text-[#2D2424]  tracking-tighter m-0 uppercase">Vos Privilèges</h2>
-                 <p className="font-sans text-[10px] font-black text-[#2D2424]/70 uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
+                 <h2 className="text-4xl font-black text-on-background tracking-tight m-0 uppercase">Vos privilèges</h2>
+                 <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
               </div>
-              <div className="flex items-center gap-3 text-[#2D2424]">
-                 <Zap className="w-4 h-4 fill-current text-[#D14D1A]" />
-                 <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres Exclusives</span>
+              <div className="flex items-center gap-3 text-on-surface-variant">
+                 <Zap className="w-4 h-4 fill-current" />
+                 <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres exclusives</span>
               </div>
            </div>
 
@@ -128,32 +128,32 @@ export const LoyaltyPage: React.FC = () => {
                        viewport={{ once: true }}
                        transition={{ delay: idx * 0.1 }}
                        whileHover={isUnlockable ? { y: -8, scale: 1.02 } : {}}
-                       className={`group relative p-8 rounded-[2.5rem] border transition-colors duration-700 overflow-hidden flex flex-col justify-between h-[400px] ${isUnlockable ? 'bg-[#FAF9F6] border-[#2D2424]/10 hover:border-[#C5A059]/40 shadow-xl hover:shadow-2xl' : 'bg-[#F4F1EA]/50 border-transparent grayscale'}`}
+                       className={`group relative p-6 md:p-8 rounded-lg border transition-colors duration-300 overflow-hidden flex flex-col justify-between min-h-[320px] ${isUnlockable ? 'bg-surface border-outline hover:border-on-background/20 shadow-sm hover:shadow-md' : 'bg-surface-container-high border-transparent grayscale'}`}
                     >
                        <div className="space-y-6 relative z-10">
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isUnlockable ? 'bg-[#C5A059]/10 text-[#C5A059] group-hover:bg-[#C5A059] group-hover:text-[#FAF9F6]' : 'bg-[#2D2424]/5 text-[#2D2424]/20'}`}>
+                          <div className={`w-14 h-14 rounded-lg flex items-center justify-center transition-all duration-500 ${isUnlockable ? 'bg-surface-container-high text-on-background group-hover:bg-on-background group-hover:text-background' : 'bg-surface-container-high text-on-surface-variant/40'}`}>
                              <Gift className="w-6 h-6" />
                           </div>
                           <div className="space-y-3">
-                             <h4 className=" text-2xl font-black text-[#2D2424] uppercase  tracking-tight">{reward.nom}</h4>
-                             <p className="font-body text-sm text-[#2D2424]/70 leading-relaxed ">{reward.description}</p>
+                             <h4 className="text-2xl font-black text-on-background uppercase tracking-tight">{reward.nom}</h4>
+                             <p className="font-body text-sm text-on-surface-variant leading-relaxed">{reward.description}</p>
                           </div>
                        </div>
 
                        <div className="space-y-6 relative z-10">
-                          <div className="flex justify-between items-center border-t border-[#2D2424]/5 pt-6">
-                             <span className="font-sans text-[11px] font-black text-[#7A6228] uppercase tracking-widest">{reward.points_requis} PTS</span>
+                          <div className="flex justify-between items-center border-t border-outline pt-6">
+                             <span className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest">{reward.points_requis} pts</span>
                              {isUnlockable ? (
-                                <button className="flex items-center gap-2 text-[#B83D12] font-sans text-[10px] font-black uppercase tracking-widest hover:translate-x-2 transition-all">
+                                <button className="flex items-center gap-2 text-on-background font-sans text-[10px] font-black uppercase tracking-widest hover:translate-x-2 transition-all">
                                    En profiter <ChevronRight className="w-3.5 h-3.5" />
                                 </button>
                              ) : (
-                                <span className="font-sans text-[10px] font-black text-[#6B6767] uppercase tracking-widest">Verrouillé</span>
+                                <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Verrouillé</span>
                              )}
                           </div>
                        </div>
                        
-                       <div className="absolute inset-0 bg-gradient-to-br from-[#C5A059]/5 to-transparent pointer-events-none" />
+                       <div className="absolute inset-0 bg-gradient-to-br from-on-background/5 to-transparent pointer-events-none" />
                     </motion.div>
                  );
               })}

@@ -54,7 +54,7 @@ export const buildClientStorageState = ({
   cookies: [] as never[],
   origins: [
     {
-      origin: 'http://127.0.0.1:3003',
+      origin: process.env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003',
       localStorage: [
         {
           name: 'client-auth-storage',

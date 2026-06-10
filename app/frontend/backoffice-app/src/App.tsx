@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { useAuthStore } from './store/authStore';
 import { Login } from './pages/auth/Login';
@@ -16,6 +18,7 @@ import { AvisPage } from './pages/Avis/AvisPage';
 import { SettingsPage } from './pages/Settings/SettingsPage';
 import { MaintenancePage } from './pages/System/MaintenancePage';
 import { WebSocketProvider } from './contexts/WebSocketProvider';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 import { Toaster } from 'sonner';
 
@@ -59,13 +62,40 @@ const RoleIndex = () => {
   return <DashboardPage />;
 };
 
+const routeTitles: Record<string, string> = {
+  '/': 'Tastify Staff — Tableau de Bord',
+  '/menu': 'Tastify Staff — La Carte',
+  '/categories': 'Tastify Staff — Catégories',
+  '/salle': 'Tastify Staff — Plan de Salle',
+  '/reservations': 'Tastify Staff — Réservations',
+  '/kds': 'Tastify Staff — Cuisine (KDS)',
+  '/stock': 'Tastify Staff — Stock & Logistique',
+  '/hr': 'Tastify Staff — Registre Personnel',
+  '/avis': 'Tastify Staff — Avis & Sentiments',
+  '/settings': 'Tastify Staff — Paramètres',
+  '/maintenance': 'Tastify Staff — Maintenance',
+  '/login': 'Tastify Staff — Connexion',
+};
+
+const RouteTitle = () => {
+  const location = useLocation();
+  useEffect(() => {
+    const title = routeTitles[location.pathname];
+    if (title) document.title = title;
+  }, [location.pathname]);
+  return null;
+};
+
 function App() {
   return (
+    <ErrorBoundary>
     <AuthBootstrap>
       <WebSocketProvider>
+        <MotionConfig reducedMotion="user">
         <div className="selection:bg-on-background/10 selection:text-on-background">
           <Toaster position="top-right" richColors theme="dark" />
           <BrowserRouter>
+            <RouteTitle />
             <Routes>
               <Route path="/login" element={
                 <PublicRoute>
@@ -143,8 +173,10 @@ function App() {
             </Routes>
           </BrowserRouter>
         </div>
+        </MotionConfig>
       </WebSocketProvider>
     </AuthBootstrap>
+    </ErrorBoundary>
   );
 }
 

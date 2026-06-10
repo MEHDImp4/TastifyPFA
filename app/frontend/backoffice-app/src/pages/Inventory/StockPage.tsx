@@ -66,7 +66,7 @@ export const StockPage: React.FC = () => {
   const handleExportCSV = () => {
     try {
       if (ingredients.length === 0) return;
-      const headers = ['ID', 'DESIGNATION', 'UNIT', 'STOCK', 'SEUIL', 'STATUS'];
+      const headers = ['ID', 'DESIGNATION', 'UNITE', 'STOCK', 'SEUIL', 'STATUT'];
       const rows = ingredients.map(i => [i.id, i.nom.toUpperCase(), i.unite_mesure.toUpperCase(), i.stock_actuel, i.seuil_alerte]);
       const csvContent = '﻿' + [headers.join(';'), ...rows.map(row => row.join(';'))].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -76,7 +76,7 @@ export const StockPage: React.FC = () => {
       link.setAttribute('download', 'STOCK_TASTIFY.csv');
       link.click();
     } catch (err) {
-      toast.error('ERREUR EXPORT');
+      toast.error('Export impossible');
     }
   };
 
@@ -90,17 +90,18 @@ export const StockPage: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
-      <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
+      <header className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Inventory & Logistics" className="text-sm font-bold tracking-widest text-on-background uppercase">Stock & Logistique</h1>
+          <h1 aria-label="Stock et logistique" className="text-sm font-bold tracking-widest text-on-background uppercase">Stock & Logistique</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Approvisionnement et inventaire global</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input
               type="text"
-              placeholder="RESOURCE LOOKUP..."
+              aria-label="Rechercher un ingrédient"
+              placeholder="Rechercher un ingrédient..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
@@ -110,12 +111,12 @@ export const StockPage: React.FC = () => {
             <Download className="w-3.5 h-3.5" /> <span>Export CSV</span>
           </button>
           <button onClick={() => handleOpenEditor()} className="btn-primary h-10 px-6">
-            <Plus className="w-4 h-4" /> <span>Add Item</span>
+            <Plus className="w-4 h-4" /> <span>Ajouter</span>
           </button>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-8 bg-background custom-scrollbar">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-background custom-scrollbar">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {paginatedIngredients.map(i => {
             const isLow = parseFloat(i.stock_actuel) < parseFloat(i.seuil_alerte);
@@ -124,8 +125,8 @@ export const StockPage: React.FC = () => {
                 <div className="flex justify-between items-start mb-6">
                   <span className="font-mono text-[9px] opacity-40">#{i.id}</span>
                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => handleOpenEditor(i)} className="p-1.5 hover:bg-surface-container-high rounded transition-all text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button onClick={() => { setItemToDelete(i.id); setIsDeleteModalOpen(true); }} className="p-1.5 hover:bg-error/5 rounded transition-all text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                    <button aria-label={`Modifier ${i.nom}`} onClick={() => handleOpenEditor(i)} className="p-1.5 hover:bg-surface-container-high rounded transition-all text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
+                    <button aria-label={`Supprimer ${i.nom}`} onClick={() => { setItemToDelete(i.id); setIsDeleteModalOpen(true); }} className="p-1.5 hover:bg-error/5 rounded transition-all text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
                 <div>
@@ -135,7 +136,7 @@ export const StockPage: React.FC = () => {
                     <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">{i.unite_mesure}</span>
                   </div>
                   {isLow && (
-                    <p className="mt-2 text-[9px] font-bold text-error uppercase tracking-widest">CRITICAL DEPLETION</p>
+                    <p className="mt-2 text-[9px] font-bold text-error uppercase tracking-widest">Stock sous le seuil</p>
                   )}
                 </div>
               </div>
@@ -148,39 +149,38 @@ export const StockPage: React.FC = () => {
         {isEditorOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-end">
             <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={() => setIsEditorOpen(false)} />
-            <div className="relative w-full max-w-md h-full bg-surface border-l border-outline flex flex-col shadow-2xl">
+            <div role="dialog" aria-modal="true" aria-labelledby="stock-editor-title" className="relative w-full max-w-md h-full bg-surface border-l border-outline flex flex-col shadow-2xl">
               <div className="p-8 border-b border-outline bg-surface-container-high">
-                <h2 className="text-sm font-bold text-on-background uppercase tracking-[0.3em]">
-                  {editingItem ? 'ÉDITER RESSOURCE' : 'Nouvel Item'}
-                  {!editingItem && <span className="sr-only"> New Resource</span>}
+                <h2 id="stock-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.3em]">
+                  {editingItem ? 'Modifier l\'ingrédient' : 'Nouvel ingrédient'}
                 </h2>
               </div>
               <div className="p-10 space-y-8 flex-1 overflow-y-auto">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Désignation</label>
-                  <input value={nom} onChange={e => setNom(e.target.value)} type="text" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <label htmlFor="stock-name" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Désignation</label>
+                  <input id="stock-name" value={nom} onChange={e => setNom(e.target.value)} type="text" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Unité</label>
-                  <select value={unite} onChange={e => setUnite(e.target.value as 'g' | 'ml' | 'pcs')} className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm">
+                  <label htmlFor="stock-unit" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Unité</label>
+                  <select id="stock-unit" value={unite} onChange={e => setUnite(e.target.value as 'g' | 'ml' | 'pcs')} className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm">
                     <option value="g">g</option>
                     <option value="ml">ml</option>
                     <option value="pcs">pcs</option>
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Stock actuel</label>
-                  <input value={stock} onChange={e => setStock(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <label htmlFor="stock-current" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Stock actuel</label>
+                  <input id="stock-current" value={stock} onChange={e => setStock(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Seuil alerte</label>
-                  <input value={seuil} onChange={e => setSeuil(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <label htmlFor="stock-threshold" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Seuil alerte</label>
+                  <input id="stock-threshold" value={seuil} onChange={e => setSeuil(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
                 </div>
               </div>
               <div className="p-8 border-t border-outline bg-surface-container-high flex gap-4">
-                <button type="button" onClick={() => setIsEditorOpen(false)} aria-label="discard" className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
+                <button type="button" onClick={() => setIsEditorOpen(false)} aria-label="Annuler la modification" className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
                 <button className="flex-[2] btn-primary h-12">
-                  <span>Commit Record</span>
+                  <span>Enregistrer</span>
                 </button>
               </div>
             </div>
@@ -192,9 +192,9 @@ export const StockPage: React.FC = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={fetchStock}
-        title="DÉSTRUCTION RESSOURCE"
-        message="Voulez-vous rayer définitivement cet article du registre logistique ?"
-        confirmLabel="discard"
+        title="Supprimer l'ingrédient"
+        message="Voulez-vous retirer définitivement cet article du stock ?"
+        confirmLabel="Supprimer"
         variant="danger"
       />
     </div>

@@ -68,17 +68,18 @@ export const AvisPage: React.FC = () => {
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       
       {/* Header */}
-      <div className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
+      <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Client Sentiment" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
+          <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Perception de marque et satisfaction convives</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
            <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input 
               type="text"
-              placeholder="FILTER ENTRIES..."
+              aria-label="Filtrer les avis"
+              placeholder="Filtrer les avis..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
@@ -91,10 +92,10 @@ export const AvisPage: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-hidden flex flex-col p-8 gap-8 min-h-0">
+      <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
         
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { label: 'Satisfaction Globale', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
               { label: 'Positifs', val: stats.positive, sub: '', icon: Smile, color: 'text-success' },
@@ -112,7 +113,10 @@ export const AvisPage: React.FC = () => {
         </div>
 
         <div className="flex-1 atelier-card overflow-hidden flex flex-col">
-          
+
+          {/* Scrollable Table Area */}
+          <div className="flex-1 overflow-auto custom-scrollbar">
+            <div className="min-w-[700px]">
           {/* Table Header */}
           <div className="flex-none grid grid-cols-12 gap-4 px-8 h-12 items-center border-b border-outline bg-surface-container-high text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
             <div className="col-span-1 flex items-center gap-2"><Hash className="w-2.5 h-2.5" /> ID</div>
@@ -123,9 +127,8 @@ export const AvisPage: React.FC = () => {
           </div>
 
           {/* Table Body */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
             {paginatedAvis.length > 0 ? paginatedAvis.map((a) => (
-                <div 
+                <div
                   key={a.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-start group"
                 >
@@ -151,31 +154,31 @@ export const AvisPage: React.FC = () => {
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
                     <button className="h-8 px-3 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background hover:border-on-background transition-all">Archiver</button>
-                    <button className="sr-only">dispatch response</button>
                   </div>
                 </div>
             )) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-12 h-12 mb-4" strokeWidth={1} />
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucune donnée <span className="sr-only">NO FEEDBACK DATA LOGGED</span></p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Aucun avis disponible</p>
                 </div>
             )}
+            </div>
           </div>
 
           {/* Footer */}
-          <div className="flex-none px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center">
+          <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Analyse basées sur {filteredAvis.length} témoignages
+                Analyse basée sur {filteredAvis.length} témoignages
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">
-                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronLeft className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronLeft className="w-3.5 h-3.5" /></button>
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
                         <span className="text-on-background">{currentPage}</span>
                         <span>/</span>
                         <span>{totalPages}</span>
                     </div>
-                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronRight className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronRight className="w-3.5 h-3.5" /></button>
                 </div>
             )}
           </div>

@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='paiement',
-            constraint=models.CheckConstraint(check=models.Q(('montant__gt', 0)), name='paiements_paiement_amount_gt_zero'),
+            constraint=models.CheckConstraint(condition=models.Q(('montant__gt', 0)), name='paiements_paiement_amount_gt_zero'),
         ),
         migrations.AddIndex(
             model_name='paiementitem',
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='paiementitem',
-            constraint=models.CheckConstraint(check=models.Q(('montant_contribue__gt', 0)), name='paiements_paiementitem_amount_gt_zero'),
+            constraint=models.CheckConstraint(condition=models.Q(('montant_contribue__gt', 0)), name='paiements_paiementitem_amount_gt_zero'),
         ),
         migrations.AddConstraint(
             model_name='paiementitem',

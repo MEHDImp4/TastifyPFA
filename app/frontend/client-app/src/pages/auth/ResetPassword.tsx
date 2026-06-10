@@ -92,7 +92,7 @@ export const ResetPassword: React.FC = () => {
       <Link
         to="/login"
         aria-label="Retour à la connexion"
-        className="fixed top-12 left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all"
+        className="fixed top-6 left-4 sm:top-12 sm:left-10 z-20 group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-variant hover:text-primary transition-all min-h-[44px] min-w-[44px] justify-center"
       >
         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
         Retour
@@ -101,7 +101,7 @@ export const ResetPassword: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 md:p-16 shadow-2xl flex flex-col items-center gap-12"
+        className="relative z-10 w-full max-w-xl bg-surface-container border border-outline-variant rounded-lg p-8 md:p-12 shadow-xl flex flex-col items-center gap-10"
       >
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
@@ -196,7 +196,7 @@ export const ResetPassword: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-20 bg-primary-container text-on-background rounded-2xl font-sans text-xs font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 border border-primary-container relative overflow-hidden group"
+              className="btn-primary w-full min-h-14 gap-4 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Mettre à jour le Code</span>}

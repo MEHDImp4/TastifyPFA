@@ -16,6 +16,30 @@ const expectNoBlockingViolations = async (page: Page) => {
   expect(blockingViolations).toEqual([]);
 };
 
+const expectNoLayoutOverflow = async (page: Page) => {
+  const metrics = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    documentWidth: document.documentElement.scrollWidth,
+    bodyWidth: document.body.scrollWidth,
+  }));
+
+  expect(metrics.documentWidth).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+  expect(metrics.bodyWidth).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+};
+
+const expectDocumentScrollWorks = async (page: Page) => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const before = await page.evaluate(() => window.scrollY);
+  await page.evaluate(() => window.scrollBy(0, 700));
+  await page.waitForTimeout(100);
+  const after = await page.evaluate(() => window.scrollY);
+  const scrollable = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight + 20);
+
+  if (scrollable) {
+    expect(after).toBeGreaterThan(before);
+  }
+};
+
 const mockAccountData = async (page: Page) => {
   await page.route('**/api/reservations/', async (route) => {
     await route.fulfill({
@@ -220,6 +244,38 @@ test.describe('client public quality', () => {
     await expect(mobileNavigation.getByRole('link', { name: /Réservations/i })).toBeVisible();
     await expect(mobileNavigation.getByRole('link', { name: /Connexion Membre/i })).toBeVisible();
   });
+
+  test('prevents horizontal overflow and preserves document scrolling across public routes', async ({ page }) => {
+    await mockMenuData(page);
+    await mockPaymentSession(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    for (const route of ['/', '/menu', '/reservations', '/contact', '/login', '/register', '/pay/quality-token', '/offline', '/missing-route']) {
+      await page.goto(route);
+      await expectNoLayoutOverflow(page);
+      await expectDocumentScrollWorks(page);
+    }
+  });
+
+  test('locks body scroll while mobile navigation and dish modal overlays are open', async ({ page }) => {
+    await mockMenuData(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    await page.goto('/');
+    await page.getByRole('button', { name: /Ouvrir la navigation/i }).click();
+    await expect(page.locator('#mobile-navigation')).toBeVisible();
+    await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
+    await page.getByRole('button', { name: /Fermer la navigation/i }).click();
+    await expect(page.locator('#mobile-navigation')).toHaveCount(0);
+
+    await page.goto('/menu');
+    await page.getByText('Couscous Maison').first().click();
+    await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
+    await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
+    await expectNoLayoutOverflow(page);
+    await page.getByRole('button', { name: /Fermer le détail du plat/i }).click();
+    await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
+  });
 });
 
 test.describe('client authenticated quality', () => {
@@ -279,5 +335,26 @@ test.describe('client authenticated quality', () => {
     await expect(page.getByRole('button', { name: /^Partager$/i })).toBeVisible();
     await page.getByRole('button', { name: /^Partager$/i }).click();
     await expect(page.getByRole('button', { name: /Augmenter le nombre de parts/i })).toBeVisible();
+  });
+
+  test('prevents overflow on authenticated mobile pages', async ({ page }) => {
+    await mockAccountData(page);
+    await mockLoyaltyData(page);
+    await mockMenuData(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    await page.goto('/account');
+    await expectNoLayoutOverflow(page);
+    await expectDocumentScrollWorks(page);
+
+    await page.goto('/loyalty');
+    await expectNoLayoutOverflow(page);
+    await expectDocumentScrollWorks(page);
+
+    await page.goto('/menu');
+    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    await page.goto('/checkout');
+    await expectNoLayoutOverflow(page);
+    await expectDocumentScrollWorks(page);
   });
 });

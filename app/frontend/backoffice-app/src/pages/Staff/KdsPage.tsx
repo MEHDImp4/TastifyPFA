@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { kdsApi } from '../../api/kds';
 import { useKdsStore } from '../../store/kdsStore';
@@ -203,7 +203,7 @@ export const KdsPage: React.FC = () => {
 
   const previousTicketsRef = useRef<number>(0);
 
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     try {
       const res = await kdsApi.getActiveTickets();
       const transformed = res.data.map((cmd: any) => ({
@@ -229,13 +229,13 @@ export const KdsPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [setTickets]);
 
   useEffect(() => {
     fetchTickets();
     const syncer = setInterval(fetchTickets, 30000);
     return () => clearInterval(syncer);
-  }, []);
+  }, [fetchTickets]);
 
   useEffect(() => {
     localStorage.setItem('tastify_kds_cleared', JSON.stringify(clearedTickets));
@@ -368,7 +368,7 @@ export const KdsPage: React.FC = () => {
              ) : (
              <div className="h-full flex flex-col items-center justify-center pb-20">
              <PlayCircle aria-hidden="true" className="w-24 h-24 mb-6 stroke-[2] text-primary" />
-             <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em] text-on-surface">SECTEUR CLAIR</p>
+             <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em] text-on-surface">Aucune commande en attente</p>
              <span aria-hidden="true" className="text-sm font-black uppercase tracking-widest text-on-surface mt-2">Sector Clear</span>
              </div>
              )}

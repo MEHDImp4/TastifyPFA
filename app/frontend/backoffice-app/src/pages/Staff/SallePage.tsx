@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { salleApi } from '../../api/salle';
 import type { Table } from '../../types/salle';
@@ -16,7 +16,7 @@ export const SallePage: React.FC = () => {
   const navigate = useNavigate();
   const lastUpdate = useSocketStore(state => state.lastUpdate);
   
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const tablesRes = await salleApi.getTables();
       setTables(tablesRes.data);
@@ -25,11 +25,11 @@ export const SallePage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, [lastUpdate]);
+  }, [fetchData, lastUpdate]);
 
   const handleTableClick = (table: Table) => {
     navigate(`/ordering/${table.id}`);

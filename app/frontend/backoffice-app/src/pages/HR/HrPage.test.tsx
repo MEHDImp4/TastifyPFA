@@ -99,6 +99,6 @@ describe('HrPage component', () => {
     expect(screen.getByText('Alice Smith')).toBeDefined();
     expect(screen.getByText('@alice_root')).toBeDefined();
     expect(screen.getByText('alice@tastify.com')).toBeDefined();
-    expect(screen.getByText('OFF')).toBeDefined();
+    expect(screen.getByText('INACTIF')).toBeDefined();
   });
 });

@@ -39,6 +39,19 @@
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold text-on-background;
   }
+
+  /* Focus-visible: keyboard navigation affordance without visual impact on mouse users */
+  *:focus-visible {
+    outline: 2px solid var(--color-on-background);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Performance: paint containment for off-screen luxury cards */
+  .luxury-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
 }
 
 @layer components {
@@ -53,4 +66,11 @@
   .btn-ghost {
     @apply h-10 px-6 bg-transparent border border-outline rounded-md flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] transition-all;
   }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-outline rounded-full; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+  /* Firefox scrollbar */
+  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #EAEAEA transparent; }
 }

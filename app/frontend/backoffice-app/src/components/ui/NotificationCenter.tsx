@@ -18,7 +18,7 @@ export const NotificationCenter: React.FC = () => {
           const lowStock = res.data.filter(i => parseFloat(i.stock_actuel) <= parseFloat(i.seuil_alerte));
           const alerts = lowStock.map(i => ({
               id: `stock-${i.id}`,
-              message: `Rupture critique: ${i.nom} (${i.stock_actuel} ${i.unite_mesure})`,
+              message: `Stock bas : ${i.nom} (${i.stock_actuel} ${i.unite_mesure})`,
               type: 'WARNING',
               timestamp: new Date()
           }));
@@ -40,8 +40,9 @@ export const NotificationCenter: React.FC = () => {
 
   return (
     <div className="relative">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Centre de notifications"
         className={`p-2 rounded transition-all relative ${isOpen ? 'bg-on-background/5 text-on-background' : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low'}`}
       >
         <Bell className="w-5 h-5" strokeWidth={1.5}/>
@@ -53,10 +54,11 @@ export const NotificationCenter: React.FC = () => {
       {isOpen && (
         <div className="absolute top-full right-0 mt-3 w-80 bg-surface border border-outline rounded-md z-[100] shadow-2xl">
           <div className="p-4 border-b border-outline bg-surface-container-high flex items-center justify-between">
-            <h4 className="text-[10px] font-bold tracking-widest text-on-background uppercase">Alertes Opérationnelles</h4>
+            <h4 className="text-[10px] font-bold tracking-widest text-on-background uppercase">Alertes opérationnelles</h4>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
+              aria-label="Fermer le centre de notifications"
               className="p-1 hover:bg-background rounded transition-colors text-on-surface-variant"
             >
               <X className="w-3.5 h-3.5" strokeWidth={2}/>
@@ -66,7 +68,7 @@ export const NotificationCenter: React.FC = () => {
             {allNotifications.length === 0 ? (
                 <div className="p-10 text-center text-on-surface-variant/40">
                     <CheckCircle2 className="w-10 h-10 mx-auto mb-3 opacity-20" strokeWidth={1}/>
-                    <p className="text-[9px] font-bold uppercase tracking-widest">Système Nominal</p>
+                    <p className="text-[9px] font-bold uppercase tracking-widest">Aucune alerte</p>
                 </div>
             ) : (
                 allNotifications.map((n) => {
@@ -74,8 +76,9 @@ export const NotificationCenter: React.FC = () => {
                     return (
                         <div key={n.id} className={`p-4 border-b border-outline hover:bg-background/50 transition-colors relative group ${isWarning ? 'bg-error/[0.02]' : ''}`}>
                             {!n.id.startsWith('stock-') && (
-                                <button 
+                                <button
                                     onClick={() => clearNotification(n.id)}
+                                    aria-label="Masquer la notification"
                                     className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 p-1 hover:bg-background rounded transition-all"
                                 >
                                     <X className="w-3 h-3" />

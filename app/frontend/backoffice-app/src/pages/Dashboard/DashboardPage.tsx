@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { analyticsApi } from '../../api/analytics';
 import { kdsApi } from '../../api/kds';
 import type { DashboardData } from '../../api/analytics';
@@ -30,7 +30,7 @@ export const DashboardPage: React.FC = () => {
   const [error, setError] = useState(false);
   const lastUpdate = useSocketStore(state => state.lastUpdate);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setError(false);
       const [dashRes, ticketsRes] = await Promise.all([
@@ -45,13 +45,13 @@ export const DashboardPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
-  }, [lastUpdate]);
+  }, [fetchData, lastUpdate]);
 
   const groupedTickets = React.useMemo(() => {
     // eslint-disable-next-line react-hooks/purity
@@ -87,12 +87,12 @@ export const DashboardPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex-1 flex flex-col gap-10 overflow-hidden font-sans">
+    <div className="flex-1 flex flex-col gap-6 md:gap-10 overflow-hidden font-sans">
       
       {/* Page Header */}
       <div className="flex-none flex justify-between items-end">
         <div>
-           <h1 className="text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
+           <h1 className="text-2xl md:text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
            <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-2">Intelligence Opérationnelle & Monitoring Direct</p>
         </div>
         <div className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-8 py-3.5 rounded-xl">
@@ -102,9 +102,9 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* KPI Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {kpis.map((kpi, i) => (
-          <div key={i} className="luxury-card p-8 group transition-all cursor-default">
+          <div key={i} className="luxury-card p-5 md:p-8 group transition-all cursor-default">
              <div className="flex justify-between items-center mb-6">
                 <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em]">{kpi.label}</span>
                 <div className={`p-2.5 rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10`}>
@@ -112,7 +112,7 @@ export const DashboardPage: React.FC = () => {
                 </div>
              </div>
              <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-black text-on-surface tracking-tighter tabular-nums">{kpi.value}</span>
+                <span className="text-3xl md:text-5xl font-black text-on-surface tracking-tighter tabular-nums">{kpi.value}</span>
              </div>
              <div className="mt-8 flex items-center justify-between">
                 <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">{kpi.trend}</span>
@@ -123,7 +123,7 @@ export const DashboardPage: React.FC = () => {
       </section>
 
       {/* Operation Grid */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 min-h-0">
         
         {/* Left: Tactical Feed (7 cols) */}
         <section className="lg:col-span-7 flex flex-col min-h-0">
@@ -183,15 +183,15 @@ export const DashboardPage: React.FC = () => {
         </section>
 
         {/* Right: Security & Alerts (5 cols) */}
-        <section className="lg:col-span-5 flex flex-col min-h-0 luxury-card p-10 overflow-hidden">
-            <div className="flex items-center gap-4 mb-10 border-b border-outline-variant/30 pb-6">
+        <section className="lg:col-span-5 flex flex-col min-h-0 luxury-card p-6 xl:p-10 overflow-hidden">
+            <div className="flex-none flex items-center gap-4 mb-6 xl:mb-10 border-b border-outline-variant/30 pb-6">
                 <div className="w-10 h-10 rounded-lg bg-error/5 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Incidents Critiques</h2>
             </div>
 
-            <div tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar space-y-6">
+            <div tabIndex={0} className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-6">
                 <AnimatePresence mode="wait">
                     {groupedTickets.late.length > 0 ? (
                         groupedTickets.late.map((t) => (
@@ -215,17 +215,17 @@ export const DashboardPage: React.FC = () => {
                             </motion.div>
                         ))
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-center opacity-20">
+                        <div className="min-h-full py-8 flex flex-col items-center justify-center text-center opacity-20">
                             <CheckCircle2 className="w-16 h-16 text-success mb-6" strokeWidth={1} />
-                            <p className="text-[11px] font-black uppercase tracking-[0.4em]">Tous les indicateurs sont nominaux</p>
+                            <p className="max-w-[18rem] text-[11px] font-black uppercase tracking-[0.24em] leading-6">Tous les indicateurs sont nominaux</p>
                         </div>
                     )}
                 </AnimatePresence>
             </div>
 
-            <div className="mt-10 pt-10 border-t border-outline-variant/30">
-                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] mb-6">Santé de l'Infrastructure <span className="sr-only">Floor Plan Preview</span></h3>
-                <div className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex items-center justify-between">
+            <div className="flex-none mt-6 xl:mt-10 pt-6 xl:pt-10 border-t border-outline-variant/30">
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.3em] mb-6">Santé de l'Infrastructure <span className="sr-only">Aperçu du plan de salle</span></h3>
+                <div className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="w-2.5 h-2.5 rounded-full bg-success" />
                         <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface">Serveur Central</span>
@@ -240,8 +240,8 @@ export const DashboardPage: React.FC = () => {
       <div className="sr-only">
         {data.sentimentStats && data.sentimentStats.total > 0 && (
           <>
-            <h2>Client Sentiment Analysis</h2>
-            <span>{data.sentimentStats.total} reviews analysed by NLP pipeline</span>
+            <h2>Analyse des avis clients</h2>
+            <span>{data.sentimentStats.total} avis analysés</span>
             <span>{data.sentimentStats.positif_pct}%</span>
           </>
         )}

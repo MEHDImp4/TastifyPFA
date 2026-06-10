@@ -74,12 +74,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      <aside className={`
+      <aside
+        role="navigation"
+        aria-label="Navigation principale"
+        className={`
         fixed inset-y-0 left-0 z-50 bg-surface border-r border-outline
         transform transition-all duration-300
         md:relative md:flex md:flex-col md:translate-x-0 md:w-64
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      `} style={{ overscrollBehavior: 'contain' }}>
         <div className="p-8 pb-10">
           <div className="flex items-center gap-2">
             <span className="text-xl font-bold tracking-tighter text-on-background uppercase">Tastify.</span>

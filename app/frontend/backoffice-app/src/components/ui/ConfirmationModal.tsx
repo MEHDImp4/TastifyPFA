@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, X } from 'lucide-react';
 
@@ -26,10 +26,21 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   const accentColor = variant === 'danger' ? 'text-error' : variant === 'warning' ? 'text-primary' : 'text-primary';
   const buttonBg = variant === 'danger' ? 'bg-error' : 'bg-primary';
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, handleKeyDown]);
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" role="alertdialog" aria-modal="true" aria-label={title}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -54,8 +65,8 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                   </div>
                   <h2 className=" text-xl font-black text-on-surface uppercase  tracking-tight">{title}</h2>
                 </div>
-                <button onClick={onClose} className="p-1 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
-                  <X className="w-5 h-5" />
+                <button onClick={onClose} aria-label="Fermer" className="p-1 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
               

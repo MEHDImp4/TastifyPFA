@@ -4,6 +4,12 @@ import { useKdsStore } from '../store/kdsStore';
 import { useSocketStore } from '../store/socketStore';
 import { toast } from 'sonner';
 
+const debugWebSocket = (...args: unknown[]) => {
+  if (import.meta.env.DEV) {
+    console.debug(...args);
+  }
+};
+
 const playNotificationSound = () => {
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -43,7 +49,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const connect = useCallback(() => {
     if (!isAuthenticated || !accessToken) {
-      console.log('WS: Skip connect (not authenticated)');
+      debugWebSocket('WS: Skip connect (not authenticated)');
       return;
     }
 
@@ -64,7 +70,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const host = window.location.host;
     const wsUrl = `${protocol}//${host}/ws/staff/?token=${accessToken}`;
 
-    console.log('WS: Connecting to staff websocket...');
+    debugWebSocket('WS: Connecting to staff websocket...');
     setStatus('connecting');
     
     const ws = new WebSocket(wsUrl);
@@ -72,7 +78,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     ws.onopen = () => {
       if (socketRef.current !== ws) return;
-      console.log('WS: Staff WebSocket connected');
+      debugWebSocket('WS: Staff WebSocket connected');
       setStatus('connected');
     };
 
@@ -80,7 +86,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (socketRef.current !== ws) return;
       try {
         const data = JSON.parse(event.data);
-        console.log('WS Message:', data);
+        debugWebSocket('WS Message:', data);
         
         useSocketStore.getState().triggerUpdate();
 
@@ -131,7 +137,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         // eslint-disable-next-line
         reconnectTimeoutRef.current = setTimeout(() => connect(), 3000);
       } else {
-        console.log(`WS: Staff WebSocket closed gracefully (Code: ${e.code})`);
+        debugWebSocket(`WS: Staff WebSocket closed gracefully (Code: ${e.code})`);
         setStatus('disconnected');
       }
     };

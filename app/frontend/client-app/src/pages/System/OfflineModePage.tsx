@@ -15,7 +15,7 @@ export const OfflineModePage: React.FC = () => {
       
       {/* Background Ambience */}
       <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-         <WifiOff className="w-[400px] h-[400px] text-on-surface-variant stroke-[0.5]" />
+         <WifiOff className="w-[min(70vw,320px)] h-[min(70vw,320px)] text-on-surface-variant stroke-[0.5]" />
       </div>
 
       <motion.div 
@@ -41,7 +41,7 @@ export const OfflineModePage: React.FC = () => {
            <button 
              onClick={handleRetry}
              disabled={isRetrying}
-             className="px-12 py-5 bg-primary text-on-primary rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group"
+             className="btn-primary min-h-14 px-10 gap-4 group"
            >
              <RefreshCcw className={`w-4 h-4 transition-transform duration-700 ${isRetrying ? 'animate-spin' : 'group-hover:rotate-180'}`} />
              <span>Réessayer la Connexion</span>

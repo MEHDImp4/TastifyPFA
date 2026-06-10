@@ -69,10 +69,10 @@ export const CheckoutPage: React.FC = () => {
   };
 
   if (isSuccess) return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center bg-background font-body min-h-[85vh] selection:bg-primary/20">
+    <div className="page-shell flex flex-col items-center justify-center p-6 text-center min-h-[85vh]">
         <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-[3rem] p-12 md:p-20 relative overflow-hidden shadow-2xl"
+            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-lg p-8 md:p-14 relative overflow-hidden shadow-xl"
         >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32" />
             
@@ -87,8 +87,8 @@ export const CheckoutPage: React.FC = () => {
                 </motion.div>
                 
                 <div className="space-y-6">
-                    <h2 className="text-display-lg-mobile md:text-display-lg text-primary leading-none  m-0">Merci pour votre commande</h2>
-                    <p className="text-lg text-on-surface-variant uppercase tracking-[0.1em] font-medium leading-relaxed max-w-sm mx-auto">Votre commande a été transmise à la cuisine.</p>
+                    <h2 className="text-display-lg-mobile md:text-display-lg text-primary leading-none m-0">Merci pour votre commande</h2>
+                    <p className="text-base md:text-lg text-on-surface-variant font-medium leading-relaxed max-w-sm mx-auto">Votre commande a été transmise à la cuisine.</p>
                 </div>
 
                 <div className="w-full grid grid-cols-2 gap-8 py-10 border-y border-outline-variant/30">
@@ -106,8 +106,8 @@ export const CheckoutPage: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-6 w-full pt-4">
-                    <button onClick={() => navigate('/account')} className="flex-1 py-6 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">Suivre la commande</button>
-                    <button onClick={() => navigate('/')} className="flex-1 py-6 border border-outline-variant text-on-surface rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] hover:bg-surface-container-highest transition-all flex items-center justify-center gap-3"><Home className="w-4 h-4" /> Retour à l'Accueil</button>
+                    <button onClick={() => navigate('/account')} className="btn-primary flex-1 h-14">Suivre la commande</button>
+                    <button onClick={() => navigate('/')} className="btn-secondary flex-1 h-14"><Home className="w-4 h-4" /> Retour à l'Accueil</button>
                 </div>
             </div>
         </motion.div>
@@ -115,7 +115,7 @@ export const CheckoutPage: React.FC = () => {
   );
 
   if (items.length === 0) return (
-    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-background font-body min-h-[80vh]">
+    <div className="page-shell flex flex-col items-center justify-center p-8 text-center min-h-[80vh]">
         <div className="max-w-md space-y-12">
             <div className="w-20 h-20 bg-surface-container-high rounded-full border border-outline-variant/30 flex items-center justify-center mx-auto text-on-surface-variant/20">
                 <ShoppingBag className="w-10 h-10" />
@@ -126,7 +126,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
             <button 
               onClick={() => navigate('/menu')} 
-              className="px-12 py-5 bg-on-surface text-background rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-primary shadow-2xl active:scale-95"
+              className="btn-primary min-h-14 px-10"
             >
               Explorer la Carte
             </button>
@@ -135,8 +135,8 @@ export const CheckoutPage: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-background font-body selection:bg-primary/20 overflow-y-auto custom-scrollbar">
-      <main className="max-w-7xl mx-auto px-client-margin py-12 md:py-24">
+    <div className="page-shell">
+      <main className="max-w-7xl mx-auto px-client-margin py-8 md:py-24">
         
         {/* Page Header */}
         <motion.div 
@@ -147,7 +147,7 @@ export const CheckoutPage: React.FC = () => {
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-90"><ChevronLeft className="w-5 h-5" /></button>
             <div>
                <h1 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase  m-0">Votre Panier</h1>
-               <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.4em] mt-3">Validation de votre commande</p>
+               <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-3">Validation de votre commande</p>
             </div>
         </motion.div>
 
@@ -172,7 +172,7 @@ export const CheckoutPage: React.FC = () => {
                             >
                                 <div className="w-24 h-24 rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/30 shrink-0 shadow-inner">
                                     {item.plat.image ? (
-                                        <img src={item.plat.image} className="w-full h-full object-cover transition-all duration-700 grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-110" alt={item.plat.nom} />
+                                        <img src={item.plat.image} className="w-full h-full object-cover transition-all duration-700 grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-110" alt={item.plat.nom} loading="lazy" decoding="async" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center   text-3xl text-on-surface-variant/10">{item.plat.nom.charAt(0)}</div>
                                     )}
@@ -207,7 +207,7 @@ export const CheckoutPage: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="p-8 bg-surface-container-low border border-outline-variant rounded-[2.5rem] space-y-8"
+                    className="p-6 md:p-8 bg-surface-container-low border border-outline-variant rounded-lg space-y-8"
                 >
                     <div>
                         <h3 className="font-sans text-[11px] font-black text-on-surface uppercase tracking-[0.2em]">Ajouter un pourboire</h3>
@@ -227,11 +227,11 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Right: Summary (4 cols) */}
-            <aside className="lg:col-span-4 lg:sticky lg:top-32">
+            <aside className="lg:col-span-4 lg:sticky lg:top-24">
                 <motion.div 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="bg-surface-container-high border border-outline-variant rounded-[2.5rem] p-10 flex flex-col gap-10 shadow-2xl relative overflow-hidden"
+                    className="bg-surface-container-high border border-outline-variant rounded-lg p-6 md:p-8 flex flex-col gap-8 shadow-xl relative overflow-hidden"
                 >
                     <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
                     
@@ -265,7 +265,7 @@ export const CheckoutPage: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleOrder} disabled={isSubmitting}
-                            className="w-full py-6 bg-primary text-on-primary rounded-2xl font-sans text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/40 hover:bg-[#B13D15] transition-all flex items-center justify-center gap-4"
+                            className="btn-primary w-full min-h-14 gap-4"
                         >
                             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Valider la commande</span><ArrowRight className="w-4 h-4" /></>}
                         </motion.button>

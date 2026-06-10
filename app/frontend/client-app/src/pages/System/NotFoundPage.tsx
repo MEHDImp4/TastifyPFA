@@ -31,13 +31,13 @@ export const NotFoundPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
             <button 
               onClick={() => navigate('/')}
-              className="px-12 py-5 bg-primary text-on-primary rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20 flex items-center justify-center gap-3"
+              className="btn-primary min-h-14 px-10 gap-3"
             >
               <Home className="w-4 h-4" /> Retour Accueil
             </button>
             <button 
               onClick={() => navigate('/menu')}
-              className="px-12 py-5 border border-outline-variant text-on-surface rounded-full font-sans text-[11px] font-black uppercase tracking-[0.4em] transition-all hover:bg-surface-container-highest active:scale-95 flex items-center justify-center gap-3"
+              className="btn-secondary min-h-14 px-10 gap-3"
             >
               <UtensilsCrossed className="w-4 h-4" /> Voir le Menu
             </button>

@@ -53,7 +53,8 @@ export const Register: React.FC = () => {
     <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center justify-center p-6">
       <Link 
         to="/" 
-        className="fixed top-8 left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all"
+        aria-label="Retour à l'accueil"
+        className="fixed top-6 left-4 sm:top-8 sm:left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all min-h-[44px] min-w-[44px] justify-center"
       >
         <ChevronLeft className="w-3.5 h-3.5" />
         Retour
@@ -89,8 +90,9 @@ export const Register: React.FC = () => {
               id="username"
               data-testid="register-username"
               type="text" required value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
+              autoComplete="username"
               className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
-              placeholder="PSEUDONYME"
+              placeholder="Nom d'utilisateur"
             />
           </motion.div>
 
@@ -100,8 +102,9 @@ export const Register: React.FC = () => {
               id="email"
               data-testid="register-email"
               type="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading}
+              autoComplete="email"
               className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
-              placeholder="VOTRE@EMAIL.COM"
+              placeholder="votre@email.com"
             />
           </motion.div>
 
@@ -111,6 +114,7 @@ export const Register: React.FC = () => {
               id="password"
               data-testid="register-password"
               type="password" required value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
+              autoComplete="new-password"
               className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
               placeholder="••••••••"
             />

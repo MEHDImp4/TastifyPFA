@@ -124,7 +124,7 @@ export const PlatPage: React.FC = () => {
       await fetchAll();
       closeEditor();
     } catch (err) {
-      setSaveError('Commit failed');
+      setSaveError("Impossible d'enregistrer le plat.");
     } finally {
       setIsSaving(false);
     }
@@ -136,7 +136,7 @@ export const PlatPage: React.FC = () => {
       await menuApi.deletePlat(id);
       setPlats(prev => prev.filter(p => p.id !== id));
     } catch (err) {
-      setDeleteError('Deletion error');
+      setDeleteError('Suppression impossible.');
     }
   };
 
@@ -146,17 +146,18 @@ export const PlatPage: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
-      <header className="flex-none flex justify-between items-center px-8 h-20 border-b border-outline bg-surface">
+      <header className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Menu Operations" className="text-sm font-bold tracking-widest text-on-background uppercase">Catalogue des Plats</h1>
+          <h1 aria-label="Gestion des plats" className="text-sm font-bold tracking-widest text-on-background uppercase">Catalogue des Plats</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Gestion de l'offre gastronomique</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input
               type="text"
-              placeholder="SEARCH CATALOG..."
+              aria-label="Rechercher un plat"
+              placeholder="Rechercher un plat..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
@@ -168,7 +169,7 @@ export const PlatPage: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
         {deleteError && (
           <p className="mb-4 text-[10px] font-bold text-error uppercase tracking-widest">{deleteError}</p>
         )}
@@ -186,8 +187,8 @@ export const PlatPage: React.FC = () => {
               <div className="mt-4 flex justify-between items-end">
                 <span className="font-mono text-sm font-bold text-on-background">{parseFloat(p.prix).toFixed(0)} DH</span>
                 <div className="flex gap-2">
-                  <button data-testid={`plat-edit-${p.id}`} aria-label="Modifier" onClick={() => openEdit(p)} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button data-testid={`plat-delete-${p.id}`} aria-label="Supprimer" onClick={() => handleDelete(p.id)} className="p-2 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-edit-${p.id}`} aria-label={`Modifier ${p.nom}`} onClick={() => openEdit(p)} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-delete-${p.id}`} aria-label={`Supprimer ${p.nom}`} onClick={() => handleDelete(p.id)} className="p-2 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
             </div>
@@ -198,12 +199,12 @@ export const PlatPage: React.FC = () => {
       {editor && (
         <div className="fixed inset-0 z-[100] flex items-center justify-end">
           <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={closeEditor} />
-          <div className="relative w-full max-w-md h-full bg-surface border-l border-outline flex flex-col shadow-2xl">
+          <div role="dialog" aria-modal="true" aria-labelledby="plat-editor-title" className="relative w-full max-w-md h-full bg-surface border-l border-outline flex flex-col shadow-2xl">
             <div className="p-6 border-b border-outline flex items-center justify-between">
-              <h2 className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
+              <h2 id="plat-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
                 {editor.mode === 'create' ? 'Nouvelle Fiche' : 'Modifier Fiche'}
               </h2>
-              <button onClick={closeEditor} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant">
+              <button aria-label="Fermer l'éditeur" onClick={closeEditor} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -281,11 +282,11 @@ export const PlatPage: React.FC = () => {
                   className="w-full text-sm"
                 />
                 {editor.image && (
-                  <p className="text-[10px] font-bold text-on-background uppercase tracking-widest">FILE LOADED</p>
+                  <p className="text-[10px] font-bold text-on-background uppercase tracking-widest">Image chargée</p>
                 )}
                 {editor.imagePreviewUrl && (
                   <div className="mt-2 aspect-video rounded border border-outline overflow-hidden">
-                    <img src={editor.imagePreviewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <img src={editor.imagePreviewUrl} alt="Aperçu du plat" className="w-full h-full object-cover" />
                   </div>
                 )}
               </div>
