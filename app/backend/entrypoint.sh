@@ -23,6 +23,10 @@ migrate_with_retry() {
 
 migrate_with_retry
 
+if [ "${ENSURE_MENU_MEDIA_ON_STARTUP:-1}" = "1" ]; then
+    python manage.py ensure_menu_media
+fi
+
 seed_if_needed() {
     if [ "${SEED_ON_STARTUP:-0}" != "1" ]; then
         return 0

@@ -33,24 +33,22 @@ La figure~\ref{fig:architecture-technique} présente l'organisation technique de
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=1.0cm and 0.8cm]
-  \node[box, text width=2.9cm] (backoffice) {Back-office React\\port 3000};
-  \node[box, below=of backoffice, text width=2.9cm] (client) {Portail client React\\port 3003};
-  \node[box, right=1.6cm of $(backoffice)!0.5!(client)$, text width=3.2cm] (backend) {Backend Django ASGI\\REST + WebSocket\\port 8000};
-  \node[store, right=1.4cm of backend, yshift=1.0cm, text width=2.7cm] (mysql) {MySQL 8\\volume persistant};
-  \node[store, right=1.4cm of backend, yshift=-0.2cm, text width=2.7cm] (redis) {Redis 7\\DB WebSocket et broker};
-  \node[box, right=1.4cm of backend, yshift=-1.4cm, text width=2.7cm] (worker) {Celery worker\\tâches de fond};
-  \node[box, below=of worker, text width=2.7cm] (beat) {Celery Beat\\planification};
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\schemaNode{Back-office React\\port 3000}
+\schemaArrow
+\schemaNode{Backend Django ASGI\\REST + WebSocket\\port 8000}
+\schemaArrow
+\schemaNode{MySQL 8\\volume persistant}
 
-  \draw[flow] (backoffice) -- node[above, font=\scriptsize]{HTTP / WS} (backend);
-  \draw[flow] (client) -- node[below, font=\scriptsize]{HTTP} (backend);
-  \draw[flow] (backend) -- (mysql);
-  \draw[flow] (backend) -- (redis);
-  \draw[flow] (backend) -- (worker);
-  \draw[flow] (beat) -- (worker);
-  \draw[dashedflow] (worker) -- (mysql);
-  \draw[dashedflow] (worker) -- (redis);
-\end{tikzpicture}
+\vspace{0.45cm}
+
+\schemaNode{Portail client React\\port 3003}
+\schemaArrow
+\schemaNode{Redis 7\\WebSocket + broker}
+\schemaArrow
+\schemaNode{Celery worker / beat\\tâches de fond}
+\end{minipage}}
 \caption{Architecture technique de Tastify}
 \label{fig:architecture-technique}
 \end{figure}
@@ -96,18 +94,20 @@ L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend �
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=0.9cm and 0.8cm]
-  \node[box, text width=2.5cm] (user) {Utilisateur};
-  \node[box, right=of user, text width=2.7cm] (front) {Frontend\\staff ou client};
-  \node[box, right=of front, text width=2.8cm] (auth) {API auth\\Django};
-  \node[store, right=of auth, text width=2.6cm] (db) {Base\\Utilisateur};
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\schemaNode{Utilisateur\\identifiants}
+\schemaArrow
+\schemaNode{Frontend\\staff ou client}
+\schemaArrow
+\schemaNode{API auth Django\\vérification}
+\schemaArrow
+\schemaNode{Base utilisateur\\rôle}
 
-  \draw[flow] (user) -- node[above, font=\scriptsize]{identifiants} (front);
-  \draw[flow] (front) -- node[above, font=\scriptsize]{login} (auth);
-  \draw[flow] (auth) -- node[above, font=\scriptsize]{vérification} (db);
-  \draw[flow] (auth) to[bend left=18] node[below, font=\scriptsize]{access token + cookie refresh} (front);
-  \draw[dashedflow] (front) to[bend left=18] node[below, font=\scriptsize]{refresh} (auth);
-\end{tikzpicture}
+\vspace{0.35cm}
+
+\small Réponse : access token court + refresh token en cookie HttpOnly. Le refresh renouvelle l'accès sans exposer le jeton long côté JavaScript.
+\end{minipage}}
 \caption{Séquence simplifiée d'authentification JWT}
 \label{fig:auth-jwt}
 \end{figure}
@@ -119,21 +119,24 @@ Le temps réel est assuré par Django Channels et Redis. Le canal WebSocket \cod
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=1.0cm and 0.75cm]
-  \node[box, text width=2.6cm] (server) {Serveur\\prise de commande};
-  \node[box, right=of server, text width=2.8cm] (api) {API commandes\\validation};
-  \node[store, right=of api, text width=2.6cm] (db) {MySQL\\commande};
-  \node[store, below=of api, text width=2.6cm] (redis) {Redis\\staff group};
-  \node[box, right=of db, text width=2.6cm] (kds) {KDS cuisine\\affichage};
-  \node[box, below=of kds, text width=2.6cm] (cook) {Cuisinier\\statut plat};
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\schemaNode{Serveur\\prise de commande}
+\schemaArrow
+\schemaNode{API commandes\\validation}
+\schemaArrow
+\schemaNode{MySQL\\commande}
+\schemaArrow
+\schemaNode{Redis\\staff group}
 
-  \draw[flow] (server) -- (api);
-  \draw[flow] (api) -- (db);
-  \draw[flow] (api) -- (redis);
-  \draw[dashedflow] (redis) -| (kds);
-  \draw[flow] (cook) -- (api);
-  \draw[dashedflow] (redis) -- (server);
-\end{tikzpicture}
+\vspace{0.35cm}
+
+\schemaNode{KDS cuisine\\affichage}
+\schemaArrow
+\schemaNode{Cuisinier\\statut plat}
+\schemaArrow
+\schemaNode{API commandes\\mise à jour}
+\end{minipage}}
 \caption{Flux temps réel entre prise de commande et KDS}
 \label{fig:flux-kds}
 \end{figure}
@@ -207,27 +210,22 @@ Le fichier \code{docker-compose.yml} orchestre les services de développement : 
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=0.9cm and 0.8cm]
-  \node[box, text width=2.4cm] (compose) {Docker Compose};
-  \node[store, below left=of compose, text width=2.2cm] (db) {\code{db}\\MySQL};
-  \node[store, below=of compose, text width=2.2cm] (redis) {\code{redis}};
-  \node[box, below right=of compose, text width=2.2cm] (backend) {\code{backend}\\Daphne};
-  \node[box, below=of backend, text width=2.2cm] (worker) {\code{celery-worker}};
-  \node[box, right=of worker, text width=2.2cm] (beat) {\code{celery-beat}};
-  \node[box, right=of backend, text width=2.2cm] (staff) {\code{backoffice-app}};
-  \node[box, right=of staff, text width=2.2cm] (client) {\code{client-app}};
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\schemaNode{\pathcode{docker-compose.yml}\\orchestration}
+\schemaArrow
+\schemaNode{\code{db}\\MySQL}
+\schemaArrow
+\schemaNode{\code{redis}\\cache et broker}
 
-  \draw[flow] (compose) -- (db);
-  \draw[flow] (compose) -- (redis);
-  \draw[flow] (compose) -- (backend);
-  \draw[flow] (backend) -- (db);
-  \draw[flow] (backend) -- (redis);
-  \draw[flow] (worker) -- (redis);
-  \draw[flow] (worker) -- (db);
-  \draw[flow] (beat) -- (worker);
-  \draw[flow] (staff) -- (backend);
-  \draw[flow] (client) -- (backend);
-\end{tikzpicture}
+\vspace{0.45cm}
+
+\schemaNode{\code{backend}\\Daphne}
+\schemaArrow
+\schemaNode{\code{celery-worker}\\\code{celery-beat}}
+\schemaArrow
+\schemaNode{\pathcode{backoffice-app}\\\pathcode{client-app}}
+\end{minipage}}
 \caption{Organisation du déploiement Docker Compose}
 \label{fig:docker-compose}
 \end{figure}

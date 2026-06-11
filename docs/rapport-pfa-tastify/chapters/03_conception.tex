@@ -137,10 +137,10 @@ Le modèle logique de données découle des modèles Django confirmés dans le d
 \code{Commande}, \code{CommandeLigne} & Commande 1..N lignes ; table, serveur ou client optionnels. & Prise de commande, suivi cuisine, prix figé et total. \\
 \code{Reservation} & Client, table, date et créneau. & Réservation avec statut et contrôle de disponibilité. \\
 \code{Paiement}, \code{PaiementItem} & Paiement lié à une commande ; contributions liées aux lignes. & Encaissement et partage possible de l'addition. \\
-\code{Avis}, \code{AnalyseSentiment} & Avis 1..1 analyse ; avis lié à plat ou commande. & Commentaire client, note optionnelle, label et score de sentiment. \\
+\code{Avis}, \code{Analyse}\\\code{Sentiment} & Avis 1..1 analyse ; avis lié à plat ou commande. & Commentaire client, note optionnelle, label et score de sentiment. \\
 \code{LoyaltyProfile}, \code{Reward} & Profil 1..1 utilisateur ; transactions et récompenses. & Programme de fidélité. \\
 \code{WeatherData} & Données datées. & Support aux indicateurs et prévisions simples. \\
-\code{RestaurantConfiguration} & Configuration unique. & Paramètres du restaurant, identité, devise et réglages de service. \\
+\code{Restaurant}\\\code{Configuration} & Configuration unique. & Paramètres du restaurant, identité, devise et réglages de service. \\
 \bottomrule
 \end{longtable}
 
@@ -163,23 +163,22 @@ La conception distingue deux expériences applicatives : une application staff p
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=1.4cm and 1.2cm]
-  \node[box] (staff) {Application staff\\Gérant, serveur, cuisinier};
-  \node[box, right=of staff] (client) {Portail client\\Menu, réservation, paiement};
-  \node[box, below=1.3cm of $(staff)!0.5!(client)$, text width=4cm] (api) {Backend Django REST Framework\\API REST, permissions, logique métier};
-  \node[store, below left=of api] (db) {MySQL\\Données métier};
-  \node[store, below=of api] (redis) {Redis\\WebSocket et broker};
-  \node[box, below right=of api] (celery) {Celery\\Tâches asynchrones};
-  \node[external, right=of celery] (hf) {Hugging Face\\Inférence sentiment};
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\schemaNode{Application staff\\Gérant, serveur, cuisinier}
+\schemaArrow
+\schemaNode{Backend Django REST Framework\\API REST, permissions}
+\schemaArrow
+\schemaNode{MySQL\\Données métier}
 
-  \draw[flow] (staff) -- (api);
-  \draw[flow] (client) -- (api);
-  \draw[flow] (api) -- (db);
-  \draw[flow] (api) -- (redis);
-  \draw[flow] (api) -- (celery);
-  \draw[dashedflow] (celery) -- (hf);
-  \draw[dashedflow] (redis) -- (staff);
-\end{tikzpicture}
+\vspace{0.45cm}
+
+\schemaNode{Portail client\\Menu, réservation, paiement}
+\schemaArrow
+\schemaNode{Redis\\WebSocket et broker}
+\schemaArrow
+\schemaNode{Celery + Hugging Face\\Tâches et sentiment}
+\end{minipage}}
 \caption{Architecture fonctionnelle générale de Tastify}
 \label{fig:architecture-fonctionnelle}
 \end{figure}

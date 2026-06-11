@@ -1,3 +1,5 @@
+\pagenumbering{Alph}
+
 \begin{titlepage}
 \centering
 \vspace*{0.5cm}
@@ -11,7 +13,7 @@
   \includegraphics[width=0.48\textwidth]{figure_06.png}\\[1.0cm]
 }{}
 
-{\large \textbf{Annee UNIVERSITAIRE: 2023-2024}}\\[1.0cm]
+{\large \textbf{Annee UNIVERSITAIRE: 2025-2026}}\\[1.0cm]
 
 \begin{center}
 \fbox{%
@@ -31,12 +33,15 @@
 \textbf{Encadré par :} & \\
 \textbf{Tuteur de l'école :} & Pr. Prénom et nom \\
 \\[-0.15cm]
-\textbf{Réalisé par :} & Prénom et nom de l'étudiant \\
+\textbf{Réalisé par :} & Diouri Mehdi et El kherazi Ibtihal \\
 \end{tabular}
 
 \vfill
 {\large Projet de Fin d'Année}
 \end{titlepage}
+
+\clearpage
+\pagenumbering{roman}
 
 \chapter*{Dédicaces}
 \addcontentsline{toc}{chapter}{Dédicaces}
@@ -56,7 +61,7 @@ Tastify est une application web full-stack destinée à centraliser la gestion q
 
 La solution repose sur un backend Django REST Framework, une base de données MySQL, Redis pour les échanges temps réel et les traitements asynchrones, Celery pour les tâches de fond, ainsi que deux applications React : une interface staff pour le gérant, le serveur et le cuisinier, et un portail client. Les modules confirmés par le dépôt couvrent le menu, les tables, les commandes, le Kitchen Display System, les stocks, les ressources humaines, les réservations, les paiements, la fidélité, les avis, les tableaux de bord et la configuration du restaurant.
 
-Une partie importante du projet concerne l'analyse de sentiment des avis clients. Le code implémente un pipeline asynchrone qui analyse les commentaires au moyen de l'API Hugging Face lorsque le jeton est configuré, avec le modèle \code{nlptown/bert-base-multilingual-uncased-sentiment} pour les avis multilingues et \code{moussaKam/MARBERT-sentiment} pour les commentaires en arabe. En cas d'indisponibilité de l'API, le système utilise un secours local par mots-clés nommé \code{mots-cles-simple}. Cette fonctionnalité aide le gérant à suivre la satisfaction client sans interrompre l'expérience utilisateur.
+Une partie importante du projet concerne l'analyse de sentiment des avis clients. Le code implémente un pipeline asynchrone qui analyse les commentaires au moyen de l'API Hugging Face lorsque le jeton est configuré. Il utilise le modèle multilingue NLP Town pour les avis non arabes, MARBERT pour les commentaires en arabe, et un secours local par mots-clés nommé \pathcode{mots-cles-simple}. Les identifiants exacts des modèles sont détaillés dans le chapitre consacré à l'analyse de sentiment. Cette fonctionnalité aide le gérant à suivre la satisfaction client sans interrompre l'expérience utilisateur.
 
 \textbf{Mots-clés :} ERP, restaurant, Django, React, MySQL, Redis, Celery, WebSocket, KDS, avis clients, analyse de sentiment, Hugging Face, PFA.
 
@@ -66,7 +71,7 @@ Tastify is a full-stack web application designed to centralize daily restaurant 
 
 The solution is based on a Django REST Framework backend, a MySQL database, Redis for real-time communication and asynchronous processing, Celery for background tasks, and two React applications: a staff interface for managers, waiters and kitchen staff, and a customer portal. The repository confirms modules for menu management, tables, orders, Kitchen Display System, inventory, human resources, reservations, payments, loyalty, reviews, dashboards and restaurant settings.
 
-A key part of the project is customer review sentiment analysis. The implemented pipeline processes reviews asynchronously through the Hugging Face API when a token is configured, using \code{nlptown/bert-base-multilingual-uncased-sentiment} for multilingual reviews and \code{moussaKam/MARBERT-sentiment} for Arabic comments. If the API is unavailable, the application falls back to a local keyword-based method named \code{mots-cles-simple}. This feature helps managers monitor customer satisfaction without blocking the user experience.
+A key part of the project is customer review sentiment analysis. The implemented pipeline processes reviews asynchronously through the Hugging Face API when a token is configured. It uses the NLP Town multilingual model for non-Arabic reviews, MARBERT for Arabic comments, and a local keyword-based fallback named \pathcode{mots-cles-simple}. The exact model identifiers are detailed in the sentiment analysis chapter. This feature helps managers monitor customer satisfaction without blocking the user experience.
 
 \chapter*{Liste des abréviations}
 \addcontentsline{toc}{chapter}{Liste des abréviations}
@@ -102,11 +107,9 @@ WS & WebSocket. \\
 
 \chapter*{Informations à confirmer}
 \addcontentsline{toc}{chapter}{Informations à confirmer}
-La page de garde reprend le gabarit Word fourni. Certains champs de ce gabarit sont génériques ou contradictoires avec d'autres fichiers du dépôt. Ils ne sont donc pas inventés dans le rapport.
+La page de garde reprend le gabarit Word fourni. Les noms des étudiants et l'année universitaire ont été confirmés par l'utilisateur. Les champs restants qui ne sont pas vérifiables dans les fichiers fournis ne sont pas inventés.
 
 \begin{itemize}
-  \item Le gabarit DOCX indique \textbf{Annee UNIVERSITAIRE: 2023-2024}. Le brouillon LaTeX présent dans le dépôt mentionnait 2025--2026. L'année officielle doit être confirmée avant dépôt final.
   \item Le gabarit DOCX contient \textbf{Tuteur de l'école : Pr. Prénom et nom}. Le nom exact de l'encadrant n'est pas vérifiable dans les fichiers exploités.
-  \item Le gabarit DOCX contient \textbf{Prénom et nom de l'étudiant}. Le brouillon LaTeX du dépôt mentionnait Diouri Mehdi et El Kharrazi Ibtihal, mais le choix demandé impose de conserver la structure générique de la page de garde.
   \item Les captures présentes dans le dépôt sont réutilisées uniquement lorsqu'elles correspondent à des modules effectivement observés. Les captures manquantes sont listées en annexe au lieu d'être fabriquées.
 \end{itemize}

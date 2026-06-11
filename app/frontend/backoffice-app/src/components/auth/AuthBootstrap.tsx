@@ -8,7 +8,10 @@ const attemptRefresh = () => {
     _refreshAttempt = api
       .post('/users/refresh/')
       .then(r => r.data as { access: string; role: string; username: string })
-      .catch(() => null);
+      .catch(() => null)
+      .finally(() => {
+        _refreshAttempt = null;
+      });
   }
   return _refreshAttempt;
 };
@@ -23,7 +26,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
     (async () => {
       const hasSession = useAuthStore.getState().hasSession;
       
-      if (!isAuthenticated && hasSession) {
+      if (hasSession) {
         const data = await attemptRefresh();
         if (!active) return;
         if (data) {
