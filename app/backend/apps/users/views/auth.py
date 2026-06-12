@@ -73,19 +73,33 @@ def get_auth_cookie_name(request):
 
 def set_refresh_cookie(response, request, refresh_token):
     # Enregistre le badge de sécurité (token) dans le navigateur de l'utilisateur
+    secure_cookie = config_cookie_secure()
+    same_site = config_cookie_samesite()
     response.set_cookie(
         key=get_auth_cookie_name(request),
         value=refresh_token,
         expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
-        secure=not settings.DEBUG, # HTTPS uniquement en production
+        secure=secure_cookie, # HTTPS uniquement en production
         httponly=True, # Sécurité maximale : invisible pour le JS
-        samesite='Lax'
+        samesite=same_site,
     )
 
 
 def clear_refresh_cookie(response, request):
     # Supprime le cookie lors de la déconnexion
-    response.delete_cookie(get_auth_cookie_name(request))
+    response.delete_cookie(
+        get_auth_cookie_name(request),
+        secure=config_cookie_secure(),
+        samesite=config_cookie_samesite(),
+    )
+
+
+def config_cookie_secure():
+    return getattr(settings, 'REFRESH_COOKIE_SECURE', not settings.DEBUG)
+
+
+def config_cookie_samesite():
+    return getattr(settings, 'REFRESH_COOKIE_SAMESITE', 'Lax')
 
 # Vue de Connexion (Login)
 class CookieTokenObtainPairView(TokenObtainPairView):

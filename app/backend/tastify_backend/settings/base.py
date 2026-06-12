@@ -86,6 +86,9 @@ SIMPLE_JWT = {
     'AUTH_COOKIE': 'refresh_token',
 }
 
+REFRESH_COOKIE_SECURE = config('DJANGO_REFRESH_COOKIE_SECURE', cast=bool, default=not DEBUG)
+REFRESH_COOKIE_SAMESITE = config('DJANGO_REFRESH_COOKIE_SAMESITE', default='Lax')
+
 # Headers autorisés pour les requêtes CORS
 CORS_ALLOW_HEADERS = [
     'accept',
