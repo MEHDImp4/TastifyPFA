@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
+import { API_BASE_URL, buildApiUrl } from './apiConfig';
 
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const response = await axios.post('/api/users/refresh/', {}, {
+        const response = await axios.post(buildApiUrl('/users/refresh/'), {}, {
           withCredentials: true,
           headers: { 'X-Tastify-Portal': 'staff' }
         });

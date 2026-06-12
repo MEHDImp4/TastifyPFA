@@ -1,4 +1,5 @@
 import { api as axiosInstance } from './axios';
+import { resolveMediaUrl } from './apiConfig';
 
 export interface Categorie {
   id: number;
@@ -32,10 +33,35 @@ export interface Plat {
   top_avis?: Avis[];
 }
 
+const withCategoryMedia = (category: Categorie): Categorie => ({
+  ...category,
+  image: resolveMediaUrl(category.image),
+});
+
+const withPlatMedia = (plat: Plat): Plat => ({
+  ...plat,
+  image: resolveMediaUrl(plat.image),
+});
+
 export const menuApi = {
-  getCategories: () => axiosInstance.get<Categorie[]>('/categories/'),
-  getPlats: () => axiosInstance.get<Plat[]>('/plats/'),
-  getPlat: (id: number) => axiosInstance.get<Plat>(`/plats/${id}/`),
-  getRecommendations: (id: number) => axiosInstance.get<Plat[]>(`/plats/${id}/recommendations/`),
-  getTopRecommendations: () => axiosInstance.get<Plat[]>('/plats/top-recommendations/'),
+  getCategories: () => axiosInstance.get<Categorie[]>('/categories/').then(res => ({
+    ...res,
+    data: res.data.map(withCategoryMedia),
+  })),
+  getPlats: () => axiosInstance.get<Plat[]>('/plats/').then(res => ({
+    ...res,
+    data: res.data.map(withPlatMedia),
+  })),
+  getPlat: (id: number) => axiosInstance.get<Plat>(`/plats/${id}/`).then(res => ({
+    ...res,
+    data: withPlatMedia(res.data),
+  })),
+  getRecommendations: (id: number) => axiosInstance.get<Plat[]>(`/plats/${id}/recommendations/`).then(res => ({
+    ...res,
+    data: res.data.map(withPlatMedia),
+  })),
+  getTopRecommendations: () => axiosInstance.get<Plat[]>('/plats/top-recommendations/').then(res => ({
+    ...res,
+    data: res.data.map(withPlatMedia),
+  })),
 };

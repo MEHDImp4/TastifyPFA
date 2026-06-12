@@ -3,6 +3,7 @@ import { useAuthStore } from '../store/authStore';
 import { useKdsStore } from '../store/kdsStore';
 import { useSocketStore } from '../store/socketStore';
 import { toast } from 'sonner';
+import { buildStaffWebSocketUrl } from '../api/apiConfig';
 
 const debugWebSocket = (...args: unknown[]) => {
   if (import.meta.env.DEV) {
@@ -66,9 +67,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    const wsUrl = `${protocol}//${host}/ws/staff/?token=${accessToken}`;
+    const wsUrl = buildStaffWebSocketUrl(accessToken);
 
     debugWebSocket('WS: Connecting to staff websocket...');
     setStatus('connecting');
