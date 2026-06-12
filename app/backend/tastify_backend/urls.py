@@ -2,9 +2,10 @@
 # Ce fichier est le point d'entrée pour toutes les requêtes arrivant sur le serveur
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve as serve_static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from core.views import health
 
@@ -29,6 +30,15 @@ urlpatterns = [
     path('api/', include('tastify_backend.api_router')),
 ]
 
-# En mode développement (DEBUG=True), on demande à Django de servir les fichiers média (images)
+# En développement, static() suffit. En production Unraid, Daphne sert aussi
+# les médias du volume partagé quand DJANGO_SERVE_MEDIA_FILES=1.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+elif getattr(settings, 'SERVE_MEDIA_FILES', False):
+    urlpatterns += [
+        re_path(
+            r'^media/(?P<path>.*)$',
+            serve_static,
+            {'document_root': settings.MEDIA_ROOT},
+        ),
+    ]
