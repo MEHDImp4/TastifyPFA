@@ -89,7 +89,6 @@ def clear_refresh_cookie(response, request):
     # Supprime le cookie lors de la déconnexion
     response.delete_cookie(
         get_auth_cookie_name(request),
-        secure=config_cookie_secure(),
         samesite=config_cookie_samesite(),
     )
 
@@ -127,21 +126,21 @@ class CookieTokenRefreshView(TokenRefreshView):
         logger.debug(f"Refresh attempt for portal: {portal}, cookie_name: {cookie_name}")
 
         if not refresh_token and not request_data.get('refresh'):
-            logger.warning(f"Refresh failed: No token found in cookie '{cookie_name}' or request data")
+            logger.warning(f"Refresh failed: no refresh credential in cookie '{cookie_name}' or request data")
             return Response(
                 {"detail": "Refresh token not provided.", "code": "token_not_provided"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
         if refresh_token and not request_data.get('refresh'):
-            logger.debug(f"Using refresh token from cookie '{cookie_name}'")
+            logger.debug(f"Using refresh cookie '{cookie_name}'")
             request_data['refresh'] = refresh_token
 
         serializer = self.get_serializer(data=request_data)
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as exc:
-            logger.warning(f"Refresh failed: TokenError - {str(exc)}")
+            logger.warning("Refresh failed: token validation error (%s)", exc.__class__.__name__)
             raise InvalidToken(str(exc)) from exc
         except Exception as e:
             logger.error(f"Refresh failed: Unexpected error - {str(e)}")

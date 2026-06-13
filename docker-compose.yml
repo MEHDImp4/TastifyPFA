@@ -34,7 +34,7 @@ services:
     image: tastifypfa-backend-dev
     build:
       context: ./app/backend
-    command: daphne -b 0.0.0.0 -p 8000 tastify_backend.asgi:application
+    command: daphne -b 0.0.0.0 -p 8000 --ping-interval 25 --ping-timeout 60 tastify_backend.asgi:application
     env_file: .env
     environment:
       COLLECTSTATIC_ON_STARTUP: "1"

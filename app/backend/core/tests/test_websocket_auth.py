@@ -1,5 +1,6 @@
 from asgiref.sync import async_to_sync
 from channels.testing import WebsocketCommunicator
+import logging
 import pytest
 import subprocess
 import sys
@@ -9,16 +10,16 @@ from apps.users.models import Utilisateur
 from tastify_backend.asgi import application
 
 
-def build_socket_path(token: str | None = None):
+def build_socket_path(token: str | None = None, param_name: str = "token"):
     if token is None:
         return "/ws/staff/"
-    return f"/ws/staff/?token={token}"
+    return f"/ws/staff/?{param_name}={token}"
 
 
-async def connect_with_token(token: str | None):
+async def connect_with_token(token: str | None, param_name: str = "token"):
     communicator = WebsocketCommunicator(
         application,
-        build_socket_path(token),
+        build_socket_path(token, param_name),
         headers=[(b"origin", b"http://localhost")],
     )
     connected, detail = await communicator.connect()
@@ -48,6 +49,21 @@ def test_invalid_token_connection_is_rejected():
 
 
 @pytest.mark.django_db(transaction=True)
+def test_invalid_token_value_is_not_written_to_logs(caplog):
+    caplog.set_level(logging.WARNING, logger="core.middleware")
+
+    async def scenario():
+        communicator, connected, close_code = await connect_with_token("invalid-token")
+        assert connected is False
+        assert close_code == 4401
+        await communicator.disconnect()
+
+    async_to_sync(scenario)()
+
+    assert "invalid-token" not in caplog.text
+
+
+@pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize(
     "role",
     [
@@ -66,6 +82,23 @@ def test_staff_roles_can_connect(role):
 
     async def scenario():
         communicator, connected, _ = await connect_with_token(token)
+        assert connected is True
+        await communicator.disconnect()
+
+    async_to_sync(scenario)()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_staff_role_can_connect_with_signalr_access_token_query():
+    user = Utilisateur.objects.create_user(
+        username="gerant_signalr_query",
+        password="password123",
+        role=Utilisateur.Role.GERANT,
+    )
+    token = str(AccessToken.for_user(user))
+
+    async def scenario():
+        communicator, connected, _ = await connect_with_token(token, param_name="access_token")
         assert connected is True
         await communicator.disconnect()
 

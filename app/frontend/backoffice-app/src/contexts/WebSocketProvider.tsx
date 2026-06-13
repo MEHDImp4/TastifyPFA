@@ -5,9 +5,29 @@ import { useSocketStore } from '../store/socketStore';
 import { toast } from 'sonner';
 import { buildStaffWebSocketUrl } from '../api/apiConfig';
 
+const RECONNECT_DELAYS_MS = [1000, 2000, 5000, 10000, 30000];
+const AUTH_CLOSE_CODES = new Set([4401, 4403]);
+
 const debugWebSocket = (...args: unknown[]) => {
   if (import.meta.env.DEV) {
     console.debug(...args);
+  }
+};
+
+const getReconnectDelay = (attempt: number) => (
+  RECONNECT_DELAYS_MS[Math.min(attempt, RECONNECT_DELAYS_MS.length - 1)]
+);
+
+const closeSocket = (socket: WebSocket | null) => {
+  if (!socket) return;
+
+  socket.onopen = null;
+  socket.onmessage = null;
+  socket.onclose = null;
+  socket.onerror = null;
+
+  if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
+    socket.close(1000, 'client_shutdown');
   }
 };
 
@@ -31,7 +51,7 @@ const playNotificationSound = () => {
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + 0.5);
     } catch (e) {
-        console.error("Audio playback failed", e);
+        debugWebSocket('WS: Audio playback failed', e);
     }
 };
 
@@ -47,6 +67,16 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptRef = useRef(0);
+  const manualCloseRef = useRef(false);
+  const connectRef = useRef<() => void>(() => undefined);
+
+  const clearReconnectTimer = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+  }, []);
 
   const connect = useCallback(() => {
     if (!isAuthenticated || !accessToken) {
@@ -54,17 +84,15 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       return;
     }
 
-    // Clear any existing timeout
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
+    clearReconnectTimer();
 
-    // Close existing socket if any (though useEffect cleanup should have handled it)
     if (socketRef.current) {
       if (socketRef.current.readyState === WebSocket.OPEN || socketRef.current.readyState === WebSocket.CONNECTING) {
-        return; // Already connecting or connected
+        debugWebSocket('WS: Skip connect (already active)');
+        return;
       }
+      closeSocket(socketRef.current);
+      socketRef.current = null;
     }
 
     const wsUrl = buildStaffWebSocketUrl(accessToken);
@@ -78,6 +106,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     ws.onopen = () => {
       if (socketRef.current !== ws) return;
       debugWebSocket('WS: Staff WebSocket connected');
+      reconnectAttemptRef.current = 0;
       setStatus('connected');
     };
 
@@ -85,12 +114,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (socketRef.current !== ws) return;
       try {
         const data = JSON.parse(event.data);
-        debugWebSocket('WS Message:', data);
-        
-        useSocketStore.getState().triggerUpdate();
+        debugWebSocket('WS: Message received', data?.type);
 
         switch (data.type) {
+          case 'heartbeat':
+            break;
           case 'order_created': {
+            useSocketStore.getState().triggerUpdate();
             const order = data.payload?.order;
             if (!order) break;
             upsertTicket(order);
@@ -100,6 +130,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             break;
           }
           case 'order_updated': {
+            useSocketStore.getState().triggerUpdate();
             const order = data.payload?.order;
             if (!order) break;
             if (['PAYEE', 'ANNULEE'].includes(order.statut)) {
@@ -110,64 +141,103 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             break;
           }
           case 'line_launched':
+            useSocketStore.getState().triggerUpdate();
             updateLigneStatut(data.payload.ligne_id, 'EN_PREPARATION');
             break;
           case 'line_ready':
+            useSocketStore.getState().triggerUpdate();
             updateLigneStatut(data.payload.ligne_id, 'PRET');
             playNotificationSound();
             toast.info('Plat prêt au service', { description: `Ligne #${data.payload.ligne_id} prête au passe` });
             break;
           case 'line_cancelled':
+            useSocketStore.getState().triggerUpdate();
             updateLigneStatut(data.payload.ligne_id, 'ANNULE');
             break;
         }
       } catch (err) {
-        console.error('WS: Error parsing message:', err);
+        debugWebSocket('WS: Error parsing message', err);
       }
     };
 
     ws.onclose = (e) => {
-      // Ignore stale close events from sockets superseded by a newer connection
       if (socketRef.current !== ws) return;
       socketRef.current = null;
-      if (isAuthenticated && accessToken && e.code !== 1000) {
-        console.warn(`WS: Staff WebSocket closed (Code: ${e.code}, Reason: ${e.reason || 'None'}). Reconnecting in 3s...`);
-        setStatus('disconnected');
-        // eslint-disable-next-line
-        reconnectTimeoutRef.current = setTimeout(() => connect(), 3000);
-      } else {
+
+      const canReconnect = (
+        !manualCloseRef.current &&
+        e.code !== 1000 &&
+        !AUTH_CLOSE_CODES.has(e.code) &&
+        useAuthStore.getState().isAuthenticated &&
+        Boolean(useAuthStore.getState().accessToken)
+      );
+
+      if (!canReconnect) {
         debugWebSocket(`WS: Staff WebSocket closed gracefully (Code: ${e.code})`);
         setStatus('disconnected');
+        return;
       }
+
+      const delay = getReconnectDelay(reconnectAttemptRef.current);
+      reconnectAttemptRef.current += 1;
+      debugWebSocket(`WS: Staff WebSocket closed (Code: ${e.code}). Reconnecting in ${delay}ms...`);
+      setStatus('disconnected');
+      reconnectTimeoutRef.current = setTimeout(() => {
+        reconnectTimeoutRef.current = null;
+        connectRef.current();
+      }, delay);
     };
 
     ws.onerror = () => {
       if (socketRef.current !== ws) return;
+      debugWebSocket('WS: Socket error');
       setStatus('error');
     };
-  }, [accessToken, isAuthenticated, upsertTicket, removeTicket, updateLigneStatut, setStatus]);
+  }, [
+    accessToken,
+    clearReconnectTimer,
+    isAuthenticated,
+    removeTicket,
+    setStatus,
+    updateLigneStatut,
+    upsertTicket,
+  ]);
 
   useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
+
+  useEffect(() => {
+    manualCloseRef.current = false;
     connect();
 
     return () => {
-      // Detach from ref first so onclose/onerror handlers on this socket are ignored
+      manualCloseRef.current = true;
+      clearReconnectTimer();
       const socket = socketRef.current;
       socketRef.current = null;
-      if (socket) {
-        if (socket.readyState === WebSocket.CONNECTING) {
-          // Delay close until it opens to prevent browser warning in StrictMode
-          socket.addEventListener('open', () => socket.close(1000));
-        } else if (socket.readyState === WebSocket.OPEN) {
-          socket.close(1000);
-        }
-      }
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-        reconnectTimeoutRef.current = null;
-      }
+      closeSocket(socket);
     };
-  }, [connect]);
+  }, [clearReconnectTimer, connect]);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      reconnectAttemptRef.current = 0;
+      manualCloseRef.current = false;
+      connect();
+    };
+    const handleOffline = () => {
+      clearReconnectTimer();
+      setStatus('disconnected');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [clearReconnectTimer, connect, setStatus]);
 
   return <>{children}</>;
 };

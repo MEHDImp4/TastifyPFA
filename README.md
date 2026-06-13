@@ -99,6 +99,10 @@ The Unraid stack stores persistent data under:
 For direct LAN HTTP, keep `DJANGO_COOKIE_SECURE=False` and `DJANGO_SECURE_SSL_REDIRECT=False`.
 When you put the app behind HTTPS, update `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`,
 `CSRF_TRUSTED_ORIGINS`, `FRONTEND_BASE_URL`, then switch those two security flags to `True`.
+The backoffice frontend also bakes `VITE_API_BASE_URL`, `VITE_WS_BASE_URL`, and
+`VITE_STAFF_WS_PATH` at image build time. Rebuild the frontend image after changing those
+values. For a same-origin reverse proxy, keep `VITE_API_BASE_URL=/api`,
+`VITE_WS_BASE_URL=` and `VITE_STAFF_WS_PATH=/ws/staff/`.
 
 Useful Unraid maintenance commands:
 
@@ -187,9 +191,9 @@ Client authentication now also includes a first-class password-reset flow backed
 - `real-device-matrix` remains a non-blocking preflight until a real provider profile is configured, but it already exposes provider-agnostic environment hooks for iPhone Safari and Android Chrome style capability adapters.
 
 ## Realtime staff channel
-- `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed in the query string.
-- `app/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group`.
-- `app/frontend/backoffice-app/src/contexts/WebSocketProvider.tsx` owns the staff websocket provider, reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
+- `app/backend/core/middleware.py` authenticates `/ws/staff/` with a Simple JWT access token passed as `access_token` in the query string. The legacy `token` parameter is still accepted for older clients.
+- `app/backend/core/consumers.py` exposes `StaffConsumer`, which accepts GERANT, SERVEUR, and CUISINIER into the shared `staff_group` and emits a small heartbeat to keep proxies from closing idle WebSockets.
+- `app/frontend/backoffice-app/src/contexts/WebSocketProvider.tsx` owns the staff websocket provider, exponential backoff reconnection policy, payload parsing, and Zustand socket state used by the staff SPA.
 - `app/frontend/backoffice-app/src/components/ui/ErrorBoundary.tsx` and `app/frontend/client-app/src/components/ui/ErrorBoundary.tsx` own the render crash boundaries used by both SPAs so reload-time exceptions surface visibly instead of failing to a blank screen.
 
 ## Salle order-taking

@@ -18,13 +18,33 @@ export const resolveMediaUrl = (url: string | null) => {
   return new URL(url, apiRoot).toString();
 };
 
-export const buildStaffWebSocketUrl = (accessToken: string) => {
-  const explicitWsBase = import.meta.env.VITE_WS_BASE_URL;
-  const wsUrl = explicitWsBase
-    ? new URL(explicitWsBase.replace(/\/+$/, '') + '/ws/staff/', window.location.origin)
-    : new URL('/ws/staff/', getApiRootUrl());
+const withTrailingSlash = (value: string) => value.replace(/\/+$/, '') + '/';
 
-  wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:';
-  wsUrl.searchParams.set('token', accessToken);
+const normalizeStaffWebSocketPath = (path: string | undefined) => {
+  const value = (path || '/ws/staff/').trim() || '/ws/staff/';
+  return value.replace(/^\/+/, '');
+};
+
+export const buildStaffWebSocketUrl = (accessToken: string) => {
+  if (!accessToken.trim()) {
+    throw new Error('Cannot build staff WebSocket URL without an access token.');
+  }
+
+  const explicitWsBase = import.meta.env.VITE_WS_BASE_URL?.trim();
+  const wsBase = explicitWsBase
+    ? new URL(withTrailingSlash(explicitWsBase), window.location.origin)
+    : getApiRootUrl();
+  const wsUrl = new URL(
+    normalizeStaffWebSocketPath(import.meta.env.VITE_STAFF_WS_PATH),
+    withTrailingSlash(wsBase.toString()),
+  );
+
+  if (wsUrl.protocol === 'https:') {
+    wsUrl.protocol = 'wss:';
+  } else if (wsUrl.protocol === 'http:') {
+    wsUrl.protocol = 'ws:';
+  }
+
+  wsUrl.searchParams.set('access_token', accessToken);
   return wsUrl.toString();
 };

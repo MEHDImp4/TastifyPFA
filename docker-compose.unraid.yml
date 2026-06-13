@@ -40,7 +40,7 @@ services:
     image: ${BACKEND_IMAGE:?Set BACKEND_IMAGE in your Unraid .env file}
     container_name: tastify-backend
     restart: unless-stopped
-    command: daphne -b 0.0.0.0 -p 8000 --proxy-headers tastify_backend.asgi:application
+    command: daphne -b 0.0.0.0 -p 8000 --proxy-headers --ping-interval 25 --ping-timeout 60 tastify_backend.asgi:application
     env_file: .env
     environment:
       COLLECTSTATIC_ON_STARTUP: "1"
