@@ -2,6 +2,7 @@ from decimal import Decimal
 from rest_framework import serializers
 from .models import Categorie, Plat
 from apps.avis.models import Avis
+from core.image_utils import convert_upload_to_webp
 from urllib.parse import urlparse
 
 
@@ -54,8 +55,19 @@ class CategorieSerializer(serializers.ModelSerializer):
         # Certains champs sont gérés automatiquement par Django et ne doivent pas être modifiés par l'utilisateur
         read_only_fields = ['id', 'created_at', 'updated_at']
 
+    def create(self, validated_data):
+        image = validated_data.get('image')
+        if image:
+            validated_data['image'] = convert_upload_to_webp(image)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        image = validated_data.get('image')
+        if image:
+            validated_data['image'] = convert_upload_to_webp(image)
+        return super().update(instance, validated_data)
+
     def to_representation(self, instance):
-        # Cette méthode permet de personnaliser la sortie JSON finale
         ret = super().to_representation(instance)
         ret['image'] = existing_image_url(instance.image, ret.get('image'))
         return ret
@@ -97,6 +109,18 @@ class PlatSerializer(serializers.ModelSerializer):
             'updated_at',
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'sentiment_score', 'top_avis']
+
+    def create(self, validated_data):
+        image = validated_data.get('image')
+        if image:
+            validated_data['image'] = convert_upload_to_webp(image)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        image = validated_data.get('image')
+        if image:
+            validated_data['image'] = convert_upload_to_webp(image)
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)

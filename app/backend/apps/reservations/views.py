@@ -5,6 +5,7 @@ from rest_framework import status as drf_status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from core.pagination import OptInPageNumberPagination
 from apps.reservations.models import Reservation
 from apps.reservations.permissions import IsStaffOrOwnReservation, STAFF_ROLES
 from apps.reservations.serializers import ReservationSerializer
@@ -16,6 +17,7 @@ from apps.tables.serializers import TableSerializer
 class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = ReservationSerializer
     permission_classes = [IsStaffOrOwnReservation]
+    pagination_class = OptInPageNumberPagination
 
     def get_queryset(self):
         user = self.request.user
@@ -37,9 +39,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
                 models.Q(client__last_name__icontains=search)
             )
 
-        if user.role in STAFF_ROLES:
-            return base_qs
-        return base_qs.filter(client=user)
+        if user.role not in STAFF_ROLES:
+            base_qs = base_qs.filter(client=user)
+
+        return base_qs.order_by('-date_reservation', '-heure_debut', '-id')
 
     @action(detail=False, methods=['get'], url_path='available_tables')
     def available_tables(self, request):

@@ -61,6 +61,22 @@ class CategorieAPITest(TestCase):
         self.assertEqual(response.data['nom'], 'Patisseries')
         self.assertIsNotNone(response.data['image'])
         self.assertTrue(response.data['image'].startswith('/media/categories/'))
+        self.assertTrue(response.data['image'].endswith('.webp'))
+
+    def test_category_upload_converts_png_to_webp(self):
+        response = self.client.post(
+            '/api/categories/',
+            {
+                'nom': 'WebP Test',
+                'description': 'Doit être converti',
+                'ordre_affichage': 5,
+                'image': make_test_image('photo.png'),
+            },
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        created = Categorie.objects.get(nom='WebP Test')
+        self.assertTrue(created.image.name.endswith('.webp'))
 
     def test_list_category_with_missing_image_returns_null(self):
         self.categorie.image = 'categories/missing-category.png'
@@ -87,7 +103,9 @@ class CategorieAPITest(TestCase):
         self.categorie.refresh_from_db()
         self.assertNotEqual(self.categorie.image.name, previous_image_name)
         self.assertTrue(self.categorie.image.name.startswith('categories/'))
+        self.assertTrue(self.categorie.image.name.endswith('.webp'))
         self.assertTrue(response.data['image'].startswith('/media/categories/'))
+        self.assertTrue(response.data['image'].endswith('.webp'))
 
     def test_partial_update_category_can_clear_existing_image_with_null(self):
         self.categorie.image = make_test_image('clearable-category.png')

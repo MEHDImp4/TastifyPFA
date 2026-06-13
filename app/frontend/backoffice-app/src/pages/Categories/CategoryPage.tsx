@@ -7,7 +7,9 @@ import {
   Loader2,
   Search,
   Edit2,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -33,10 +35,13 @@ const BLANK_EDITOR = (nextOrder: number): EditorState => ({
   imagePreviewUrl: null,
 });
 
+const CATEGORY_PAGE_SIZE = 12;
+
 export const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [editor, setEditor] = useState<EditorState | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -57,6 +62,10 @@ export const CategoryPage: React.FC = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   const openCreate = () => {
     const nextOrder = categories.length > 0
@@ -106,6 +115,7 @@ export const CategoryPage: React.FC = () => {
 
       if (editor.mode === 'create') {
         await menuApi.createCategory(formData);
+        setCurrentPage(1);
       } else if (editor.id !== null) {
         await menuApi.updateCategory(editor.id, formData);
       }
@@ -126,6 +136,17 @@ export const CategoryPage: React.FC = () => {
       toast.error('Suppression impossible');
     }
   };
+
+  const normalizedSearch = search.trim().toLowerCase();
+  const filteredCategories = categories.filter(c => c.nom.toLowerCase().includes(normalizedSearch));
+  const totalPages = Math.max(1, Math.ceil(filteredCategories.length / CATEGORY_PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const pageStart = (safeCurrentPage - 1) * CATEGORY_PAGE_SIZE;
+  const paginatedCategories = filteredCategories.slice(pageStart, pageStart + CATEGORY_PAGE_SIZE);
+
+  useEffect(() => {
+    setCurrentPage(page => Math.min(page, totalPages));
+  }, [totalPages]);
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
@@ -156,11 +177,11 @@ export const CategoryPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {categories.filter(c => c.nom.toLowerCase().includes(search.toLowerCase())).map(c => (
+          {paginatedCategories.map(c => (
             <div key={c.id} data-testid={`category-card-${c.id}`} className="atelier-card p-6 group">
               {c.image && (
                 <div className="mb-4 aspect-video rounded overflow-hidden border border-outline">
-                  <img src={c.image} alt={c.nom} role="img" aria-label={c.nom} className="w-full h-full object-cover" />
+                  <img src={c.image} alt={c.nom} role="img" aria-label={c.nom} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
               )}
               <div className="flex justify-between items-start mb-4">
@@ -176,6 +197,34 @@ export const CategoryPage: React.FC = () => {
               <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40">{c.description || 'Aucune description spécifiée.'}</p>
             </div>
           ))}
+        </div>
+        <div className="mt-6 flex flex-col gap-3 border-t border-outline pt-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant sm:flex-row sm:items-center sm:justify-between">
+          <span>
+            {filteredCategories.length} catégorie{filteredCategories.length > 1 ? 's' : ''} trouvée{filteredCategories.length > 1 ? 's' : ''}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
+              disabled={safeCurrentPage <= 1}
+              className="btn-icon"
+              aria-label="Page précédente"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="min-w-24 text-center text-on-background">
+              Page {safeCurrentPage} / {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
+              disabled={safeCurrentPage >= totalPages}
+              className="btn-icon"
+              aria-label="Page suivante"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </main>
 

@@ -7,7 +7,9 @@ import {
   Trash2,
   Loader2,
   Download,
-  Search
+  Search,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -24,16 +26,24 @@ export const StockPage: React.FC = () => {
   const [, setItemToDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+  const [totalCount, setTotalCount] = useState(0);
 
   const [nom, setNom] = useState('');
   const [unite, setUnite] = useState<'g' | 'ml' | 'pcs'>('g');
   const [stock, setStock] = useState('0');
   const [seuil, setSeuil] = useState('0');
 
-  const fetchStock = async () => {
+  const fetchStock = async (page = currentPage) => {
+    setIsLoading(true);
     try {
-      const res = await stockApi.getIngredients();
-      setIngredients(res.data);
+      const res = await stockApi.getIngredientsPage({
+        page,
+        page_size: itemsPerPage,
+        search: search.trim() || undefined,
+        est_active: true,
+      });
+      setIngredients(res.data.results);
+      setTotalCount(res.data.count);
     } catch (err) {
       console.error('Failed to fetch stock', err);
       toast.error('Erreur chargement inventaire');
@@ -44,7 +54,7 @@ export const StockPage: React.FC = () => {
 
   useEffect(() => {
     fetchStock();
-  }, []);
+  }, [currentPage, search]);
 
   const handleOpenEditor = (item?: Ingredient) => {
     if (item) {
@@ -63,11 +73,12 @@ export const StockPage: React.FC = () => {
     setIsEditorOpen(true);
   };
 
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     try {
-      if (ingredients.length === 0) return;
+      const exportRes = await stockApi.getIngredients({ search: search.trim() || undefined, est_active: true });
+      if (exportRes.data.length === 0) return;
       const headers = ['ID', 'DESIGNATION', 'UNITE', 'STOCK', 'SEUIL', 'STATUT'];
-      const rows = ingredients.map(i => [i.id, i.nom.toUpperCase(), i.unite_mesure.toUpperCase(), i.stock_actuel, i.seuil_alerte]);
+      const rows = exportRes.data.map(i => [i.id, i.nom.toUpperCase(), i.unite_mesure.toUpperCase(), i.stock_actuel, i.seuil_alerte]);
       const csvContent = '﻿' + [headers.join(';'), ...rows.map(row => row.join(';'))].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
@@ -80,11 +91,7 @@ export const StockPage: React.FC = () => {
     }
   };
 
-  const filteredIngredients = ingredients.filter(i =>
-    i.est_active && i.nom.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const paginatedIngredients = filteredIngredients.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
 
@@ -118,7 +125,7 @@ export const StockPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-background custom-scrollbar">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {paginatedIngredients.map(i => {
+          {ingredients.map(i => {
             const isLow = parseFloat(i.stock_actuel) < parseFloat(i.seuil_alerte);
             return (
               <div key={i.id} className="atelier-card p-6 flex flex-col justify-between group">
@@ -142,6 +149,22 @@ export const StockPage: React.FC = () => {
               </div>
             );
           })}
+        </div>
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-outline pt-4">
+          <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-60">
+            Total : {totalCount} ingrédients
+          </span>
+          {totalPages > 1 && (
+            <div className="flex items-center gap-3">
+              <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="btn-icon"><ChevronLeft className="w-3.5 h-3.5" /></button>
+              <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
+                <span className="text-on-background">{currentPage}</span>
+                <span>/</span>
+                <span>{totalPages}</span>
+              </div>
+              <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="btn-icon"><ChevronRight className="w-3.5 h-3.5" /></button>
+            </div>
+          )}
         </div>
       </main>
 

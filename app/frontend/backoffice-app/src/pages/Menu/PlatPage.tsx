@@ -8,7 +8,9 @@ import {
   Loader2,
   Search,
   Image as ImageIcon,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -41,17 +43,35 @@ export const PlatPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [editor, setEditor] = useState<EditorState | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const itemsPerPage = 12;
 
-  const fetchAll = async () => {
+  const fetchCategories = async () => {
     try {
-      const [platsRes, catsRes] = await Promise.all([menuApi.getPlats(), menuApi.getCategories()]);
-      setPlats(platsRes.data);
+      const catsRes = await menuApi.getCategories();
       setCategories(catsRes.data);
+    } catch (err) {
+      console.error(err);
+      toast.error('Erreur chargement catégories');
+    }
+  };
+
+  const fetchPlats = async (page = currentPage) => {
+    setIsLoading(true);
+    try {
+      const platsRes = await menuApi.getPlatsPage({
+        page,
+        page_size: itemsPerPage,
+        search: search.trim() || undefined,
+      });
+      setPlats(platsRes.data.results);
+      setTotalCount(platsRes.data.count);
     } catch (err) {
       console.error(err);
       toast.error('Erreur chargement catalogue');
@@ -61,8 +81,12 @@ export const PlatPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchAll();
+    fetchCategories();
   }, []);
+
+  useEffect(() => {
+    fetchPlats();
+  }, [currentPage, search]);
 
   const openCreate = () => {
     setSaveError(null);
@@ -121,7 +145,8 @@ export const PlatPage: React.FC = () => {
       } else if (editor.id !== null) {
         await menuApi.updatePlat(editor.id, formData);
       }
-      await fetchAll();
+      setCurrentPage(1);
+      await fetchPlats(1);
       closeEditor();
     } catch (err) {
       setSaveError("Impossible d'enregistrer le plat.");
@@ -134,13 +159,17 @@ export const PlatPage: React.FC = () => {
     setDeleteError(null);
     try {
       await menuApi.deletePlat(id);
-      setPlats(prev => prev.filter(p => p.id !== id));
+      if (plats.length === 1 && currentPage > 1) {
+        setCurrentPage(page => page - 1);
+      } else {
+        await fetchPlats();
+      }
     } catch (err) {
       setDeleteError('Suppression impossible.');
     }
   };
 
-  const filteredPlats = plats.filter(p => p.nom.toLowerCase().includes(search.toLowerCase()));
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
 
@@ -159,7 +188,7 @@ export const PlatPage: React.FC = () => {
               aria-label="Rechercher un plat"
               placeholder="Rechercher un plat..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
@@ -174,11 +203,11 @@ export const PlatPage: React.FC = () => {
           <p role="alert" className="form-error mb-4">{deleteError}</p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredPlats.map(p => (
+          {plats.map(p => (
             <div key={p.id} data-testid={`plat-card-${p.id}`} className="atelier-card p-4 group">
               <div className="relative aspect-video rounded border border-outline overflow-hidden bg-background mb-4">
                 {p.image ? (
-                  <img src={p.image} className="w-full h-full object-cover" alt={p.nom} role="img" aria-label={p.nom} />
+                  <img src={p.image} className="w-full h-full object-cover" alt={p.nom} role="img" aria-label={p.nom} loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-10"><ImageIcon className="w-8 h-8" /></div>
                 )}
@@ -193,6 +222,22 @@ export const PlatPage: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-outline pt-4">
+          <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-60">
+            Total : {totalCount} plats
+          </span>
+          {totalPages > 1 && (
+            <div className="flex items-center gap-3">
+              <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="btn-icon"><ChevronLeft className="w-3.5 h-3.5" /></button>
+              <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
+                <span className="text-on-background">{currentPage}</span>
+                <span>/</span>
+                <span>{totalPages}</span>
+              </div>
+              <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="btn-icon"><ChevronRight className="w-3.5 h-3.5" /></button>
+            </div>
+          )}
         </div>
       </main>
 

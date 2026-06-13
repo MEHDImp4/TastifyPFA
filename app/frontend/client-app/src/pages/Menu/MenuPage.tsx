@@ -35,43 +35,91 @@ const itemVariants = {
   }
 };
 
+const MENU_PAGE_SIZE = 9;
+
 export const MenuPage: React.FC = () => {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [plats, setPlats] = useState<Plat[]>([]);
-  const [activeCat, setActiveCat] = useState<number | null>(null);
+  const [activeCat, setActiveCat] = useState<number | null | undefined>(undefined);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+  const [isPlatsLoading, setIsPlatsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [selectedPlat, setSelectedPlat] = useState<Plat | null>(null);
   const { addItem } = useCartStore();
   const { config } = useConfigStore();
   useBodyScrollLock(Boolean(selectedPlat));
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategories = async () => {
       try {
-        const [catsRes, platsRes] = await Promise.all([
-          menuApi.getCategories(),
-          menuApi.getPlats()
-        ]);
+        const catsRes = await menuApi.getCategories();
         const sortedCats = catsRes.data.sort((a, b) => a.ordre_affichage - b.ordre_affichage);
         setCategories(sortedCats);
-        setPlats(platsRes.data);
-        if (sortedCats.length > 0) setActiveCat(sortedCats[0].id);
+        setActiveCat(sortedCats[0]?.id ?? null);
       } catch (err) {
-        console.error('Failed to load menu', err);
+        console.error('Failed to load menu categories', err);
+        setActiveCat(null);
       } finally {
-        setIsLoading(false);
+        setIsCategoriesLoading(false);
       }
     };
-    fetchData();
+    fetchCategories();
   }, []);
 
-  const filteredPlats = plats.filter(p => 
-    (activeCat === null || p.categorie === activeCat) &&
-    (search === '' || p.nom.toLowerCase().includes(search.toLowerCase()) || (p.description && p.description.toLowerCase().includes(search.toLowerCase())))
-  );
+  useEffect(() => {
+    if (activeCat === undefined) return;
 
-  if (isLoading) return (
+    const fetchPlats = async () => {
+      const isFirstPage = currentPage === 1;
+      setIsPlatsLoading(isFirstPage);
+      setIsLoadingMore(!isFirstPage);
+
+      try {
+        const res = await menuApi.getPlatsPage({
+          page: currentPage,
+          page_size: MENU_PAGE_SIZE,
+          categorie: activeCat ?? undefined,
+          search: search.trim() || undefined,
+        });
+
+        setTotalCount(res.data.count);
+        setPlats(prev => (
+          isFirstPage
+            ? res.data.results
+            : [...prev, ...res.data.results.filter(item => !prev.some(existing => existing.id === item.id))]
+        ));
+      } catch (err) {
+        console.error('Failed to load menu dishes', err);
+        if (isFirstPage) {
+          setPlats([]);
+          setTotalCount(0);
+        }
+      } finally {
+        setIsPlatsLoading(false);
+        setIsLoadingMore(false);
+      }
+    };
+
+    fetchPlats();
+  }, [activeCat, currentPage, search]);
+
+  const handleCategoryChange = (categoryId: number | null) => {
+    setActiveCat(categoryId);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
+
+  const hasMorePlats = plats.length < totalCount;
+  const isInitialLoading = isCategoriesLoading || (isPlatsLoading && plats.length === 0);
+
+  if (isInitialLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-background">
         <motion.div 
             initial={{ opacity: 0 }}
@@ -101,7 +149,7 @@ export const MenuPage: React.FC = () => {
                 aria-label="Rechercher"
                 placeholder="RECHERCHER UN PLAT..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="field-control pl-12 pr-4 text-xs uppercase placeholder:text-on-surface-variant/70"
               />
            </div>
@@ -112,7 +160,7 @@ export const MenuPage: React.FC = () => {
       <div className="flex-none bg-surface border-b border-outline">
         <div className="max-w-[1200px] mx-auto px-client-margin py-4 md:py-6 flex gap-4 md:gap-8 overflow-x-auto no-scrollbar relative">
            <button
-             onClick={() => setActiveCat(null)}
+             onClick={() => handleCategoryChange(null)}
              className={`min-h-11 px-1 text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === null ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
            >
              Tous les plats
@@ -123,7 +171,7 @@ export const MenuPage: React.FC = () => {
            {categories.map(cat => (
              <button
                 key={cat.id}
-                onClick={() => setActiveCat(cat.id)}
+                onClick={() => handleCategoryChange(cat.id)}
                 className={`min-h-11 px-1 text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === cat.id ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
              >
                 {cat.nom}
@@ -144,7 +192,7 @@ export const MenuPage: React.FC = () => {
             className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pb-24"
         >
            <AnimatePresence mode="popLayout">
-              {filteredPlats.map((plat) => (
+              {plats.map((plat) => (
                 <motion.div 
                   key={plat.id}
                   layout
@@ -199,11 +247,35 @@ export const MenuPage: React.FC = () => {
            </AnimatePresence>
         </motion.div>
 
-        {filteredPlats.length === 0 && (
+        {isPlatsLoading && currentPage === 1 && plats.length > 0 && (
+           <div className="py-12 flex items-center justify-center text-on-surface-variant">
+              <Loader2 className="w-5 h-5 animate-spin" strokeWidth={1.5} />
+           </div>
+        )}
+
+        {plats.length === 0 && !isPlatsLoading && (
            <div className="py-24 sm:py-32 flex flex-col items-center justify-center text-on-surface-variant gap-4">
               <ShoppingBag className="w-12 h-12 stroke-[1]" />
               <p className="text-ui-label">AUCUN RÉSULTAT TROUVÉ</p>
            </div>
+        )}
+
+        {hasMorePlats && (
+          <div className="max-w-[1200px] mx-auto flex justify-center pb-20">
+            <button
+              type="button"
+              onClick={() => setCurrentPage(page => page + 1)}
+              disabled={isLoadingMore}
+              className="btn-secondary min-h-12 px-8"
+            >
+              {isLoadingMore ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ShoppingBag className="w-4 h-4" />
+              )}
+              <span>{isLoadingMore ? 'Chargement' : 'Afficher plus'}</span>
+            </button>
+          </div>
         )}
       </main>
 

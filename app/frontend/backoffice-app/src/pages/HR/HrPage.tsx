@@ -27,11 +27,19 @@ export const HrPage: React.FC = () => {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+  const [totalCount, setTotalCount] = useState(0);
 
-  const fetchHr = async () => {
+  const fetchHr = async (page = currentPage) => {
+    setIsLoading(true);
     try {
-      const res = await hrApi.getEmployes();
-      setEmployes(res.data);
+      const res = await hrApi.getEmployesPage({
+        page,
+        page_size: itemsPerPage,
+        search: search.trim() || undefined,
+        poste: activeTab === 'ALL' ? undefined : activeTab,
+      });
+      setEmployes(res.data.results);
+      setTotalCount(res.data.count);
     } catch (err) {
       console.error('Failed to fetch HR data', err);
       toast.error('Erreur chargement personnel');
@@ -42,14 +50,18 @@ export const HrPage: React.FC = () => {
 
   useEffect(() => {
     fetchHr();
-  }, []);
+  }, [currentPage, search, activeTab]);
 
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     try {
         toast.info("Préparation de l'export");
-        if (employes.length === 0) return;
+        const exportRes = await hrApi.getEmployes({
+          search: search.trim() || undefined,
+          poste: activeTab === 'ALL' ? undefined : activeTab,
+        });
+        if (exportRes.data.length === 0) return;
         const headers = ["ID", "IDENTIFIANT", "IDENTITÉ", "POSTE", "EMAIL", "TÉLÉPHONE"];
-        const rows = employes.map(e => [
+        const rows = exportRes.data.map(e => [
             `#${e.id}`,
             e.user_details?.username || e.username || 'Non renseigné',
             `${e.user_details?.first_name || e.first_name || ''} ${e.user_details?.last_name || e.last_name || ''}`.trim() || 'Non renseigné',
@@ -70,20 +82,7 @@ export const HrPage: React.FC = () => {
     }
   };
 
-  const filteredEmployes = employes.filter(emp => {
-    const fullName = `${emp.user_details?.first_name || emp.first_name || ''} ${emp.user_details?.last_name || emp.last_name || ''}`.trim();
-    const u = emp.user_details?.username || emp.username || '';
-    const matchesSearch = 
-      u.toLowerCase().includes(search.toLowerCase()) || 
-      fullName.toLowerCase().includes(search.toLowerCase()) ||
-      emp.poste.toLowerCase().includes(search.toLowerCase());
-      
-    if (activeTab === 'ALL') return matchesSearch;
-    return matchesSearch && emp.poste.toUpperCase().includes(activeTab);
-  });
-
-  const totalPages = Math.ceil(filteredEmployes.length / itemsPerPage);
-  const paginatedEmployes = filteredEmployes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
@@ -136,7 +135,7 @@ export const HrPage: React.FC = () => {
             <div className="flex items-center gap-8 bg-surface border border-outline px-6 py-2.5 rounded-lg">
                 <div className="text-center border-r border-outline pr-8">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Effectif Actif</p>
-                    <p className="text-lg font-bold text-on-background mt-0.5">{employes.filter(e => e.user_details?.is_active ?? e.is_active ?? true).length}</p>
+                    <p className="text-lg font-bold text-on-background mt-0.5">{totalCount}</p>
                 </div>
                 <div className="text-center">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Opérationnel</p>
@@ -161,7 +160,7 @@ export const HrPage: React.FC = () => {
           </div>
 
           {/* Table Body */}
-            {paginatedEmployes.length > 0 ? paginatedEmployes.map((emp) => (
+            {employes.length > 0 ? employes.map((emp) => (
                 <div 
                   key={emp.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-center group"
@@ -219,7 +218,7 @@ export const HrPage: React.FC = () => {
           {/* Table Footer */}
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Total : {filteredEmployes.length} Dossiers
+                Total : {totalCount} Dossiers
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">

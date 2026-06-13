@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../../api/axios';
+import { avisApi, type Avis } from '../../api/avis';
 import { 
   Loader2, 
   Search, 
@@ -17,18 +17,25 @@ import {
 import { toast } from 'sonner';
 
 export const AvisPage: React.FC = () => {
-  const [avis, setAvis] = useState<any[]>([]);
+  const [avis, setAvis] = useState<Avis[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const [totalCount, setTotalCount] = useState(0);
 
-  const fetchAvis = async () => {
+  const fetchAvis = async (page = currentPage) => {
+    setIsLoading(true);
     try {
-      const res = await api.get('/avis/');
-      setAvis(res.data);
+      const res = await avisApi.getAvisPage({
+        page,
+        page_size: itemsPerPage,
+        search: search.trim() || undefined,
+      });
+      setAvis(res.data.results);
+      setTotalCount(res.data.count);
     } catch (err) {
       console.error('Failed to fetch avis', err);
       toast.error('Erreur chargement sentiments');
@@ -39,7 +46,7 @@ export const AvisPage: React.FC = () => {
 
   useEffect(() => {
     fetchAvis();
-  }, []);
+  }, [currentPage, search]);
 
   const getSentimentIcon = (score: number) => {
     if (score > 0.2) return <Smile className="w-4 h-4 text-success" />;
@@ -54,13 +61,7 @@ export const AvisPage: React.FC = () => {
     negative: avis.filter(a => (a.sentiment_score || 0) < -0.2).length,
   };
 
-  const filteredAvis = avis.filter(a => 
-    a.commentaire.toLowerCase().includes(search.toLowerCase()) ||
-    a.user_username.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredAvis.length / itemsPerPage);
-  const paginatedAvis = filteredAvis.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
@@ -127,14 +128,16 @@ export const AvisPage: React.FC = () => {
           </div>
 
           {/* Table Body */}
-            {paginatedAvis.length > 0 ? paginatedAvis.map((a) => (
+            {avis.length > 0 ? avis.map((a) => {
+              const username = a.username ?? a.user_username ?? 'client';
+              return (
                 <div
                   key={a.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-start group"
                 >
                   <div className="col-span-1 font-mono text-[10px] font-bold text-on-surface-variant pt-1">#{a.id.toString().slice(-4)}</div>
                   <div className="col-span-2">
-                    <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider">@{a.user_username}</h3>
+                    <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider">@{username}</h3>
                     <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                   <div className="col-span-5">
@@ -156,7 +159,8 @@ export const AvisPage: React.FC = () => {
                     <button className="min-h-[44px] px-4 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-background hover:border-on-background transition-all">Archiver</button>
                   </div>
                 </div>
-            )) : (
+              );
+            }) : (
                 <div className="h-64 flex flex-col items-center justify-center opacity-10">
                     <Activity className="w-12 h-12 mb-4" strokeWidth={1} />
                     <p className="text-[10px] font-bold uppercase tracking-widest">Aucun avis disponible</p>
@@ -168,7 +172,7 @@ export const AvisPage: React.FC = () => {
           {/* Footer */}
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Analyse basée sur {filteredAvis.length} témoignages
+                Analyse basée sur {totalCount} témoignages
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">

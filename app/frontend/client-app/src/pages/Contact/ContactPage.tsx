@@ -196,7 +196,7 @@ export const ContactPage: React.FC = () => {
                                 data-testid="contact-submit"
                                 className="btn-primary w-full min-h-14 gap-4"
                             >
-                                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Transmettre la Liaison</span><Send className="w-5 h-5 text-on-primary/60" /></>}
+                                {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <><span>Envoyer le message</span><Send className="w-5 h-5 text-on-primary/60" /></>}
                             </button>
                         </form>
                     </div>

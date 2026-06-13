@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.db import models
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.users.permissions import IsGerant, IsCuisinierOrGerant
+from core.pagination import OptInPageNumberPagination
 from .models import Ingredient, PlatIngredient, MouvementStock
 from .serializers import IngredientSerializer, PlatIngredientSerializer, MouvementStockSerializer
 
@@ -15,6 +17,7 @@ User = get_user_model()
 
 class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
+    pagination_class = OptInPageNumberPagination
 
     def get_permissions(self):
         """GERANT: full CRUD. All authenticated users: read-only."""
@@ -26,8 +29,24 @@ class IngredientViewSet(viewsets.ModelViewSet):
         """GERANT sees all including inactive; others only see active ingredients."""
         user = self.request.user
         if user.is_authenticated and user.role == User.Role.GERANT:
-            return Ingredient.objects.all().order_by('nom')
-        return Ingredient.objects.filter(est_active=True).order_by('nom')
+            queryset = Ingredient.objects.all()
+        else:
+            queryset = Ingredient.objects.filter(est_active=True)
+
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                models.Q(nom__icontains=search)
+                | models.Q(unite_mesure__icontains=search)
+            )
+
+        est_active = self.request.query_params.get('est_active')
+        if est_active in ('true', '1'):
+            queryset = queryset.filter(est_active=True)
+        elif est_active in ('false', '0'):
+            queryset = queryset.filter(est_active=False)
+
+        return queryset.order_by('nom', 'id')
 
     @action(detail=False, methods=['get'])
     def forecasting(self, request):

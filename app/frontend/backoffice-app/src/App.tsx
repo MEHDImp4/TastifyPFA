@@ -1,24 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { useAuthStore } from './store/authStore';
-import { Login } from './pages/auth/Login';
 import { AppShell } from './layouts/AppShell';
-import { CategoryPage } from './pages/Categories/CategoryPage';
-import { PlatPage } from './pages/Menu/PlatPage';
-import { SallePage } from './pages/Staff/SallePage';
-import { OrderingPage } from './pages/Staff/OrderingPage';
-import { KdsPage } from './pages/Staff/KdsPage';
-import { ReservationsPage } from './pages/Staff/ReservationsPage';
-import { DashboardPage } from './pages/Dashboard/DashboardPage';
-import { StockPage } from './pages/Inventory/StockPage';
-import { HrPage } from './pages/HR/HrPage';
-import { AvisPage } from './pages/Avis/AvisPage';
-import { SettingsPage } from './pages/Settings/SettingsPage';
-import { MaintenancePage } from './pages/System/MaintenancePage';
 import { WebSocketProvider } from './contexts/WebSocketProvider';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import {
+  AvisPage,
+  CategoryPage,
+  DashboardPage,
+  HrPage,
+  KdsPage,
+  Login,
+  MaintenancePage,
+  OrderingPage,
+  PlatPage,
+  ReservationsPage,
+  SallePage,
+  SettingsPage,
+  StockPage,
+} from './routes/lazyPages';
 
 import { Toaster } from 'sonner';
 
@@ -59,7 +61,7 @@ const RoleIndex = () => {
   const role = useAuthStore(state => state.role);
   const home = ROLE_HOME[role ?? ''];
   if (home) return <Navigate to={home} replace />;
-  return <DashboardPage />;
+  return lazyRoute(<DashboardPage />);
 };
 
 const routeTitles: Record<string, string> = {
@@ -86,6 +88,18 @@ const RouteTitle = () => {
   return null;
 };
 
+const RouteFallback = () => (
+  <div role="status" aria-live="polite" className="flex min-h-[50dvh] items-center justify-center text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+    Chargement
+  </div>
+);
+
+const lazyRoute = (children: React.ReactNode) => (
+  <Suspense fallback={<RouteFallback />}>
+    {children}
+  </Suspense>
+);
+
 function App() {
   return (
     <ErrorBoundary>
@@ -98,17 +112,17 @@ function App() {
             <RouteTitle />
             <Routes>
               <Route path="/login" element={
-                <PublicRoute>
+                lazyRoute(<PublicRoute>
                   <Login />
-                </PublicRoute>
+                </PublicRoute>)
               } />
               
               <Route path="/ordering/:tableId" element={
-                <ProtectedRoute>
+                lazyRoute(<ProtectedRoute>
                   <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
                     <OrderingPage />
                   </RoleRoute>
-                </ProtectedRoute>
+                </ProtectedRoute>)
               } />
 
               <Route path="/" element={
@@ -118,54 +132,54 @@ function App() {
               }>
                 <Route index element={<RoleIndex />} />
                 <Route path="menu" element={
-                  <RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
                     <PlatPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="categories" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <CategoryPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="salle" element={
-                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
                     <SallePage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="reservations" element={
-                  <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
                     <ReservationsPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="kds" element={
-                  <RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT', 'CUISINIER']}>
                     <KdsPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="stock" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <StockPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="hr" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <HrPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="avis" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <AvisPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="settings" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <SettingsPage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
                 <Route path="maintenance" element={
-                  <RoleRoute allowedRoles={['GERANT']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <MaintenancePage />
-                  </RoleRoute>
+                  </RoleRoute>)
                 } />
               </Route>
 

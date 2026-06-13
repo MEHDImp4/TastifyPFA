@@ -77,3 +77,4 @@ class TestRestaurantConfigurationAPI:
         assert config.nom == "Tastify Atlas"
         assert config.email == "atlas@tastify.ma"
         assert config.logo.name.startswith("restaurant_logos/")
+        assert config.logo.name.endswith(".webp")

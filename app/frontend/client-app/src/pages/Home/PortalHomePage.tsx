@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
+  CalendarDays,
   Sparkles,
   TrendingUp,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
@@ -46,7 +48,7 @@ export const PortalHomePage = () => {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-on-background">Gastronomie Contemporaine</span>
             </div>
 
-            <h1 className="text-[clamp(3rem,12vw,5.75rem)] font-bold tracking-tight leading-[0.95]">
+            <h1 className="text-[clamp(3rem,12vw,5.75rem)] font-bold tracking-tight leading-[1.05]">
               {config?.nom ? config.nom : "Tastify"} <br/>
               <span className="text-on-background">Cuisine de terroir.</span>
             </h1>
@@ -58,11 +60,20 @@ export const PortalHomePage = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-2 sm:pt-4">
-                <Link to="/menu" className="btn-primary min-h-14">
-                Voir la Carte
+                <Link
+                  to="/menu"
+                  className="btn-primary w-full min-h-16 sm:min-h-14 gap-3 text-[11px] tracking-[0.18em] px-6 group"
+                >
+                  <UtensilsCrossed className="w-5 h-5 sm:w-4 sm:h-4" />
+                  Voir la Carte
+                  <ArrowRight className="w-4 h-4 ml-auto sm:ml-0 transition-transform group-hover:translate-x-0.5" />
                 </Link>
-                <Link to="/reservations" className="btn-secondary min-h-14">
-                Réserver une table
+                <Link
+                  to="/reservations"
+                  className="btn-secondary w-full min-h-16 sm:min-h-14 gap-3 text-[11px] tracking-[0.18em] px-6 group"
+                >
+                  <CalendarDays className="w-5 h-5 sm:w-4 sm:h-4" />
+                  Réserver une table
                 </Link>
             </div>
           </motion.div>
@@ -124,7 +135,7 @@ export const PortalHomePage = () => {
                     <div className="lg:col-span-5">
                         <div className="aspect-square rounded-md overflow-hidden border border-outline">
                             {dish.image ? (
-                                <img src={dish.image} className="w-full h-full object-cover" alt={dish.nom} />
+                                <img src={dish.image} className="w-full h-full object-cover" alt={dish.nom} loading="lazy" decoding="async" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/20 font-bold text-4xl">{dish.nom.charAt(0)}</div>
                             )}
@@ -149,7 +160,7 @@ export const PortalHomePage = () => {
 
                         <Link
                             to="/menu"
-                            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
+                            className="inline-flex min-h-11 items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
                         >
                             Détails <ArrowRight className="w-3 h-3" />
                         </Link>
@@ -165,7 +176,7 @@ export const PortalHomePage = () => {
       <footer className="py-20 px-client-margin border-t border-outline">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-6 space-y-6">
-                <Link to="/" className="inline-block">
+                <Link to="/" className="inline-flex min-h-11 items-center">
                     <h2 className="text-2xl font-bold tracking-tighter">
                         {config?.nom || "tastify."}
                     </h2>
@@ -178,8 +189,8 @@ export const PortalHomePage = () => {
           <div className="md:col-span-3 space-y-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Menu</span>
             <ul className="space-y-2">
-              <li><Link to="/menu" className="text-xs text-on-surface-variant hover:text-on-background transition-colors">La Carte</Link></li>
-              <li><Link to="/reservations" className="text-xs text-on-surface-variant hover:text-on-background transition-colors">Réservations</Link></li>
+              <li><Link to="/menu" className="inline-flex min-h-11 items-center text-xs text-on-surface-variant hover:text-on-background transition-colors">La Carte</Link></li>
+              <li><Link to="/reservations" className="inline-flex min-h-11 items-center text-xs text-on-surface-variant hover:text-on-background transition-colors">Réservations</Link></li>
             </ul>
           </div>
 

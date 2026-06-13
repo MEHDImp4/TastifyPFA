@@ -114,7 +114,7 @@ export const Login: React.FC = () => {
           <motion.div variants={fadeIn} className="space-y-1.5">
             <div className="flex justify-between items-center px-1">
                <label htmlFor="password" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em]">Mot de passe</label>
-               <Link to="/forgot-password" title="Mot de passe oublié" className="font-sans text-[9px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.1em]">Oublié ?</Link>
+               <Link to="/forgot-password" title="Mot de passe oublié" className="inline-flex min-h-11 items-center px-1 font-sans text-[9px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.1em]">Oublié ?</Link>
             </div>
             <input
               id="password"
@@ -134,7 +134,7 @@ export const Login: React.FC = () => {
             whileTap={{ scale: 0.98 }}
             data-testid="login-submit"
             type="submit" disabled={isLoading}
-            className="btn-primary w-full min-h-16 rounded-xl tracking-[0.28em] group"
+            className="btn-primary w-full min-h-16 tracking-[0.18em] group"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <>
@@ -148,7 +148,7 @@ export const Login: React.FC = () => {
         <motion.div variants={fadeIn} className="pt-8 border-t border-outline text-center">
           <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em]">
             Pas de compte ? {' '}
-            <Link to="/register" className="text-on-background hover:text-on-surface-variant ml-1 transition-colors border-b border-outline pb-0.5">S'inscrire</Link>
+            <Link to="/register" className="inline-flex min-h-11 items-center text-on-background hover:text-on-surface-variant ml-1 transition-colors border-b border-outline pb-0.5 align-middle">S'inscrire</Link>
           </p>
         </motion.div>
       </motion.div>

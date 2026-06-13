@@ -31,6 +31,7 @@ export const ReservationsPage: React.FC = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const reservationsPerPage = 3;
+  const [totalCount, setTotalCount] = useState(0);
 
   // Dropdown state - tracking by ID
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
@@ -39,10 +40,17 @@ export const ReservationsPage: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [reservationToDelete, setReservationToDelete] = useState<number | null>(null);
 
-  const fetchReservations = async () => {
+  const fetchReservations = async (page = currentPage) => {
+    setIsLoading(true);
     try {
-      const res = await reservationApi.getReservations();
-      setReservations(res.data);
+      const res = await reservationApi.getReservationsPage({
+        page,
+        page_size: reservationsPerPage,
+        search: search.trim() || undefined,
+        statut: filter === 'ALL' ? undefined : filter,
+      });
+      setReservations(res.data.results);
+      setTotalCount(res.data.count);
     } catch (err) {
       console.error('Failed to fetch reservations', err);
     } finally {
@@ -52,7 +60,9 @@ export const ReservationsPage: React.FC = () => {
 
   useEffect(() => {
     fetchReservations();
-    
+  }, [currentPage, search, filter]);
+
+  useEffect(() => {
     // Global click listener to close any open dropdowns
     const handleGlobalClick = () => setActiveMenuId(null);
     window.addEventListener('click', handleGlobalClick);
@@ -124,25 +134,10 @@ export const ReservationsPage: React.FC = () => {
     }
   };
 
-  const filteredReservations = reservations.filter(res => {
-    const matchesFilter = filter === 'ALL' ? true : res.statut === filter;
-    const normalizedSearch = search.trim().toLowerCase();
-    const matchesSearch =
-      normalizedSearch === '' ||
-      (res.user_username || 'CLIENT ANONYME').toLowerCase().includes(normalizedSearch) ||
-      (!res.user_username && 'anonymous guest'.includes(normalizedSearch));
-
-    return matchesFilter && matchesSearch;
-  });
-
   const statusLabel = (status: string) =>
     status === 'ALL' ? 'VOIR TOUT' : status.replace('_', ' ');
 
-  const totalPages = Math.ceil(filteredReservations.length / reservationsPerPage);
-  const paginatedReservations = filteredReservations.slice(
-    (currentPage - 1) * reservationsPerPage,
-    currentPage * reservationsPerPage
-  );
+  const totalPages = Math.max(1, Math.ceil(totalCount / reservationsPerPage));
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body overflow-hidden">
@@ -184,7 +179,14 @@ export const ReservationsPage: React.FC = () => {
       {/* List Body */}
       <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-8">
         <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
-          {paginatedReservations.map((res) => (
+          {reservations.map((res) => {
+            const guestName = res.user_username
+              || res.client_details?.username
+              || `${res.client_details?.first_name || ''} ${res.client_details?.last_name || ''}`.trim()
+              || null;
+            const tableNumber = res.table_numero || res.table_details?.numero || res.table;
+
+            return (
             <div 
               key={res.id} 
               className="group rounded-lg atelier-card p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full"
@@ -199,7 +201,7 @@ export const ReservationsPage: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
                       <h3 className="text-base text-on-background font-bold tracking-wider uppercase">
-                        {res.user_username || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
+                        {guestName || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
                       </h3>
                       <span className={`w-fit rounded px-3 py-1 border text-[9px] font-bold uppercase tracking-widest ${getStatusColor(res.statut)}`}>
                           {res.statut.replace('_', ' ')}
@@ -216,7 +218,7 @@ export const ReservationsPage: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
                           <TableIcon className="w-3.5 h-3.5 opacity-20" strokeWidth={2}/>
-                          <span>UNITÉ #{res.table_numero || res.table}</span>
+                          <span>UNITÉ #{tableNumber}</span>
                       </div>
                     </div>
                     {res.notes && (
@@ -301,9 +303,10 @@ export const ReservationsPage: React.FC = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
 
-          {filteredReservations.length === 0 && (
+          {reservations.length === 0 && (
             <div className="rounded border border-dashed border-outline py-32 flex flex-col items-center justify-center opacity-20">
                 <Calendar className="w-12 h-12 mb-4" strokeWidth={1}/>
                 <p className="text-xl font-bold uppercase tracking-widest">Aucune Réservation</p>

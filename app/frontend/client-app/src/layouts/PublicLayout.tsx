@@ -5,6 +5,7 @@ import { useConfigStore } from '../store/configStore';
 import { LogOut, Menu, X, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { publicPagePreloads } from '../routes/lazyPages';
 
 export const PublicLayout: React.FC = () => {
   const { isAuthenticated, username, logout } = useAuthStore();
@@ -23,6 +24,9 @@ export const PublicLayout: React.FC = () => {
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const preloadRoute = (to: string) => {
+    void publicPagePreloads[to]?.();
+  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (window.location.pathname === '/') {
@@ -52,7 +56,9 @@ export const PublicLayout: React.FC = () => {
             <Link 
               to="/" 
               onClick={handleLogoClick}
-              className="flex items-center group transition-all active:scale-95 z-50 min-w-0"
+              onFocus={() => preloadRoute('/')}
+              onPointerEnter={() => preloadRoute('/')}
+              className="flex min-h-11 items-center group transition-all active:scale-95 z-50 min-w-0"
             >
               <span className="text-xl font-bold tracking-tighter text-on-background uppercase truncate max-w-[42vw] sm:max-w-none">
                   {config?.nom || "tastify."}
@@ -64,7 +70,9 @@ export const PublicLayout: React.FC = () => {
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className={`text-[10px] font-bold tracking-widest transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
+                  onFocus={() => preloadRoute(link.to)}
+                  onPointerEnter={() => preloadRoute(link.to)}
+                  className={`inline-flex min-h-11 items-center px-1 text-[10px] font-bold tracking-widest transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
                 >
                   {link.label}
                 </Link>
@@ -77,6 +85,8 @@ export const PublicLayout: React.FC = () => {
               <Link
                 to="/checkout"
                 aria-label="Voir le panier"
+                onFocus={() => preloadRoute('/checkout')}
+                onPointerEnter={() => preloadRoute('/checkout')}
                 className="btn-primary min-w-11 px-3 sm:px-4"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
@@ -84,19 +94,15 @@ export const PublicLayout: React.FC = () => {
               </Link>
             )}
 
-            {!isAuthenticated && (
-              <Link
-                to="/login"
-                className="md:hidden min-h-11 inline-flex items-center px-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
-              >
-                Log in
-              </Link>
-            )}
-
             <div className="hidden md:flex items-center gap-4">
               {isAuthenticated ? (
                 <div className="flex items-center gap-4 pl-4 border-l border-outline">
-                  <Link to="/account" className="flex flex-col items-end group leading-none">
+                  <Link
+                  to="/account"
+                  onFocus={() => preloadRoute('/account')}
+                  onPointerEnter={() => preloadRoute('/account')}
+                    className="flex min-h-11 flex-col items-end justify-center group leading-none"
+                  >
                     <p className="text-[10px] font-bold uppercase tracking-wider">{username}</p>
                   </Link>
                   <button
@@ -110,7 +116,9 @@ export const PublicLayout: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="min-h-11 inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
+                  onFocus={() => preloadRoute('/login')}
+                  onPointerEnter={() => preloadRoute('/login')}
+                  className="min-h-11 inline-flex items-center px-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
                 >
                   S'identifier
                 </Link>
@@ -142,8 +150,14 @@ export const PublicLayout: React.FC = () => {
                 <Link
                     key={link.to}
                     to={link.to}
+                    onFocus={() => preloadRoute(link.to)}
+                    onPointerEnter={() => preloadRoute(link.to)}
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-3xl sm:text-4xl font-bold tracking-tight text-on-background break-words"
+                    className={`text-3xl sm:text-4xl font-bold tracking-tight break-words transition-colors ${
+                      location.pathname === link.to
+                        ? 'text-on-background'
+                        : 'text-on-surface-variant hover:text-on-background'
+                    }`}
                 >
                     {link.label}
                 </Link>
@@ -154,7 +168,13 @@ export const PublicLayout: React.FC = () => {
               {isAuthenticated ? (
                 <button onClick={handleLogout} className="btn-secondary justify-start text-error hover:border-error">Fermer la session</button>
               ) : (
-                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full h-14">
+                <Link
+                  to="/login"
+                  onFocus={() => preloadRoute('/login')}
+                  onPointerEnter={() => preloadRoute('/login')}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="btn-primary w-full h-14"
+                >
                   Connexion Membre
                 </Link>
               )}

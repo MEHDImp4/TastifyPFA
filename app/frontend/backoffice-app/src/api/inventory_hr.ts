@@ -1,8 +1,13 @@
 import { api } from './axios';
 import type { Ingredient, Employe, PlatIngredient } from '../types/inventory';
+import type { PaginatedResponse, PaginationParams } from './pagination';
+import { toPaginatedResponse } from './pagination';
 
 export const stockApi = {
-  getIngredients: () => api.get<Ingredient[]>('/stock/ingredients/'),
+  getIngredients: (params?: Pick<PaginationParams, 'search' | 'est_active'>) => api.get<Ingredient[]>('/stock/ingredients/', { params }),
+  getIngredientsPage: (params: PaginationParams) => api
+    .get<PaginatedResponse<Ingredient> | Ingredient[]>('/stock/ingredients/', { params })
+    .then(res => ({ ...res, data: toPaginatedResponse(res.data) })),
   createIngredient: (data: Partial<Ingredient>) => api.post<Ingredient>('/stock/ingredients/', data),
   updateIngredient: (id: number, data: Partial<Ingredient>) => api.patch<Ingredient>(`/stock/ingredients/${id}/`, data),
   deleteIngredient: (id: number) => api.delete(`/stock/ingredients/${id}/`),
@@ -17,7 +22,10 @@ export const stockApi = {
 };
 
 export const hrApi = {
-  getEmployes: () => api.get<Employe[]>('/employes/'),
+  getEmployes: (params?: Pick<PaginationParams, 'search' | 'poste'>) => api.get<Employe[]>('/employes/', { params }),
+  getEmployesPage: (params: PaginationParams) => api
+    .get<PaginatedResponse<Employe> | Employe[]>('/employes/', { params })
+    .then(res => ({ ...res, data: toPaginatedResponse(res.data) })),
   createEmploye: (data: any) => api.post<Employe>('/employes/', data),
   updateEmploye: (id: number, data: any) => api.patch<Employe>(`/employes/${id}/`, data),
   deleteEmploye: (id: number) => api.delete(`/employes/${id}/`),

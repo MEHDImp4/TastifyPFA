@@ -1,9 +1,11 @@
+from django.db import models
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.users.permissions import IsCuisinierOrGerant, IsGerant
+from core.pagination import OptInPageNumberPagination
 from .models import Categorie, Plat
 from .serializers import CategorieSerializer, PlatSerializer
 
@@ -31,6 +33,7 @@ class CategorieViewSet(viewsets.ModelViewSet):
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
+    pagination_class = OptInPageNumberPagination
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'recommendations', 'top_recommendations'):
@@ -41,14 +44,34 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        plats = Plat.objects.select_related('categorie').order_by('categorie', 'nom')
+        plats = Plat.objects.select_related('categorie').order_by(
+            'categorie__ordre_affichage',
+            'categorie__nom',
+            'nom',
+            'id',
+        )
 
         if user.is_authenticated and user.role in ['GERANT', 'CUISINIER']:
-            if self.action == 'list':
-                return plats.filter(est_active=True)
-            return plats
+            queryset = plats.filter(est_active=True) if self.action == 'list' else plats
+        else:
+            queryset = plats.filter(est_active=True, est_disponible=True)
 
-        return plats.filter(est_active=True, est_disponible=True)
+        if self.action == 'list':
+            categorie_id = self.request.query_params.get('categorie')
+            if categorie_id:
+                if not categorie_id.isdecimal():
+                    return queryset.none()
+                queryset = queryset.filter(categorie_id=int(categorie_id))
+
+            search = self.request.query_params.get('search')
+            if search:
+                queryset = queryset.filter(
+                    models.Q(nom__icontains=search)
+                    | models.Q(description__icontains=search)
+                    | models.Q(categorie__nom__icontains=search)
+                )
+
+        return queryset
 
     def destroy(self, request, *args, **kwargs):
         plat = self.get_object()

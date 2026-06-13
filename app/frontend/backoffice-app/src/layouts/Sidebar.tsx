@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
+import { staffPagePreloads } from '../routes/lazyPages';
 import { 
   LayoutDashboard, 
   UtensilsCrossed, 
@@ -25,6 +26,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setMobileOpen,
 }) => {
   const { role, logout } = useAuthStore();
+  const preloadRoute = (to: string) => {
+    void staffPagePreloads[to]?.();
+  };
 
   const getLinks = () => {
     const links = [];
@@ -99,6 +103,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 end={link.exact}
                 data-testid={link.testid}
                 className={navClass}
+                onFocus={() => preloadRoute(link.to)}
+                onPointerEnter={() => preloadRoute(link.to)}
                 onClick={() => setMobileOpen(false)}
               >
                 {({ isActive }) => (

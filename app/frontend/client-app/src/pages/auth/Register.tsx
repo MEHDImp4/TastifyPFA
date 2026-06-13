@@ -133,7 +133,7 @@ export const Register: React.FC = () => {
             variants={fadeIn}
             whileTap={{ scale: 0.98 }}
             type="submit" disabled={isLoading}
-            className="btn-primary w-full min-h-16 rounded-xl tracking-[0.28em] group mt-4"
+            className="btn-primary w-full min-h-16 tracking-[0.18em] group mt-4"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <>

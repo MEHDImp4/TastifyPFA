@@ -1,5 +1,7 @@
 import { api as axiosInstance } from './axios';
 import { resolveMediaUrl } from './apiConfig';
+import type { PaginatedResponse, PaginationParams } from './pagination';
+import { mapPaginatedData, toPaginatedResponse } from './pagination';
 
 export interface Categorie {
   id: number;
@@ -52,6 +54,12 @@ export const menuApi = {
     ...res,
     data: res.data.map(withPlatMedia),
   })),
+  getPlatsPage: (params: PaginationParams) => axiosInstance
+    .get<PaginatedResponse<Plat> | Plat[]>('/plats/', { params })
+    .then(res => ({
+      ...res,
+      data: toPaginatedResponse(mapPaginatedData(res.data, withPlatMedia)),
+    })),
   getPlat: (id: number) => axiosInstance.get<Plat>(`/plats/${id}/`).then(res => ({
     ...res,
     data: withPlatMedia(res.data),

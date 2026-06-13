@@ -7,7 +7,7 @@
   --color-on-background: #111111;
   --color-surface: #FFFFFF;
   --color-on-surface: #111111;
-  --color-on-surface-variant: #71717A;
+  --color-on-surface-variant: #52525A;
   
   --color-surface-container-low: #FFFFFF;
   --color-surface-container-high: #F5F5F4;
@@ -22,7 +22,7 @@
   --color-error: #B91C1C;
   --color-on-success: #FBFBFA;
   --color-on-error: #FBFBFA;
-  --color-focus-ring: #B45309;
+  --color-focus-ring: #0E9AA7;
 
   /* Pure Sans Typography */
   --font-sans: "Public Sans", system-ui, sans-serif;
@@ -50,6 +50,14 @@
     outline: 3px solid var(--color-focus-ring);
     outline-offset: 3px;
     border-radius: 4px;
+  }
+
+  .btn-primary:focus-visible {
+    outline-color: var(--color-background);
+  }
+
+  .btn-danger:focus-visible {
+    outline-color: var(--color-on-error);
   }
 
   a,
@@ -95,11 +103,11 @@
   }
 
   .btn-ghost {
-    @apply min-h-[44px] px-6 bg-surface border border-outline-variant rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-transparent rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
   }
 
   .btn-secondary {
-    @apply min-h-[44px] px-6 bg-surface border border-outline-variant rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-surface border border-[#B0B0B4] rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
   }
 
   .btn-danger {
@@ -111,7 +119,7 @@
   }
 
   .field-control {
-    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-variant/70 focus:border-on-background focus:bg-surface outline-none disabled:opacity-50;
+    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-variant/70 focus:border-on-background focus:bg-surface disabled:opacity-50;
   }
 
   .form-error {

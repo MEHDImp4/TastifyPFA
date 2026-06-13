@@ -1,35 +1,37 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect, type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { AuthBootstrap } from './components/auth/AuthBootstrap';
 import { PublicLayout } from './layouts/PublicLayout';
-import { PortalHomePage } from './pages/Home/PortalHomePage';
-import { MenuPage } from './pages/Menu/MenuPage';
-import { ReservationWizard } from './pages/Reservations/ReservationWizard';
-import { AccountPage } from './pages/Account/AccountPage';
-import { Login } from './pages/auth/Login';
-import { Register } from './pages/auth/Register';
-import { ForgotPassword } from './pages/auth/ForgotPassword';
-import { ResetPassword } from './pages/auth/ResetPassword';
-import { CheckoutPage } from './pages/Checkout/CheckoutPage';
-import { ContactPage } from './pages/Contact/ContactPage';
-import { PaymentPortal } from './pages/Payment/PaymentPortal';
-import { LoyaltyPage } from './pages/Loyalty/LoyaltyPage';
-import { NotFoundPage } from './pages/System/NotFoundPage';
-import { OfflineModePage } from './pages/System/OfflineModePage';
 import { useAuthStore } from './store/authStore';
 import { useConfigStore } from './store/configStore';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import {
+  AccountPage,
+  CheckoutPage,
+  ContactPage,
+  ForgotPassword,
+  Login,
+  LoyaltyPage,
+  MenuPage,
+  NotFoundPage,
+  OfflineModePage,
+  PaymentPortal,
+  PortalHomePage,
+  Register,
+  ReservationWizard,
+  ResetPassword,
+} from './routes/lazyPages';
 
 import { Toaster } from 'sonner';
 
-const GuestRoute = ({ children }: { children: React.ReactNode }) => {
+const GuestRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
@@ -58,6 +60,18 @@ const RouteTitle = () => {
   return null;
 };
 
+const RouteFallback = () => (
+  <div role="status" aria-live="polite" className="flex min-h-[50dvh] items-center justify-center px-client-margin text-ui-label text-on-surface-variant">
+    Chargement
+  </div>
+);
+
+const lazyRoute = (children: ReactNode) => (
+  <Suspense fallback={<RouteFallback />}>
+    {children}
+  </Suspense>
+);
+
 const AnimatedRoutes = () => {
   return (
     <>
@@ -65,54 +79,54 @@ const AnimatedRoutes = () => {
     <Routes>
       <Route element={<PublicLayout />}>
         {/* Public Showcase Pages */}
-        <Route path="/" element={<PortalHomePage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/reservations" element={<ReservationWizard />} />
+        <Route path="/" element={lazyRoute(<PortalHomePage />)} />
+        <Route path="/menu" element={lazyRoute(<MenuPage />)} />
+        <Route path="/reservations" element={lazyRoute(<ReservationWizard />)} />
 
         {/* Member-only Action Pages */}
         <Route path="/loyalty" element={
-          <ProtectedRoute>
+          lazyRoute(<ProtectedRoute>
             <LoyaltyPage />
-          </ProtectedRoute>
+          </ProtectedRoute>)
         } />
 
         <Route path="/account" element={
-          <ProtectedRoute>
+          lazyRoute(<ProtectedRoute>
             <AccountPage />
-          </ProtectedRoute>
+          </ProtectedRoute>)
         } />
 
         {/* Guest-only Auth Pages */}
         <Route path="/login" element={
-          <GuestRoute>
+          lazyRoute(<GuestRoute>
             <Login />
-          </GuestRoute>
+          </GuestRoute>)
         } />
 
         <Route path="/register" element={
-          <GuestRoute>
+          lazyRoute(<GuestRoute>
             <Register />
-          </GuestRoute>
+          </GuestRoute>)
         } />
 
         <Route path="/forgot-password" element={
-          <GuestRoute>
+          lazyRoute(<GuestRoute>
             <ForgotPassword />
-          </GuestRoute>
+          </GuestRoute>)
         } />
 
         <Route path="/reset-password" element={
-          <GuestRoute>
+          lazyRoute(<GuestRoute>
             <ResetPassword />
-          </GuestRoute>
+          </GuestRoute>)
         } />
 
         {/* Global Helpers */}
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/pay/:token" element={<PaymentPortal />} />
-        <Route path="/offline" element={<OfflineModePage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/checkout" element={lazyRoute(<CheckoutPage />)} />
+        <Route path="/contact" element={lazyRoute(<ContactPage />)} />
+        <Route path="/pay/:token" element={lazyRoute(<PaymentPortal />)} />
+        <Route path="/offline" element={lazyRoute(<OfflineModePage />)} />
+        <Route path="*" element={lazyRoute(<NotFoundPage />)} />
       </Route>
     </Routes>
     </>

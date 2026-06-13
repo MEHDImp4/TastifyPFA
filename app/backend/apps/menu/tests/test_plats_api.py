@@ -73,6 +73,7 @@ class PlatAPITest(TestCase):
         self.assertEqual(response.data['nom'], 'Tagine Image')
         self.assertIsNotNone(response.data['image'])
         self.assertTrue(response.data['image'].startswith('/media/plats/'))
+        self.assertTrue(response.data['image'].endswith('.webp'))
 
     def test_list_plat_with_missing_image_returns_null(self):
         self.client.force_authenticate(user=self.serveur)
@@ -130,7 +131,9 @@ class PlatAPITest(TestCase):
         self.plat.refresh_from_db()
         self.assertNotEqual(self.plat.image.name, previous_image_name)
         self.assertTrue(self.plat.image.name.startswith('plats/'))
+        self.assertTrue(self.plat.image.name.endswith('.webp'))
         self.assertTrue(response.data['image'].startswith('/media/plats/'))
+        self.assertTrue(response.data['image'].endswith('.webp'))
 
     def test_partial_update_plat_can_clear_existing_image_with_null(self):
         self.client.force_authenticate(user=self.gerant)

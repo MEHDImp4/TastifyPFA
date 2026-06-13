@@ -106,7 +106,7 @@ export const CheckoutPage: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-6 w-full pt-4">
-                    <button onClick={() => navigate('/account')} className="btn-primary flex-1 h-14">Suivre la commande</button>
+                    <button onClick={() => navigate('/account')} className="btn-primary flex-1 h-14">Voir ma commande</button>
                     <button onClick={() => navigate('/')} className="btn-secondary flex-1 h-14"><Home className="w-4 h-4" /> Retour à l'Accueil</button>
                 </div>
             </div>
