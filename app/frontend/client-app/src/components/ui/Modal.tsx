@@ -68,7 +68,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
               <button
                 onClick={onClose}
                 aria-label="Fermer la fenêtre"
-                className="p-2 rounded-full hover:bg-surface-container-highest text-on-surface-variant transition-colors"
+                className="btn-icon rounded-full"
               >
                 <X className="w-6 h-6" aria-hidden="true" />
               </button>

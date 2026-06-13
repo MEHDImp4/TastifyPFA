@@ -148,14 +148,14 @@ export const ReservationsPage: React.FC = () => {
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body overflow-hidden">
       
       {/* Header */}
-      <header className="flex-none px-staff-margin h-20 border-b border-outline bg-surface">
-        <div className="max-w-[1400px] mx-auto h-full flex items-center justify-between gap-4">
+      <header className="flex-none px-staff-margin min-h-20 border-b border-outline bg-surface py-3">
+        <div className="max-w-[1400px] mx-auto min-h-14 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
             <h1 aria-label="Reservations Admin" className="text-sm font-bold text-on-background uppercase tracking-widest">Gestion Réservations</h1>
           </div>
           
-          <div className="flex items-center gap-3">
-              <div className="relative group">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:w-auto">
+              <div className="relative group w-full sm:w-auto">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors"  strokeWidth={2}/>
                   <input 
                       type="text" 
@@ -163,15 +163,15 @@ export const ReservationsPage: React.FC = () => {
                       aria-label="Rechercher client"
                       value={search}
                       onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
-                      className="w-48 pl-10 pr-3 h-10 rounded border border-outline bg-background text-[10px] font-bold focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant uppercase"
+                      className="field-control w-full sm:w-56 pl-10 pr-3 text-[10px] uppercase"
                   />
               </div>
-              <div className="flex rounded border border-outline bg-background p-0.5">
+              <div className="flex max-w-full overflow-x-auto rounded border border-outline bg-background p-0.5 no-scrollbar">
                   {['ALL', 'EN_ATTENTE', 'CONFIRMEE', 'ANNULEE'].map(f => (
                       <button
                           key={f}
                           onClick={() => { setFilter(f); setCurrentPage(1); }}
-                          className={`rounded px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase transition-all ${filter === f ? 'bg-on-background text-background' : 'text-on-surface-variant hover:text-on-background'}`}
+                          className={`min-h-[44px] whitespace-nowrap rounded px-3 text-[8px] font-bold tracking-widest uppercase transition-all ${filter === f ? 'bg-on-background text-background' : 'text-on-background hover:bg-surface-container-high'}`}
                       >
                           {statusLabel(f)}
                       </button>
@@ -241,7 +241,7 @@ export const ReservationsPage: React.FC = () => {
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
                       aria-label="CANCEL"
-                      className="h-10 w-10 border border-outline rounded flex items-center justify-center text-error hover:bg-error/5 transition-all"
+                      className="btn-icon text-error hover:border-error/30 hover:text-error"
                     >
                       <XCircle className="w-5 h-5" />
                     </button>
@@ -261,7 +261,7 @@ export const ReservationsPage: React.FC = () => {
                 <div className="relative">
                     <button
                         onClick={(e) => { e.stopPropagation(); setActiveMenuId(activeMenuId === res.id ? null : res.id); }}
-                        className={`w-10 h-10 border border-outline rounded flex items-center justify-center transition-colors ${activeMenuId === res.id ? 'bg-on-background text-background' : 'text-on-surface-variant hover:text-on-background'}`}
+                        className={`btn-icon ${activeMenuId === res.id ? 'bg-on-background text-background' : ''}`}
                         aria-label="Options"
                     >
                         <MoreVertical className="w-4 h-4" />
@@ -275,14 +275,14 @@ export const ReservationsPage: React.FC = () => {
                             <div className="p-2 space-y-1">
                                 <button 
                                     onClick={() => { setActiveMenuId(null); toast.info('DETAILS...'); }}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-all"
+                                    className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-background transition-all"
                                 >
                                     <Eye className="w-4 h-4" />
                                     Voir Détails
                                 </button>
                                 <button 
                                     onClick={() => { setActiveMenuId(null); navigate('/salle'); }}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-all"
+                                    className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-background transition-all"
                                 >
                                     <TableIcon className="w-4 h-4" />
                                     Associer Table
@@ -290,7 +290,7 @@ export const ReservationsPage: React.FC = () => {
                                 <div className="h-px bg-outline my-1" />
                                 <button 
                                     onClick={(e) => confirmDelete(e, res.id)}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded hover:bg-error/5 text-[10px] font-bold uppercase tracking-widest text-error transition-all"
+                                    className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 rounded hover:bg-error/5 text-[10px] font-bold uppercase tracking-widest text-error transition-all"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                     Supprimer
@@ -321,7 +321,7 @@ export const ReservationsPage: React.FC = () => {
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background disabled:opacity-10 transition-all"
+                    className="min-h-[44px] flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant disabled:opacity-30 transition-all"
                 >
                     <ChevronLeft className="w-4 h-4" /> Précédent
                 </button>
@@ -336,7 +336,7 @@ export const ReservationsPage: React.FC = () => {
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background disabled:opacity-10 transition-all"
+                    className="min-h-[44px] flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant disabled:opacity-30 transition-all"
                 >
                     Suivant <ChevronRight className="w-4 h-4" />
                 </button>

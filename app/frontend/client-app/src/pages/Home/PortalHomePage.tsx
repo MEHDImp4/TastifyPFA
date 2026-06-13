@@ -35,43 +35,43 @@ export const PortalHomePage = () => {
       
       {/* Simple Minimal Hero */}
       <section className="relative w-full flex flex-col justify-center border-b border-outline">
-        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-16 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
+        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-12 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
           <motion.div
-             initial={{ opacity: 0, y: 10 }}
-             animate={{ opacity: 1, y: 0 }}
+             initial={{ y: 10 }}
+             animate={{ y: 0 }}
              transition={{ duration: 0.6 }}
              className="lg:col-span-7 space-y-8"
           >
             <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Gastronomie Contemporaine</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-on-background">Gastronomie Contemporaine</span>
             </div>
 
             <h1 className="text-[clamp(3rem,12vw,5.75rem)] font-bold tracking-tight leading-[0.95]">
               {config?.nom ? config.nom : "Tastify"} <br/>
-              <span className="text-on-surface-variant">Cuisine de terroir.</span>
+              <span className="text-on-background">Cuisine de terroir.</span>
             </h1>
 
             <div className="max-w-lg">
-                <p className="text-lg text-on-surface-variant leading-relaxed">
+                <p className="text-lg text-on-background leading-relaxed">
                    Une table marocaine contemporaine où chaque plat raconte une histoire de terroir et d'élégance simple.
                 </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Link to="/menu" className="btn-primary">
+            <div className="flex flex-col sm:flex-row gap-4 pt-2 sm:pt-4">
+                <Link to="/menu" className="btn-primary min-h-14">
                 Voir la Carte
                 </Link>
-                <Link to="/reservations" className="btn-secondary">
+                <Link to="/reservations" className="btn-secondary min-h-14">
                 Réserver une table
                 </Link>
             </div>
           </motion.div>
 
-          <div className="lg:col-span-5 hidden lg:block">
-            <div className="aspect-[4/5] bg-surface-container-high rounded-lg overflow-hidden border border-outline">
+          <div className="lg:col-span-5 block">
+            <div className="aspect-[16/11] sm:aspect-[4/5] max-h-[420px] lg:max-h-none bg-surface-container-high rounded-lg overflow-hidden border border-outline">
                 <img 
                     src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
-                    alt="Atmosphere"
+                    alt="Table dressée dans une ambiance restaurant contemporaine"
                     fetchPriority="high"
                     decoding="async"
                     className="w-full h-full object-cover opacity-90"
@@ -92,7 +92,7 @@ export const PortalHomePage = () => {
               </div>
               <h3 className="text-3xl font-bold tracking-tight">Sélection du Chef</h3>
             </div>
-            <Link to="/menu" className="text-[10px] font-bold uppercase tracking-widest text-on-background border-b border-outline pb-1 hover:border-on-background transition-all">
+            <Link to="/menu" className="min-h-11 inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background border-b border-outline hover:border-on-background transition-all">
                 Tout voir
             </Link>
           </div>
@@ -183,7 +183,7 @@ export const PortalHomePage = () => {
             </ul>
           </div>
 
-          <div className="md:col-span-3 space-y-4 text-right">
+          <div className="md:col-span-3 space-y-4 md:text-right">
             <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Contact</span>
             <div className="space-y-2">
                 <p className="text-xs text-on-surface-variant">
@@ -197,4 +197,3 @@ export const PortalHomePage = () => {
     </div>
   );
 };
-

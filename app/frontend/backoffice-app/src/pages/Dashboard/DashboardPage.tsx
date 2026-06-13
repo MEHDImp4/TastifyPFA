@@ -87,15 +87,15 @@ export const DashboardPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex-1 flex flex-col gap-6 md:gap-10 overflow-hidden font-sans">
+    <div className="flex-1 flex flex-col gap-6 md:gap-10 overflow-y-auto lg:overflow-hidden font-sans custom-scrollbar pb-6 lg:pb-0">
       
       {/* Page Header */}
-      <div className="flex-none flex justify-between items-end">
+      <div className="flex-none flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end">
         <div>
            <h1 className="text-2xl md:text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
-           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.4em] mt-2">Intelligence Opérationnelle & Monitoring Direct</p>
+           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.18em] sm:tracking-[0.4em] mt-2">Intelligence Opérationnelle & Monitoring Direct</p>
         </div>
-        <div className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-8 py-3.5 rounded-xl">
+        <div className="flex min-h-[44px] items-center gap-3 bg-surface-container-low border border-outline-variant px-5 sm:px-8 py-3.5 rounded-xl">
            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">Système Connecté</span>
         </div>
@@ -134,7 +134,7 @@ export const DashboardPage: React.FC = () => {
                  </div>
                  <h2 className="text-xl font-black tracking-tight text-on-surface uppercase ">Flux Opérationnel <span className="sr-only">Live Orchestration Feed</span></h2>
               </div>
-              <button onClick={() => navigate('/salle')} className="h-10 px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-primary hover:border-primary transition-all flex items-center gap-2">
+              <button onClick={() => navigate('/salle')} className="min-h-[44px] px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-background hover:text-primary hover:border-primary transition-all flex items-center gap-2">
                 Accéder au Plan <ChevronRight className="w-4 h-4" />
               </button>
            </div>
@@ -145,9 +145,9 @@ export const DashboardPage: React.FC = () => {
                     <motion.div 
                         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                         key={ticket.id}
-                        className="luxury-card p-6 flex items-center justify-between hover:border-primary/20 transition-all group"
+                        className="luxury-card p-5 md:p-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between hover:border-primary/20 transition-all group"
                     >
-                        <div className="flex items-center gap-8">
+                        <div className="flex items-center gap-4 md:gap-8">
                             <div className="w-16 h-16 bg-surface-container-low border border-outline-variant rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
                                 <span className="font-mono text-2xl font-black">T{ticket.table}</span>
                             </div>
@@ -158,7 +158,7 @@ export const DashboardPage: React.FC = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-10">
+                        <div className="flex flex-wrap items-center gap-4 md:gap-10">
                             <div className="text-right hidden sm:block">
                                 <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Durée</p>
                                 <p className="font-sans text-sm font-bold text-on-surface mt-1 uppercase tracking-tight">
@@ -208,7 +208,7 @@ export const DashboardPage: React.FC = () => {
                                 </p>
                                 <button 
                                     onClick={() => navigate('/kds')}
-                                    className="mt-6 w-full py-4 bg-error text-on-error rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
+                                    className="mt-6 w-full min-h-[44px] py-4 bg-error text-on-error rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
                                 >
                                     Consulter Cuisine
                                 </button>

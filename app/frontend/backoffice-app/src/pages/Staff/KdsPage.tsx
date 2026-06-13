@@ -66,7 +66,7 @@ const TicketTimer = ({ createdAt, onCritical }: { createdAt: string, onCritical:
     }, [createdAt, isRush, onCritical]);
 
     return (
-        <span className={`font-mono text-2xl font-black tabular-nums tracking-tighter ${isRush ? 'text-error' : 'text-primary'}`}>
+        <span className={`font-mono text-xl sm:text-2xl font-black tabular-nums tracking-tighter ${isRush ? 'text-error' : 'text-primary'}`}>
             {elapsed}
         </span>
     );
@@ -102,19 +102,19 @@ const KdsTicket = ({
         <div data-testid={`kds-ticket-${ticket.id}`} className={`luxury-card flex flex-col overflow-hidden shrink-0 mb-6 transition-all ${isCritical && !isDone ? 'ring-2 ring-error/20 border-error/30' : 'border-outline-variant'}`}>
             
             {/* En-tête du Ticket */}
-            <div className={`p-5 ${statusBg} border-b border-outline-variant flex justify-between items-start`}>
-                <div>
-                    <div className="flex gap-2 mb-3">
+            <div className={`p-4 sm:p-5 ${statusBg} border-b border-outline-variant flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start`}>
+                <div className="min-w-0">
+                    <div className="flex flex-wrap gap-2 mb-3">
                         <span className="px-2.5 py-1 rounded-sm bg-on-surface text-background text-[10px] font-black uppercase tracking-widest">
                             TABLE {ticket.table_numero || '??'}
                         </span>
                         {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
                         {(isDone || allLignesReady) && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">DONE</span>}
                     </div>
-                    <h3 className="font-mono text-sm font-bold text-on-surface opacity-80">ID-NEURAL: #{ticket.id}</h3>
+                    <h3 className="font-mono text-sm font-bold text-on-surface">ID-NEURAL: #{ticket.id}</h3>
                 </div>
                 
-                <div className="text-right flex flex-col items-end">
+                <div className="text-left flex flex-col items-start sm:items-end sm:text-right">
                     <TicketTimer createdAt={ticket.created_at} onCritical={setIsCritical} />
                     <div className="flex items-center gap-1.5 mt-2 opacity-80">
                         <Timer className="w-3.5 h-3.5" />
@@ -124,23 +124,23 @@ const KdsTicket = ({
             </div>
 
             {/* Liste des Plats */}
-            <div className="flex-1 p-3 bg-surface-container-low flex flex-col gap-2">
+            <div className="flex-1 p-3 bg-surface-container-low flex flex-col gap-3">
                 {ticket.lignes.map((item: any) => {
                     const isItemReady = item.statut === 'PRET';
                     return (
                         <button 
                             key={item.id}
                             onClick={() => onUpdateItem(item.id, item.statut)}
-                            className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-5 ${isItemReady ? 'bg-success/5 border-success/20 opacity-60' : 'bg-surface-container-lowest border-outline-variant hover:border-primary active:scale-[0.98]'}`}
+                            className={`w-full min-h-20 text-left p-4 rounded-xl border-2 transition-all flex items-center gap-3 sm:gap-5 ${isItemReady ? 'bg-success/5 border-success/20 opacity-75' : 'bg-surface-container-lowest border-outline-variant hover:border-primary active:scale-[0.98]'}`}
                         >
                             <span className={`font-mono text-3xl font-black w-10 text-center ${isItemReady ? 'text-success' : 'text-primary'}`}>
                                 {item.quantite}
                             </span>
-                            <div className="flex-1">
+                            <div className="flex-1 min-w-0">
                                 <p className={`font-sans text-lg font-black uppercase tracking-tight ${isItemReady ? 'text-on-surface-variant line-through' : 'text-on-surface'}`}>
                                     {item.plat_nom}
                                 </p>
-                                <div className="flex gap-2 items-center mt-1">
+                                <div className="flex flex-wrap gap-2 items-center mt-1">
                                     <span className="text-[10px] font-black px-2 py-0.5 rounded bg-primary text-on-primary uppercase">
                                         {item.statut === 'PRET' ? 'PRÊT' : (item.statut === 'EN_PREPARATION' ? 'In Preparation' : 'Pending')}
                                     </span>
@@ -164,14 +164,14 @@ const KdsTicket = ({
                 {isDone ? (
                     <button 
                         onClick={handleMainAction}
-                        className="w-full h-16 rounded-xl border border-outline-variant bg-surface-container text-on-surface font-sans text-xs font-black uppercase tracking-widest hover:text-primary hover:border-primary transition-all"
+                        className="btn-secondary w-full min-h-16 rounded-xl text-xs"
                     >
                         Archiver le Ticket
                     </button>
                 ) : (
                     <button 
                         onClick={handleMainAction}
-                        className={`w-full h-16 rounded-xl font-sans text-xs font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${allLignesReady ? 'bg-success text-on-success hover:scale-[1.02]' : 'bg-primary text-on-primary hover:scale-[1.02]'}`}
+                        className={`w-full min-h-16 rounded-xl font-sans text-xs font-black uppercase tracking-[0.18em] sm:tracking-[0.3em] transition-all flex items-center justify-center gap-3 sm:gap-4 ${allLignesReady ? 'bg-success text-on-success hover:scale-[1.02]' : 'bg-primary text-on-primary hover:scale-[1.02]'}`}
                     >
                         {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Service <span className="sr-only">Ready to Window</span></> : <><Zap className="w-5 h-5" /> Forcer Prêt <span className="sr-only">Force Ready</span></>}
                     </button>
@@ -298,31 +298,31 @@ export const KdsPage: React.FC = () => {
   const visibleTickets = tickets.filter(t => !clearedTickets.includes(t.id));
 
   return (
-    <div className="flex-1 flex flex-col bg-background font-sans selection:bg-primary/20 overflow-hidden">
+    <div className="flex-1 flex flex-col bg-background font-sans selection:bg-primary/20 overflow-y-auto lg:overflow-hidden">
       
       {/* KDS Header */}
-      <header className="flex-none h-24 bg-surface-container-high border-b border-outline-variant px-10 flex items-center justify-between z-20">
-        <div className="flex items-center gap-8">
+      <header className="flex-none min-h-24 bg-surface-container-high border-b border-outline-variant px-4 py-4 md:px-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between z-20">
+        <div className="flex w-full min-w-0 items-center gap-4 lg:w-auto lg:gap-8">
           <button
             onClick={() => navigate(-1)}
             aria-label="Retour au tableau de bord"
-            className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant hover:text-primary transition-all flex items-center justify-center"
+            className="btn-icon rounded-xl bg-surface-container-low"
           >
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
-          <div>
+          <div className="min-w-0">
             <h1 aria-label="Kitchen Display System" className="text-2xl font-black uppercase tracking-tight text-on-surface  leading-none">Écran Cuisine</h1>
-            <p className="text-[10px] font-bold text-on-surface uppercase tracking-[0.3em] mt-2">Système de Monitoring de Production</p>
+            <p className="text-[10px] font-bold text-on-surface uppercase tracking-widest mt-2">Système de Monitoring de Production</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-10">
-          <div className="flex items-center gap-10 bg-surface-container-low px-10 py-3 rounded-2xl border border-outline-variant">
-             <div className="text-center border-r border-outline-variant pr-10">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:gap-8">
+          <div className="flex min-h-14 items-center justify-between gap-4 bg-surface-container-low px-4 py-3 rounded-xl border border-outline-variant sm:px-6 lg:px-10">
+             <div className="text-left border-r border-outline-variant pr-4 sm:text-center sm:pr-8 lg:pr-10">
              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Unités Actives</p>
              <p className="text-2xl font-mono font-black text-on-surface leading-none mt-1">{visibleTickets.length}</p>
              </div>
-             <div className="text-center">
+             <div className="text-left sm:text-center">
              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Statut</p>
              <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
              <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> SYNC EN DIRECT
@@ -332,7 +332,7 @@ export const KdsPage: React.FC = () => {
 
              <button 
              onClick={fetchTickets}
-             className="h-14 px-8 rounded-xl bg-surface-container text-on-surface border border-outline-variant font-black uppercase tracking-widest text-[11px] hover:text-primary hover:border-primary transition-all flex items-center gap-3 active:scale-95"
+             className="btn-secondary min-h-14 px-8 rounded-xl text-[11px] active:scale-95"
              >
              <RotateCcw className="w-4 h-4" /> Actualiser
              </button>
@@ -340,20 +340,20 @@ export const KdsPage: React.FC = () => {
              </header>
 
              {/* Kanban Grid */}
-             <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-px bg-outline-variant overflow-hidden">
+             <main className="flex-none lg:flex-1 grid grid-cols-1 lg:grid-cols-2 gap-px bg-outline-variant overflow-visible lg:overflow-hidden">
              {columns.map((col) => {
              const colTickets = visibleTickets.filter(t => t.statut === col.id);
 
              return (
-             <section key={col.id} className="relative flex flex-col h-full bg-surface-container-lowest">
-             <header className="flex-none h-16 bg-surface-container-high border-b border-outline-variant px-8 flex items-center justify-between z-10">
-             <h2 className="text-xs font-black uppercase tracking-[0.4em] text-on-surface">{col.label}</h2>
+             <section key={col.id} className="relative flex flex-col min-h-[28rem] lg:min-h-0 lg:h-full bg-surface-container-lowest">
+             <header className="flex-none min-h-16 bg-surface-container-high border-b border-outline-variant px-4 py-3 md:px-8 flex items-center justify-between gap-4 z-10">
+             <h2 className="text-xs font-black uppercase tracking-[0.18em] sm:tracking-[0.4em] text-on-surface">{col.label}</h2>
              <div className="bg-primary text-on-primary text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest border border-primary">
              {colTickets.length} TICKETS
              </div>
              </header>
 
-             <div tabIndex={0} className="absolute top-16 left-0 right-0 bottom-0 overflow-y-auto p-10 custom-scrollbar">
+             <div tabIndex={0} className="absolute top-16 left-0 right-0 bottom-0 overflow-y-auto p-4 md:p-10 custom-scrollbar">
              {colTickets.length > 0 ? (
              <div className="flex flex-col">
              {colTickets.map((ticket) => (
@@ -366,10 +366,10 @@ export const KdsPage: React.FC = () => {
              ))}
              </div>
              ) : (
-             <div className="h-full flex flex-col items-center justify-center pb-20">
-             <PlayCircle aria-hidden="true" className="w-24 h-24 mb-6 stroke-[2] text-primary" />
-             <p aria-hidden="true" className="text-xl font-black uppercase tracking-[0.6em] text-on-surface">Aucune commande en attente</p>
-             <span aria-hidden="true" className="text-sm font-black uppercase tracking-widest text-on-surface mt-2">Sector Clear</span>
+             <div className="h-full flex flex-col items-center justify-center px-6 pb-20 text-center">
+             <PlayCircle aria-hidden="true" className="w-20 h-20 md:w-24 md:h-24 mb-6 stroke-[2] text-primary" />
+             <p aria-hidden="true" className="text-base md:text-xl font-black uppercase tracking-[0.2em] md:tracking-[0.6em] text-on-surface">Aucune commande en attente</p>
+             <span aria-hidden="true" className="text-xs md:text-sm font-black uppercase tracking-widest text-on-surface mt-2">Sector Clear</span>
              </div>
              )}
              </div>

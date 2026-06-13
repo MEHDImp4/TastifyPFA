@@ -73,8 +73,8 @@ export const AvisPage: React.FC = () => {
           <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Perception de marque et satisfaction convives</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-4">
-           <div className="relative group">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
+           <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input 
               type="text"
@@ -82,7 +82,7 @@ export const AvisPage: React.FC = () => {
               placeholder="Filtrer les avis..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
           <button className="btn-ghost h-10 px-4">
@@ -95,7 +95,7 @@ export const AvisPage: React.FC = () => {
       <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
         
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
               { label: 'Satisfaction Globale', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
               { label: 'Positifs', val: stats.positive, sub: '', icon: Smile, color: 'text-success' },
@@ -104,8 +104,8 @@ export const AvisPage: React.FC = () => {
             ].map((s, i) => (
               <div key={i} className="atelier-card p-6 flex justify-between items-center">
                   <div>
-                      <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">{s.label}</span>
-                      <p className={`text-2xl font-bold ${s.color} mt-1`}>{s.val}<span className="text-[10px] text-on-surface-variant ml-2 uppercase opacity-40">{s.sub}</span></p>
+                      <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">{s.label}</span>
+                      <p className={`text-2xl font-bold ${s.color} mt-1`}>{s.val}<span className="text-[10px] text-on-surface-variant ml-2 uppercase">{s.sub}</span></p>
                   </div>
                   <s.icon className={`w-8 h-8 ${s.color} opacity-10`} strokeWidth={1} />
               </div>
@@ -135,7 +135,7 @@ export const AvisPage: React.FC = () => {
                   <div className="col-span-1 font-mono text-[10px] font-bold text-on-surface-variant pt-1">#{a.id.toString().slice(-4)}</div>
                   <div className="col-span-2">
                     <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider">@{a.user_username}</h3>
-                    <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-30">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
+                    <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                   <div className="col-span-5">
                     <p className="text-xs text-on-surface-variant leading-relaxed select-all">
@@ -153,7 +153,7 @@ export const AvisPage: React.FC = () => {
                     </span>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button className="h-8 px-3 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background hover:border-on-background transition-all">Archiver</button>
+                    <button className="min-h-[44px] px-4 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-background hover:border-on-background transition-all">Archiver</button>
                   </div>
                 </div>
             )) : (
@@ -172,13 +172,13 @@ export const AvisPage: React.FC = () => {
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">
-                    <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronLeft className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="btn-icon"><ChevronLeft className="w-3.5 h-3.5" /></button>
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
                         <span className="text-on-background">{currentPage}</span>
                         <span>/</span>
                         <span>{totalPages}</span>
                     </div>
-                    <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronRight className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="btn-icon"><ChevronRight className="w-3.5 h-3.5" /></button>
                 </div>
             )}
           </div>

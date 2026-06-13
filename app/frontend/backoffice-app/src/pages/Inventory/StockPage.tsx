@@ -95,8 +95,8 @@ export const StockPage: React.FC = () => {
           <h1 aria-label="Stock et logistique" className="text-sm font-bold tracking-widest text-on-background uppercase">Stock & Logistique</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Approvisionnement et inventaire global</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-4">
-          <div className="relative group">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
+          <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input
               type="text"
@@ -104,7 +104,7 @@ export const StockPage: React.FC = () => {
               placeholder="Rechercher un ingrédient..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
           <button onClick={handleExportCSV} className="btn-ghost h-10 px-4">
@@ -124,9 +124,9 @@ export const StockPage: React.FC = () => {
               <div key={i.id} className="atelier-card p-6 flex flex-col justify-between group">
                 <div className="flex justify-between items-start mb-6">
                   <span className="font-mono text-[9px] opacity-40">#{i.id}</span>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button aria-label={`Modifier ${i.nom}`} onClick={() => handleOpenEditor(i)} className="p-1.5 hover:bg-surface-container-high rounded transition-all text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button aria-label={`Supprimer ${i.nom}`} onClick={() => { setItemToDelete(i.id); setIsDeleteModalOpen(true); }} className="p-1.5 hover:bg-error/5 rounded transition-all text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <div className="flex gap-2">
+                    <button aria-label={`Modifier ${i.nom}`} onClick={() => handleOpenEditor(i)} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
+                    <button aria-label={`Supprimer ${i.nom}`} onClick={() => { setItemToDelete(i.id); setIsDeleteModalOpen(true); }} className="btn-icon text-error hover:border-error/30 hover:text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
                 <div>
@@ -155,14 +155,14 @@ export const StockPage: React.FC = () => {
                   {editingItem ? 'Modifier l\'ingrédient' : 'Nouvel ingrédient'}
                 </h2>
               </div>
-              <div className="p-10 space-y-8 flex-1 overflow-y-auto">
+              <div className="p-6 md:p-10 space-y-8 flex-1 overflow-y-auto">
                 <div className="space-y-2">
                   <label htmlFor="stock-name" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Désignation</label>
-                  <input id="stock-name" value={nom} onChange={e => setNom(e.target.value)} type="text" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <input id="stock-name" value={nom} onChange={e => setNom(e.target.value)} type="text" className="field-control" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="stock-unit" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Unité</label>
-                  <select id="stock-unit" value={unite} onChange={e => setUnite(e.target.value as 'g' | 'ml' | 'pcs')} className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm">
+                  <select id="stock-unit" value={unite} onChange={e => setUnite(e.target.value as 'g' | 'ml' | 'pcs')} className="field-control">
                     <option value="g">g</option>
                     <option value="ml">ml</option>
                     <option value="pcs">pcs</option>
@@ -170,14 +170,14 @@ export const StockPage: React.FC = () => {
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="stock-current" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Stock actuel</label>
-                  <input id="stock-current" value={stock} onChange={e => setStock(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <input id="stock-current" value={stock} onChange={e => setStock(e.target.value)} type="number" className="field-control" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="stock-threshold" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Seuil alerte</label>
-                  <input id="stock-threshold" value={seuil} onChange={e => setSeuil(e.target.value)} type="number" className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm" />
+                  <input id="stock-threshold" value={seuil} onChange={e => setSeuil(e.target.value)} type="number" className="field-control" />
                 </div>
               </div>
-              <div className="p-8 border-t border-outline bg-surface-container-high flex gap-4">
+              <div className="p-6 md:p-8 border-t border-outline bg-surface-container-high flex gap-4">
                 <button type="button" onClick={() => setIsEditorOpen(false)} aria-label="Annuler la modification" className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
                 <button className="flex-[2] btn-primary h-12">
                   <span>Enregistrer</span>

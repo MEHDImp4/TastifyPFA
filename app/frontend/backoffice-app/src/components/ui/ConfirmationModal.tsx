@@ -65,19 +65,19 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                   </div>
                   <h2 className=" text-xl font-black text-on-surface uppercase  tracking-tight">{title}</h2>
                 </div>
-                <button onClick={onClose} aria-label="Fermer" className="p-1 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
+                <button onClick={onClose} aria-label="Fermer" className="btn-icon border-transparent bg-transparent">
                   <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
               
-              <p className="font-sans text-sm font-bold text-on-surface-variant leading-relaxed uppercase tracking-tight opacity-80 mb-10">
+              <p className="font-sans text-sm font-bold text-on-surface-variant leading-relaxed uppercase tracking-tight mb-10">
                 {message}
               </p>
               
               <div className="flex items-center gap-4">
                 <button
                   onClick={onClose}
-                  className="flex-1 h-14 border border-outline-variant rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95"
+                  className="btn-secondary flex-1 h-14 rounded-xl tracking-[0.2em]"
                 >
                   {cancelLabel}
                 </button>
@@ -86,7 +86,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     onConfirm();
                     onClose();
                   }}
-                  className={`flex-[1.5] h-14 ${buttonBg} text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
+                  className={`flex-[1.5] min-h-14 ${buttonBg} text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
                 >
                   {confirmLabel}
                 </button>

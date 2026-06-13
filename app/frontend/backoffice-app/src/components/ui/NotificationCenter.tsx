@@ -43,7 +43,7 @@ export const NotificationCenter: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Centre de notifications"
-        className={`p-2 rounded transition-all relative ${isOpen ? 'bg-on-background/5 text-on-background' : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low'}`}
+        className={`btn-icon border-transparent relative ${isOpen ? 'bg-on-background/5 text-on-background' : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low'}`}
       >
         <Bell className="w-5 h-5" strokeWidth={1.5}/>
         {allNotifications.length > 0 && (
@@ -52,14 +52,14 @@ export const NotificationCenter: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-80 bg-surface border border-outline rounded-md z-[100] shadow-2xl">
+        <div className="absolute top-full right-0 mt-3 w-[min(20rem,calc(100vw-2rem))] bg-surface border border-outline rounded-md z-[100] shadow-2xl">
           <div className="p-4 border-b border-outline bg-surface-container-high flex items-center justify-between">
             <h4 className="text-[10px] font-bold tracking-widest text-on-background uppercase">Alertes opérationnelles</h4>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
               aria-label="Fermer le centre de notifications"
-              className="p-1 hover:bg-background rounded transition-colors text-on-surface-variant"
+              className="btn-icon border-transparent bg-transparent"
             >
               <X className="w-3.5 h-3.5" strokeWidth={2}/>
             </button>
@@ -79,7 +79,7 @@ export const NotificationCenter: React.FC = () => {
                                 <button
                                     onClick={() => clearNotification(n.id)}
                                     aria-label="Masquer la notification"
-                                    className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 p-1 hover:bg-background rounded transition-all"
+                                    className="btn-icon absolute top-2 right-2 border-transparent bg-background/80"
                                 >
                                     <X className="w-3 h-3" />
                                 </button>
@@ -102,7 +102,7 @@ export const NotificationCenter: React.FC = () => {
              <div className="p-3 bg-surface-container-high border-t border-outline text-center">
                 <button 
                    onClick={() => setIsOpen(false)}
-                   className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-on-background transition-colors"
+                   className="min-h-[44px] px-4 text-[9px] font-bold uppercase tracking-[0.2em] text-on-background hover:text-on-surface-variant transition-colors"
                 >
                    Fermer le panneau
                 </button>

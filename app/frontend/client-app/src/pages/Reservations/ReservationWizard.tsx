@@ -20,6 +20,7 @@ export const ReservationWizard: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   // Form state
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -40,6 +41,7 @@ export const ReservationWizard: React.FC = () => {
 
   const fetchAvailableTables = async () => {
     setIsLoading(true);
+    setActionError(null);
     try {
       const res = await reservationApi.getAvailableTables({
         date,
@@ -52,6 +54,8 @@ export const ReservationWizard: React.FC = () => {
       if (filtered.length > 0) setSelectedTable(filtered[0].id);
       nextStep();
     } catch (err) {
+      const message = 'Impossible de vérifier les disponibilités. Réessayez dans un instant.';
+      setActionError(message);
       toast.error('Échec de la vérification de disponibilité');
     } finally {
       setIsLoading(false);
@@ -61,6 +65,7 @@ export const ReservationWizard: React.FC = () => {
   const handleFinish = async () => {
     if (!selectedTable) return;
     setIsLoading(true);
+    setActionError(null);
     try {
       await reservationApi.createReservation({
         table: selectedTable,
@@ -72,7 +77,9 @@ export const ReservationWizard: React.FC = () => {
       });
       nextStep();
     } catch (err: any) {
-        toast.error(err.response?.data?.detail || "Une erreur est survenue lors de la réservation.");
+        const message = err.response?.data?.detail || "Nous n'avons pas pu confirmer cette réservation. Vérifiez le créneau puis réessayez.";
+        setActionError(message);
+        toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -97,13 +104,13 @@ export const ReservationWizard: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
                     <button 
                         onClick={() => navigate('/register')}
-                        className="btn-primary"
+                        className="btn-primary min-h-14"
                     >
                         <UserPlus className="w-4 h-4" /> Créer un compte
                     </button>
                     <button 
                         onClick={() => navigate('/login')}
-                        className="btn-secondary"
+                        className="btn-secondary min-h-14"
                     >
                         Se connecter
                     </button>
@@ -151,6 +158,12 @@ export const ReservationWizard: React.FC = () => {
 
           {/* Content */}
           <div className="p-6 md:p-12">
+              {actionError && (
+                <div id="reservation-error" role="alert" className="form-error mb-8">
+                  {actionError}
+                </div>
+              )}
+
               {step === 1 && (
                 <div className="space-y-10">
                    <div className="p-8 bg-background border border-outline rounded-lg flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -159,20 +172,20 @@ export const ReservationWizard: React.FC = () => {
                          <p className="text-sm text-on-surface-variant">Couverts à prévoir</p>
                       </div>
                       <div className="flex items-center gap-6">
-                         <button aria-label="Réduire" onClick={() => setGuests(Math.max(1, guests - 1))} className="w-10 h-10 rounded border border-outline bg-surface flex items-center justify-center hover:border-on-background transition-colors"><Minus className="w-4 h-4" /></button>
+                         <button aria-label="Réduire" onClick={() => setGuests(Math.max(1, guests - 1))} className="btn-icon"><Minus className="w-4 h-4" /></button>
                          <span className="text-4xl font-bold text-on-background w-12 text-center">{guests}</span>
-                         <button aria-label="Augmenter le nombre de convives" onClick={() => setGuests(Math.min(12, guests + 1))} className="w-10 h-10 rounded border border-outline bg-surface flex items-center justify-center hover:border-on-background transition-colors"><Plus className="w-4 h-4" /></button>
+                         <button aria-label="Augmenter le nombre de convives" onClick={() => setGuests(Math.min(12, guests + 1))} className="btn-icon"><Plus className="w-4 h-4" /></button>
                       </div>
                    </div>
 
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
                          <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas <span className="sr-only">Temporal Window</span></label>
-                         <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
+                         <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
                       </div>
                       <div className="space-y-2">
                          <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée <span className="sr-only">Arrival Pivot</span></label>
-                         <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-12 px-4 bg-background border border-outline rounded focus:border-on-background outline-none transition-all font-bold text-sm" />
+                         <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
                       </div>
                    </div>
 
@@ -189,7 +202,7 @@ export const ReservationWizard: React.FC = () => {
                 <div className="space-y-10">
                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {availableTables.length > 0 ? availableTables.map(t => (
-                        <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`p-6 rounded-lg border-2 flex flex-col items-center gap-3 transition-all ${selectedTable === t.id ? 'bg-on-background border-on-background text-background' : 'bg-background border-outline text-on-background hover:border-on-background'}`}>
+                        <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`min-h-32 p-6 rounded-lg border-2 flex flex-col items-center gap-3 transition-all ${selectedTable === t.id ? 'bg-on-background border-on-background text-background' : 'bg-background border-outline text-on-background hover:border-on-background'}`}>
                            <TableIcon className="w-6 h-6 opacity-20" />
                            <div className="text-center">
                               <span className="block text-xl font-bold uppercase tracking-tighter">Table {t.numero}</span>
@@ -222,7 +235,7 @@ export const ReservationWizard: React.FC = () => {
                       </div>
                       <div className="space-y-3">
                          <label htmlFor="res-notes" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Une demande particulière ? <span className="sr-only">Specific Manifest Requirements</span></label>
-                         <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="w-full p-4 bg-surface border border-outline rounded focus:border-on-background outline-none transition-all resize-none text-sm" rows={4} />
+                         <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="field-control min-h-28 py-4 resize-none" rows={4} />
                       </div>
                    </div>
                    <div className="flex flex-col sm:flex-row gap-4 pt-4">

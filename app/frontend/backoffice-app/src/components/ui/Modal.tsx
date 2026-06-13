@@ -57,19 +57,19 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative w-full max-w-lg bg-surface-container border border-outline-variant rounded-xl overflow-hidden flex flex-col outline-none"
+            className="relative w-full max-w-lg max-h-[calc(100dvh-2rem)] bg-surface-container border border-outline-variant rounded-xl overflow-hidden flex flex-col outline-none"
           >
             <div className="flex items-center justify-between p-6 border-b border-outline-variant/30 bg-surface-container-high">
               <h3 className="font-sans text-[11px] font-black text-primary uppercase tracking-[0.2em] m-0">{title}</h3>
               <button
                 onClick={onClose}
                 aria-label="Fermer la fenêtre"
-                className="p-1 rounded hover:bg-surface-container-highest text-on-surface-variant transition-colors"
+                className="btn-icon border-transparent bg-transparent"
               >
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="p-8 overflow-y-auto max-h-[75vh] custom-scrollbar">
+            <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar">
               {children}
             </div>
             

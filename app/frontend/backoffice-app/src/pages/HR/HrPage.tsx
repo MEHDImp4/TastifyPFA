@@ -96,8 +96,8 @@ export const HrPage: React.FC = () => {
           <h1 aria-label="Ressources humaines" className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion des effectifs et accès opérationnels</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-4">
-           <div className="relative group">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
+           <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input 
               type="text"
@@ -105,7 +105,7 @@ export const HrPage: React.FC = () => {
               placeholder="Rechercher nom, poste ou ID..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
           <button onClick={handleExportCSV} className="btn-ghost h-10 px-4">
@@ -122,12 +122,12 @@ export const HrPage: React.FC = () => {
         
         {/* Top Status Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
                 {['ALL', 'GERANT', 'CUISINIER', 'SERVEUR'].map(tab => (
                     <button 
                         key={tab}
                         onClick={() => { setActiveFilter(tab); setCurrentPage(1); }}
-                        className={`px-4 h-9 rounded font-bold text-[9px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-on-background text-background' : 'bg-surface border border-outline text-on-surface-variant hover:text-on-background'}`}
+                        className={`min-h-[44px] px-4 rounded font-bold text-[9px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-on-background text-background' : 'bg-surface border border-outline text-on-background hover:border-on-background'}`}
                     >
                         {tab === 'ALL' ? 'Tout l\'Effectif' : tab}
                     </button>
@@ -203,8 +203,8 @@ export const HrPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-end gap-2">
-                    <button aria-label={`Modifier ${emp.user_details?.username || emp.username || 'employé'}`} className="w-8 h-8 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-background transition-all"><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button aria-label={`Options de ${emp.user_details?.username || emp.username || 'employé'}`} className="w-8 h-8 border border-outline rounded flex items-center justify-center text-on-surface-variant hover:text-on-background transition-all"><MoreVertical className="w-3.5 h-3.5" /></button>
+                    <button aria-label={`Modifier ${emp.user_details?.username || emp.username || 'employé'}`} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
+                    <button aria-label={`Options de ${emp.user_details?.username || emp.username || 'employé'}`} className="btn-icon"><MoreVertical className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
             )) : (
@@ -223,13 +223,13 @@ export const HrPage: React.FC = () => {
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">
-                    <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronLeft className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page précédente" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="btn-icon"><ChevronLeft className="w-3.5 h-3.5" /></button>
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-on-surface-variant">
                         <span className="text-on-background">{currentPage}</span>
                         <span>/</span>
                         <span>{totalPages}</span>
                     </div>
-                    <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 border border-outline rounded hover:bg-background disabled:opacity-10 transition-all"><ChevronRight className="w-3.5 h-3.5" /></button>
+                    <button aria-label="Page suivante" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="btn-icon"><ChevronRight className="w-3.5 h-3.5" /></button>
                 </div>
             )}
           </div>

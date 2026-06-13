@@ -77,7 +77,7 @@ export const PublicLayout: React.FC = () => {
               <Link
                 to="/checkout"
                 aria-label="Voir le panier"
-                className="flex items-center gap-2 px-3 py-2 bg-on-background text-background rounded-md text-[10px] font-bold uppercase tracking-wider min-h-10"
+                className="btn-primary min-w-11 px-3 sm:px-4"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 {cartCount}
@@ -87,7 +87,7 @@ export const PublicLayout: React.FC = () => {
             {!isAuthenticated && (
               <Link
                 to="/login"
-                className="md:hidden text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
+                className="md:hidden min-h-11 inline-flex items-center px-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
               >
                 Log in
               </Link>
@@ -102,7 +102,7 @@ export const PublicLayout: React.FC = () => {
                   <button
                     onClick={handleLogout}
                     aria-label="Se déconnecter"
-                    className="p-1 text-on-surface-variant hover:text-error transition-colors"
+                    className="btn-icon border-transparent bg-transparent hover:text-error hover:border-error/30"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -110,7 +110,7 @@ export const PublicLayout: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors"
+                  className="min-h-11 inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
                 >
                   S'identifier
                 </Link>
@@ -152,7 +152,7 @@ export const PublicLayout: React.FC = () => {
 
             <div className="mt-auto py-10 border-t border-outline flex flex-col gap-6">
               {isAuthenticated ? (
-                <button onClick={handleLogout} className="text-[10px] font-bold uppercase tracking-widest text-error text-left">Fermer la session</button>
+                <button onClick={handleLogout} className="btn-secondary justify-start text-error hover:border-error">Fermer la session</button>
               ) : (
                 <Link to="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary w-full h-14">
                   Connexion Membre

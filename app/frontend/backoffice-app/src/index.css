@@ -20,6 +20,9 @@
 
   --color-success: #15803D;
   --color-error: #B91C1C;
+  --color-on-success: #FBFBFA;
+  --color-on-error: #FBFBFA;
+  --color-focus-ring: #B45309;
 
   /* Pure Sans Typography */
   --font-sans: "Public Sans", system-ui, sans-serif;
@@ -27,6 +30,8 @@
   --font-mono: "JetBrains Mono", monospace;
 
   --radius-md: 4px;
+  --spacing-staff-gutter: clamp(1rem, 2.6vw, 2rem);
+  --spacing-staff-margin: clamp(1rem, 3vw, 2rem);
 }
 
 @layer base {
@@ -38,13 +43,39 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold text-on-background;
+    text-wrap: balance;
   }
 
-  /* Focus-visible: keyboard navigation affordance without visual impact on mouse users */
   *:focus-visible {
-    outline: 2px solid var(--color-on-background);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-focus-ring);
+    outline-offset: 3px;
     border-radius: 4px;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  button:disabled,
+  a[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 
   /* Performance: paint containment for off-screen luxury cards */
@@ -60,11 +91,31 @@
   }
 
   .btn-primary {
-    @apply h-10 px-6 bg-on-background text-background rounded-md flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all;
+    @apply min-h-[44px] px-6 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:bg-primary hover:shadow-lg hover:shadow-black/10 active:scale-[0.98] disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
   }
 
   .btn-ghost {
-    @apply h-10 px-6 bg-transparent border border-outline rounded-md flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:bg-surface-container-high active:scale-[0.98] transition-all;
+    @apply min-h-[44px] px-6 bg-surface border border-outline-variant rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
+  }
+
+  .btn-secondary {
+    @apply min-h-[44px] px-6 bg-surface border border-outline-variant rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
+  }
+
+  .btn-danger {
+    @apply min-h-[44px] px-6 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:brightness-95 active:scale-[0.98] disabled:opacity-45 transition-all duration-200 text-center leading-tight;
+  }
+
+  .btn-icon {
+    @apply min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-md border border-outline bg-surface text-on-surface-variant transition-all duration-200 hover:border-on-background hover:text-on-background active:scale-[0.96] disabled:opacity-45 disabled:active:scale-100;
+  }
+
+  .field-control {
+    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-variant/70 focus:border-on-background focus:bg-surface outline-none disabled:opacity-50;
+  }
+
+  .form-error {
+    @apply rounded-md border border-error/30 bg-error/5 px-4 py-3 text-sm font-semibold text-error;
   }
 
   .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }

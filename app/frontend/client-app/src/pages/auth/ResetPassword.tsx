@@ -27,7 +27,7 @@ export const ResetPassword: React.FC = () => {
       if (!uid || !token) {
         if (active) {
           setTokenStatus('invalid');
-          setError('JETON_DE_RÉINITIALISATION_INVALIDE');
+          setError('Ce lien de réinitialisation est invalide ou expiré.');
         }
         return;
       }
@@ -40,7 +40,7 @@ export const ResetPassword: React.FC = () => {
       } catch (err: any) {
         if (active) {
           setTokenStatus('invalid');
-          setError(err.response?.data?.token?.[0] || 'JETON_DE_RÉINITIALISATION_INVALIDE');
+          setError(err.response?.data?.token?.[0] || 'Ce lien de réinitialisation est invalide ou expiré.');
         }
       }
     };
@@ -54,6 +54,14 @@ export const ResetPassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (password.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères.');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      setError('Les deux mots de passe ne correspondent pas.');
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -64,7 +72,7 @@ export const ResetPassword: React.FC = () => {
         password_confirm: passwordConfirm,
       });
       setIsComplete(true);
-      toast.success('MOT_DE_PASSE_MIS_À_JOUR');
+      toast.success('Mot de passe mis à jour');
     } catch (err: any) {
       const responseData = err.response?.data;
       const nextError =
@@ -72,12 +80,12 @@ export const ResetPassword: React.FC = () => {
         responseData?.password_confirm?.[0] ||
         responseData?.token?.[0] ||
         responseData?.detail ||
-        'ÉCHEC_RÉINITIALISATION';
+        'La réinitialisation a échoué. Réessayez.';
       setError(nextError);
       if (responseData?.token) {
         setTokenStatus('invalid');
       }
-      toast.error('ÉCHEC_RÉINITIALISATION');
+      toast.error(nextError);
     } finally {
       setIsSubmitting(false);
     }
@@ -120,14 +128,16 @@ export const ResetPassword: React.FC = () => {
         <AnimatePresence mode="wait">
           {error && (
             <motion.div
+              id="reset-password-error"
+              role="alert"
               key="reset-password-error"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3"
+              className="w-full form-error flex items-center gap-3"
             >
               <ShieldAlert className="w-4 h-4 text-error" />
-              <p className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</p>
+              <p className="font-sans text-sm font-bold text-error">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -144,7 +154,7 @@ export const ResetPassword: React.FC = () => {
             <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-error">
               Ce lien de réinitialisation est invalide ou expiré.
             </p>
-            <Link to="/forgot-password" university-link="true" className="mt-6 inline-flex text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
+            <Link to="/forgot-password" className="mt-6 min-h-11 inline-flex items-center text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
               Demander un nouveau lien
             </Link>
           </div>
@@ -153,12 +163,12 @@ export const ResetPassword: React.FC = () => {
             <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-on-surface">
               Votre mot de passe a été mis à jour.
             </p>
-            <Link to="/login" className="mt-6 inline-flex text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
+            <Link to="/login" className="mt-6 min-h-11 inline-flex items-center text-sm font-black uppercase tracking-[0.2em] text-primary hover:text-on-surface">
               Retour à la connexion
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="w-full space-y-8">
+          <form onSubmit={handleSubmit} noValidate className="w-full space-y-8">
             <div className="space-y-2">
               <label htmlFor="reset-password-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
                 Nouveau Code d'accès
@@ -171,7 +181,9 @@ export const ResetPassword: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'reset-password-error' : undefined}
+                className="field-control min-h-16 rounded-2xl px-6"
                 placeholder="••••••••"
               />
             </div>
@@ -188,7 +200,9 @@ export const ResetPassword: React.FC = () => {
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'reset-password-error' : undefined}
+                className="field-control min-h-16 rounded-2xl px-6"
                 placeholder="••••••••"
               />
             </div>

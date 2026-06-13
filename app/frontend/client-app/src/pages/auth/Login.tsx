@@ -18,6 +18,7 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore(state => state.setAuth);
+  const errorId = 'login-error-message';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,12 +83,14 @@ export const Login: React.FC = () => {
         <AnimatePresence mode="wait">
           {error && (
             <motion.div
+              id={errorId}
               data-testid="login-error"
+              role="alert"
               initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="p-4 bg-error/5 border border-error/10 rounded-xl flex items-center gap-3"
+              className="form-error flex items-center gap-3"
             >
               <ShieldAlert className="w-4 h-4 text-error" />
-              <p className="font-sans text-[10px] font-bold text-error uppercase tracking-widest">{error}</p>
+              <p className="font-sans text-sm font-bold text-error">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -100,8 +103,10 @@ export const Login: React.FC = () => {
               data-testid="login-username"
               type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
               required aria-required="true"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               autoComplete="username"
-              className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
+              className="field-control min-h-14 rounded-xl px-5"
               placeholder="Nom d'utilisateur"
             />
           </motion.div>
@@ -116,8 +121,10 @@ export const Login: React.FC = () => {
               data-testid="login-password"
               type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
               required aria-required="true"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               autoComplete="current-password"
-              className="w-full h-14 bg-surface border border-outline rounded-xl px-5 font-sans font-bold text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/20"
+              className="field-control min-h-14 rounded-xl px-5"
               placeholder="••••••••"
             />
           </motion.div>
@@ -127,7 +134,7 @@ export const Login: React.FC = () => {
             whileTap={{ scale: 0.98 }}
             data-testid="login-submit"
             type="submit" disabled={isLoading}
-            className="w-full h-16 bg-on-background text-background rounded-xl font-sans text-[10px] font-bold uppercase tracking-[0.4em] transition-all hover:brightness-110 flex items-center justify-center gap-3 group"
+            className="btn-primary w-full min-h-16 rounded-xl tracking-[0.28em] group"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <>

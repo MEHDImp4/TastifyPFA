@@ -15,15 +15,20 @@ export const ForgotPassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (!email.trim()) {
+      setError('Indiquez votre email.');
+      return;
+    }
     setIsLoading(true);
 
     try {
       await api.post('/users/request-reset/', { email });
       setSubmitted(true);
-      toast.success('DEMANDE_DE_REINITIALISATION_ACCEPTEE');
+      toast.success('Demande de réinitialisation acceptée');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'ECHEC_DE_LA_DEMANDE');
-      toast.error('ECHEC_DE_LA_DEMANDE');
+      const message = err.response?.data?.detail || 'Nous ne pouvons pas envoyer le lien pour le moment.';
+      setError(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -66,14 +71,16 @@ export const ForgotPassword: React.FC = () => {
         <AnimatePresence mode="wait">
           {error && (
             <motion.div
+              id="forgot-password-error"
+              role="alert"
               key="forgot-password-error"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="w-full p-4 bg-error/5 border border-error/20 rounded-xl flex items-center gap-3"
+              className="w-full form-error flex items-center gap-3"
             >
               <ShieldAlert className="w-4 h-4 text-error" />
-              <p className="font-sans text-[10px] font-black text-error uppercase tracking-widest">{error}</p>
+              <p className="font-sans text-sm font-bold text-error">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -88,7 +95,7 @@ export const ForgotPassword: React.FC = () => {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="w-full space-y-10">
+          <form onSubmit={handleSubmit} noValidate className="w-full space-y-10">
             <div className="space-y-2">
               <label htmlFor="forgot-password-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
                 Email d'Enregistrement
@@ -102,7 +109,9 @@ export const ForgotPassword: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="w-full h-16 bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 pr-14 font-sans font-bold text-on-surface focus:border-primary outline-none transition-all tracking-tight"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'forgot-password-error' : undefined}
+                  className="field-control min-h-16 rounded-2xl px-6 pr-14 tracking-tight"
                   placeholder="votre@email.com"
                 />
                 <Mail className="absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2 text-on-surface-variant" />

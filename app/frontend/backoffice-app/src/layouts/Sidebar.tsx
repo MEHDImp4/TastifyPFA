@@ -58,7 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-4 px-8 py-3.5 transition-all duration-200 group relative border-l-2
+    flex min-h-[44px] items-center gap-4 px-8 py-3.5 transition-all duration-200 group relative border-l-2
     ${isActive 
       ? 'text-on-background bg-surface-container-high font-bold border-on-background border-primary' 
       : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container-low border-transparent'
@@ -78,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         role="navigation"
         aria-label="Navigation principale"
         className={`
-        fixed inset-y-0 left-0 z-50 bg-surface border-r border-outline
+        fixed inset-y-0 left-0 z-50 w-[min(20rem,calc(100vw-2rem))] bg-surface border-r border-outline
         transform transition-all duration-300
         md:relative md:flex md:flex-col md:translate-x-0 md:w-64
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => logout()}
             data-testid="logout-button"
-            className="flex items-center gap-3 w-full py-3 border border-outline hover:border-error text-on-surface-variant hover:text-error transition-all duration-200 rounded-md group"
+            className="flex min-h-[44px] items-center gap-3 w-full py-3 border border-outline hover:border-error text-on-surface-variant hover:text-error transition-all duration-200 rounded-md group"
           >
             <LogOut strokeWidth={1.5} className="h-4 w-4 ml-4 shrink-0" />
             <span className="text-[10px] font-bold uppercase tracking-widest">Fermer Session</span>

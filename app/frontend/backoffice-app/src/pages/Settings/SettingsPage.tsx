@@ -53,7 +53,7 @@ export const SettingsPage: React.FC = () => {
           <h1 aria-label="Paramètres système" className="text-sm font-bold tracking-widest text-on-background uppercase">Console Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Configuration globale de l'établissement</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
           <button onClick={fetchSettings} className="btn-ghost h-10 px-4">
             <RotateCcw className="w-3.5 h-3.5" /> <span>Réinitialiser</span>
           </button>
@@ -75,7 +75,7 @@ export const SettingsPage: React.FC = () => {
           </div>
         ) : (
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="atelier-card p-10 space-y-10">
+            <div className="atelier-card p-6 md:p-10 space-y-10">
               <div className="flex items-center gap-3 border-b border-outline pb-4">
                 <Building2 className="w-5 h-5 text-on-surface-variant opacity-40" />
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-background">Identité Visuelle & Légale</h3>
@@ -89,7 +89,7 @@ export const SettingsPage: React.FC = () => {
                   aria-label="Nom de l'enseigne"
                   value={config.nom ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, nom: e.target.value } : null)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm uppercase"
+                  className="field-control uppercase"
                 />
               </div>
               <div className="space-y-2">
@@ -102,7 +102,7 @@ export const SettingsPage: React.FC = () => {
                   value={config.description ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, description: e.target.value } : null)}
                   rows={3}
-                  className="w-full bg-background border border-outline rounded-md px-4 py-3 font-bold text-sm resize-none"
+                  className="field-control min-h-28 py-3 resize-none"
                 />
               </div>
               <div className="space-y-2">
@@ -114,7 +114,7 @@ export const SettingsPage: React.FC = () => {
                   aria-label="Téléphone"
                   value={config.telephone ?? ''}
                   onChange={e => setConfig(prev => prev ? { ...prev, telephone: e.target.value } : null)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  className="field-control"
                 />
               </div>
             </div>

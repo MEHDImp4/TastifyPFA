@@ -53,5 +53,8 @@ async function waitForAuthApi(baseURL: string) {
 export default async function globalSetup() {
   const baseURL = process.env.BACKOFFICE_BASE_URL ?? 'http://127.0.0.1:3000';
   await waitForApp(baseURL);
+  if (process.env.BACKOFFICE_SKIP_AUTH_HEALTHCHECK === 'true') {
+    return;
+  }
   await waitForAuthApi(baseURL);
 }

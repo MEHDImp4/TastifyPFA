@@ -151,8 +151,8 @@ export const PlatPage: React.FC = () => {
           <h1 aria-label="Gestion des plats" className="text-sm font-bold tracking-widest text-on-background uppercase">Catalogue des Plats</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Gestion de l'offre gastronomique</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-4">
-          <div className="relative group">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
+          <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input
               type="text"
@@ -160,7 +160,7 @@ export const PlatPage: React.FC = () => {
               placeholder="Rechercher un plat..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
           <button data-testid="plat-create-button" onClick={openCreate} className="btn-primary h-10 px-6">
@@ -171,7 +171,7 @@ export const PlatPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
         {deleteError && (
-          <p className="mb-4 text-[10px] font-bold text-error uppercase tracking-widest">{deleteError}</p>
+          <p role="alert" className="form-error mb-4">{deleteError}</p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPlats.map(p => (
@@ -187,8 +187,8 @@ export const PlatPage: React.FC = () => {
               <div className="mt-4 flex justify-between items-end">
                 <span className="font-mono text-sm font-bold text-on-background">{parseFloat(p.prix).toFixed(0)} DH</span>
                 <div className="flex gap-2">
-                  <button data-testid={`plat-edit-${p.id}`} aria-label={`Modifier ${p.nom}`} onClick={() => openEdit(p)} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button data-testid={`plat-delete-${p.id}`} aria-label={`Supprimer ${p.nom}`} onClick={() => handleDelete(p.id)} className="p-2 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-edit-${p.id}`} aria-label={`Modifier ${p.nom}`} onClick={() => openEdit(p)} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`plat-delete-${p.id}`} aria-label={`Supprimer ${p.nom}`} onClick={() => handleDelete(p.id)} className="btn-icon text-error hover:border-error/30 hover:text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
             </div>
@@ -204,14 +204,14 @@ export const PlatPage: React.FC = () => {
               <h2 id="plat-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
                 {editor.mode === 'create' ? 'Nouvelle Fiche' : 'Modifier Fiche'}
               </h2>
-              <button aria-label="Fermer l'éditeur" onClick={closeEditor} className="p-2 hover:bg-surface-container-high rounded text-on-surface-variant">
+              <button aria-label="Fermer l'éditeur" onClick={closeEditor} className="btn-icon">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="p-8 space-y-6 flex-1 overflow-y-auto">
               {saveError && (
-                <p className="text-[10px] font-bold text-error uppercase tracking-widest">{saveError}</p>
+                <p id="plat-save-error" role="alert" className="form-error">{saveError}</p>
               )}
               <div className="space-y-2">
                 <label htmlFor="plat-nom" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nom</label>
@@ -220,7 +220,9 @@ export const PlatPage: React.FC = () => {
                   data-testid="plat-name-input"
                   value={editor.nom}
                   onChange={e => setEditor(prev => prev ? { ...prev, nom: e.target.value } : prev)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  aria-invalid={Boolean(saveError)}
+                  aria-describedby={saveError ? 'plat-save-error' : undefined}
+                  className="field-control"
                 />
               </div>
               <div className="space-y-2">
@@ -232,7 +234,7 @@ export const PlatPage: React.FC = () => {
                   step="0.01"
                   value={editor.prix}
                   onChange={e => setEditor(prev => prev ? { ...prev, prix: e.target.value } : prev)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  className="field-control"
                 />
               </div>
               <div className="space-y-2">
@@ -243,7 +245,7 @@ export const PlatPage: React.FC = () => {
                   value={editor.description}
                   onChange={e => setEditor(prev => prev ? { ...prev, description: e.target.value } : prev)}
                   rows={3}
-                  className="w-full bg-background border border-outline rounded-md px-4 py-3 font-bold text-sm resize-none"
+                  className="field-control min-h-28 py-3 resize-none"
                 />
               </div>
               <div className="space-y-2">
@@ -254,7 +256,7 @@ export const PlatPage: React.FC = () => {
                   type="number"
                   value={editor.tempsPrep}
                   onChange={e => setEditor(prev => prev ? { ...prev, tempsPrep: e.target.value } : prev)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  className="field-control"
                 />
               </div>
               {categories.length > 0 && (
@@ -264,7 +266,7 @@ export const PlatPage: React.FC = () => {
                     id="plat-categorie"
                     value={editor.categorieId}
                     onChange={e => setEditor(prev => prev ? { ...prev, categorieId: e.target.value } : prev)}
-                    className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                    className="field-control"
                   >
                     {categories.map(c => <option key={c.id} value={c.id}>{c.nom}</option>)}
                   </select>

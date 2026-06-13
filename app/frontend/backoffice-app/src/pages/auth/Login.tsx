@@ -31,6 +31,7 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const errorId = 'staff-login-error';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,9 +76,9 @@ export const Login: React.FC = () => {
         <div className="atelier-card p-10 md:p-12">
           <AnimatePresence mode="wait">
             {error && (
-              <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mb-8 p-4 border border-error/10 bg-error/[0.02] rounded-md flex items-center gap-3">
+              <motion.div id={errorId} role="alert" initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mb-8 form-error flex items-center gap-3">
                  <ShieldAlert className="w-4 h-4 text-error" strokeWidth={1.5} />
-                 <span className="text-[10px] font-bold text-error uppercase tracking-widest">{error}</span>
+                 <span className="text-sm font-bold text-error">{error}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -91,8 +92,10 @@ export const Login: React.FC = () => {
                 type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
                 placeholder="Identifiant"
                 required aria-required="true"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? errorId : undefined}
                 autoComplete="username"
-                className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
+                className="field-control"
               />
             </div>
 
@@ -105,15 +108,17 @@ export const Login: React.FC = () => {
                   type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
                   placeholder="••••••••"
                   required aria-required="true"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? errorId : undefined}
                   autoComplete="current-password"
-                  className="w-full h-12 bg-surface-container-low border border-outline rounded-md px-4 pr-12 font-sans text-sm text-on-surface focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30"
+                  className="field-control pr-12"
                 />
                 <button
                   data-testid="login-password-visibility"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/50 hover:text-on-background transition-colors"
+                  className="btn-icon absolute right-2 top-1/2 -translate-y-1/2 border-transparent bg-transparent"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
                 </button>
@@ -137,7 +142,7 @@ export const Login: React.FC = () => {
                <div className="w-1 h-1 rounded-full bg-outline" />
                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> Connexion sécurisée</span>
             </div>
-            <Link to="/" className="text-[10px] font-bold text-on-surface-variant/40 hover:text-on-background transition-colors uppercase tracking-[0.2em]">Retour au portail</Link>
+            <Link to="/" className="min-h-[44px] inline-flex items-center text-[10px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.2em]">Retour au portail</Link>
         </motion.div>
       </motion.div>
     </div>

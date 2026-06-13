@@ -38,6 +38,7 @@ export const AccountPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [comment, setComment] = useState('');
+  const [reviewError, setReviewError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const hasPaidOrders = orders.some(o => o.statut === 'PAYEE');
   useBodyScrollLock(isReviewModalOpen && hasPaidOrders);
@@ -74,12 +75,17 @@ export const AccountPage: React.FC = () => {
         toast.error("Vous devez avoir réglé une commande pour donner votre avis.");
         return;
     }
+    if (comment.trim().length < 10) {
+        setReviewError('Votre avis doit contenir au moins 10 caractères.');
+        return;
+    }
     setIsSubmitting(true);
     try {
         await avisApi.createAvis({ commentaire: comment, note: 5 });
         toast.success('Avis enregistré');
         setIsReviewModalOpen(false);
         setComment('');
+        setReviewError('');
     } catch (err) {
         toast.error('Échec de l\'envoi');
     } finally {
@@ -187,7 +193,7 @@ export const AccountPage: React.FC = () => {
                             <div className="flex justify-between items-center border-t border-outline pt-6">
                                 <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">{reward.points_requis} pts</span>
                                 {isUnlockable ? (
-                                    <button className="text-on-background font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
+                                    <button className="min-h-11 px-3 -mr-3 text-on-background font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 rounded-md hover:bg-surface-container-high hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
                                 ) : (
                                     <span className="font-sans text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">Verrouillé</span>
                                 )}
@@ -239,7 +245,7 @@ export const AccountPage: React.FC = () => {
                                 <span className={`px-4 py-1.5 rounded-full font-sans text-[9px] font-black uppercase tracking-widest ${order.statut === 'PAYEE' ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'}`}>
                                     {order.statut}
                                 </span>
-                                <button aria-label="Options de commande" className="p-2 text-on-surface-variant/40 hover:text-on-background transition-all"><MoreVertical className="w-5 h-5" /></button>
+                                <button aria-label="Options de commande" className="btn-icon border-transparent bg-transparent text-on-surface-variant hover:text-on-background"><MoreVertical className="w-5 h-5" /></button>
                             </div>
                         </motion.div>
                     )) : (
@@ -253,9 +259,9 @@ export const AccountPage: React.FC = () => {
 
               {/* Reservations */}
               <div className="space-y-10">
-                 <div className="flex justify-between items-end border-b border-outline pb-6">
+                 <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end border-b border-outline pb-6">
                     <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Réservations</h2>
-                    <Link to="/reservations" className="font-sans text-[10px] font-black text-on-background hover:text-on-surface-variant transition-colors uppercase tracking-[0.2em] border-b border-outline pb-1">Réserver une table</Link>
+                    <Link to="/reservations" className="min-h-11 inline-flex items-center self-start font-sans text-[10px] font-black text-on-background hover:text-on-surface-variant transition-colors uppercase tracking-[0.2em] border-b border-outline">Réserver une table</Link>
                  </div>
 
                  <div className="space-y-6">
@@ -305,19 +311,19 @@ export const AccountPage: React.FC = () => {
                        <button
                         key={i} onClick={item.action}
                         disabled={item.highlight === false}
-                        className={`w-full flex items-center justify-between p-3 rounded-2xl transition-all group ${item.highlight === false ? 'opacity-20 cursor-not-allowed' : 'hover:bg-white/5'}`}
+                        className={`w-full min-h-12 flex items-center justify-between p-3 rounded-2xl transition-all group ${item.highlight === false ? 'opacity-45 cursor-not-allowed' : 'hover:bg-white/5'}`}
                        >
                           <div className="flex items-center gap-4">
                              <item.icon className={`w-4 h-4 ${item.highlight ? 'text-background' : ''}`} />
                              <span className="font-sans text-[11px] font-bold uppercase tracking-widest">{item.label}</span>
                           </div>
-                          {item.highlight !== false && <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />}
+                          {item.highlight !== false && <ChevronRight className="w-4 h-4 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-x-1 transition-all" />}
                        </button>
                     ))}
                  </div>
 
                  <div className="pt-10 border-t border-white/5 relative z-10">
-                    <button onClick={() => logout()} className="w-full flex items-center gap-4 text-background p-3 rounded-2xl hover:bg-white/10 transition-all font-sans text-[11px] font-black uppercase tracking-[0.4em]">
+                    <button onClick={() => logout()} className="w-full min-h-12 flex items-center gap-4 text-background p-3 rounded-2xl hover:bg-white/10 transition-all font-sans text-[11px] font-black uppercase tracking-widest">
                        <LogOut className="w-4 h-4" />
                        Fermer la session
                     </button>
@@ -347,14 +353,26 @@ export const AccountPage: React.FC = () => {
                  <h3 id="review-dialog-title" className="text-3xl md:text-5xl font-black text-on-background tracking-tight mb-4">Votre avis nous est précieux.</h3>
                  <p className="text-on-surface-variant font-body mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
                  
-                 <form onSubmit={handleReviewSubmit} className="w-full space-y-10">
+                 <form onSubmit={handleReviewSubmit} noValidate className="w-full space-y-6">
                     <label htmlFor="review-comment" className="sr-only">Votre avis</label>
                     <textarea 
                         id="review-comment"
-                        required value={comment} onChange={(e) => setComment(e.target.value)}
-                        className="w-full p-8 bg-surface-container-high border border-outline rounded-lg text-2xl text-on-background focus:border-on-background outline-none transition-all resize-none h-48 placeholder:text-on-surface-variant/40"
+                        required
+                        value={comment}
+                        onChange={(e) => {
+                            setComment(e.target.value);
+                            if (reviewError) setReviewError('');
+                        }}
+                        aria-invalid={Boolean(reviewError)}
+                        aria-describedby={reviewError ? 'review-comment-error' : undefined}
+                        className="field-control w-full p-6 md:p-8 rounded-lg text-lg md:text-2xl resize-none h-48 placeholder:text-on-surface-variant"
                         placeholder="Écrivez ici..."
                     />
+                    {reviewError && (
+                        <p id="review-comment-error" role="alert" className="form-error text-left">
+                            {reviewError}
+                        </p>
+                    )}
 
                     <button disabled={isSubmitting} type="submit" className="btn-primary w-full min-h-14 gap-4">
                        {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Transmettre mon avis</span>}

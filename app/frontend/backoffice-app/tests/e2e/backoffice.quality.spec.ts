@@ -62,6 +62,11 @@ const kitchenMenuRows = [
   { id: 8101, nom: 'Tagine Safran', prix: '96.00', description: 'Slow finish', temps_preparation: 22, categorie: 1, image: null, est_active: true, est_disponible: true },
 ];
 
+const DESIGN_VIEWPORTS = [
+  { width: 375, height: 812 },
+  { width: 1440, height: 900 },
+];
+
 const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
   const results = await new AxeBuilder({ page }).include('main').analyze();
   const blockingViolations = results.violations.filter(({ impact }) =>
@@ -72,7 +77,7 @@ const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page
 };
 
 const openNavigation = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.getByRole('button', { name: /open navigation menu/i }).click();
+  await page.getByRole('button', { name: /ouvrir le menu de navigation/i }).click();
 };
 
 const expectNoUnexpectedHorizontalOverflow = async (page: Parameters<typeof test>[0]['page']) => {
@@ -87,6 +92,34 @@ const expectNoUnexpectedHorizontalOverflow = async (page: Parameters<typeof test
   });
 
   expect(hasOverflow).toBe(false);
+};
+
+const expectTouchTargetsAtLeast44 = async (page: Parameters<typeof test>[0]['page']) => {
+  const offenders = await page.locator('button, [role="button"], input, select, textarea').evaluateAll((elements) =>
+    elements
+      .filter((element) => {
+        const style = window.getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return (
+          style.visibility !== 'hidden' &&
+          style.display !== 'none' &&
+          rect.width > 0 &&
+          rect.height > 0
+        );
+      })
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          tag: element.tagName,
+          text: (element.textContent || element.getAttribute('aria-label') || '').trim().slice(0, 60),
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+        };
+      })
+      .filter(({ width, height }) => width < 44 || height < 44),
+  );
+
+  expect(offenders).toEqual([]);
 };
 
 const expectVisibleLogoutControl = async (page: Parameters<typeof test>[0]['page']) => {
@@ -229,6 +262,7 @@ test.describe('authenticated backoffice quality coverage', () => {
 
     test('keeps dashboard, menu operations, and settings free of blocking axe violations', async ({ page }) => {
       await mockManagerSettings(page);
+      await mockKitchenMenuCatalog(page);
       await page.route('**/api/analytics/dashboard/', async route => {
         await route.fulfill({
           status: 200, contentType: 'application/json',
@@ -241,11 +275,11 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expectNoBlockingViolations(page);
 
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
       await expectNoBlockingViolations(page);
 
       await page.goto('/settings');
-      await expect(page.getByRole('heading', { name: 'System Settings' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Paramètres système' })).toBeVisible();
       await expectNoBlockingViolations(page);
     });
 
@@ -270,25 +304,25 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockManagerAvis(page);
 
       await page.goto('/stock');
-      await expect(page.getByRole('heading', { name: 'Inventory & Logistics' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
       await expect(page.getByText('Safran Atlas')).toBeVisible();
-      await page.getByRole('button', { name: /add item/i }).click();
-      await expect(page.getByRole('heading', { name: 'New Resource' })).toBeVisible();
-      await page.getByRole('button', { name: /discard/i }).last().click();
-      await expect(page.getByRole('heading', { name: 'New Resource' })).toHaveCount(0);
+      await page.getByRole('button', { name: /ajouter/i }).click();
+      await expect(page.getByRole('heading', { name: /Nouvel ingrédient/i })).toBeVisible();
+      await page.getByRole('button', { name: /annuler/i }).last().click();
+      await expect(page.getByRole('heading', { name: /Nouvel ingrédient/i })).toHaveCount(0);
 
       await page.goto('/hr');
-      await expect(page.getByRole('heading', { name: 'Human Resources' })).toBeVisible();
-      await page.getByPlaceholder('SEARCH BY NAME, ROLE, OR ID...').fill('serveur');
+      await expect(page.getByRole('heading', { name: 'Ressources humaines' })).toBeVisible();
+      await page.getByPlaceholder(/Rechercher nom/i).fill('serveur');
       await expect(page.getByRole('heading', { name: 'Salma Floor' })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Leila Lead' })).toHaveCount(0);
 
       await page.goto('/avis');
-      await expect(page.getByRole('heading', { name: 'Client Sentiment' })).toBeVisible();
-      await page.getByPlaceholder('FILTER ENTRIES...').fill('dessert');
+      await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
+      await page.getByPlaceholder(/Filtrer les avis/i).fill('dessert');
       await expect(page.getByText('Dessert timing drifted but staff recovered well.')).toBeVisible();
       await expect(page.getByText('Fast service and a calm floor handoff.')).toHaveCount(0);
-      await expect(page.getByRole('button', { name: /dispatch response/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /archiver/i })).toBeVisible();
 
       await page.goto('/maintenance');
       await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
@@ -304,7 +338,7 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 1180, height: 820 });
       await page.goto('/stock');
-      await expect(page.getByRole('button', { name: /add item/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /ajouter/i })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 1024, height: 768 });
@@ -314,12 +348,55 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 820, height: 1180 });
       await page.goto('/avis');
-      await expect(page.getByRole('button', { name: /dispatch response/i }).first()).toBeVisible();
+      await expect(page.getByRole('button', { name: /archiver/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.goto('/settings');
-      await expect(page.getByRole('button', { name: 'Deploy Changes' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Enregistrer les paramètres' })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
+    });
+
+    test('keeps manager primary screens stable at DesignMeter mobile and desktop sizes', async ({ page }) => {
+      await mockManagerSettings(page);
+      await mockManagerStock(page);
+      await mockManagerHr(page);
+      await mockManagerAvis(page);
+      await mockKitchenMenuCatalog(page);
+      await page.route('**/api/analytics/dashboard/', async route => {
+        await route.fulfill({
+          status: 200, contentType: 'application/json',
+          body: JSON.stringify({ todayRevenue: 0, activeTables: 0, pendingOrders: 0, avgPrepTime: 0, revenue7Days: [], topDishes: [] }),
+        });
+      });
+
+      for (const viewport of DESIGN_VIEWPORTS) {
+        await page.setViewportSize(viewport);
+
+        await page.goto('/');
+        await expect(page.getByText('Live Orchestration Feed')).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/menu');
+        await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/stock');
+        await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/avis');
+        await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/settings');
+        await expect(page.getByRole('button', { name: 'Enregistrer les paramètres' })).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+      }
     });
   });
 
@@ -392,6 +469,26 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
     });
+
+    test('keeps serveur salle and reservations stable at DesignMeter sizes', async ({ page }) => {
+      await mockSalle(page);
+      await mockReservations(page);
+
+      for (const viewport of DESIGN_VIEWPORTS) {
+        await page.setViewportSize(viewport);
+
+        await page.goto('/salle');
+        await expect(page.getByText('Main Dining Area')).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/reservations');
+        await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+        await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+      }
+    });
   });
 
   test.describe('cuisinier', () => {
@@ -418,7 +515,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expectNoBlockingViolations(page);
 
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
       await expectNoBlockingViolations(page);
     });
 
@@ -448,9 +545,29 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 430, height: 932 });
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
       await expect(page.getByTestId('plat-card-8101')).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
+    });
+
+    test('keeps kds and kitchen menu stable at DesignMeter sizes', async ({ page }) => {
+      await mockKds(page);
+      await mockKitchenMenuCatalog(page);
+
+      for (const viewport of DESIGN_VIEWPORTS) {
+        await page.setViewportSize(viewport);
+
+        await page.goto('/kds');
+        await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+
+        await page.goto('/menu');
+        await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+        await expect(page.getByTestId('plat-card-8101')).toBeVisible();
+        await expectNoUnexpectedHorizontalOverflow(page);
+        await expectTouchTargetsAtLeast44(page);
+      }
     });
   });
 });

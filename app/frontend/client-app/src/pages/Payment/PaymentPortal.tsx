@@ -98,7 +98,7 @@ export const PaymentPortal: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background relative overflow-hidden p-6">
         <div className="flex flex-col items-center gap-6 relative z-10">
             <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1}/>
             <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em]">Initialisation du terminal de paiement</span>
@@ -107,19 +107,19 @@ export const PaymentPortal: React.FC = () => {
   );
 
   if (isSuccess) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center font-body">
-        <div className="w-full max-w-xl atelier-card p-12 relative overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 text-center font-body">
+        <div className="w-full max-w-xl atelier-card p-6 sm:p-10 md:p-12 relative overflow-hidden">
             <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-10" strokeWidth={1} />
             <h2 className="text-4xl font-bold text-on-surface mb-4 leading-none">Paiement Sécurisé. <span className="sr-only">Payment Secured.</span></h2>
-            <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed mb-12">Merci de votre visite chez {brandName}. Votre session a été réglée avec succès.</p>
-            <button onClick={() => navigate('/')} className="btn-primary mx-auto w-fit px-16 h-14">Retour à l'Accueil</button>
+            <p className="text-base sm:text-lg text-on-surface-variant uppercase tracking-wider sm:tracking-widest leading-relaxed mb-10 md:mb-12">Merci de votre visite chez {brandName}. Votre session a été réglée avec succès.</p>
+            <button onClick={() => navigate('/')} className="btn-primary mx-auto w-full sm:w-fit px-8 sm:px-16 h-14">Retour à l'Accueil</button>
         </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background font-body selection:bg-on-background/10 flex flex-col items-center py-12 md:py-24 px-6 overflow-x-hidden">
-        <main className="w-full max-w-2xl flex flex-col gap-12">
+    <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center py-8 md:py-24 px-4 sm:px-6 overflow-x-hidden">
+        <main className="w-full max-w-2xl flex flex-col gap-8 md:gap-12">
             
             {/* Header Section */}
             <div className="text-center space-y-4">
@@ -131,27 +131,27 @@ export const PaymentPortal: React.FC = () => {
                 >
                   {session.montant_restant} DH
                 </div>
-                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Inclut les frais de service automatisés</p>
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Inclut les frais de service automatisés</p>
             </div>
 
             {/* Split Options */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <button onClick={() => setSplitMode('ALL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                <button aria-pressed={splitMode === 'ALL'} onClick={() => setSplitMode('ALL')} className={`min-h-28 p-5 sm:p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-background hover:border-on-background'}`}>
                    <Receipt className="w-5 h-5" strokeWidth={1.5}/>
                    <span className="text-[10px] font-bold uppercase tracking-widest">Tout Régler</span>
                 </button>
-                <button onClick={() => setSplitMode('EQUAL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'EQUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                <button aria-pressed={splitMode === 'EQUAL'} onClick={() => setSplitMode('EQUAL')} className={`min-h-28 p-5 sm:p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'EQUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-background hover:border-on-background'}`}>
                    <PieChart className="w-5 h-5" strokeWidth={1.5}/>
                    <span className="text-[10px] font-bold uppercase tracking-widest">Partager</span>
                 </button>
-                <button onClick={() => setSplitMode('INDIVIDUAL')} className={`p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'INDIVIDUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-surface-variant hover:border-on-background'}`}>
+                <button aria-pressed={splitMode === 'INDIVIDUAL'} onClick={() => setSplitMode('INDIVIDUAL')} className={`min-h-28 p-5 sm:p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'INDIVIDUAL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-background hover:border-on-background'}`}>
                    <ListOrdered className="w-5 h-5" strokeWidth={1.5}/>
                    <span className="text-[10px] font-bold uppercase tracking-widest">Par Article</span>
                 </button>
             </div>
 
             {splitMode === 'INDIVIDUAL' && (
-                <div className="atelier-card p-8 space-y-6">
+                <div className="atelier-card p-5 sm:p-8 space-y-6">
                     <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Détail par Article</label>
                     <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                         {session.lignes.map((l: any) => (
@@ -171,9 +171,9 @@ export const PaymentPortal: React.FC = () => {
             )}
             
             {splitMode === 'EQUAL' && (
-                <div className="atelier-card p-10 flex flex-col items-center gap-6">
+                <div className="atelier-card p-6 sm:p-10 flex flex-col items-center gap-6">
                     <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre de Parts</label>
-                    <div className="flex items-center gap-12 bg-background rounded-md p-3 border border-outline">
+                    <div className="flex items-center gap-6 sm:gap-12 bg-background rounded-md p-3 border border-outline">
                         <button aria-label="Diminuer le nombre de parts" onClick={() => setSplitCount(Math.max(2, splitCount - 1))} className="w-12 h-12 rounded bg-surface border border-outline flex items-center justify-center hover:bg-on-background hover:text-background transition-all">
                         <span aria-hidden="true">—</span>
                         <span className="sr-only">Diminuer le nombre de parts</span>
@@ -188,7 +188,7 @@ export const PaymentPortal: React.FC = () => {
             )}
 
             {/* Action / QR Section */}
-            <div className="atelier-card p-10 flex flex-col items-center gap-8 shadow-sm">
+            <div className="atelier-card p-6 sm:p-10 flex flex-col items-center gap-8 shadow-sm">
                 <div className="text-center space-y-2">
                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Autoriser l'Allocation Individuelle</p>
                    <p className="font-mono text-3xl font-bold text-on-background tabular-nums" data-testid="payment-payable-amount">{payableAmount} DH</p>
@@ -198,7 +198,7 @@ export const PaymentPortal: React.FC = () => {
                    <QrCode className="w-40 h-40 text-on-background stroke-[1] group-hover:scale-105 transition-all duration-700" />
                 </div>
                 
-                <p className="text-[14px] text-on-surface-variant max-w-xs text-center uppercase tracking-tight opacity-40">Scannez pour une autorisation biométrique sécurisée via Apple Pay ou Google Pay</p>
+                <p className="text-[14px] text-on-surface-variant max-w-xs text-center uppercase tracking-tight">Scannez pour une autorisation biométrique sécurisée via Apple Pay ou Google Pay</p>
                 
                 <div className="w-full space-y-4">
                     <button 
@@ -207,7 +207,7 @@ export const PaymentPortal: React.FC = () => {
                     >
                         {isPaying ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Confirmer le Règlement</span><span className="sr-only">Confirm Payment</span><ArrowRight className="w-4 h-4" /></>}
                     </button>
-                    <div className="flex items-center justify-center gap-2 opacity-20">
+                    <div className="flex items-center justify-center gap-2 text-on-surface-variant">
                        <ShieldCheck className="w-3 h-3" />
                        <span className="text-[8px] font-bold uppercase tracking-[0.3em]">Centre de Sécurité Cryptographique de Bout en Bout</span>
                     </div>

@@ -102,7 +102,7 @@ export const MenuPage: React.FC = () => {
                 placeholder="RECHERCHER UN PLAT..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-11 bg-background border border-outline rounded-md pl-12 pr-4 font-sans text-xs text-on-background focus:border-on-background outline-none transition-all placeholder:text-on-surface-variant/30 uppercase"
+                className="field-control pl-12 pr-4 text-xs uppercase placeholder:text-on-surface-variant/70"
               />
            </div>
         </div>
@@ -113,7 +113,7 @@ export const MenuPage: React.FC = () => {
         <div className="max-w-[1200px] mx-auto px-client-margin py-4 md:py-6 flex gap-4 md:gap-8 overflow-x-auto no-scrollbar relative">
            <button
              onClick={() => setActiveCat(null)}
-             className={`text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === null ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
+             className={`min-h-11 px-1 text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === null ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
            >
              Tous les plats
              {activeCat === null && (
@@ -124,7 +124,7 @@ export const MenuPage: React.FC = () => {
              <button
                 key={cat.id}
                 onClick={() => setActiveCat(cat.id)}
-                className={`text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === cat.id ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
+                className={`min-h-11 px-1 text-ui-label text-[10px] whitespace-nowrap transition-all relative ${activeCat === cat.id ? 'text-on-background font-bold' : 'text-on-surface-variant hover:text-on-background'}`}
              >
                 {cat.nom}
                 {activeCat === cat.id && (
@@ -150,7 +150,16 @@ export const MenuPage: React.FC = () => {
                   layout
                   variants={itemVariants}
                   data-testid={`menu-card-${plat.id}`}
-                  className={`group atelier-card p-6 flex flex-col gap-6 cursor-pointer ${!plat.est_disponible ? 'opacity-30 grayscale' : ''}`}
+                  role={plat.est_disponible ? 'button' : undefined}
+                  tabIndex={plat.est_disponible ? 0 : -1}
+                  onKeyDown={(e) => {
+                    if (!plat.est_disponible) return;
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedPlat(plat);
+                    }
+                  }}
+                  className={`group atelier-card p-5 sm:p-6 flex flex-col gap-5 sm:gap-6 cursor-pointer ${!plat.est_disponible ? 'opacity-60 grayscale' : ''}`}
                   onClick={() => plat.est_disponible && setSelectedPlat(plat)}
                 >
                   <div className="relative aspect-video rounded-lg overflow-hidden border border-outline grayscale group-hover:grayscale-0 transition-all duration-700">
@@ -178,7 +187,7 @@ export const MenuPage: React.FC = () => {
                       <button
                         aria-label={`Ajouter ${plat.nom} au panier`}
                         onClick={(e) => { e.stopPropagation(); addItem(plat); }}
-                        className="btn-primary w-full h-10 text-[10px]"
+                        className="btn-primary w-full min-h-11 text-[10px]"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                         Ajouter au panier
@@ -191,7 +200,7 @@ export const MenuPage: React.FC = () => {
         </motion.div>
 
         {filteredPlats.length === 0 && (
-           <div className="py-32 flex flex-col items-center justify-center opacity-10 gap-4">
+           <div className="py-24 sm:py-32 flex flex-col items-center justify-center text-on-surface-variant gap-4">
               <ShoppingBag className="w-12 h-12 stroke-[1]" />
               <p className="text-ui-label">AUCUN RÉSULTAT TROUVÉ</p>
            </div>
@@ -201,7 +210,7 @@ export const MenuPage: React.FC = () => {
       {/* Detailed Modal */}
       <AnimatePresence>
         {selectedPlat && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true" aria-label={`Détails de ${selectedPlat.nom}`}>
              <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                className="absolute inset-0 bg-background/80 backdrop-blur-xl"
@@ -211,9 +220,9 @@ export const MenuPage: React.FC = () => {
                initial={{ opacity: 0, scale: 0.98 }}
                animate={{ opacity: 1, scale: 1 }}
                exit={{ opacity: 0, scale: 0.98 }}
-               className="relative w-full max-w-4xl max-h-[calc(100dvh-2rem)] bg-surface border border-outline rounded-lg overflow-hidden shadow-2xl flex flex-col md:flex-row"
+               className="relative w-full max-w-4xl max-h-[calc(100dvh-1.5rem)] bg-surface border border-outline rounded-lg overflow-hidden shadow-2xl flex flex-col md:flex-row"
              >
-                <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="absolute top-6 right-6 z-20 p-2 text-on-surface-variant hover:text-on-background transition-colors"><X className="w-5 h-5" strokeWidth={1.5} /></button>
+                <button aria-label="Fermer le détail du plat" onClick={() => setSelectedPlat(null)} className="btn-icon absolute top-4 right-4 md:top-6 md:right-6 z-20 bg-surface/90"><X className="w-5 h-5" strokeWidth={1.5} /></button>
                 
                 <div className="w-full md:w-1/2 aspect-[4/3] md:aspect-auto bg-surface-container-high relative border-b md:border-b-0 md:border-r border-outline shrink-0">
                    {selectedPlat.image ? (
@@ -223,7 +232,7 @@ export const MenuPage: React.FC = () => {
                    )}
                 </div>
 
-                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col overflow-y-auto custom-scrollbar">
+                <div className="w-full md:w-1/2 p-5 sm:p-6 md:p-10 flex flex-col overflow-y-auto custom-scrollbar">
                    <div className="mb-8">
                       <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4 block">DÉTAILS DU PLAT</span>
                       <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6 break-words">{selectedPlat.nom}</h2>
@@ -237,14 +246,14 @@ export const MenuPage: React.FC = () => {
                    <div className="space-y-8 pt-8 border-t border-outline mt-auto">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-12">
                          <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Préparation</p>
+                            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Préparation</p>
                             <div className="flex items-center gap-2 font-mono text-sm text-on-surface">
                                <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
                                {selectedPlat.temps_preparation}m
                             </div>
                          </div>
                          <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Catégorie</p>
+                            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Catégorie</p>
                             <div className="text-[11px] font-bold text-on-surface uppercase tracking-wider">
                                {categories.find(c => c.id === selectedPlat.categorie)?.nom || 'Plat'}
                             </div>

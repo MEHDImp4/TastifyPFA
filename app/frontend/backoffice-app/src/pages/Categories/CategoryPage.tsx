@@ -136,8 +136,8 @@ export const CategoryPage: React.FC = () => {
           <h1 aria-label="Gestion des catégories" className="text-sm font-bold tracking-widest text-on-background uppercase">Secteurs & Catégories</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Organisation hiérarchique du menu</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-4">
-          <div className="relative group">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
+          <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
             <input
               type="text"
@@ -145,7 +145,7 @@ export const CategoryPage: React.FC = () => {
               placeholder="Rechercher..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-48 h-10 bg-background border border-outline pl-10 pr-4 rounded text-[10px] font-bold text-on-background focus:border-on-background outline-none transition-all uppercase placeholder:text-on-surface-variant/30"
+              className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
           <button data-testid="category-create-button" onClick={openCreate} className="btn-primary h-10 px-6">
@@ -168,9 +168,9 @@ export const CategoryPage: React.FC = () => {
                   <div className="w-8 h-8 rounded border border-outline bg-background flex items-center justify-center font-bold text-[10px]">{c.ordre_affichage}</div>
                   <h3 className="text-sm font-bold uppercase tracking-tight text-on-background">{c.nom}</h3>
                 </div>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button data-testid={`category-edit-${c.id}`} aria-label={`Modifier ${c.nom}`} onClick={() => openEdit(c)} className="p-1.5 hover:bg-surface-container-high rounded text-on-surface-variant"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button data-testid={`category-delete-${c.id}`} aria-label={`Supprimer ${c.nom}`} onClick={() => handleDelete(c.id)} className="p-1.5 hover:bg-error/5 rounded text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+                <div className="flex gap-2">
+                  <button data-testid={`category-edit-${c.id}`} aria-label={`Modifier ${c.nom}`} onClick={() => openEdit(c)} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button data-testid={`category-delete-${c.id}`} aria-label={`Supprimer ${c.nom}`} onClick={() => handleDelete(c.id)} className="btn-icon text-error hover:border-error/30 hover:text-error"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
               <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40">{c.description || 'Aucune description spécifiée.'}</p>
@@ -187,14 +187,14 @@ export const CategoryPage: React.FC = () => {
               <h2 id="category-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
                 {editor.mode === 'create' ? 'Nouveau Secteur' : 'Modifier Secteur'}
               </h2>
-              <button data-testid="close-editor" aria-label="Fermer l'éditeur" onClick={closeEditor} className="p-2 hover:bg-surface-container-high rounded transition-all text-on-surface-variant">
+              <button data-testid="close-editor" aria-label="Fermer l'éditeur" onClick={closeEditor} className="btn-icon">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="p-8 space-y-6 overflow-y-auto">
               {saveError && (
-                <p className="text-[10px] font-bold text-error uppercase tracking-widest">{saveError}</p>
+                <p id="category-save-error" role="alert" className="form-error">{saveError}</p>
               )}
               <div className="space-y-2">
                 <label htmlFor="cat-nom" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nom</label>
@@ -203,7 +203,9 @@ export const CategoryPage: React.FC = () => {
                   data-testid="category-name-input"
                   value={editor.nom}
                   onChange={e => setEditor(prev => prev ? { ...prev, nom: e.target.value } : prev)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  aria-invalid={Boolean(saveError)}
+                  aria-describedby={saveError ? 'category-save-error' : undefined}
+                  className="field-control"
                 />
               </div>
               <div className="space-y-2">
@@ -214,7 +216,7 @@ export const CategoryPage: React.FC = () => {
                   value={editor.description}
                   onChange={e => setEditor(prev => prev ? { ...prev, description: e.target.value } : prev)}
                   rows={3}
-                  className="w-full bg-background border border-outline rounded-md px-4 py-3 font-bold text-sm resize-none"
+                  className="field-control min-h-28 py-3 resize-none"
                 />
               </div>
               <div className="space-y-2">
@@ -225,7 +227,7 @@ export const CategoryPage: React.FC = () => {
                   type="number"
                   value={editor.ordre}
                   onChange={e => setEditor(prev => prev ? { ...prev, ordre: e.target.value } : prev)}
-                  className="w-full h-12 bg-background border border-outline rounded-md px-4 font-bold text-sm"
+                  className="field-control"
                 />
               </div>
               <div className="space-y-2">

@@ -72,7 +72,7 @@ export const CheckoutPage: React.FC = () => {
     <div className="page-shell flex flex-col items-center justify-center p-6 text-center min-h-[85vh]">
         <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-lg p-8 md:p-14 relative overflow-hidden shadow-xl"
+            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-lg p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-xl"
         >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32" />
             
@@ -91,12 +91,12 @@ export const CheckoutPage: React.FC = () => {
                     <p className="text-base md:text-lg text-on-surface-variant font-medium leading-relaxed max-w-sm mx-auto">Votre commande a été transmise à la cuisine.</p>
                 </div>
 
-                <div className="w-full grid grid-cols-2 gap-8 py-10 border-y border-outline-variant/30">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 py-8 sm:py-10 border-y border-outline-variant/30">
                     <div className="text-center space-y-2">
                         <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Réf. Commande</span>
                         <p className=" text-2xl text-on-surface ">#CMD-8924</p>
                     </div>
-                    <div className="text-center space-y-2 border-l border-outline-variant/30">
+                    <div className="text-center space-y-2 sm:border-l border-outline-variant/30">
                         <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Temps Estimé</span>
                         <div className="flex items-center justify-center gap-2 text-primary  text-2xl ">
                            <Timer className="w-5 h-5" />
@@ -122,7 +122,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
             <div className="space-y-6">
                 <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight ">Votre panier <br /><span className="text-on-surface-variant">est vide.</span></h2>
-                <p className="text-lg text-on-surface-variant uppercase tracking-widest leading-relaxed">Ajoutez des plats de notre carte pour commencer.</p>
+                <p className="text-base sm:text-lg text-on-surface-variant uppercase tracking-wider sm:tracking-widest leading-relaxed">Ajoutez des plats de notre carte pour commencer.</p>
             </div>
             <button 
               onClick={() => navigate('/menu')} 
@@ -142,7 +142,7 @@ export const CheckoutPage: React.FC = () => {
         <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-6 mb-16 border-b border-outline-variant pb-10"
+            className="flex items-center gap-4 sm:gap-6 mb-10 md:mb-16 border-b border-outline-variant pb-8 md:pb-10"
         >
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-90"><ChevronLeft className="w-5 h-5" /></button>
             <div>
@@ -183,9 +183,9 @@ export const CheckoutPage: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <div className="flex items-center bg-background border border-outline-variant/30 rounded-xl p-1.5 shadow-sm">
-                                        <button aria-label={`Diminuer la quantité pour ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, -1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Minus className="w-4 h-4" /></button>
+                                        <button aria-label={`Diminuer la quantité pour ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, -1)} className="btn-icon border-transparent bg-transparent"><Minus className="w-4 h-4" /></button>
                                         <span className="font-sans text-sm font-black w-10 text-center tabular-nums">{item.quantite}</span>
-                                        <button aria-label={`Augmenter la quantité pour ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, 1)} className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary active:scale-75 transition-all"><Plus className="w-4 h-4" /></button>
+                                        <button aria-label={`Augmenter la quantité pour ${item.plat.nom}`} onClick={() => updateQty(item.plat.id, 1)} className="btn-icon border-transparent bg-transparent"><Plus className="w-4 h-4" /></button>
                                     </div>
                                     <motion.button 
                                         whileHover={{ rotate: 15, scale: 1.1 }}

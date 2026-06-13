@@ -26,6 +26,9 @@
 
   --color-success: #15803D;
   --color-error: #B91C1C;
+  --color-on-success: #FBFBFA;
+  --color-on-error: #FBFBFA;
+  --color-focus-ring: #B45309;
 
   /* Unified Sans Font Stack */
   --font-sans: "Public Sans", system-ui, sans-serif;
@@ -51,6 +54,7 @@
   body {
     font-family: var(--font-body);
     @apply bg-background text-on-background antialiased min-h-[100dvh] overflow-x-hidden;
+    font-size: 16px;
   }
 
   #root {
@@ -59,13 +63,39 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold text-on-background;
+    text-wrap: balance;
   }
 
-  /* Focus-visible: keyboard navigation affordance without visual impact on mouse users */
   *:focus-visible {
-    outline: 2px solid var(--color-on-background);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-focus-ring);
+    outline-offset: 3px;
     border-radius: 4px;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  button:disabled,
+  a[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 
   /* Performance: paint containment for off-screen animated cards */
@@ -85,6 +115,10 @@
   canvas {
     max-width: 100%;
   }
+
+  p {
+    text-wrap: pretty;
+  }
 }
 
 @layer components {
@@ -93,11 +127,11 @@
   }
 
   .page-container {
-    @apply w-full max-w-[1200px] mx-auto px-client-margin;
+    @apply w-full max-w-[1200px] mx-auto px-client-margin min-w-0;
   }
 
   .page-section {
-    @apply py-12 md:py-20;
+    @apply py-10 md:py-20;
   }
 
   .editorial-kicker,
@@ -122,11 +156,27 @@
   }
 
   .btn-primary {
-    @apply min-h-11 px-6 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all active:scale-[0.98] text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:bg-primary hover:shadow-lg hover:shadow-black/10 active:scale-[0.98] disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 text-center leading-tight;
   }
 
   .btn-secondary {
-    @apply min-h-11 px-6 bg-transparent border border-outline text-on-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all hover:bg-surface-container-high active:scale-[0.98] text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-surface border border-outline-variant text-on-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 text-center leading-tight;
+  }
+
+  .btn-danger {
+    @apply min-h-[44px] px-6 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:brightness-95 active:scale-[0.98] disabled:opacity-45 text-center leading-tight;
+  }
+
+  .btn-icon {
+    @apply min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-md border border-outline bg-surface text-on-surface-variant transition-all duration-200 hover:border-on-background hover:text-on-background active:scale-[0.96] disabled:opacity-45 disabled:active:scale-100;
+  }
+
+  .field-control {
+    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-variant/70 focus:border-on-background focus:bg-surface outline-none disabled:opacity-50;
+  }
+
+  .form-error {
+    @apply rounded-md border border-error/30 bg-error/5 px-4 py-3 text-sm font-semibold text-error;
   }
 
   .no-scrollbar {
