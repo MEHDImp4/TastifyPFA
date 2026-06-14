@@ -60,7 +60,7 @@ export const PublicLayout: React.FC = () => {
               onPointerEnter={() => preloadRoute('/')}
               className="flex min-h-11 items-center group transition-all active:scale-95 z-50 min-w-0"
             >
-              <span className="text-xl font-bold tracking-tighter text-on-background uppercase truncate max-w-[42vw] sm:max-w-none">
+              <span className="text-xl font-bold font-heading tracking-tighter text-on-background uppercase truncate max-w-[42vw] sm:max-w-none">
                   {config?.nom || "tastify."}
               </span>
             </Link>
@@ -72,7 +72,7 @@ export const PublicLayout: React.FC = () => {
                   to={link.to} 
                   onFocus={() => preloadRoute(link.to)}
                   onPointerEnter={() => preloadRoute(link.to)}
-                  className={`inline-flex min-h-11 items-center px-1 text-[10px] font-bold tracking-widest transition-all hover:text-on-background ${location.pathname === link.to ? 'text-on-background' : 'text-on-surface-variant'}`}
+                  className={`inline-flex min-h-11 items-center px-1 text-[10px] font-bold tracking-widest transition-all hover:text-primary ${location.pathname === link.to ? 'text-primary' : 'text-on-surface-variant'}`}
                 >
                   {link.label}
                 </Link>
@@ -118,7 +118,7 @@ export const PublicLayout: React.FC = () => {
                   to="/login"
                   onFocus={() => preloadRoute('/login')}
                   onPointerEnter={() => preloadRoute('/login')}
-                  className="min-h-11 inline-flex items-center px-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-on-surface-variant transition-colors"
+                  className="min-h-11 inline-flex items-center px-2 text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-primary transition-colors"
                 >
                   S'identifier
                 </Link>
@@ -153,10 +153,10 @@ export const PublicLayout: React.FC = () => {
                     onFocus={() => preloadRoute(link.to)}
                     onPointerEnter={() => preloadRoute(link.to)}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`text-3xl sm:text-4xl font-bold tracking-tight break-words transition-colors ${
+                    className={`text-3xl sm:text-4xl font-bold font-heading tracking-tight break-words transition-colors ${
                       location.pathname === link.to
-                        ? 'text-on-background'
-                        : 'text-on-surface-variant hover:text-on-background'
+                        ? 'text-primary'
+                        : 'text-on-surface-variant hover:text-primary'
                     }`}
                 >
                     {link.label}

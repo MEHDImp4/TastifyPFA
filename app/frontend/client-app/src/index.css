@@ -1,41 +1,42 @@
-@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&family=Playfair+Display+SC:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Sober restaurant palette */
-  --color-background: #FBFBFA;
-  --color-on-background: #111111;
+  /* Premium Moroccan Red & Gold Palette */
+  --color-background: #FFFDFB;
+  --color-on-background: #450A0A;
   --color-surface: #FFFFFF;
-  --color-on-surface: #111111;
-  --color-on-surface-variant: #4A4A50;
+  --color-on-surface: #450A0A;
+  --color-on-surface-variant: #5C3E3E;
   
   --color-surface-container-low: #FFFFFF;
   --color-surface-container-lowest: #FFFFFF;
   --color-surface-container: #FFFFFF;
-  --color-surface-container-high: #F5F5F4;
-  --color-surface-container-highest: #EFEFEB;
+  --color-surface-container-high: #FBF9F6;
+  --color-surface-container-highest: #F5EFE9;
   --color-surface-bright: #FFFFFF;
   
-  --color-outline: #EAEAEA;
-  --color-outline-variant: #D4D4D8;
+  --color-outline: #F0E6DC;
+  --color-outline-variant: #E1D2C3;
 
-  --color-primary: #111111;
-  --color-on-primary: #FBFBFA;
-  --color-primary-container: #EFEFEB;
-  --color-on-primary-container: #111111;
+  --color-primary: #991B1B;
+  --color-on-primary: #FFFDFB;
+  --color-primary-container: #F5EFE9;
+  --color-on-primary-container: #450A0A;
 
   --color-accent: #B45309;
   --color-on-accent: #FFFFFF;
 
   --color-success: #15803D;
   --color-error: #B91C1C;
-  --color-on-success: #FBFBFA;
-  --color-on-error: #FBFBFA;
-  --color-focus-ring: #78350F;
+  --color-on-success: #FFFDFB;
+  --color-on-error: #FFFDFB;
+  --color-focus-ring: #B45309;
 
-  /* Unified Sans Font Stack */
-  --font-sans: "Public Sans", system-ui, sans-serif;
-  --font-body: "Public Sans", system-ui, sans-serif;
+  /* Fonts */
+  --font-sans: "Karla", system-ui, sans-serif;
+  --font-body: "Karla", system-ui, sans-serif;
+  --font-heading: "Playfair Display SC", serif;
   --font-mono: "JetBrains Mono", monospace;
 
   --radius-md: 4px;
@@ -56,8 +57,8 @@
   --text-display-lg-mobile: clamp(2.25rem, 12vw, 4rem);
 
   /* Accessible secondary text (solid, no opacity hacks) */
-  --color-on-surface-muted: #3F3F46;     /* ~4.5:1 on #FBFBFA */
-  --color-on-surface-subtle: #62626A;    /* ~5.1:1 on #EFEFEB */
+  --color-on-surface-muted: #4F3535;
+  --color-on-surface-subtle: #7F6060;
 }
 
 @layer base {
@@ -78,6 +79,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
     @apply tracking-tight font-semibold text-on-background;
     text-wrap: balance;
   }
