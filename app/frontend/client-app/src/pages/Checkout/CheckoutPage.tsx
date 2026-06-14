@@ -78,12 +78,18 @@ export const CheckoutPage: React.FC = () => {
             
             <div className="relative z-10 flex flex-col items-center gap-12">
                 <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", damping: 10, stiffness: 180, delay: 0.25 }}
-                    className="w-24 h-24 rounded-full bg-surface-container-highest border border-primary/20 flex items-center justify-center text-primary"
+                    initial={{ scale: 0, rotate: -20, opacity: 0 }}
+                    animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                    transition={{ type: "spring", damping: 8, stiffness: 160, delay: 0.2 }}
+                    className="relative"
                 >
-                    <CheckCircle2 className="w-12 h-12" strokeWidth={1} />
+                    <motion.div
+                        animate={{ scale: [1, 1.08, 1] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-28 h-28 rounded-full bg-success/10 border-2 border-success/20 flex items-center justify-center text-success"
+                    >
+                        <CheckCircle2 className="w-14 h-14" strokeWidth={1} />
+                    </motion.div>
                 </motion.div>
                 
                 <div className="space-y-6">

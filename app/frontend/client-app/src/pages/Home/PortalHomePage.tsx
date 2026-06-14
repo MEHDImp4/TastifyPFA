@@ -59,7 +59,7 @@ export const PortalHomePage = () => {
     <div className="page-shell text-on-background">
       
       {/* Simple Minimal Hero */}
-      <section className="relative w-full flex flex-col justify-center border-b border-outline overflow-hidden">
+      <section className="relative w-full flex flex-col justify-center border-b border-outline overflow-hidden snap-start">
         {/* Soft elegant glowing background to wow users */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(180,83,9,0.06),transparent_50%)] pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent pointer-events-none lg:block hidden" />

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { reservationApi } from '../../api/reservations';
 import { useAuthStore } from '../../store/authStore';
-import { 
-  ChevronRight, 
+import {
+  ChevronRight,
   Loader2,
   Table as TableIcon,
   ShieldCheck,
@@ -25,7 +25,6 @@ export const ReservationWizard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  // Form state
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('19:00');
   const [guests, setGuests] = useState(2);
@@ -88,7 +87,6 @@ export const ReservationWizard: React.FC = () => {
     }
   };
 
-  // Invitation state for guests
   if (!isAuthenticated && step < 4) {
       return (
           <div className="page-shell flex flex-col items-center justify-center p-6 min-h-[85vh]">
@@ -98,20 +96,20 @@ export const ReservationWizard: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-4xl font-bold tracking-tight m-0 uppercase">Prenez place. <span className="sr-only">Secured.</span></h2>
+                    <h2 className="text-4xl font-bold tracking-tight m-0 uppercase">Prenez place.</h2>
                     <p className="text-lg text-on-surface-variant leading-relaxed max-w-md mx-auto">
                         Pour garantir un service d'exception et suivre vos réservations, la création d'un compte est nécessaire.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
-                    <button 
+                    <button
                         onClick={() => navigate('/register')}
                         className="btn-primary min-h-14"
                     >
                         <UserPlus className="w-4 h-4" /> Créer un compte
                     </button>
-                    <button 
+                    <button
                         onClick={() => navigate('/login')}
                         className="btn-secondary min-h-14"
                     >
@@ -131,35 +129,42 @@ export const ReservationWizard: React.FC = () => {
   return (
     <div className="page-shell">
       <main className="max-w-4xl mx-auto px-4 md:px-6 page-section">
-        
-        {/* Reservation Wizard Card */}
         <div className="w-full bg-surface border border-outline rounded-xl flex flex-col overflow-hidden relative">
-          
-          {/* Header */}
+
           <div className="px-6 md:px-10 py-8 md:py-10 border-b border-outline bg-surface text-center">
                 <h2 className="text-2xl md:text-3xl font-bold text-on-background tracking-tight uppercase m-0">Réserver une Table</h2>
-                <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-3">Étape {step} sur 3</p>
           </div>
 
-          {/* Stepper */}
-          <div className="px-5 md:px-12 py-5 md:py-6 bg-surface-container-high border-b border-outline flex flex-wrap items-center justify-center gap-3 md:gap-10">
-             <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>1</div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 1 ? 'text-on-background' : 'text-on-surface-variant'}`}>Détails</span>
-             </div>
-             <div className="hidden sm:block h-px w-8 bg-outline" />
-             <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>2</div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 2 ? 'text-on-background' : 'text-on-surface-variant'}`}>Table</span>
-             </div>
-             <div className="hidden sm:block h-px w-8 bg-outline" />
-             <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-on-background text-background' : 'bg-outline text-on-surface'}`}>3</div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${step >= 3 ? 'text-on-background' : 'text-on-surface-variant'}`}>Confirmation</span>
+          {/* Progress Bar with checkmarks */}
+          <div className="px-5 md:px-12 py-5 md:py-6 bg-surface-container-high border-b border-outline">
+             <div className="flex items-center gap-2 md:gap-0">
+                {[1, 2, 3].map((s) => (
+                  <React.Fragment key={s}>
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                      <motion.div
+                        animate={{ scale: step === s ? 1.1 : 1 }}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 transition-colors duration-300 ${
+                          step > s ? 'bg-success text-on-success' :
+                          step === s ? 'bg-on-background text-background' :
+                          'bg-outline text-on-surface'
+                        }`}
+                      >
+                        {step > s ? <Check className="w-4 h-4" strokeWidth={3} /> : s}
+                      </motion.div>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest hidden sm:inline whitespace-nowrap ${
+                        step >= s ? 'text-on-background' : 'text-on-surface-variant'
+                      }`}>
+                        {s === 1 ? "Détails" : s === 2 ? "Table" : "Confirmation"}
+                      </span>
+                    </div>
+                    {s < 3 && (
+                      <div className="flex-1 h-0.5 mx-2 md:mx-4 rounded-full transition-colors duration-500" style={{ background: step > s ? '#15803D' : '#F0E6DC' }} />
+                    )}
+                  </React.Fragment>
+                ))}
              </div>
           </div>
 
-          {/* Content */}
           <div className="p-6 md:p-12">
               {actionError && (
                 <div id="reservation-error" role="alert" className="form-error mb-8">
@@ -167,8 +172,9 @@ export const ReservationWizard: React.FC = () => {
                 </div>
               )}
 
+              <AnimatePresence mode="wait">
               {step === 1 && (
-                <div className="space-y-10">
+                <motion.div key="step1" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-10">
                    <div className="p-8 bg-background border border-outline rounded-lg flex flex-col sm:flex-row items-center justify-between gap-6">
                       <div className="text-center sm:text-left">
                          <h3 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Nombre de personnes</h3>
@@ -183,26 +189,26 @@ export const ReservationWizard: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                        <div className="space-y-2">
-                          <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas <span className="sr-only">Temporal Window</span></label>
+                          <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas</label>
                           <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
                        </div>
                        <div className="space-y-2">
-                          <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée <span className="sr-only">Arrival Pivot</span></label>
+                          <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée</label>
                           <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
                        </div>
                     </div>
 
-                   <button 
+                   <button
                      onClick={fetchAvailableTables} disabled={isLoading}
                      className="btn-primary w-full h-16"
                    >
-                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Voir les tables libres</span><span className="sr-only">Analyze Availability</span><ChevronRight className="w-4 h-4" /></>}
+                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Voir les tables libres</span><ChevronRight className="w-4 h-4" /></>}
                    </button>
-                </div>
+                </motion.div>
               )}
 
               {step === 2 && (
-                <div className="space-y-10">
+                <motion.div key="step2" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-10">
                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {availableTables.length > 0 ? availableTables.map(t => (
                         <button key={t.id} onClick={() => setSelectedTable(t.id)} className={`min-h-32 p-6 rounded-lg border-2 flex flex-col items-center gap-3 transition-all ${selectedTable === t.id ? 'bg-on-background border-on-background text-background' : 'bg-background border-outline text-on-background hover:border-on-background'}`}>
@@ -218,13 +224,13 @@ export const ReservationWizard: React.FC = () => {
                    </div>
                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                       <button onClick={prevStep} className="btn-secondary flex-1 h-14 uppercase">Retour</button>
-                      <button onClick={nextStep} disabled={!selectedTable} className="btn-primary flex-[1.5] h-14 uppercase">Confirmer mon choix <span className="sr-only">Confirm Placement</span></button>
+                      <button onClick={nextStep} disabled={!selectedTable} className="btn-primary flex-[1.5] h-14 uppercase">Confirmer mon choix</button>
                    </div>
-                </div>
+                </motion.div>
               )}
 
               {step === 3 && (
-                <div className="space-y-10">
+                <motion.div key="step3" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-10">
                    <div className="bg-background border border-outline rounded-lg p-8 space-y-8">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 border-b border-outline pb-8">
                          <div>
@@ -237,37 +243,49 @@ export const ReservationWizard: React.FC = () => {
                          </div>
                       </div>
                       <div className="space-y-3">
-                         <label htmlFor="res-notes" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Une demande particulière ? <span className="sr-only">Specific Manifest Requirements</span></label>
+                         <label htmlFor="res-notes" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Une demande particulière ?</label>
                          <textarea id="res-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Allergies, anniversaire, préférences..." className="field-control min-h-28 py-4 resize-none" rows={4} />
                       </div>
                    </div>
                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                       <button onClick={prevStep} className="btn-secondary flex-1 h-14 uppercase">Retour</button>
-                      <button 
+                      <button
                         onClick={handleFinish} disabled={isLoading}
                         className="btn-primary flex-[1.5] h-14 uppercase"
                       >
-                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Valider ma réservation</span><span className="sr-only">Commit to Registry</span><ShieldCheck className="w-4 h-4" /></>}
+                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Valider ma réservation</span><ShieldCheck className="w-4 h-4" /></>}
                       </button>
                    </div>
-                </div>
+                </motion.div>
               )}
 
               {step === 4 && (
-                 <div className="text-center py-6 space-y-10">
-                    <div className="w-24 h-24 rounded-full bg-background flex items-center justify-center text-success mx-auto border border-outline">
-                       <ShieldCheck className="w-10 h-10" strokeWidth={1} />
-                    </div>
-                    <div className="space-y-4">
-                       <h2 className="text-4xl font-bold text-on-background uppercase tracking-tight m-0">C'est confirmé. <span className="sr-only">Secured.</span></h2>
-                       <p className="text-lg text-on-surface-variant max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
-                    </div>
-                    <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                       <button onClick={() => navigate('/')} className="btn-primary px-12 h-14 uppercase">Accueil</button>
-                       <button onClick={() => navigate('/account')} className="btn-secondary px-12 h-14 uppercase">Voir mes réservations</button>
-                    </div>
-                 </div>
+                <motion.div key="step4" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-center py-6 space-y-10">
+                   <motion.div
+                     initial={{ scale: 0, rotate: -30 }}
+                     animate={{ scale: 1, rotate: 0 }}
+                     transition={{ type: "spring", damping: 8, stiffness: 180, delay: 0.2 }}
+                     className="relative"
+                   >
+                     <motion.div
+                       animate={{ scale: [1, 1.15, 1] }}
+                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                       className="w-28 h-28 rounded-full bg-success/10 flex items-center justify-center text-success mx-auto border-2 border-success/20"
+                     >
+                       <PartyPopper className="w-12 h-12" strokeWidth={1.5} />
+                     </motion.div>
+                   </motion.div>
+                   <div className="space-y-4">
+                      <h2 className="text-4xl font-bold text-on-background uppercase tracking-tight m-0">C'est confirmé.</h2>
+                      <p className="text-lg text-on-surface-variant max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
+                   </div>
+                   <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                      <button onClick={() => navigate('/')} className="btn-primary px-12 h-14 uppercase">Accueil</button>
+                      <button onClick={() => navigate('/account')} className="btn-secondary px-12 h-14 uppercase">Voir mes réservations</button>
+                   </div>
+                </motion.div>
               )}
+              </AnimatePresence>
           </div>
         </div>
       </main>
