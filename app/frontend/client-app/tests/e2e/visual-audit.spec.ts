@@ -1,7 +1,7 @@
 import { expect, test, type Page, type Route } from '@playwright/test';
 
 const clientBaseURL = process.env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
-const backofficeBaseURL = process.env.BACKOFFICE_BASE_URL ?? 'http://127.0.0.1:3004';
+const backofficeBaseURL = process.env.BACKOFFICE_BASE_URL ?? 'http://127.0.0.1:3000';
 
 const categories = [
   { id: 1, nom: 'Signatures', description: 'Plats maison', image: null, est_active: true },

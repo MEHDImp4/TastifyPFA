@@ -33,6 +33,7 @@ export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<DashboardData | null>(null);
   const [activeTickets, setActiveTickets] = useState<Commande[]>([]);
+  const [currentTime, setCurrentTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const lastUpdate = useSocketStore(state => state.lastUpdate);
@@ -60,15 +61,21 @@ export const DashboardPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [fetchData, lastUpdate]);
 
+  useEffect(() => {
+    setCurrentTime(Date.now());
+    const interval = setInterval(() => setCurrentTime(Date.now()), 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const groupedTickets = React.useMemo(() => {
-    const now = Date.now();
     return {
       late: activeTickets.filter(t => {
-        const elapsed = (now - new Date(t.created_at).getTime()) / 60000;
+        if (!currentTime) return false;
+        const elapsed = (currentTime - new Date(t.created_at).getTime()) / 60000;
         return (t.statut === 'EN_CUISINE') && elapsed > 20;
       })
     };
-  }, [activeTickets]);
+  }, [activeTickets, currentTime]);
 
   const occupancyData = React.useMemo(() => {
     if (!data) return [];

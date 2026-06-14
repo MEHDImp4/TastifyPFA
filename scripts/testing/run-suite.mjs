@@ -168,9 +168,7 @@ async function runE2E(command, env = {}, extraComposeFiles = []) {
   const clientBaseUrl = env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
   const services = [...appServices];
 
-  if (command !== 'e2e:client') {
-    services.push('backoffice-app');
-  }
+  services.push('backoffice-app');
 
   if (command !== 'e2e:backoffice' && command !== 'e2e:ui') {
     services.push('client-app');
@@ -182,11 +180,9 @@ async function runE2E(command, env = {}, extraComposeFiles = []) {
     async () => {
       await waitForHttp(backendReadyUrl, { expectJson: true });
 
-      if (command !== 'e2e:client') {
-        await waitForHttp(`${backofficeBaseUrl}/`);
-      }
+      await waitForHttp(`${backofficeBaseUrl}/`);
 
-      if (command !== 'e2e:backoffice') {
+      if (command !== 'e2e:backoffice' && command !== 'e2e:ui') {
         await waitForHttp(`${clientBaseUrl}/`);
       }
 
@@ -201,6 +197,7 @@ async function runE2E(command, env = {}, extraComposeFiles = []) {
         case 'e2e:client':
           runNpm('app/frontend/client-app', ['run', 'test:e2e'], {
             ...env,
+            BACKOFFICE_BASE_URL: backofficeBaseUrl,
             CLIENT_BASE_URL: clientBaseUrl,
           });
           break;

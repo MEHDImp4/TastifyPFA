@@ -1,6 +1,6 @@
-const CLIENT_ORIGIN = 'http://127.0.0.1:3003';
-const BACKOFFICE_ORIGIN = 'http://127.0.0.1:3000';
-const BACKEND_ORIGIN = 'http://127.0.0.1:8000';
+const CLIENT_ORIGIN = process.env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
+const BACKOFFICE_ORIGIN = process.env.BACKOFFICE_BASE_URL ?? 'http://127.0.0.1:3000';
+const BACKEND_ORIGIN = process.env.BACKEND_BASE_URL ?? 'http://127.0.0.1:8000';
 
 type PersistedAuthState = {
   accessToken: string;
@@ -8,7 +8,12 @@ type PersistedAuthState = {
   username: string;
 };
 
-function buildPersistedStorageState(origin: string, storageKey: string, auth: PersistedAuthState) {
+function buildPersistedStorageState(
+  origin: string,
+  storageKey: string,
+  auth: PersistedAuthState,
+  options: { hasSession?: boolean } = {},
+) {
   const localStorageItems = [
     {
       name: storageKey,
@@ -18,7 +23,7 @@ function buildPersistedStorageState(origin: string, storageKey: string, auth: Pe
           role: auth.role,
           username: auth.username,
           isAuthenticated: true,
-          hasSession: true,
+          hasSession: options.hasSession ?? true,
         },
         version: 0,
       }),
@@ -48,7 +53,7 @@ export function buildClientBrowserStorageState(auth: PersistedAuthState) {
 }
 
 export function buildBackofficeBrowserStorageState(auth: PersistedAuthState) {
-  return buildPersistedStorageState(BACKOFFICE_ORIGIN, 'backoffice-auth-storage', auth);
+  return buildPersistedStorageState(BACKOFFICE_ORIGIN, 'backoffice-auth-storage', auth, { hasSession: false });
 }
 
 export function buildCrossAppIdentity() {

@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.core.mail import send_mail
 
@@ -6,19 +8,24 @@ from apps.reservations.models import Reservation
 from apps.users.models import Utilisateur
 from apps.users.reset_tokens import build_password_reset_token, build_password_reset_uid
 
+logger = logging.getLogger(__name__)
+
 
 def _portal_base_url() -> str:
     return settings.FRONTEND_BASE_URL.rstrip("/")
 
 
 def _send_transactional_mail(*, subject: str, body: str, recipient: str) -> None:
-    send_mail(
-        subject,
-        body,
-        settings.DEFAULT_FROM_EMAIL,
-        [recipient],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [recipient],
+            fail_silently=False,
+        )
+    except Exception:
+        logger.exception("Transactional email delivery failed for %s", recipient)
 
 
 def send_password_reset_requested_email(*, user: Utilisateur) -> None:
