@@ -72,14 +72,14 @@ export const ContactPage: React.FC = () => {
             {/* Coordinates & Identity */}
             <aside className="lg:col-span-4 space-y-16">
                 <section className="space-y-10">
-                    <span className="editorial-kicker opacity-40">Coordonnées</span>
+                    <span className="editorial-kicker text-on-surface-subtle">Coordonnées</span>
                     <div className="space-y-8">
                         <div className="flex items-start gap-8 group cursor-default">
                             <div className="w-14 h-14 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center text-primary shrink-0 transition-all duration-700 group-hover:bg-on-surface group-hover:text-background shadow-inner">
                                 <MapPin className="w-6 h-6" strokeWidth={1.5} />
                             </div>
                             <div className="space-y-1">
-                                <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Localisation</p>
+                                <p className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.2em]">Localisation</p>
                                 <p className=" text-xl md:text-2xl  text-on-surface leading-tight uppercase tracking-tight">123 Boulevard Gastronomique,<br/>Casablanca, Maroc</p>
                             </div>
                         </div>
@@ -89,7 +89,7 @@ export const ContactPage: React.FC = () => {
                                 <Phone className="w-6 h-6" strokeWidth={1.5} />
                             </div>
                             <div className="space-y-1">
-                                <p className="font-sans text-[10px] font-black text-on-surface uppercase tracking-[0.2em] opacity-40">Assistance</p>
+                                <p className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.2em]">Assistance</p>
                                 <p className=" text-xl md:text-2xl  text-on-surface leading-tight tabular-nums">+212 5 22 00 00 00</p>
                             </div>
                         </div>
@@ -97,7 +97,7 @@ export const ContactPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-10">
-                    <span className="editorial-kicker opacity-40">Fenêtre Temporelle</span>
+                    <span className="editorial-kicker text-on-surface-subtle">Fenêtre Temporelle</span>
                     <div className="flex items-start gap-8">
                         <div className="w-14 h-14 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center text-primary shrink-0 shadow-inner">
                             <Clock className="w-6 h-6" strokeWidth={1.5} />
@@ -105,11 +105,11 @@ export const ContactPage: React.FC = () => {
                         <div className="grid grid-cols-1 gap-4 w-full">
                             <div className="flex justify-between items-end border-b border-outline-variant/10 pb-3">
                                 <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Lun — Ven</span>
-                                <span className="font-sans text-[10px] font-medium text-on-surface-variant opacity-60">12:00 — 23:30</span>
+                                <span className="font-sans text-[10px] font-medium text-on-surface-variant">12:00 — 23:30</span>
                             </div>
                             <div className="flex justify-between items-end border-b border-outline-variant/10 pb-3">
                                 <span className="font-sans text-xs font-black text-on-surface uppercase tracking-widest">Sam — Dim</span>
-                                <span className="font-sans text-[10px] font-medium text-on-surface-variant opacity-60">11:00 — 00:30</span>
+                                <span className="font-sans text-[10px] font-medium text-on-surface-variant">11:00 — 00:30</span>
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export const ContactPage: React.FC = () => {
                                     {errors.name && <p id="contact-name-error" role="alert" className="form-error">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Coordonnée</label>
+                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Coordonnée</label>
                                     <input 
                                         id="contact-email-input" type="email" name="email" value={formData.email} onChange={handleChange} required
                                         aria-label="Coordonnée"
@@ -162,7 +162,7 @@ export const ContactPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-3">
-                                <label htmlFor="contact-subject-select" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Sujet</label>
+                                <label htmlFor="contact-subject-select" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Sujet</label>
                                 <select 
                                     id="contact-subject-select" name="subject" value={formData.subject} onChange={handleChange} required
                                     aria-label="Sujet"

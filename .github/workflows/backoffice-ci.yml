@@ -611,6 +611,8 @@ jobs:
       - name: Run cross-app realism suite
         env:
           CI: "true"
+          BACKOFFICE_BASE_URL: http://127.0.0.1:3000
+          CLIENT_BASE_URL: http://127.0.0.1:3003
         run: node scripts/testing/run-suite.mjs e2e:cross-app
 
       - name: Upload cross-app realism report
@@ -619,6 +621,14 @@ jobs:
         with:
           name: cross-app-realism-report
           path: app/frontend/client-app/playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload cross-app realism traces
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: cross-app-realism-test-results
+          path: app/frontend/client-app/test-results
           if-no-files-found: ignore
 
   real-device-matrix:

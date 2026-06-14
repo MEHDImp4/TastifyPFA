@@ -178,16 +178,16 @@ export const ReservationWizard: React.FC = () => {
                       </div>
                    </div>
 
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-2">
-                         <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas <span className="sr-only">Temporal Window</span></label>
-                         <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
-                      </div>
-                      <div className="space-y-2">
-                         <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée <span className="sr-only">Arrival Pivot</span></label>
-                         <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
-                      </div>
-                   </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                       <div className="space-y-2">
+                          <label htmlFor="res-date" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Date du repas <span className="sr-only">Temporal Window</span></label>
+                          <input id="res-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
+                       </div>
+                       <div className="space-y-2">
+                          <label htmlFor="res-time" className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Heure d'arrivée <span className="sr-only">Arrival Pivot</span></label>
+                          <input id="res-time" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} aria-describedby={actionError ? 'reservation-error' : undefined} className="field-control" />
+                       </div>
+                    </div>
 
                    <button 
                      onClick={fetchAvailableTables} disabled={isLoading}
@@ -206,11 +206,11 @@ export const ReservationWizard: React.FC = () => {
                            <TableIcon className="w-6 h-6 opacity-20" />
                            <div className="text-center">
                               <span className="block text-xl font-bold uppercase tracking-tighter">Table {t.numero}</span>
-                              <span className={`text-[9px] font-bold uppercase tracking-widest opacity-40`}>{t.capacite} PERS</span>
+                              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-subtle">{t.capacite} PERS</span>
                            </div>
                         </button>
                       )) : (
-                        <div className="col-span-full py-10 text-center opacity-40">Aucune table disponible pour ce créneau.</div>
+                        <div className="col-span-full py-10 text-center text-on-surface-subtle">Aucune table disponible pour ce créneau.</div>
                       )}
                    </div>
                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -225,11 +225,11 @@ export const ReservationWizard: React.FC = () => {
                    <div className="bg-background border border-outline rounded-lg p-8 space-y-8">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 border-b border-outline pb-8">
                          <div>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mb-2 opacity-40">Quand</p>
+                            <p className="text-[9px] font-bold text-on-surface-subtle uppercase tracking-widest mb-2">Quand</p>
                             <p className="text-xl font-bold text-on-background uppercase">{new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' })} <br/> à {startTime}</p>
                          </div>
                          <div className="sm:text-right">
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mb-2 opacity-40">Convives</p>
+                            <p className="text-[9px] font-bold text-on-surface-subtle uppercase tracking-widest mb-2">Convives</p>
                             <p className="text-xl font-bold text-on-background uppercase">{guests} Personnes</p>
                          </div>
                       </div>
