@@ -86,7 +86,8 @@
   }
 
   .btn-primary:focus-visible {
-    outline-color: var(--color-background);
+    outline-color: var(--color-focus-ring);
+    outline-offset: 2px;
   }
 
   .btn-danger:focus-visible {

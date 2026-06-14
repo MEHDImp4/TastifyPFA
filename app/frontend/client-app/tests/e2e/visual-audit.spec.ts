@@ -162,7 +162,10 @@ async function mockClientApis(page: Page) {
   await page.route(/\/api\/plats\/(?:\?.*)?$/, route => fulfillJson(route, arrayOrPage(route, plats)));
   await page.route('**/api/reservations/available_tables/**', route => fulfillJson(route, tables));
   await page.route('**/api/reservations/', route => fulfillJson(route, paginated(reservations)));
-  await page.route('**/api/**', route => fulfillJson(route, []));
+  await page.route(
+    url => new URL(url).pathname.startsWith('/api/'),
+    route => fulfillJson(route, []),
+  );
 }
 
 async function mockBackofficeApis(page: Page) {
@@ -205,17 +208,27 @@ async function mockBackofficeApis(page: Page) {
   await page.route('**/api/tables/', route => fulfillJson(route, tables));
   await page.route('**/api/plan-texts/', route => fulfillJson(route, []));
   await page.route(/\/api\/commandes\/(?:\?.*)?$/, route => fulfillJson(route, commandes));
-  await page.route('**/api/**', route => fulfillJson(route, []));
+  await page.route(
+    url => new URL(url).pathname.startsWith('/api/'),
+    route => fulfillJson(route, []),
+  );
 }
 
-async function expectUsableViewport(page: Page) {
-  await expect.poll(async () => page.locator('body').innerText()).not.toEqual('');
+async function expectUsableViewport(page: Page, browserErrors: string[]) {
+  await expect
+    .poll(async () => page.locator('body').innerText(), {
+      message: `Page should render visible text. Browser errors: ${browserErrors.join(' | ') || 'none'}`,
+    })
+    .not.toEqual('');
 
   const metrics = await page.evaluate(() => {
     const interactive = [...document.querySelectorAll('button, a[href], input, select, textarea, [role="button"]')]
       .filter(element => {
         const rect = element.getBoundingClientRect();
         const style = getComputedStyle(element);
+        const isScreenReaderOnly =
+          element.classList.contains('sr-only') && element !== document.activeElement;
+        if (isScreenReaderOnly) return false;
         return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
       })
       .map(element => {
@@ -245,12 +258,17 @@ test.describe('desktop and mobile visual audit', () => {
     test(`client and backoffice stay usable on ${viewport.label}`, async ({ browser }, testInfo) => {
       const clientContext = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
       const clientPage = await clientContext.newPage();
+      const clientErrors: string[] = [];
+      clientPage.on('pageerror', error => clientErrors.push(error.message));
+      clientPage.on('console', message => {
+        if (message.type() === 'error') clientErrors.push(message.text());
+      });
       await mockClientApis(clientPage);
 
       for (const path of ['/', '/menu', '/reservations', '/contact', '/login']) {
         await clientPage.goto(`${clientBaseURL}${path}`);
         await clientPage.waitForTimeout(500);
-        await expectUsableViewport(clientPage);
+        await expectUsableViewport(clientPage, clientErrors);
       }
 
       await testInfo.attach(`client-home-${viewport.label}`, {
@@ -261,10 +279,15 @@ test.describe('desktop and mobile visual audit', () => {
 
       const loginContext = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
       const loginPage = await loginContext.newPage();
+      const loginErrors: string[] = [];
+      loginPage.on('pageerror', error => loginErrors.push(error.message));
+      loginPage.on('console', message => {
+        if (message.type() === 'error') loginErrors.push(message.text());
+      });
       await loginPage.route('**/api/users/refresh/', route => fulfillJson(route, {}, 401));
       await loginPage.goto(`${backofficeBaseURL}/login`);
       await loginPage.waitForTimeout(500);
-      await expectUsableViewport(loginPage);
+      await expectUsableViewport(loginPage, loginErrors);
       await testInfo.attach(`backoffice-login-${viewport.label}`, {
         body: await loginPage.screenshot(),
         contentType: 'image/png',
@@ -273,12 +296,17 @@ test.describe('desktop and mobile visual audit', () => {
 
       const backofficeContext = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
       const backofficePage = await backofficeContext.newPage();
+      const backofficeErrors: string[] = [];
+      backofficePage.on('pageerror', error => backofficeErrors.push(error.message));
+      backofficePage.on('console', message => {
+        if (message.type() === 'error') backofficeErrors.push(message.text());
+      });
       await mockBackofficeApis(backofficePage);
 
       for (const path of ['/', '/menu', '/stock', '/avis', '/reservations', '/salle', '/kds']) {
         await backofficePage.goto(`${backofficeBaseURL}${path}`);
         await backofficePage.waitForTimeout(500);
-        await expectUsableViewport(backofficePage);
+        await expectUsableViewport(backofficePage, backofficeErrors);
       }
 
       await testInfo.attach(`backoffice-dashboard-${viewport.label}`, {

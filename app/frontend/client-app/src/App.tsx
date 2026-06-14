@@ -6,6 +6,7 @@ import { PublicLayout } from './layouts/PublicLayout';
 import { useAuthStore } from './store/authStore';
 import { useConfigStore } from './store/configStore';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ConsentBanner } from './components/consent/ConsentBanner';
 import {
   AccountPage,
   CheckoutPage,
@@ -150,6 +151,7 @@ function App() {
           <BrowserRouter>
             <AnimatedRoutes />
           </BrowserRouter>
+          <ConsentBanner />
         </div>
       </AuthBootstrap>
     </MotionConfig>
