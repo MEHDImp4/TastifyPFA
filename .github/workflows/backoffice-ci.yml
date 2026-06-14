@@ -329,6 +329,13 @@ jobs:
         working-directory: app/frontend/client-app
         run: npm ci
 
+      - name: Disable unavailable Microsoft apt repositories
+        run: |
+          mapfile -t microsoft_sources < <(sudo grep -rl "packages.microsoft.com" /etc/apt/sources.list.d 2>/dev/null || true)
+          for source_file in "${microsoft_sources[@]}"; do
+            sudo mv "$source_file" "$source_file.disabled"
+          done
+
       - name: Install Playwright browser
         working-directory: app/frontend/client-app
         run: npx playwright install --with-deps chromium
@@ -386,6 +393,13 @@ jobs:
         working-directory: app/frontend/client-app
         run: npm ci
 
+      - name: Disable unavailable Microsoft apt repositories
+        run: |
+          mapfile -t microsoft_sources < <(sudo grep -rl "packages.microsoft.com" /etc/apt/sources.list.d 2>/dev/null || true)
+          for source_file in "${microsoft_sources[@]}"; do
+            sudo mv "$source_file" "$source_file.disabled"
+          done
+
       - name: Install expanded Playwright browsers
         run: |
           npm --prefix app/frontend/backoffice-app run test:e2e:install
@@ -433,6 +447,13 @@ jobs:
       - name: Install backoffice dependencies
         working-directory: app/frontend/backoffice-app
         run: npm ci
+
+      - name: Disable unavailable Microsoft apt repositories
+        run: |
+          mapfile -t microsoft_sources < <(sudo grep -rl "packages.microsoft.com" /etc/apt/sources.list.d 2>/dev/null || true)
+          for source_file in "${microsoft_sources[@]}"; do
+            sudo mv "$source_file" "$source_file.disabled"
+          done
 
       - name: Install Playwright browser
         working-directory: app/frontend/backoffice-app
@@ -601,6 +622,13 @@ jobs:
         working-directory: app/frontend/client-app
         run: npm ci
 
+      - name: Disable unavailable Microsoft apt repositories
+        run: |
+          mapfile -t microsoft_sources < <(sudo grep -rl "packages.microsoft.com" /etc/apt/sources.list.d 2>/dev/null || true)
+          for source_file in "${microsoft_sources[@]}"; do
+            sudo mv "$source_file" "$source_file.disabled"
+          done
+
       - name: Install Playwright browser
         working-directory: app/frontend/client-app
         run: npx playwright install --with-deps chromium
@@ -659,6 +687,13 @@ jobs:
       - name: Install client dependencies
         working-directory: app/frontend/client-app
         run: npm ci
+
+      - name: Disable unavailable Microsoft apt repositories
+        run: |
+          mapfile -t microsoft_sources < <(sudo grep -rl "packages.microsoft.com" /etc/apt/sources.list.d 2>/dev/null || true)
+          for source_file in "${microsoft_sources[@]}"; do
+            sudo mv "$source_file" "$source_file.disabled"
+          done
 
       - name: Install expanded Playwright browsers
         run: |
