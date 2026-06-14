@@ -136,7 +136,7 @@ export const MenuPage: React.FC = () => {
     <div className="page-shell flex flex-col">
       
       {/* Header */}
-      <div className="flex-none px-client-margin py-12 md:py-20 border-b border-outline bg-surface">
+      <div className="flex-none px-client-margin page-section border-b border-outline bg-surface">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-12">
            <div className="space-y-4">
               <span className="text-ui-label text-on-surface-variant">L'Atelier</span>
@@ -150,7 +150,7 @@ export const MenuPage: React.FC = () => {
                 placeholder="RECHERCHER UN PLAT..."
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="field-control pl-12 pr-4 text-xs uppercase placeholder:text-on-surface-variant/70"
+                className="field-control pl-12 pr-4 text-xs uppercase placeholder:text-on-surface-subtle"
               />
            </div>
         </div>
@@ -184,12 +184,12 @@ export const MenuPage: React.FC = () => {
       </div>
 
       {/* Grid Canvas */}
-      <main className="flex-1 py-12 md:py-24 px-client-margin bg-background">
+      <main className="flex-1 page-section px-client-margin bg-background">
         <motion.div 
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pb-24"
+            className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12 pb-24"
         >
            <AnimatePresence mode="popLayout">
               {plats.map((plat) => (
@@ -198,31 +198,33 @@ export const MenuPage: React.FC = () => {
                   layout
                   variants={itemVariants}
                   data-testid={`menu-card-${plat.id}`}
-                  role={plat.est_disponible ? 'button' : undefined}
-                  tabIndex={plat.est_disponible ? 0 : -1}
-                  onKeyDown={(e) => {
-                    if (!plat.est_disponible) return;
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedPlat(plat);
-                    }
-                  }}
-                  className={`group atelier-card p-5 sm:p-6 flex flex-col gap-5 sm:gap-6 cursor-pointer ${!plat.est_disponible ? 'opacity-60 grayscale' : ''}`}
-                  onClick={() => plat.est_disponible && setSelectedPlat(plat)}
+                  className={`group atelier-card p-5 sm:p-6 flex flex-col gap-5 sm:gap-6 ${!plat.est_disponible ? 'opacity-60 grayscale' : ''}`}
                 >
-                  <div className="relative aspect-video rounded-lg overflow-hidden border border-outline grayscale group-hover:grayscale-0 transition-all duration-700">
-                    {plat.image ? (
-                       <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} loading="lazy" decoding="async" />
-                    ) : (
-                       <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10   text-4xl">{plat.nom.charAt(0)}</div>
-                    )}
-                    
-                    {!plat.est_disponible && (
+                  {plat.est_disponible ? (
+                    <button
+                      type="button"
+                      aria-label={`Voir le détail de ${plat.nom}`}
+                      onClick={() => setSelectedPlat(plat)}
+                      className="relative aspect-video w-full rounded-lg overflow-hidden border border-outline grayscale group-hover:grayscale-0 transition-all duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-background focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      {plat.image ? (
+                         <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} loading="lazy" decoding="async" />
+                      ) : (
+                         <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 text-4xl">{plat.nom.charAt(0)}</div>
+                      )}
+                    </button>
+                  ) : (
+                    <div className="relative aspect-video rounded-lg overflow-hidden border border-outline grayscale transition-all duration-700">
+                      {plat.image ? (
+                         <img src={plat.image} className="w-full h-full object-cover" alt={plat.nom} loading="lazy" decoding="async" />
+                      ) : (
+                         <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/10 text-4xl">{plat.nom.charAt(0)}</div>
+                      )}
                       <div className="absolute inset-0 bg-background/50 flex items-center justify-center">
                         <span className="text-[10px] font-bold uppercase tracking-widest">Épuisé</span>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div className="flex flex-col flex-1 gap-4">
                     <div className="flex justify-between items-baseline gap-4">
@@ -235,7 +237,7 @@ export const MenuPage: React.FC = () => {
                       <button
                         aria-label={`Ajouter ${plat.nom} au panier`}
                         onClick={(e) => { e.stopPropagation(); addItem(plat); }}
-                        className="btn-primary w-full min-h-11 text-[10px]"
+                        className="btn-primary w-full min-h-[48px]"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                         Ajouter au panier

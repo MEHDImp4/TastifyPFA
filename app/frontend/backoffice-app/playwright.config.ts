@@ -11,7 +11,7 @@ const projects = [
   {
     name: 'guest-chromium',
     dependencies: ['setup'],
-    testMatch: /.*\.public\.spec\.ts/,
+    testMatch: [/.*\.public\.spec\.ts/, /.*\.a11y\.spec\.ts/],
     use: {
       ...devices['Desktop Chrome'],
     },
@@ -50,7 +50,7 @@ if (includeExpandedMatrix) {
     {
       name: 'guest-firefox-smoke',
       dependencies: ['setup'],
-      testMatch: /.*\.public\.spec\.ts/,
+      testMatch: [/.*\.public\.spec\.ts/, /.*\.a11y\.spec\.ts/],
       use: {
         ...devices['Desktop Firefox'],
       },

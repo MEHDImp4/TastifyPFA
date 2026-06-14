@@ -55,7 +55,7 @@ export const ContactPage: React.FC = () => {
 
   return (
     <div className="page-shell min-h-[85vh]">
-      <div className="max-w-7xl mx-auto px-client-margin py-12 md:py-24">
+      <div className="max-w-7xl mx-auto px-client-margin page-section">
         
         {/* Editorial Header */}
         <header className="mb-12 md:mb-20 space-y-6">
@@ -136,7 +136,7 @@ export const ContactPage: React.FC = () => {
                         <form onSubmit={handleSubmit} noValidate className="space-y-8 md:space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Identité</label>
+                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Identité</label>
                                     <input 
                                         id="contact-name-input" type="text" name="name" value={formData.name} onChange={handleChange} required
                                         aria-label="Identité"
@@ -179,7 +179,7 @@ export const ContactPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-3">
-                                <label htmlFor="contact-message-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2 opacity-40">Message</label>
+                                <label htmlFor="contact-message-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Message</label>
                                 <textarea 
                                     id="contact-message-input" name="message" value={formData.message} onChange={handleChange} required rows={4}
                                     aria-label="Message"

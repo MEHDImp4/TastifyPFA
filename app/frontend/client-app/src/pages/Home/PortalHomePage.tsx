@@ -37,7 +37,7 @@ export const PortalHomePage = () => {
       
       {/* Simple Minimal Hero */}
       <section className="relative w-full flex flex-col justify-center border-b border-outline">
-        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-12 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
+        <div className="max-w-[1200px] mx-auto w-full px-client-margin py-[--spacing-section-y-lg] grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
           <motion.div
              initial={{ y: 10 }}
              animate={{ y: 0 }}
@@ -59,20 +59,20 @@ export const PortalHomePage = () => {
                 </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-2 sm:pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
                 <Link
                   to="/menu"
-                  className="btn-primary w-full min-h-16 sm:min-h-14 gap-3 text-[11px] tracking-[0.18em] px-6 group"
+                  className="btn-primary w-full sm:w-auto min-h-[52px] sm:min-h-[48px] gap-3 px-8 group"
                 >
-                  <UtensilsCrossed className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <UtensilsCrossed className="w-5 h-5" />
                   Voir la Carte
-                  <ArrowRight className="w-4 h-4 ml-auto sm:ml-0 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="w-4 h-4 ml-auto sm:ml-0 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   to="/reservations"
-                  className="btn-secondary w-full min-h-16 sm:min-h-14 gap-3 text-[11px] tracking-[0.18em] px-6 group"
+                  className="btn-secondary w-full sm:w-auto min-h-[44px] gap-3 px-6 group"
                 >
-                  <CalendarDays className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <CalendarDays className="w-5 h-5" />
                   Réserver une table
                 </Link>
             </div>
@@ -93,7 +93,7 @@ export const PortalHomePage = () => {
       </section>
 
       {/* Recommended Selection - Clean Grid */}
-      <section className="py-16 md:py-24">
+      <section className="page-section-lg">
         <div className="max-w-[1200px] mx-auto px-client-margin">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
             <div className="space-y-2">
@@ -112,7 +112,7 @@ export const PortalHomePage = () => {
             {isLoading ? [1, 2].map(i => (
                <div key={i} className="aspect-video bg-surface-container-high animate-pulse rounded-lg border border-outline" />
             )) : topDishes.length === 0 ? (
-              <div className="col-span-full py-16 text-center opacity-40">
+              <div className="col-span-full py-16 text-center text-on-surface-subtle">
                 <p className="text-sm font-bold uppercase tracking-widest">Sélection indisponible pour le moment</p>
               </div>
             ) : topDishes.map((dish, idx) => (
@@ -124,10 +124,10 @@ export const PortalHomePage = () => {
                 className="atelier-card p-6 flex flex-col h-full"
               >
                 <div className="flex justify-between items-start mb-8">
-                    <span className="font-mono text-xs opacity-20">0{idx + 1}</span>
+                    <span className="font-mono text-xs text-on-surface-subtle">0{idx + 1}</span>
                     <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full border border-outline">
                         <TrendingUp className="w-3 h-3 text-success" />
-                        <span className="text-[9px] font-bold uppercase tracking-widest">Tendance</span>
+                        <span className="text-caption font-bold uppercase tracking-widest">Tendance</span>
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@ export const PortalHomePage = () => {
                             {dish.image ? (
                                 <img src={dish.image} className="w-full h-full object-cover" alt={dish.nom} loading="lazy" decoding="async" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-variant/20 font-bold text-4xl">{dish.nom.charAt(0)}</div>
+                                <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-on-surface-subtle font-bold text-4xl">{dish.nom.charAt(0)}</div>
                             )}
                         </div>
                     </div>
@@ -173,7 +173,7 @@ export const PortalHomePage = () => {
       </section>
 
       {/* Minimal Footer */}
-      <footer className="py-20 px-client-margin border-t border-outline">
+      <footer className="page-section px-client-margin border-t border-outline">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-6 space-y-6">
                 <Link to="/" className="inline-flex min-h-11 items-center">

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page, type Route } from '@playwright/test';
 
 import {
   AUTHENTICATED_STORAGE_STATE,
@@ -14,6 +14,13 @@ const expectNoBlockingViolations = async (page: Page) => {
   );
 
   expect(blockingViolations).toEqual([]);
+};
+
+const asPaginatedPayload = (route: Route, rows: unknown[]) => {
+  const requestUrl = new URL(route.request().url());
+  return requestUrl.searchParams.has('page') || requestUrl.searchParams.has('page_size')
+    ? { count: rows.length, next: null, previous: null, results: rows }
+    : rows;
 };
 
 const expectNoLayoutOverflow = async (page: Page) => {
@@ -114,23 +121,24 @@ const mockMenuData = async (page: Page) => {
       ]),
     });
   });
-  await page.route('**/api/plats/', async (route) => {
+  await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
+    const rows = [
+      {
+        id: 82,
+        nom: 'Couscous Maison',
+        prix: '18.00',
+        temps_preparation: 12,
+        categorie: 81,
+        image: null,
+        est_active: true,
+        est_disponible: true,
+        description: 'Slow-cooked signature semolina service.',
+      },
+    ];
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([
-        {
-          id: 82,
-          nom: 'Couscous Maison',
-          prix: '18.00',
-          temps_preparation: 12,
-          categorie: 81,
-          image: null,
-          est_active: true,
-          est_disponible: true,
-          description: 'Slow-cooked signature semolina service.',
-        },
-      ]),
+      body: JSON.stringify(asPaginatedPayload(route, rows)),
     });
   });
 };
@@ -225,7 +233,7 @@ test.describe('client public quality', () => {
     await expect(page).toHaveURL('/checkout');
     await page.goto('/menu');
 
-    await page.getByText('Couscous Maison').first().click();
+    await page.getByRole('button', { name: /Voir le détail de Couscous Maison/i }).click();
     await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
     await page.getByRole('button', { name: /Fermer le détail du plat/i }).click();
     await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toHaveCount(0);
@@ -269,7 +277,7 @@ test.describe('client public quality', () => {
     await expect(page.locator('#mobile-navigation')).toHaveCount(0);
 
     await page.goto('/menu');
-    await page.getByText('Couscous Maison').first().click();
+    await page.getByRole('button', { name: /Voir le détail de Couscous Maison/i }).click();
     await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
     await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
     await expectNoLayoutOverflow(page);

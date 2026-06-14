@@ -136,7 +136,7 @@ export const CheckoutPage: React.FC = () => {
 
   return (
     <div className="page-shell">
-      <main className="max-w-7xl mx-auto px-client-margin py-8 md:py-24">
+      <main className="max-w-7xl mx-auto px-client-margin page-section">
         
         {/* Page Header */}
         <motion.div 

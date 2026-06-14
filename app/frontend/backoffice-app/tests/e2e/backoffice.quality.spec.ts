@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import type { Route } from '@playwright/test';
 
 const settingsPayload = {
   id: 1,
@@ -94,6 +95,13 @@ const expectNoUnexpectedHorizontalOverflow = async (page: Parameters<typeof test
   expect(hasOverflow).toBe(false);
 };
 
+const asPaginatedPayload = (route: Route, rows: unknown[]) => {
+  const requestUrl = new URL(route.request().url());
+  return requestUrl.searchParams.has('page') || requestUrl.searchParams.has('page_size')
+    ? { count: rows.length, next: null, previous: null, results: rows }
+    : rows;
+};
+
 const expectTouchTargetsAtLeast44 = async (page: Parameters<typeof test>[0]['page']) => {
   const offenders = await page.locator('button, [role="button"], input, select, textarea').evaluateAll((elements) =>
     elements
@@ -139,11 +147,11 @@ const mockManagerSettings = async (page: Parameters<typeof test>[0]['page']) => 
 };
 
 const mockManagerStock = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.route('**/api/stock/ingredients/', async (route) => {
+  await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(stockRows),
+      body: JSON.stringify(asPaginatedPayload(route, stockRows)),
     });
   });
 
@@ -157,21 +165,31 @@ const mockManagerStock = async (page: Parameters<typeof test>[0]['page']) => {
 };
 
 const mockManagerHr = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.route('**/api/employes/', async (route) => {
+  await page.route(/\/api\/employes\/(?:\?.*)?$/, async (route) => {
+    const requestUrl = new URL(route.request().url());
+    const search = requestUrl.searchParams.get('search')?.toLowerCase() ?? '';
+    const rows = search
+      ? hrRows.filter(row => `${row.username} ${row.poste}`.toLowerCase().includes(search))
+      : hrRows;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(hrRows),
+      body: JSON.stringify(asPaginatedPayload(route, rows)),
     });
   });
 };
 
 const mockManagerAvis = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.route('**/api/avis/', async (route) => {
+  await page.route(/\/api\/avis\/(?:\?.*)?$/, async (route) => {
+    const requestUrl = new URL(route.request().url());
+    const search = requestUrl.searchParams.get('search')?.toLowerCase() ?? '';
+    const rows = search
+      ? avisRows.filter(row => `${row.commentaire} ${row.user_username}`.toLowerCase().includes(search))
+      : avisRows;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(avisRows),
+      body: JSON.stringify(asPaginatedPayload(route, rows)),
     });
   });
 };
@@ -190,11 +208,11 @@ const mockSalle = async (page: Parameters<typeof test>[0]['page']) => {
 };
 
 const mockReservations = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.route('**/api/reservations/', async (route) => {
+  await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(reservationsRows),
+      body: JSON.stringify(asPaginatedPayload(route, reservationsRows)),
     });
   });
 };
@@ -211,16 +229,16 @@ const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page']) 
     });
   });
 
-  await page.route('**/api/plats/', async (route) => {
+  await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(kitchenMenuRows),
+      body: JSON.stringify(asPaginatedPayload(route, kitchenMenuRows)),
     });
   });
 
-  await page.route('**/api/stock/ingredients/', async (route) => {
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+  await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(asPaginatedPayload(route, [])) });
   });
 
   await page.route('**/api/stock/plat-ingredients/', async (route) => {

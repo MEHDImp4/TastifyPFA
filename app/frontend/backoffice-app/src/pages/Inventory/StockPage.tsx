@@ -151,7 +151,7 @@ export const StockPage: React.FC = () => {
           })}
         </div>
         <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-outline pt-4">
-          <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-60">
+          <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
             Total : {totalCount} ingrédients
           </span>
           {totalPages > 1 && (

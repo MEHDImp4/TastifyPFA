@@ -69,7 +69,7 @@ export const Login: React.FC = () => {
                <User className="w-5 h-5 text-on-surface-variant" strokeWidth={1} />
             </div>
             <h1 aria-label="Tastify Staff OS" className="text-4xl   tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
+            <p className="text-[10px] font-bold text-[#52525A] uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
         </motion.div>
 
         {/* Login Card */}
@@ -85,7 +85,7 @@ export const Login: React.FC = () => {
 
           <form onSubmit={handleSubmit} noValidate className="space-y-8">
             <div className="space-y-3">
-              <label htmlFor="staff-login-username" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Opérateur</label>
+              <label htmlFor="staff-login-username" className="block text-[10px] font-bold text-[#3F3F46] uppercase tracking-widest ml-1">Opérateur</label>
               <input
                 id="staff-login-username"
                 data-testid="login-username"
@@ -95,12 +95,12 @@ export const Login: React.FC = () => {
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? errorId : undefined}
                 autoComplete="username"
-                className="field-control"
+                className="field-control !border-[#B0B0B4] !bg-white !text-[#111111] placeholder:!text-[#52525A]"
               />
             </div>
 
             <div className="space-y-3">
-              <label htmlFor="staff-login-password" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Code secret</label>
+              <label htmlFor="staff-login-password" className="block text-[10px] font-bold text-[#3F3F46] uppercase tracking-widest ml-1">Code secret</label>
               <div className="relative">
                 <input
                   id="staff-login-password"
@@ -111,14 +111,14 @@ export const Login: React.FC = () => {
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? errorId : undefined}
                   autoComplete="current-password"
-                  className="field-control pr-12"
+                  className="field-control pr-12 !border-[#B0B0B4] !bg-white !text-[#111111] placeholder:!text-[#52525A]"
                 />
                 <button
                   data-testid="login-password-visibility"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                  className="btn-icon absolute right-2 top-1/2 -translate-y-1/2 border-transparent bg-transparent"
+                  className="btn-icon absolute right-2 top-1/2 -translate-y-1/2 !border-transparent !bg-transparent !text-[#52525A] hover:!text-[#111111]"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
                 </button>
@@ -128,7 +128,7 @@ export const Login: React.FC = () => {
             <button
               data-testid="login-submit"
               type="submit" disabled={isLoading}
-              className="btn-primary w-full h-14"
+              className="btn-primary w-full h-14 !bg-[#111111] !text-[#FBFBFA] hover:!bg-[#111111]"
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Connexion</span>}
             </button>
@@ -137,7 +137,7 @@ export const Login: React.FC = () => {
 
         {/* Footer info */}
         <motion.div variants={itemVariants} className="mt-12 flex flex-col items-center gap-4">
-            <div className="flex items-center gap-3 text-on-surface-variant/40 font-bold text-[9px] uppercase tracking-widest">
+            <div className="flex items-center gap-3 text-[#52525A] font-bold text-[9px] uppercase tracking-widest">
                <span>Accès Sécurisé</span>
                <div className="w-1 h-1 rounded-full bg-outline" />
                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> Connexion sécurisée</span>

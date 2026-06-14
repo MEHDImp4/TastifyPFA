@@ -93,7 +93,7 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
                             />
                         ))}
                     </div>
-                    <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-widest ml-1">L'Excellence se prépare</span>
+                    <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">L'Excellence se prépare</span>
                 </div>
             </motion.div>
             

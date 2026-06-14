@@ -114,7 +114,7 @@ export const Login: React.FC = () => {
           <motion.div variants={fadeIn} className="space-y-1.5">
             <div className="flex justify-between items-center px-1">
                <label htmlFor="password" className="font-sans text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.3em]">Mot de passe</label>
-               <Link to="/forgot-password" title="Mot de passe oublié" className="inline-flex min-h-11 items-center px-1 font-sans text-[9px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.1em]">Oublié ?</Link>
+               <Link to="/forgot-password" title="Mot de passe oublié" className="inline-flex min-h-11 items-center px-1 font-sans text-[10px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.1em]">Oublié ?</Link>
             </div>
             <input
               id="password"

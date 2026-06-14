@@ -45,7 +45,7 @@ export const LoyaltyPage: React.FC = () => {
             className="flex flex-col items-center gap-6 relative z-10"
         >
             <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Chargement des privilèges</span>
+            <span className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.4em]">Chargement des privilèges</span>
         </motion.div>
         <div className="absolute inset-0 bg-on-background/5 blur-[100px] rounded-full" />
     </div>
@@ -53,7 +53,7 @@ export const LoyaltyPage: React.FC = () => {
 
   return (
     <div className="page-shell">
-      <main className="max-w-7xl mx-auto px-client-margin py-12 md:py-24 space-y-20">
+      <main className="max-w-7xl mx-auto px-client-margin page-section space-y-20">
         
         {/* Hero Loyalty Status */}
         <section className="relative rounded-lg overflow-hidden bg-on-background p-8 md:p-16 text-center shadow-xl">
@@ -131,7 +131,7 @@ export const LoyaltyPage: React.FC = () => {
                        className={`group relative p-6 md:p-8 rounded-lg border transition-colors duration-300 overflow-hidden flex flex-col justify-between min-h-[320px] ${isUnlockable ? 'bg-surface border-outline hover:border-on-background/20 shadow-sm hover:shadow-md' : 'bg-surface-container-high border-transparent grayscale'}`}
                     >
                        <div className="space-y-6 relative z-10">
-                          <div className={`w-14 h-14 rounded-lg flex items-center justify-center transition-all duration-500 ${isUnlockable ? 'bg-surface-container-high text-on-background group-hover:bg-on-background group-hover:text-background' : 'bg-surface-container-high text-on-surface-variant/40'}`}>
+                          <div className={`w-14 h-14 rounded-lg flex items-center justify-center transition-all duration-500 ${isUnlockable ? 'bg-surface-container-high text-on-background group-hover:bg-on-background group-hover:text-background' : 'bg-surface-container-high text-on-surface-subtle'}`}>
                              <Gift className="w-6 h-6" />
                           </div>
                           <div className="space-y-3">

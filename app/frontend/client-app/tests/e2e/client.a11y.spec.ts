@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import type { Route } from '@playwright/test';
 
 import { mockConfig, mockRefreshFail } from './fixtures/api';
 
@@ -7,6 +8,13 @@ const DESIGN_VIEWPORTS = [
   { width: 375, height: 812 },
   { width: 1440, height: 900 },
 ];
+
+const asPaginatedPayload = (route: Route, rows: unknown[]) => {
+  const requestUrl = new URL(route.request().url());
+  return requestUrl.searchParams.has('page') || requestUrl.searchParams.has('page_size')
+    ? { count: rows.length, next: null, previous: null, results: rows }
+    : rows;
+};
 
 const mockHomeRecommendations = async (page: Parameters<typeof test>[0]['page']) => {
   await page.route('**/api/plats/top-recommendations/', async (route) => {
@@ -43,24 +51,25 @@ const mockMenuCatalog = async (page: Parameters<typeof test>[0]['page']) => {
     });
   });
 
-  await page.route('**/api/plats/', async (route) => {
+  await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
+    const rows = [
+      {
+        id: 9101,
+        categorie: 1,
+        nom: 'Couscous Royal',
+        description: 'Semoule fine, légumes de saison et bouillon parfumé.',
+        prix: '135.00',
+        temps_preparation: 30,
+        image: null,
+        est_disponible: true,
+        est_active: true,
+        sentiment_score: 22,
+      },
+    ];
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([
-        {
-          id: 9101,
-          categorie: 1,
-          nom: 'Couscous Royal',
-          description: 'Semoule fine, légumes de saison et bouillon parfumé.',
-          prix: '135.00',
-          temps_preparation: 30,
-          image: null,
-          est_disponible: true,
-          est_active: true,
-          sentiment_score: 22,
-        },
-      ]),
+      body: JSON.stringify(asPaginatedPayload(route, rows)),
     });
   });
 };
@@ -129,7 +138,7 @@ test.describe('client public accessibility and responsiveness', () => {
 
     await expect(page.getByRole('link', { name: /voir la carte/i }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: /réserver/i }).first()).toBeVisible();
-    await expect(page.getByRole('link', { name: /log in/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /ouvrir la navigation/i })).toBeVisible();
     await expect(page.getByText('Tagine Signature')).toBeVisible();
     await expect(page.getByText(/Tastify/i).first()).toBeVisible();
   });
@@ -161,7 +170,7 @@ test.describe('client public accessibility and responsiveness', () => {
 
       await page.goto('/contact');
       await expect(page.getByRole('heading', { name: /Registre de Contact/i })).toBeVisible();
-      await expect(page.getByRole('button', { name: /Transmettre la Liaison/i })).toBeVisible();
+      await expect(page.getByRole('button', { name: /Envoyer le message/i })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
 

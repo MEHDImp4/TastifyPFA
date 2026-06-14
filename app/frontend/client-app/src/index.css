@@ -39,9 +39,22 @@
   --radius-lg: 8px;
 
   --spacing-client-margin: clamp(1rem, 4vw, 2rem);
-  --text-ui-label: 0.6875rem;
+
+  /* Spacing scale — sober restaurant rhythm */
+  --spacing-section-y: clamp(2.5rem, 6vw, 5rem);        /* 10→20 default */
+  --spacing-section-y-lg: clamp(4rem, 8vw, 6rem);        /* 16→24 hero-adjacent */
+
+  /* Typography scale */
+  --text-ui-label: 0.6875rem;            /* 11px */
+  --text-button: 0.75rem;                /* 12px — button baseline */
+  --text-button-lg: 0.8125rem;           /* 13px — primary CTA emphasis */
+  --text-caption: 0.75rem;               /* 12px — minimum readable */
   --text-display-lg: clamp(2.75rem, 9vw, 5.75rem);
   --text-display-lg-mobile: clamp(2.25rem, 12vw, 4rem);
+
+  /* Accessible secondary text (solid, no opacity hacks) */
+  --color-on-surface-muted: #3F3F46;     /* ~4.5:1 on #FBFBFA */
+  --color-on-surface-subtle: #71717A;    /* ~3.5:1 on #FBFBFA — metadata only */
 }
 
 @layer base {
@@ -139,12 +152,19 @@
   }
 
   .page-section {
-    @apply py-10 md:py-20;
+    @apply py-[--spacing-section-y];
+  }
+  .page-section-lg {
+    @apply py-[--spacing-section-y-lg];
   }
 
   .editorial-kicker,
   .text-ui-label {
-    @apply text-[10px] font-bold uppercase tracking-widest;
+    @apply text-[length:var(--text-ui-label)] font-bold uppercase tracking-widest;
+  }
+
+  .text-caption {
+    @apply text-[length:var(--text-caption)] font-medium;
   }
 
   .text-display-lg {
@@ -164,15 +184,15 @@
   }
 
   .btn-primary {
-    @apply min-h-[44px] px-6 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:bg-primary hover:shadow-lg hover:shadow-black/10 active:scale-[0.98] disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 text-center leading-tight;
+    @apply min-h-[48px] px-7 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button-lg)] font-bold uppercase tracking-wider transition-all duration-200 hover:bg-on-background/90 hover:shadow-lg hover:shadow-black/15 active:scale-[0.98] disabled:opacity-40 disabled:hover:shadow-none disabled:active:scale-100 text-center leading-tight;
   }
 
   .btn-secondary {
-    @apply min-h-[44px] px-6 bg-surface border border-[#B0B0B4] text-on-background rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-transparent border border-outline-variant text-on-background rounded-md inline-flex items-center justify-center gap-2 text-[length:var(--text-button)] font-semibold tracking-wide transition-all duration-200 hover:border-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-40 disabled:active:scale-100 text-center leading-tight;
   }
 
   .btn-danger {
-    @apply min-h-[44px] px-6 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 hover:brightness-95 active:scale-[0.98] disabled:opacity-45 text-center leading-tight;
+    @apply min-h-[44px] px-6 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2 text-[length:var(--text-button)] font-bold uppercase tracking-wider transition-all duration-200 hover:brightness-95 active:scale-[0.98] disabled:opacity-45 text-center leading-tight;
   }
 
   .btn-icon {
@@ -180,7 +200,7 @@
   }
 
   .field-control {
-    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-variant/70 focus:border-on-background focus:bg-surface disabled:opacity-50;
+    @apply w-full min-h-[44px] rounded-md border border-outline bg-background px-4 text-sm font-semibold text-on-background transition-all duration-200 placeholder:text-on-surface-subtle focus:border-on-background focus:bg-surface disabled:opacity-50;
   }
 
   .form-error {

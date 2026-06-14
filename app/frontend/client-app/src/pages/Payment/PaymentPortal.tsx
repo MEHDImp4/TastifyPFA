@@ -118,7 +118,7 @@ export const PaymentPortal: React.FC = () => {
   );
 
   return (
-    <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center py-8 md:py-24 px-4 sm:px-6 overflow-x-hidden">
+    <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center page-section px-4 sm:px-6 overflow-x-hidden">
         <main className="w-full max-w-2xl flex flex-col gap-8 md:gap-12">
             
             {/* Header Section */}
@@ -209,7 +209,7 @@ export const PaymentPortal: React.FC = () => {
                     </button>
                     <div className="flex items-center justify-center gap-2 text-on-surface-variant">
                        <ShieldCheck className="w-3 h-3" />
-                       <span className="text-[8px] font-bold uppercase tracking-[0.3em]">Centre de Sécurité Cryptographique de Bout en Bout</span>
+                       <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Centre de Sécurité Cryptographique de Bout en Bout</span>
                     </div>
                 </div>
             </div>

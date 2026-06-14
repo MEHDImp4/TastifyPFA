@@ -127,7 +127,7 @@ export const ReservationWizard: React.FC = () => {
 
   return (
     <div className="page-shell">
-      <main className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-20">
+      <main className="max-w-4xl mx-auto px-4 md:px-6 page-section">
         
         {/* Reservation Wizard Card */}
         <div className="w-full bg-surface border border-outline rounded-xl flex flex-col overflow-hidden relative">

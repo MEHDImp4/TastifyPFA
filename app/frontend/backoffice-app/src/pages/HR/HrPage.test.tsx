@@ -7,6 +7,7 @@ import type { Employe } from '../../types/inventory';
 vi.mock('../../api/inventory_hr', () => ({
   hrApi: {
     getEmployes: vi.fn(),
+    getEmployesPage: vi.fn(),
   },
 }));
 
@@ -16,7 +17,7 @@ describe('HrPage component', () => {
   });
 
   it('renders loading state initially', () => {
-    vi.mocked(hrApi.getEmployes).mockReturnValue(new Promise(() => {}));
+    vi.mocked(hrApi.getEmployesPage).mockReturnValue(new Promise(() => {}));
     render(<HrPage />);
     // When loading, heading is not present
     expect(screen.queryByText('Registre du Personnel')).toBeNull();
@@ -44,8 +45,13 @@ describe('HrPage component', () => {
       },
     ];
 
-    vi.mocked(hrApi.getEmployes).mockResolvedValue({
-      data: mockEmployes,
+    vi.mocked(hrApi.getEmployesPage).mockResolvedValue({
+      data: {
+        count: mockEmployes.length,
+        next: null,
+        previous: null,
+        results: mockEmployes,
+      },
       status: 200,
       statusText: 'OK',
       headers: {},
@@ -82,8 +88,13 @@ describe('HrPage component', () => {
       },
     ];
 
-    vi.mocked(hrApi.getEmployes).mockResolvedValue({
-      data: mockEmployes,
+    vi.mocked(hrApi.getEmployesPage).mockResolvedValue({
+      data: {
+        count: mockEmployes.length,
+        next: null,
+        previous: null,
+        results: mockEmployes,
+      },
       status: 200,
       statusText: 'OK',
       headers: {},

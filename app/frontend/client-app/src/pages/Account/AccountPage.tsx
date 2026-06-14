@@ -101,7 +101,7 @@ export const AccountPage: React.FC = () => {
             className="flex flex-col items-center gap-6 relative z-10"
         >
             <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1.5}/>
-            <span className="font-sans text-[9px] font-black text-on-surface-variant uppercase tracking-[0.4em]">Chargement de votre espace</span>
+            <span className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.4em]">Chargement de votre espace</span>
         </motion.div>
         <div className="absolute inset-0 bg-on-background/5 blur-[100px] rounded-full" />
     </div>
@@ -109,7 +109,7 @@ export const AccountPage: React.FC = () => {
 
   return (
     <div className="page-shell">
-      <main className="max-w-7xl mx-auto px-client-margin py-8 md:py-24 space-y-16 md:space-y-24">
+      <main className="max-w-7xl mx-auto px-client-margin page-section space-y-16 md:space-y-24">
         
         {/* Profile Hero Section */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -182,7 +182,7 @@ export const AccountPage: React.FC = () => {
                             className={`p-6 md:p-8 rounded-lg border transition-all duration-300 flex flex-col justify-between min-h-[260px] ${isUnlockable ? 'bg-surface border-outline shadow-sm hover:border-on-background/20' : 'bg-surface-container-high border-transparent grayscale'}`}
                         >
                             <div className="space-y-6">
-                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isUnlockable ? 'bg-surface-container-high text-on-background' : 'bg-surface-container-high text-on-surface-variant/40'}`}>
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isUnlockable ? 'bg-surface-container-high text-on-background' : 'bg-surface-container-high text-on-surface-subtle'}`}>
                                     <Gift className="w-5 h-5" />
                                 </div>
                                 <div className="space-y-2">
@@ -193,9 +193,9 @@ export const AccountPage: React.FC = () => {
                             <div className="flex justify-between items-center border-t border-outline pt-6">
                                 <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">{reward.points_requis} pts</span>
                                 {isUnlockable ? (
-                                    <button className="min-h-11 px-3 -mr-3 text-on-background font-sans text-[9px] font-black uppercase tracking-widest flex items-center gap-1 rounded-md hover:bg-surface-container-high hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
+                                    <button className="min-h-11 px-3 -mr-3 text-on-background font-sans text-[10px] font-black uppercase tracking-widest flex items-center gap-1 rounded-md hover:bg-surface-container-high hover:translate-x-1 transition-all">En profiter <ChevronRight className="w-3 h-3" /></button>
                                 ) : (
-                                    <span className="font-sans text-[9px] font-black text-on-surface-variant/40 uppercase tracking-widest">Verrouillé</span>
+                                    <span className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-widest">Verrouillé</span>
                                 )}
                             </div>
                         </motion.div>
@@ -281,7 +281,7 @@ export const AccountPage: React.FC = () => {
                                     <p className="font-body text-sm text-on-surface-variant">{res.heure_debut} • Table {res.table}</p>
                                 </div>
                             </div>
-                            <span className="bg-surface-container-high border border-outline px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest text-on-surface-variant">{res.statut}</span>
+                            <span className="bg-surface-container-high border border-outline px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-on-surface-variant">{res.statut}</span>
                         </motion.div>
                     )) : (
                         <div className="py-20 text-center opacity-20">
@@ -300,7 +300,7 @@ export const AccountPage: React.FC = () => {
                  
                  <div className="space-y-4 relative z-10">
                     <h3 className="text-3xl text-background tracking-tight m-0">Menu privé</h3>
-                    <p className="font-sans text-[9px] font-black uppercase tracking-[0.3em] text-background/70">Gestion du compte & assistance</p>
+                    <p className="font-sans text-[10px] font-black uppercase tracking-[0.3em] text-background/70">Gestion du compte & assistance</p>
                  </div>
 
                  <div className="space-y-2 relative z-10">
