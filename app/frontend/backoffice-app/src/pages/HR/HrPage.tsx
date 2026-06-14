@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { hrApi } from '../../api/inventory_hr';
 import type { Employe } from '../../types/inventory';
-import { 
-  Plus, 
-  Edit2, 
-  Users, 
-  Loader2, 
-  Search, 
+import {
+  Users,
+  Loader2,
+  Search,
   Download,
-  MoreVertical,
   Mail,
   Phone,
   ChevronLeft,
@@ -24,7 +21,6 @@ export const HrPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [activeTab, setActiveFilter] = useState('ALL');
 
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
   const [totalCount, setTotalCount] = useState(0);
@@ -88,8 +84,7 @@ export const HrPage: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
-      
-      {/* Header */}
+
       <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
           <h1 aria-label="Ressources humaines" className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
@@ -98,7 +93,7 @@ export const HrPage: React.FC = () => {
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
            <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
-            <input 
+            <input
               type="text"
               aria-label="Rechercher dans le personnel"
               placeholder="Rechercher nom, poste ou ID..."
@@ -110,20 +105,15 @@ export const HrPage: React.FC = () => {
           <button onClick={handleExportCSV} className="btn-ghost h-10 px-4">
              <Download className="w-3.5 h-3.5" /> <span>Exporter</span>
           </button>
-          <button className="btn-primary h-10 px-6">
-            <Plus className="w-4 h-4" /> <span>Nouvel Employé</span>
-          </button>
         </div>
       </div>
 
-      {/* Main Grid Content */}
       <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
-        
-        {/* Top Status Bar */}
+
         <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
                 {['ALL', 'GERANT', 'CUISINIER', 'SERVEUR'].map(tab => (
-                    <button 
+                    <button
                         key={tab}
                         onClick={() => { setActiveFilter(tab); setCurrentPage(1); }}
                         className={`min-h-[44px] px-4 rounded font-bold text-[9px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-on-background text-background' : 'bg-surface border border-outline text-on-background hover:border-on-background'}`}
@@ -146,29 +136,25 @@ export const HrPage: React.FC = () => {
 
         <div className="flex-1 atelier-card overflow-hidden flex flex-col">
 
-          {/* Scrollable Table Area */}
           <div className="flex-1 overflow-auto custom-scrollbar">
             <div className="min-w-[750px]">
-          {/* Table Header */}
           <div className="flex-none grid grid-cols-12 gap-4 px-8 h-12 items-center border-b border-outline bg-surface-container-high text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
             <div className="col-span-1 flex items-center gap-2"><Hash className="w-2.5 h-2.5" /> ID</div>
             <div className="col-span-3">Identité</div>
             <div className="col-span-2 text-center">Rôle</div>
             <div className="col-span-2 text-center">Statut</div>
-            <div className="col-span-2">Contact</div>
-            <div className="col-span-2 text-right">Actions</div>
+            <div className="col-span-4">Contact</div>
           </div>
 
-          {/* Table Body */}
             {employes.length > 0 ? employes.map((emp) => (
-                <div 
+                <div
                   key={emp.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-center group"
                 >
                   <div className="col-span-1 font-mono text-[10px] font-bold text-on-surface-variant">#{emp.id.toString().slice(-4)}</div>
                   <div className="col-span-3 flex items-center gap-4 min-w-0">
                     <div className="w-9 h-9 rounded bg-background border border-outline flex items-center justify-center shrink-0">
-                        <span className="text-[11px] font-bold text-on-background">{(emp.user_details?.first_name || emp.first_name || emp.user_details?.username || emp.username || 'U').charAt(0).toUpperCase()}</span>
+                        <span className="text-[11px] font-bold text-on-background">{(emp.user_details?.first_name || emp.first_name || emp.user_details?.username || emp.username || '?').charAt(0).toUpperCase()}</span>
                     </div>
                     <div className="min-w-0">
                         <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider truncate">
@@ -191,19 +177,15 @@ export const HrPage: React.FC = () => {
                       <span className="text-[8px] font-bold uppercase tracking-widest">{(emp.user_details?.is_active ?? emp.is_active ?? true) ? 'ACTIF' : 'INACTIF'}</span>
                     </div>
                   </div>
-                  <div className="col-span-2 space-y-1">
-                    <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
+                  <div className="col-span-4 space-y-1">
+                    <div className="flex items-center gap-2 text-on-surface-variant/60">
                       <Mail className="w-3 h-3 opacity-20" />
                       <span className="text-[9px] font-bold truncate">{emp.user_details?.email || emp.email || 'Non renseigné'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-on-surface-variant/60 hover:text-on-background transition-colors">
+                    <div className="flex items-center gap-2 text-on-surface-variant/60">
                       <Phone className="w-3 h-3 opacity-20" />
                       <span className="text-[9px] font-bold">{emp.telephone || 'Non renseigné'}</span>
                     </div>
-                  </div>
-                  <div className="col-span-2 flex justify-end gap-2">
-                    <button aria-label={`Modifier ${emp.user_details?.username || emp.username || 'employé'}`} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
-                    <button aria-label={`Options de ${emp.user_details?.username || emp.username || 'employé'}`} className="btn-icon"><MoreVertical className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
             )) : (
@@ -215,7 +197,6 @@ export const HrPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Table Footer */}
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
                 Total : {totalCount} Dossiers
@@ -237,4 +218,3 @@ export const HrPage: React.FC = () => {
     </div>
   );
 };
-

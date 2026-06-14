@@ -218,6 +218,11 @@
     @apply rounded-md border border-error/30 bg-error/5 px-4 py-3 text-sm font-semibold text-error;
   }
 
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-outline rounded-full; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #F0E6DC transparent; }
+
   .no-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -229,4 +234,8 @@
 
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { @apply bg-outline rounded-full; }
+
+  .btn-ghost {
+    @apply min-h-[44px] px-6 bg-transparent rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button)] font-semibold tracking-wide text-on-surface-variant hover:text-on-background hover:bg-surface-container-high active:scale-[0.98] disabled:opacity-45 disabled:active:scale-100 transition-all duration-200 text-center leading-tight;
+  }
 }

@@ -1,11 +1,9 @@
 import React from 'react';
-import { 
-  Terminal, 
-  Cpu, 
-  Network, 
+import {
+  Terminal,
+  Cpu,
+  Network,
   Database,
-  Download,
-  RotateCcw,
   Phone,
   Mail,
   Server,
@@ -32,14 +30,6 @@ export const MaintenancePage: React.FC = () => {
         <div>
           <h1 aria-label="System Health" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Télémétrie temps réel et état des modules</p>
-        </div>
-        <div className="flex gap-4 items-center">
-          <button aria-label="Export Logs" className="btn-ghost h-10 px-4">
-            <Download className="w-3.5 h-3.5" /> <span>Exporter Logs</span>
-          </button>
-          <button aria-label="Manual Sync" className="btn-primary h-10 px-6">
-            <RotateCcw className="w-4 h-4" /> <span>Sync Manuelle</span>
-          </button>
         </div>
       </header>
 
@@ -128,14 +118,14 @@ export const MaintenancePage: React.FC = () => {
                  <h3 className="text-[10px] font-bold text-on-background uppercase tracking-widest flex items-center gap-2 mb-4"><Database className="w-4 h-4" /> Support Technique</h3>
                  <p className="text-[11px] text-on-surface-variant leading-relaxed opacity-60 uppercase mb-8">Pour les pannes critiques ou matérielles ne pouvant être résolues par un redémarrage, contactez le support de niveau 2 immédiatement.</p>
                  <div className="space-y-3">
-                    <button className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg hover:bg-background transition-all group">
-                       <Phone className="w-4 h-4 text-on-surface-variant group-hover:text-on-background" />
-                       <span className="text-[9px] font-bold text-on-surface-variant group-hover:text-on-background uppercase tracking-widest">1-800-TASTIFY</span>
-                    </button>
-                    <button className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg hover:bg-background transition-all group">
-                       <Mail className="w-4 h-4 text-on-surface-variant group-hover:text-on-background" />
-                       <span className="text-[9px] font-bold text-on-surface-variant group-hover:text-on-background uppercase tracking-widest">noc@tastify.inc</span>
-                    </button>
+                    <div className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg">
+                       <Phone className="w-4 h-4 text-on-surface-variant" />
+                       <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">1-800-TASTIFY</span>
+                    </div>
+                    <div className="w-full flex items-center gap-4 p-4 border border-outline rounded-lg">
+                       <Mail className="w-4 h-4 text-on-surface-variant" />
+                       <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">noc@tastify.inc</span>
+                    </div>
                  </div>
               </div>
            </div>

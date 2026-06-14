@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { avisApi, type Avis } from '../../api/avis';
-import { 
-  Loader2, 
-  Search, 
-  Download,
+import {
+  Loader2,
+  Search,
   Smile,
   Meh,
   Frown,
@@ -21,7 +20,6 @@ export const AvisPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const [totalCount, setTotalCount] = useState(0);
@@ -67,8 +65,7 @@ export const AvisPage: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
-      
-      {/* Header */}
+
       <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
           <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
@@ -77,7 +74,7 @@ export const AvisPage: React.FC = () => {
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
            <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
-            <input 
+            <input
               type="text"
               aria-label="Filtrer les avis"
               placeholder="Filtrer les avis..."
@@ -86,16 +83,11 @@ export const AvisPage: React.FC = () => {
               className="field-control w-full sm:w-56 pl-10 pr-4 text-[10px] uppercase"
             />
           </div>
-          <button className="btn-ghost h-10 px-4">
-             <Download className="w-3.5 h-3.5" /> <span>Rapport PDF</span>
-          </button>
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
-        
-        {/* Stats */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
               { label: 'Satisfaction Globale', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
@@ -115,19 +107,15 @@ export const AvisPage: React.FC = () => {
 
         <div className="flex-1 atelier-card overflow-hidden flex flex-col">
 
-          {/* Scrollable Table Area */}
           <div className="flex-1 overflow-auto custom-scrollbar">
             <div className="min-w-[700px]">
-          {/* Table Header */}
           <div className="flex-none grid grid-cols-12 gap-4 px-8 h-12 items-center border-b border-outline bg-surface-container-high text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
             <div className="col-span-1 flex items-center gap-2"><Hash className="w-2.5 h-2.5" /> ID</div>
             <div className="col-span-2">Convive</div>
-            <div className="col-span-5">Commentaire</div>
-            <div className="col-span-2 text-center">Score IA</div>
-            <div className="col-span-2 text-right">Actions</div>
+            <div className="col-span-6">Commentaire</div>
+            <div className="col-span-3 text-center">Score IA</div>
           </div>
 
-          {/* Table Body */}
             {avis.length > 0 ? avis.map((a) => {
               const username = a.username ?? a.user_username ?? 'client';
               return (
@@ -140,23 +128,20 @@ export const AvisPage: React.FC = () => {
                     <h3 className="text-[11px] font-bold text-on-background uppercase tracking-wider">@{username}</h3>
                     <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
                   </div>
-                  <div className="col-span-5">
+                  <div className="col-span-6">
                     <p className="text-xs text-on-surface-variant leading-relaxed select-all">
                         {a.commentaire}
                     </p>
                   </div>
-                  <div className="col-span-2 flex flex-col items-center justify-center gap-1">
+                  <div className="col-span-3 flex flex-col items-center justify-center gap-1">
                     {getSentimentIcon(a.sentiment_score || 0)}
                     <span className={`text-[10px] font-bold tracking-widest font-mono opacity-60 ${
-                        (a.sentiment_score || 0) > 0.2 ? 'text-success' : 
-                        (a.sentiment_score || 0) < -0.2 ? 'text-error' : 
+                        (a.sentiment_score || 0) > 0.2 ? 'text-success' :
+                        (a.sentiment_score || 0) < -0.2 ? 'text-error' :
                         'text-on-surface-variant'
                     }`}>
                         {((a.sentiment_score || 0) * 100).toFixed(0)}%
                     </span>
-                  </div>
-                  <div className="col-span-2 flex justify-end gap-2">
-                    <button className="min-h-[44px] px-4 border border-outline rounded text-[9px] font-bold uppercase tracking-widest text-on-background hover:border-on-background transition-all">Archiver</button>
                   </div>
                 </div>
               );
@@ -169,7 +154,6 @@ export const AvisPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
                 Analyse basée sur {totalCount} témoignages

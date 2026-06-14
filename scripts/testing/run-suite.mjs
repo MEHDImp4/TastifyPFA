@@ -21,6 +21,8 @@ const composeEnv = {
 };
 
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const appServices = ['db', 'redis', 'backend'];
+const ciComposeFiles = ['docker-compose.yml', 'docker-compose.ci.yml'];
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -65,6 +67,22 @@ function runCompose(files, args, env = {}) {
   });
 }
 
+function dumpComposeDiagnostics(files, services = []) {
+  console.error('Docker compose service status:');
+  try {
+    runCompose(files, ['ps']);
+  } catch {
+    console.error('Unable to read docker compose service status.');
+  }
+
+  console.error('Docker compose logs:');
+  try {
+    runCompose(files, ['logs', '--no-color', '--tail=200', ...services]);
+  } catch {
+    console.error('Unable to read docker compose logs.');
+  }
+}
+
 async function waitForHttp(url, { expectJson = false, timeoutMs = 180_000 } = {}) {
   const deadline = Date.now() + timeoutMs;
   let lastError;
@@ -98,11 +116,14 @@ async function waitForHttp(url, { expectJson = false, timeoutMs = 180_000 } = {}
   throw new Error(`Timed out waiting for ${url}${lastError ? `: ${lastError.message}` : ''}`);
 }
 
-async function withCompose(files, upArgs, task) {
+async function withCompose(files, upArgs, task, { diagnosticServices = [] } = {}) {
   runCompose(files, upArgs);
 
   try {
     return await task();
+  } catch (error) {
+    dumpComposeDiagnostics(files, diagnosticServices);
+    throw error;
   } finally {
     try {
       runCompose(files, ['down', '--volumes', '--remove-orphans']);
@@ -113,37 +134,51 @@ async function withCompose(files, upArgs, task) {
 }
 
 async function runPreviewSmoke() {
+  const files = [...ciComposeFiles, 'docker-compose.preview.yml'];
+  const services = [...appServices, 'backoffice-app', 'client-app'];
+
   await withCompose(
-    ['docker-compose.yml', 'docker-compose.preview.yml'],
-    ['up', '-d', '--build', '--remove-orphans'],
+    files,
+    ['up', '-d', '--build', '--remove-orphans', ...services],
     async () => {
       await waitForHttp('http://127.0.0.1:8000/api/health/', { expectJson: true });
       await waitForHttp('http://127.0.0.1:3000/');
       await waitForHttp('http://127.0.0.1:3003/');
     },
+    { diagnosticServices: services },
   );
 }
 
 async function runLoadTests() {
   await withCompose(
-    ['docker-compose.yml'],
-    ['up', '-d', '--build', '--remove-orphans', 'db', 'redis', 'backend'],
+    ciComposeFiles,
+    ['up', '-d', '--build', '--remove-orphans', ...appServices],
     async () => {
       await waitForHttp('http://127.0.0.1:8000/api/health/', { expectJson: true });
-      runCompose(['docker-compose.yml', 'docker-compose.ci.yml'], ['run', '--rm', 'load-tester']);
+      runCompose(ciComposeFiles, ['run', '--rm', 'load-tester']);
     },
+    { diagnosticServices: appServices },
   );
 }
 
 async function runE2E(command, env = {}, extraComposeFiles = []) {
-  const files = ['docker-compose.yml', ...extraComposeFiles];
+  const files = [...ciComposeFiles, ...extraComposeFiles];
   const backendReadyUrl = 'http://127.0.0.1:8000/api/health/';
   const backofficeBaseUrl = env.BACKOFFICE_BASE_URL ?? 'http://127.0.0.1:3000';
   const clientBaseUrl = env.CLIENT_BASE_URL ?? 'http://127.0.0.1:3003';
+  const services = [...appServices];
+
+  if (command !== 'e2e:client') {
+    services.push('backoffice-app');
+  }
+
+  if (command !== 'e2e:backoffice' && command !== 'e2e:ui') {
+    services.push('client-app');
+  }
 
   await withCompose(
     files,
-    ['up', '-d', '--build', '--remove-orphans'],
+    ['up', '-d', '--build', '--remove-orphans', ...services],
     async () => {
       await waitForHttp(backendReadyUrl, { expectJson: true });
 
@@ -210,6 +245,7 @@ async function runE2E(command, env = {}, extraComposeFiles = []) {
           throw new Error(`Unsupported E2E suite: ${command}`);
       }
     },
+    { diagnosticServices: services },
   );
 }
 
@@ -221,13 +257,16 @@ async function main() {
       runNpm('app/frontend/client-app', ['run', 'test:unit']);
       break;
     case 'integration':
-      run('docker', ['compose', '-f', 'docker-compose.yml', 'up', '-d', '--build', '--remove-orphans', 'db', 'redis', 'backend']);
+      runCompose(ciComposeFiles, ['up', '-d', '--build', '--remove-orphans', ...appServices]);
       try {
         await waitForHttp('http://127.0.0.1:8000/api/health/', { expectJson: true });
-        run('docker', ['compose', '-f', 'docker-compose.yml', 'exec', '-T', 'backend', 'python', '-m', 'pytest', 'apps/commandes/tests/test_stock_integration.py']);
+        runCompose(ciComposeFiles, ['exec', '-T', 'backend', 'python', '-m', 'pytest', 'apps/commandes/tests/test_stock_integration.py']);
+      } catch (error) {
+        dumpComposeDiagnostics(ciComposeFiles, appServices);
+        throw error;
       } finally {
         try {
-          run('docker', ['compose', '-f', 'docker-compose.yml', 'down', '--volumes', '--remove-orphans']);
+          runCompose(ciComposeFiles, ['down', '--volumes', '--remove-orphans']);
         } catch {
           // Best-effort cleanup.
         }

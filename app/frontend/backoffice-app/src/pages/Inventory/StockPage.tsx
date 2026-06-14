@@ -23,7 +23,7 @@ export const StockPage: React.FC = () => {
   const [search, setSearch] = useState('');
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [, setItemToDelete] = useState<number | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
   const [totalCount, setTotalCount] = useState(0);
@@ -71,6 +71,41 @@ export const StockPage: React.FC = () => {
       setSeuil('0');
     }
     setIsEditorOpen(true);
+  };
+
+  const handleSave = async () => {
+    const payload = {
+      nom,
+      unite_mesure: unite,
+      stock_actuel: stock,
+      seuil_alerte: seuil,
+    };
+    try {
+      if (editingItem) {
+        await stockApi.updateIngredient(editingItem.id, payload);
+        toast.success(`${nom} mis à jour`);
+      } else {
+        await stockApi.createIngredient(payload);
+        toast.success(`${nom} créé`);
+      }
+      setIsEditorOpen(false);
+      fetchStock();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Échec enregistrement');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (itemToDelete === null) return;
+    try {
+      await stockApi.deleteIngredient(itemToDelete);
+      toast.success('Ingrédient supprimé');
+      setItemToDelete(null);
+      setIsDeleteModalOpen(false);
+      fetchStock();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Échec suppression');
+    }
   };
 
   const handleExportCSV = async () => {
@@ -202,7 +237,7 @@ export const StockPage: React.FC = () => {
               </div>
               <div className="p-6 md:p-8 border-t border-outline bg-surface-container-high flex gap-4">
                 <button type="button" onClick={() => setIsEditorOpen(false)} aria-label="Annuler la modification" className="flex-1 h-12 border border-outline rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-background transition-all">Annuler</button>
-                <button className="flex-[2] btn-primary h-12">
+                <button onClick={handleSave} className="flex-[2] btn-primary h-12">
                   <span>Enregistrer</span>
                 </button>
               </div>
@@ -213,8 +248,8 @@ export const StockPage: React.FC = () => {
 
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={fetchStock}
+        onClose={() => { setIsDeleteModalOpen(false); setItemToDelete(null); }}
+        onConfirm={handleDelete}
         title="Supprimer l'ingrédient"
         message="Voulez-vous retirer définitivement cet article du stock ?"
         confirmLabel="Supprimer"

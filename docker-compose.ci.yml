@@ -1,4 +1,9 @@
 services:
+  backend:
+    environment:
+      CI: "true"
+      SEED_MEDIA_DOWNLOADS: "0"
+
   load-tester:
     image: python:3.12-slim
     working_dir: /workspace

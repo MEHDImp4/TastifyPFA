@@ -14,9 +14,13 @@ import {
 } from 'lucide-react';
 
 // --- Utilitaires ---
-const playDing = () => {
+const playDing = async () => {
     try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const AC = window.AudioContext || (window as any).webkitAudioContext;
+        const audioCtx = new AC();
+        if (audioCtx.state === 'suspended') {
+            await audioCtx.resume();
+        }
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
 
@@ -109,7 +113,8 @@ const KdsTicket = ({
                             TABLE {ticket.table_numero || '??'}
                         </span>
                         {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
-                        {(isDone || allLignesReady) && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">DONE</span>}
+                        {isDone && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">TERMINÉ</span>}
+                        {!isDone && allLignesReady && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">PRÊT</span>}
                     </div>
                     <h3 className="font-mono text-sm font-bold text-on-surface">ID-NEURAL: #{ticket.id}</h3>
                 </div>
@@ -142,7 +147,7 @@ const KdsTicket = ({
                                 </p>
                                 <div className="flex flex-wrap gap-2 items-center mt-1">
                                     <span className="text-[10px] font-black px-2 py-0.5 rounded bg-primary text-on-primary uppercase">
-                                        {item.statut === 'PRET' ? 'PRÊT' : (item.statut === 'EN_PREPARATION' ? 'In Preparation' : 'Pending')}
+                                        {item.statut === 'PRET' ? 'PRÊT' : (item.statut === 'EN_PREPARATION' ? 'En préparation' : 'En attente')}
                                     </span>
                                     {item.notes && (
                                         <p className="font-sans text-[10px] font-black text-primary bg-primary/20 uppercase tracking-wider inline-block px-2 py-0.5 rounded border border-primary/30">

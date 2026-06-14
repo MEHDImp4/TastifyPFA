@@ -1,3 +1,5 @@
+import os
+
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -332,6 +334,12 @@ class Command(BaseCommand):
     def ensure_seed_media(self, image_paths):
         import urllib.request
         created = 0
+        media_downloads = os.environ.get('SEED_MEDIA_DOWNLOADS')
+        should_download_media = (
+            media_downloads.lower() in {'1', 'true', 'yes', 'on'}
+            if media_downloads is not None
+            else os.environ.get('CI', '').lower() not in {'1', 'true', 'yes', 'on'}
+        )
         
         # High quality royalty free images from Unsplash matching each Moroccan dish/category
         url_map = {
@@ -386,10 +394,9 @@ class Command(BaseCommand):
 
             target.parent.mkdir(parents=True, exist_ok=True)
             
-            # Try downloading the image from Unsplash
             downloaded = False
             url = url_map.get(image_path)
-            if url:
+            if should_download_media and url:
                 try:
                     req = urllib.request.Request(
                         url,

@@ -107,7 +107,7 @@ function App() {
       <WebSocketProvider>
         <MotionConfig reducedMotion="user">
         <div className="selection:bg-on-background/10 selection:text-on-background">
-          <Toaster position="top-right" richColors theme="dark" />
+          <Toaster position="top-right" richColors />
           <BrowserRouter>
             <RouteTitle />
             <Routes>

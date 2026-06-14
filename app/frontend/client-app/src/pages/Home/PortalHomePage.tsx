@@ -62,6 +62,7 @@ export const PortalHomePage = () => {
       <section className="relative w-full flex flex-col justify-center border-b border-outline overflow-hidden">
         {/* Soft elegant glowing background to wow users */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(180,83,9,0.06),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
         
         <div className="max-w-[1200px] mx-auto w-full px-client-margin py-[--spacing-section-y-lg] grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center relative z-10">
           <motion.div

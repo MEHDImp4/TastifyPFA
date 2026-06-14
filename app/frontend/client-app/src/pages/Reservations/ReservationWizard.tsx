@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { reservationApi } from '../../api/reservations';
 import { useAuthStore } from '../../store/authStore';
 import { 
@@ -11,7 +12,9 @@ import {
   Minus,
   UserPlus,
   Calendar,
-  Sparkles
+  Sparkles,
+  Check,
+  PartyPopper
 } from 'lucide-react';
 import { toast } from 'sonner';
 
