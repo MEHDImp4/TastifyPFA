@@ -17,7 +17,7 @@ test.describe('unauthenticated page access', () => {
     await page.route('**/api/categories/', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
     await page.goto('/menu');

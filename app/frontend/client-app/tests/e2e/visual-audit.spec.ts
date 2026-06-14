@@ -148,6 +148,9 @@ const arrayOrPage = <T,>(route: Route, rows: T[]) => {
 };
 
 async function mockClientApis(page: Page) {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('tastify_cookie_consent', JSON.stringify({ accepted: true, date: Date.now() }));
+  });
   await page.route('**/api/settings/public/', route =>
     fulfillJson(route, {
       restaurant_name: 'Tastify',

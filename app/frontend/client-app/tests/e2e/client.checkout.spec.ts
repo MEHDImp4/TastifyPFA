@@ -33,8 +33,14 @@ async function mockMenuCatalog(page: Parameters<typeof test.beforeEach>[0]['page
   await page.route('**/api/categories/', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories) });
   });
-  await page.route('**/api/plats/', async (route) => {
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
+  await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
+    const url = new URL(route.request().url());
+    const catParam = url.searchParams.get('categorie');
+    let filtered = plats;
+    if (catParam) {
+      filtered = filtered.filter(p => p.categorie === Number(catParam));
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(filtered) });
   });
 }
 

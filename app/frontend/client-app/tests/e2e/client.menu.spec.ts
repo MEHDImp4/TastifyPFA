@@ -23,8 +23,19 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/categories/', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories) });
   });
-  await page.route('**/api/plats/', async (route) => {
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
+  await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
+    const url = new URL(route.request().url());
+    const catParam = url.searchParams.get('categorie');
+    const searchParam = url.searchParams.get('search');
+    let filtered = plats;
+    if (catParam) {
+      filtered = filtered.filter(p => p.categorie === Number(catParam));
+    }
+    if (searchParam) {
+      const q = searchParam.toLowerCase();
+      filtered = filtered.filter(p => p.nom.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(filtered) });
   });
 });
 
@@ -100,7 +111,7 @@ test.describe('menu catalog', () => {
 
   test('opens the dish detail modal and closes it without changing the route', async ({ page }) => {
     await page.goto('/menu');
-    await page.getByText('Soupe Harira').click();
+    await page.getByRole('button', { name: /Voir le détail de Soupe Harira/i }).click();
 
     await expect(page.getByText('DÉTAILS DU PLAT')).toBeVisible();
     await expect(page.getByRole('button', { name: /Ajouter au panier/i })).toBeVisible();
@@ -115,9 +126,20 @@ test.describe('menu catalog', () => {
       plat.id === 12 ? { ...plat, est_disponible: false } : plat,
     );
 
-    await page.unroute('**/api/plats/');
-    await page.route('**/api/plats/', async (route) => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(unavailablePlats) });
+    await page.unroute(/\/api\/plats\/?(\?.*)?$/);
+    await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
+      const url = new URL(route.request().url());
+      const catParam = url.searchParams.get('categorie');
+      const searchParam = url.searchParams.get('search');
+      let filtered = unavailablePlats;
+      if (catParam) {
+        filtered = filtered.filter(p => p.categorie === Number(catParam));
+      }
+      if (searchParam) {
+        const q = searchParam.toLowerCase();
+        filtered = filtered.filter(p => p.nom.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+      }
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(filtered) });
     });
 
     await page.goto('/menu');
@@ -129,12 +151,23 @@ test.describe('menu catalog', () => {
   });
 
   test('renders image-backed dishes safely in both the catalog and detail modal', async ({ page }) => {
-    await page.unroute('**/api/plats/');
-    await page.route('**/api/plats/', async (route) => {
+    await page.unroute(/\/api\/plats\/?(\?.*)?$/);
+    await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
+      const url = new URL(route.request().url());
+      const catParam = url.searchParams.get('categorie');
+      const searchParam = url.searchParams.get('search');
+      let filtered = [plats[0], plats[1], imageBackedPlat];
+      if (catParam) {
+        filtered = filtered.filter(p => p.categorie === Number(catParam));
+      }
+      if (searchParam) {
+        const q = searchParam.toLowerCase();
+        filtered = filtered.filter(p => p.nom.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+      }
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify([plats[0], plats[1], imageBackedPlat]),
+        body: JSON.stringify(filtered),
       });
     });
 

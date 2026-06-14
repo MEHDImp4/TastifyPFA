@@ -25,18 +25,18 @@ test.describe('contact form', () => {
   test('submits successfully, shows loading, and resets the form', async ({ page }) => {
     await page.goto('/contact');
 
-    await page.getByPlaceholder('NOM_COMPLET').fill('Mehdi');
-    await page.getByPlaceholder('EMAIL@DOMAIN.COM').fill('mehdi@example.com');
+    await page.getByPlaceholder('Votre nom').fill('Mehdi');
+    await page.getByPlaceholder('votre@email.com').fill('mehdi@example.com');
     await page.getByLabel('Sujet').selectOption('partenariat');
-    await page.getByPlaceholder(/DÉTAILLEZ LES NUANCES/i).fill('Long-term partnership proposal');
+    await page.getByPlaceholder(/Votre message\.\.\./i).fill('Long-term partnership proposal');
     const submitButton = page.getByTestId('contact-submit');
     await submitButton.click();
 
     await expect(submitButton).toBeDisabled();
     await expect(page.getByText('Manifeste Transmis. Notre concierge vous contactera.')).toBeVisible();
-    await expect(page.getByPlaceholder('NOM_COMPLET')).toHaveValue('');
+    await expect(page.getByPlaceholder('Votre nom')).toHaveValue('');
     await expect(page.getByLabel('Sujet')).toHaveValue('');
-    await expect(page.getByPlaceholder(/DÉTAILLEZ LES NUANCES/i)).toHaveValue('');
+    await expect(page.getByPlaceholder(/Votre message\.\.\./i)).toHaveValue('');
   });
 });
 

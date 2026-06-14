@@ -116,12 +116,16 @@
   }
 
   button,
-  a {
+  a,
+  [role="button"] {
     touch-action: manipulation;
+    cursor: pointer;
   }
 
   button:disabled,
-  a[aria-disabled="true"] {
+  a[aria-disabled="true"],
+  [role="button"]:disabled,
+  [role="button"][aria-disabled="true"] {
     cursor: not-allowed;
   }
 

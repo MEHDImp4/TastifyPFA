@@ -1,0 +1,109 @@
+\pagenumbering{Alph}
+
+\begin{titlepage}
+\centering
+\vspace*{0.5cm}
+
+{\Large Sous le thème}\\[0.35cm]
+{\Large Rapport de projet de fin d'année}\\[0.15cm]
+{\large 3e/4e année}\\[0.15cm]
+{\large Ingénierie Informatique et Réseaux}\\[1.0cm]
+
+\IfFileExists{figure_06.png}{%
+  \includegraphics[width=0.48\textwidth]{figure_06.png}\\[1.0cm]
+}{}
+
+{\large \textbf{Année universitaire : 2025--2026}}\\[1.0cm]
+
+\begin{center}
+\fbox{%
+  \begin{minipage}{0.86\textwidth}
+  \centering
+  \vspace{0.4cm}
+  {\Huge \bfseries Tastify}\\[0.35cm]
+  {\Large \bfseries Application ERP de gestion de restaurant}\\[0.2cm]
+  {\large Analyse de sentiment des avis clients et pilotage opérationnel}
+  \vspace{0.4cm}
+  \end{minipage}}
+\end{center}
+
+\vspace{1.0cm}
+
+\begin{tabular}{p{5.2cm}p{8cm}}
+\textbf{Encadré par :} & \\
+\textbf{Tuteur de l'école :} & \\ % À compléter : nom et prénom de l'encadrant académique.
+\\[-0.15cm]
+\textbf{Réalisé par :} & Diouri Mehdi et El kherazi Ibtihal \\
+\end{tabular}
+
+\vfill
+{\large Projet de Fin d'Année}
+\end{titlepage}
+
+\clearpage
+\pagenumbering{roman}
+
+\chapter*{Dédicaces}
+\addcontentsline{toc}{chapter}{Dédicaces}
+Nous dédions ce travail à nos familles, pour leur soutien constant, leur patience et leur confiance. Leur présence a permis de mener ce projet avec sérieux, même dans les phases où la charge technique et documentaire était importante.
+
+Nous dédions également ce rapport à nos enseignants, qui nous ont transmis les bases nécessaires en génie logiciel, développement web, bases de données, modélisation, sécurité et conduite de projet. Enfin, nous adressons cette dédicace à toutes les personnes qui encouragent l'apprentissage par la pratique et l'amélioration continue.
+
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+Avant de présenter le projet Tastify, nous exprimons notre reconnaissance à nos familles pour leur accompagnement tout au long de notre formation. Nous remercions également l'ensemble du personnel enseignant et administratif pour le cadre académique qui a rendu possible la réalisation de ce Projet de Fin d'Année.
+
+Nous remercions particulièrement les enseignants qui nous ont guidés dans les disciplines mobilisées par ce projet : conception UML, développement backend, développement frontend, architecture logicielle, bases de données, tests et documentation technique. Ces acquis constituent le socle sur lequel Tastify a été conçu et réalisé.
+
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+Tastify est une application web full-stack destinée à centraliser la gestion quotidienne d'un restaurant. Le projet répond à des difficultés concrètes observées dans la restauration : dispersion des informations, erreurs de transmission entre la salle et la cuisine, suivi manuel des stocks, manque de visibilité sur les réservations, encaissements complexes et exploitation limitée des avis clients.
+
+La solution repose sur un backend Django REST Framework, une base de données MySQL, Redis pour les échanges temps réel et les traitements asynchrones, Celery pour les tâches de fond, ainsi que deux applications React : une interface staff pour le gérant, le serveur et le cuisinier, et un portail client. Les modules confirmés par le dépôt couvrent le menu, les tables, les commandes, le Kitchen Display System, les stocks, les ressources humaines, les réservations, les paiements, la fidélité, les avis, les tableaux de bord et la configuration du restaurant.
+
+Une partie importante du projet concerne l'analyse de sentiment des avis clients. Le code implémente un pipeline asynchrone qui analyse les commentaires au moyen de l'API Hugging Face lorsque le jeton est configuré. Il utilise le modèle multilingue NLP Town pour les avis non arabes, MARBERT pour les commentaires en arabe, et un secours local par mots-clés nommé \pathcode{mots-cles-simple}. Les identifiants exacts des modèles sont détaillés dans le chapitre consacré à l'analyse de sentiment. Cette fonctionnalité aide le gérant à suivre la satisfaction client sans interrompre l'expérience utilisateur.
+
+\textbf{Mots-clés :} ERP, restaurant, Django, React, MySQL, Redis, Celery, WebSocket, KDS, avis clients, analyse de sentiment, Hugging Face, PFA.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Tastify is a full-stack web application designed to centralize daily restaurant management. The project addresses practical issues such as scattered operational information, communication errors between waiters and kitchen staff, manual inventory tracking, limited reservation visibility, complex payment flows and underused customer feedback.
+
+The solution is based on a Django REST Framework backend, a MySQL database, Redis for real-time communication and asynchronous processing, Celery for background tasks, and two React applications: a staff interface for managers, waiters and kitchen staff, and a customer portal. The repository confirms modules for menu management, tables, orders, Kitchen Display System, inventory, human resources, reservations, payments, loyalty, reviews, dashboards and restaurant settings.
+
+A key part of the project is customer review sentiment analysis. The implemented pipeline processes reviews asynchronously through the Hugging Face API when a token is configured. It uses the NLP Town multilingual model for non-Arabic reviews, MARBERT for Arabic comments, and a local keyword-based fallback named \pathcode{mots-cles-simple}. The exact model identifiers are detailed in the sentiment analysis chapter. This feature helps managers monitor customer satisfaction without blocking the user experience.
+
+\chapter*{Liste des abréviations}
+\addcontentsline{toc}{chapter}{Liste des abréviations}
+\begin{longtable}{p{3cm}p{11cm}}
+\toprule
+\textbf{Abréviation} & \textbf{Signification} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Abréviation} & \textbf{Signification} \\
+\midrule
+\endhead
+API & Application Programming Interface. \\
+ASGI & Asynchronous Server Gateway Interface. \\
+CRUD & Create, Read, Update, Delete. \\
+DRF & Django REST Framework. \\
+ERP & Enterprise Resource Planning, progiciel de gestion intégré. \\
+JWT & JSON Web Token. \\
+KDS & Kitchen Display System, écran de suivi des commandes en cuisine. \\
+ML & Machine Learning, apprentissage automatique. \\
+NLP & Natural Language Processing, traitement automatique du langage naturel. \\
+ORM & Object-Relational Mapping. \\
+PFA & Projet de Fin d'Année. \\
+PWA & Progressive Web App. \\
+RBAC & Role-Based Access Control, contrôle d'accès basé sur les rôles. \\
+REST & Representational State Transfer. \\
+SPA & Single Page Application. \\
+SQL & Structured Query Language. \\
+UML & Unified Modeling Language. \\
+WS & WebSocket. \\
+\bottomrule
+\end{longtable}
+
+% À compléter : vérifier l'intitulé officiel de la filière et le nom complet de l'encadrant avant dépôt.
+% À compléter : remplacer ou compléter les captures si l'environnement de démonstration final fournit de meilleures images.

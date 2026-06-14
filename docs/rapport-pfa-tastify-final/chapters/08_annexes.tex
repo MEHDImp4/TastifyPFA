@@ -1,0 +1,110 @@
+\chapter{Annexes}
+\label{chap:annexes}
+
+\section{Schémas existants intégrés}
+Le tableau~\ref{tab:schemas-integres} indique les schémas existants retenus dans le rapport.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Schémas existants intégrés}
+\label{tab:schemas-integres}
+\begin{tabularx}{\textwidth}{p{3.3cm}p{3cm}Y p{3cm}}
+\toprule
+\textbf{Fichier} & \textbf{Emplacement} & \textbf{Légende} & \textbf{Objectif} \\
+\midrule
+\pathcode{figure_08.jpeg} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation du back-office gérant & Montrer le périmètre administratif. \\
+\pathcode{figure_05.png} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation des modules salle et cuisine & Expliquer les interactions serveur/cuisine. \\
+\pathcode{figure_02.png} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation du portail client & Montrer les fonctions client. \\
+\pathcode{figure_03.png} & Chapitre~\ref{chap:conception} & Diagramme de classes de Tastify & Présenter les entités métier majeures. \\
+\pathcode{figure_06.png} & Page de garde & Logo Tastify & Identifier visuellement le projet. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Schémas techniques créés dans le rapport}
+Les schémas suivants ont été créés directement en LaTeX sous forme de diagrammes textuels. Ils ne sont pas des captures d'écran.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Schémas techniques créés}
+\label{tab:schemas-crees}
+\begin{tabularx}{\textwidth}{p{3.5cm}p{3.8cm}Y}
+\toprule
+\textbf{Schéma} & \textbf{Emplacement} & \textbf{Contenu attendu} \\
+\midrule
+Architecture fonctionnelle & Chapitre~\ref{chap:conception}, figure~\ref{fig:architecture-fonctionnelle} & Deux frontends, backend DRF, MySQL, Redis, Celery et Hugging Face. \\
+Pipeline de sentiment & Chapitre~\ref{chap:sentiment}, figure~\ref{fig:pipeline-sentiment} & Création avis, tâche Celery, API Hugging Face, fallback local, stockage et dashboard. \\
+Architecture technique & Chapitre~\ref{chap:realisation}, figure~\ref{fig:architecture-technique} & Ports, backend ASGI, base de données, Redis, worker et beat. \\
+Séquence JWT & Chapitre~\ref{chap:realisation}, figure~\ref{fig:auth-jwt} & Connexion, vérification, access token, cookie refresh et refresh ultérieur. \\
+Flux KDS & Chapitre~\ref{chap:realisation}, figure~\ref{fig:flux-kds} & Serveur, API commandes, base, Redis, KDS et cuisinier. \\
+Déploiement Docker Compose & Chapitre~\ref{chap:realisation}, figure~\ref{fig:docker-compose} & Services Compose et dépendances principales. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Captures existantes réutilisées}
+Les captures suivantes sont déjà présentes dans le dépôt et intégrées dans le rapport.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Captures existantes réutilisées}
+\label{tab:captures-reutilisees}
+\begin{tabularx}{\textwidth}{p{4cm}Y}
+\toprule
+\textbf{Fichier} & \textbf{Section, légende et objectif} \\
+\midrule
+\pathcode{capture_dashboard.png} & Section : interfaces réalisées. Légende : tableau de bord gérant du back-office. Objectif : montrer le pilotage et les indicateurs. \\
+\pathcode{capture_salle.png} & Section : interfaces réalisées. Légende : interface serveur, plan de salle. Objectif : montrer la gestion opérationnelle des tables. \\
+\pathcode{capture_kds.png} & Section : interfaces réalisées. Légende : Kitchen Display System côté cuisine. Objectif : montrer le suivi de préparation. \\
+\pathcode{capture_client.png} & Section : interfaces réalisées. Légende : portail client, consultation du menu. Objectif : montrer l'expérience client. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Captures complémentaires recommandées}
+Les captures ci-dessous peuvent enrichir une version ultérieure du rapport. Elles doivent être prises depuis l'application en fonctionnement afin de rester fidèles au projet réel.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Captures complémentaires recommandées}
+\label{tab:captures-complementaires}
+\begin{tabularx}{\textwidth}{p{3.2cm}p{2.8cm}p{3.8cm}Y}
+\toprule
+\textbf{Fichier} & \textbf{Section} & \textbf{Légende} & \textbf{Objectif} \\
+\midrule
+\pathcode{capture_login_staff.png} & Réalisation, interfaces & Page de connexion du back-office staff & Prouver la séparation staff et l'accès sécurisé. \\
+\pathcode{capture_stock_admin.png} & Réalisation, stocks & Gestion du stock et alertes de seuil & Illustrer le suivi des ingrédients et alertes. \\
+\pathcode{capture_avis_sentiment.png} & Analyse de sentiment ou interfaces & Avis clients et statistiques de sentiment & Relier le pipeline de sentiment à l'interface gérant. \\
+\pathcode{capture_reservation_client.png} & Réalisation, portail client & Parcours de réservation client & Montrer la réservation côté client. \\
+\pathcode{capture_checkout_payment.png} & Réalisation, paiement & Panier et paiement client & Illustrer l'encaissement et le checkout. \\
+\pathcode{capture_loyalty_client.png} & Réalisation, fidélité & Espace fidélité client & Montrer les points et récompenses. \\
+\pathcode{capture_hr_admin.png} & Réalisation, RH & Module ressources humaines & Montrer employés, shifts ou candidatures. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% À compléter : nom officiel de l'encadrant ou du tuteur de l'école.
+% À compléter : intitulé académique exact du thème si l'école impose une formulation.
+% À compléter : résultats chiffrés des tests si une exécution complète est réalisée.
+% À compléter : captures finales prises sur l'environnement de démonstration si elles diffèrent des captures intégrées.
+
+\section{Commandes utiles}
+Les commandes ci-dessous sont données à titre de rappel pour vérifier le projet et le rapport.
+
+{\scriptsize
+\begin{verbatim}
+cd docs/rapport-pfa-tastify-final
+pdflatex --disable-installer -interaction=nonstopmode main.tex
+bibtex main
+pdflatex --disable-installer -interaction=nonstopmode main.tex
+pdflatex --disable-installer -interaction=nonstopmode main.tex
+
+docker compose up -d --build
+docker compose exec backend python -m pytest
+npm run test
+\end{verbatim}
+}

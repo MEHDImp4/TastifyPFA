@@ -42,11 +42,17 @@ test.beforeEach(async ({ page }) => {
       body: JSON.stringify(categories),
     });
   });
-  await page.route('**/api/plats/', async (route) => {
+  await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
+    const url = new URL(route.request().url());
+    const catParam = url.searchParams.get('categorie');
+    let filtered = plats;
+    if (catParam) {
+      filtered = filtered.filter(p => p.categorie === Number(catParam));
+    }
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(plats),
+      body: JSON.stringify(filtered),
     });
   });
 });

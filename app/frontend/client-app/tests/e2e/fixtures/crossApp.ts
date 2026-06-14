@@ -9,26 +9,35 @@ type PersistedAuthState = {
 };
 
 function buildPersistedStorageState(origin: string, storageKey: string, auth: PersistedAuthState) {
+  const localStorageItems = [
+    {
+      name: storageKey,
+      value: JSON.stringify({
+        state: {
+          accessToken: auth.accessToken,
+          role: auth.role,
+          username: auth.username,
+          isAuthenticated: true,
+          hasSession: true,
+        },
+        version: 0,
+      }),
+    },
+  ];
+
+  if (origin === CLIENT_ORIGIN) {
+    localStorageItems.push({
+      name: 'tastify_cookie_consent',
+      value: JSON.stringify({ accepted: true, date: Date.now() }),
+    });
+  }
+
   return {
     cookies: [] as never[],
     origins: [
       {
         origin,
-        localStorage: [
-          {
-            name: storageKey,
-            value: JSON.stringify({
-              state: {
-                accessToken: auth.accessToken,
-                role: auth.role,
-                username: auth.username,
-                isAuthenticated: true,
-                hasSession: true,
-              },
-              version: 0,
-            }),
-          },
-        ],
+        localStorage: localStorageItems,
       },
     ],
   };

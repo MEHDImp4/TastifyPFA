@@ -124,7 +124,7 @@ test.describe('reservation journey', () => {
       await page.getByPlaceholder(/Allergies, anniversaire, préférences/i).fill('Quiet corner');
       await page.getByRole('button', { name: /Valider ma réservation/i }).click();
 
-      await expect(page.getByText('TABLE_ALREADY_RESERVED')).toBeVisible();
+      await expect(page.locator('#reservation-error')).toContainText('TABLE_ALREADY_RESERVED');
       await expect(page.getByRole('button', { name: /Valider ma réservation/i })).toBeVisible();
       await expect(page.getByPlaceholder(/Allergies, anniversaire, préférences/i)).toHaveValue('Quiet corner');
     });

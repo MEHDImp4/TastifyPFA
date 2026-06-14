@@ -1,0 +1,128 @@
+\chapter{Tests, validation, limites et perspectives}
+\label{chap:tests}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+La validation d'un projet multi-modules doit couvrir plusieurs niveaux : backend, frontend, parcours utilisateurs, sécurité et intégration. Cette section présente les surfaces de tests observées dans le dépôt, les scénarios importants, les limites vérifiées et les perspectives d'amélioration.
+
+\section{Stratégie de tests}
+Le dépôt confirme trois familles principales de tests.
+
+\begin{table}[H]
+\centering
+\caption{Familles de tests présentes dans le dépôt}
+\label{tab:familles-tests}
+\begin{tabularx}{\textwidth}{p{3.4cm}p{4cm}Y}
+\toprule
+\textbf{Famille} & \textbf{Outils} & \textbf{Objectif} \\
+\midrule
+Backend & pytest, pytest-django & Vérifier les modèles, permissions, API, services, signaux et tâches. \\
+Frontend unitaire & Vitest, Testing Library & Tester des composants, stores et fonctions API côté React. \\
+End-to-end & Playwright & Simuler des parcours utilisateur sur les applications staff et client. \\
+CI et qualité & GitHub Actions, npm scripts & Automatiser lint, typecheck, build, tests et contrôles de sécurité. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Le rapport ne présente pas de résultat chiffré récent d'exécution complète, car aucune exécution globale n'a été relancée dans le cadre de la rédaction. Les commandes et suites existent, mais les résultats doivent être générés au moment de la soutenance ou de la livraison finale.
+
+\section{Tests backend}
+Les tests backend sont répartis dans les applications Django. Ils couvrent notamment :
+
+\begin{itemize}
+  \item l'authentification, les rôles et les permissions ;
+  \item les réservations, conflits de créneaux et services associés ;
+  \item les commandes, lignes de commande, KDS et synchronisation avec les tables ;
+  \item les paiements, tokens, services et signaux ;
+  \item les stocks, mouvements, seuils d'alerte et intégration avec les commandes ;
+  \item les avis et l'analyse de sentiment, y compris le fallback local ;
+  \item les WebSocket staff et l'autorisation des rôles internes ;
+  \item la configuration restaurant et les tableaux de bord.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Exemples de scénarios backend critiques}
+\label{tab:tests-backend}
+\begin{tabularx}{\textwidth}{p{3.4cm}Y}
+\toprule
+\textbf{Domaine} & \textbf{Scénario à valider} \\
+\midrule
+Avis & Un client crée un avis, une tâche Celery est déclenchée et le résultat d'analyse est enregistré. \\
+Sentiment & Hugging Face renvoie un label ; si l'API échoue, le fallback local produit un résultat. \\
+RBAC & Un client ne peut pas accéder aux actions réservées au gérant ou au staff. \\
+KDS & Une ligne de commande passe par les statuts attendus et reste visible côté cuisine. \\
+Stock & Une commande peut déclencher une consommation d'ingrédients selon les recettes. \\
+Paiement & Un paiement valide réconcilie la commande sans montant nul ou négatif. \\
+Réservation & Deux réservations incompatibles sur la même table et le même créneau sont évitées. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Tests frontend et end-to-end}
+Les deux frontends possèdent des configurations Vitest et Playwright. Les tests end-to-end couvrent des parcours publics, authentifiés et inter-applications.
+
+\begin{table}[H]
+\centering
+\caption{Parcours frontend à valider}
+\label{tab:tests-frontend}
+\begin{tabularx}{\textwidth}{p{3.4cm}Y}
+\toprule
+\textbf{Application} & \textbf{Parcours attendus} \\
+\midrule
+Back-office & Connexion staff, tableau de bord, menu, catégories, plan de salle, prise de commande, KDS, réservations, stocks, RH, avis, paramètres. \\
+Portail client & Accueil, menu public, inscription, connexion, réservation, compte, panier, paiement, contact et fidélité. \\
+Cross-app & Une réservation ou une commande côté client doit se refléter dans le back-office lorsque le scénario le prévoit. \\
+Accessibilité & Navigation clavier, libellés, états d'erreur, pages not found et mode hors ligne. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Validation de l'analyse de sentiment}
+La validation minimale de la fonctionnalité sentiment doit couvrir les scénarios suivants :
+
+\begin{enumerate}
+  \item avis positif non arabe avec réponse Hugging Face de type \code{5 stars} ;
+  \item avis négatif non arabe avec réponse \code{1 star} ;
+  \item commentaire arabe routé vers \pathcode{moussaKam/MARBERT-sentiment} ;
+  \item indisponibilité Hugging Face entraînant l'utilisation de \pathcode{mots-cles-simple} ;
+  \item commentaire vide ne créant pas d'analyse ;
+  \item agrégation correcte des labels dans le tableau de bord.
+\end{enumerate}
+
+Ces scénarios sont importants car ils testent à la fois la logique métier, l'appel externe, la normalisation des labels, la persistance et l'exploitation analytique.
+
+\section{Tests de charge}
+Le dépôt contient une configuration \code{load-tester} dans \code{docker-compose.ci.yml}, qui référence \code{scripts/locustfile.py}. Cependant, ce fichier n'est pas présent dans l'arborescence analysée. Il serait donc incorrect de présenter des résultats Locust comme réalisés.
+
+La conclusion rigoureuse est la suivante : une campagne de charge est prévue dans l'architecture de test, mais elle doit être complétée par un fichier Locust effectif, puis exécutée pour produire des indicateurs tels que temps moyen, p95, taux d'échec et volume de requêtes.
+
+\section{Limites du projet}
+Les limites identifiées sont les suivantes :
+
+\begin{itemize}
+  \item le projet reste un prototype académique et ne fournit pas de données de production ;
+  \item l'analyse de sentiment n'est pas évaluée sur un corpus d'avis Tastify annoté manuellement ;
+  \item le fallback local de sentiment est volontairement simple ;
+  \item la recommandation de plats n'est pas un modèle IA personnalisé complet ;
+  \item la prévision de stock semble reposer sur des règles ou moyennes simples, pas sur un modèle statistique avancé validé ;
+  \item les tests de charge ne sont pas exploitables tant que \code{scripts/locustfile.py} est absent ;
+  \item les informations administratives dépendant de l'établissement doivent être vérifiées avant le dépôt officiel.
+\end{itemize}
+
+\section{Perspectives}
+Plusieurs améliorations peuvent être envisagées :
+
+\begin{itemize}
+  \item constituer un jeu d'avis annotés pour évaluer objectivement les modèles de sentiment ;
+  \item combiner commentaire et note client afin d'améliorer la fiabilité du sentiment ;
+  \item remplacer ou compléter le fallback par un modèle local léger de type TF-IDF et classifieur linéaire ;
+  \item améliorer la détection de langue, notamment pour le français, l'arabe dialectal et les textes mixtes ;
+  \item ajouter une vraie campagne Locust et intégrer ses métriques dans la CI ;
+  \item enrichir la recommandation de plats avec l'historique client et les contraintes de stock ;
+  \item consolider le déploiement production avec sauvegardes, HTTPS, monitoring et rotation des secrets.
+\end{itemize}
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+Le dépôt présente une surface de validation sérieuse pour un PFA : tests backend, tests frontend, scénarios Playwright et CI. Les limites sont clairement identifiées et ouvrent des perspectives réalistes. Cette transparence renforce la crédibilité du rapport, car elle distingue ce qui est implémenté, ce qui est prévu et ce qui reste à prouver.

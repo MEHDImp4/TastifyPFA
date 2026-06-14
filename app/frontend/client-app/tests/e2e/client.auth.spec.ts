@@ -113,8 +113,8 @@ test.describe('register form — API responses', () => {
     });
 
     await page.goto('/register');
-    await page.getByPlaceholder('PSEUDONYME').fill('taken_user');
-    await page.getByPlaceholder('VOTRE@EMAIL.COM').fill('taken@example.com');
+    await page.getByTestId('register-username').fill('taken_user');
+    await page.getByTestId('register-email').fill('taken@example.com');
     await page.getByLabel('Mot de passe').fill('password123');
     await page.getByRole('button', { name: /Créer mon profil/i }).click();
 
@@ -139,8 +139,8 @@ test.describe('register form — API responses', () => {
     });
 
     await page.goto('/register');
-    await page.getByPlaceholder('PSEUDONYME').fill('fresh_guest');
-    await page.getByPlaceholder('VOTRE@EMAIL.COM').fill('fresh@example.com');
+    await page.getByTestId('register-username').fill('fresh_guest');
+    await page.getByTestId('register-email').fill('fresh@example.com');
     await page.getByLabel('Mot de passe').fill('password123');
     await page.getByRole('button', { name: /Créer mon profil/i }).click();
 
@@ -233,11 +233,14 @@ test.describe('password reset flow — API responses', () => {
     await page.getByLabel("Nouveau Code d'accès").fill('newpassword123');
     await page.getByLabel('Confirmer le Code').fill('differentpassword123');
     await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
-    await expect(page.getByText('PASSWORD_CONFIRM_MISMATCH')).toBeVisible();
+    await expect(page.getByText('Les deux mots de passe ne correspondent pas.')).toBeVisible();
 
     await page.getByLabel('Confirmer le Code').fill('newpassword123');
     await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
-    await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.')).toBeVisible();
+    await expect(page.getByText('PASSWORD_CONFIRM_MISMATCH').first()).toBeVisible();
+
+    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.').first()).toBeVisible();
   });
 });
 

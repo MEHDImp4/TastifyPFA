@@ -17,6 +17,9 @@ const DEFAULT_CONFIG = {
 };
 
 export async function mockConfig(page: Page, overrides: Record<string, unknown> = {}) {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('tastify_cookie_consent', JSON.stringify({ accepted: true, date: Date.now() }));
+  });
   await page.route('**/api/settings/public/', async (route) => {
     await route.fulfill({
       status: 200,
@@ -68,6 +71,10 @@ export const buildClientStorageState = ({
             },
             version: 0,
           }),
+        },
+        {
+          name: 'tastify_cookie_consent',
+          value: JSON.stringify({ accepted: true, date: Date.now() }),
         },
       ],
     },
