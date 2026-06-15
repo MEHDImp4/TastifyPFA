@@ -16,8 +16,8 @@ test.describe('contact form', () => {
     await page.getByTestId('contact-submit').click();
 
     await expect(page).toHaveURL('/contact');
-    await expectInvalid(page.getByLabel('Identité'));
-    await expectInvalid(page.getByLabel('Coordonnée'));
+    await expectInvalid(page.getByLabel('Nom'));
+    await expectInvalid(page.getByLabel('Email'));
     await expectInvalid(page.getByLabel('Sujet'));
     await expectInvalid(page.getByLabel('Message'));
   });
@@ -33,7 +33,7 @@ test.describe('contact form', () => {
     await submitButton.click();
 
     await expect(submitButton).toBeDisabled();
-    await expect(page.getByText('Manifeste Transmis. Notre concierge vous contactera.')).toBeVisible();
+    await expect(page.getByText('Message envoyé. Nous vous répondrons rapidement.')).toBeVisible();
     await expect(page.getByPlaceholder('Votre nom')).toHaveValue('');
     await expect(page.getByLabel('Sujet')).toHaveValue('');
     await expect(page.getByPlaceholder(/Votre message\.\.\./i)).toHaveValue('');

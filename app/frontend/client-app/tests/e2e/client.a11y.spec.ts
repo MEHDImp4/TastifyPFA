@@ -9,6 +9,8 @@ const DESIGN_VIEWPORTS = [
   { width: 1440, height: 900 },
 ];
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 const asPaginatedPayload = (route: Route, rows: unknown[]) => {
   const requestUrl = new URL(route.request().url());
   return requestUrl.searchParams.has('page') || requestUrl.searchParams.has('page_size')
@@ -134,7 +136,7 @@ test.describe('client public accessibility and responsiveness', () => {
   test('keeps the public home usable on a narrow viewport', async ({ page }) => {
     await mockHomeRecommendations(page);
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/');
+    await page.goto('/', routeReady);
 
     await expect(page.getByRole('link', { name: /voir la carte/i }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: /réserver/i }).first()).toBeVisible();
@@ -150,31 +152,31 @@ test.describe('client public accessibility and responsiveness', () => {
     for (const viewport of DESIGN_VIEWPORTS) {
       await page.setViewportSize(viewport);
 
-      await page.goto('/');
+      await page.goto('/', routeReady);
       await expect(page.getByRole('link', { name: /voir la carte/i }).first()).toBeVisible();
       await expect(page.getByRole('link', { name: /réserver/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
 
-      await page.goto('/menu');
+      await page.goto('/menu', routeReady);
       await expect(page.getByRole('heading', { name: /la carte/i })).toBeVisible();
       await expect(page.getByText('Couscous Royal')).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
 
-      await page.goto('/reservations');
+      await page.goto('/reservations', routeReady);
       await expect(page.getByRole('heading', { name: /Prenez place/i })).toBeVisible();
       await expect(page.getByRole('button', { name: /Créer un compte/i })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
 
-      await page.goto('/contact');
-      await expect(page.getByRole('heading', { name: /Registre de Contact/i })).toBeVisible();
+      await page.goto('/contact', routeReady);
+      await expect(page.getByRole('heading', { name: /Écrivez-nous/i })).toBeVisible();
       await expect(page.getByRole('button', { name: /Envoyer le message/i })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
 
-      await page.goto('/login');
+      await page.goto('/login', routeReady);
       await expect(page.getByRole('button', { name: /Accéder au compte/i })).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);
@@ -182,7 +184,7 @@ test.describe('client public accessibility and responsiveness', () => {
   });
 
   test('has no critical or serious axe violations on login', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
 
     await expectNoBlockingViolations(page);
   });
@@ -194,7 +196,7 @@ test.describe('client public accessibility and responsiveness', () => {
     await page.setViewportSize({ width: 375, height: 812 });
 
     for (const route of ['/', '/menu', '/login']) {
-      await page.goto(route);
+      await page.goto(route, routeReady);
       await expectNoBlockingViolations(page);
     }
   });

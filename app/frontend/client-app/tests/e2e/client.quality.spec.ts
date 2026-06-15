@@ -7,6 +7,8 @@ import {
   mockRefreshFail,
 } from './fixtures/api';
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 const expectNoBlockingViolations = async (page: Page) => {
   const results = await new AxeBuilder({ page }).analyze();
   const blockingViolations = results.violations.filter(({ impact }) =>
@@ -177,13 +179,13 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('client public quality', () => {
   test('keeps auth routes accessible and exposes stable labels', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await expect(page.getByLabel('Utilisateur')).toBeVisible();
     await expect(page.getByLabel('Mot de passe')).toBeVisible();
     await expect(page.getByRole('link', { name: /Retour/i })).toBeVisible();
     await expectNoBlockingViolations(page);
 
-    await page.goto('/register');
+    await page.goto('/register', routeReady);
     await expect(page.getByLabel('Utilisateur')).toBeVisible();
     await expect(page.getByLabel('Email')).toBeVisible();
     await expect(page.getByLabel('Mot de passe')).toBeVisible();
@@ -193,30 +195,30 @@ test.describe('client public quality', () => {
   test('keeps guest navigation stable across home, menu, login, register, and 404', async ({ page }) => {
     await mockMenuData(page);
 
-    await page.goto('/');
+    await page.goto('/', routeReady);
     await expect(page.getByRole('link', { name: "S'identifier" })).toBeVisible();
 
     await page.locator('header').getByRole('link', { name: /LA CARTE/i }).click();
     await expect(page).toHaveURL('/menu');
     await expect(page.getByLabel('Rechercher')).toBeVisible();
 
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await expect(page.getByRole('heading', { name: 'Connexion.' })).toBeVisible();
 
-    await page.goto('/register');
+    await page.goto('/register', routeReady);
     await expect(page.getByRole('heading', { name: 'Inscription.' })).toBeVisible();
 
-    await page.goto('/missing-route');
+    await page.goto('/missing-route', routeReady);
     await expect(page.getByRole('heading', { name: 'Page Introuvable' })).toBeVisible();
     await page.getByRole('button', { name: /Voir le Menu/i }).click();
     await expect(page).toHaveURL('/menu');
   });
 
   test('renders the offline recovery state and retry affordance', async ({ page }) => {
-    await page.goto('/offline');
+    await page.goto('/offline', routeReady);
 
-    await expect(page.getByRole('heading', { name: /Mode Hors Ligne/i })).toBeVisible();
-    await page.getByRole('button', { name: /Réessayer la Connexion/i }).click();
+    await expect(page.getByRole('heading', { name: /Connexion interrompue/i })).toBeVisible();
+    await page.getByRole('button', { name: /Réessayer/i }).click();
     await expect(page.getByText(/Tentative de reconnexion/i)).toBeVisible();
   });
 
@@ -224,14 +226,14 @@ test.describe('client public quality', () => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
-    await page.goto('/menu');
+    await page.goto('/menu', routeReady);
     await expect(page.getByLabel('Rechercher')).toBeVisible();
 
     await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
     // Cart link is hidden on mobile (hidden md:flex) — navigate directly
-    await page.goto('/checkout');
+    await page.goto('/checkout', routeReady);
     await expect(page).toHaveURL('/checkout');
-    await page.goto('/menu');
+    await page.goto('/menu', routeReady);
 
     await page.getByRole('button', { name: /Voir le détail de Couscous Maison/i }).click();
     await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
@@ -242,7 +244,7 @@ test.describe('client public quality', () => {
   test('keeps guest mobile navigation direct and scroll-safe', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
 
-    await page.goto('/');
+    await page.goto('/', routeReady);
     await expect(page.getByRole('button', { name: /Ouvrir la navigation/i })).toBeVisible();
 
     await page.getByRole('button', { name: /Ouvrir la navigation/i }).click();
@@ -250,7 +252,7 @@ test.describe('client public quality', () => {
     await expect(mobileNavigation.getByText('Navigation invitée')).toBeVisible();
     await expect(mobileNavigation.getByRole('link', { name: /La Carte/i })).toBeVisible();
     await expect(mobileNavigation.getByRole('link', { name: /Réservations/i })).toBeVisible();
-    await expect(mobileNavigation.getByRole('link', { name: /Connexion Membre/i })).toBeVisible();
+    await expect(mobileNavigation.getByRole('link', { name: /Se connecter/i })).toBeVisible();
   });
 
   test('prevents horizontal overflow and preserves document scrolling across public routes', async ({ page }) => {
@@ -259,7 +261,7 @@ test.describe('client public quality', () => {
     await page.setViewportSize({ width: 390, height: 844 });
 
     for (const route of ['/', '/menu', '/reservations', '/contact', '/login', '/register', '/pay/quality-token', '/offline', '/missing-route']) {
-      await page.goto(route);
+      await page.goto(route, routeReady);
       await expectNoLayoutOverflow(page);
       await expectDocumentScrollWorks(page);
     }
@@ -269,14 +271,14 @@ test.describe('client public quality', () => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
-    await page.goto('/');
+    await page.goto('/', routeReady);
     await page.getByRole('button', { name: /Ouvrir la navigation/i }).click();
     await expect(page.locator('#mobile-navigation')).toBeVisible();
     await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
     await page.getByRole('button', { name: /Fermer la navigation/i }).click();
     await expect(page.locator('#mobile-navigation')).toHaveCount(0);
 
-    await page.goto('/menu');
+    await page.goto('/menu', routeReady);
     await page.getByRole('button', { name: /Voir le détail de Couscous Maison/i }).click();
     await expect(page.getByRole('button', { name: /Fermer le détail du plat/i })).toBeVisible();
     await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
@@ -292,7 +294,7 @@ test.describe('client authenticated quality', () => {
   test('keeps account accessible on desktop and after a narrow-viewport refresh', async ({ page }) => {
     await mockAccountData(page);
 
-    await page.goto('/account');
+    await page.goto('/account', routeReady);
     await expect(page.getByRole('button', { name: /Donner votre avis/i })).toBeVisible();
     await expectNoBlockingViolations(page);
 
@@ -304,10 +306,10 @@ test.describe('client authenticated quality', () => {
   test('keeps checkout usable on a narrow viewport and after a refresh', async ({ page }) => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/menu');
+    await page.goto('/menu', routeReady);
     await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
     // Cart link is hidden on mobile (hidden md:flex) — navigate directly
-    await page.goto('/checkout');
+    await page.goto('/checkout', routeReady);
     await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /Retour à la carte/i })).toBeVisible();
 
@@ -318,7 +320,7 @@ test.describe('client authenticated quality', () => {
   });
 
   test('keeps reservations accessible with labeled controls', async ({ page }) => {
-    await page.goto('/reservations');
+    await page.goto('/reservations', routeReady);
 
     await expect(page.getByLabel('Date du repas')).toBeVisible();
     await expect(page.getByLabel("Heure d'arrivée")).toBeVisible();
@@ -329,8 +331,8 @@ test.describe('client authenticated quality', () => {
   test('keeps loyalty accessible with deterministic reward data', async ({ page }) => {
     await mockLoyaltyData(page);
 
-    await page.goto('/loyalty');
-    await expect(page.getByRole('heading', { name: /Vos Privilèges/i })).toBeVisible();
+    await page.goto('/loyalty', routeReady);
+    await expect(page.getByRole('heading', { name: /Vos points/i })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
@@ -338,7 +340,7 @@ test.describe('client authenticated quality', () => {
     await mockPaymentSession(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
-    await page.goto('/pay/quality-token');
+    await page.goto('/pay/quality-token', routeReady);
     await expect(page.getByRole('button', { name: /Confirmer le paiement/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /^Partager$/i })).toBeVisible();
     await page.getByRole('button', { name: /^Partager$/i }).click();
@@ -351,17 +353,17 @@ test.describe('client authenticated quality', () => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
-    await page.goto('/account');
+    await page.goto('/account', routeReady);
     await expectNoLayoutOverflow(page);
     await expectDocumentScrollWorks(page);
 
-    await page.goto('/loyalty');
+    await page.goto('/loyalty', routeReady);
     await expectNoLayoutOverflow(page);
     await expectDocumentScrollWorks(page);
 
-    await page.goto('/menu');
+    await page.goto('/menu', routeReady);
     await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
-    await page.goto('/checkout');
+    await page.goto('/checkout', routeReady);
     await expectNoLayoutOverflow(page);
     await expectDocumentScrollWorks(page);
   });
