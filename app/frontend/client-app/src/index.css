@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Premium Moroccan Red & Gold Palette */
+  /* Moroccan red and warm neutral palette */
   --color-background: #FFFDFB;
   --color-on-background: #450A0A;
   --color-surface: #FFFFFF;
@@ -195,7 +195,7 @@
   }
 
   .btn-primary {
-    @apply min-h-[48px] px-7 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button-lg)] font-bold uppercase tracking-wider transition-all duration-200 hover:bg-on-background/90 hover:shadow-lg hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-40 disabled:hover:shadow-none disabled:active:scale-100 disabled:translate-y-0 text-center leading-tight;
+    @apply min-h-[48px] px-7 bg-on-background text-background rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button-lg)] font-bold tracking-wide transition-all duration-200 hover:bg-on-background/90 hover:shadow-sm hover:shadow-black/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-40 disabled:hover:shadow-none disabled:active:scale-100 disabled:translate-y-0 text-center leading-tight;
   }
 
   .btn-secondary {
@@ -203,7 +203,7 @@
   }
 
   .btn-danger {
-    @apply min-h-[48px] px-7 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button)] font-bold uppercase tracking-wider transition-all duration-200 hover:brightness-95 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-45 disabled:translate-y-0 text-center leading-tight;
+    @apply min-h-[48px] px-7 bg-error text-on-error rounded-md inline-flex items-center justify-center gap-2.5 text-[length:var(--text-button)] font-bold tracking-wide transition-all duration-200 hover:brightness-95 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-45 disabled:translate-y-0 text-center leading-tight;
   }
 
   .btn-icon {

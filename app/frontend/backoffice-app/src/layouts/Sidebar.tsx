@@ -48,9 +48,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     
     if (role === 'GERANT') {
       links.push({ to: '/categories', icon: Package, label: 'Catégories', testid: 'nav-categories' });
-      links.push({ to: '/stock', icon: Activity, label: 'Stock & Logistique', testid: 'nav-stock' });
-      links.push({ to: '/hr', icon: Users, label: 'Registre Personnel', testid: 'nav-hr' });
-      links.push({ to: '/avis', icon: Star, label: 'Avis & Sentiments', testid: 'nav-avis' });
+      links.push({ to: '/stock', icon: Activity, label: 'Stocks', testid: 'nav-stock' });
+      links.push({ to: '/hr', icon: Users, label: 'Personnel', testid: 'nav-hr' });
+      links.push({ to: '/avis', icon: Star, label: 'Avis clients', testid: 'nav-avis' });
       links.push({ to: '/settings', icon: Settings, label: 'Paramètres', testid: 'nav-settings' });
     }
 
@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
               <span className="text-[9px] font-bold uppercase tracking-widest">Actif</span>
             </div>
-            <span className="font-mono text-[8px]">V4.2</span>
+            <span className="font-mono text-[8px]">v1</span>
           </div>
 
           <button
@@ -133,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="flex min-h-[44px] items-center gap-3 w-full py-3 border border-outline hover:border-error text-on-surface-variant hover:text-error transition-all duration-200 rounded-md group"
           >
             <LogOut strokeWidth={1.5} className="h-4 w-4 ml-4 shrink-0" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Fermer Session</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest">Se déconnecter</span>
           </button>
         </div>
       </aside>

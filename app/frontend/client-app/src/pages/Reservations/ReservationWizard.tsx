@@ -98,7 +98,7 @@ export const ReservationWizard: React.FC = () => {
                 <div className="space-y-4">
                     <h2 className="text-4xl font-bold tracking-tight m-0 uppercase">Prenez place.</h2>
                     <p className="text-lg text-on-surface-variant leading-relaxed max-w-md mx-auto">
-                        Pour garantir un service d'exception et suivre vos réservations, la création d'un compte est nécessaire.
+                        Créez un compte pour confirmer votre table et retrouver vos réservations.
                     </p>
                 </div>
 
@@ -119,7 +119,7 @@ export const ReservationWizard: React.FC = () => {
 
                 <div className="pt-8 border-t border-outline flex items-center justify-center gap-2 text-on-surface-variant/40">
                     <Sparkles className="w-4 h-4" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Avantages Membres Inclus</span>
+                    <span className="text-[10px] font-bold tracking-widest">Compte client requis</span>
                 </div>
               </div>
           </div>
@@ -132,7 +132,7 @@ export const ReservationWizard: React.FC = () => {
         <div className="w-full bg-surface border border-outline rounded-xl flex flex-col overflow-hidden relative">
 
           <div className="px-6 md:px-10 py-8 md:py-10 border-b border-outline bg-surface text-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-on-background tracking-tight uppercase m-0">Réserver une Table</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-on-background tracking-tight m-0">Réserver une table</h2>
           </div>
 
           {/* Progress Bar with checkmarks */}
@@ -277,7 +277,7 @@ export const ReservationWizard: React.FC = () => {
                    </motion.div>
                    <div className="space-y-4">
                       <h2 className="text-4xl font-bold text-on-background uppercase tracking-tight m-0">C'est confirmé.</h2>
-                      <p className="text-lg text-on-surface-variant max-w-lg mx-auto">Nous avons hâte de vous recevoir pour ce moment d'exception.</p>
+                      <p className="text-lg text-on-surface-variant max-w-lg mx-auto">Votre table est réservée. Vous pouvez la retrouver dans votre compte.</p>
                    </div>
                    <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
                       <button onClick={() => navigate('/')} className="btn-primary px-12 h-14 uppercase">Accueil</button>

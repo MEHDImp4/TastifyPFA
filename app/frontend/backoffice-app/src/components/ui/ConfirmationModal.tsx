@@ -19,8 +19,8 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onConfirm,
   title,
   message,
-  confirmLabel = 'CONFIRMER',
-  cancelLabel = 'ANNULER',
+  confirmLabel = 'Confirmer',
+  cancelLabel = 'Annuler',
   variant = 'danger'
 }) => {
   const accentColor = variant === 'danger' ? 'text-error' : variant === 'warning' ? 'text-primary' : 'text-primary';
@@ -53,7 +53,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-surface-container border border-outline-variant rounded-2xl overflow-hidden"
+            className="relative w-full max-w-md bg-surface-container border border-outline-variant rounded-lg overflow-hidden"
           >
             <div className={`h-1.5 w-full ${variant === 'danger' ? 'bg-error' : 'bg-primary'}`} />
             
@@ -63,21 +63,21 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                   <div className={`p-2 rounded-lg ${variant === 'danger' ? 'bg-error/10' : 'bg-primary/10'}`}>
                     <AlertTriangle className={`w-5 h-5 ${accentColor}`} />
                   </div>
-                  <h2 className=" text-xl font-black text-on-surface uppercase  tracking-tight">{title}</h2>
+                  <h2 className=" text-xl font-black text-on-surface tracking-tight">{title}</h2>
                 </div>
                 <button onClick={onClose} aria-label="Fermer" className="btn-icon border-transparent bg-transparent">
                   <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
               
-              <p className="font-sans text-sm font-bold text-on-surface-variant leading-relaxed uppercase tracking-tight mb-10">
+              <p className="font-sans text-sm font-bold text-on-surface-variant leading-relaxed tracking-tight mb-10">
                 {message}
               </p>
               
               <div className="flex items-center gap-4">
                 <button
                   onClick={onClose}
-                  className="btn-secondary flex-1 h-14 rounded-xl tracking-[0.2em]"
+                  className="btn-secondary flex-1 h-14 rounded-lg tracking-wide"
                 >
                   {cancelLabel}
                 </button>
@@ -86,7 +86,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     onConfirm();
                     onClose();
                   }}
-                  className={`flex-[1.5] min-h-14 ${buttonBg} text-on-primary rounded-xl font-sans text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
+                  className={`flex-[1.5] min-h-14 ${buttonBg} text-on-primary rounded-lg font-sans text-[12px] font-black tracking-wide transition-all hover:scale-[1.02] active:scale-[0.98] border ${variant === 'danger' ? 'border-error' : 'border-primary'}`}
                 >
                   {confirmLabel}
                 </button>

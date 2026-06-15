@@ -139,15 +139,15 @@ export const MenuPage: React.FC = () => {
       <div className="flex-none px-client-margin page-section border-b border-outline bg-surface">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-12">
            <div className="space-y-4">
-              <span className="text-ui-label text-on-surface-variant">L'Atelier</span>
-              <h1 className="text-display-lg  lowercase">notre carte.</h1>
+              <span className="text-ui-label text-on-surface-variant">Menu</span>
+              <h1 className="text-display-lg  lowercase">la carte.</h1>
            </div>
            <div className="relative group w-full md:w-80">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-on-background transition-colors" />
               <input
                 type="text"
                 aria-label="Rechercher"
-                placeholder="RECHERCHER UN PLAT..."
+                placeholder="Rechercher un plat"
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 className="field-control pl-12 pr-4 text-xs uppercase placeholder:text-on-surface-subtle"
@@ -231,7 +231,7 @@ export const MenuPage: React.FC = () => {
                       <h3 className="text-xl font-medium tracking-tight flex-1">{plat.nom}</h3>
                       <span className="font-mono text-xs text-on-surface-variant whitespace-nowrap">{parseFloat(plat.prix).toFixed(0)} {config?.devise || 'DH'}</span>
                     </div>
-                    <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed flex-1 ">{plat.description || 'Une création culinaire d\'exception.'}</p>
+                    <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed flex-1 ">{plat.description || 'Plat préparé par la cuisine.'}</p>
                     
                     {plat.est_disponible && (
                       <button
@@ -258,7 +258,7 @@ export const MenuPage: React.FC = () => {
         {plats.length === 0 && !isPlatsLoading && (
            <div className="py-24 sm:py-32 flex flex-col items-center justify-center text-on-surface-variant gap-4">
               <ShoppingBag className="w-12 h-12 stroke-[1]" />
-              <p className="text-ui-label">AUCUN RÉSULTAT TROUVÉ</p>
+              <p className="text-ui-label">Aucun plat trouvé</p>
            </div>
         )}
 
@@ -308,13 +308,13 @@ export const MenuPage: React.FC = () => {
 
                 <div className="w-full md:w-1/2 p-5 sm:p-6 md:p-10 flex flex-col overflow-y-auto custom-scrollbar">
                    <div className="mb-8">
-                      <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4 block">DÉTAILS DU PLAT</span>
+                      <span className="text-[10px] font-bold text-on-surface-variant tracking-widest mb-4 block">Détails du plat</span>
                       <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6 break-words">{selectedPlat.nom}</h2>
                       <span className="font-mono text-xl text-on-background">{selectedPlat.prix} {config?.devise || 'DH'}</span>
                    </div>
 
                    <p className="text-base text-on-surface-variant leading-relaxed mb-10">
-                     {selectedPlat.description || 'Une création signature préparée avec soin par nos chefs.'}
+                     {selectedPlat.description || 'Plat préparé par la cuisine.'}
                    </p>
 
                    <div className="space-y-8 pt-8 border-t border-outline mt-auto">

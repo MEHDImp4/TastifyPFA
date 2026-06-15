@@ -37,12 +37,12 @@ export const PublicLayout: React.FC = () => {
   };
 
   const navLinks = [
-    { to: '/menu', label: 'LA CARTE' },
+    { to: '/menu', label: 'La carte' },
     { to: '/reservations', label: 'Réservations' },
   ];
 
   if (isAuthenticated) {
-    navLinks.splice(2, 0, { to: '/loyalty', label: 'Privilèges' });
+    navLinks.splice(2, 0, { to: '/loyalty', label: 'Fidélité' });
   }
 
   return (
@@ -175,7 +175,7 @@ export const PublicLayout: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className="btn-primary w-full h-14"
                 >
-                  Connexion Membre
+                  Se connecter
                 </Link>
               )}
             </div>

@@ -93,14 +93,14 @@ export const ReservationsPage: React.FC = () => {
     try {
       if (action === 'confirm') {
         await reservationApi.confirmReservation(id);
-        toast.success('RÉSERVATION CONFIRMÉE');
+        toast.success('Réservation confirmée');
       } else {
         await reservationApi.cancelReservation(id);
-        toast.warning('RÉSERVATION ANNULÉE');
+        toast.warning('Réservation annulée');
       }
       fetchReservations();
     } catch (err) {
-      toast.error('ÉCHEC DE L\'OPÉRATION');
+      toast.error('Opération impossible');
       console.error(`Failed to ${action} reservation`, err);
     }
   };
@@ -116,10 +116,10 @@ export const ReservationsPage: React.FC = () => {
     if (!reservationToDelete) return;
     try {
         await reservationApi.cancelReservation(reservationToDelete);
-        toast.success('RÉSERVATION SUPPRIMÉE');
+        toast.success('Réservation supprimée');
         fetchReservations();
     } catch (err) {
-        toast.error('ÉCHEC DE SUPPRESSION');
+        toast.error('Suppression impossible');
     }
     setReservationToDelete(null);
   };
@@ -135,7 +135,7 @@ export const ReservationsPage: React.FC = () => {
   };
 
   const statusLabel = (status: string) =>
-    status === 'ALL' ? 'VOIR TOUT' : status.replace('_', ' ');
+    status === 'ALL' ? 'Tout voir' : status.replace('_', ' ');
 
   const totalPages = Math.max(1, Math.ceil(totalCount / reservationsPerPage));
 
@@ -146,7 +146,7 @@ export const ReservationsPage: React.FC = () => {
       <header className="flex-none px-staff-margin min-h-20 border-b border-outline bg-surface py-3">
         <div className="max-w-[1400px] mx-auto min-h-14 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
-            <h1 aria-label="Reservations Admin" className="text-sm font-bold text-on-background uppercase tracking-widest">Gestion Réservations</h1>
+            <h1 aria-label="Reservations Admin" className="text-sm font-bold text-on-background tracking-widest">Réservations</h1>
           </div>
           
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:w-auto">
@@ -201,7 +201,7 @@ export const ReservationsPage: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
                       <h3 className="text-base text-on-background font-bold tracking-wider uppercase">
-                        {guestName || <>CLIENT ANONYME <span className="sr-only">ANONYMOUS GUEST</span></>}
+                        {guestName || <>Client sans compte</>}
                       </h3>
                       <span className={`w-fit rounded px-3 py-1 border text-[9px] font-bold uppercase tracking-widest ${getStatusColor(res.statut)}`}>
                           {res.statut.replace('_', ' ')}
@@ -218,7 +218,7 @@ export const ReservationsPage: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
                           <TableIcon className="w-3.5 h-3.5 opacity-20" strokeWidth={2}/>
-                          <span>UNITÉ #{tableNumber}</span>
+                          <span>Table #{tableNumber}</span>
                       </div>
                     </div>
                     {res.notes && (
@@ -234,15 +234,15 @@ export const ReservationsPage: React.FC = () => {
                   <>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'confirm')}
-                      aria-label="CONFIRM"
+                      aria-label="Confirmer"
                       className="btn-primary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px]"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      CONFIRMER
+                      Confirmer
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                      aria-label="CANCEL"
+                      aria-label="Annuler"
                       className="btn-icon text-error hover:border-error/30 hover:text-error"
                     >
                       <XCircle className="w-5 h-5" />
@@ -253,10 +253,10 @@ export const ReservationsPage: React.FC = () => {
                 {res.statut === 'CONFIRMEE' && (
                    <button 
                     onClick={() => handleStatusUpdate(res.id, 'cancel')}
-                    aria-label="CANCEL BOOKING"
+                    aria-label="Annuler la réservation"
                     className="btn-secondary flex-1 lg:flex-none h-10 px-6 uppercase text-[10px] text-error hover:border-error"
                    >
-                     ANNULER
+                     Annuler
                    </button>
                 )}
 
@@ -276,18 +276,18 @@ export const ReservationsPage: React.FC = () => {
                         >
                             <div className="p-2 space-y-1">
                                 <button 
-                                    onClick={() => { setActiveMenuId(null); toast.info('DETAILS...'); }}
+                                    onClick={() => { setActiveMenuId(null); toast.info('Détails bientôt disponibles'); }}
                                     className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-background transition-all"
                                 >
                                     <Eye className="w-4 h-4" />
-                                    Voir Détails
+                                    Voir détails
                                 </button>
                                 <button 
                                     onClick={() => { setActiveMenuId(null); navigate('/salle'); }}
                                     className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 rounded hover:bg-background text-[10px] font-bold uppercase tracking-widest text-on-background transition-all"
                                 >
                                     <TableIcon className="w-4 h-4" />
-                                    Associer Table
+                                    Associer une table
                                 </button>
                                 <div className="h-px bg-outline my-1" />
                                 <button 
@@ -309,8 +309,7 @@ export const ReservationsPage: React.FC = () => {
           {reservations.length === 0 && (
             <div className="rounded border border-dashed border-outline py-32 flex flex-col items-center justify-center opacity-20">
                 <Calendar className="w-12 h-12 mb-4" strokeWidth={1}/>
-                <p className="text-xl font-bold uppercase tracking-widest">Aucune Réservation</p>
-                <span className="sr-only">No Bookings Logged</span>
+                <p className="text-xl font-bold tracking-widest">Aucune réservation</p>
             </div>
           )}
         </div>
@@ -345,7 +344,7 @@ export const ReservationsPage: React.FC = () => {
                 </button>
             </div>
           ) : (
-             <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Fin du registre</p>
+             <p className="text-[9px] font-bold tracking-widest text-on-surface-variant">Fin de la liste</p>
           )}
         </div>
       </footer>
@@ -354,9 +353,9 @@ export const ReservationsPage: React.FC = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={executeDelete}
-        title="Supprimer Réservation"
+        title="Supprimer la réservation"
         message="Confirmez-vous la suppression définitive de cette réservation ?"
-        confirmLabel="SUPPRIMER"
+        confirmLabel="Supprimer"
         variant="danger"
       />
     </div>

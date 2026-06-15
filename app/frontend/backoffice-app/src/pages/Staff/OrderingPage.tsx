@@ -227,7 +227,7 @@ export const OrderingPage: React.FC = () => {
   if (isLoading) return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50">
       <Loader2 className="w-12 h-12 animate-spin text-on-background" strokeWidth={1}/>
-      <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-on-surface-variant mt-8">Chargement...</p>
+      <p className="text-[10px] font-bold tracking-[0.2em] text-on-surface-variant mt-8">Chargement</p>
     </div>
   );
 
@@ -374,7 +374,7 @@ export const OrderingPage: React.FC = () => {
             {cart.length === 0 && (!currentCommande || !currentCommande.lignes || currentCommande.lignes.length === 0) ? (
                <div className="h-full flex flex-col items-center justify-center p-8 md:p-12 text-on-surface-variant gap-6">
                   <UtensilsCrossed className="w-16 h-16 stroke-[0.5]" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-center">Ticket Vide <span className="sr-only">Ticket Buffer Empty</span></p>
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-center">Aucun article sur le ticket</p>
                </div>
             ) : (
               <div className="flex flex-col">
@@ -547,8 +547,8 @@ export const OrderingPage: React.FC = () => {
                             <Banknote className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-bold text-on-surface uppercase tracking-widest">Espèces</p>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Validation physique immédiate</p>
+                            <p className="text-lg font-bold text-on-surface tracking-widest">Espèces</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant mt-1 tracking-widest">Paiement reçu en caisse</p>
                          </div>
                       </button>
 
@@ -560,14 +560,14 @@ export const OrderingPage: React.FC = () => {
                             <CreditCard className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-bold text-on-surface uppercase tracking-widest">Carte Bancaire</p>
-                            <p className="text-[9px] font-bold text-on-surface-variant uppercase mt-1 tracking-widest">Utilisation Terminal Externe</p>
+                            <p className="text-lg font-bold text-on-surface tracking-widest">Carte bancaire</p>
+                            <p className="text-[9px] font-bold text-on-surface-variant mt-1 tracking-widest">Paiement sur le terminal</p>
                          </div>
                       </button>
 
                       <div className="flex items-center gap-6 py-4">
                           <div className="h-px flex-1 bg-outline" />
-                          <span className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest">Ou client scanne</span>
+                          <span className="text-[8px] font-bold text-on-surface-variant tracking-widest">Ou QR code client</span>
                           <div className="h-px flex-1 bg-outline" />
                       </div>
 
@@ -579,8 +579,8 @@ export const OrderingPage: React.FC = () => {
                             <QrCode className="w-8 h-8" strokeWidth={1.5}/>
                          </div>
                          <div>
-                            <p className="text-lg font-bold uppercase tracking-widest">Lien de Paiement QR</p>
-                            <p className="text-[9px] font-bold uppercase mt-1 tracking-widest text-background/80">Apple Pay, Google Pay, Carte</p>
+                            <p className="text-lg font-bold tracking-widest">Lien de paiement QR</p>
+                            <p className="text-[9px] font-bold mt-1 tracking-widest text-background/80">Apple Pay, Google Pay, carte</p>
                          </div>
                       </button>
                     </motion.div>
@@ -601,15 +601,15 @@ export const OrderingPage: React.FC = () => {
                        </div>
                        
                        <div className="space-y-4">
-                          <p className="text-2xl text-on-surface uppercase font-bold tracking-tight">Code de Règlement Sécurisé</p>
-                          <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">
-                            Session: {qrData?.token?.substring(0, 8)}...
+                          <p className="text-2xl text-on-surface font-bold tracking-tight">QR code de paiement</p>
+                          <p className="text-[9px] font-bold text-on-surface-variant tracking-widest">
+                            Code: {qrData?.token?.substring(0, 8)}
                           </p>
                        </div>
 
                        <div className="w-full flex gap-4">
                           <button onClick={() => setPaymentStep('CHOICE')} className="btn-secondary flex-1 min-h-14 text-[10px]">Retour</button>
-                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="btn-primary flex-1 min-h-14 uppercase text-[10px] gap-3">Lien Direct <ExternalLink className="w-4 h-4" /></a>
+                          <a href={qrData?.url} target="_blank" rel="noreferrer" className="btn-primary flex-1 min-h-14 text-[10px] gap-3">Ouvrir le lien <ExternalLink className="w-4 h-4" /></a>
                        </div>
                     </motion.div>
                   )}

@@ -36,7 +36,7 @@ export const AvisPage: React.FC = () => {
       setTotalCount(res.data.count);
     } catch (err) {
       console.error('Failed to fetch avis', err);
-      toast.error('Erreur chargement sentiments');
+      toast.error('Impossible de charger les avis');
     } finally {
       setIsLoading(false);
     }
@@ -68,8 +68,8 @@ export const AvisPage: React.FC = () => {
 
       <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Analyse des Sentiments</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Perception de marque et satisfaction convives</p>
+          <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Avis clients</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant tracking-widest mt-1 opacity-60">Commentaires et satisfaction des convives</p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
            <div className="relative group w-full sm:w-auto">
@@ -90,7 +90,7 @@ export const AvisPage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
-              { label: 'Satisfaction Globale', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
+              { label: 'Note moyenne', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
               { label: 'Positifs', val: stats.positive, sub: '', icon: Smile, color: 'text-success' },
               { label: 'Neutres', val: stats.neutral, sub: '', icon: Meh, color: 'text-on-surface-variant' },
               { label: 'Négatifs', val: stats.negative, sub: '', icon: AlertCircle, color: 'text-error' },
@@ -113,7 +113,7 @@ export const AvisPage: React.FC = () => {
             <div className="col-span-1 flex items-center gap-2"><Hash className="w-2.5 h-2.5" /> ID</div>
             <div className="col-span-2">Convive</div>
             <div className="col-span-6">Commentaire</div>
-            <div className="col-span-3 text-center">Score IA</div>
+            <div className="col-span-3 text-center">Score d'avis</div>
           </div>
 
             {avis.length > 0 ? avis.map((a) => {
@@ -156,7 +156,7 @@ export const AvisPage: React.FC = () => {
 
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Analyse basée sur {totalCount} témoignages
+                Basé sur {totalCount} avis
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">

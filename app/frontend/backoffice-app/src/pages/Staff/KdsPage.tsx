@@ -103,7 +103,7 @@ const KdsTicket = ({
     };
 
     return (
-        <div data-testid={`kds-ticket-${ticket.id}`} className={`luxury-card flex flex-col overflow-hidden shrink-0 mb-6 transition-all ${isCritical && !isDone ? 'ring-2 ring-error/20 border-error/30' : 'border-outline-variant'}`}>
+        <div data-testid={`kds-ticket-${ticket.id}`} className={`ops-card flex flex-col overflow-hidden shrink-0 mb-6 transition-all ${isCritical && !isDone ? 'ring-2 ring-error/20 border-error/30' : 'border-outline-variant'}`}>
             
             {/* En-tête du Ticket */}
             <div className={`p-4 sm:p-5 ${statusBg} border-b border-outline-variant flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start`}>
@@ -112,11 +112,11 @@ const KdsTicket = ({
                         <span className="px-2.5 py-1 rounded-sm bg-on-surface text-background text-[10px] font-black uppercase tracking-widest">
                             TABLE {ticket.table_numero || '??'}
                         </span>
-                        {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black uppercase tracking-widest animate-pulse">ALERTE RUSH</span>}
+                        {isCritical && !isDone && <span className="px-2.5 py-1 rounded-sm bg-error text-on-error text-[10px] font-black tracking-widest">Retard</span>}
                         {isDone && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">TERMINÉ</span>}
                         {!isDone && allLignesReady && <span className="px-2.5 py-1 rounded-sm bg-success text-on-success text-[10px] font-black uppercase tracking-widest">PRÊT</span>}
                     </div>
-                    <h3 className="font-mono text-sm font-bold text-on-surface">ID-NEURAL: #{ticket.id}</h3>
+                    <h3 className="font-mono text-sm font-bold text-on-surface">Commande #{ticket.id}</h3>
                 </div>
                 
                 <div className="text-left flex flex-col items-start sm:items-end sm:text-right">
@@ -178,7 +178,7 @@ const KdsTicket = ({
                         onClick={handleMainAction}
                         className={`w-full min-h-16 rounded-xl font-sans text-xs font-black uppercase tracking-[0.18em] sm:tracking-[0.3em] transition-all flex items-center justify-center gap-3 sm:gap-4 ${allLignesReady ? 'bg-success text-on-success hover:scale-[1.02]' : 'bg-primary text-on-primary hover:scale-[1.02]'}`}
                     >
-                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au Service <span className="sr-only">Ready to Window</span></> : <><Zap className="w-5 h-5" /> Forcer Prêt <span className="sr-only">Force Ready</span></>}
+                        {allLignesReady ? <><CheckCircle2 className="w-5 h-5" /> Envoyer au service</> : <><Zap className="w-5 h-5" /> Marquer prêt</>}
                     </button>
                 )}
             </div>
@@ -317,7 +317,7 @@ export const KdsPage: React.FC = () => {
           </button>
           <div className="min-w-0">
             <h1 aria-label="Kitchen Display System" className="text-2xl font-black uppercase tracking-tight text-on-surface  leading-none">Écran Cuisine</h1>
-            <p className="text-[10px] font-bold text-on-surface uppercase tracking-widest mt-2">Système de Monitoring de Production</p>
+            <p className="text-[10px] font-bold text-on-surface tracking-widest mt-2">Commandes à préparer</p>
           </div>
         </div>
         
@@ -330,7 +330,7 @@ export const KdsPage: React.FC = () => {
              <div className="text-left sm:text-center">
              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface">Statut</p>
              <p className="text-[10px] font-black text-success uppercase leading-none mt-1.5 flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> SYNC EN DIRECT
+             <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> En direct
              </p>
              </div>
              </div>
@@ -374,7 +374,7 @@ export const KdsPage: React.FC = () => {
              <div className="h-full flex flex-col items-center justify-center px-6 pb-20 text-center">
              <PlayCircle aria-hidden="true" className="w-20 h-20 md:w-24 md:h-24 mb-6 stroke-[2] text-primary" />
              <p aria-hidden="true" className="text-base md:text-xl font-black uppercase tracking-[0.2em] md:tracking-[0.6em] text-on-surface">Aucune commande en attente</p>
-             <span aria-hidden="true" className="text-xs md:text-sm font-black uppercase tracking-widest text-on-surface mt-2">Sector Clear</span>
+             <span aria-hidden="true" className="text-xs md:text-sm font-black tracking-widest text-on-surface mt-2">Colonne vide</span>
              </div>
              )}
              </div>

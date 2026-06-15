@@ -39,7 +39,7 @@ export const ContactPage: React.FC = () => {
     if (!validateForm()) return;
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Manifeste Transmis. Notre concierge vous contactera.');
+    toast.success('Message envoyé. Nous vous répondrons rapidement.');
     setFormData({ name: '', email: '', subject: '', message: '' });
     setIsSubmitting(false);
   };
@@ -61,10 +61,10 @@ export const ContactPage: React.FC = () => {
         <header className="mb-12 md:mb-20 space-y-6">
             <div className="flex items-center gap-3">
                 <span className="h-[1px] w-8 bg-primary" />
-                <span className="editorial-kicker">Liaison Directe</span>
+                <span className="editorial-kicker">Contact</span>
             </div>
-            <h1 className="text-4xl md:text-7xl font-black text-on-surface uppercase tracking-tight leading-none m-0">Registre de Contact.</h1>
-            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl opacity-80 leading-relaxed">Une demande spéciale ou un retour ? Notre concierge digital est à votre entière disposition.</p>
+            <h1 className="text-4xl md:text-7xl font-black text-on-surface tracking-tight leading-none m-0">Écrivez-nous.</h1>
+            <p className="max-w-xl text-on-surface-variant text-lg md:text-xl opacity-80 leading-relaxed">Une question, une réservation de groupe ou un retour sur votre visite ? Envoyez-nous un message.</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
@@ -97,7 +97,7 @@ export const ContactPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-10">
-                    <span className="editorial-kicker text-on-surface-subtle">Fenêtre Temporelle</span>
+                    <span className="editorial-kicker text-on-surface-subtle">Horaires</span>
                     <div className="flex items-start gap-8">
                         <div className="w-14 h-14 rounded-2xl bg-surface-container border border-outline-variant flex items-center justify-center text-primary shrink-0 shadow-inner">
                             <Clock className="w-6 h-6" strokeWidth={1.5} />
@@ -116,11 +116,11 @@ export const ContactPage: React.FC = () => {
                 </section>
             </aside>
 
-            {/* Liaison Manifest Form */}
+            {/* Contact form */}
             <main className="lg:col-span-8">
                 <motion.div 
                     initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="bg-surface-container border border-outline-variant rounded-lg p-6 md:p-12 relative overflow-hidden shadow-xl"
+                    className="bg-surface-container border border-outline-variant rounded-lg p-6 md:p-12 relative overflow-hidden shadow-sm"
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 blur-[100px] -mr-40 -mt-40 pointer-events-none" />
                     
@@ -128,33 +128,33 @@ export const ContactPage: React.FC = () => {
                         <div className="space-y-4">
                             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface-container-highest text-primary border border-primary/20">
                                 <Sparkles className="w-4 h-4" />
-                                <span className="font-sans text-[9px] font-black tracking-[0.3em] uppercase">Protocole Actif</span>
+                                <span className="font-sans text-[9px] font-black tracking-[0.2em]">Réponse sous 24 h</span>
                             </div>
-                            <h2 className=" text-3xl md:text-5xl font-black text-on-surface  leading-none m-0">Le Manifeste.</h2>
+                            <h2 className=" text-3xl md:text-5xl font-black text-on-surface  leading-none m-0">Votre message</h2>
                         </div>
 
                         <form onSubmit={handleSubmit} noValidate className="space-y-8 md:space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Identité</label>
+                                    <label htmlFor="contact-name-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Nom</label>
                                     <input 
                                         id="contact-name-input" type="text" name="name" value={formData.name} onChange={handleChange} required
-                                        aria-label="Identité"
+                                        aria-label="Nom"
                                         aria-invalid={Boolean(errors.name)}
                                         aria-describedby={errors.name ? 'contact-name-error' : undefined}
-                                        className="field-control min-h-16 rounded-2xl px-6 uppercase"
+                                        className="field-control min-h-16 rounded-lg px-6"
                                         placeholder="Votre nom"
                                     />
                                     {errors.name && <p id="contact-name-error" role="alert" className="form-error">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-3">
-                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Coordonnée</label>
+                                    <label htmlFor="contact-email-input" className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.3em] ml-2">Email</label>
                                     <input 
                                         id="contact-email-input" type="email" name="email" value={formData.email} onChange={handleChange} required
-                                        aria-label="Coordonnée"
+                                        aria-label="Email"
                                         aria-invalid={Boolean(errors.email)}
                                         aria-describedby={errors.email ? 'contact-email-error' : undefined}
-                                        className="field-control min-h-16 rounded-2xl px-6"
+                                        className="field-control min-h-16 rounded-lg px-6"
                                         placeholder="votre@email.com"
                                     />
                                     {errors.email && <p id="contact-email-error" role="alert" className="form-error">{errors.email}</p>}
@@ -168,12 +168,12 @@ export const ContactPage: React.FC = () => {
                                     aria-label="Sujet"
                                     aria-invalid={Boolean(errors.subject)}
                                     aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
-                                    className="field-control min-h-16 rounded-2xl px-6 appearance-none cursor-pointer"
+                                    className="field-control min-h-16 rounded-lg px-6 appearance-none cursor-pointer"
                                 >
-                                    <option value="">SÉLECTIONNER UN PARAMÈTRE...</option>
-                                    <option value="reservation">RÉSERVATION PRIVÉE</option>
-                                    <option value="evenement">ARCHITECTURE D'ÉVÉNEMENT</option>
-                                    <option value="partenariat">PARTENARIAT</option>
+                                    <option value="">Choisir un sujet</option>
+                                    <option value="reservation">Réservation</option>
+                                    <option value="evenement">Événement</option>
+                                    <option value="partenariat">Partenariat</option>
                                 </select>
                                 {errors.subject && <p id="contact-subject-error" role="alert" className="form-error">{errors.subject}</p>}
                             </div>
@@ -185,7 +185,7 @@ export const ContactPage: React.FC = () => {
                                     aria-label="Message"
                                     aria-invalid={Boolean(errors.message)}
                                     aria-describedby={errors.message ? 'contact-message-error' : undefined}
-                                    className="field-control min-h-36 rounded-[2rem] p-6 md:p-8 resize-none font-body text-base md:text-lg uppercase"
+                                    className="field-control min-h-36 rounded-lg p-6 md:p-8 resize-none font-body text-base md:text-lg"
                                     placeholder="Votre message..."
                                 />
                                 {errors.message && <p id="contact-message-error" role="alert" className="form-error">{errors.message}</p>}

@@ -58,11 +58,8 @@ export const PortalHomePage = () => {
   return (
     <div className="page-shell text-on-background">
       
-      {/* Simple Minimal Hero */}
       <section className="relative w-full flex flex-col justify-center border-b border-outline overflow-hidden snap-start">
-        {/* Soft elegant glowing background to wow users */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(180,83,9,0.06),transparent_50%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(180,83,9,0.035),transparent_48%)] pointer-events-none" />
         
         <div className="max-w-[1200px] mx-auto w-full px-client-margin py-[--spacing-section-y-lg] grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center relative z-10">
           <motion.div
@@ -72,17 +69,17 @@ export const PortalHomePage = () => {
              className="lg:col-span-7 space-y-8"
           >
             <motion.div variants={heroItemVariants} className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Gastronomie Contemporaine</span>
+                <span className="text-xs font-bold tracking-[0.16em] text-accent">Restaurant marocain à Casablanca</span>
             </motion.div>
 
             <motion.h1 variants={heroItemVariants} className="text-[clamp(2.75rem,8vw,5.5rem)] font-bold tracking-tight leading-[1.1] text-on-background">
               {config?.nom ? config.nom : "Tastify"} <br/>
-              <span className="bg-gradient-to-r from-amber-700 to-amber-900 bg-clip-text text-transparent">Cuisine de terroir.</span>
+              <span className="text-accent">Cuisine marocaine.</span>
             </motion.h1>
 
             <motion.div variants={heroItemVariants} className="max-w-lg">
                 <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed">
-                   Une table marocaine contemporaine où chaque plat raconte une histoire de terroir et d'élégance simple.
+                   Consultez la carte, commandez vos plats et réservez une table en quelques gestes.
                 </p>
             </motion.div>
 
@@ -92,7 +89,7 @@ export const PortalHomePage = () => {
                   className="btn-primary w-full sm:w-auto min-h-[48px] gap-3 px-8 group shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 transition-all duration-300"
                 >
                   <UtensilsCrossed className="w-4 h-4" />
-                  Voir la Carte
+                  Voir la carte
                   <ArrowRight className="w-4 h-4 ml-auto sm:ml-0 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
@@ -100,7 +97,7 @@ export const PortalHomePage = () => {
                   className="btn-secondary w-full sm:w-auto min-h-[48px] gap-3 px-8 group transition-all duration-300"
                 >
                   <CalendarDays className="w-4 h-4 text-accent" />
-                  Réserver une Table
+                  Réserver une table
                 </Link>
             </motion.div>
           </motion.div>
@@ -111,7 +108,7 @@ export const PortalHomePage = () => {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="lg:col-span-5 block"
           >
-            <div className="relative group aspect-[16/11] sm:aspect-[4/5] max-h-[420px] lg:max-h-none bg-surface-container-high rounded-xl overflow-hidden border border-outline shadow-2xl transition-all duration-500 hover:scale-[1.01] hover:border-accent/30">
+            <div className="relative group aspect-[16/11] sm:aspect-[4/5] max-h-[420px] lg:max-h-none bg-surface-container-high rounded-lg overflow-hidden border border-outline shadow-sm transition-all duration-500 hover:border-accent/30">
                 <img 
                     src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
                     alt="Table dressée dans une ambiance restaurant contemporaine"
@@ -125,16 +122,15 @@ export const PortalHomePage = () => {
         </div>
       </section>
 
-      {/* Recommended Selection - Clean Grid */}
       <section className="page-section-lg">
         <div className="max-w-[1200px] mx-auto px-client-margin">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-on-surface-variant">
                  <Sparkles className="w-4 h-4 text-accent" />
-                 <span className="text-[10px] font-bold uppercase tracking-widest">Inspirations</span>
+                 <span className="text-[10px] font-bold tracking-widest">Suggestions</span>
               </div>
-              <h3 className="text-3xl font-bold tracking-tight">Sélection du Chef</h3>
+              <h3 className="text-3xl font-bold tracking-tight">Plats appréciés</h3>
             </div>
             <Link to="/menu" className="min-h-11 inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background border-b border-outline hover:border-accent hover:text-accent transition-all">
                 Tout voir
@@ -158,9 +154,9 @@ export const PortalHomePage = () => {
               >
                 <div className="flex justify-between items-start mb-8">
                     <span className="font-mono text-xs text-on-surface-subtle">0{idx + 1}</span>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full border border-outline">
+                    <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-md border border-outline">
                         <TrendingUp className="w-3 h-3 text-success" />
-                        <span className="text-caption font-bold uppercase tracking-widest">Tendance</span>
+                        <span className="text-caption font-bold tracking-wide">Demandé</span>
                     </div>
                 </div>
 
@@ -215,7 +211,7 @@ export const PortalHomePage = () => {
                     </h2>
                 </Link>
                 <p className="text-sm text-on-surface-variant leading-relaxed max-w-sm">
-                   Une hospitalité contemporaine, servie avec précision et simplicité au coeur de la ville.
+                   Réservations, commandes et suivi client pour votre restaurant.
                 </p>
           </div>
 

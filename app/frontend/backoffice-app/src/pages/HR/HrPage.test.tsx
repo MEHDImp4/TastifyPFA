@@ -20,7 +20,7 @@ describe('HrPage component', () => {
     vi.mocked(hrApi.getEmployesPage).mockReturnValue(new Promise(() => {}));
     render(<HrPage />);
     // When loading, heading is not present
-    expect(screen.queryByText('Registre du Personnel')).toBeNull();
+    expect(screen.queryByText('Personnel')).toBeNull();
   });
 
   it('renders employees list with user_details correctly', async () => {
@@ -61,7 +61,7 @@ describe('HrPage component', () => {
     render(<HrPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Registre du Personnel')).toBeDefined();
+      expect(screen.getByText('Personnel')).toBeDefined();
     });
 
     expect(screen.getByText('John Doe')).toBeDefined();
@@ -104,7 +104,7 @@ describe('HrPage component', () => {
     render(<HrPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Registre du Personnel')).toBeDefined();
+      expect(screen.getByText('Personnel')).toBeDefined();
     });
 
     expect(screen.getByText('Alice Smith')).toBeDefined();

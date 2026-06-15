@@ -123,7 +123,7 @@ export const AccountPage: React.FC = () => {
               <div className="flex-1 text-center md:text-left space-y-6 z-10">
                  <div>
                     <h1 className="text-4xl md:text-6xl font-black text-on-background uppercase tracking-tight m-0 leading-none break-words">{username}</h1>
-                    <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest mt-4">Identité Vérifiée</p>
+                    <p className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-widest mt-4">Compte client</p>
                  </div>
                  
                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
@@ -142,7 +142,7 @@ export const AccountPage: React.FC = () => {
            {/* Tier Progress Bento */}
            <div className="lg:col-span-4 bg-surface border border-outline rounded-lg p-8 flex flex-col justify-between shadow-sm">
               <div className="space-y-6">
-                 <h3 className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Statut privilège</h3>
+                 <h3 className="font-sans text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em]">Points fidélité</h3>
                  <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
                     <motion.div
                        initial={{ width: 0 }}
@@ -152,7 +152,7 @@ export const AccountPage: React.FC = () => {
                        className="h-full bg-on-background"
                     />
                  </div>
-                 <p className="text-lg text-on-background">Bientôt le prochain avantage membre</p>
+                 <p className="text-lg text-on-background">Vous vous rapprochez du prochain avantage.</p>
               </div>
            </div>
         </section>
@@ -161,12 +161,12 @@ export const AccountPage: React.FC = () => {
         <section className="space-y-12">
             <div className="flex justify-between items-end border-b border-outline pb-6">
                 <div>
-                    <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Privilèges</h2>
-                    <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Profitez de vos points cumulés</p>
+                    <h2 className="text-4xl font-black text-on-background tracking-tight m-0">Avantages</h2>
+                    <p className="font-sans text-[10px] font-black text-on-surface-variant tracking-widest mt-2">Utilisez vos points disponibles</p>
                 </div>
                 <div className="flex items-center gap-3 text-on-surface-variant">
                     <Zap className="w-4 h-4 fill-current" />
-                    <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres membres</span>
+                    <span className="font-sans text-[10px] font-black tracking-widest">Compte fidélité</span>
                 </div>
             </div>
 
@@ -213,11 +213,11 @@ export const AccountPage: React.FC = () => {
                  <div className="flex justify-between items-end border-b border-outline pb-6">
                     <div>
                         <h2 className="text-4xl font-black text-on-background uppercase tracking-tight m-0">Historique</h2>
-                        <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Vos moments partagés avec nous</p>
+                        <p className="font-sans text-[10px] font-black text-on-surface-variant tracking-widest mt-2">Commandes passées</p>
                     </div>
                     <div className="flex items-center gap-3 text-on-surface-variant">
                         <History className="w-4 h-4" />
-                        <span className="font-sans text-[10px] font-black uppercase tracking-widest">Suivi d'expérience</span>
+                        <span className="font-sans text-[10px] font-black tracking-widest">Historique client</span>
                     </div>
                  </div>
 
@@ -300,7 +300,7 @@ export const AccountPage: React.FC = () => {
                  
                  <div className="space-y-4 relative z-10">
                     <h3 className="text-3xl text-background tracking-tight m-0">Menu privé</h3>
-                    <p className="font-sans text-[10px] font-black uppercase tracking-[0.3em] text-background/70">Gestion du compte & assistance</p>
+                    <p className="font-sans text-[10px] font-black tracking-[0.2em] text-background/70">Compte et assistance</p>
                  </div>
 
                  <div className="space-y-2 relative z-10">
@@ -350,8 +350,8 @@ export const AccountPage: React.FC = () => {
                  <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center text-on-background mb-10 border border-outline">
                     <Quote className="w-8 h-8" />
                  </div>
-                 <h3 id="review-dialog-title" className="text-3xl md:text-5xl font-black text-on-background tracking-tight mb-4">Votre avis nous est précieux.</h3>
-                 <p className="text-on-surface-variant font-body mb-12">Partagez votre ressenti sur votre dernier moment chez nous.</p>
+                 <h3 id="review-dialog-title" className="text-3xl md:text-5xl font-black text-on-background tracking-tight mb-4">Donner votre avis</h3>
+                 <p className="text-on-surface-variant font-body mb-12">Dites-nous comment s'est passée votre dernière commande.</p>
                  
                  <form onSubmit={handleReviewSubmit} noValidate className="w-full space-y-6">
                     <label htmlFor="review-comment" className="sr-only">Votre avis</label>

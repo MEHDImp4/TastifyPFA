@@ -72,7 +72,7 @@ export const CheckoutPage: React.FC = () => {
     <div className="page-shell flex flex-col items-center justify-center p-6 text-center min-h-[85vh]">
         <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-lg p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-xl"
+            className="w-full max-w-2xl bg-surface-container border border-outline-variant rounded-lg p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-sm"
         >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -mr-32 -mt-32" />
             
@@ -84,8 +84,6 @@ export const CheckoutPage: React.FC = () => {
                     className="relative"
                 >
                     <motion.div
-                        animate={{ scale: [1, 1.08, 1] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                         className="w-28 h-28 rounded-full bg-success/10 border-2 border-success/20 flex items-center justify-center text-success"
                     >
                         <CheckCircle2 className="w-14 h-14" strokeWidth={1} />
@@ -99,11 +97,11 @@ export const CheckoutPage: React.FC = () => {
 
                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 py-8 sm:py-10 border-y border-outline-variant/30">
                     <div className="text-center space-y-2">
-                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Réf. Commande</span>
-                        <p className=" text-2xl text-on-surface ">#CMD-8924</p>
+                                    <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Statut</span>
+                        <p className=" text-2xl text-on-surface ">Envoyée</p>
                     </div>
                     <div className="text-center space-y-2 sm:border-l border-outline-variant/30">
-                        <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Temps Estimé</span>
+                                    <span className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Temps estimé</span>
                         <div className="flex items-center justify-center gap-2 text-primary  text-2xl ">
                            <Timer className="w-5 h-5" />
                            <span>25 min</span>
@@ -113,7 +111,7 @@ export const CheckoutPage: React.FC = () => {
 
                 <div className="flex flex-col sm:flex-row gap-6 w-full pt-4">
                     <button onClick={() => navigate('/account')} className="btn-primary flex-1 h-14">Voir ma commande</button>
-                    <button onClick={() => navigate('/')} className="btn-secondary flex-1 h-14"><Home className="w-4 h-4" /> Retour à l'Accueil</button>
+                    <button onClick={() => navigate('/')} className="btn-secondary flex-1 h-14"><Home className="w-4 h-4" /> Retour à l'accueil</button>
                 </div>
             </div>
         </motion.div>
@@ -128,13 +126,13 @@ export const CheckoutPage: React.FC = () => {
             </div>
             <div className="space-y-6">
                 <h2 className="text-display-lg text-4xl lg:text-6xl text-on-surface leading-tight ">Votre panier <br /><span className="text-on-surface-variant">est vide.</span></h2>
-                <p className="text-base sm:text-lg text-on-surface-variant uppercase tracking-wider sm:tracking-widest leading-relaxed">Ajoutez des plats de notre carte pour commencer.</p>
+                <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed">Ajoutez des plats de la carte pour commencer.</p>
             </div>
             <button 
               onClick={() => navigate('/menu')} 
               className="btn-primary min-h-14 px-10"
             >
-              Explorer la Carte
+              Voir la carte
             </button>
         </div>
     </div>
@@ -152,8 +150,8 @@ export const CheckoutPage: React.FC = () => {
         >
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-12 h-12 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-90"><ChevronLeft className="w-5 h-5" /></button>
             <div>
-               <h1 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter uppercase  m-0">Votre Panier</h1>
-               <p className="font-sans text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-3">Validation de votre commande</p>
+               <h1 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter  m-0">Votre panier</h1>
+               <p className="font-sans text-[10px] font-bold text-on-surface-variant tracking-widest mt-3">Vérifiez les plats avant l'envoi en cuisine</p>
             </div>
         </motion.div>
 
@@ -174,7 +172,7 @@ export const CheckoutPage: React.FC = () => {
                                 layout 
                                 variants={itemVariants}
                                 exit={{ opacity: 0, x: 20, transition: { duration: 0.3 } }}
-                                className="p-6 bg-surface-container border border-outline-variant rounded-2xl flex flex-col sm:flex-row items-center gap-8 group transition-all hover:border-primary/40 hover:bg-surface-bright shadow-sm hover:shadow-md"
+                                className="p-6 bg-surface-container border border-outline-variant rounded-lg flex flex-col sm:flex-row items-center gap-8 group transition-all hover:border-primary/40 hover:bg-surface-bright shadow-sm"
                             >
                                 <div className="w-24 h-24 rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/30 shrink-0 shadow-inner">
                                     {item.plat.image ? (
@@ -237,7 +235,7 @@ export const CheckoutPage: React.FC = () => {
                 <motion.div 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="bg-surface-container-high border border-outline-variant rounded-lg p-6 md:p-8 flex flex-col gap-8 shadow-xl relative overflow-hidden"
+                    className="bg-surface-container-high border border-outline-variant rounded-lg p-6 md:p-8 flex flex-col gap-8 shadow-sm relative overflow-hidden"
                 >
                     <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
                     

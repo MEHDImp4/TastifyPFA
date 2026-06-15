@@ -68,9 +68,9 @@ export const LoyaltyPage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="font-sans text-[11px] font-black uppercase tracking-widest text-background/70"
                  >
-                    PROGRAMME ÉCHELON
+                    Programme fidélité
                  </motion.span>
-                 <h1 className="text-4xl md:text-7xl text-background tracking-tight leading-none m-0">Votre Fidélité <br/> <span className="uppercase font-black text-background/70">Récompensée.</span></h1>
+                 <h1 className="text-4xl md:text-7xl text-background tracking-tight leading-none m-0">Vos points <br/> <span className="font-black text-background/70">et avantages.</span></h1>
               </div>
 
               <div className="max-w-xl mx-auto space-y-10">
@@ -88,7 +88,7 @@ export const LoyaltyPage: React.FC = () => {
                     </div>
                  </div>
 
-                 {/* Premium Progress Bar */}
+                 {/* Progress Bar */}
                  <div className="space-y-4">
                     <div className="w-full h-2.5 bg-background/10 rounded-full overflow-hidden border border-white/10">
                        <motion.div
@@ -98,7 +98,7 @@ export const LoyaltyPage: React.FC = () => {
                           className="h-full bg-background relative"
                        />
                     </div>
-                    <p className="font-body text-[13px] text-background/70">Bientôt le prochain avantage</p>
+                    <p className="font-body text-[13px] text-background/70">Vous vous rapprochez du prochain avantage.</p>
                  </div>
               </div>
            </div>
@@ -108,12 +108,12 @@ export const LoyaltyPage: React.FC = () => {
         <section className="space-y-12">
            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 border-b border-outline pb-6">
               <div>
-                 <h2 className="text-4xl font-black text-on-background tracking-tight m-0 uppercase">Vos privilèges</h2>
-                 <p className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-2">Échangez vos points contre des attentions particulières</p>
+                 <h2 className="text-4xl font-black text-on-background tracking-tight m-0">Avantages disponibles</h2>
+                 <p className="font-sans text-[10px] font-black text-on-surface-variant tracking-widest mt-2">Échangez vos points au restaurant</p>
               </div>
               <div className="flex items-center gap-3 text-on-surface-variant">
                  <Zap className="w-4 h-4 fill-current" />
-                 <span className="font-sans text-[10px] font-black uppercase tracking-widest">Offres exclusives</span>
+                 <span className="font-sans text-[10px] font-black tracking-widest">Compte fidélité</span>
               </div>
            </div>
 
@@ -153,7 +153,7 @@ export const LoyaltyPage: React.FC = () => {
                           </div>
                        </div>
                        
-                       <div className="absolute inset-0 bg-gradient-to-br from-on-background/5 to-transparent pointer-events-none" />
+                       <div className="absolute inset-0 bg-on-background/[0.025] pointer-events-none" />
                     </motion.div>
                  );
               })}

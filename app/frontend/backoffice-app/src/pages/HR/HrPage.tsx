@@ -72,7 +72,7 @@ export const HrPage: React.FC = () => {
         link.setAttribute("href", url);
         link.setAttribute("download", `PERSONNEL_TASTIFY.csv`);
         link.click();
-        toast.success("Registre exporté");
+        toast.success("Liste exportée");
     } catch (err) {
         toast.error("Export impossible");
     }
@@ -87,8 +87,8 @@ export const HrPage: React.FC = () => {
 
       <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Ressources humaines" className="text-sm font-bold tracking-widest text-on-background uppercase">Registre du Personnel</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Gestion des effectifs et accès opérationnels</p>
+          <h1 aria-label="Ressources humaines" className="text-sm font-bold tracking-widest text-on-background uppercase">Personnel</h1>
+          <p className="text-[10px] font-bold text-on-surface-variant tracking-widest mt-1 opacity-60">Employés, postes et contacts</p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
            <div className="relative group w-full sm:w-auto">
@@ -118,17 +118,17 @@ export const HrPage: React.FC = () => {
                         onClick={() => { setActiveFilter(tab); setCurrentPage(1); }}
                         className={`min-h-[44px] px-4 rounded font-bold text-[9px] uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-on-background text-background' : 'bg-surface border border-outline text-on-background hover:border-on-background'}`}
                     >
-                        {tab === 'ALL' ? 'Tout l\'Effectif' : tab}
+                        {tab === 'ALL' ? 'Toute l\'équipe' : tab}
                     </button>
                 ))}
             </div>
             <div className="flex items-center gap-8 bg-surface border border-outline px-6 py-2.5 rounded-lg">
                 <div className="text-center border-r border-outline pr-8">
-                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Effectif Actif</p>
+                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Employés</p>
                     <p className="text-lg font-bold text-on-background mt-0.5">{totalCount}</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Opérationnel</p>
+                    <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Statut</p>
                     <p className="text-lg font-bold text-success mt-0.5">Prêt</p>
                 </div>
             </div>
@@ -199,7 +199,7 @@ export const HrPage: React.FC = () => {
 
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Total : {totalCount} Dossiers
+                Total : {totalCount} employés
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">

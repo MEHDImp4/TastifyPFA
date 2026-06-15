@@ -24,16 +24,15 @@ export const OfflineModePage: React.FC = () => {
         className="relative z-10 w-full max-w-2xl text-center flex flex-col items-center gap-12"
       >
         <div className="relative">
-           <div className="w-32 h-32 rounded-full border-2 border-outline-variant/30 flex items-center justify-center bg-surface-container-low shadow-2xl relative z-10">
+           <div className="w-32 h-32 rounded-full border-2 border-outline-variant/30 flex items-center justify-center bg-surface-container-low shadow-sm relative z-10">
               <CloudOff className="w-12 h-12 text-on-surface-variant stroke-[1]" />
            </div>
-           <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping opacity-20" />
         </div>
 
         <div className="space-y-6">
-           <h1 className=" text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Mode Hors Ligne</h1>
-           <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
-              Connexion interrompue. Votre menu et vos préférences de profil sont sécurisés en cache. La synchronisation en direct est temporairement suspendue.
+           <h1 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter m-0">Connexion interrompue</h1>
+           <p className="font-body text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-md mx-auto opacity-80">
+              Certaines informations restent disponibles, mais les commandes et réservations doivent être synchronisées.
            </p>
         </div>
 
@@ -44,7 +43,7 @@ export const OfflineModePage: React.FC = () => {
              className="btn-primary min-h-14 px-10 gap-4 group"
            >
              <RefreshCcw className={`w-4 h-4 transition-transform duration-700 ${isRetrying ? 'animate-spin' : 'group-hover:rotate-180'}`} />
-             <span>Réessayer la Connexion</span>
+             <span>Réessayer</span>
            </button>
 
            <div className={`flex items-center gap-3 transition-opacity duration-500 ${isRetrying ? 'opacity-100' : 'opacity-0'}`}>
@@ -56,11 +55,11 @@ export const OfflineModePage: React.FC = () => {
         <div className="pt-12 border-t border-outline-variant/10 w-full max-w-sm flex items-center justify-center gap-8 opacity-20">
            <div className="flex items-center gap-2">
               <ShieldCheck className="w-3 h-3" />
-              <span className="font-sans text-[8px] font-black uppercase tracking-widest">Bouclier Local Actif</span>
+              <span className="font-sans text-[8px] font-black uppercase tracking-widest">Cache local</span>
            </div>
            <div className="flex items-center gap-2">
               <Database className="w-3 h-3" />
-              <span className="font-sans text-[8px] font-black uppercase tracking-widest">Cache Validé</span>
+              <span className="font-sans text-[8px] font-black uppercase tracking-widest">Données conservées</span>
            </div>
         </div>
       </motion.div>

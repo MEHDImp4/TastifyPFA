@@ -22,9 +22,9 @@ export const NotFoundPage: React.FC = () => {
         <div className="w-16 h-px bg-outline-variant/30" />
         
         <div className="space-y-6">
-           <h2 className=" text-3xl md:text-5xl font-black text-on-surface uppercase  tracking-tighter m-0">Page Introuvable</h2>
-           <p className="font-body text-lg md:text-xl text-on-surface-variant uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-60">
-              Le goût de l'évasion, littéralement. La page que vous recherchez a été retirée de notre menu ou n'a jamais existé.
+           <h2 className=" text-3xl md:text-5xl font-black text-on-surface tracking-tighter m-0">Page introuvable</h2>
+           <p className="font-body text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-md mx-auto opacity-80">
+              La page demandée n'existe pas ou n'est plus disponible.
            </p>
         </div>
 
@@ -33,13 +33,13 @@ export const NotFoundPage: React.FC = () => {
               onClick={() => navigate('/')}
               className="btn-primary min-h-14 px-10 gap-3"
             >
-              <Home className="w-4 h-4" /> Retour Accueil
+              <Home className="w-4 h-4" /> Retour à l'accueil
             </button>
             <button 
               onClick={() => navigate('/menu')}
               className="btn-secondary min-h-14 px-10 gap-3"
             >
-              <UtensilsCrossed className="w-4 h-4" /> Voir le Menu
+              <UtensilsCrossed className="w-4 h-4" /> Voir le menu
             </button>
         </div>
       </motion.div>

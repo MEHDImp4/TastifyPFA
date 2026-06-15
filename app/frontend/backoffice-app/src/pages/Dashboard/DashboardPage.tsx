@@ -88,8 +88,8 @@ export const DashboardPage: React.FC = () => {
   if (error) return (
     <div className="h-full flex flex-col items-center justify-center text-error p-8 text-center uppercase tracking-widest font-black">
       <AlertTriangle className="w-16 h-16 mb-4" />
-      <h2 className="text-2xl">Data registry offline.</h2>
-      <p className="text-xs text-on-surface-variant mt-3 font-bold">Échec de synchronisation avec le registre analytique principal.</p>
+      <h2 className="text-2xl">Données indisponibles</h2>
+      <p className="text-xs text-on-surface-variant mt-3 font-bold">Impossible de charger le tableau de bord pour le moment.</p>
       <button onClick={fetchData} className="mt-8 btn-primary">Réessayer</button>
     </div>
   );
@@ -113,18 +113,18 @@ export const DashboardPage: React.FC = () => {
       <div className="flex-none flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end">
         <div>
            <h1 className="text-2xl md:text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
-           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.18em] sm:tracking-[0.4em] mt-2">Intelligence Opérationnelle & Monitoring Direct</p>
+           <p className="text-[11px] font-bold text-on-surface-variant tracking-[0.12em] sm:tracking-[0.2em] mt-2">Suivi du service en salle et en cuisine</p>
         </div>
         <div className="flex min-h-[44px] items-center gap-3 bg-surface-container-high border border-outline-variant px-5 sm:px-8 py-3.5 rounded-xl">
            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-           <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">Système Connecté</span>
+           <span className="text-[10px] font-black tracking-widest text-on-surface">Connecté</span>
         </div>
       </div>
 
       {/* KPI Section */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {kpis.map((kpi, i) => (
-          <div key={i} className="luxury-card p-5 md:p-8 group transition-all cursor-default">
+          <div key={i} className="ops-card p-5 md:p-8 group transition-all cursor-default">
              <div className="flex justify-between items-center mb-6">
                 <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em]">{kpi.label}</span>
                 <div className="p-2.5 rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10">
@@ -145,7 +145,7 @@ export const DashboardPage: React.FC = () => {
       {/* Charts Row */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
         {/* Revenue Chart (7 cols) */}
-        <div className="lg:col-span-7 luxury-card p-5 md:p-8">
+        <div className="lg:col-span-7 ops-card p-5 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary" strokeWidth={2.5} />
@@ -176,12 +176,12 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Top Dishes Bar Chart (5 cols) */}
-        <div className="lg:col-span-5 luxury-card p-5 md:p-8">
+        <div className="lg:col-span-5 ops-card p-5 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-accent/5 flex items-center justify-center">
               <ShoppingBag className="w-5 h-5 text-accent" strokeWidth={2.5} />
             </div>
-            <h2 className="text-lg font-black tracking-tight text-on-surface uppercase">Plats Stars</h2>
+            <h2 className="text-lg font-black tracking-tight text-on-surface">Plats les plus commandés</h2>
           </div>
           {data.topDishes && data.topDishes.length > 0 ? (
             <div className="h-64">
@@ -205,7 +205,7 @@ export const DashboardPage: React.FC = () => {
       {data.sentimentStats && data.sentimentStats.total > 0 && (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Sentiment Analysis */}
-          <div className="luxury-card p-5 md:p-8">
+          <div className="ops-card p-5 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-success/5 flex items-center justify-center">
                 <Smile className="w-5 h-5 text-success" strokeWidth={2.5} />
@@ -256,7 +256,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Occupancy Pie */}
-          <div className="luxury-card p-5 md:p-8">
+          <div className="ops-card p-5 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
                 <Users className="w-5 h-5 text-primary" strokeWidth={2.5} />
@@ -310,10 +310,10 @@ export const DashboardPage: React.FC = () => {
                  <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
                     <Activity className="w-5 h-5 text-primary" strokeWidth={2.5} />
                  </div>
-                 <h2 className="text-xl font-black tracking-tight text-on-surface uppercase">Flux Opérationnel</h2>
+                 <h2 className="text-xl font-black tracking-tight text-on-surface">Commandes en cours</h2>
               </div>
               <button onClick={() => navigate('/salle')} className="min-h-[44px] px-5 border border-outline-variant rounded-lg text-[10px] font-black uppercase tracking-widest text-on-background hover:text-primary hover:border-primary transition-all flex items-center gap-2">
-                Accéder au Plan <ChevronRight className="w-4 h-4" />
+                Voir le plan <ChevronRight className="w-4 h-4" />
               </button>
            </div>
 
@@ -323,7 +323,7 @@ export const DashboardPage: React.FC = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                         key={ticket.id}
-                        className="luxury-card p-5 md:p-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between hover:border-primary/20 transition-all group"
+                        className="ops-card p-5 md:p-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between hover:border-primary/20 transition-all group"
                     >
                         <div className="flex items-center gap-4 md:gap-8">
                             <div className="w-16 h-16 bg-surface-container-high border border-outline-variant rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
@@ -353,7 +353,7 @@ export const DashboardPage: React.FC = () => {
                  )) : (
                     <div className="h-64 border-2 border-dashed border-outline-variant rounded-[2rem] flex flex-col items-center justify-center text-on-surface-variant">
                         <History className="w-12 h-12 mb-4 opacity-40" />
-                        <p className="text-xs font-black uppercase tracking-[0.4em] text-on-surface">Aucune transaction active</p>
+                        <p className="text-xs font-black tracking-[0.2em] text-on-surface">Aucune commande active</p>
                     </div>
                  )}
               </div>
@@ -361,12 +361,12 @@ export const DashboardPage: React.FC = () => {
         </section>
 
         {/* Right: Alerts (5 cols) */}
-        <section className="lg:col-span-5 flex flex-col min-h-0 luxury-card p-6 xl:p-10 overflow-hidden">
+        <section className="lg:col-span-5 flex flex-col min-h-0 ops-card p-6 xl:p-10 overflow-hidden">
             <div className="flex-none flex items-center gap-4 mb-6 xl:mb-10 border-b border-outline-variant/30 pb-6">
                 <div className="w-10 h-10 rounded-lg bg-error/5 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
-                <h2 className="text-xl font-black tracking-tight text-on-surface uppercase">Incidents Critiques</h2>
+                <h2 className="text-xl font-black tracking-tight text-on-surface">Retards cuisine</h2>
             </div>
 
             <div tabIndex={0} className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-6">
@@ -378,24 +378,24 @@ export const DashboardPage: React.FC = () => {
                                 className="bg-error/5 border border-error/20 rounded-2xl p-6 relative overflow-hidden"
                             >
                                 <div className="flex justify-between items-start mb-4">
-                                    <span className="text-[10px] font-black text-error uppercase tracking-widest">Temps Dépassé</span>
+                                    <span className="text-[10px] font-black text-error tracking-widest">Temps dépassé</span>
                                     <span className="font-mono text-xs font-bold text-on-surface-variant">T-{t.id}</span>
                                 </div>
                                 <p className="text-sm font-bold text-on-surface leading-relaxed uppercase tracking-tight">
-                                    Alerte production : La table {t.table} dépasse l'objectif de 20 minutes.
+                                    La table {t.table} dépasse l'objectif de 20 minutes.
                                 </p>
                                 <button
                                     onClick={() => navigate('/kds')}
                                     className="mt-6 w-full min-h-[44px] py-4 bg-error text-on-error rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
                                 >
-                                    Consulter Cuisine
+                                    Voir en cuisine
                                 </button>
                             </motion.div>
                         ))
                     ) : (
                         <div className="min-h-full py-8 flex flex-col items-center justify-center text-center opacity-20">
                             <CheckCircle2 className="w-16 h-16 text-success mb-6" strokeWidth={1} />
-                            <p className="max-w-[18rem] text-[11px] font-black uppercase tracking-[0.24em] leading-6">Tous les indicateurs sont nominaux</p>
+                            <p className="max-w-[18rem] text-[11px] font-black tracking-[0.16em] leading-6">Aucun retard cuisine pour le moment</p>
                         </div>
                     )}
                 </AnimatePresence>
