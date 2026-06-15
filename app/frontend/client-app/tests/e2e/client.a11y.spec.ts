@@ -157,7 +157,7 @@ test.describe('client public accessibility and responsiveness', () => {
       await expectTouchTargetsAtLeast44(page);
 
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: /notre carte/i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /la carte/i })).toBeVisible();
       await expect(page.getByText('Couscous Royal')).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
       await expectTouchTargetsAtLeast44(page);

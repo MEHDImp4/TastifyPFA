@@ -45,7 +45,7 @@ test.describe('account journey', () => {
       await page.goto('/account');
 
       await expect(page.getByText('Aucune commande enregistrée')).toBeVisible();
-      await expect(page.getByText('980 POINTS')).toBeVisible();
+      await expect(page.getByText(/980\s+points/i)).toBeVisible();
       await expect(page.getByText(/Historique/i)).toBeVisible();
 
       await page.getByRole('button', { name: 'Fermer la session', exact: true }).click();
@@ -75,11 +75,11 @@ test.describe('account journey', () => {
       });
 
       await page.goto('/account');
-      await expect(page.getByText('120 POINTS')).toBeVisible();
+      await expect(page.getByText(/120\s+points/i)).toBeVisible();
 
       await page.reload();
       await expect(page).toHaveURL('/account');
-      await expect(page.getByText('120 POINTS')).toBeVisible();
+      await expect(page.getByText(/120\s+points/i)).toBeVisible();
 
       await page.getByRole('button', { name: 'Fermer la session', exact: true }).click();
       await expect(page).toHaveURL('/login');

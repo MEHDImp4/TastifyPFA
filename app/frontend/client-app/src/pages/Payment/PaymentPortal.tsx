@@ -117,6 +117,17 @@ export const PaymentPortal: React.FC = () => {
     </div>
   );
 
+  if (!session) return (
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 text-center font-body">
+        <div className="w-full max-w-xl atelier-card p-6 sm:p-10 md:p-12 relative overflow-hidden">
+            <ShieldCheck className="w-16 h-16 text-error mx-auto mb-10" strokeWidth={1} />
+            <h2 className="text-4xl font-bold text-on-surface mb-4 leading-none">Lien expiré</h2>
+            <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-10 md:mb-12">Ce lien de paiement n'est plus disponible.</p>
+            <button onClick={() => navigate('/')} className="btn-primary mx-auto w-full sm:w-fit px-8 sm:px-16 h-14">Retour à l'accueil</button>
+        </div>
+    </div>
+  );
+
   return (
     <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center page-section px-4 sm:px-6 overflow-x-hidden">
         <main className="w-full max-w-2xl flex flex-col gap-8 md:gap-12">

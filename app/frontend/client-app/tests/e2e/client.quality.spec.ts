@@ -144,7 +144,7 @@ const mockMenuData = async (page: Page) => {
 };
 
 const mockPaymentSession = async (page: Page) => {
-  await page.route('**/api/paiements/session/resolve/**', async (route) => {
+  await page.route(/\/api\/paiements\/session\/resolve\/\?.*/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -339,7 +339,7 @@ test.describe('client authenticated quality', () => {
     await page.setViewportSize({ width: 390, height: 844 });
 
     await page.goto('/pay/quality-token');
-    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Confirmer le paiement/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /^Partager$/i })).toBeVisible();
     await page.getByRole('button', { name: /^Partager$/i }).click();
     await expect(page.getByRole('button', { name: /Augmenter le nombre de parts/i })).toBeVisible();

@@ -42,7 +42,7 @@ test.describe('contact form', () => {
 
 test.describe('payment portal', () => {
   test('surfaces invalid secure links', async ({ page }) => {
-    await page.route('**/api/paiements/session/resolve/**', async (route) => {
+    await page.route(/\/api\/paiements\/session\/resolve\/\?.*/, async (route) => {
       await route.fulfill({
         status: 404,
         contentType: 'application/json',
@@ -51,7 +51,7 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/bad-token');
-    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Confirmer le paiement/i })).toHaveCount(0);
     await expect(page.getByRole('heading', { name: /Votre Addition/i })).toHaveCount(0);
   });
 
@@ -67,7 +67,7 @@ test.describe('payment portal', () => {
 
     let payPayloads: Array<Record<string, unknown>> = [];
 
-    await page.route('**/api/paiements/session/resolve/**', async (route) => {
+    await page.route(/\/api\/paiements\/session\/resolve\/\?.*/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) });
     });
     await page.route('**/api/paiements/session/equal-split/', async (route) => {
@@ -87,8 +87,8 @@ test.describe('payment portal', () => {
     await page.goto('/pay/live-token');
     await expect(page.getByTestId('payment-session-total')).toHaveText('180.00 DH');
 
-    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
-    await expect(page.getByText('Autorisation Réussie')).toBeVisible();
+    await page.getByRole('button', { name: /Confirmer le paiement/i }).click();
+    await expect(page.getByRole('heading', { name: /Paiement confirmé/i })).toBeVisible();
     expect(payPayloads[0]).toMatchObject({ token: 'live-token', montant: '180.00' });
 
     payPayloads = [];
@@ -97,8 +97,8 @@ test.describe('payment portal', () => {
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('90.00 DH');
     await page.getByRole('button', { name: /Augmenter le nombre de parts/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('60.00 DH');
-    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
-    await expect(page.getByText('Autorisation Réussie')).toBeVisible();
+    await page.getByRole('button', { name: /Confirmer le paiement/i }).click();
+    await expect(page.getByRole('heading', { name: /Paiement confirmé/i })).toBeVisible();
 
     expect(payPayloads[0]).toMatchObject({
       token: 'live-token',
@@ -109,12 +109,12 @@ test.describe('payment portal', () => {
     await page.goto('/pay/live-token');
     await page.getByRole('button', { name: /^Par Article$/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('0.00 DH');
-    await expect(page.getByRole('button', { name: /Confirmer le Règlement/i })).toBeDisabled();
+    await expect(page.getByRole('button', { name: /Confirmer le paiement/i })).toBeDisabled();
 
     await page.getByRole('button', { name: /Harira/i }).click();
     await page.getByRole('button', { name: /Tagine/i }).click();
     await expect(page.getByTestId('payment-payable-amount')).toHaveText('180.00 DH');
-    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
+    await page.getByRole('button', { name: /Confirmer le paiement/i }).click();
 
     expect(payPayloads[0]).toMatchObject({
       token: 'live-token',
@@ -129,7 +129,7 @@ test.describe('payment portal', () => {
   test('keeps payment submission single-shot when the first attempt fails slowly', async ({ page }) => {
     let payAttempts = 0;
 
-    await page.route('**/api/paiements/session/resolve/**', async (route) => {
+    await page.route(/\/api\/paiements\/session\/resolve\/\?.*/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -151,7 +151,7 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/retry-token');
-    const confirmButton = page.getByRole('button', { name: /Confirmer le Règlement/i });
+    const confirmButton = page.getByRole('button', { name: /Confirmer le paiement/i });
     await confirmButton.dblclick();
 
     await expect(page.getByText('PAYMENT_RETRY_LATER')).toBeVisible();
@@ -160,7 +160,7 @@ test.describe('payment portal', () => {
   });
 
   test('shows successful payment confirmation screen', async ({ page }) => {
-    await page.route('**/api/paiements/session/resolve/**', async (route) => {
+    await page.route(/\/api\/paiements\/session\/resolve\/\?.*/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -176,10 +176,10 @@ test.describe('payment portal', () => {
     });
 
     await page.goto('/pay/success-token');
-    await page.getByRole('button', { name: /Confirmer le Règlement/i }).click();
+    await page.getByRole('button', { name: /Confirmer le paiement/i }).click();
 
-    await expect(page.getByRole('heading', { name: /Paiement Sécurisé\./i })).toBeVisible();
-    await page.getByRole('button', { name: /Retour à l'Accueil/i }).click();
+    await expect(page.getByRole('heading', { name: /Paiement confirmé/i })).toBeVisible();
+    await page.getByRole('button', { name: /Retour à l'accueil/i }).click();
     await expect(page).toHaveURL('/');
   });
 });
