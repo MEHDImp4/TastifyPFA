@@ -10,6 +10,8 @@ import {
   CROSS_APP_ORIGINS,
 } from './fixtures/crossApp';
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 type LoginPayload = {
   access: string;
   role: string;
@@ -245,7 +247,7 @@ test.describe('cross-app realism', () => {
       }),
     );
 
-    await clientPage.goto(`${CROSS_APP_ORIGINS.client}/reservations`);
+    await clientPage.goto(`${CROSS_APP_ORIGINS.client}/reservations`, routeReady);
     await clientPage.getByLabel('Date du repas').fill(reservationDate);
     await clientPage.getByLabel("Heure d'arrivée").fill('19:00');
     await clientPage.getByRole('button', { name: /Voir les tables libres/i }).click();
@@ -272,7 +274,7 @@ test.describe('cross-app realism', () => {
     const backofficePage = await backofficeContext.newPage();
     await proxyBackofficeReservationApis(backofficePage, request, gerantLogin.access);
 
-    await backofficePage.goto(`${CROSS_APP_ORIGINS.backoffice}/reservations`);
+    await backofficePage.goto(`${CROSS_APP_ORIGINS.backoffice}/reservations`, routeReady);
     await backofficePage.getByLabel('Rechercher client').fill(clientIdentity.username);
     await expect(backofficePage.getByText(`“${reservationNote}”`)).toBeVisible();
     const reservationCard = backofficePage.getByText(`“${reservationNote}”`).locator('xpath=ancestor::div[contains(@class,"group rounded-lg")]').first();
@@ -311,10 +313,10 @@ test.describe('cross-app realism', () => {
     await seedClientConsent(paymentContext);
     const paymentPage = await paymentContext.newPage();
     await proxyPaymentSessionApis(paymentPage, request);
-    await paymentPage.goto(`${CROSS_APP_ORIGINS.client}/pay/${encodeURIComponent(payableSession.token)}`);
-    await expect(paymentPage.getByRole('button', { name: /Confirm Payment/i })).toBeEnabled();
-    await paymentPage.getByRole('button', { name: /Confirm Payment/i }).click();
-    await expect(paymentPage.getByRole('heading', { name: /Payment Secured\./i })).toBeVisible();
+    await paymentPage.goto(`${CROSS_APP_ORIGINS.client}/pay/${encodeURIComponent(payableSession.token)}`, routeReady);
+    await expect(paymentPage.getByRole('button', { name: /Confirmer le paiement/i })).toBeEnabled();
+    await paymentPage.getByRole('button', { name: /Confirmer le paiement/i }).click();
+    await expect(paymentPage.getByRole('heading', { name: /Paiement confirmé/i })).toBeVisible();
 
     const postPaymentResponse = await request.get(buildApiUrl(`/api/tables/${payableSession.table_id}/qr/`), {
       headers: {

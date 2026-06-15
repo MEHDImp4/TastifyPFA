@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { AUTHENTICATED_STORAGE_STATE, mockConfig, mockRefreshFail } from './fixtures/api';
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
@@ -8,24 +10,21 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('login form — validation', () => {
   test('shows error when both fields are empty', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').focus();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 
   test('shows error when only username is filled', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').fill('testuser');
     await page.getByTestId('login-submit').click();
     await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
   });
 
   test('shows error when only password is filled', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-password').fill('somepass');
     await page.getByTestId('login-submit').click();
     await expect(page.getByTestId('login-error')).toContainText('Veuillez remplir tous les champs');
@@ -42,7 +41,7 @@ test.describe('login form — API responses', () => {
       });
     });
 
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').fill('wronguser');
     await page.getByTestId('login-password').fill('wrongpass');
     await page.getByTestId('login-submit').click();
@@ -61,7 +60,7 @@ test.describe('login form — API responses', () => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({}) });
     });
 
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').fill('gerant_test');
     await page.getByTestId('login-password').fill('password123');
     await page.getByTestId('login-submit').click();
@@ -78,7 +77,7 @@ test.describe('login form — API responses', () => {
       });
     });
 
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').fill('someuser');
     await page.getByTestId('login-password').fill('somepass');
     await page.getByTestId('login-submit').click();
@@ -94,7 +93,7 @@ test.describe('login form — API responses', () => {
       });
     });
 
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await page.getByTestId('login-username').fill('client_test');
     await page.getByTestId('login-password').fill('password123');
     await page.getByTestId('login-submit').click();
@@ -112,7 +111,7 @@ test.describe('register form — API responses', () => {
       });
     });
 
-    await page.goto('/register');
+    await page.goto('/register', routeReady);
     await page.getByTestId('register-username').fill('taken_user');
     await page.getByTestId('register-email').fill('taken@example.com');
     await page.getByLabel('Mot de passe').fill('password123');
@@ -138,7 +137,7 @@ test.describe('register form — API responses', () => {
       });
     });
 
-    await page.goto('/register');
+    await page.goto('/register', routeReady);
     await page.getByTestId('register-username').fill('fresh_guest');
     await page.getByTestId('register-email').fill('fresh@example.com');
     await page.getByLabel('Mot de passe').fill('password123');
@@ -158,9 +157,9 @@ test.describe('password reset flow — API responses', () => {
       });
     });
 
-    await page.goto('/forgot-password');
-    await page.getByLabel("Email d'Enregistrement").fill('client_test@tastify.ma');
-    await page.getByRole('button', { name: /Envoyer le Lien de Récupération/i }).click();
+    await page.goto('/forgot-password', routeReady);
+    await page.getByLabel('Email du compte').fill('client_test@tastify.ma');
+    await page.getByRole('button', { name: /Envoyer le lien/i }).click();
 
     await expect(page.getByText("Instructions envoyées si l'adresse est enregistrée.")).toBeVisible();
   });
@@ -174,7 +173,7 @@ test.describe('password reset flow — API responses', () => {
       });
     });
 
-    await page.goto('/reset-password?uid=abc&token=broken-token');
+    await page.goto('/reset-password?uid=abc&token=broken-token', routeReady);
     await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.')).toBeVisible();
   });
 
@@ -194,10 +193,10 @@ test.describe('password reset flow — API responses', () => {
       });
     });
 
-    await page.goto('/reset-password?uid=valid-uid&token=valid-token');
-    await page.getByLabel("Nouveau Code d'accès").fill('newpassword123');
-    await page.getByLabel('Confirmer le Code').fill('newpassword123');
-    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await page.goto('/reset-password?uid=valid-uid&token=valid-token', routeReady);
+    await page.getByLabel('Nouveau mot de passe').fill('newpassword123');
+    await page.getByLabel('Confirmer le mot de passe').fill('newpassword123');
+    await page.getByRole('button', { name: /^Mettre à jour$/i }).click();
 
     await expect(page.getByText('Votre mot de passe a été mis à jour.')).toBeVisible();
   });
@@ -229,17 +228,17 @@ test.describe('password reset flow — API responses', () => {
       });
     });
 
-    await page.goto('/reset-password?uid=valid-uid&token=valid-token');
-    await page.getByLabel("Nouveau Code d'accès").fill('newpassword123');
-    await page.getByLabel('Confirmer le Code').fill('differentpassword123');
-    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await page.goto('/reset-password?uid=valid-uid&token=valid-token', routeReady);
+    await page.getByLabel('Nouveau mot de passe').fill('newpassword123');
+    await page.getByLabel('Confirmer le mot de passe').fill('differentpassword123');
+    await page.getByRole('button', { name: /^Mettre à jour$/i }).click();
     await expect(page.getByText('Les deux mots de passe ne correspondent pas.')).toBeVisible();
 
-    await page.getByLabel('Confirmer le Code').fill('newpassword123');
-    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await page.getByLabel('Confirmer le mot de passe').fill('newpassword123');
+    await page.getByRole('button', { name: /^Mettre à jour$/i }).click();
     await expect(page.getByText('PASSWORD_CONFIRM_MISMATCH').first()).toBeVisible();
 
-    await page.getByRole('button', { name: /Mettre à jour le Code/i }).click();
+    await page.getByRole('button', { name: /^Mettre à jour$/i }).click();
     await expect(page.getByText('Ce lien de réinitialisation est invalide ou expiré.').first()).toBeVisible();
   });
 });
@@ -248,12 +247,12 @@ test.describe('authenticated user — route guards', () => {
   test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
 
   test('authenticated user is redirected from /login to home', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('/login', routeReady);
     await expect(page).toHaveURL('/');
   });
 
   test('authenticated user is redirected from /register to home', async ({ page }) => {
-    await page.goto('/register');
+    await page.goto('/register', routeReady);
     await expect(page).toHaveURL('/');
   });
 
@@ -261,7 +260,7 @@ test.describe('authenticated user — route guards', () => {
     await page.route('**/api/**', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({}) });
     });
-    await page.goto('/account');
+    await page.goto('/account', routeReady);
     await expect(page).toHaveURL('/account');
     await expect(page).not.toHaveURL(/login/);
   });

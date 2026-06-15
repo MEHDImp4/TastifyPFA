@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { mockConfig, mockRefreshFail } from './fixtures/api';
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 const categories = [
   { id: 1, nom: 'Entrées', description: 'Les entrées', ordre_affichage: 1, est_active: true },
   { id: 2, nom: 'Plats', description: 'Les plats principaux', ordre_affichage: 2, est_active: true },
@@ -46,7 +48,7 @@ async function mockMenuCatalog(page: Parameters<typeof test.beforeEach>[0]['page
 
 async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['page']) {
   await mockMenuCatalog(page);
-  await page.goto('/menu');
+  await page.goto('/menu', routeReady);
 
   await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
   await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
@@ -64,10 +66,10 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('checkout journey', () => {
   test('empty cart offers recovery back to the menu', async ({ page }) => {
-    await page.goto('/checkout');
+    await page.goto('/checkout', routeReady);
 
     await expect(page.getByRole('heading', { name: /Votre panier/i })).toBeVisible();
-    await page.getByRole('button', { name: /Explorer la Carte/i }).click();
+    await page.getByRole('button', { name: /Voir la carte/i }).click();
     await expect(page).toHaveURL('/menu');
   });
 

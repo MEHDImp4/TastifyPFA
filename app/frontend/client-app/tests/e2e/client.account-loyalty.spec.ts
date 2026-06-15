@@ -7,6 +7,8 @@ import {
   mockRefreshFail,
 } from './fixtures/api';
 
+const routeReady = { waitUntil: 'domcontentloaded' } as const;
+
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
@@ -14,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('account journey', () => {
   test('redirects guests away from account', async ({ page }) => {
-    await page.goto('/account');
+    await page.goto('/account', routeReady);
     await expect(page).toHaveURL('/login');
   });
 
@@ -42,11 +44,11 @@ test.describe('account journey', () => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({}) });
       });
 
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
 
       await expect(page.getByText('Aucune commande enregistrée')).toBeVisible();
       await expect(page.getByText(/980\s+points/i)).toBeVisible();
-      await expect(page.getByText(/Historique/i)).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Historique' })).toBeVisible();
 
       await page.getByRole('button', { name: 'Fermer la session', exact: true }).click();
       await expect(page).toHaveURL('/login');
@@ -74,7 +76,7 @@ test.describe('account journey', () => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({}) });
       });
 
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
       await expect(page.getByText(/120\s+points/i)).toBeVisible();
 
       await page.reload();
@@ -133,7 +135,7 @@ test.describe('account journey', () => {
         });
       });
 
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
 
       await page.getByRole('button', { name: /Donner votre avis/i }).click();
       await page.getByPlaceholder(/Écrivez ici/i).fill('Excellent pacing and service');
@@ -175,7 +177,7 @@ test.describe('account journey', () => {
         });
       });
 
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
       await page.getByRole('button', { name: /Donner votre avis/i }).click();
       await page.getByPlaceholder(/Écrivez ici/i).fill('Needs work');
       await page.getByRole('button', { name: /Transmettre mon avis/i }).click();
@@ -205,7 +207,7 @@ test.describe('account journey', () => {
         });
       });
 
-      await page.goto('/loyalty');
+      await page.goto('/loyalty', routeReady);
 
       await expect(page.getByText('1200')).toBeVisible();
       await expect(page.getByText('Verrouillé')).toBeVisible();
@@ -217,7 +219,7 @@ test.describe('account journey', () => {
     test.use({ storageState: STALE_SESSION_STORAGE_STATE });
 
     test('sends stale client session state back to login safely', async ({ page }) => {
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
       await expect(page).toHaveURL('/login');
       await expect(page.getByRole('heading', { name: 'Connexion.' })).toBeVisible();
     });
@@ -227,10 +229,10 @@ test.describe('account journey', () => {
     test.use({ storageState: PARTIAL_SESSION_STORAGE_STATE });
 
     test('treats partial client storage as logged out state', async ({ page }) => {
-      await page.goto('/account');
+      await page.goto('/account', routeReady);
       await expect(page).toHaveURL('/login');
 
-      await page.goto('/login');
+      await page.goto('/login', routeReady);
       await expect(page).toHaveURL('/login');
       await expect(page.getByRole('heading', { name: 'Connexion.' })).toBeVisible();
     });
