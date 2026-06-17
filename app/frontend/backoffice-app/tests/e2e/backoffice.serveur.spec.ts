@@ -293,15 +293,15 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByText('Alice Martin')).toBeVisible();
     await expect(page.getByText('Yassine Haddad')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
-    await expect(page.getByText('No Bookings Logged')).toBeVisible();
+    await page.getByRole('button', { name: 'Confirmer', exact: true }).click();
+    await expect(page.getByText('Aucune réservation')).toBeVisible();
 
     await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
     await expect(page.getByText('Alice Martin')).toBeVisible();
     await expect(page.getByText('Yassine Haddad')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'CANCEL BOOKING', exact: true })).toHaveCount(2);
+    await expect(page.getByRole('button', { name: 'Annuler la réservation', exact: true })).toHaveCount(2);
 
-    await page.getByRole('button', { name: 'CANCEL BOOKING', exact: true }).first().click();
+    await page.getByRole('button', { name: 'Annuler la réservation', exact: true }).first().click();
     await expect(page.getByText('Alice Martin')).toHaveCount(0);
   });
 
@@ -351,7 +351,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
+    const searchInput = page.getByPlaceholder('Rechercher un client...');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
 
     await searchInput.fill('amina');
@@ -359,10 +359,10 @@ test.describe('serveur browser workflows', () => {
     await expect(reservationsGrid.getByText('Amina Refresh')).toBeVisible();
     await expect(reservationsGrid.getByText('Amina Confirmed')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
+    await page.getByRole('button', { name: 'Confirmer', exact: true }).click();
     await expect(searchInput).toHaveValue('amina');
     await expect(reservationsGrid.getByText('Amina Refresh')).toHaveCount(0);
-    await expect(page.getByText('No Bookings Logged')).toBeVisible();
+    await expect(page.getByText('Aucune réservation')).toBeVisible();
 
     await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
     await expect(searchInput).toHaveValue('amina');
@@ -380,7 +380,7 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    await expect(page.getByText('No Bookings Logged')).toBeVisible();
+    await expect(page.getByText('Aucune réservation')).toBeVisible();
   });
 
   test('keeps reservation actions stable when confirm and cancel fail', async ({ page }) => {
@@ -436,12 +436,12 @@ test.describe('serveur browser workflows', () => {
     });
 
     await page.goto('/reservations');
-    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
+    await page.getByRole('button', { name: 'Confirmer', exact: true }).click();
     await expect(page.getByText('Sara Bennani')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'CONFIRM', exact: true })).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'Confirmer', exact: true })).toHaveCount(1);
 
     const confirmedBookingCancelButton = page.getByRole('button', {
-      name: /^CANCEL BOOKING$/,
+      name: /^Annuler la réservation$/,
     });
 
     await confirmedBookingCancelButton.click();
@@ -485,13 +485,13 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    await page.getByPlaceholder('SEARCH GUEST IDENTITY...').fill('nadia');
-    await expect(page.getByPlaceholder('SEARCH GUEST IDENTITY...')).toHaveValue('nadia');
+    await page.getByPlaceholder('Rechercher un client...').fill('nadia');
+    await expect(page.getByPlaceholder('Rechercher un client...')).toHaveValue('nadia');
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
     await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
     await expect(reservationsGrid.getByText('“Allergies”')).toBeVisible();
 
-    await page.getByPlaceholder('SEARCH GUEST IDENTITY...').fill('');
+    await page.getByPlaceholder('Rechercher un client...').fill('');
     await page.getByRole('button', { name: 'ANNULEE' }).click();
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
     await expect(reservationsGrid.getByText('Karim Visible')).toHaveCount(0);
@@ -533,16 +533,16 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
+    const searchInput = page.getByPlaceholder('Rechercher un client...');
 
     await searchInput.fill('  naDIA  ');
     await expect(searchInput).toHaveValue('  naDIA  ');
     await expect(reservationsGrid.getByText('Nadia Search')).toBeVisible();
-    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toHaveCount(0);
+    await expect(reservationsGrid.getByText('Client sans compte', { exact: true })).toHaveCount(0);
 
     await searchInput.fill('guest');
     await expect(reservationsGrid.getByText('Nadia Search')).toHaveCount(0);
-    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toBeVisible();
+    await expect(reservationsGrid.getByText('Client sans compte', { exact: true })).toBeVisible();
     await expect(reservationsGrid.getByText('“Sans gluten”')).toBeVisible();
   });
 
@@ -585,9 +585,9 @@ test.describe('serveur browser workflows', () => {
     await page.getByRole('button', { name: 'CONFIRMEE', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
 
-    await page.getByRole('button', { name: 'CANCEL BOOKING', exact: true }).click();
+    await page.getByRole('button', { name: 'Annuler la réservation', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toHaveCount(0);
-    await expect(page.getByText('No Bookings Logged')).toBeVisible();
+    await expect(page.getByText('Aucune réservation')).toBeVisible();
 
     await page.getByRole('button', { name: 'ANNULEE', exact: true }).click();
     await expect(reservationsGrid.getByText('Salma Transit')).toBeVisible();
@@ -653,7 +653,7 @@ test.describe('serveur browser workflows', () => {
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
 
     await page.getByRole('button', { name: 'EN ATTENTE' }).click();
-    await page.getByRole('button', { name: 'CONFIRM', exact: true }).click();
+    await page.getByRole('button', { name: 'Confirmer', exact: true }).click();
     await expect(reservationsGrid.getByText('Amina Pending')).toBeVisible();
 
     await page.getByRole('button', { name: 'CONFIRMEE' }).click();
@@ -713,18 +713,18 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
+    const searchInput = page.getByPlaceholder('Rechercher un client...');
 
     await searchInput.fill('guest');
-    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(2);
+    await expect(reservationsGrid.getByText(/Client sans compte/i)).toHaveCount(2);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
 
     await page.getByRole('button', { name: 'EN ATTENTE', exact: true }).click();
-    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(1);
+    await expect(reservationsGrid.getByText(/Client sans compte/i)).toHaveCount(1);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
 
     await page.getByRole('button', { name: 'ANNULEE', exact: true }).click();
-    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i)).toHaveCount(1);
+    await expect(reservationsGrid.getByText(/Client sans compte/i)).toHaveCount(1);
     await expect(reservationsGrid.getByText('Nadia Named')).toHaveCount(0);
   });
 
@@ -764,15 +764,15 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/reservations');
     const reservationsGrid = page.locator('.grid.grid-cols-1.gap-4').first();
-    const searchInput = page.getByPlaceholder('SEARCH GUEST IDENTITY...');
+    const searchInput = page.getByPlaceholder('Rechercher un client...');
 
     await searchInput.fill('  gUeSt  ');
-    await expect(reservationsGrid.getByText('ANONYMOUS GUEST Karim')).toBeVisible();
-    await expect(reservationsGrid.getByText(/ANONYMOUS GUEST/i).nth(1)).toBeVisible();
+    await expect(reservationsGrid.getByText('Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText(/Client sans compte/i)).toBeVisible();
 
     await searchInput.fill('karim');
-    await expect(reservationsGrid.getByText('ANONYMOUS GUEST Karim')).toBeVisible();
-    await expect(reservationsGrid.getByText('ANONYMOUS GUEST', { exact: true })).toHaveCount(0);
+    await expect(reservationsGrid.getByText('Karim')).toBeVisible();
+    await expect(reservationsGrid.getByText('Client sans compte', { exact: true })).toHaveCount(0);
   });
 
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
@@ -818,7 +818,7 @@ test.describe('serveur browser workflows', () => {
 
     await expect(cart).toBeVisible({ timeout: 15000 });
 
-    await page.getByPlaceholder('SEARCH MENU...').fill('salade');
+    await page.getByPlaceholder('Rechercher dans le menu...').fill('salade');
     const saladeCard = catalog.getByRole('button', { name: /Salade fraiche/i });
     await expect(saladeCard).toBeVisible();
     await expect(catalog.getByText('Soupe du jour')).toHaveCount(0);
@@ -834,7 +834,7 @@ test.describe('serveur browser workflows', () => {
     await expect(cartItem.getByText('1x')).toBeVisible();
 
     await cartItem.getByTestId('remove-item').click();
-    await expect(page.getByText(/Ticket Buffer Empty/i)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/Ticket Actuel/i)).toBeVisible({ timeout: 15000 });
   });
 
   test('keeps ordering quantities floored at one and totals mixed carts correctly', async ({ page }) => {
@@ -925,7 +925,7 @@ test.describe('serveur browser workflows', () => {
     await page.goto('/ordering/1');
     await page.waitForLoadState('networkidle');
     const catalog = page.getByTestId('menu-catalog');
-    await page.getByPlaceholder('SEARCH MENU...').fill('orange');
+    await page.getByPlaceholder('Rechercher dans le menu...').fill('orange');
     await expect(catalog.getByText('Salade orange')).toBeVisible();
     await expect(catalog.getByText('Tarte orange')).toHaveCount(0);
 
@@ -1028,7 +1028,7 @@ test.describe('serveur browser workflows', () => {
     const cart = page.getByTestId('ordering-cart');
     await catalog.getByRole('button', { name: /Tagine citron/i }).click({ force: true });
 
-    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    const searchInput = page.getByPlaceholder('Rechercher dans le menu...');
 
     await searchInput.fill('pastilla');
     await expect(catalog.getByRole('button', { name: /Tagine citron/i })).toHaveCount(0);
@@ -1086,7 +1086,7 @@ test.describe('serveur browser workflows', () => {
     await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
     await catalog.getByRole('button', { name: /Tarte orange/i }).click({ force: true });
 
-    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    const searchInput = page.getByPlaceholder('Rechercher dans le menu...');
     await expect(cart.locator('p', { hasText: 'Salade orange' })).toBeVisible();
     await expect(cart.locator('p', { hasText: 'Tarte orange' })).toBeVisible();
     await expect(cart.getByText('23 DH').last()).toBeVisible();
@@ -1375,7 +1375,7 @@ test.describe('serveur browser workflows', () => {
     const catalog = page.getByTestId('menu-catalog');
     await catalog.getByRole('button', { name: /Salade mechouia/i }).click({ force: true });
 
-    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    const searchInput = page.getByPlaceholder('Rechercher dans le menu...');
     await catalog.getByRole('button', { name: 'Desserts', exact: true }).click();
     await searchInput.fill('orange');
     await catalog.getByRole('button', { name: /Creme orange/i }).click({ force: true });
@@ -1449,7 +1449,7 @@ test.describe('serveur browser workflows', () => {
     await page.waitForLoadState('networkidle');
     const catalog = page.getByTestId('menu-catalog');
     const cart = page.getByTestId('ordering-cart');
-    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    const searchInput = page.getByPlaceholder('Rechercher dans le menu...');
 
     await catalog.getByRole('button', { name: /Tajine citron/i }).click({ force: true });
     await catalog.getByRole('button', { name: /Tajine citron/i }).click({ force: true });
@@ -1580,7 +1580,7 @@ test.describe('serveur browser workflows', () => {
     await catalog.getByRole('button', { name: /Pastilla lait/i }).click({ force: true });
     await catalog.getByRole('button', { name: /Pastilla lait/i }).click({ force: true });
 
-    const searchInput = page.getByPlaceholder('SEARCH MENU...');
+    const searchInput = page.getByPlaceholder('Rechercher dans le menu...');
     await expect(cart.getByText('42 DH').last()).toBeVisible();
 
     await searchInput.fill('tagine');

@@ -95,11 +95,11 @@ test.describe('manager dashboard analytics e2e', () => {
     await expect(page.getByText('50%')).toBeVisible();
     await expect(page.getByText('6', { exact: true })).toBeVisible();
     await expect(page.getByText(/^18m$/)).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Client Sentiment Analysis' })).toBeVisible();
-    await expect(page.getByText('28 reviews analysed by NLP pipeline')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Avis Clients' })).toBeVisible();
+    await expect(page.getByText('28 avis analysés')).toBeVisible();
     await expect(page.getByText('71%')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Floor Plan Preview' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Retards cuisine' })).toBeVisible();
   });
 
   test('keeps the dashboard stable when analytics returns an empty operational snapshot', async ({ page }) => {
@@ -116,8 +116,8 @@ test.describe('manager dashboard analytics e2e', () => {
     await expect(page.getByText('0 DH')).toBeVisible();
     await expect(page.getByText(/^0%$/)).toBeVisible();
     await expect(page.getByText(/^0m$/)).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Client Sentiment Analysis' })).toHaveCount(0);
-    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Avis Clients' })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
   });
 
   test('shows the dashboard fallback state when analytics fails', async ({ page }) => {
@@ -131,7 +131,7 @@ test.describe('manager dashboard analytics e2e', () => {
 
     await page.goto('/');
 
-    await expect(page.getByText('Data registry offline.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Données indisponibles' })).toBeVisible();
     await expect(page).toHaveURL(/\/$/);
   });
 

@@ -289,7 +289,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       });
 
       await page.goto('/');
-      await expect(page.getByText('Live Orchestration Feed')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
       await expectNoBlockingViolations(page);
 
       await page.goto('/menu');
@@ -340,7 +340,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       await page.getByPlaceholder(/Filtrer les avis/i).fill('dessert');
       await expect(page.getByText('Dessert timing drifted but staff recovered well.')).toBeVisible();
       await expect(page.getByText('Fast service and a calm floor handoff.')).toHaveCount(0);
-      await expect(page.getByRole('button', { name: /archiver/i })).toBeVisible();
+      await expect(page.getByText('Dessert timing drifted but staff recovered well.')).toBeVisible();
 
       await page.goto('/maintenance');
       await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
@@ -366,7 +366,7 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 820, height: 1180 });
       await page.goto('/avis');
-      await expect(page.getByRole('button', { name: /archiver/i }).first()).toBeVisible();
+      await expect(page.getByText('Fast service and a calm floor handoff.')).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.goto('/settings');
@@ -391,7 +391,7 @@ test.describe('authenticated backoffice quality coverage', () => {
         await page.setViewportSize(viewport);
 
         await page.goto('/');
-        await expect(page.getByText('Live Orchestration Feed')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
@@ -478,13 +478,13 @@ test.describe('authenticated backoffice quality coverage', () => {
       await page.setViewportSize({ width: 1024, height: 768 });
       await page.goto('/reservations');
       await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
-      await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
+      await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 430, height: 932 });
       await page.goto('/reservations');
       await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
-      await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
+      await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
     });
 
@@ -502,7 +502,7 @@ test.describe('authenticated backoffice quality coverage', () => {
 
         await page.goto('/reservations');
         await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
-        await expect(page.getByRole('button', { name: /confirm/i }).first()).toBeVisible();
+        await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
       }

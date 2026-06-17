@@ -141,13 +141,13 @@ test.describe('cuisinier browser workflows', () => {
 
     await expect(page).toHaveURL(/\/menu$/);
     await expect(page.getByTestId('nav-menu')).toHaveClass(/border-primary/);
-    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
   });
 
   test('keeps cuisinier users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/menu');
     await expect(page).toHaveURL(/\/menu$/);
-    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
 
     for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/salle', '/reservations', '/ordering/1']) {
       await page.goto(forbiddenPath);
@@ -196,7 +196,7 @@ test.describe('cuisinier browser workflows', () => {
     await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
 
-    const searchInput = page.getByPlaceholder('SEARCH CATALOG...');
+    const searchInput = page.getByPlaceholder('Rechercher un plat...');
     await searchInput.fill('orange');
     await expect(page.getByRole('heading', { name: 'Tarte Orange' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Tagine Safran' })).toHaveCount(0);
@@ -211,8 +211,8 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/menu');
 
-    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
-    await expect(page.getByPlaceholder('SEARCH CATALOG...')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un plat...')).toBeVisible();
     await expect(page.getByTestId('plat-create-button')).toBeVisible();
   });
 
@@ -238,7 +238,7 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Sector Clear').first()).toBeVisible();
+    await expect(page.getByText('Aucune commande en attente').first()).toBeVisible();
   });
 
   test('has no critical or serious axe violations on the KDS page', async ({ page }) => {
@@ -253,7 +253,7 @@ test.describe('cuisinier browser workflows', () => {
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByText('Sector Clear').first()).toBeVisible();
+    await expect(page.getByText('Aucune commande en attente').first()).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
@@ -320,11 +320,11 @@ test.describe('cuisinier browser workflows', () => {
 
     const ticket = page.getByTestId('kds-ticket-9201');
     await page.getByText('Risotto safran').click();
-    await expect(ticket.getByText('In Preparation')).toBeVisible();
+    await expect(ticket.getByText('En préparation')).toBeVisible();
 
     await page.getByText('Risotto safran').click();
-    await expect(ticket.getByText('DONE')).toBeVisible();
-    await expect(page.getByText('Ready to Window')).toBeVisible();
+    await expect(ticket.getByText('PRÊT')).toBeVisible();
+    await expect(page.getByText('Envoyer au service')).toBeVisible();
   });
 
   test('does not advance KDS item state when the backend update fails', async ({ page }) => {
@@ -366,8 +366,8 @@ test.describe('cuisinier browser workflows', () => {
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
     await page.getByText('Pastilla poulet').click();
-    await expect(page.getByText('EN ATTENTE')).toHaveCount(0);
-    await expect(page.getByText('DONE')).toHaveCount(0);
+    await expect(page.getByText('En attente')).toHaveCount(0);
+    await expect(page.getByText('PRÊT')).toHaveCount(0);
   });
 
   test('shows completion only for tickets whose every line is ready', async ({ page }) => {
@@ -431,10 +431,10 @@ test.describe('cuisinier browser workflows', () => {
 
     await expect(firstTicket.getByText('Harira')).toBeVisible();
     await expect(firstTicket.getByText('Brochettes')).toBeVisible();
-    await expect(firstTicket.getByText('DONE')).toHaveCount(0);
+    await expect(firstTicket.getByText('TERMINÉ')).toHaveCount(0);
 
     await expect(secondTicket.getByText('Rfissa')).toBeVisible();
-    await expect(secondTicket.getByText('DONE')).toBeVisible();
+    await expect(secondTicket.getByText('TERMINÉ')).toBeVisible();
     await expect(secondTicket.getByText('Extra chaud')).toBeVisible();
   });
 
@@ -521,16 +521,16 @@ test.describe('cuisinier browser workflows', () => {
     const firstTicket = page.getByTestId('kds-ticket-9501');
     const secondTicket = page.getByTestId('kds-ticket-9502');
 
-    await expect(firstTicket.getByText('DONE')).toHaveCount(0);
-    await expect(secondTicket.getByText('DONE')).toHaveCount(0);
+    await expect(firstTicket.getByText('TERMINÉ')).toHaveCount(0);
+    await expect(secondTicket.getByText('TERMINÉ')).toHaveCount(0);
 
     await firstTicket.getByText('Legumes rôtis').click();
 
     await expect(firstTicket.getByText('Legumes rôtis')).toBeVisible();
-    await expect(firstTicket.getByText('DONE')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
 
     await expect(secondTicket.getByText('Filet poisson')).toBeVisible();
-    await expect(secondTicket.getByText('DONE')).toHaveCount(0);
+    await expect(secondTicket.getByText('TERMINÉ')).toHaveCount(0);
   });
 
   test('keeps sibling tickets unchanged when one KDS mutation fails', async ({ page }) => {
@@ -603,11 +603,11 @@ test.describe('cuisinier browser workflows', () => {
     await firstTicket.getByText('Couscous legumes').click();
 
     await expect(firstTicket.getByText('Couscous legumes')).toBeVisible();
-    await expect(firstTicket.getByText('DONE')).toHaveCount(0);
+    await expect(firstTicket.getByText('TERMINÉ')).toHaveCount(0);
 
     await expect(secondTicket.getByText('Poisson chermoula')).toBeVisible();
     await expect(secondTicket.getByText('Sans sel')).toBeVisible();
-    await expect(secondTicket.getByText('DONE')).toHaveCount(0);
+    await expect(secondTicket.getByText('TERMINÉ')).toHaveCount(0);
   });
 
   test('updates only the targeted ready button when multiple tickets expose the same action', async ({ page }) => {
@@ -679,11 +679,11 @@ test.describe('cuisinier browser workflows', () => {
 
     await firstTicket.getByText('Tajine pruneaux').click();
 
-    await expect(firstTicket.getByText('DONE')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
 
     await expect(secondTicket.getByText('Seffa medfouna')).toBeVisible();
     await expect(secondTicket.getByText('Cannelle extra')).toBeVisible();
-    await expect(secondTicket.getByText('DONE')).toHaveCount(0);
+    await expect(secondTicket.getByText('TERMINÉ')).toHaveCount(0);
   });
 
   test('adds a websocket-created ticket without mutating existing siblings', async ({ page }) => {
@@ -830,11 +830,11 @@ test.describe('cuisinier browser workflows', () => {
       },
     });
 
-    await expect(secondTicket.getByText('DONE')).toBeVisible();
+    await expect(secondTicket.getByText('TERMINÉ')).toBeVisible();
     await expect(secondTicket.getByText('Bien dore').first()).toBeVisible();
 
     await expect(firstTicket.getByText('Couscous tfaya')).toBeVisible();
-    await expect(firstTicket.getByText('DONE')).toHaveCount(0);
+    await expect(firstTicket.getByText('TERMINÉ')).toHaveCount(0);
 
     await emitStaffSocketMessage(page, {
       type: 'line_ready',
@@ -843,7 +843,7 @@ test.describe('cuisinier browser workflows', () => {
       },
     });
 
-    await expect(firstTicket.getByText('DONE')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
   });
 
   test('removes only the terminal websocket ticket while keeping siblings visible', async ({ page }) => {

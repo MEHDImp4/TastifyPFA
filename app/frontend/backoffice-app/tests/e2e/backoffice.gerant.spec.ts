@@ -52,7 +52,7 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/');
 
     await expect(page.getByTestId('nav-dashboard')).toHaveClass(/border-primary/);
-    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
   });
 
   test('keeps gerant logout working after visiting a secondary route', async ({ page }) => {
@@ -70,7 +70,7 @@ test.describe('gerant browser workflows', () => {
     await page.reload();
 
     await expect(page).toHaveURL(/\/settings$/);
-    await expect(page.getByRole('button', { name: 'Deploy Changes' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Enregistrer les paramètres' })).toBeVisible();
   });
 
   test('sends stale gerant session storage back to login safely', async ({ page }) => {
@@ -126,11 +126,11 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/categories');
     await expect(page).toHaveURL(/\/categories$/);
-    await expect(page.getByRole('heading', { name: 'Category Management' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestion des catégories' })).toBeVisible();
 
     await page.goto('/menu');
     await expect(page).toHaveURL(/\/menu$/);
-    await expect(page.getByRole('heading', { name: 'Menu Operations' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
 
     await page.goto('/stock');
     await expect(page).toHaveURL(/\/stock$/);
@@ -146,15 +146,15 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/hr');
     await expect(page).toHaveURL(/\/hr$/);
-    await expect(page.getByRole('heading', { name: 'Human Resources' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Ressources humaines' })).toBeVisible();
 
     await page.goto('/avis');
     await expect(page).toHaveURL(/\/avis$/);
-    await expect(page.getByRole('heading', { name: 'Client Sentiment' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
 
     await page.goto('/settings');
     await expect(page).toHaveURL(/\/settings$/);
-    await expect(page.getByRole('button', { name: 'Deploy Changes' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Enregistrer les paramètres' })).toBeVisible();
 
     await page.route('**/api/plats/', async (route) => {
       await route.fulfill({ status: 200, body: JSON.stringify([]) });
@@ -409,7 +409,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-price-input').fill('61.00');
     await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
 
-    await expect(page.getByText('FILE LOADED')).toBeVisible();
+    await expect(page.getByText('Image chargée')).toBeVisible();
     await page.getByTestId('plat-save-button').click();
 
     const createdCard = page.getByTestId('plat-card-7010');
@@ -467,7 +467,7 @@ test.describe('gerant browser workflows', () => {
 
     await page.getByTestId('plat-edit-7110').click();
     await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
-    await expect(page.getByText('FILE LOADED')).toBeVisible();
+    await expect(page.getByText('Image chargée')).toBeVisible();
     await page.getByTestId('plat-save-button').click();
 
     await expect(platCard.getByRole('img', { name: 'Tagine Atlas' })).toHaveAttribute('src', /replaced-plat\.png/);
@@ -536,7 +536,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('category-image-input').setInputFiles(uploadedPng);
     await page.getByTestId('category-save-button').click();
 
-    await expect(page.getByText('Failed to save category')).toBeVisible();
+    await expect(page.getByText("Impossible d'enregistrer la catégorie.")).toBeVisible();
     await expect(page.getByTestId('category-name-input')).toHaveValue('Broken image category');
     await expect(page.getByTestId('category-image-preview')).toBeVisible();
   });
@@ -572,7 +572,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('category-order-input').fill('8');
     await page.getByTestId('category-save-button').click();
 
-    await expect(page.getByText('Failed to save category')).toBeVisible();
+    await expect(page.getByText("Impossible d'enregistrer la catégorie.")).toBeVisible();
     await expect(page.getByTestId('category-name-input')).toHaveValue('Renamed starters');
     await expect(page.getByTestId('category-description-input')).toHaveValue('Updated draft that should remain visible.');
     await expect(page.getByTestId('category-order-input')).toHaveValue('8');
@@ -600,7 +600,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-time-input').fill('12');
     await page.getByTestId('plat-save-button').click();
 
-    await expect(page.getByText('Commit failed')).toBeVisible();
+    await expect(page.getByText("Impossible d'enregistrer le plat.")).toBeVisible();
     await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken plat draft');
     await expect(page.getByTestId('plat-price-input')).toHaveValue('31.50');
     await expect(page.getByTestId('plat-description-input')).toHaveValue('This draft should survive a failing save.');
@@ -643,9 +643,9 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-image-input').setInputFiles(uploadedPng);
     await page.getByTestId('plat-save-button').click();
 
-    await expect(page.getByText('Commit failed')).toBeVisible();
+    await expect(page.getByText("Impossible d'enregistrer le plat.")).toBeVisible();
     await expect(page.getByTestId('plat-name-input')).toHaveValue('Broken image plat');
-    await expect(page.getByText('FILE LOADED')).toBeVisible();
+    await expect(page.getByText('Image chargée')).toBeVisible();
   });
 
   test('keeps plat edits visible when an update request fails', async ({ page }) => {
@@ -694,7 +694,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-price-input').fill('92.00');
     await page.getByTestId('plat-save-button').click();
 
-    await expect(page.getByText('Commit failed')).toBeVisible();
+    await expect(page.getByText("Impossible d'enregistrer le plat.")).toBeVisible();
     await expect(page.getByTestId('plat-name-input')).toHaveValue('Tagine Royal Deluxe');
     await expect(page.getByTestId('plat-price-input')).toHaveValue('92.00');
   });
@@ -743,7 +743,7 @@ test.describe('gerant browser workflows', () => {
     await page.getByTestId('plat-card-7201').hover();
     await page.getByTestId('plat-delete-7201').click();
 
-    await expect(page.getByText('Deletion error')).toBeVisible();
+    await expect(page.getByText('Suppression impossible.')).toBeVisible();
     await expect(page.getByTestId('plat-card-7201')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Rfissa Maison' })).toBeVisible();
   });
@@ -758,7 +758,7 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await expect(page.getByText('CRITICAL: UNAVAILABLE.')).toBeVisible();
+    await expect(page.getByText('Service indisponible.')).toBeVisible();
   });
 
   test('saves settings successfully with a deterministic API response', async ({ page }) => {
@@ -799,13 +799,13 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.getByLabel('Trading Name').fill('Playwright Bistro');
-    await page.getByLabel('Restaurant Description').fill('Saved from E2E');
-    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+    await page.getByLabel("Nom de l'enseigne").fill('Playwright Bistro');
+    await page.getByLabel('Description').fill('Saved from E2E');
+    await page.getByRole('button', { name: 'Enregistrer les paramètres' }).click();
 
-    await expect(page.getByText('System parameters deployed')).toBeVisible();
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Playwright Bistro');
-    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Saved from E2E');
+    await expect(page.getByText('Paramètres enregistrés')).toBeVisible();
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Playwright Bistro');
+    await expect(page.getByLabel('Description')).toHaveValue('Saved from E2E');
   });
 
   test('persists partial settings edits after a successful save', async ({ page }) => {
@@ -849,14 +849,14 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.getByLabel('Trading Name').fill('Playwright Ops');
-    await page.getByLabel('Primary Contact').fill('+212611111111');
-    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+    await page.getByLabel("Nom de l'enseigne").fill('Playwright Ops');
+    await page.getByLabel('Téléphone').fill('+212611111111');
+    await page.getByRole('button', { name: 'Enregistrer les paramètres' }).click();
 
-    await expect(page.getByText('System parameters deployed')).toBeVisible();
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Playwright Ops');
-    await expect(page.getByLabel('Primary Contact')).toHaveValue('+212611111111');
-    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Base config');
+    await expect(page.getByText('Paramètres enregistrés')).toBeVisible();
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Playwright Ops');
+    await expect(page.getByLabel('Téléphone')).toHaveValue('+212611111111');
+    await expect(page.getByLabel('Description')).toHaveValue('Base config');
   });
 
   test('keeps saved settings visible after a reload', async ({ page }) => {
@@ -898,16 +898,16 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.getByLabel('Trading Name').fill('Reload Safe Ops');
-    await page.getByLabel('Restaurant Description').fill('Persisted through reload');
-    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+    await page.getByLabel("Nom de l'enseigne").fill('Reload Safe Ops');
+    await page.getByLabel('Description').fill('Persisted through reload');
+    await page.getByRole('button', { name: 'Enregistrer les paramètres' }).click();
 
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Reload Safe Ops');
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Reload Safe Ops');
     await page.reload();
 
     await expect(page).toHaveURL(/\/settings$/);
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Reload Safe Ops');
-    await expect(page.getByLabel('Restaurant Description')).toHaveValue('Persisted through reload');
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Reload Safe Ops');
+    await expect(page.getByLabel('Description')).toHaveValue('Persisted through reload');
   });
 
   test('shows a settings save error when the update request fails', async ({ page }) => {
@@ -920,11 +920,11 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.getByLabel('Trading Name').fill('Broken save');
-    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+    await page.getByLabel("Nom de l'enseigne").fill('Broken save');
+    await page.getByRole('button', { name: 'Enregistrer les paramètres' }).click();
 
-    await expect(page.getByText('Deployment failure')).toBeVisible();
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Broken save');
+    await expect(page.getByText('Enregistrement impossible')).toBeVisible();
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Broken save');
   });
 
   test('keeps dirty settings inputs after a failed partial save', async ({ page }) => {
@@ -937,13 +937,13 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/settings');
-    await page.getByLabel('Trading Name').fill('Dirty config');
-    await page.getByLabel('Primary Contact').fill('+212622222222');
-    await page.getByRole('button', { name: 'Deploy Changes' }).click();
+    await page.getByLabel("Nom de l'enseigne").fill('Dirty config');
+    await page.getByLabel('Téléphone').fill('+212622222222');
+    await page.getByRole('button', { name: 'Enregistrer les paramètres' }).click();
 
-    await expect(page.getByText('Deployment failure')).toBeVisible();
-    await expect(page.getByLabel('Trading Name')).toHaveValue('Dirty config');
-    await expect(page.getByLabel('Primary Contact')).toHaveValue('+212622222222');
+    await expect(page.getByText('Enregistrement impossible')).toBeVisible();
+    await expect(page.getByLabel("Nom de l'enseigne")).toHaveValue('Dirty config');
+    await expect(page.getByLabel('Téléphone')).toHaveValue('+212622222222');
   });
 
   test('renders the HR empty state and export toast when no employees are returned', async ({ page }) => {
@@ -956,9 +956,9 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/hr');
-    await expect(page.getByText('NO STAFF RECORDS FOUND')).toBeVisible();
-    await page.getByRole('button', { name: /EXPORT ROSTER/ }).click();
-    await expect(page.getByText('GENERATING_EXPORT_STREAM')).toBeVisible();
+    await expect(page.getByText('Aucun membre du personnel trouvé')).toBeVisible();
+    await page.getByRole('button', { name: /exporter/i }).click();
+    await expect(page.getByText("Préparation de l'export")).toBeVisible();
   });
 
   test('renders the avis empty state when no feedback is returned', async ({ page }) => {
@@ -971,7 +971,7 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/avis');
-    await expect(page.getByText('NO FEEDBACK DATA LOGGED')).toBeVisible();
+    await expect(page.getByText('Aucun avis disponible')).toBeVisible();
   });
 
   test('surfaces low stock rows when ingredient thresholds are crossed', async ({ page }) => {
@@ -994,7 +994,7 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/stock');
     await expect(page.getByText('Safran test')).toBeVisible();
-    await expect(page.getByText('CRITICAL DEPLETION', { exact: true })).toBeVisible();
+    await expect(page.getByText('Stock sous le seuil', { exact: true })).toBeVisible();
   });
 
   test('renders populated stock data and keeps search plus editor interactions stable', async ({ page }) => {
@@ -1013,14 +1013,14 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByText('Safran Atlas')).toBeVisible();
     await expect(page.getByText('Huile Olive')).toBeVisible();
 
-    const searchInput = page.getByPlaceholder('RESOURCE LOOKUP...');
+    const searchInput = page.getByPlaceholder('Rechercher un ingrédient...');
     await searchInput.fill('huile');
     await expect(page.getByText('Huile Olive')).toBeVisible();
     await expect(page.getByText('Safran Atlas')).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'Add Item' }).click();
-    await expect(page.getByRole('heading', { name: 'New Resource' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Commit Record' })).toBeVisible();
+    await page.getByRole('button', { name: 'Ajouter' }).click();
+    await expect(page.getByRole('heading', { name: 'Nouvel ingrédient' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Enregistrer' })).toBeVisible();
   });
 
   test('renders populated hr data and filters by search plus role tab', async ({ page }) => {
@@ -1044,7 +1044,7 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByRole('heading', { name: 'youssef' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'amina' })).toHaveCount(0);
 
-    await page.getByPlaceholder('SEARCH BY NAME, ROLE, OR ID...').fill('nadia');
+    await page.getByPlaceholder('Rechercher nom, poste ou ID...').fill('nadia');
     await page.getByRole('button', { name: 'GERANT' }).click();
     await expect(page.getByRole('heading', { name: 'nadia' })).toBeVisible();
   });
@@ -1065,7 +1065,7 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByText('samira')).toBeVisible();
     await expect(page.getByText('mehdi')).toBeVisible();
 
-    const searchInput = page.getByPlaceholder('FILTER ENTRIES...');
+    const searchInput = page.getByPlaceholder('Filtrer les avis...');
     await searchInput.fill('cold');
     await expect(page.getByText('Dessert arrived cold')).toBeVisible();
     await expect(page.getByText('Excellent service and timing')).toHaveCount(0);
@@ -1102,8 +1102,8 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByText('50%')).toBeVisible();
     await expect(page.getByText('6')).toBeVisible();
     await expect(page.getByText(/^18m$/)).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Floor Plan Preview' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Retards cuisine' })).toBeVisible();
   });
 
   test('shows the dashboard fallback state when analytics loading fails', async ({ page }) => {
@@ -1122,7 +1122,7 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/');
-    await expect(page.getByText('Data registry offline.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Données indisponibles' })).toBeVisible();
     await expect(page).toHaveURL(/\/$/);
   });
 
@@ -1156,7 +1156,7 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { name: 'Live Orchestration Feed' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();
     await expectNoBlockingViolations(page);
   });
 
