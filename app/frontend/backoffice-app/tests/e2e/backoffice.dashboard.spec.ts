@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { fulfillRefreshWithStoredAccess } from './fixtures/auth';
 
 type DashboardPayload = {
   todayRevenue: number;
@@ -58,11 +59,7 @@ test.describe('manager dashboard analytics e2e', () => {
       await route.fulfill({ status: 200 });
     });
     await page.route('**/api/users/refresh/', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
-      });
+      await fulfillRefreshWithStoredAccess(page, route, 'GERANT', 'gerant_test');
     });
     await page.route('**/api/commandes/*', async route => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
@@ -92,8 +89,8 @@ test.describe('manager dashboard analytics e2e', () => {
     releaseDashboardResponse();
     await navigation;
     await expect(page.getByText('4290 DH')).toBeVisible();
-    await expect(page.getByText('50%')).toBeVisible();
-    await expect(page.getByText('6', { exact: true })).toBeVisible();
+    await expect(page.getByText('50%').first()).toBeVisible();
+    await expect(page.getByText('6', { exact: true }).first()).toBeVisible();
     await expect(page.getByText(/^18m$/)).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Avis Clients' })).toBeVisible();
     await expect(page.getByText('28 avis analysés')).toBeVisible();

@@ -2,6 +2,7 @@ services:
   backend:
     environment:
       CI: "true"
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
       SEED_MEDIA_DOWNLOADS: "0"
 
   load-tester:

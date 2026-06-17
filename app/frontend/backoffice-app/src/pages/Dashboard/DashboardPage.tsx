@@ -171,7 +171,7 @@ export const DashboardPage: React.FC = () => {
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-on-surface-variant/40 text-xs font-bold uppercase tracking-widest">Données indisponibles</div>
+            <div className="h-64 flex items-center justify-center text-on-surface-variant text-xs font-bold uppercase tracking-widest">Données indisponibles</div>
           )}
         </div>
 
@@ -196,7 +196,7 @@ export const DashboardPage: React.FC = () => {
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-on-surface-variant/40 text-xs font-bold uppercase tracking-widest">Données indisponibles</div>
+            <div className="h-64 flex items-center justify-center text-on-surface-variant text-xs font-bold uppercase tracking-widest">Données indisponibles</div>
           )}
         </div>
       </section>

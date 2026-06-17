@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import type { Route } from '@playwright/test';
+import { fulfillRefreshWithStoredAccess } from './fixtures/auth';
 
 const settingsPayload = {
   id: 1,
@@ -155,7 +156,7 @@ const mockManagerStock = async (page: Parameters<typeof test>[0]['page']) => {
     });
   });
 
-  await page.route('**/api/stock/plat-ingredients/', async (route) => {
+  await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -218,7 +219,7 @@ const mockReservations = async (page: Parameters<typeof test>[0]['page']) => {
 };
 
 const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page']) => {
-  await page.route('**/api/categories/', async (route) => {
+  await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -241,7 +242,7 @@ const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page']) 
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(asPaginatedPayload(route, [])) });
   });
 
-  await page.route('**/api/stock/plat-ingredients/', async (route) => {
+  await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
   });
 };
@@ -264,11 +265,7 @@ test.describe('authenticated backoffice quality coverage', () => {
         await route.fulfill({ status: 200 });
       });
       await page.route('**/api/users/refresh/', async route => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
-        });
+        await fulfillRefreshWithStoredAccess(page, route, 'GERANT', 'gerant_test');
       });
       await page.route('**/api/commandes/*', async route => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
@@ -425,11 +422,7 @@ test.describe('authenticated backoffice quality coverage', () => {
         await route.fulfill({ status: 200 });
       });
       await page.route('**/api/users/refresh/', async route => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ access: 'test-token', role: 'SERVEUR', username: 'serveur_test' }),
-        });
+        await fulfillRefreshWithStoredAccess(page, route, 'SERVEUR', 'serveur_test');
       });
       await page.route('**/api/tables/', async route => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
@@ -516,11 +509,7 @@ test.describe('authenticated backoffice quality coverage', () => {
         await route.fulfill({ status: 200 });
       });
       await page.route('**/api/users/refresh/', async route => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ access: 'test-token', role: 'CUISINIER', username: 'cuisinier_test' }),
-        });
+        await fulfillRefreshWithStoredAccess(page, route, 'CUISINIER', 'cuisinier_test');
       });
     });
 

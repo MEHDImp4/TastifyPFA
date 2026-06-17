@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { fulfillRefreshWithStoredAccess } from './fixtures/auth';
 
 const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
   const results = await new AxeBuilder({ page }).include('main').analyze();
@@ -81,7 +82,7 @@ const emitStaffSocketMessage = async (page: Parameters<typeof test>[0]['page'], 
 };
 
 const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page'], plats: unknown[]) => {
-  await page.route('**/api/categories/', async (route) => {
+  await page.route('**/api/categories**', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -92,11 +93,20 @@ const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page'], 
     });
   });
 
-  await page.route('**/api/plats/', async (route) => {
+  await page.route('**/api/plats**', async (route) => {
+    const url = new URL(route.request().url());
+    const search = (url.searchParams.get('search') || '').trim().toLowerCase();
+    const responsePlats = search
+      ? plats.filter((plat: any) =>
+          String(plat?.nom || '').toLowerCase().includes(search)
+          || String(plat?.description || '').toLowerCase().includes(search),
+        )
+      : plats;
+
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(plats),
+      body: JSON.stringify(responsePlats),
     });
   });
 
@@ -115,11 +125,7 @@ test.describe('cuisinier browser workflows', () => {
       await route.fulfill({ status: 200 });
     });
     await page.route('**/api/users/refresh/', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ access: 'test-token', role: 'CUISINIER', username: 'cuisinier_test' }),
-      });
+      await fulfillRefreshWithStoredAccess(page, route, 'CUISINIER', 'cuisinier_test');
     });
   });
 
@@ -270,7 +276,7 @@ test.describe('cuisinier browser workflows', () => {
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
 
-    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
+    const menuButton = page.getByRole('button', { name: 'Ouvrir le menu de navigation' });
     await menuButton.click();
 
     await expect(page.getByTestId('nav-kds')).toBeVisible();
@@ -323,7 +329,7 @@ test.describe('cuisinier browser workflows', () => {
     await expect(ticket.getByText('En préparation')).toBeVisible();
 
     await page.getByText('Risotto safran').click();
-    await expect(ticket.getByText('PRÊT')).toBeVisible();
+    await expect(ticket.getByText('PRÊT').first()).toBeVisible();
     await expect(page.getByText('Envoyer au service')).toBeVisible();
   });
 
@@ -365,9 +371,10 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/kds');
     await page.waitForLoadState('networkidle');
-    await page.getByText('Pastilla poulet').click();
-    await expect(page.getByText('En attente')).toHaveCount(0);
-    await expect(page.getByText('PRÊT')).toHaveCount(0);
+    const ticket = page.getByTestId('kds-ticket-9301');
+    await ticket.getByText('Pastilla poulet').click();
+    await expect(ticket.getByText('En attente')).toBeVisible();
+    await expect(ticket.getByText('PRÊT', { exact: true })).toHaveCount(0);
   });
 
   test('shows completion only for tickets whose every line is ready', async ({ page }) => {
@@ -527,7 +534,7 @@ test.describe('cuisinier browser workflows', () => {
     await firstTicket.getByText('Legumes rôtis').click();
 
     await expect(firstTicket.getByText('Legumes rôtis')).toBeVisible();
-    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT').first()).toBeVisible();
 
     await expect(secondTicket.getByText('Filet poisson')).toBeVisible();
     await expect(secondTicket.getByText('TERMINÉ')).toHaveCount(0);
@@ -679,7 +686,7 @@ test.describe('cuisinier browser workflows', () => {
 
     await firstTicket.getByText('Tajine pruneaux').click();
 
-    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT').first()).toBeVisible();
 
     await expect(secondTicket.getByText('Seffa medfouna')).toBeVisible();
     await expect(secondTicket.getByText('Cannelle extra')).toBeVisible();
@@ -843,7 +850,7 @@ test.describe('cuisinier browser workflows', () => {
       },
     });
 
-    await expect(firstTicket.getByText('PRÊT')).toBeVisible();
+    await expect(firstTicket.getByText('PRÊT').first()).toBeVisible();
   });
 
   test('removes only the terminal websocket ticket while keeping siblings visible', async ({ page }) => {

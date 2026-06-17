@@ -24,3 +24,27 @@ export async function loginThroughUi(page: import('@playwright/test').Page, user
   await page.getByTestId('login-password').fill(password);
   await page.getByTestId('login-submit').click();
 }
+
+export async function fulfillRefreshWithStoredAccess(
+  page: import('@playwright/test').Page,
+  route: import('@playwright/test').Route,
+  role: 'GERANT' | 'SERVEUR' | 'CUISINIER',
+  username: string,
+) {
+  const access = await page.evaluate(() => {
+    const rawStorage = window.localStorage.getItem('backoffice-auth-storage');
+    if (!rawStorage) return null;
+
+    try {
+      return JSON.parse(rawStorage)?.state?.accessToken ?? null;
+    } catch {
+      return null;
+    }
+  });
+
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ access, role, username }),
+  });
+}

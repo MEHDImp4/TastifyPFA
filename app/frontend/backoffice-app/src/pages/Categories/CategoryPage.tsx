@@ -231,7 +231,7 @@ export const CategoryPage: React.FC = () => {
       {editor && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
           <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={closeEditor} />
-          <div role="dialog" aria-modal="true" aria-labelledby="category-editor-title" className="relative w-full max-w-md bg-surface border border-outline rounded-xl flex flex-col shadow-2xl">
+          <div role="dialog" aria-modal="true" aria-labelledby="category-editor-title" className="relative w-full max-w-md max-h-[calc(100dvh-3rem)] bg-surface border border-outline rounded-xl flex flex-col shadow-2xl">
             <div className="p-6 border-b border-outline flex items-center justify-between">
               <h2 id="category-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
                 {editor.mode === 'create' ? 'Nouveau Secteur' : 'Modifier Secteur'}
@@ -241,7 +241,7 @@ export const CategoryPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-8 space-y-6 overflow-y-auto">
+            <div className="min-h-0 flex-1 p-8 space-y-6 overflow-y-auto">
               {saveError && (
                 <p id="category-save-error" role="alert" className="form-error">{saveError}</p>
               )}

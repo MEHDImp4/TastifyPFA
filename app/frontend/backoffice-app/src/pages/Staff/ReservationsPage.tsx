@@ -137,6 +137,28 @@ export const ReservationsPage: React.FC = () => {
   const statusLabel = (status: string) =>
     status === 'ALL' ? 'Tout voir' : status.replace('_', ' ');
 
+  const getReservationGuestName = (res: Reservation) =>
+    res.user_username
+    || res.client_details?.username
+    || `${res.client_details?.first_name || ''} ${res.client_details?.last_name || ''}`.trim()
+    || null;
+
+  const normalizedSearch = search.trim().toLowerCase();
+  const visibleReservations = reservations.filter((res) => {
+    if (filter !== 'ALL' && res.statut !== filter) return false;
+
+    if (!normalizedSearch) return true;
+
+    const guestName = getReservationGuestName(res);
+    const searchableText = [
+      guestName || 'client sans compte guest',
+      res.notes || '',
+      String(res.table_numero || res.table_details?.numero || res.table || ''),
+    ].join(' ').toLowerCase();
+
+    return searchableText.includes(normalizedSearch);
+  });
+
   const totalPages = Math.max(1, Math.ceil(totalCount / reservationsPerPage));
 
   return (
@@ -179,11 +201,8 @@ export const ReservationsPage: React.FC = () => {
       {/* List Body */}
       <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-8">
         <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
-          {reservations.map((res) => {
-            const guestName = res.user_username
-              || res.client_details?.username
-              || `${res.client_details?.first_name || ''} ${res.client_details?.last_name || ''}`.trim()
-              || null;
+          {visibleReservations.map((res) => {
+            const guestName = getReservationGuestName(res);
             const tableNumber = res.table_numero || res.table_details?.numero || res.table;
 
             return (
@@ -306,7 +325,7 @@ export const ReservationsPage: React.FC = () => {
             );
           })}
 
-          {reservations.length === 0 && (
+          {visibleReservations.length === 0 && (
             <div className="rounded border border-dashed border-outline py-32 flex flex-col items-center justify-center opacity-20">
                 <Calendar className="w-12 h-12 mb-4" strokeWidth={1}/>
                 <p className="text-xl font-bold tracking-widest">Aucune réservation</p>

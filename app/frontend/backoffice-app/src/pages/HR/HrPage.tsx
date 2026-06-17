@@ -78,6 +78,26 @@ export const HrPage: React.FC = () => {
     }
   };
 
+  const normalizedSearch = search.trim().toLowerCase();
+  const visibleEmployes = employes.filter((emp) => {
+    if (activeTab !== 'ALL' && emp.poste !== activeTab) return false;
+    if (!normalizedSearch) return true;
+
+    return [
+      emp.id,
+      emp.poste,
+      emp.username,
+      emp.first_name,
+      emp.last_name,
+      emp.email,
+      emp.telephone,
+      emp.user_details?.username,
+      emp.user_details?.first_name,
+      emp.user_details?.last_name,
+      emp.user_details?.email,
+    ].join(' ').toLowerCase().includes(normalizedSearch);
+  });
+
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
@@ -146,7 +166,7 @@ export const HrPage: React.FC = () => {
             <div className="col-span-4">Contact</div>
           </div>
 
-            {employes.length > 0 ? employes.map((emp) => (
+            {visibleEmployes.length > 0 ? visibleEmployes.map((emp) => (
                 <div
                   key={emp.id}
                   className="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline hover:bg-background/50 transition-colors items-center group"

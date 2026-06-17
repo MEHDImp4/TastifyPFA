@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { fulfillRefreshWithStoredAccess } from './fixtures/auth';
 
 const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
   const results = await new AxeBuilder({ page }).include('main').analyze();
@@ -26,11 +27,7 @@ test.describe('gerant browser workflows', () => {
       await route.fulfill({ status: 200 });
     });
     await page.route('**/api/users/refresh/', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ access: 'test-token', role: 'GERANT', username: 'gerant_test' }),
-      });
+      await fulfillRefreshWithStoredAccess(page, route, 'GERANT', 'gerant_test');
     });
   });
 
@@ -134,7 +131,7 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/stock');
     await expect(page).toHaveURL(/\/stock$/);
-    await expect(page.getByRole('heading', { name: 'Inventory & Logistics' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
 
     await page.goto('/reservations');
     await expect(page).toHaveURL(/\/reservations$/);
@@ -156,10 +153,10 @@ test.describe('gerant browser workflows', () => {
     await expect(page).toHaveURL(/\/settings$/);
     await expect(page.getByRole('button', { name: 'Enregistrer les paramètres' })).toBeVisible();
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, body: JSON.stringify([]) });
     });
 
@@ -179,7 +176,7 @@ test.describe('gerant browser workflows', () => {
     const updatedName = `${initialName} Updated`;
     let categories = [];
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       const method = route.request().method();
       if (method === 'POST') {
         const newCat = { id: 3000, nom: initialName, description: '...', ordre_affichage: 91, est_active: true };
@@ -230,7 +227,7 @@ test.describe('gerant browser workflows', () => {
     const initialName = `PW Image Category ${Date.now()}`;
     let categories = [];
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       const method = route.request().method();
       if (method === 'POST') {
         const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
@@ -280,7 +277,7 @@ test.describe('gerant browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(categories) });
     });
 
@@ -311,7 +308,7 @@ test.describe('gerant browser workflows', () => {
     const updatedName = `${initialName} Updated`;
     let plats = [];
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       const method = route.request().method();
       if (method === 'POST') {
         const newPlat = { id: 7000, nom: initialName, description: '...', prix: '77.00', temps_preparation: 18, categorie: 1, est_active: true, est_disponible: true };
@@ -361,7 +358,7 @@ test.describe('gerant browser workflows', () => {
     const initialName = `PW Image Plat ${Date.now()}`;
     let plats = [];
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -369,7 +366,7 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       const method = route.request().method();
       if (method === 'POST') {
         const payload = route.request().postDataBuffer()?.toString('utf8') ?? '';
@@ -395,11 +392,11 @@ test.describe('gerant browser workflows', () => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
     });
 
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -432,7 +429,7 @@ test.describe('gerant browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -440,15 +437,15 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(plats) });
     });
 
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -490,7 +487,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps the category draft visible when creation fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       if (route.request().method() === 'POST') {
         await route.fulfill({
           status: 500,
@@ -516,7 +513,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps the category image draft recoverable when the upload save fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       if (route.request().method() === 'POST') {
         await route.fulfill({
           status: 500,
@@ -542,7 +539,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps the category editor state intact when an edit request fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -579,7 +576,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('shows a save error and keeps the plat draft after a failed create', async ({ page }) => {
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       if (route.request().method() === 'POST') {
         await route.fulfill({
           status: 500,
@@ -607,7 +604,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps the plat image draft recoverable when the upload save fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -615,7 +612,7 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       if (route.request().method() === 'POST') {
         await route.fulfill({
           status: 500,
@@ -628,11 +625,11 @@ test.describe('gerant browser workflows', () => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -649,7 +646,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('keeps plat edits visible when an update request fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -657,7 +654,7 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -667,11 +664,11 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -700,7 +697,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('does not remove a plat card when delete fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -708,7 +705,7 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -718,11 +715,11 @@ test.describe('gerant browser workflows', () => {
       });
     });
 
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
-    await page.route('**/api/stock/plat-ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/plat-ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -947,7 +944,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('renders the HR empty state and export toast when no employees are returned', async ({ page }) => {
-    await page.route('**/api/employes/', async (route) => {
+    await page.route(/\/api\/employes\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -962,7 +959,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('renders the avis empty state when no feedback is returned', async ({ page }) => {
-    await page.route('**/api/avis/', async (route) => {
+    await page.route(/\/api\/avis\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -975,7 +972,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('surfaces low stock rows when ingredient thresholds are crossed', async ({ page }) => {
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -998,7 +995,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('renders populated stock data and keeps search plus editor interactions stable', async ({ page }) => {
-    await page.route('**/api/stock/ingredients/', async (route) => {
+    await page.route(/\/api\/stock\/ingredients\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1024,7 +1021,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('renders populated hr data and filters by search plus role tab', async ({ page }) => {
-    await page.route('**/api/employes/', async (route) => {
+    await page.route(/\/api\/employes\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1050,7 +1047,7 @@ test.describe('gerant browser workflows', () => {
   });
 
   test('renders populated avis data and filters by guest identity and comment text', async ({ page }) => {
-    await page.route('**/api/avis/', async (route) => {
+    await page.route(/\/api\/avis\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1099,7 +1096,7 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/');
     await expect(page.getByText('4290 DH')).toBeVisible();
-    await expect(page.getByText('50%')).toBeVisible();
+    await expect(page.getByText('50%').first()).toBeVisible();
     await expect(page.getByText('6')).toBeVisible();
     await expect(page.getByText(/^18m$/)).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Commandes en cours' })).toBeVisible();

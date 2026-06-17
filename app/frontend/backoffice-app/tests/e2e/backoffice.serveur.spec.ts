@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { fulfillRefreshWithStoredAccess } from './fixtures/auth';
 
 const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page']) => {
   const results = await new AxeBuilder({ page }).include('main').analyze();
@@ -18,11 +19,7 @@ test.describe('serveur browser workflows', () => {
       await route.fulfill({ status: 200 });
     });
     await page.route('**/api/users/refresh/', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ access: 'test-token', role: 'SERVEUR', username: 'serveur_test' }),
-      });
+      await fulfillRefreshWithStoredAccess(page, route, 'SERVEUR', 'serveur_test');
     });
     // Default tables mock so any test that navigates to /salle (serveur home) doesn't hang
     await page.route('**/api/tables/', async route => {
@@ -64,7 +61,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps the reservations nav active after a direct route load', async ({ page }) => {
-    await page.route('**/api/reservations/', async route => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async route => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
     await page.goto('/reservations');
@@ -92,10 +89,10 @@ test.describe('serveur browser workflows', () => {
     await page.route('**/api/commandes/?table=41*', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
     });
 
@@ -157,14 +154,14 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps an ordering handoff stable after a hard refresh', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify([{ id: 81, nom: 'Plats', ordre_affichage: 1, est_active: true }]),
       });
     });
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -252,7 +249,7 @@ test.describe('serveur browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -333,7 +330,7 @@ test.describe('serveur browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -371,7 +368,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('renders the reservations empty state when no bookings are returned', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -411,7 +408,7 @@ test.describe('serveur browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -450,7 +447,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('filters reservations by client search and cancelled status', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -498,7 +495,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('normalizes reservation search input and supports fallback client names', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -562,7 +559,7 @@ test.describe('serveur browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -633,7 +630,7 @@ test.describe('serveur browser workflows', () => {
       },
     ];
 
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -666,7 +663,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('filters fallback client identities by active reservation status', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -729,7 +726,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('distinguishes fallback client matches from real client names during search normalization', async ({ page }) => {
-    await page.route('**/api/reservations/', async (route) => {
+    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -776,7 +773,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('builds and clears an ordering cart with search and quantity controls', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -787,7 +784,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -838,7 +835,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps ordering quantities floored at one and totals mixed carts correctly', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -846,7 +843,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -887,7 +884,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('intersects ordering category switches with text search', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -898,7 +895,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -936,7 +933,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('preserves cart state while category tabs change', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -947,7 +944,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -991,7 +988,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('preserves cart state while catalog search hides and reveals items', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -999,7 +996,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1043,7 +1040,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('preserves a multi-item cart across category and search intersections', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1054,7 +1051,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1111,7 +1108,7 @@ test.describe('serveur browser workflows', () => {
   test('submits a fresh order to the kitchen from ordering', async ({ page }) => {
     let createdCommande: any = null;
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1119,7 +1116,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1173,7 +1170,7 @@ test.describe('serveur browser workflows', () => {
     let addItemsPayload: any = null;
     let createCalled = false;
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1181,7 +1178,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1247,7 +1244,7 @@ test.describe('serveur browser workflows', () => {
     let addItemsPayload: any = null;
     let addItemsTargetId: number | null = null;
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1255,7 +1252,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1309,7 +1306,7 @@ test.describe('serveur browser workflows', () => {
     let addItemsPayload: any = null;
     let createCalled = false;
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1320,7 +1317,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1397,7 +1394,7 @@ test.describe('serveur browser workflows', () => {
   test('preserves existing-order quantities after cart edits under changing filters', async ({ page }) => {
     let addItemsPayload: any = null;
 
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1408,7 +1405,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1478,7 +1475,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps cart and session pinned when existing-order add_items fails', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1486,7 +1483,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1541,7 +1538,7 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps hidden cart items stable when removing a different visible line', async ({ page }) => {
-    await page.route('**/api/categories/', async (route) => {
+    await page.route(/\/api\/categories\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -1549,7 +1546,7 @@ test.describe('serveur browser workflows', () => {
       });
     });
 
-    await page.route('**/api/plats/', async (route) => {
+    await page.route(/\/api\/plats\/(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',

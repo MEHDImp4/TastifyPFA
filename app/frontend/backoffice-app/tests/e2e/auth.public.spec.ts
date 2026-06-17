@@ -12,7 +12,7 @@ test.describe('public authentication flows', () => {
   test('blocks empty credential submission', async ({ page }) => {
     await page.goto('/login');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('IDENTIFIER_REQUIRED')).toBeVisible();
+    await expect(page.getByRole('alert')).toContainText('Identifiant et mot de passe requis.');
   });
 
   test('shows unauthorized error for invalid credentials', async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe('public authentication flows', () => {
     await page.getByTestId('login-username').fill('unknown_user');
     await page.getByTestId('login-password').fill('wrong-password');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('ACCESS_DENIED')).toBeVisible();
+    await expect(page.getByRole('alert')).toContainText('Identifiants incorrects.');
   });
 
   test('normalizes seeded credentials before authenticating', async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe('public authentication flows', () => {
     await page.getByTestId('login-username').fill('gerant_test');
     await page.getByTestId('login-password').fill('password123');
     await page.getByTestId('login-submit').click();
-    await expect(page.getByText('SYSTEM_ERROR')).toBeVisible();
+    await expect(page.getByRole('alert')).toContainText('Connexion impossible pour le moment.');
     await expect(page).toHaveURL(/\/login$/);
   });
 

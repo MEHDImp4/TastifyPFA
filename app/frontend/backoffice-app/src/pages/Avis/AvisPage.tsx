@@ -52,11 +52,24 @@ export const AvisPage: React.FC = () => {
     return <Meh className="w-4 h-4 text-on-surface-variant/40" />;
   };
 
+  const normalizedSearch = search.trim().toLowerCase();
+  const visibleAvis = avis.filter((a) => {
+    if (!normalizedSearch) return true;
+    const username = a.username ?? a.user_username ?? 'client';
+
+    return [
+      username,
+      a.commentaire,
+      String(a.note ?? ''),
+      String(a.id),
+    ].join(' ').toLowerCase().includes(normalizedSearch);
+  });
+
   const stats = {
-    avg: (avis.reduce((sum, a) => sum + (a.note || 5), 0) / (avis.length || 1)).toFixed(1),
-    positive: avis.filter(a => (a.sentiment_score || 0) > 0.2).length,
-    neutral: avis.filter(a => Math.abs(a.sentiment_score || 0) <= 0.2).length,
-    negative: avis.filter(a => (a.sentiment_score || 0) < -0.2).length,
+    avg: (visibleAvis.reduce((sum, a) => sum + (a.note || 5), 0) / (visibleAvis.length || 1)).toFixed(1),
+    positive: visibleAvis.filter(a => (a.sentiment_score || 0) > 0.2).length,
+    neutral: visibleAvis.filter(a => Math.abs(a.sentiment_score || 0) <= 0.2).length,
+    negative: visibleAvis.filter(a => (a.sentiment_score || 0) < -0.2).length,
   };
 
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
@@ -116,7 +129,7 @@ export const AvisPage: React.FC = () => {
             <div className="col-span-3 text-center">Score d'avis</div>
           </div>
 
-            {avis.length > 0 ? avis.map((a) => {
+            {visibleAvis.length > 0 ? visibleAvis.map((a) => {
               const username = a.username ?? a.user_username ?? 'client';
               return (
                 <div

@@ -126,6 +126,17 @@ export const StockPage: React.FC = () => {
     }
   };
 
+  const normalizedSearch = search.trim().toLowerCase();
+  const visibleIngredients = ingredients.filter((ingredient) => {
+    if (!normalizedSearch) return true;
+
+    return [
+      ingredient.nom,
+      ingredient.unite_mesure,
+      String(ingredient.id),
+    ].join(' ').toLowerCase().includes(normalizedSearch);
+  });
+
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
@@ -160,7 +171,7 @@ export const StockPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-background custom-scrollbar">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {ingredients.map(i => {
+          {visibleIngredients.map(i => {
             const isLow = parseFloat(i.stock_actuel) < parseFloat(i.seuil_alerte);
             return (
               <div key={i.id} className="atelier-card p-6 flex flex-col justify-between group">
