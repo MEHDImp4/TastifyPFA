@@ -3,32 +3,32 @@
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-Ce chapitre situe Tastify dans son environnement métier. Il présente les difficultés rencontrées dans la gestion d'un restaurant, formule la problématique, analyse brièvement les solutions existantes et définit les objectifs retenus pour le projet.
+Ce chapitre place Tastify dans son contexte métier. Il décrit les problèmes rencontrés dans la gestion d'un restaurant, formule la problématique, compare quelques solutions existantes et fixe les objectifs retenus pour le projet.
 
 \section{Contexte métier}
-Un restaurant fonctionne autour de flux courts et interdépendants. Une table se libère, une commande est prise, des plats sont envoyés en cuisine, des ingrédients sont consommés, un paiement est enregistré, puis le client peut laisser un avis. Ces actions mobilisent des rôles différents : le gérant, le serveur, le cuisinier et le client.
+Un restaurant fonctionne avec des enchaînements rapides. Une table se libère, un serveur prend une commande, la cuisine prépare les plats, le stock diminue, le paiement est enregistré, puis le client peut laisser un avis. Chaque étape dépend de la précédente, et plusieurs rôles interviennent en même temps : gérant, serveur, cuisinier et client.
 
-Lorsque ces informations sont gérées avec des outils séparés, le risque d'incohérence augmente. Le serveur peut ne pas connaître la disponibilité réelle d'un plat, la cuisine peut recevoir une commande incomplète, le gérant peut découvrir une rupture de stock trop tard et les avis clients peuvent rester dispersés. La numérisation d'un restaurant devient donc utile lorsqu'elle centralise les données et réduit les frictions entre les acteurs.
+Quand ces informations sont réparties entre plusieurs outils, les erreurs arrivent vite. Un serveur peut annoncer un plat qui n'est plus disponible. La cuisine peut recevoir une commande incomplète. Le gérant peut découvrir une rupture de stock après le service. Les avis clients peuvent rester dispersés et ne servir à aucune décision. Une application utile doit donc réunir ces informations au même endroit et réduire les pertes de temps entre les acteurs.
 
 \section{Problématique}
-La problématique principale du projet peut être formulée ainsi :
+La problématique principale du projet peut être formulée de cette manière :
 
 \begin{quote}
-Comment concevoir une application web centralisée, maintenable et accessible permettant de piloter les opérations d'un restaurant, tout en améliorant la coordination entre la salle, la cuisine, la gestion administrative et l'expérience client ?
+Comment concevoir une application web centralisée, maintenable et accessible permettant de gérer les opérations d'un restaurant, tout en améliorant la coordination entre la salle, la cuisine, la gestion administrative et l'expérience client ?
 \end{quote}
 
-Cette problématique se décline en plusieurs questions opérationnelles :
+Cette problématique conduit à plusieurs questions concrètes :
 
 \begin{itemize}
-  \item comment séparer les accès selon les rôles sans multiplier inutilement les applications ;
-  \item comment transmettre rapidement les commandes vers la cuisine ;
+  \item comment séparer les accès selon les rôles sans multiplier les applications inutilement ;
+  \item comment envoyer rapidement les commandes vers la cuisine ;
   \item comment relier commandes, stocks, paiements et fidélité ;
-  \item comment exploiter les avis clients sans bloquer l'expérience utilisateur ;
-  \item comment rendre l'ensemble testable et déployable avec une architecture claire.
+  \item comment analyser les avis clients sans ralentir l'expérience utilisateur ;
+  \item comment garder une architecture claire, testable et simple à déployer.
 \end{itemize}
 
-\section{Etude de l'existant}
-Le marché propose plusieurs solutions de gestion de restaurant ou de caisse connectée. Elles couvrent souvent une partie du besoin : prise de commande, caisse, stocks ou reporting. Le tableau~\ref{tab:existant} synthétise leur positionnement face aux besoins de Tastify.
+\section{Étude de l'existant}
+Le marché propose déjà plusieurs solutions de caisse ou de gestion de restaurant. Elles couvrent souvent une partie du besoin : prise de commande, paiement, gestion des stocks ou reporting. Le tableau~\ref{tab:existant} résume leur positionnement par rapport à Tastify.
 
 \begin{table}[H]
 \centering
@@ -38,32 +38,32 @@ Le marché propose plusieurs solutions de gestion de restaurant ou de caisse con
 \toprule
 \textbf{Solution} & \textbf{Points forts} & \textbf{Limites fréquentes} & \textbf{Lecture pour Tastify} \\
 \midrule
-Lightspeed Restaurant & Caisse, menu, commandes, reporting. & Coût récurrent, dépendance à un écosystème commercial. & Confirme l'intérêt d'une solution intégrée. \\
-Toast POS & Orientation restaurant, commande et paiement. & Disponibilité et adaptation au marché local variables. & Met en évidence l'importance du lien salle-cuisine. \\
-Revel Systems & Couverture ERP large, gestion multi-sites. & Complexité et coût élevés pour une petite structure. & Montre l'intérêt d'un périmètre modulaire. \\
-L'Addition & Solution spécialisée restauration, caisse et service. & Couverture variable selon les offres et les intégrations. & Sert de référence pour les besoins opérationnels. \\
-Tastify & Projet web modulaire, deux portails, temps réel, avis et fidélité. & Prototype académique, données de production non disponibles. & Solution adaptée au périmètre pédagogique du PFA. \\
+Lightspeed Restaurant & Caisse, menu, commandes, reporting. & Coût récurrent, dépendance à une offre commerciale. & Confirme l'intérêt d'une solution intégrée. \\
+Toast POS & Orientation restaurant, commande et paiement. & Disponibilité et adaptation au marché local variables. & Montre l'importance du lien salle-cuisine. \\
+Revel Systems & Couverture ERP large, gestion multi-sites. & Coût et complexité élevés pour une petite structure. & Justifie un périmètre modulaire. \\
+L'Addition & Solution spécialisée restauration, caisse et service. & Couverture variable selon les offres et les intégrations. & Sert de repère pour les besoins terrain. \\
+Tastify & Projet web modulaire, deux portails, temps réel, avis et fidélité. & Prototype académique, pas de données de production. & Adapté au cadre pédagogique du PFA. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-L'étude de l'existant montre que les solutions commerciales sont puissantes, mais parfois coûteuses ou dépendantes d'un environnement matériel et contractuel. Tastify se positionne comme un projet académique complet, focalisé sur la compréhension des flux et sur une architecture réutilisable.
+Cette comparaison montre que les solutions commerciales sont puissantes, mais qu'elles peuvent être coûteuses, fermées ou liées à un matériel précis. Tastify se place dans une logique pédagogique : comprendre les flux d'un restaurant, les modéliser proprement et proposer une architecture réutilisable.
 
 \section{Objectifs du projet}
 Les objectifs du projet sont les suivants :
 
 \begin{itemize}
   \item centraliser la gestion des menus, catégories, plats, tables, commandes et réservations ;
-  \item offrir une interface staff adaptée aux rôles gérant, serveur et cuisinier ;
-  \item offrir un portail client pour consulter le menu, réserver, payer et suivre la fidélité ;
-  \item améliorer la coordination cuisine grâce à un Kitchen Display System et aux WebSocket ;
+  \item proposer une interface staff adaptée au gérant, au serveur et au cuisinier ;
+  \item proposer un portail client pour consulter le menu, réserver, payer et suivre la fidélité ;
+  \item améliorer la coordination cuisine avec un Kitchen Display System et des WebSocket ;
   \item gérer les stocks, les ingrédients, les recettes et les mouvements associés ;
-  \item exploiter les avis clients grâce à une analyse de sentiment asynchrone ;
-  \item produire une architecture testable, documentée et déployable avec Docker Compose.
+  \item analyser les avis clients avec un traitement de sentiment lancé en arrière-plan ;
+  \item obtenir une architecture testable, documentée et déployable avec Docker Compose.
 \end{itemize}
 
 \section{Périmètre fonctionnel retenu}
-Le périmètre confirmé par le dépôt couvre les modules listés dans le tableau~\ref{tab:perimetre}.
+L'implémentation couvre les modules listés dans le tableau~\ref{tab:perimetre}.
 
 \begin{table}[H]
 \centering
@@ -89,7 +89,7 @@ Configuration & Informations du restaurant, devise, couleurs, paramètres de ser
 \end{table}
 
 \section{Planification}
-Le dépôt ne contient pas de journal de projet complet permettant de prouver une planification datée. Le tableau~\ref{tab:planification} présente donc une planification pédagogique cohérente avec la structure du projet, à considérer comme une reconstitution documentaire et non comme un relevé historique certifié.
+La planification ci-dessous synthétise les principales phases suivies durant le projet, à partir des modules livrés, des étapes de conception, des développements réalisés et des validations effectuées.
 
 \begin{table}[H]
 \centering
@@ -109,6 +109,48 @@ Phase 6 & Tests, documentation, conteneurisation et préparation du rapport. & 1
 \end{tabularx}
 \end{table}
 
+\section{Méthodologie de travail}
+Le projet a été conduit par itérations successives afin de garder un lien constant entre les besoins métier, la conception et l'implémentation. Chaque phase a produit un résultat vérifiable : modèle de données, API, écran React, scénario de test ou élément documentaire.
+
+\begin{table}[H]
+\centering
+\caption{Méthodologie suivie pendant le projet}
+\label{tab:methodologie-travail}
+\begin{tabularx}{\textwidth}{p{3cm}Y}
+\toprule
+\textbf{Phase} & \textbf{Travail réalisé} \\
+\midrule
+Cadrage & Analyse du besoin restaurant, identification des acteurs, choix du périmètre et comparaison avec des solutions existantes. \\
+Conception & Modélisation UML, découpage des modules Django, définition des routes API et organisation des deux applications React. \\
+Réalisation backend & Implémentation des modèles, serializers, vues DRF, permissions, WebSocket, tâches Celery et services métier. \\
+Réalisation frontend & Construction du back-office staff et du portail client avec React, Vite, TypeScript et Tailwind CSS. \\
+Intégration & Connexion des frontends aux API, orchestration Docker Compose, synchronisation salle-cuisine et validation des flux de bout en bout. \\
+Validation & Exécution des tests pytest, Vitest et Playwright, capture des interfaces, correction documentaire et préparation du rapport final. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Les outils utilisés ont structuré le travail quotidien : Git pour suivre l'évolution du code, Docker Compose pour lancer l'environnement complet, Django REST Framework pour l'API, React et Vite pour les interfaces, MySQL pour la persistance, Redis et Celery pour le temps réel et les traitements asynchrones, puis pytest, Vitest et Playwright pour la validation.
+
+Les principales difficultés ont concerné la séparation claire des rôles, la synchronisation entre la salle et la cuisine, la cohérence entre paiements, commandes et fidélité, ainsi que la production d'un rapport fidèle au projet réel. Ces points ont été traités par un découpage modulaire, des tests ciblés et une documentation progressive des décisions.
+
+\section{Répartition du travail}
+La répartition a combiné spécialisation technique et validation croisée. Mehdi s'est concentré sur le socle backend, l'intégration, les tests et le déploiement. Ibtihal s'est concentrée sur les interfaces, l'expérience utilisateur, la documentation, les diagrammes UML et la validation fonctionnelle.
+
+\begin{table}[H]
+\centering
+\caption{Répartition synthétique des contributions}
+\label{tab:repartition-travail}
+\begin{tabularx}{\textwidth}{p{2.7cm}YY}
+\toprule
+\textbf{Membre} & \textbf{Tâches réalisées} & \textbf{Contribution principale} \\
+\midrule
+Mehdi & Backend Django/DRF, modèles métier, API, authentification JWT, permissions, Redis, Celery, Docker Compose, tests pytest, intégration et préparation des résultats de validation. & Fiabilisation du cœur applicatif, cohérence des modules métier et validation technique. \\
+Ibtihal & Frontends React staff et client, parcours utilisateur, interfaces UI, documentation du rapport, diagrammes UML, captures fonctionnelles et validation des scénarios métier. & Qualité de l'expérience utilisateur, lisibilité documentaire et cohérence fonctionnelle. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-Le contexte étudié justifie la création d'une solution centralisée et modulaire pour les restaurants. Tastify répond à cette problématique par une architecture full-stack couvrant les flux essentiels. Le chapitre suivant formalise les besoins, les acteurs et la conception du système.
+Le contexte étudié montre l'intérêt d'une application centralisée pour un restaurant. Tastify répond à ce besoin avec une architecture full-stack qui couvre les flux métier principaux. Le chapitre suivant détaille les acteurs, les besoins et la conception du système.

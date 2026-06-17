@@ -279,7 +279,7 @@ test.describe('cross-app realism', () => {
     await expect(backofficePage.getByText(`“${reservationNote}”`)).toBeVisible();
     const reservationCard = backofficePage.getByText(`“${reservationNote}”`).locator('xpath=ancestor::div[contains(@class,"group rounded-lg")]').first();
     await expect(reservationCard).toContainText('CONFIRMEE');
-    await reservationCard.getByRole('button', { name: 'CANCEL BOOKING' }).click();
+    await reservationCard.getByRole('button', { name: /Annuler la réservation/i }).click();
     await expect(reservationCard).toContainText('ANNULEE');
 
     await backofficePage.reload();

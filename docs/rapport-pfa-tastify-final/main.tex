@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper]{report}
-
+\usepackage{graphicx}
+\usepackage{tikz}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
@@ -14,13 +15,17 @@
 \usepackage{array}
 \usepackage{hyperref}
 \usepackage{microtype}
+\usepackage{pdflscape}
 
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \onehalfspacing
 \setlength{\parindent}{0.8cm}
 \setlength{\parskip}{0.2cm}
 \graphicspath{{figures/}}
-\emergencystretch=2em
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=2000
+\emergencystretch=3em
 
 \hypersetup{
   colorlinks=false,

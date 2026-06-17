@@ -3,10 +3,10 @@
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-Ce chapitre décrit la réalisation effective de Tastify. Il présente la stack technique, l'organisation du backend, les deux applications React, les mécanismes de sécurité, le temps réel, les modules métier, les interfaces et le déploiement.
+Ce chapitre décrit la réalisation de Tastify. Il présente la stack technique, l'organisation du backend, les deux applications React, la sécurité, le temps réel, les modules métier, les interfaces et le déploiement.
 
 \section{Stack technique}
-Le projet adopte une architecture web découplée. Le backend expose des API REST et un canal WebSocket ; les frontends consomment ces services depuis deux applications React.
+Le projet utilise une architecture web découplée. Le backend expose des API REST et un canal WebSocket ; les frontends consomment ces services depuis deux applications React.
 
 \begin{table}[H]
 \centering
@@ -22,7 +22,7 @@ Base de données & MySQL & Persistance relationnelle des données métier \cite{
 Cache et messages & Redis & Channel layer WebSocket et broker Celery \cite{redis}. \\
 Tâches asynchrones & Celery, Celery Beat & Analyse de sentiment, traitements de stock, orchestration et tâches planifiées \cite{celery}. \\
 Frontends & React, Vite, TypeScript, Tailwind CSS & Applications SPA staff et client \cite{react,vite,tailwind}. \\
-Tests & pytest, Vitest, Playwright & Validation backend, unitaire frontend et end-to-end. \\
+Tests & pytest, Vitest, Playwright & Validation backend, tests unitaires frontend et scénarios end-to-end. \\
 Déploiement & Docker Compose & Orchestration des services locaux et préparation au déploiement \cite{docker}. \\
 \bottomrule
 \end{tabularx}
@@ -53,10 +53,10 @@ La figure~\ref{fig:architecture-technique} présente l'organisation technique de
 \label{fig:architecture-technique}
 \end{figure}
 
-Cette architecture a deux avantages principaux : elle sépare les responsabilités et elle rend le projet déployable par services. Le backend reste le point d'entrée métier ; les frontends se concentrent sur l'expérience utilisateur.
+Cette architecture sépare les responsabilités. Le backend concentre la logique métier. Les deux frontends restent centrés sur leurs usages : gestion interne pour le staff, expérience client pour le portail public.
 
 \section{Organisation du backend}
-Le backend est organisé en applications Django spécialisées. Ce découpage limite la complexité d'un domaine et facilite les tests.
+Le backend est découpé en applications Django spécialisées. Ce choix rend chaque domaine plus lisible et simplifie les tests.
 
 \begin{longtable}{p{3.5cm}p{10cm}}
 \caption{Modules backend réalisés}
@@ -90,7 +90,7 @@ Les routes principales sont regroupées dans un routeur DRF. Le dépôt expose n
 La documentation OpenAPI est générée avec \code{drf-spectacular}. Les routes \code{/api/schema/}, \code{/api/docs/} et \code{/api/redoc/} permettent de consulter le schéma et de tester l'API pendant le développement.
 
 \section{Authentification et sécurité}
-L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le dépôt contient également une séparation staff/client afin d'éviter qu'une session d'un portail écrase l'autre.
+L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le dépôt contient aussi une séparation staff/client pour éviter qu'une session ouverte sur un portail écrase l'autre.
 
 \begin{figure}[H]
 \centering
@@ -115,7 +115,7 @@ L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend �
 Les accès sensibles sont protégés par les permissions DRF et par les gardes de rôles côté frontend. Le gérant accède aux écrans d'administration, le serveur aux fonctions de salle, le cuisinier au KDS, et le client au portail public et à son espace personnel.
 
 \section{Temps réel et Kitchen Display System}
-Le temps réel est assuré par Django Channels et Redis. Le canal WebSocket \code{/ws/staff/} accepte uniquement les rôles internes : gérant, serveur et cuisinier. Les événements staff permettent de mettre à jour les écrans sans rechargement complet.
+Le temps réel repose sur Django Channels et Redis. Le canal WebSocket \code{/ws/staff/} accepte seulement les rôles internes : gérant, serveur et cuisinier. Les événements staff mettent à jour les écrans sans recharger toute la page.
 
 \begin{figure}[H]
 \centering
@@ -141,7 +141,7 @@ Le temps réel est assuré par Django Channels et Redis. Le canal WebSocket \cod
 \label{fig:flux-kds}
 \end{figure}
 
-La figure~\ref{fig:flux-kds} montre le flux principal : le serveur crée la commande, le backend la persiste, puis publie un événement vers le groupe staff. Le cuisinier peut ensuite modifier les statuts de préparation.
+La figure~\ref{fig:flux-kds} montre le flux principal : le serveur crée la commande, le backend l'enregistre, puis publie un événement vers le groupe staff. Le cuisinier peut ensuite mettre à jour les statuts de préparation.
 
 \section{Applications frontend}
 Le dépôt contient deux applications React.
@@ -160,20 +160,27 @@ Portail client & 3003 & Accueil, menu, réservation, compte, inscription, connex
 \end{tabularx}
 \end{table}
 
-Les routes frontend confirment la séparation des usages. Dans le back-office, les routes sont protégées par rôle. Dans le portail client, certaines pages sont publiques et d'autres nécessitent une authentification.
+Les routes frontend confirment la séparation des usages. Dans le back-office, les routes sont protégées par rôle. Dans le portail client, certaines pages sont publiques et d'autres demandent une authentification.
 
 \section{Paiement et fidélité}
-Le module de paiement associe chaque paiement à une commande et peut relier des contributions aux lignes de commande. Cette structure permet de représenter un paiement global ou un partage de l'addition. Les méthodes présentes dans le modèle couvrent notamment les espèces, la carte et le QR.
+Le module de paiement associe chaque paiement à une commande. Il peut aussi relier des contributions aux lignes de commande, ce qui permet de représenter un paiement global ou un partage de l'addition. Les méthodes présentes dans le modèle couvrent notamment les espèces, la carte et le QR.
 
-Le module fidélité repose sur un profil lié à l'utilisateur, des transactions de points et des récompenses. Les paliers calculés à partir du solde de points permettent d'ajouter une dimension relation client sans complexifier le parcours principal.
+Le module fidélité repose sur un profil lié à l'utilisateur, des transactions de points et des récompenses. Les paliers calculés à partir du solde de points ajoutent une logique de relation client sans alourdir l'usage principal.
 
 \section{Stocks et prévision simple}
-Le module stock relie les plats à leurs ingrédients via une table de recette. Les mouvements de stock permettent de suivre les entrées, sorties et ajustements. Des seuils d'alerte sont présents afin d'identifier les ingrédients à surveiller.
+Le module stock relie les plats à leurs ingrédients grâce à une table de recette. Les mouvements de stock servent à suivre les entrées, les sorties et les ajustements. Les seuils d'alerte permettent d'identifier les ingrédients à surveiller.
 
-Le dépôt contient également un service d'approvisionnement et des éléments analytics liés à la météo. Aucune preuve d'un modèle prédictif avancé entraîné localement n'a été trouvée ; le rapport présente donc cette partie comme une estimation ou une logique métier simple, et non comme un système d'intelligence artificielle complet.
+Dans cette version, la partie approvisionnement et météo reste limitée à une estimation métier simple, utile pour anticiper certains besoins sans la confondre avec un modèle prédictif avancé entraîné localement.
 
 \section{Interfaces réalisées}
-Les captures existantes du dépôt sont intégrées comme preuves visuelles des modules principaux. Elles ne sont pas générées artificiellement.
+Les captures suivantes proviennent de l'environnement local de démonstration Tastify. Elles sont intégrées dans le corps du rapport afin de montrer directement les modules livrés.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_login_staff.png}
+\caption{Connexion staff : accès sécurisé au back-office}
+\label{fig:capture-login-staff}
+\end{figure}
 
 \begin{figure}[H]
 \centering
@@ -203,7 +210,44 @@ Les captures existantes du dépôt sont intégrées comme preuves visuelles des 
 \label{fig:capture-client}
 \end{figure}
 
-Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds} et \ref{fig:capture-client} couvrent les quatre espaces essentiels : pilotage, salle, cuisine et client. Des captures complémentaires recommandées sont listées en annexe afin de faciliter une éventuelle version enrichie du rapport.
+Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds} et \ref{fig:capture-client} couvrent quatre espaces du projet : pilotage, salle, cuisine et client.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_stock_admin.png}
+\caption{Back-office : gestion du stock et alertes d'ingrédients}
+\label{fig:capture-stock-admin}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_reservation_client.png}
+\caption{Portail client : réservation d'une table}
+\label{fig:capture-reservation-client}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_checkout_payment.png}
+\caption{Portail client : paiement et partage de l'addition}
+\label{fig:capture-checkout-payment}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_loyalty_client.png}
+\caption{Portail client : fidélité, points et récompenses}
+\label{fig:capture-loyalty-client}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_hr_admin.png}
+\caption{Back-office : gestion des ressources humaines}
+\label{fig:capture-hr-admin}
+\end{figure}
+
+Avec les captures d'avis et de sentiment du chapitre~\ref{chap:sentiment}, le rapport documente les parcours essentiels : authentification staff, pilotage, salle, cuisine, portail client, réservation, paiement, fidélité, stocks, avis et ressources humaines.
 
 \section{Déploiement Docker Compose}
 Le fichier \code{docker-compose.yml} orchestre les services de développement : base de données, Redis, backend, worker, beat, back-office et portail client.
@@ -230,8 +274,8 @@ Le fichier \code{docker-compose.yml} orchestre les services de développement : 
 \label{fig:docker-compose}
 \end{figure}
 
-Cette organisation prépare le projet à un déploiement sur serveur, tout en conservant un lancement reproductible en environnement de développement.
+Cette organisation prépare un déploiement sur serveur et garde un lancement reproductible en environnement de développement.
 
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-La réalisation de Tastify s'appuie sur une architecture moderne et cohérente : backend Django modulaire, API REST, WebSocket, tâches asynchrones, deux frontends React et déploiement Docker Compose. Les choix techniques répondent directement aux besoins métier formulés dans les chapitres précédents.
+La réalisation de Tastify repose sur un backend Django modulaire, des API REST, des WebSocket, des tâches asynchrones, deux frontends React et Docker Compose. Ces choix répondent aux besoins métier formulés dans les chapitres précédents.

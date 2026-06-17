@@ -3,10 +3,10 @@
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-Ce chapitre formalise les besoins de Tastify et présente la conception fonctionnelle et objet. La modélisation s'appuie sur UML, langage standard de représentation des systèmes logiciels \cite{uml}. Les diagrammes intégrés proviennent des fichiers déjà présents dans le dépôt.
+Ce chapitre précise les besoins de Tastify et présente la conception fonctionnelle et objet. La modélisation s'appuie sur UML, langage standard pour représenter les systèmes logiciels \cite{uml}. Les diagrammes intégrés proviennent des fichiers déjà présents dans le dépôt.
 
 \section{Acteurs du système}
-Tastify distingue quatre acteurs fonctionnels. Le système d'accès repose sur le rôle associé à l'utilisateur.
+Tastify distingue quatre acteurs fonctionnels. Les accès dépendent du rôle associé à chaque utilisateur.
 
 \begin{table}[H]
 \centering
@@ -16,7 +16,7 @@ Tastify distingue quatre acteurs fonctionnels. Le système d'accès repose sur l
 \toprule
 \textbf{Acteur} & \textbf{Responsabilités principales} \\
 \midrule
-Gérant & Piloter le restaurant, gérer le menu, les stocks, les employés, les paramètres, les réservations, les avis et les indicateurs. \\
+Gérant & Gérer le restaurant, gérer le menu, les stocks, les employés, les paramètres, les réservations, les avis et les indicateurs. \\
 Serveur & Consulter le plan de salle, créer les commandes, suivre les tables et déclencher l'encaissement. \\
 Cuisinier & Consulter les commandes cuisine, mettre à jour les statuts de préparation et signaler les plats prêts. \\
 Client & Consulter le menu, s'inscrire, se connecter, réserver, payer, consulter sa fidélité et laisser un avis. \\
@@ -54,7 +54,7 @@ Configuration & Paramétrer les informations du restaurant, la devise, certains 
 \end{longtable}
 
 \section{Besoins non fonctionnels}
-Au-delà des fonctionnalités, Tastify doit satisfaire des contraintes techniques nécessaires à un projet maintenable.
+Tastify doit aussi respecter plusieurs contraintes techniques pour rester maintenable.
 
 \begin{table}[H]
 \centering
@@ -75,11 +75,11 @@ Testabilité & Tests backend avec pytest, tests frontend avec Vitest et scénari
 \end{table}
 
 \section{Diagrammes de cas d'utilisation}
-Les diagrammes de cas d'utilisation décrivent les interactions principales entre les acteurs et les modules.
+Les diagrammes de cas d'utilisation décrivent les échanges principaux entre les acteurs et les modules.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.94\textwidth]{figure_08.jpeg}
+\includegraphics[width=\textwidth]{figure_08.jpeg}
 \caption{Diagramme de cas d'utilisation du back-office gérant}
 \label{fig:uc-admin}
 \end{figure}
@@ -88,36 +88,40 @@ Le diagramme~\ref{fig:uc-admin} regroupe les fonctions d'administration : menu, 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.94\textwidth]{figure_05.png}
+\includegraphics[width=\textwidth]{figure_05.png}
 \caption{Diagramme de cas d'utilisation des modules salle et cuisine}
 \label{fig:uc-salle-cuisine}
 \end{figure}
 
-Le diagramme~\ref{fig:uc-salle-cuisine} illustre le lien entre le serveur, la salle et le KDS. Il justifie l'utilisation du temps réel, car la commande doit passer rapidement de l'interface serveur vers l'écran cuisine.
+Le diagramme~\ref{fig:uc-salle-cuisine} montre le lien entre le serveur, la salle et le KDS. Il explique le besoin de temps réel : la commande doit passer de l'interface serveur vers l'écran cuisine sans attente inutile.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\textwidth]{figure_02.png}
+\includegraphics[width=0.98\textwidth]{figure_02.png}
 \caption{Diagramme de cas d'utilisation du portail client}
 \label{fig:uc-client}
 \end{figure}
 
-Le diagramme~\ref{fig:uc-client} représente les fonctions disponibles côté client : consultation du menu, réservation, commande, paiement, fidélité et avis.
+Le diagramme~\ref{fig:uc-client} présente les fonctions disponibles côté client : consultation du menu, réservation, commande, paiement, fidélité et avis.
 
 \section{Diagramme de classes}
 Le diagramme de classes présente les entités majeures et leurs relations.
 
-\begin{figure}[H]
+\clearpage
+\begin{landscape}
+\begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{figure_03.png}
+\includegraphics[width=0.95\linewidth,height=0.82\textheight,keepaspectratio]{figure_03.png}
 \caption{Diagramme de classes de Tastify}
 \label{fig:classes}
 \end{figure}
+\end{landscape}
+\clearpage
 
-Le diagramme~\ref{fig:classes} correspond aux domaines effectivement présents dans le backend Django : utilisateurs, plats, tables, commandes, réservations, paiements, avis et stock. Certaines entités détaillées dans le code ne sont pas toutes visibles sur le schéma initial ; elles sont donc précisées dans le modèle logique ci-dessous.
+Le diagramme~\ref{fig:classes} correspond aux domaines présents dans le backend Django : utilisateurs, plats, tables, commandes, réservations, paiements, avis et stock. Certaines entités détaillées dans le code ne sont pas toutes visibles sur le schéma initial ; elles sont donc précisées dans le modèle logique ci-dessous.
 
 \section{Modèle logique de données}
-Le modèle logique de données découle des modèles Django confirmés dans le dépôt. Le tableau~\ref{tab:mld-resume} ne liste pas toutes les colonnes techniques, mais il synthétise les tables structurantes et leurs relations.
+Le modèle logique de données est construit à partir des modèles Django confirmés dans le dépôt. Le tableau~\ref{tab:mld-resume} ne liste pas toutes les colonnes techniques. Il résume les tables structurantes et leurs relations.
 
 \begin{longtable}{p{3.2cm}p{4.2cm}p{6.2cm}}
 \caption{Synthèse du modèle logique de données}
@@ -148,10 +152,10 @@ Le modèle logique de données découle des modèles Django confirmés dans le d
 Les règles suivantes structurent le comportement attendu :
 
 \begin{itemize}
-  \item un utilisateur possède un rôle qui conditionne les routes et les actions accessibles ;
-  \item une commande peut être liée à une table, à un serveur et éventuellement à un client ;
+  \item un utilisateur possède un rôle qui détermine les routes et les actions accessibles ;
+  \item une commande peut être liée à une table, à un serveur et parfois à un client ;
   \item chaque ligne de commande conserve le prix unitaire du plat au moment de la commande ;
-  \item les statuts de lignes permettent de piloter le KDS : attente, préparation, prêt, servi ou annulé ;
+  \item les statuts de lignes pilotent le KDS : attente, préparation, prêt, servi ou annulé ;
   \item un paiement est toujours lié à une commande et peut comporter des contributions par ligne ;
   \item un avis appartient à un utilisateur et peut être lié à un plat ou à une commande ;
   \item une analyse de sentiment est associée à un seul avis ;
@@ -159,7 +163,7 @@ Les règles suivantes structurent le comportement attendu :
 \end{itemize}
 
 \section{Architecture fonctionnelle cible}
-La conception distingue deux expériences applicatives : une application staff pour les rôles internes et un portail client. Les deux consomment le même backend API.
+La conception sépare deux usages : une application staff pour les rôles internes et un portail client. Les deux utilisent le même backend API.
 
 \begin{figure}[H]
 \centering
@@ -183,8 +187,8 @@ La conception distingue deux expériences applicatives : une application staff p
 \label{fig:architecture-fonctionnelle}
 \end{figure}
 
-La figure~\ref{fig:architecture-fonctionnelle} montre le choix central du projet : un backend unique expose les services communs, tandis que les interfaces sont séparées selon les usages.
+La figure~\ref{fig:architecture-fonctionnelle} résume le choix principal du projet : un backend commun expose les services, tandis que les interfaces restent séparées selon les usages.
 
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-L'analyse des besoins et la conception mettent en évidence un système multi-acteurs, organisé autour d'un backend commun et de deux interfaces web. Les diagrammes existants fournissent une base UML, complétée par le modèle logique issu du code. Le chapitre suivant approfondit la fonctionnalité d'analyse de sentiment, essentielle pour exploiter les retours clients.
+L'analyse des besoins fait apparaître un système multi-acteurs, organisé autour d'un backend commun et de deux interfaces web. Les diagrammes existants donnent une base UML, complétée par le modèle logique tiré du code. Le chapitre suivant détaille l'analyse de sentiment, utilisée pour traiter les retours clients.
