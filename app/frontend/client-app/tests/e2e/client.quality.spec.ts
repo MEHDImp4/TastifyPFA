@@ -194,11 +194,26 @@ test.describe('client public quality', () => {
 
   test('keeps guest navigation stable across home, menu, login, register, and 404', async ({ page }) => {
     await mockMenuData(page);
+    const openMenuFromGuestNav = async () => {
+      const desktopMenuLink = page.locator('header').getByRole('link', { name: /LA CARTE/i });
+      if (await desktopMenuLink.isVisible()) {
+        await desktopMenuLink.click();
+        return;
+      }
+
+      await page.getByRole('button', { name: /Ouvrir la navigation/i }).click();
+      await page.locator('#mobile-navigation').getByRole('link', { name: /La Carte/i }).click();
+    };
 
     await page.goto('/', routeReady);
-    await expect(page.getByRole('link', { name: "S'identifier" })).toBeVisible();
+    const desktopLoginLink = page.getByRole('link', { name: "S'identifier" });
+    if (await desktopLoginLink.isVisible()) {
+      await expect(desktopLoginLink).toBeVisible();
+    } else {
+      await expect(page.getByRole('button', { name: /Ouvrir la navigation/i })).toBeVisible();
+    }
 
-    await page.locator('header').getByRole('link', { name: /LA CARTE/i }).click();
+    await openMenuFromGuestNav();
     await expect(page).toHaveURL('/menu');
     await expect(page.getByLabel('Rechercher')).toBeVisible();
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '../../store/cartStore';
@@ -38,6 +38,7 @@ const itemVariants = {
 export const CheckoutPage: React.FC = () => {
   const { items, updateQty, removeItem, clearCart } = useCartStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [tipPercent, setTipPercent] = useState<number>(0);
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ export const CheckoutPage: React.FC = () => {
   const grandTotal = subtotal + serviceTax + tipAmount;
 
   const handleOrder = async () => {
+    if (isSubmittingRef.current || isSubmitting) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     try {
       await api.post('/commandes/', {
@@ -64,6 +67,7 @@ export const CheckoutPage: React.FC = () => {
     } catch (err: any) {
       toast.error('Une erreur est survenue');
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -221,7 +225,7 @@ export const CheckoutPage: React.FC = () => {
                         {[10, 15, 20, 25].map(p => (
                             <button 
                                 key={p} onClick={() => setTipPercent(p)}
-                                className={`py-4 rounded-2xl border-2 font-sans text-xs font-black uppercase tracking-widest transition-all ${tipPercent === p ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-lowest border-outline-variant/30 text-on-surface-variant hover:border-primary/50'}`}
+                                className={`py-4 rounded-2xl border-2 font-sans text-xs font-black uppercase tracking-widest transition-all ${tipPercent === p ? 'bg-primary border-primary text-on-primary shadow-xl scale-105' : 'bg-surface-container-lowest border-outline text-on-surface hover:border-primary/50'}`}
                             >
                                 {p}%
                             </button>
