@@ -102,10 +102,13 @@ When you put the app behind HTTPS, update `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_
 `CSRF_TRUSTED_ORIGINS`, `FRONTEND_BASE_URL`, then switch those two security flags to `True`.
 For QR payments, `FRONTEND_BASE_URL` must point to the public client portal origin, for example
 `https://tastify-client.mehdidiouri.dev`, so generated links use `/pay/<token>` on the frontend.
-The backoffice frontend also bakes `VITE_API_BASE_URL`, `VITE_WS_BASE_URL`, and
-`VITE_STAFF_WS_PATH` at image build time. Rebuild the frontend image after changing those
-values. For a same-origin reverse proxy, keep `VITE_API_BASE_URL=/api`,
-`VITE_WS_BASE_URL=` and `VITE_STAFF_WS_PATH=/ws/staff/`.
+The frontend images bake `VITE_API_BASE_URL`, `VITE_MEDIA_BASE_URL`,
+`VITE_WS_BASE_URL`, and `VITE_STAFF_WS_PATH` at image build time. For a
+three-domain deployment, set `VITE_API_BASE_URL=https://api.example.com/api`,
+`VITE_MEDIA_BASE_URL=https://api.example.com`, and
+`VITE_WS_BASE_URL=https://api.example.com`, then rebuild the frontend images.
+The API reverse proxy must forward to `http://UNRAID_IP:BACKEND_PORT`; otherwise
+the browser will see `502 Bad Gateway` even if the frontend bundle is correct.
 
 Useful Unraid maintenance commands:
 

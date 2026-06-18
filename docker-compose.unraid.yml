@@ -46,6 +46,8 @@ services:
       COLLECTSTATIC_ON_STARTUP: "1"
       SEED_ON_STARTUP: "${SEED_ON_STARTUP:-0}"
       SEED_COMMAND: "seed_all"
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
     volumes:
       - /mnt/user/appdata/tastify/media:/app/media
       - /mnt/user/appdata/tastify/staticfiles:/app/staticfiles

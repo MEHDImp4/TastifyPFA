@@ -19,6 +19,11 @@ const imageBackedPlat = {
   image: '/media/plats/tagine-poulet-hero.png',
 };
 
+const tinyPng = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'base64',
+);
+
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
@@ -118,7 +123,7 @@ test.describe('menu catalog', () => {
     await expect(page.getByText('DÉTAILS DU PLAT')).toBeVisible();
     await expect(page.getByRole('button', { name: /Ajouter au panier/i })).toBeVisible();
 
-    await page.mouse.click(16, 16);
+    await page.getByRole('button', { name: /Fermer le détail du plat/i }).click();
     await expect(page.getByText('DÉTAILS DU PLAT')).toHaveCount(0);
     await expect(page).toHaveURL('/menu');
   });
@@ -153,6 +158,13 @@ test.describe('menu catalog', () => {
   });
 
   test('renders image-backed dishes safely in both the catalog and detail modal', async ({ page }) => {
+    await page.route('**/media/plats/tagine-poulet-hero.png', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'image/png',
+        body: tinyPng,
+      });
+    });
     await page.unroute(/\/api\/plats\/?(\?.*)?$/);
     await page.route(/\/api\/plats\/?(\?.*)?$/, async (route) => {
       const url = new URL(route.request().url());
@@ -176,13 +188,12 @@ test.describe('menu catalog', () => {
     await page.goto('/menu', routeReady);
     await page.getByRole('button', { name: 'Tous les plats' }).click();
 
-    const tagineCard = page.getByTestId('menu-card-21');
     await expect(page.getByRole('img', { name: 'Tagine Poulet' }).first()).toHaveAttribute(
       'src',
       /tagine-poulet-hero\.png/,
     );
 
-    await tagineCard.click();
+    await page.getByRole('button', { name: /Voir le détail de Tagine Poulet/i }).click();
     await expect(page.getByText('DÉTAILS DU PLAT')).toBeVisible();
     await expect(page.getByRole('img', { name: 'Tagine Poulet' }).last()).toHaveAttribute(
       'src',
