@@ -341,8 +341,9 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.goto('/maintenance');
       await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
-      await expect(page.getByRole('button', { name: /manual sync/i })).toBeVisible();
-      await expect(page.getByRole('button', { name: /export logs/i })).toBeVisible();
+      await expect(page.getByText('Journal Événements')).toBeVisible();
+      await expect(page.getByText('Support interne')).toBeVisible();
+      await expect(page.getByText('admin@tastify.local')).toBeVisible();
     });
 
     test('keeps dense manager screens readable across reduced laptop and tablet widths', async ({ page }) => {

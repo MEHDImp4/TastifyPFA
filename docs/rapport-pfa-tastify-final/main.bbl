@@ -1,0 +1,128 @@
+\begin{thebibliography}{10}
+
+\bibitem{marbert}
+Muhammad Abdul-Mageed, AbdelRahim Elmadany, and El~Moatez~Billah Nagoudi.
+\newblock Arbert and marbert: Deep bidirectional transformers for arabic.
+\newblock {\em Proceedings of ACL-IJCNLP}, 2021.
+
+\bibitem{xlmt}
+Francesco Barbieri, Luis~Espinosa Anke, and Jose Camacho-Collados.
+\newblock Xlm-t: Multilingual language models in twitter for sentiment analysis
+  and beyond.
+\newblock {\em Proceedings of LREC}, 2022.
+
+\bibitem{uml}
+Grady Booch, James Rumbaugh, and Ivar Jacobson.
+\newblock {\em The Unified Modeling Language User Guide}.
+\newblock Addison-Wesley, 2005.
+
+\bibitem{celery}
+{Celery Project}.
+\newblock Celery documentation.
+\newblock \url{https://docs.celeryq.dev/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{xlmroberta}
+Alexis Conneau, Kartikay Khandelwal, Naman Goyal, Vishrav Chaudhary, Guillaume
+  Wenzek, Francisco Guzmán, Edouard Grave, Myle Ott, Luke Zettlemoyer, and
+  Veselin Stoyanov.
+\newblock Unsupervised cross-lingual representation learning at scale.
+\newblock {\em Proceedings of ACL}, 2020.
+
+\bibitem{distilcamembert}
+{Crédit Mutuel Arkéa}.
+\newblock Distilcamembert-sentiment.
+\newblock \url{https://huggingface.co/cmarkea/distilcamembert-base-sentiment},
+  2026.
+\newblock Fiche modèle Hugging Face consultée en juin 2026.
+
+\bibitem{bert}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock In {\em Proceedings of NAACL-HLT}, 2019.
+
+\bibitem{channels}
+{Django Channels Project}.
+\newblock Django channels documentation.
+\newblock \url{https://channels.readthedocs.io/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{django}
+{Django Software Foundation}.
+\newblock Django documentation.
+\newblock \url{https://docs.djangoproject.com/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{docker}
+{Docker Inc.}
+\newblock Docker compose documentation.
+\newblock \url{https://docs.docker.com/compose/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{drf}
+{Encode OSS}.
+\newblock Django rest framework documentation.
+\newblock \url{https://www.django-rest-framework.org/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{hftextclassification}
+{Hugging Face}.
+\newblock Inference providers: Text classification.
+\newblock
+  \url{https://huggingface.co/docs/inference-providers/tasks/text-classification},
+  2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{simplejwt}
+{Jazzband}.
+\newblock Simple jwt documentation.
+\newblock \url{https://django-rest-framework-simplejwt.readthedocs.io/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{camembert}
+Louis Martin, Benjamin Muller, Pedro Javier~Ortiz Suárez, Yoann Dupont,
+  Laurent Romary, Éric Villemonte de~la Clergerie, Djamé Seddah, and Benoît
+  Sagot.
+\newblock Camembert: a tasty french language model.
+\newblock {\em Proceedings of ACL}, 2020.
+
+\bibitem{react}
+{Meta Open Source}.
+\newblock React documentation.
+\newblock \url{https://react.dev/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{nlptown}
+{NLP Town}.
+\newblock bert-base-multilingual-uncased-sentiment.
+\newblock
+  \url{https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment},
+  2026.
+\newblock Fiche modèle Hugging Face consultée en juin 2026.
+
+\bibitem{mysql}
+{Oracle}.
+\newblock Mysql 8.0 reference manual.
+\newblock \url{https://dev.mysql.com/doc/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{redis}
+{Redis}.
+\newblock Redis documentation.
+\newblock \url{https://redis.io/docs/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{tailwind}
+{Tailwind Labs}.
+\newblock Tailwind css documentation.
+\newblock \url{https://tailwindcss.com/docs}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{vite}
+{Vite}.
+\newblock Vite documentation.
+\newblock \url{https://vite.dev/}, 2026.
+\newblock Consulté en juin 2026.
+
+\end{thebibliography}

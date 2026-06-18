@@ -10,7 +10,7 @@ L'implémentation couvre quatre familles de tests ou de contrôles.
 
 \begin{table}[H]
 \centering
-\caption{Familles de tests présentes dans le dépôt}
+\caption{Familles de tests dans le projet}
 \label{tab:familles-tests}
 \begin{tabularx}{\textwidth}{p{3.4cm}p{4cm}Y}
 \toprule
@@ -40,7 +40,7 @@ Backend pytest & \pathcode{docker compose exec -T -e DJANGO_SETTINGS_MODULE=tast
 Vitest back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:unit} & 25 tests passed, 8 fichiers, 4.55 s & Les tests unitaires du back-office passent entièrement. \\
 Vitest client & \pathcode{npm --prefix app/frontend/client-app run test:unit} & 4 tests passed, 2 fichiers, 7.18 s & Les tests unitaires du portail client passent entièrement. \\
 Playwright client & \pathcode{npm --prefix app/frontend/client-app run test:e2e} & 79 passed, 1 failed, 1.6 min & La quasi-totalité des scénarios client passe ; l'échec restant concerne un sélecteur de test ambigu sur deux boutons \code{Ajouter au panier}, pas une règle métier bloquante. \\
-CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dessus & Workflow disponible, validation locale exécutée & Le workflow CI automatise les mêmes familles de contrôles ; la preuve intégrée montre la configuration et les résultats locaux équivalents. \\
+CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dessus & Workflow disponible, validation locale exécutée & Le workflow CI automatise les mêmes familles de contrôles ; les rapports intégrés montrent la configuration et les résultats locaux équivalents. \\
 \bottomrule
 \end{tabularx}
 \end{table}

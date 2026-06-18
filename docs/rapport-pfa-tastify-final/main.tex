@@ -16,6 +16,8 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 \usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{amsmath}
 
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \onehalfspacing
@@ -41,13 +43,17 @@
 \newcommand{\schemaNode}[1]{\fbox{\begin{minipage}{0.18\textwidth}\centering\small #1\end{minipage}}}
 \newcommand{\schemaArrow}{\quad$\longrightarrow$\quad}
 
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+
 \begin{document}
 
 \input{chapters/00_frontmatter}
 
 \tableofcontents
 \listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
 \listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
 
 \cleardoublepage
 \pagenumbering{arabic}
@@ -59,10 +65,12 @@
 \input{chapters/05_realisation}
 \input{chapters/06_tests}
 \input{chapters/07_conclusion}
-\appendix
-\input{chapters/08_annexes}
-
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliographie}
 \bibliographystyle{plain}
 \bibliography{bibliography}
+
+\appendix
+\input{chapters/08_annexes}
 
 \end{document}

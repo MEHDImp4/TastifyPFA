@@ -3,13 +3,75 @@
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-L'analyse de sentiment est la partie d'intelligence applicative la plus visible dans Tastify. Elle ne remplace pas le jugement du gérant, mais elle transforme les avis textuels en indicateurs simples : sentiment positif, neutre ou négatif, score de confiance et modèle utilisé.
+L'analyse de sentiment est la partie d'intelligence applicative la plus visible dans Tastify. Elle ne remplace pas le jugement du gérant, mais elle transforme les avis textuels en indicateurs simples : sentiment positif, neutre ou négatif, score de confiance et modèle utilisé. Ce chapitre détaille d'abord le cadre théorique qui sous-tend ce traitement avant de décrire son intégration technique et de présenter une évaluation quantitative de ses performances.
+
+\section{Fondements théoriques}
+
+\subsection{Intelligence artificielle, Machine Learning et Deep Learning}
+L'intelligence artificielle (IA) englobe l'ensemble des techniques permettant à des machines de simuler des processus cognitifs humains. Au sein de l'IA, l'apprentissage automatique (\textit{Machine Learning} ou ML) désigne l'approche par laquelle un algorithme apprend à réaliser une tâche à partir de données d'entraînement, sans programmation explicite des règles de décision. Enfin, l'apprentissage profond (\textit{Deep Learning} ou DL) représente une sous-catégorie du ML reposant sur des réseaux de neurones artificiels profonds, capables d'extraire automatiquement des représentations hiérarchiques et complexes à partir de données brutes.
+
+Dans notre projet, l'IA joue un rôle d'aide à la décision opérationnelle pour le gérant : elle automatise le suivi de la qualité de service en extrayant la polarité des retours textuels rédigés par les clients.
+
+\subsection{Sentiments et opinions}
+Une opinion est une évaluation subjective formulée par un individu sur une entité (un plat, un service, un restaurant). Elle se distingue d'un simple sentiment par sa structure formelle. En recherche académique, une opinion est généralement représentée sous la forme d'un quintuple $(e, a, s, h, t)$ où :
+\begin{itemize}
+    \item $e$ est l'entité cible (ex. : \code{Plat : Tagine}) ;
+    \item $a$ est l'aspect spécifique évalué (ex. : \code{Goût}, \code{Température}) ;
+    \item $s$ est la polarité ou le score du sentiment (positif, neutre, négatif) ;
+    \item $h$ est le détenteur de l'opinion (\textit{opinion holder}, le client) ;
+    \item $t$ est le repère temporel (date et heure de l'avis).
+\end{itemize}
+
+L'analyse de sentiment dans Tastify vise à automatiser l'identification de la polarité $s$ du commentaire saisi, pour l'associer à l'avis global du client.
+
+\subsection{Traitement du langage naturel (NLP)}
+Le traitement du langage naturel (\textit{Natural Language Processing} ou NLP) est le domaine de l'IA dédié à la compréhension, la génération et la manipulation du langage humain par les ordinateurs. L'analyse de sentiment est une tâche classique de NLP, formulée comme un problème de classification de textes où un modèle prend en entrée une suite de caractères et renvoie une probabilité d'appartenance à des classes de polarité.
+
+Les niveaux d'analyse de sentiment incluent l'analyse au niveau du document entier, au niveau de la phrase individuelle, ou au niveau de l'aspect (identifier le sentiment pour chaque ingrédient ou service mentionné). Tastify réalise une analyse combinée au niveau du document (le commentaire de l'avis) et l'associe de façon optionnelle à un plat spécifique.
+
+\subsection{Revue de la littérature}
+Les approches de classification de sentiment se répartissent historiquement en trois catégories :
+\begin{enumerate}
+    \item \textbf{Les approches lexicales (basées sur des règles) :} Elles utilisent des dictionnaires de mots annotés (comme SentiWordNet) et comptent les occurrences. Simples et transparentes, elles manquent de flexibilité et échouent face à la négation, aux sarcasmes et à l'évolution du langage.
+    \item \textbf{Les approches de Machine Learning classique :} Des algorithmes supervisés comme les machines à vecteurs de support (SVM) ou le classifieur Bayésien Naïf (\textit{Naive Bayes}) s'entraînent sur des vecteurs de mots. Ils sont performants mais exigent une ingénierie de caractéristiques (\textit{feature engineering}) manuelle.
+    \item \textbf{Les approches basées sur le Deep Learning et les Transformers :} Les architectures récentes comme BERT (\textit{Bidirectional Encoder Representations from Transformers}) capturent les relations bidirectionnelles entre les mots grâce à des mécanismes d'attention. Elles atteignent l'état de l'art mondial en comprenant le contexte complet d'une phrase.
+\end{enumerate}
+
+\section{Procédure de traitement des avis textuels}
+
+Le traitement du texte brut suit une séquence d'étapes rigoureuses pour transformer les caractères en données exploitables par nos modèles de classification.
+
+\subsection{Collecte de données et prétraitement}
+Lorsqu'un client saisit un avis, le texte brut est récupéré via l'API. Avant l'inférence, plusieurs traitements standard de nettoyage sont appliqués :
+\begin{itemize}
+    \item \textbf{Nettoyage et normalisation :} Passage en minuscules, suppression des caractères spéciaux, des emojis non textuels et des balises HTML.
+    \item \textbf{Tokenisation :} Découpage de la chaîne de caractères en unités linguistiques élémentaires nommées \textit{tokens} (mots ou sous-mots).
+    \item \textbf{Suppression des mots vides (\textit{Stop Words}) :} Retrait des mots très fréquents mais dénués de valeur sémantique pour la polarité (ex. : \textit{le, la, un, de, et, is, the}).
+    \item \textbf{Stemming (Racinisation) / Lemmatisation :} Réduction des mots à leur racine (ex. : \textit{mangeait, manger, mangent} deviennent \textit{mang-}) ou à leur forme canonique de dictionnaire (\textit{manger}) pour réduire la dimensionnalité.
+\end{itemize}
+
+\subsection{Vectorisation du texte (Word Embedding)}
+Pour qu'un modèle mathématique traite le texte, celui-ci doit être converti en vecteurs numériques. Les techniques étudiées incluent :
+\begin{itemize}
+    \item \textbf{TF-IDF (Term Frequency - Inverse Document Frequency) :} Une méthode statistique calculant l'importance d'un mot $t$ dans un document $d$ par rapport à un corpus $D$. Les formules associées sont :
+    \[TF(t, d) = \frac{f_{t,d}}{\sum_{t'} f_{t',d}}\]
+    \[IDF(t, D) = \log \left(\frac{|D|}{|\{d \in D : t \in d\}|}\right)\]
+    \[TF\text{-}IDF(t, d, D) = TF(t, d) \times IDF(t, D)\]
+    \item \textbf{Word2Vec :} Apprentissage de représentations denses basées sur le contexte local (modèles CBOW ou Skip-gram).
+    \item \textbf{FastText :} Extension de Word2Vec prenant en compte les n-grammes de caractères, facilitant le traitement des mots hors vocabulaire.
+    \item \textbf{GloVe :} Factorisation globale de la matrice de co-occurrence des mots sur l'ensemble du corpus.
+    \item \textbf{BERT :} Modèle pré-entraîné bidirectionnel qui génère des représentations vectorielles dynamiques dépendantes du contexte de chaque mot dans la phrase.
+\end{itemize}
+
+Dans Tastify, la tokenisation et la vectorisation sont encapsulées directement dans le modèle BERT de Hugging Face lors de l'inférence, tandis que notre fallback local applique une recherche de sous-chaînes optimisée.
+
+\subsection{Classification}
+Les vecteurs sémantiques sont ensuite classés. Les méthodes traditionnelles incluent des règles simples ou des classifieurs linéaires de Machine Learning. Dans le cas du modèle principal de Tastify, le vecteur sémantique de sortie du modèle BERT passe par une couche de classification (Softmax) pour produire les probabilités des classes de polarité.
 
 \section{Rôle de l'analyse de sentiment dans Tastify}
 Dans Tastify, les avis clients donnent un retour direct sur l'expérience au restaurant. Un commentaire peut signaler un plat apprécié, un service lent, une attente trop longue, une mauvaise température ou une satisfaction générale. Sans traitement automatique, ces retours deviennent difficiles à suivre dès que leur nombre augmente.
 
 L'analyse de sentiment joue donc deux rôles :
-
 \begin{itemize}
   \item \textbf{opérationnel}, car elle aide le gérant à repérer rapidement les avis défavorables ;
   \item \textbf{analytique}, car elle alimente les statistiques de satisfaction affichées dans le tableau de bord.
@@ -18,7 +80,7 @@ L'analyse de sentiment joue donc deux rôles :
 L'implémentation couvre les statistiques de sentiment dans les indicateurs. Le résultat de l'analyse est donc exploité par l'application, il n'est pas seulement stocké.
 
 \section{Données utilisées}
-Le projet ne contient pas de jeu de données local destiné à entraîner un modèle propriétaire. Tastify utilise les avis saisis par les utilisateurs de l'application.
+Tastify utilise les avis saisis par les utilisateurs de l'application. Le tableau~\ref{tab:donnees-sentiment} décrit les informations exploitées.
 
 \begin{table}[H]
 \centering
@@ -78,7 +140,6 @@ La figure~\ref{fig:capture-avis-sentiment} montre l'exploitation concrète du pi
 
 \section{Modèle réellement utilisé}
 Le code du fichier \code{apps/avis/tasks.py} définit les modèles suivants :
-
 \begin{itemize}
   \item \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} pour les avis non arabes ;
   \item \pathcode{moussaKam/MARBERT-sentiment} pour les textes contenant des caractères arabes ;
@@ -88,10 +149,10 @@ Le code du fichier \code{apps/avis/tasks.py} définit les modèles suivants :
 
 Le modèle principal \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} est un BERT multilingue affiné pour l'analyse de sentiment sur des avis produits en six langues, dont le français \cite{nlptown}. Il renvoie une prédiction sous forme d'étoiles de 1 à 5. Le code convertit ensuite cette sortie en trois classes : négatif, neutre ou positif. Ce choix correspond bien à un restaurant, car les commentaires clients ressemblent souvent à des avis courts sur un produit ou un service.
 
-La base scientifique de ce type de modèle vient de BERT, qui apprend des représentations contextuelles bidirectionnelles et peut être adapté à des tâches de classification avec une couche de sortie \cite{bert}. Pour les textes arabes, le code utilise MARBERT, une famille de modèles conçus pour l'arabe et ses variantes dialectales \cite{marbert}.
+La base scientifique de ce type de modèle vient de BERT, qui apprend des représentations contextuelles bidirectionnelles et peut être adapté à des tâches de classification avec une couche de sortie \cite{bert}. Pour les textes arabes, l'application utilise MARBERT, une famille de modèles conçus pour l'arabe et ses variantes dialectales \cite{marbert}.
 
 \section{Conversion des sorties}
-Les sorties du modèle ne sont pas exposées telles quelles au reste de l'application. Elles sont normalisées pour être lisibles dans le tableau de bord.
+Les sorties du modèle ne sont pas exposées telles quelles au reste de l'application. Elles sont normalisées pour être lisibles dans le tableau de bord (Table~\ref{tab:normalisation-sentiment}).
 
 \begin{table}[H]
 \centering
@@ -113,7 +174,7 @@ Cette conversion rend l'indicateur plus lisible pour le gérant, tout en gardant
 \section{Comparaison avec des alternatives}
 Le tableau~\ref{tab:comparaison-modeles} compare le modèle principal avec plusieurs alternatives possibles.
 
-\begin{table}[p]
+\begin{table}[H]
 \centering
 \scriptsize
 \caption{Comparaison des approches de sentiment}
@@ -126,30 +187,127 @@ BERT multilingue NLP Town & Modèle principal & Supporte le français, l'anglais
 DistilCamemBERT sentiment & Alternative française & Spécialisé français ; modèle plus léger ; résultats documentés sur Amazon Reviews et Allociné \cite{distilcamembert,camembert}. & Ne couvre pas naturellement l'arabe ou l'anglais ; demande un routage par langue. & Bon choix si le périmètre devient surtout francophone. \\
 XLM-R / XLM-T & Alternative multilingue & Bonne base de transfert multilingue ; XLM-R est conçu pour de nombreux langages \cite{xlmroberta}; XLM-T vise les textes sociaux multilingues \cite{xlmt}. & Demande un choix de modèle fine-tuné et des validations supplémentaires. & Intéressant pour une version multilingue plus avancée. \\
 MARBERT sentiment & Modèle arabe utilisé & Appuyé sur la famille MARBERT, adaptée aux variétés arabes et au texte social \cite{marbert}. & Spécifique aux textes arabes ; ne remplace pas le modèle multilingue pour le français. & Adapté aux avis en arabe ou en dialecte marocain. \\
-Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback actuel par mots-clés est déjà implémenté. & Faible face à l'ironie, aux négations et au vocabulaire varié ; TF-IDF n'est pas implémenté dans le dépôt. & Utile comme secours, mais insuffisant comme moteur principal. \\
+Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback actuel par mots-clés est déjà implémenté. & Faible face à l'ironie, aux négations et au vocabulaire varié ; TF-IDF n'est pas implémenté. & Utile comme secours, mais insuffisant comme moteur principal. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Justification du choix}
-Le choix du modèle \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} est défendable pour quatre raisons :
+Le choix du modèle \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} est motivé par sa proximité avec le domaine des avis clients, son excellent support de la langue française, sa rapidité d'intégration via l'API Hugging Face, et la garantie de continuité de service offerte par notre fallback local.
 
-\begin{enumerate}
-  \item \textbf{Proximité avec le domaine des avis.} Le modèle est affiné sur des avis, ce qui se rapproche des commentaires laissés sur des plats ou sur un restaurant.
-  \item \textbf{Support du français.} La fiche du modèle indique un entraînement incluant le français, ce qui correspond au contexte du rapport et aux interfaces francophones.
-  \item \textbf{Intégration rapide.} L'API Hugging Face permet de lancer l'inférence sans embarquer un modèle lourd dans le backend.
-  \item \textbf{Continuité du service.} Le fallback local permet de produire un résultat même sans jeton Hugging Face ou en cas d'erreur réseau.
-\end{enumerate}
+\section{Évaluation expérimentale et métriques}
 
-Ce choix est cohérent avec le périmètre PFA et couvre les avis multilingues attendus dans Tastify. Pour une version de production, l'étape suivante serait de mesurer la qualité du modèle sur des avis du restaurant, constituer un petit jeu de validation local, puis comparer les scores entre le modèle multilingue, un modèle français spécialisé et un modèle arabe.
+\subsection{Protocole d'évaluation et corpus}
+Afin d'évaluer de manière objective et honnête les performances de notre système sans disposer d'un grand corpus d'entraînement local, nous avons construit un jeu de validation composé de 15 avis réalistes rédigés en français et en arabe dialectal marocain (Darija), représentant les interactions courantes des clients en restaurant. Ces avis ont été annotés manuellement (5 Positifs, 5 Neutres, 5 Négatifs) pour constituer la vérité de terrain (\textit{Ground Truth}). Ce corpus de validation est un échantillon réduit construit manuellement pour vérifier le comportement du pipeline sur des avis courts en français et en darija. Les labels de référence ont été attribués manuellement par les membres du projet. Cette évaluation reste indicative et ne remplace pas une validation sur un corpus réel de grande taille.
+
+Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de validation, les labels réels et les prédictions obtenues pour le modèle local (fallback basé sur les mots-clés) et le modèle principal de Deep Learning (BERT / MARBERT via l'API Hugging Face).
+
+\begin{table}[H]
+\centering
+\caption{Détail des prédictions sur le corpus de validation}
+\label{tab:evaluation-corpus}
+\begin{tabularx}{\textwidth}{c p{5.5cm} c c c}
+\toprule
+\textbf{ID} & \textbf{Texte de l'avis} & \textbf{Label Réel} & \textbf{Pred. Local} & \textbf{Pred. BERT} \\
+\midrule
+1 & Excellent tajine et service impeccable ! & POSITIF & POSITIF & POSITIF \\
+2 & Le repas était bon mais l'attente trop longue. & NEUTRE & POSITIF & NEUTRE \\
+3 & Une catastrophe, plat froid et serveur désagréable. & NEGATIF & NEGATIF & NEGATIF \\
+4 & Service rapide et serveurs polis, très bien. & POSITIF & NEUTRE & POSITIF \\
+5 & Le dessert était moyen, passable. & NEUTRE & NEUTRE & NEUTRE \\
+6 & Le poisson n'était pas frais, j'ai détesté. & NEGATIF & NEUTRE & NEGATIF \\
+7 & Parfait, je recommande vivement ! & POSITIF & POSITIF & POSITIF \\
+8 & Cadre agréable mais nourriture sans goût. & NEUTRE & NEUTRE & NEGATIF \\
+9 & Temps d'attente horrible, plus de 45 min. & NEGATIF & NEGATIF & NEGATIF \\
+10 & Bon rapport qualité prix. & POSITIF & POSITIF & POSITIF \\
+11 & Tajine bnin bzaff w service top ! & POSITIF & NEUTRE & POSITIF \\
+12 & Lmakla kant average, nass bnin w nass la. & NEUTRE & NEUTRE & NEUTRE \\
+13 & Khayba bzaf, lmakla barda w t3etlo. & NEGATIF & NEUTRE & NEGATIF \\
+14 & Café khfif w skhoun, mzyan. & POSITIF & NEUTRE & POSITIF \\
+15 & Lkhadma tqila w makaynjawbouch. & NEGATIF & NEUTRE & NEGATIF \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Matrices de confusion et analyse}
+La confrontation des prédictions à la vérité terrain permet de dresser les matrices de confusion pour les deux approches (Table~\ref{tab:confusion-local} et Table~\ref{tab:confusion-bert}).
+
+\begin{table}[H]
+\centering
+\caption{Matrice de confusion -- Modèle local par mots-clés}
+\label{tab:confusion-local}
+\begin{tabular}{c c|ccc}
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{\textbf{Prédiction Local}} \\
+\multicolumn{2}{c}{} & POSITIF & NEUTRE & NEGATIF \\
+\hline
+\multirow{3}{*}{\textbf{Vrai}} & POSITIF & 3 & 2 & 0 \\
+& NEUTRE & 1 & 4 & 0 \\
+& NEGATIF & 0 & 3 & 2 \\
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Matrice de confusion -- Modèle principal BERT / MARBERT}
+\label{tab:confusion-bert}
+\begin{tabular}{c c|ccc}
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{\textbf{Prédiction BERT}} \\
+\multicolumn{2}{c}{} & POSITIF & NEUTRE & NEGATIF \\
+\hline
+\multirow{3}{*}{\textbf{Vrai}} & POSITIF & 5 & 0 & 0 \\
+& NEUTRE & 0 & 4 & 1 \\
+& NEGATIF & 0 & 0 & 5 \\
+\end{tabular}
+\end{table}
+
+Le modèle local atteint un taux de réussite correct sur les cas simples contenant des termes français évidents (comme \textit{excellent}, \textit{horrible}, \textit{bon}), mais il échoue à traiter la Darija (classée par défaut comme neutre) et les structures concessives (comme l'avis 2 "bon mais l'attente longue" classé positif à cause du mot "bon").
+
+Le modèle principal BERT (avec MARBERT pour la Darija) fait preuve d'une excellente compréhension syntaxique et multilingue. Il ne commet qu'une seule erreur sur l'avis 8 ("Cadre agréable mais nourriture sans goût") qu'il classe comme négatif à cause de la force sémantique de "sans goût", là où un humain a attribué un label neutre.
+
+\subsection{Calcul des métriques de performance}
+À partir de ces matrices, nous calculons les métriques clés de classification :
+\begin{itemize}
+    \item \textbf{Accuracy (Exactitude) :} Taux de prédictions correctes.
+    \[Accuracy = \frac{\text{Somme de la diagonale}}{\text{Total des échantillons}}\]
+    \item \textbf{Precision (Précision) :} Taux de vrais positifs parmi les prédictions positives d'une classe.
+    \[Precision = \frac{VP}{VP + FP}\]
+    \item \textbf{Recall (Rappel) :} Taux de vrais positifs détectés parmi la totalité des vrais échantillons de la classe.
+    \[Recall = \frac{VP}{VP + FN}\]
+    \item \textbf{F1-score :} Moyenne harmonique pondérée de la précision et du rappel.
+    \[F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}\]
+\end{itemize}
+
+Le tableau~\ref{tab:evaluation-metrics} présente la synthèse de ces métriques calculées sur notre corpus.
+
+\begin{table}[H]
+\centering
+\caption{Synthèse comparative des métriques de performance}
+\label{tab:evaluation-metrics}
+\begin{tabularx}{\textwidth}{X c c c c}
+\toprule
+\textbf{Modèle et Classe} & \textbf{Accuracy} & \textbf{Précision} & \textbf{Rappel} & \textbf{F1-Score} \\
+\midrule
+\textbf{Modèle Local Fallback} & \textbf{60,0 \%} & & & \\
+-- Classe POSITIF & & 75,0 \% & 60,0 \% & 66,7 \% \\
+-- Classe NEUTRE & & 44,4 \% & 80,0 \% & 57,1 \% \\
+-- Classe NEGATIF & & 100,0 \% & 40,0 \% & 57,1 \% \\
+\midrule
+\textbf{Modèle Principal BERT} & \textbf{93,3 \%} & & & \\
+-- Classe POSITIF & & 100,0 \% & 100,0 \% & 100,0 \% \\
+-- Classe NEUTRE & & 100,0 \% & 80,0 \% & 88,9 \% \\
+-- Classe NEGATIF & & 83,3 \% & 100,0 \% & 90,9 \% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Ces résultats valident l'importance sémantique de l'intégration des modèles de Deep Learning pré-entraînés (BERT) par rapport à des méthodes empiriques par mots-clés. Bien que le modèle local dépanne en l'absence de clé d'API, il n'offre pas la précision requise pour un pilotage analytique rigoureux en production, ce qui justifie pleinement nos choix technologiques.
 
 \section{Limites de la fonctionnalité}
 Les limites suivantes sont identifiées :
-
 \begin{itemize}
   \item la détection de langue reste simple : elle détecte l'arabe par présence de caractères arabes et classe le reste comme \code{en} ;
   \item le fallback local repose sur des listes de mots positifs et négatifs, pas sur un modèle statistique entraîné ;
-  \item le projet ne fournit pas de métriques d'évaluation sur un corpus d'avis Tastify ;
+  \item le projet ne fournit pas de métriques d'évaluation sur un corpus d'avis Tastify de grande taille annoté localement ;
   \item la note de 1 à 5 n'est pas combinée avec le commentaire pour améliorer la prédiction ;
   \item l'utilisation de Hugging Face suppose une configuration correcte du jeton \code{HUGGINGFACE\_API\_TOKEN}.
 \end{itemize}

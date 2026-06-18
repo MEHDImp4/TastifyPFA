@@ -1,0 +1,30 @@
+\babel@toc {french}{}\relax 
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Comparaison synthétique des solutions existantes}}{3}{table.1.1}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces Périmètre fonctionnel confirmé}}{5}{table.1.2}%
+\contentsline {table}{\numberline {1.3}{\ignorespaces Planification pédagogique du projet}}{6}{table.1.3}%
+\contentsline {table}{\numberline {1.4}{\ignorespaces Méthodologie suivie pendant le projet}}{6}{table.1.4}%
+\contentsline {table}{\numberline {1.5}{\ignorespaces Répartition synthétique des contributions}}{7}{table.1.5}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Acteurs et responsabilités}}{8}{table.2.1}%
+\contentsline {table}{\numberline {2.2}{Besoins fonctionnels principaux}}{9}{table.2.2}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Besoins non fonctionnels}}{10}{table.2.3}%
+\contentsline {table}{\numberline {2.4}{Synthèse du modèle logique de données}}{16}{table.2.4}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Données utilisées par le pipeline de sentiment}}{23}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Normalisation des sorties de sentiment}}{25}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Comparaison des approches de sentiment}}{26}{table.3.3}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Détail des prédictions sur le corpus de validation}}{28}{table.3.4}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Matrice de confusion -- Modèle local par mots-clés}}{29}{table.3.5}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Matrice de confusion -- Modèle principal BERT / MARBERT}}{29}{table.3.6}%
+\contentsline {table}{\numberline {3.7}{\ignorespaces Synthèse comparative des métriques de performance}}{30}{table.3.7}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Stack technique confirmée}}{33}{table.4.1}%
+\contentsline {table}{\numberline {4.2}{Modules backend réalisés}}{34}{table.4.2}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Applications frontend}}{36}{table.4.3}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Familles de tests dans le projet}}{46}{table.5.1}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Résultats de tests du 17 juin 2026}}{47}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Exemples de scénarios backend critiques}}{50}{table.5.3}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Scénarios frontend validés}}{51}{table.5.4}%
+\addvspace {10\p@ }

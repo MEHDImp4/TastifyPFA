@@ -214,7 +214,7 @@ test.describe('serveur browser workflows', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/salle');
 
-    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
+    const menuButton = page.getByRole('button', { name: 'Ouvrir le menu de navigation' });
     await menuButton.click();
 
     await expect(page.getByTestId('nav-salle')).toBeVisible();

@@ -1129,11 +1129,10 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/maintenance');
 
     await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Export Logs/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Manual Sync/i })).toBeVisible();
-    await expect(page.getByText('API Gateway')).toBeVisible();
+    await expect(page.getByText('Journal Événements')).toBeVisible();
+    await expect(page.getByText('Support interne')).toBeVisible();
+    await expect(page.getByText('admin@tastify.local')).toBeVisible();
     await expect(page.getByText('Degraded')).toBeVisible();
-    await expect(page.getByText('1-800-TASTIFY')).toBeVisible();
   });
 
   test('has no critical or serious axe violations on the manager dashboard', async ({ page }) => {
@@ -1175,7 +1174,7 @@ test.describe('gerant browser workflows', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
-    const menuButton = page.getByRole('button', { name: 'Open navigation menu' });
+    const menuButton = page.getByRole('button', { name: 'Ouvrir le menu de navigation' });
     await menuButton.click();
 
     await expect(page.getByTestId('nav-dashboard')).toBeVisible();

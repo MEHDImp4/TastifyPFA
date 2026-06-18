@@ -85,12 +85,12 @@ Le backend est découpé en applications Django spécialisées. Ce choix rend ch
 \end{longtable}
 
 \section{API REST et documentation}
-Les routes principales sont regroupées dans un routeur DRF. Le dépôt expose notamment les ressources suivantes : catégories, plats, tables, plan-texts, commandes, lignes de commande, employés, shifts, offres, candidatures, réservations, avis, fidélité, récompenses, paramètres et paiements.
+Les routes principales sont regroupées dans un routeur DRF. L'API backend expose notamment les ressources suivantes : catégories, plats, tables, plan-texts, commandes, lignes de commande, employés, shifts, offres, candidatures, réservations, avis, fidélité, récompenses, paramètres et paiements.
 
 La documentation OpenAPI est générée avec \code{drf-spectacular}. Les routes \code{/api/schema/}, \code{/api/docs/} et \code{/api/redoc/} permettent de consulter le schéma et de tester l'API pendant le développement.
 
 \section{Authentification et sécurité}
-L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le dépôt contient aussi une séparation staff/client pour éviter qu'une session ouverte sur un portail écrase l'autre.
+L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le projet intègre aussi une séparation staff/client pour éviter qu'une session ouverte sur un portail écrase l'autre.
 
 \begin{figure}[H]
 \centering
@@ -144,7 +144,7 @@ Le temps réel repose sur Django Channels et Redis. Le canal WebSocket \code{/ws
 La figure~\ref{fig:flux-kds} montre le flux principal : le serveur crée la commande, le backend l'enregistre, puis publie un événement vers le groupe staff. Le cuisinier peut ensuite mettre à jour les statuts de préparation.
 
 \section{Applications frontend}
-Le dépôt contient deux applications React.
+L'architecture comprend deux applications React distinctes.
 
 \begin{table}[H]
 \centering
@@ -171,6 +171,13 @@ Le module fidélité repose sur un profil lié à l'utilisateur, des transaction
 Le module stock relie les plats à leurs ingrédients grâce à une table de recette. Les mouvements de stock servent à suivre les entrées, les sorties et les ajustements. Les seuils d'alerte permettent d'identifier les ingrédients à surveiller.
 
 Dans cette version, la partie approvisionnement et météo reste limitée à une estimation métier simple, utile pour anticiper certains besoins sans la confondre avec un modèle prédictif avancé entraîné localement.
+
+\section{Moteur de recommandation de plats}
+Tastify intègre un moteur de recommandation pour suggérer des plats aux clients sur le portail public. Ce moteur repose sur une approche de filtrage collaboratif base-item calculée à partir des co-occurrences de commande.
+
+L'algorithme, implémenté dans le module \pathcode{apps/menu/ml/recommender.py}, analyse l'historique de toutes les lignes de commande via la méthode \code{compute\_similarities}. Pour chaque paire de plats commandés ensemble dans une même transaction, un score de co-occurrence est incrémenté. Les résultats de cette matrice de similarité symétrique sont stockés dans le cache Redis pour des performances optimales lors de la navigation du client.
+
+Sur la page d'accueil du portail client, les plats recommandés (issus de l'action \code{top-recommendations} de l'API) s'affichent sous la forme de suggestions, enrichies du premier avis positif du plat s'il existe.
 
 \section{Interfaces réalisées}
 Les captures suivantes proviennent de l'environnement local de démonstration Tastify. Elles sont intégrées dans le corps du rapport afin de montrer directement les modules livrés.
@@ -210,7 +217,14 @@ Les captures suivantes proviennent de l'environnement local de démonstration Ta
 \label{fig:capture-client}
 \end{figure}
 
-Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds} et \ref{fig:capture-client} couvrent quatre espaces du projet : pilotage, salle, cuisine et client.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{capture_recommandations.png}
+\caption{Portail client : suggestions et plats recommandés avec avis positifs}
+\label{fig:capture-recommandations}
+\end{figure}
+
+Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds}, \ref{fig:capture-client} et \ref{fig:capture-recommandations} couvrent cinq espaces du projet : pilotage, salle, cuisine, menu et suggestions clients.
 
 \begin{figure}[H]
 \centering

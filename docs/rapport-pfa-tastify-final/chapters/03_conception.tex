@@ -1,9 +1,7 @@
 \chapter{Analyse des besoins et conception}
 \label{chap:conception}
 
-\section*{Introduction}
-\addcontentsline{toc}{section}{Introduction}
-Ce chapitre précise les besoins de Tastify et présente la conception fonctionnelle et objet. La modélisation s'appuie sur UML, langage standard pour représenter les systèmes logiciels \cite{uml}. Les diagrammes intégrés proviennent des fichiers déjà présents dans le dépôt.
+Ce chapitre précise les besoins de Tastify et présente la conception fonctionnelle et objet. La modélisation s'appuie sur UML, langage standard pour représenter les systèmes logiciels \cite{uml}. Les diagrammes présentés décrivent les cas d'utilisation, la structure de données et les interactions dynamiques du projet.
 
 \section{Acteurs du système}
 Tastify distingue quatre acteurs fonctionnels. Les accès dépendent du rôle associé à chaque utilisateur.
@@ -118,10 +116,143 @@ Le diagramme de classes présente les entités majeures et leurs relations.
 \end{landscape}
 \clearpage
 
-Le diagramme~\ref{fig:classes} correspond aux domaines présents dans le backend Django : utilisateurs, plats, tables, commandes, réservations, paiements, avis et stock. Certaines entités détaillées dans le code ne sont pas toutes visibles sur le schéma initial ; elles sont donc précisées dans le modèle logique ci-dessous.
+Le diagramme~\ref{fig:classes} correspond aux domaines présents dans l'application : utilisateurs, plats, tables, commandes, réservations, paiements, avis et stock. Certaines entités détaillées dans le code ne sont pas toutes visibles sur le schéma structurel initial ; elles sont donc précisées dans le modèle logique ci-dessous.
+
+\section{Diagrammes de séquence}
+Afin d'illustrer la dynamique des échanges et le comportement du système lors de scénarios clés, trois diagrammes de séquence sont introduits ci-dessous.
+
+\subsection{Authentification staff}
+Le processus d'authentification sécurisé pour les membres du personnel repose sur des jetons JWT. Le serveur, le cuisinier ou le gérant fournit ses identifiants qui sont validés par l'API backend avant d'émettre les clés de session (Figure~\ref{fig:seq-auth}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.85, every node/.style={font=\footnotesize}, >=stealth]
+  \colorlet{pboxfill}{amber!10}
+  \colorlet{pboxdraw}{amber!80!black}
+  \colorlet{actfill}{gray!20}
+  \colorlet{actdraw}{gray!60}
+  \colorlet{msgcolor}{blue!60!black}
+
+  \draw[dashed, thick, gray!60] (0,-0.4) -- (0,-6.5);
+  \draw[dashed, thick, gray!60] (3.8,-0.4) -- (3.8,-6.5);
+  \draw[dashed, thick, gray!60] (8,-0.4) -- (8,-6.5);
+  \draw[dashed, thick, gray!60] (12,-0.4) -- (12,-6.5);
+
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.4cm, minimum height=0.7cm, font=\bfseries] at (0,0) {Personnel};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.4cm, minimum height=0.7cm, font=\bfseries] at (3.8,0) {Interface Staff};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.4cm, minimum height=0.7cm, font=\bfseries] at (8,0) {API Backend};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.4cm, minimum height=0.7cm, font=\bfseries] at (12,0) {Base de données};
+
+  \draw[draw=actdraw, fill=actfill] (-0.1,-0.6) rectangle (0.1,-1.2);
+  \draw[draw=actdraw, fill=actfill] (3.7,-1.0) rectangle (3.9,-2.4);
+  \draw[draw=actdraw, fill=actfill] (3.7,-4.8) rectangle (3.9,-6.0);
+  \draw[draw=actdraw, fill=actfill] (7.9,-2.0) rectangle (8.1,-5.2);
+  \draw[draw=actdraw, fill=actfill] (11.9,-3.0) rectangle (12.1,-4.2);
+
+  \draw[->, thick, msgcolor] (0.1,-1.0) -- node[above, align=center] {1. Saisie identifiants \\ Nom et Code} (3.7,-1.0);
+  \draw[->, thick, msgcolor] (3.9,-2.2) -- node[above] {2. POST /api/token/} (7.9,-2.2);
+  \draw[->, thick, msgcolor] (8.1,-3.2) -- node[above] {3. Requête utilisateur et rôle} (11.9,-3.2);
+  \draw[<-, thick, dashed, gray!80!black] (8.1,-4.0) -- node[above] {4. Profil trouvé et validé} (11.9,-4.0);
+  \draw[<-, thick, dashed, gray!80!black] (3.9,-5.0) -- node[above, align=center] {5. Retourne Access Token \\ et Cookie de Refresh} (7.9,-5.0);
+  \draw[->, thick, msgcolor] (3.9,-5.8) -- node[above] {6. Accès au Tableau de Bord} (0.1,-5.8);
+\end{tikzpicture}
+\caption{Diagramme de séquence de l'authentification staff}
+\label{fig:seq-auth}
+\end{figure}
+
+\subsection{Prise de commande et envoi vers le KDS}
+Ce scénario décrit le flux de traitement en temps réel depuis la prise de commande par le serveur en salle jusqu'à sa diffusion instantanée vers l'écran de cuisine KDS grâce au protocole WebSocket géré par Redis (Figure~\ref{fig:seq-commande-kds}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.8, every node/.style={font=\footnotesize}, >=stealth]
+  \colorlet{pboxfill}{amber!10}
+  \colorlet{pboxdraw}{amber!80!black}
+  \colorlet{actfill}{gray!20}
+  \colorlet{actdraw}{gray!60}
+  \colorlet{msgcolor}{blue!60!black}
+
+  \draw[dashed, thick, gray!60] (0,-0.4) -- (0,-7.5);
+  \draw[dashed, thick, gray!60] (3.2,-0.4) -- (3.2,-7.5);
+  \draw[dashed, thick, gray!60] (6.4,-0.4) -- (6.4,-7.5);
+  \draw[dashed, thick, gray!60] (9.6,-0.4) -- (9.6,-7.5);
+  \draw[dashed, thick, gray!60] (12.8,-0.4) -- (12.8,-7.5);
+
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (0,0) {Serveur};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (3.2,0) {Interface Staff};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (6.4,0) {API Backend};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (9.6,0) {Serveur WS};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (12.8,0) {KDS Cuisine};
+
+  \draw[draw=actdraw, fill=actfill] (-0.1,-0.6) rectangle (0.1,-1.2);
+  \draw[draw=actdraw, fill=actfill] (3.1,-1.0) rectangle (3.3,-4.2);
+  \draw[draw=actdraw, fill=actfill] (6.3,-1.8) rectangle (6.5,-5.2);
+  \draw[draw=actdraw, fill=actfill] (9.5,-4.8) rectangle (9.7,-6.2);
+  \draw[draw=actdraw, fill=actfill] (12.7,-5.8) rectangle (12.9,-7.2);
+
+  \draw[->, thick, msgcolor] (0.1,-1.0) -- node[above] {1. Choix table et plats} (3.1,-1.0);
+  \draw[->, thick, msgcolor] (3.3,-2.0) -- node[above] {2. POST /api/commandes/} (6.3,-2.0);
+  
+  \draw[->, thick, msgcolor] (6.5,-2.8) -- ++(0.8,0) -- ++(0,-0.6) -- node[right, align=left, pos=0.5] {3. Sauvegarde \\ en base} (6.5,-3.4);
+
+  \draw[<-, thick, dashed, gray!80!black] (3.3,-4.0) -- node[above] {4. Commande 201 Created} (6.3,-4.0);
+  \draw[->, thick, msgcolor] (6.5,-5.0) -- node[above] {5. Notification groupe staff} (9.5,-5.0);
+  \draw[->, thick, msgcolor] (9.7,-6.0) -- node[above] {6. WebSocket broadcast} (12.7,-6.0);
+  \draw[dashed, ->, thick, msgcolor] (12.7,-7.0) -- node[above] {7. Affichage temps réel} (12.9,-7.0);
+\end{tikzpicture}
+\caption{Diagramme de séquence de la prise de commande et envoi au KDS}
+\label{fig:seq-commande-kds}
+\end{figure}
+
+\subsection{Création d'un avis client et analyse de sentiment}
+Le client soumet son commentaire et sa note depuis le portail public. Le backend enregistre l'avis et délègue en tâche d'arrière-plan Celery l'appel à l'API de traitement de langage naturel de Hugging Face pour classer le sentiment (Figure~\ref{fig:seq-avis-sentiment}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.8, every node/.style={font=\footnotesize}, >=stealth]
+  \colorlet{pboxfill}{amber!10}
+  \colorlet{pboxdraw}{amber!80!black}
+  \colorlet{actfill}{gray!20}
+  \colorlet{actdraw}{gray!60}
+  \colorlet{msgcolor}{blue!60!black}
+
+  \draw[dashed, thick, gray!60] (0,-0.4) -- (0,-8.5);
+  \draw[dashed, thick, gray!60] (3.2,-0.4) -- (3.2,-8.5);
+  \draw[dashed, thick, gray!60] (6.4,-0.4) -- (6.4,-8.5);
+  \draw[dashed, thick, gray!60] (9.6,-0.4) -- (9.6,-8.5);
+  \draw[dashed, thick, gray!60] (12.8,-0.4) -- (12.8,-8.5);
+
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (0,0) {Client};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (3.2,0) {Portail Client};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (6.4,0) {API Backend};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (9.6,0) {Celery Worker};
+  \node[draw=pboxdraw, fill=pboxfill, rounded corners, minimum width=2.0cm, minimum height=0.7cm, font=\bfseries] at (12.8,0) {Service Analyse};
+
+  \draw[draw=actdraw, fill=actfill] (-0.1,-0.6) rectangle (0.1,-1.2);
+  \draw[draw=actdraw, fill=actfill] (3.1,-1.0) rectangle (3.3,-4.0);
+  \draw[draw=actdraw, fill=actfill] (6.3,-1.8) rectangle (6.5,-4.4);
+  \draw[draw=actdraw, fill=actfill] (6.3,-6.6) rectangle (6.5,-8.2);
+  \draw[draw=actdraw, fill=actfill] (9.5,-2.8) rectangle (9.7,-7.2);
+  \draw[draw=actdraw, fill=actfill] (12.7,-4.6) rectangle (12.9,-6.0);
+
+  \draw[->, thick, msgcolor] (0.1,-1.0) -- node[above] {1. Saisie avis et note} (3.1,-1.0);
+  \draw[->, thick, msgcolor] (3.3,-2.0) -- node[above] {2. POST /api/avis/} (6.3,-2.0);
+  \draw[->, thick, msgcolor] (6.5,-3.0) -- node[above] {3. Lancement tâche Celery} (9.5,-3.0);
+  \draw[<-, thick, dashed, gray!80!black] (3.3,-3.8) -- node[above] {4. Succès Avis créé} (6.3,-3.8);
+  
+  \draw[->, thick, msgcolor] (9.7,-4.8) -- node[above] {5. Inférence API Hugging Face} (12.7,-4.8);
+  \draw[<-, thick, dashed, gray!80!black] (9.7,-5.8) -- node[above] {6. Retour Label + Score} (12.7,-5.8);
+  
+  \draw[->, thick, msgcolor] (9.5,-6.8) -- node[above] {7. Sauvegarde sentiment (DB)} (6.5,-6.8);
+  
+  \draw[->, thick, msgcolor] (6.5,-7.4) -- ++(0.8,0) -- ++(0,-0.6) -- node[right, align=left, pos=0.5] {8. Mise à jour \\ stats gérant} (6.5,-8.0);
+\end{tikzpicture}
+\caption{Diagramme de séquence de la création d'un avis et analyse de sentiment}
+\label{fig:seq-avis-sentiment}
+\end{figure}
 
 \section{Modèle logique de données}
-Le modèle logique de données est construit à partir des modèles Django confirmés dans le dépôt. Le tableau~\ref{tab:mld-resume} ne liste pas toutes les colonnes techniques. Il résume les tables structurantes et leurs relations.
+Le modèle logique de données est construit à partir des modèles Django de la codebase. Le tableau~\ref{tab:mld-resume} ne liste pas toutes les colonnes techniques. Il résume les tables structurantes et leurs relations.
 
 \begin{longtable}{p{3.2cm}p{4.2cm}p{6.2cm}}
 \caption{Synthèse du modèle logique de données}

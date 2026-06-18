@@ -1,95 +1,34 @@
 \chapter{Annexes}
 \label{chap:annexes}
 
-\section{Schémas existants intégrés}
-Le tableau~\ref{tab:schemas-integres} liste les schémas existants retenus dans le rapport.
+\section{Commandes de déploiement et de test}
+Les commandes ci-dessous servent de rappel pour lancer, tester et compiler le projet Tastify et son rapport.
 
-\begin{table}[H]
-\centering
-\small
-\caption{Schémas existants intégrés}
-\label{tab:schemas-integres}
-\begin{tabularx}{\textwidth}{p{3.3cm}p{3cm}Y p{3cm}}
-\toprule
-\textbf{Fichier} & \textbf{Emplacement} & \textbf{Légende} & \textbf{Objectif} \\
-\midrule
-\pathcode{figure_08.jpeg} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation du back-office gérant & Montrer le périmètre administratif. \\
-\pathcode{figure_05.png} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation des modules salle et cuisine & Expliquer les interactions serveur/cuisine. \\
-\pathcode{figure_02.png} & Chapitre~\ref{chap:conception} & Diagramme de cas d'utilisation du portail client & Montrer les fonctions client. \\
-\pathcode{figure_03.png} & Chapitre~\ref{chap:conception} & Diagramme de classes de Tastify & Présenter les entités métier majeures en page paysage. \\
-\pathcode{figure_06.png} & Page de garde & Logo Tastify & Identifier visuellement le projet. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\section{Schémas techniques créés dans le rapport}
-Les schémas suivants ont été créés directement en LaTeX sous forme de diagrammes textuels. Ce ne sont pas des captures d'écran.
-
-\begin{table}[H]
-\centering
-\small
-\caption{Schémas techniques créés}
-\label{tab:schemas-crees}
-\begin{tabularx}{\textwidth}{p{3.5cm}p{3.8cm}Y}
-\toprule
-\textbf{Schéma} & \textbf{Emplacement} & \textbf{Contenu} \\
-\midrule
-Architecture fonctionnelle & Chapitre~\ref{chap:conception}, figure~\ref{fig:architecture-fonctionnelle} & Deux frontends, backend DRF, MySQL, Redis, Celery et Hugging Face. \\
-Pipeline de sentiment & Chapitre~\ref{chap:sentiment}, figure~\ref{fig:pipeline-sentiment} & Création avis, tâche Celery, API Hugging Face, fallback local, stockage et dashboard. \\
-Architecture technique & Chapitre~\ref{chap:realisation}, figure~\ref{fig:architecture-technique} & Ports, backend ASGI, base de données, Redis, worker et beat. \\
-Séquence JWT & Chapitre~\ref{chap:realisation}, figure~\ref{fig:auth-jwt} & Connexion, vérification, access token, cookie refresh et refresh ultérieur. \\
-Flux KDS & Chapitre~\ref{chap:realisation}, figure~\ref{fig:flux-kds} & Serveur, API commandes, base, Redis, KDS et cuisinier. \\
-Déploiement Docker Compose & Chapitre~\ref{chap:realisation}, figure~\ref{fig:docker-compose} & Services Compose et dépendances principales. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\section{Captures intégrées dans le corps du rapport}
-Les captures suivantes sont intégrées dans les chapitres de réalisation, d'analyse de sentiment et de tests. Elles ne sont plus présentées comme des éléments à ajouter ultérieurement.
-
-\begin{table}[H]
-\centering
-\scriptsize
-\caption{Captures placées dans le corps du rapport}
-\label{tab:captures-integrees}
-\begin{tabularx}{\textwidth}{p{3.8cm}p{3.2cm}Y}
-\toprule
-\textbf{Fichier} & \textbf{Section} & \textbf{Objectif} \\
-\midrule
-\pathcode{capture_login_staff.png} & Réalisation & Prouver la séparation staff et l'accès sécurisé. \\
-\pathcode{capture_dashboard.png} & Réalisation & Montrer le pilotage et les indicateurs gérant. \\
-\pathcode{capture_salle.png} & Réalisation & Montrer la gestion opérationnelle des tables. \\
-\pathcode{capture_kds.png} & Réalisation & Montrer le suivi de préparation côté cuisine. \\
-\pathcode{capture_client.png} & Réalisation & Montrer la consultation du menu côté client. \\
-\pathcode{capture_stock_admin.png} & Réalisation & Illustrer le suivi des ingrédients et alertes. \\
-\pathcode{capture_reservation_client.png} & Réalisation & Montrer la réservation côté client. \\
-\pathcode{capture_checkout_payment.png} & Réalisation & Illustrer le paiement et le partage de l'addition. \\
-\pathcode{capture_loyalty_client.png} & Réalisation & Montrer les points et récompenses. \\
-\pathcode{capture_hr_admin.png} & Réalisation & Montrer les employés et la gestion RH. \\
-\pathcode{capture_avis_sentiment.png} & Analyse de sentiment & Relier les avis clients au score de sentiment. \\
-\pathcode{capture_test_pytest.png} & Tests & Prouver les résultats backend pytest. \\
-\pathcode{capture_test_vitest.png} & Tests & Prouver les résultats Vitest des frontends. \\
-\pathcode{capture_test_playwright.png} & Tests & Prouver les résultats Playwright client. \\
-\pathcode{capture_test_ci.png} & Tests & Relier workflow CI et validation locale. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\section{Commandes utiles}
-Les commandes ci-dessous servent de rappel pour vérifier le projet et le rapport.
-
-{\scriptsize
+\subsection{Compilation du rapport LaTeX}
+Pour compiler localement le rapport et mettre à jour l'ensemble de la table des matières, de la liste des figures/tableaux et de la bibliographie, les commandes suivantes sont exécutées depuis la racine du dossier du rapport :
 \begin{verbatim}
 cd docs/rapport-pfa-tastify-final
 pdflatex --disable-installer -interaction=nonstopmode main.tex
 bibtex main
 pdflatex --disable-installer -interaction=nonstopmode main.tex
 pdflatex --disable-installer -interaction=nonstopmode main.tex
+\end{verbatim}
 
+\subsection{Lancement et tests de la codebase}
+Les commandes ci-dessous permettent de lancer l'orchestration Docker Compose pour le développement et d'exécuter la suite complète de tests (tests unitaires backend et frontend, et tests end-to-end) :
+\begin{verbatim}
+# Lancement des conteneurs en arrière-plan
 docker compose up -d --build
+
+# Exécution des tests unitaires et d'intégration backend (Python/Django)
 docker compose exec backend python -m pytest
+
+# Exécution des tests unitaires du back-office (React)
 npm --prefix app/frontend/backoffice-app run test:unit
+
+# Exécution des tests unitaires du portail client (React)
 npm --prefix app/frontend/client-app run test:unit
+
+# Exécution des scénarios de test bout-en-bout (Playwright)
 npm --prefix app/frontend/client-app run test:e2e
 \end{verbatim}
-}
