@@ -147,7 +147,7 @@ function App() {
     <MotionConfig reducedMotion="user">
       <AuthBootstrap>
         <div className="selection:bg-primary/20 selection:text-primary">
-          <Toaster position="top-center" richColors />
+          <Toaster position="top-center" richColors closeButton />
           <BrowserRouter>
             <AnimatedRoutes />
           </BrowserRouter>

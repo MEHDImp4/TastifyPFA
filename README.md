@@ -74,7 +74,8 @@ This repository includes a production-oriented Compose file for Unraid:
 
 ```bash
 cp .env.unraid.example .env
-# edit .env: replace UNRAID_IP, YOUR_GITHUB_OWNER, domains, SECRET_KEY, and passwords
+# edit .env: replace UNRAID_IP, YOUR_GITHUB_OWNER, domains, SECRET_KEY, and passwords.
+# FRONTEND_BASE_URL must be the public client portal domain used in QR payment links.
 docker compose -f docker-compose.unraid.yml pull
 docker compose -f docker-compose.unraid.yml up -d
 ```
@@ -86,7 +87,7 @@ docker compose -f docker-compose.unraid.yml pull
 docker compose -f docker-compose.unraid.yml up -d
 ```
 
-Default URLs after deployment:
+Default LAN URLs after deployment:
 - `http://UNRAID_IP:3003/` -> client portal
 - `http://UNRAID_IP:3000/` -> staff backoffice
 
@@ -99,6 +100,8 @@ The Unraid stack stores persistent data under:
 For direct LAN HTTP, keep `DJANGO_COOKIE_SECURE=False` and `DJANGO_SECURE_SSL_REDIRECT=False`.
 When you put the app behind HTTPS, update `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`,
 `CSRF_TRUSTED_ORIGINS`, `FRONTEND_BASE_URL`, then switch those two security flags to `True`.
+For QR payments, `FRONTEND_BASE_URL` must point to the public client portal origin, for example
+`https://tastify-client.mehdidiouri.dev`, so generated links use `/pay/<token>` on the frontend.
 The backoffice frontend also bakes `VITE_API_BASE_URL`, `VITE_WS_BASE_URL`, and
 `VITE_STAFF_WS_PATH` at image build time. Rebuild the frontend image after changing those
 values. For a same-origin reverse proxy, keep `VITE_API_BASE_URL=/api`,
