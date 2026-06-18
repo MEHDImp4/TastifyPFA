@@ -68,10 +68,6 @@ export const PortalHomePage = () => {
              animate="visible"
              className="lg:col-span-7 space-y-8"
           >
-            <motion.div variants={heroItemVariants} className="flex items-center gap-2">
-                <span className="text-xs font-bold tracking-[0.16em] text-accent">Restaurant marocain à Casablanca</span>
-            </motion.div>
-
             <motion.h1 variants={heroItemVariants} className="text-[clamp(2.75rem,8vw,5.5rem)] font-bold tracking-tight leading-[1.1] text-on-background">
               {config?.nom ? config.nom : "Tastify"} <br/>
               <span className="text-accent">Cuisine marocaine.</span>
@@ -126,10 +122,6 @@ export const PortalHomePage = () => {
         <div className="max-w-[1200px] mx-auto px-client-margin">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-on-surface-variant">
-                 <Sparkles className="w-4 h-4 text-accent" />
-                 <span className="text-[10px] font-bold tracking-widest">Suggestions</span>
-              </div>
               <h3 className="text-3xl font-bold tracking-tight">Plats appréciés</h3>
             </div>
             <Link to="/menu" className="min-h-11 inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background border-b border-outline hover:border-accent hover:text-accent transition-all">
@@ -153,7 +145,6 @@ export const PortalHomePage = () => {
                 className="atelier-card p-6 flex flex-col h-full hover:border-accent/20 transition-all duration-300 hover:shadow-xl hover:shadow-black/[0.02]"
               >
                 <div className="flex justify-between items-start mb-8">
-                    <span className="font-mono text-xs text-on-surface-subtle">0{idx + 1}</span>
                     <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-md border border-outline">
                         <TrendingUp className="w-3 h-3 text-success" />
                         <span className="text-caption font-bold tracking-wide">Demandé</span>
@@ -202,7 +193,7 @@ export const PortalHomePage = () => {
       </section>
 
       {/* Minimal Footer */}
-      <footer className="page-section px-client-margin border-t border-outline">
+      <footer className="page-section mt-12 px-client-margin border-t border-outline md:mt-16">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-6 space-y-6">
                 <Link to="/" className="inline-flex min-h-11 items-center">
