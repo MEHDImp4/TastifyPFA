@@ -50,11 +50,11 @@ async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['pa
   await mockMenuCatalog(page);
   await page.goto('/menu', routeReady);
 
-  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
-  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+  await page.getByRole('button', { name: 'Ajouter Harira au panier' }).click();
+  await page.getByRole('button', { name: 'Ajouter Harira au panier' }).click();
 
   await page.getByRole('button', { name: 'Plats', exact: true }).click();
-  await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+  await page.getByRole('button', { name: 'Ajouter Tagine au panier' }).click();
 
   await page.getByRole('link', { name: /Voir le panier/i }).click();
 }

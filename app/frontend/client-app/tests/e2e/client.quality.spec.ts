@@ -194,10 +194,12 @@ test.describe('client public quality', () => {
 
   test('keeps guest navigation stable across home, menu, login, register, and 404', async ({ page }) => {
     await mockMenuData(page);
+    const usesMobileNavigation = async () =>
+      page.evaluate(() => window.matchMedia('(max-width: 1023px)').matches);
+
     const openMenuFromGuestNav = async () => {
-      const desktopMenuLink = page.locator('header').getByRole('link', { name: /LA CARTE/i });
-      if (await desktopMenuLink.isVisible()) {
-        await desktopMenuLink.click();
+      if (!(await usesMobileNavigation())) {
+        await page.locator('header').getByRole('link', { name: /LA CARTE/i }).click();
         return;
       }
 
@@ -206,11 +208,10 @@ test.describe('client public quality', () => {
     };
 
     await page.goto('/', routeReady);
-    const desktopLoginLink = page.getByRole('link', { name: "S'identifier" });
-    if (await desktopLoginLink.isVisible()) {
-      await expect(desktopLoginLink).toBeVisible();
-    } else {
+    if (await usesMobileNavigation()) {
       await expect(page.getByRole('button', { name: /Ouvrir la navigation/i })).toBeVisible();
+    } else {
+      await expect(page.getByRole('link', { name: /S.identifier/i })).toBeVisible();
     }
 
     await openMenuFromGuestNav();
@@ -244,7 +245,7 @@ test.describe('client public quality', () => {
     await page.goto('/menu', routeReady);
     await expect(page.getByLabel('Rechercher')).toBeVisible();
 
-    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    await page.getByRole('button', { name: 'Ajouter Couscous Maison au panier' }).click();
     // Cart link is hidden on mobile (hidden md:flex) — navigate directly
     await page.goto('/checkout', routeReady);
     await expect(page).toHaveURL('/checkout');
@@ -322,7 +323,7 @@ test.describe('client authenticated quality', () => {
     await mockMenuData(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/menu', routeReady);
-    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    await page.getByRole('button', { name: 'Ajouter Couscous Maison au panier' }).click();
     // Cart link is hidden on mobile (hidden md:flex) — navigate directly
     await page.goto('/checkout', routeReady);
     await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
@@ -377,7 +378,7 @@ test.describe('client authenticated quality', () => {
     await expectDocumentScrollWorks(page);
 
     await page.goto('/menu', routeReady);
-    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    await page.getByRole('button', { name: 'Ajouter Couscous Maison au panier' }).click();
     await page.goto('/checkout', routeReady);
     await expectNoLayoutOverflow(page);
     await expectDocumentScrollWorks(page);
