@@ -117,9 +117,9 @@ export const PortalHomePage = () => {
         </div>
       </section>
 
-      <section className="page-section-lg">
+      <section className="page-section-lg mt-6 md:mt-10">
         <div className="max-w-[1200px] mx-auto px-client-margin">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-16 md:mb-20 gap-6">
             <div className="space-y-2">
               <h3 className="text-3xl font-bold tracking-tight">Plats appréciés</h3>
             </div>
