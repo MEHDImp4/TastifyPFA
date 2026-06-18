@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight,
   CalendarDays,
-  Sparkles,
   TrendingUp,
   UtensilsCrossed,
 } from 'lucide-react';
@@ -136,7 +135,7 @@ export const PortalHomePage = () => {
               <div className="col-span-full py-16 text-center text-on-surface-subtle">
                 <p className="text-sm font-bold uppercase tracking-widest">Sélection indisponible pour le moment</p>
               </div>
-            ) : topDishes.map((dish, idx) => (
+            ) : topDishes.map((dish) => (
               <motion.div 
                 key={dish.id}
                 initial={{ opacity: 0, y: 5 }}
