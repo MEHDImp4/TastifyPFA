@@ -56,6 +56,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/health/ >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 60s
     networks:
       - tastify-network
 
@@ -107,7 +113,7 @@ services:
       - /mnt/user/appdata/tastify/media:/usr/share/nginx/media:ro
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy
     networks:
       - tastify-network
 
@@ -121,7 +127,7 @@ services:
       - /mnt/user/appdata/tastify/media:/usr/share/nginx/media:ro
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy
     networks:
       - tastify-network
 
