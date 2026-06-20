@@ -15,16 +15,14 @@
 \contentsline {table}{\numberline {3.2}{\ignorespaces Normalisation des sorties de sentiment}}{25}{table.3.2}%
 \contentsline {table}{\numberline {3.3}{\ignorespaces Comparaison des approches de sentiment}}{26}{table.3.3}%
 \contentsline {table}{\numberline {3.4}{\ignorespaces Détail des prédictions sur le corpus de validation}}{28}{table.3.4}%
-\contentsline {table}{\numberline {3.5}{\ignorespaces Matrice de confusion -- Modèle local par mots-clés}}{29}{table.3.5}%
-\contentsline {table}{\numberline {3.6}{\ignorespaces Matrice de confusion -- Modèle principal BERT / MARBERT}}{29}{table.3.6}%
-\contentsline {table}{\numberline {3.7}{\ignorespaces Synthèse comparative des métriques de performance}}{30}{table.3.7}%
+\contentsline {table}{\numberline {3.7}{\ignorespaces Synthèse comparative des métriques de performance}}{29}{table.3.7}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Stack technique confirmée}}{33}{table.4.1}%
-\contentsline {table}{\numberline {4.2}{Modules backend réalisés}}{34}{table.4.2}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Applications frontend}}{36}{table.4.3}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Stack technique confirmée}}{32}{table.4.1}%
+\contentsline {table}{\numberline {4.2}{Modules backend réalisés}}{33}{table.4.2}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Applications frontend}}{35}{table.4.3}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Familles de tests dans le projet}}{46}{table.5.1}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Résultats de tests du 17 juin 2026}}{47}{table.5.2}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Exemples de scénarios backend critiques}}{50}{table.5.3}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Scénarios frontend validés}}{51}{table.5.4}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Familles de tests dans le projet}}{45}{table.5.1}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Résultats de tests du 17 juin 2026}}{46}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Exemples de scénarios backend critiques}}{49}{table.5.3}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Scénarios frontend validés}}{50}{table.5.4}%
 \addvspace {10\p@ }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { menuApi } from '../../api/menu';
+import { stockApi } from '../../api/inventory_hr';
 import type { Plat, Categorie } from '../../types/menu';
+import type { Ingredient, PlatIngredient } from '../../types/inventory';
 import {
   Plus,
   Edit2,
@@ -14,6 +16,13 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+interface RecipeItem {
+  localId: string;
+  id: number | null;
+  ingredientId: string;
+  quantiteRequise: string;
+}
+
 interface EditorState {
   mode: 'create' | 'edit';
   id: number | null;
@@ -24,6 +33,9 @@ interface EditorState {
   categorieId: string;
   image: File | null;
   imagePreviewUrl: string | null;
+  recipeItems: RecipeItem[];
+  originalRecipeIds: number[];
+  isRecipeLoading: boolean;
 }
 
 const BLANK_EDITOR: EditorState = {
@@ -36,12 +48,24 @@ const BLANK_EDITOR: EditorState = {
   categorieId: '',
   image: null,
   imagePreviewUrl: null,
+  recipeItems: [],
+  originalRecipeIds: [],
+  isRecipeLoading: false,
 };
+
+const makeRecipeItem = (ingredientId = '', quantiteRequise = '', id: number | null = null): RecipeItem => ({
+  localId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  id,
+  ingredientId,
+  quantiteRequise,
+});
 
 export const PlatPage: React.FC = () => {
   const [plats, setPlats] = useState<Plat[]>([]);
   const [categories, setCategories] = useState<Categorie[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedPlats, setHasLoadedPlats] = useState(false);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -62,6 +86,16 @@ export const PlatPage: React.FC = () => {
     }
   };
 
+  const fetchIngredients = async () => {
+    try {
+      const res = await stockApi.getIngredients({ est_active: true });
+      setIngredients(res.data);
+    } catch (err) {
+      console.error(err);
+      toast.error('Erreur chargement ingrédients');
+    }
+  };
+
   const fetchPlats = async (page = currentPage) => {
     setIsLoading(true);
     try {
@@ -77,11 +111,13 @@ export const PlatPage: React.FC = () => {
       toast.error('Erreur chargement catalogue');
     } finally {
       setIsLoading(false);
+      setHasLoadedPlats(true);
     }
   };
 
   useEffect(() => {
     fetchCategories();
+    fetchIngredients();
   }, []);
 
   useEffect(() => {
@@ -91,7 +127,7 @@ export const PlatPage: React.FC = () => {
   const openCreate = () => {
     setSaveError(null);
     setDeleteError(null);
-    setEditor({ ...BLANK_EDITOR, categorieId: categories[0] ? String(categories[0].id) : '' });
+    setEditor({ ...BLANK_EDITOR, categorieId: categories[0] ? String(categories[0].id) : '', recipeItems: [] });
     if (imageInputRef.current) imageInputRef.current.value = '';
   };
 
@@ -108,8 +144,26 @@ export const PlatPage: React.FC = () => {
       categorieId: plat.categorie ? String(plat.categorie) : '',
       image: null,
       imagePreviewUrl: plat.image ?? null,
+      recipeItems: [],
+      originalRecipeIds: [],
+      isRecipeLoading: true,
     });
     if (imageInputRef.current) imageInputRef.current.value = '';
+    stockApi.getPlatIngredients({ plat: plat.id })
+      .then((res) => {
+        const recipeItems = res.data.map(item => makeRecipeItem(String(item.ingredient), item.quantite_requise, item.id));
+        setEditor(prev => prev?.id === plat.id ? {
+          ...prev,
+          recipeItems,
+          originalRecipeIds: res.data.map(item => item.id),
+          isRecipeLoading: false,
+        } : prev);
+      })
+      .catch((err) => {
+        console.error(err);
+        setEditor(prev => prev?.id === plat.id ? { ...prev, isRecipeLoading: false } : prev);
+        toast.error('Erreur chargement recette');
+      });
   };
 
   const closeEditor = () => {
@@ -125,8 +179,64 @@ export const PlatPage: React.FC = () => {
     setEditor(prev => prev ? { ...prev, image: file, imagePreviewUrl: url } : prev);
   };
 
+  const addRecipeItem = () => {
+    setEditor(prev => prev ? {
+      ...prev,
+      recipeItems: [...prev.recipeItems, makeRecipeItem(ingredients[0] ? String(ingredients[0].id) : '', '1')],
+    } : prev);
+  };
+
+  const updateRecipeItem = (localId: string, patch: Partial<RecipeItem>) => {
+    setEditor(prev => prev ? {
+      ...prev,
+      recipeItems: prev.recipeItems.map(item => item.localId === localId ? { ...item, ...patch } : item),
+    } : prev);
+  };
+
+  const removeRecipeItem = (localId: string) => {
+    setEditor(prev => prev ? {
+      ...prev,
+      recipeItems: prev.recipeItems.filter(item => item.localId !== localId),
+    } : prev);
+  };
+
+  const validateRecipe = (recipeItems: RecipeItem[]) => {
+    const selectedIds = recipeItems.map(item => item.ingredientId).filter(Boolean);
+    if (selectedIds.length !== recipeItems.length || recipeItems.some(item => !item.quantiteRequise || Number(item.quantiteRequise) <= 0)) {
+      return 'Chaque ingrédient de recette doit avoir une quantité positive.';
+    }
+    if (new Set(selectedIds).size !== selectedIds.length) {
+      return 'Un ingrédient ne peut pas être ajouté deux fois au même plat.';
+    }
+    return null;
+  };
+
+  const syncRecipe = async (platId: number, editorState: EditorState) => {
+    const currentIds = editorState.recipeItems
+      .map(item => item.id)
+      .filter((id): id is number => id !== null);
+    const removedIds = editorState.originalRecipeIds.filter(id => !currentIds.includes(id));
+
+    await Promise.all(removedIds.map(id => stockApi.deletePlatIngredient(id)));
+    await Promise.all(editorState.recipeItems.map((item) => {
+      const payload: Partial<PlatIngredient> = {
+        plat: platId,
+        ingredient: Number(item.ingredientId),
+        quantite_requise: item.quantiteRequise,
+      };
+      return item.id
+        ? stockApi.updatePlatIngredient(item.id, payload)
+        : stockApi.createPlatIngredient(payload);
+    }));
+  };
+
   const handleSave = async () => {
     if (!editor) return;
+    const recipeError = validateRecipe(editor.recipeItems);
+    if (recipeError) {
+      setSaveError(recipeError);
+      return;
+    }
     setIsSaving(true);
     setSaveError(null);
     try {
@@ -140,10 +250,19 @@ export const PlatPage: React.FC = () => {
       if (editor.categorieId) formData.append('categorie', editor.categorieId);
       if (editor.image) formData.append('image', editor.image);
 
+      let savedPlat: Plat | null = null;
       if (editor.mode === 'create') {
-        await menuApi.createPlat(formData);
+        const res = await menuApi.createPlat(formData);
+        savedPlat = res.data;
       } else if (editor.id !== null) {
-        await menuApi.updatePlat(editor.id, formData);
+        const res = await menuApi.updatePlat(editor.id, formData);
+        savedPlat = res.data;
+      }
+      if (savedPlat) {
+        if (editor.mode === 'create') {
+          setEditor(prev => prev ? { ...prev, mode: 'edit', id: savedPlat.id } : prev);
+        }
+        await syncRecipe(savedPlat.id, editor);
       }
       setCurrentPage(1);
       await fetchPlats(1);
@@ -171,7 +290,7 @@ export const PlatPage: React.FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
+  if (isLoading && !hasLoadedPlats) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
@@ -199,10 +318,16 @@ export const PlatPage: React.FC = () => {
       </header>
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+        {isLoading && (
+          <div className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            Recherche en cours
+          </div>
+        )}
         {deleteError && (
           <p role="alert" className="form-error mb-4">{deleteError}</p>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
           {plats.map(p => (
             <div key={p.id} data-testid={`plat-card-${p.id}`} className="atelier-card p-4 group">
               <div className="relative aspect-video rounded border border-outline overflow-hidden bg-background mb-4">
@@ -317,6 +442,93 @@ export const PlatPage: React.FC = () => {
                   </select>
                 </div>
               )}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Ingrédients</label>
+                  <button
+                    type="button"
+                    data-testid="plat-add-ingredient-button"
+                    onClick={addRecipeItem}
+                    disabled={ingredients.length === 0 || editor.isRecipeLoading}
+                    className="btn-icon"
+                    aria-label="Ajouter un ingrédient au plat"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {editor.isRecipeLoading ? (
+                  <div className="h-16 border border-outline rounded flex items-center justify-center text-on-surface-variant">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  </div>
+                ) : editor.recipeItems.length > 0 ? (
+                  <div className="space-y-3" data-testid="plat-ingredients-list">
+                    {editor.recipeItems.map((item, index) => {
+                      const ingredient = ingredients.find(i => String(i.id) === item.ingredientId);
+                      return (
+                        <div key={item.localId} className="grid grid-cols-[1fr_8.5rem_2.75rem] gap-2 items-end">
+                          <div className="space-y-1">
+                            <label htmlFor={`plat-ingredient-${item.localId}`} className="sr-only">Ingrédient {index + 1}</label>
+                            <select
+                              id={`plat-ingredient-${item.localId}`}
+                              data-testid={`plat-ingredient-select-${index}`}
+                              value={item.ingredientId}
+                              onChange={e => updateRecipeItem(item.localId, { ingredientId: e.target.value })}
+                              className="field-control text-[11px]"
+                            >
+                              <option value="">Choisir</option>
+                              {ingredients.map(ingredientOption => (
+                                <option key={ingredientOption.id} value={ingredientOption.id}>
+                                  {ingredientOption.nom}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1">
+                            <label htmlFor={`plat-ingredient-qty-${item.localId}`} className="sr-only">Quantité requise</label>
+                            <div className="relative">
+                              <input
+                                id={`plat-ingredient-qty-${item.localId}`}
+                                data-testid={`plat-ingredient-qty-${index}`}
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                value={item.quantiteRequise}
+                                onChange={e => updateRecipeItem(item.localId, { quantiteRequise: e.target.value })}
+                                className="field-control pr-8 text-[11px]"
+                              />
+                              {ingredient && (
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-on-surface-variant uppercase">
+                                  {ingredient.unite_mesure}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            data-testid={`plat-remove-ingredient-${index}`}
+                            onClick={() => removeRecipeItem(item.localId)}
+                            className="btn-icon text-error hover:border-error/30 hover:text-error"
+                            aria-label={`Retirer l'ingrédient ${index + 1}`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="border border-dashed border-outline rounded p-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                    Aucun ingrédient lié à ce plat.
+                  </p>
+                )}
+
+                {ingredients.length === 0 && (
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                    Crée d'abord des ingrédients dans le stock.
+                  </p>
+                )}
+              </div>
               <div className="space-y-2">
                 <label htmlFor="plat-image" className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Image</label>
                 <input

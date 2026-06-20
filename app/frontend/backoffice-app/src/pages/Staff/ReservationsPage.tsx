@@ -8,6 +8,7 @@ import {
   CheckCircle2, 
   XCircle, 
   Search,
+  Loader2,
   MoreVertical,
   ChevronLeft,
   ChevronRight,
@@ -24,6 +25,7 @@ import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 export const ReservationsPage: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedReservations, setHasLoadedReservations] = useState(false);
   const [filter, setFilter] = useState('ALL');
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
@@ -55,6 +57,7 @@ export const ReservationsPage: React.FC = () => {
       console.error('Failed to fetch reservations', err);
     } finally {
       setIsLoading(false);
+      setHasLoadedReservations(true);
     }
   };
 
@@ -69,7 +72,7 @@ export const ReservationsPage: React.FC = () => {
     return () => window.removeEventListener('click', handleGlobalClick);
   }, []);
 
-  if (isLoading) {
+  if (isLoading && !hasLoadedReservations) {
     return (
       <div className="flex-1 p-8 space-y-8">
         <div className="flex items-center justify-between">
@@ -200,6 +203,12 @@ export const ReservationsPage: React.FC = () => {
 
       {/* List Body */}
       <main tabIndex={0} className="flex-1 overflow-y-auto custom-scrollbar px-staff-margin py-8">
+        {isLoading && (
+          <div className="max-w-[1400px] mx-auto mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            Recherche en cours
+          </div>
+        )}
         <div className="max-w-[1400px] mx-auto space-y-4 grid grid-cols-1 gap-4">
           {visibleReservations.map((res) => {
             const guestName = getReservationGuestName(res);

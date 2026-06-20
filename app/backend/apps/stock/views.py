@@ -72,6 +72,13 @@ class PlatIngredientViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated()]
         return [IsAuthenticated(), IsCuisinierOrGerant()]
 
+    def get_queryset(self):
+        queryset = self.queryset
+        plat = self.request.query_params.get('plat')
+        if plat:
+            queryset = queryset.filter(plat_id=plat)
+        return queryset
+
 
 class MouvementStockViewSet(viewsets.ModelViewSet):
     serializer_class = MouvementStockSerializer

@@ -164,7 +164,7 @@ const mockPaymentSession = async (page: Page) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ share_amount: '90.00' }),
+      body: JSON.stringify({ share_amounts: ['90.00'] }),
     });
   });
   await page.route('**/api/paiements/session/pay/', async (route) => {

@@ -29,8 +29,8 @@ Le traitement du langage naturel (\textit{Natural Language Processing} ou NLP) e
 
 Les niveaux d'analyse de sentiment incluent l'analyse au niveau du document entier, au niveau de la phrase individuelle, ou au niveau de l'aspect (identifier le sentiment pour chaque ingrédient ou service mentionné). Tastify réalise une analyse combinée au niveau du document (le commentaire de l'avis) et l'associe de façon optionnelle à un plat spécifique.
 
-\subsection{Revue de la littérature}
-Les approches de classification de sentiment se répartissent historiquement en trois catégories :
+\subsection{Approches de classification de sentiment}
+Les approches de classification de sentiment étudiées pour cadrer le choix technique du projet se répartissent en trois catégories principales :
 \begin{enumerate}
     \item \textbf{Les approches lexicales (basées sur des règles) :} Elles utilisent des dictionnaires de mots annotés (comme SentiWordNet) et comptent les occurrences. Simples et transparentes, elles manquent de flexibilité et échouent face à la négation, aux sarcasmes et à l'évolution du langage.
     \item \textbf{Les approches de Machine Learning classique :} Des algorithmes supervisés comme les machines à vecteurs de support (SVM) ou le classifieur Bayésien Naïf (\textit{Naive Bayes}) s'entraînent sur des vecteurs de mots. Ils sont performants mais exigent une ingénierie de caractéristiques (\textit{feature engineering}) manuelle.
@@ -65,8 +65,8 @@ Pour qu'un modèle mathématique traite le texte, celui-ci doit être converti e
 
 Dans Tastify, la tokenisation et la vectorisation sont encapsulées directement dans le modèle BERT de Hugging Face lors de l'inférence, tandis que notre fallback local applique une recherche de sous-chaînes optimisée.
 
-\subsection{Classification}
-Les vecteurs sémantiques sont ensuite classés. Les méthodes traditionnelles incluent des règles simples ou des classifieurs linéaires de Machine Learning. Dans le cas du modèle principal de Tastify, le vecteur sémantique de sortie du modèle BERT passe par une couche de classification (Softmax) pour produire les probabilités des classes de polarité.
+\subsection{Prédiction de la polarité}
+Les vecteurs sémantiques sont ensuite utilisés pour prédire la polarité du commentaire. Les méthodes traditionnelles incluent des règles simples ou des classifieurs linéaires de Machine Learning. Dans le cas du modèle principal de Tastify, le vecteur sémantique de sortie du modèle BERT passe par une couche de classification (Softmax) afin de produire une prédiction de sentiment, exprimée sous forme de probabilités pour les classes positif, neutre et négatif.
 
 \section{Rôle de l'analyse de sentiment dans Tastify}
 Dans Tastify, les avis clients donnent un retour direct sur l'expérience au restaurant. Un commentaire peut signaler un plat apprécié, un service lent, une attente trop longue, une mauvaise température ou une satisfaction générale. Sans traitement automatique, ces retours deviennent difficiles à suivre dès que leur nombre augmente.
@@ -138,7 +138,7 @@ La figure~\ref{fig:pipeline-sentiment} résume le flux : l'utilisateur soumet un
 
 La figure~\ref{fig:capture-avis-sentiment} montre l'exploitation concrète du pipeline dans l'interface : chaque avis conserve son texte, sa note et un résultat de sentiment utilisable par le gérant pour prioriser les retours.
 
-\section{Modèle réellement utilisé}
+\section{Modèle utilisé dans Tastify}
 Le code du fichier \code{apps/avis/tasks.py} définit les modèles suivants :
 \begin{itemize}
   \item \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} pour les avis non arabes ;
@@ -192,10 +192,13 @@ Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparen
 \end{tabularx}
 \end{table}
 
+Cette comparaison qualitative est complétée par l'évaluation expérimentale de la section~\ref{sec:evaluation-sentiment}, qui présente les prédictions détaillées et les métriques chiffrées obtenues sur un corpus de validation.
+
 \section{Justification du choix}
 Le choix du modèle \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} est motivé par sa proximité avec le domaine des avis clients, son excellent support de la langue française, sa rapidité d'intégration via l'API Hugging Face, et la garantie de continuité de service offerte par notre fallback local.
 
 \section{Évaluation expérimentale et métriques}
+\label{sec:evaluation-sentiment}
 
 \subsection{Protocole d'évaluation et corpus}
 Afin d'évaluer de manière objective et honnête les performances de notre système sans disposer d'un grand corpus d'entraînement local, nous avons construit un jeu de validation composé de 15 avis réalistes rédigés en français et en arabe dialectal marocain (Darija), représentant les interactions courantes des clients en restaurant. Ces avis ont été annotés manuellement (5 Positifs, 5 Neutres, 5 Négatifs) pour constituer la vérité de terrain (\textit{Ground Truth}). Ce corpus de validation est un échantillon réduit construit manuellement pour vérifier le comportement du pipeline sur des avis courts en français et en darija. Les labels de référence ont été attribués manuellement par les membres du projet. Cette évaluation reste indicative et ne remplace pas une validation sur un corpus réel de grande taille.
@@ -229,43 +232,14 @@ Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de valida
 \end{tabularx}
 \end{table}
 
-\subsection{Matrices de confusion et analyse}
-La confrontation des prédictions à la vérité terrain permet de dresser les matrices de confusion pour les deux approches (Table~\ref{tab:confusion-local} et Table~\ref{tab:confusion-bert}).
-
-\begin{table}[H]
-\centering
-\caption{Matrice de confusion -- Modèle local par mots-clés}
-\label{tab:confusion-local}
-\begin{tabular}{c c|ccc}
-\multicolumn{2}{c}{} & \multicolumn{3}{c}{\textbf{Prédiction Local}} \\
-\multicolumn{2}{c}{} & POSITIF & NEUTRE & NEGATIF \\
-\hline
-\multirow{3}{*}{\textbf{Vrai}} & POSITIF & 3 & 2 & 0 \\
-& NEUTRE & 1 & 4 & 0 \\
-& NEGATIF & 0 & 3 & 2 \\
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Matrice de confusion -- Modèle principal BERT / MARBERT}
-\label{tab:confusion-bert}
-\begin{tabular}{c c|ccc}
-\multicolumn{2}{c}{} & \multicolumn{3}{c}{\textbf{Prédiction BERT}} \\
-\multicolumn{2}{c}{} & POSITIF & NEUTRE & NEGATIF \\
-\hline
-\multirow{3}{*}{\textbf{Vrai}} & POSITIF & 5 & 0 & 0 \\
-& NEUTRE & 0 & 4 & 1 \\
-& NEGATIF & 0 & 0 & 5 \\
-\end{tabular}
-\end{table}
+\subsection{Analyse des erreurs et métriques}
+La confrontation des prédictions à la vérité terrain met en évidence deux comportements distincts. Le modèle local reste utile comme solution de secours, tandis que le modèle principal BERT / MARBERT produit des résultats plus réguliers sur le corpus de validation.
 
 Le modèle local atteint un taux de réussite correct sur les cas simples contenant des termes français évidents (comme \textit{excellent}, \textit{horrible}, \textit{bon}), mais il échoue à traiter la Darija (classée par défaut comme neutre) et les structures concessives (comme l'avis 2 "bon mais l'attente longue" classé positif à cause du mot "bon").
 
 Le modèle principal BERT (avec MARBERT pour la Darija) fait preuve d'une excellente compréhension syntaxique et multilingue. Il ne commet qu'une seule erreur sur l'avis 8 ("Cadre agréable mais nourriture sans goût") qu'il classe comme négatif à cause de la force sémantique de "sans goût", là où un humain a attribué un label neutre.
 
-\subsection{Calcul des métriques de performance}
-À partir de ces matrices, nous calculons les métriques clés de classification :
+À partir des prédictions du corpus de validation, nous calculons les métriques clés de classification :
 \begin{itemize}
     \item \textbf{Accuracy (Exactitude) :} Taux de prédictions correctes.
     \[Accuracy = \frac{\text{Somme de la diagonale}}{\text{Total des échantillons}}\]
@@ -279,6 +253,7 @@ Le modèle principal BERT (avec MARBERT pour la Darija) fait preuve d'une excell
 
 Le tableau~\ref{tab:evaluation-metrics} présente la synthèse de ces métriques calculées sur notre corpus.
 
+\setcounter{table}{6}
 \begin{table}[H]
 \centering
 \caption{Synthèse comparative des métriques de performance}
@@ -287,15 +262,15 @@ Le tableau~\ref{tab:evaluation-metrics} présente la synthèse de ces métriques
 \toprule
 \textbf{Modèle et Classe} & \textbf{Accuracy} & \textbf{Précision} & \textbf{Rappel} & \textbf{F1-Score} \\
 \midrule
-\textbf{Modèle Local Fallback} & \textbf{60,0 \%} & & & \\
--- Classe POSITIF & & 75,0 \% & 60,0 \% & 66,7 \% \\
--- Classe NEUTRE & & 44,4 \% & 80,0 \% & 57,1 \% \\
--- Classe NEGATIF & & 100,0 \% & 40,0 \% & 57,1 \% \\
+\textbf{Modèle Local Fallback} & \textbf{0,60} & & & \\
+-- Classe POSITIF & & 0,75 & 0,60 & 0,67 \\
+-- Classe NEUTRE & & 0,44 & 0,80 & 0,57 \\
+-- Classe NEGATIF & & 1,00 & 0,40 & 0,57 \\
 \midrule
-\textbf{Modèle Principal BERT} & \textbf{93,3 \%} & & & \\
--- Classe POSITIF & & 100,0 \% & 100,0 \% & 100,0 \% \\
--- Classe NEUTRE & & 100,0 \% & 80,0 \% & 88,9 \% \\
--- Classe NEGATIF & & 83,3 \% & 100,0 \% & 90,9 \% \\
+\textbf{Modèle Principal BERT} & \textbf{0,93} & & & \\
+-- Classe POSITIF & & 1,00 & 1,00 & 1,00 \\
+-- Classe NEUTRE & & 1,00 & 0,80 & 0,89 \\
+-- Classe NEGATIF & & 0,83 & 1,00 & 0,91 \\
 \bottomrule
 \end{tabularx}
 \end{table}

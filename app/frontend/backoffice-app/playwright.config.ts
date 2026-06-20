@@ -19,7 +19,7 @@ const projects = [
   {
     name: 'gerant-chromium',
     dependencies: ['setup'],
-    testMatch: [/.*\.gerant\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/, /.*backoffice\.dashboard\.spec\.ts/],
+    testMatch: [/.*\.gerant\.spec\.ts/, /.*backoffice\.dashboard\.spec\.ts/],
     use: {
       ...devices['Desktop Chrome'],
       storageState: './tests/e2e/.auth/gerant.json',
@@ -28,7 +28,7 @@ const projects = [
   {
     name: 'serveur-chromium',
     dependencies: ['setup'],
-    testMatch: [/.*\.serveur\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
+    testMatch: [/.*\.serveur\.spec\.ts/],
     use: {
       ...devices['Desktop Chrome'],
       storageState: './tests/e2e/.auth/serveur.json',
@@ -37,7 +37,37 @@ const projects = [
   {
     name: 'cuisinier-chromium',
     dependencies: ['setup'],
-    testMatch: [/.*\.cuisinier\.spec\.ts/, /.*backoffice\.quality\.spec\.ts/],
+    testMatch: [/.*\.cuisinier\.spec\.ts/],
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: './tests/e2e/.auth/cuisinier.json',
+    },
+  },
+  {
+    name: 'gerant-quality-chromium',
+    dependencies: ['setup'],
+    testMatch: /.*backoffice\.quality\.spec\.ts/,
+    grep: /@gerant-quality/,
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: './tests/e2e/.auth/gerant.json',
+    },
+  },
+  {
+    name: 'serveur-quality-chromium',
+    dependencies: ['setup'],
+    testMatch: /.*backoffice\.quality\.spec\.ts/,
+    grep: /@serveur-quality/,
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: './tests/e2e/.auth/serveur.json',
+    },
+  },
+  {
+    name: 'cuisinier-quality-chromium',
+    dependencies: ['setup'],
+    testMatch: /.*backoffice\.quality\.spec\.ts/,
+    grep: /@cuisinier-quality/,
     use: {
       ...devices['Desktop Chrome'],
       storageState: './tests/e2e/.auth/cuisinier.json',
@@ -58,7 +88,8 @@ if (includeExpandedMatrix) {
     {
       name: 'gerant-mobile-smoke',
       dependencies: ['setup'],
-      testMatch: [/.*backoffice\.quality\.spec\.ts/, /.*backoffice\.dashboard\.spec\.ts/],
+      testMatch: /.*backoffice\.quality\.spec\.ts/,
+      grep: /@gerant-quality/,
       use: {
         ...devices['iPhone 13'],
         storageState: './tests/e2e/.auth/gerant.json',

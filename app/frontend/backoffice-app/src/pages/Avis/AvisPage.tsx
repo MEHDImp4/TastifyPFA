@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 export const AvisPage: React.FC = () => {
   const [avis, setAvis] = useState<Avis[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedAvis, setHasLoadedAvis] = useState(false);
   const [search, setSearch] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +40,7 @@ export const AvisPage: React.FC = () => {
       toast.error('Impossible de charger les avis');
     } finally {
       setIsLoading(false);
+      setHasLoadedAvis(true);
     }
   };
 
@@ -50,6 +52,17 @@ export const AvisPage: React.FC = () => {
     if (score > 0.2) return <Smile className="w-4 h-4 text-success" />;
     if (score < -0.2) return <Frown className="w-4 h-4 text-error" />;
     return <Meh className="w-4 h-4 text-on-surface-variant/40" />;
+  };
+
+  const getSentimentMeta = (score: number | null | undefined) => {
+    const normalized = Math.max(-1, Math.min(1, Number(score || 0)));
+    if (normalized > 0.2) {
+      return { label: 'Positif', percent: Math.round(normalized * 100), color: 'text-success' };
+    }
+    if (normalized < -0.2) {
+      return { label: 'Négatif', percent: Math.round(Math.abs(normalized) * 100), color: 'text-error' };
+    }
+    return { label: 'Neutre', percent: Math.round(Math.abs(normalized) * 100), color: 'text-on-surface-variant' };
   };
 
   const normalizedSearch = search.trim().toLowerCase();
@@ -74,7 +87,7 @@ export const AvisPage: React.FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
+  if (isLoading && !hasLoadedAvis) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
@@ -100,6 +113,12 @@ export const AvisPage: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
+        {isLoading && (
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            Recherche en cours
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
@@ -131,6 +150,7 @@ export const AvisPage: React.FC = () => {
 
             {visibleAvis.length > 0 ? visibleAvis.map((a) => {
               const username = a.username ?? a.user_username ?? 'client';
+              const sentiment = getSentimentMeta(a.sentiment_score);
               return (
                 <div
                   key={a.id}
@@ -148,12 +168,8 @@ export const AvisPage: React.FC = () => {
                   </div>
                   <div className="col-span-3 flex flex-col items-center justify-center gap-1">
                     {getSentimentIcon(a.sentiment_score || 0)}
-                    <span className={`text-[10px] font-bold tracking-widest font-mono opacity-60 ${
-                        (a.sentiment_score || 0) > 0.2 ? 'text-success' :
-                        (a.sentiment_score || 0) < -0.2 ? 'text-error' :
-                        'text-on-surface-variant'
-                    }`}>
-                        {((a.sentiment_score || 0) * 100).toFixed(0)}%
+                    <span className={`text-[10px] font-bold tracking-widest font-mono opacity-60 ${sentiment.color}`}>
+                        {sentiment.label} · {sentiment.percent}%
                     </span>
                   </div>
                 </div>

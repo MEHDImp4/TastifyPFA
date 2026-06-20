@@ -28,7 +28,7 @@ export const AppShell: React.FC = () => {
         
         <main
           id="staff-main-content"
-          className={`flex-1 flex flex-col min-h-0 overflow-hidden ${isTacticalPage ? 'p-0' : 'p-staff-gutter md:p-8'}`}
+          className={`flex-1 flex flex-col min-h-0 overflow-hidden ${isTacticalPage ? 'p-0' : 'p-staff-gutter md:p-6'}`}
         >
           <div
             className={`flex-1 flex flex-col min-h-0 w-full ${isTacticalPage ? '' : 'max-w-[1600px] mx-auto'}`}

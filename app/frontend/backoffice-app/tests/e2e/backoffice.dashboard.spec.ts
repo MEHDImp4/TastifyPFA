@@ -53,8 +53,7 @@ const emptyDashboardPayload: DashboardPayload = {
 };
 
 test.describe('manager dashboard analytics e2e', () => {
-  test.beforeEach(async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name !== 'gerant-chromium');
+  test.beforeEach(async ({ page }) => {
     await page.route('**/api/users/logout/', async route => {
       await route.fulfill({ status: 200 });
     });

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAuthStore } from './authStore';
 
 vi.mock('../api/axios', () => ({
@@ -17,6 +17,10 @@ const reset = () =>
   });
 
 beforeEach(reset);
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('authStore — initial state', () => {
   it('starts unauthenticated', () => {
@@ -78,6 +82,7 @@ describe('authStore — logout (async)', () => {
 
   it('still clears auth state when the logout API call fails', async () => {
     const { api } = await import('../api/axios');
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.mocked(api.post).mockRejectedValueOnce(new Error('Network error'));
 
     useAuthStore.getState().setAuth('tok', 'SERVEUR', 'serveur_test');

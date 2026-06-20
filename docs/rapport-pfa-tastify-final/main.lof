@@ -13,24 +13,24 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Pipeline technique de l'analyse de sentiment}}{23}{figure.3.1}%
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Back-office : avis clients avec scores de sentiment}}{24}{figure.3.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Architecture technique de Tastify}}{33}{figure.4.1}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Séquence simplifiée d'authentification JWT}}{35}{figure.4.2}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Flux temps réel entre prise de commande et KDS}}{36}{figure.4.3}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Connexion staff : accès sécurisé au back-office}}{38}{figure.4.4}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Tableau de bord gérant du back-office}}{38}{figure.4.5}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Interface serveur : plan de salle}}{39}{figure.4.6}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Kitchen Display System côté cuisine}}{39}{figure.4.7}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Portail client : consultation du menu}}{40}{figure.4.8}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Portail client : suggestions et plats recommandés avec avis positifs}}{41}{figure.4.9}%
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Back-office : gestion du stock et alertes d'ingrédients}}{42}{figure.4.10}%
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Portail client : réservation d'une table}}{42}{figure.4.11}%
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Portail client : paiement et partage de l'addition}}{43}{figure.4.12}%
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Portail client : fidélité, points et récompenses}}{43}{figure.4.13}%
-\contentsline {figure}{\numberline {4.14}{\ignorespaces Back-office : gestion des ressources humaines}}{44}{figure.4.14}%
-\contentsline {figure}{\numberline {4.15}{\ignorespaces Organisation du déploiement Docker Compose}}{44}{figure.4.15}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Architecture technique de Tastify}}{32}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Séquence simplifiée d'authentification JWT}}{34}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Flux temps réel entre prise de commande et KDS}}{34}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Connexion staff : accès sécurisé au back-office}}{37}{figure.4.4}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Tableau de bord gérant du back-office}}{37}{figure.4.5}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Interface serveur : plan de salle}}{38}{figure.4.6}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Kitchen Display System côté cuisine}}{38}{figure.4.7}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Portail client : consultation du menu}}{39}{figure.4.8}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Portail client : plats recommandés classés selon les avis positifs}}{40}{figure.4.9}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Back-office : gestion du stock et alertes d'ingrédients}}{41}{figure.4.10}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Portail client : réservation d'une table}}{41}{figure.4.11}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Portail client : paiement et partage de l'addition}}{42}{figure.4.12}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Portail client : fidélité, points et récompenses}}{42}{figure.4.13}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Back-office : gestion des ressources humaines}}{43}{figure.4.14}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Organisation du déploiement Docker Compose}}{43}{figure.4.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Sortie pytest backend : 335 tests réussis}}{48}{figure.5.1}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Sorties Vitest : back-office et portail client réussis}}{48}{figure.5.2}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Sortie Playwright client : 79 scénarios réussis et un sélecteur à corriger}}{49}{figure.5.3}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Workflow CI et synthèse des validations locales}}{49}{figure.5.4}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Sortie pytest backend : 335 tests réussis}}{47}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Sorties Vitest : back-office et portail client réussis}}{47}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Sortie Playwright client : 79 scénarios réussis et un sélecteur à corriger}}{48}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Workflow CI et synthèse des validations locales}}{48}{figure.5.4}%
 \addvspace {10\p@ }

@@ -53,7 +53,7 @@ export const CategoryPage: React.FC = () => {
       setCategories(res.data.sort((a, b) => a.ordre_affichage - b.ordre_affichage));
     } catch (err) {
       console.error(err);
-      toast.error('Erreur chargement secteurs');
+      toast.error('Erreur chargement catégories');
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +154,7 @@ export const CategoryPage: React.FC = () => {
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       <header className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
         <div>
-          <h1 aria-label="Gestion des catégories" className="text-sm font-bold tracking-widest text-on-background uppercase">Secteurs & Catégories</h1>
+          <h1 aria-label="Gestion des catégories" className="text-sm font-bold tracking-widest text-on-background uppercase">Catégories</h1>
           <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 opacity-40">Organisation hiérarchique du menu</p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
@@ -170,31 +170,31 @@ export const CategoryPage: React.FC = () => {
             />
           </div>
           <button data-testid="category-create-button" onClick={openCreate} className="btn-primary h-10 px-6">
-            <Plus className="w-4 h-4" /> <span>Nouveau Secteur</span>
+            <Plus className="w-4 h-4" /> <span>Nouvelle Catégorie</span>
           </button>
         </div>
       </header>
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
           {paginatedCategories.map(c => (
-            <div key={c.id} data-testid={`category-card-${c.id}`} className="atelier-card p-6 group">
+            <div key={c.id} data-testid={`category-card-${c.id}`} className="atelier-card p-6 group flex flex-col h-full">
               {c.image && (
-                <div className="mb-4 aspect-video rounded overflow-hidden border border-outline">
+                <div className="mb-4 aspect-video rounded overflow-hidden border border-outline flex-shrink-0">
                   <img src={c.image} alt={c.nom} role="img" aria-label={c.nom} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
               )}
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded border border-outline bg-background flex items-center justify-center font-bold text-[10px]">{c.ordre_affichage}</div>
-                  <h3 className="text-sm font-bold uppercase tracking-tight text-on-background">{c.nom}</h3>
-                </div>
-                <div className="flex gap-2">
-                  <button data-testid={`category-edit-${c.id}`} aria-label={`Modifier ${c.nom}`} onClick={() => openEdit(c)} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button data-testid={`category-delete-${c.id}`} aria-label={`Supprimer ${c.nom}`} onClick={() => handleDelete(c.id)} className="btn-icon text-error hover:border-error/30 hover:text-error"><Trash2 className="w-3.5 h-3.5" /></button>
-                </div>
+              <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+                <div className="w-8 h-8 rounded border border-outline bg-background flex items-center justify-center font-bold text-[10px] flex-shrink-0">{c.ordre_affichage}</div>
+                <h3 className="text-sm font-bold uppercase tracking-tight text-on-background truncate flex-1 min-w-0" title={c.nom}>{c.nom}</h3>
               </div>
-              <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40">{c.description || 'Aucune description spécifiée.'}</p>
+              <p className="text-[10px] text-on-surface-variant leading-relaxed line-clamp-2 uppercase tracking-widest opacity-40 mb-4 flex-grow">
+                {c.description || 'Aucune description spécifiée.'}
+              </p>
+              <div className="flex justify-end gap-2 border-t border-outline/50 pt-4 mt-auto flex-shrink-0">
+                <button data-testid={`category-edit-${c.id}`} aria-label={`Modifier ${c.nom}`} onClick={() => openEdit(c)} className="btn-icon"><Edit2 className="w-3.5 h-3.5" /></button>
+                <button data-testid={`category-delete-${c.id}`} aria-label={`Supprimer ${c.nom}`} onClick={() => handleDelete(c.id)} className="btn-icon text-error hover:border-error/30 hover:text-error"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
             </div>
           ))}
         </div>
@@ -234,7 +234,7 @@ export const CategoryPage: React.FC = () => {
           <div role="dialog" aria-modal="true" aria-labelledby="category-editor-title" className="relative w-full max-w-md max-h-[calc(100dvh-3rem)] bg-surface border border-outline rounded-xl flex flex-col shadow-2xl">
             <div className="p-6 border-b border-outline flex items-center justify-between">
               <h2 id="category-editor-title" className="text-sm font-bold text-on-background uppercase tracking-[0.2em]">
-                {editor.mode === 'create' ? 'Nouveau Secteur' : 'Modifier Secteur'}
+                {editor.mode === 'create' ? 'Nouvelle Catégorie' : 'Modifier la Catégorie'}
               </h2>
               <button data-testid="close-editor" aria-label="Fermer l'éditeur" onClick={closeEditor} className="btn-icon">
                 <X className="w-4 h-4" />

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { mockConfig, mockRefreshFail } from './fixtures/api';
+import { AUTHENTICATED_STORAGE_STATE, mockConfig, mockRefreshFail } from './fixtures/api';
 
 async function expectInvalid(locator: ReturnType<Parameters<typeof test>[0]['page']['getByLabel']>) {
   expect(await locator.evaluate((element) => !element.checkValidity())).toBe(true);
@@ -55,10 +55,17 @@ test.describe('payment portal', () => {
     await expect(page.getByRole('heading', { name: /Votre Addition/i })).toHaveCount(0);
   });
 
-  test('supports full payment, equal split, individual item split, and zero-total guard', async ({ page }) => {
+  test.describe('authenticated payment actions', () => {
+    test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
+
+    test('supports full payment, equal split, individual item split, and zero-total guard', async ({ page }) => {
     const session = {
       table_numero: '12',
       montant_restant: '180.00',
+      items: [
+        { id: 1, plat_nom: 'Harira', quantite: 1, montant_restant: '40.00' },
+        { id: 2, plat_nom: 'Tagine', quantite: 2, montant_restant: '140.00' },
+      ],
       lignes: [
         { id: 1, plat_nom: 'Harira', quantite: 1, montant_restant: '40.00' },
         { id: 2, plat_nom: 'Tagine', quantite: 2, montant_restant: '140.00' },
@@ -76,7 +83,7 @@ test.describe('payment portal', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ share_amount: (180 / count).toFixed(2) }),
+        body: JSON.stringify({ share_amounts: [(180 / count).toFixed(2)] }),
       });
     });
     await page.route('**/api/paiements/session/pay/', async (route) => {
@@ -120,8 +127,8 @@ test.describe('payment portal', () => {
       token: 'live-token',
       montant: '180.00',
       contributions: [
-        { ligne_id: 1, montant: '40.00' },
-        { ligne_id: 2, montant: '140.00' },
+        { commande_ligne_id: 1, montant_contribue: '40.00' },
+        { commande_ligne_id: 2, montant_contribue: '140.00' },
       ],
     });
   });
@@ -136,6 +143,7 @@ test.describe('payment portal', () => {
         body: JSON.stringify({
           table_numero: '7',
           montant_restant: '42.00',
+          items: [{ id: 1, plat_nom: 'Mocktail', quantite: 1, montant_restant: '42.00' }],
           lignes: [{ id: 1, plat_nom: 'Mocktail', quantite: 1, montant_restant: '42.00' }],
         }),
       });
@@ -167,6 +175,7 @@ test.describe('payment portal', () => {
         body: JSON.stringify({
           table_numero: '9',
           montant_restant: '25.00',
+          items: [{ id: 1, plat_nom: 'Coffee', quantite: 1, montant_restant: '25.00' }],
           lignes: [{ id: 1, plat_nom: 'Coffee', quantite: 1, montant_restant: '25.00' }],
         }),
       });
@@ -181,5 +190,6 @@ test.describe('payment portal', () => {
     await expect(page.getByRole('heading', { name: /Paiement confirmé/i })).toBeVisible();
     await page.getByRole('button', { name: /Retour à l'accueil/i }).click();
     await expect(page).toHaveURL('/');
+  });
   });
 });

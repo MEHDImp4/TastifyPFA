@@ -45,12 +45,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        plats = Plat.objects.select_related('categorie').order_by(
-            'categorie__ordre_affichage',
-            'categorie__nom',
-            'nom',
-            'id',
-        )
+        plats = Plat.objects.select_related('categorie')
 
         if user.is_authenticated and user.role in ['GERANT', 'CUISINIER']:
             queryset = plats.filter(est_active=True) if self.action == 'list' else plats
@@ -71,6 +66,23 @@ class PlatViewSet(viewsets.ModelViewSet):
                     | models.Q(description__icontains=search)
                     | models.Q(categorie__nom__icontains=search)
                 )
+
+            queryset = queryset.annotate(
+                avg_sentiment=Avg('avis__sentiment_score'),
+                avis_count=Count('avis', filter=models.Q(avis__sentiment_score__isnull=False)),
+            ).order_by(
+                models.F('avg_sentiment').desc(nulls_last=True),
+                '-avis_count',
+                'nom',
+                'id',
+            )
+        else:
+            queryset = queryset.order_by(
+                'categorie__ordre_affichage',
+                'categorie__nom',
+                'nom',
+                'id',
+            )
 
         return queryset
 

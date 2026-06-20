@@ -190,65 +190,51 @@ export const MenuPage: React.FC = () => {
 
   return (
     <div className="page-shell flex flex-col">
-      <div className="flex-none border-b border-outline bg-surface">
-        <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 px-client-margin py-10 sm:py-12 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,420px)] lg:items-end lg:gap-12">
-          <div className="relative overflow-hidden rounded-[28px] border border-outline bg-[linear-gradient(135deg,rgba(255,253,251,1)_0%,rgba(251,245,237,1)_52%,rgba(246,235,224,1)_100%)] px-6 py-8 shadow-[0_20px_60px_rgba(69,10,10,0.05)] sm:px-8 sm:py-9">
-            <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_top_right,rgba(180,83,9,0.16),transparent_48%)]" />
-            <div className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(69,10,10,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(69,10,10,0.18)_1px,transparent_1px)] [background-size:36px_36px]" />
-            <div className="relative space-y-5">
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-ui-label text-on-surface-variant">Menu</span>
-                <span className="rounded-full border border-outline bg-white/80 px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-on-surface-variant shadow-sm">
-                  {totalCount} plats
+      <div className="flex-none border-b border-outline/40 bg-surface">
+        <section className="mx-auto w-full max-w-[1200px] px-client-margin py-12 md:py-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-4">
+            <div className="space-y-4 max-w-xl">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase">Suggestions du chef</span>
+                <span className="h-3 w-px bg-outline/50" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-on-surface-subtle">
+                  {totalCount} créations
                 </span>
               </div>
-              <div className="max-w-2xl space-y-4">
-                <h1 className="text-display-lg lowercase">la carte.</h1>
-                <p className="max-w-xl text-sm text-on-surface-variant sm:text-base">
-                  Une lecture plus claire, des assiettes mises en valeur et une navigation plus douce pour parcourir la carte du restaurant.
-                </p>
-              </div>
+              <h1 className="text-display-lg lowercase text-on-background leading-none font-heading">la carte.</h1>
+              <p className="text-sm leading-relaxed text-on-surface-muted">
+                Découvrez une gastronomie marocaine raffinée, alliant tradition ancestrale et touches contemporaines. Nos assiettes sont préparées minute avec des ingrédients locaux de saison.
+              </p>
             </div>
-          </div>
 
-          <div className="space-y-4">
-            <div className="rounded-[24px] border border-outline bg-surface-container-high/80 p-2 shadow-[0_16px_50px_rgba(69,10,10,0.04)]">
-              <div className="flex items-center gap-3 rounded-[18px] bg-background px-4 py-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-outline bg-surface-container-high text-on-surface-variant">
-                  <Search className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="mb-1 block text-[0.62rem] font-bold uppercase tracking-[0.22em] text-on-surface-subtle">
-                    Recherche
-                  </span>
-                  <input
-                    type="text"
-                    aria-label="Rechercher"
-                    placeholder="Rechercher un plat"
-                    value={search}
-                    onChange={(e) => handleSearchChange(e.target.value)}
-                    className="w-full border-none bg-transparent p-0 text-sm font-semibold text-on-background placeholder:text-on-surface-subtle focus:outline-none"
-                  />
-                </div>
+            <div className="w-full md:max-w-xs space-y-3">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-accent/60" />
+                <input
+                  type="text"
+                  aria-label="Rechercher"
+                  placeholder="Épices, entrées, tajines..."
+                  value={search}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="w-full min-h-[48px] pl-11 pr-4 rounded-xl border border-outline bg-background text-sm font-semibold text-on-background placeholder:text-on-surface-subtle focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-premium"
+                />
               </div>
-            </div>
-            <div className="flex items-center justify-between gap-4 px-1">
-              <div className="min-w-0">
-                <p className="text-[0.62rem] font-bold uppercase tracking-[0.24em] text-on-surface-subtle">Catégorie active</p>
-                <p className="truncate text-sm font-semibold text-on-background">{categoryLabel}</p>
+              
+              <div className="flex items-center justify-between text-[9px] tracking-wider uppercase font-bold text-on-surface-subtle px-1">
+                <span>Catégorie : <span className="text-accent">{categoryLabel}</span></span>
+                {search.trim() ? (
+                  <button
+                    type="button"
+                    onClick={() => handleSearchChange('')}
+                    className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-primary hover:text-accent transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                    Effacer
+                  </button>
+                ) : (
+                  <span className="italic opacity-60">Sélection et filtrage fluides.</span>
+                )}
               </div>
-              {search.trim() ? (
-                <button
-                  type="button"
-                  onClick={() => handleSearchChange('')}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-outline bg-background px-4 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant transition-colors hover:text-on-background"
-                >
-                  <X className="h-3.5 w-3.5" />
-                  Effacer
-                </button>
-              ) : (
-                <p className="text-right text-xs text-on-surface-subtle">Navigation fluide et filtrage instantané.</p>
-              )}
             </div>
           </div>
         </section>

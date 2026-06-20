@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api/axios';
+import { avisApi } from '../../api/avis';
 import { useConfigStore } from '../../store/configStore';
+import { useAuthStore } from '../../store/authStore';
 import { getBrandName } from '../../components/branding/brandName';
 import { 
   CheckCircle2, 
@@ -11,9 +13,31 @@ import {
   ShieldCheck,
   PieChart,
   Receipt,
-  QrCode
+  QrCode,
+  LogIn,
+  MessageSquare,
+  Send,
+  Star,
+  UserPlus
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+type PaymentItem = {
+  id: number;
+  plat_id: number;
+  plat_nom: string;
+  quantite: number;
+  reste_a_payer: string;
+  montant_restant?: string;
+};
+
+type ReviewItem = {
+  commande_id: number;
+  commande_ligne_id: number;
+  plat_id: number;
+  plat_nom: string;
+  quantite: number;
+};
 
 export const PaymentPortal: React.FC = () => {
   const { token } = useParams<{ token: string }>();
@@ -23,6 +47,11 @@ export const PaymentPortal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isPaying, setIsPaying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
+  const [reviewDrafts, setReviewDrafts] = useState<Record<number, { note: number; commentaire: string }>>({});
+  const [submittedReviews, setSubmittedReviews] = useState<Record<number, boolean>>({});
+  const [submittingReviewId, setSubmittingReviewId] = useState<number | null>(null);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
   // Split logic state
   const [splitMode, setSplitMode] = useState<'ALL' | 'EQUAL' | 'INDIVIDUAL'>('ALL');
@@ -30,6 +59,8 @@ export const PaymentPortal: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [payableAmount, setPayableAmount] = useState('0.00');
   const brandName = getBrandName(config?.nom);
+  const paymentPath = token ? `/pay/${token}` : '/';
+  const authRedirect = encodeURIComponent(paymentPath);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -55,16 +86,16 @@ export const PaymentPortal: React.FC = () => {
           const check = async () => {
             try {
                 const res = await api.post(`/paiements/session/equal-split/`, { token, split_count: splitCount });
-                setPayableAmount(res.data.share_amount);
+                setPayableAmount(res.data.share_amounts?.[0] ?? session.montant_restant);
             } catch (e) {
                 console.error(e);
             }
           };
           check();
       } else if (splitMode === 'INDIVIDUAL') {
-          const total = session.lignes
+          const total = (session.items ?? [])
             .filter((l: any) => selectedItems.includes(l.id))
-            .reduce((sum: number, l: any) => sum + parseFloat(l.montant_restant), 0);
+            .reduce((sum: number, l: any) => sum + parseFloat(l.reste_a_payer ?? l.montant_restant ?? '0'), 0);
           setPayableAmount(total.toFixed(2));
       }
   }, [splitMode, splitCount, selectedItems, session, token]);
@@ -74,6 +105,10 @@ export const PaymentPortal: React.FC = () => {
   };
 
   const handlePay = async () => {
+    if (!isAuthenticated) {
+      toast.error('Connectez-vous pour confirmer ce paiement.');
+      return;
+    }
     if (parseFloat(payableAmount) <= 0) return;
     setIsPaying(true);
     try {
@@ -83,17 +118,56 @@ export const PaymentPortal: React.FC = () => {
             reference_transaction: `TXN-${Math.random().toString(36).substring(2, 9).toUpperCase()}`
         };
         if (splitMode === 'INDIVIDUAL') {
-            payload.contributions = session.lignes
+            payload.contributions = (session.items ?? [])
                 .filter((l: any) => selectedItems.includes(l.id))
-                .map((l: any) => ({ ligne_id: l.id, montant: l.montant_restant }));
+                .map((l: any) => ({
+                    commande_ligne_id: l.id,
+                    montant_contribue: l.reste_a_payer ?? l.montant_restant
+                }));
         }
-        await api.post(`/paiements/session/pay/`, payload);
+        const res = await api.post(`/paiements/session/pay/`, payload);
+        setReviewItems(res.data.review_items ?? []);
         setIsSuccess(true);
         toast.success('Paiement confirmé');
     } catch (err: any) {
         toast.error(err.response?.data?.detail || "L'autorisation a échoué.");
     } finally {
         setIsPaying(false);
+    }
+  };
+
+  const updateReviewDraft = (platId: number, values: Partial<{ note: number; commentaire: string }>) => {
+    setReviewDrafts(prev => ({
+      ...prev,
+      [platId]: {
+        note: prev[platId]?.note ?? 5,
+        commentaire: prev[platId]?.commentaire ?? '',
+        ...values,
+      },
+    }));
+  };
+
+  const submitReview = async (item: ReviewItem) => {
+    const draft = reviewDrafts[item.plat_id] ?? { note: 5, commentaire: '' };
+    if (!draft.commentaire.trim()) {
+      toast.error('Ajoutez un commentaire pour ce plat.');
+      return;
+    }
+
+    setSubmittingReviewId(item.plat_id);
+    try {
+      await avisApi.createAvis({
+        commande: item.commande_id,
+        plat: item.plat_id,
+        note: draft.note,
+        commentaire: draft.commentaire.trim(),
+      });
+      setSubmittedReviews(prev => ({ ...prev, [item.plat_id]: true }));
+      toast.success('Merci pour votre avis');
+    } catch (err: any) {
+      toast.error(err.response?.data?.non_field_errors?.[0] || err.response?.data?.detail || "Impossible d'envoyer cet avis.");
+    } finally {
+      setSubmittingReviewId(null);
     }
   };
 
@@ -108,10 +182,62 @@ export const PaymentPortal: React.FC = () => {
 
   if (isSuccess) return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-background p-6 text-center font-body">
-        <div className="w-full max-w-xl atelier-card p-6 sm:p-10 md:p-12 relative overflow-hidden">
+        <div className="w-full max-w-3xl atelier-card p-6 sm:p-10 md:p-12 relative overflow-hidden">
             <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-10" strokeWidth={1} />
             <h2 className="text-4xl font-bold text-on-surface mb-4 leading-none">Paiement confirmé</h2>
             <p className="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-10 md:mb-12">Merci pour votre visite chez {brandName}. Votre addition est réglée.</p>
+            {reviewItems.length > 0 && (
+              <div className="mb-10 space-y-4 text-left">
+                <div className="flex items-center gap-3 border-b border-outline pb-4">
+                  <MessageSquare className="h-4 w-4 text-on-surface-variant" />
+                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-on-surface">Noter les plats payés</h3>
+                </div>
+                {reviewItems.map((item) => {
+                  const draft = reviewDrafts[item.plat_id] ?? { note: 5, commentaire: '' };
+                  const submitted = submittedReviews[item.plat_id];
+                  return (
+                    <div key={`${item.commande_ligne_id}-${item.plat_id}`} className="rounded-xl border border-outline bg-background p-4 sm:p-5">
+                      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-base font-bold text-on-surface">{item.plat_nom}</p>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">Qté {item.quantite}</p>
+                        </div>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((note) => (
+                            <button
+                              key={note}
+                              type="button"
+                              aria-label={`${note} étoile${note > 1 ? 's' : ''}`}
+                              disabled={submitted}
+                              onClick={() => updateReviewDraft(item.plat_id, { note })}
+                              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-outline bg-surface transition-colors hover:border-on-background disabled:opacity-50"
+                            >
+                              <Star className={`h-4 w-4 ${note <= draft.note ? 'fill-current text-accent' : 'text-on-surface-variant'}`} />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <textarea
+                        value={draft.commentaire}
+                        disabled={submitted}
+                        onChange={(event) => updateReviewDraft(item.plat_id, { commentaire: event.target.value })}
+                        className="field-control min-h-24 w-full resize-none rounded-xl p-4 text-sm"
+                        placeholder="Votre commentaire sur ce plat"
+                      />
+                      <button
+                        type="button"
+                        disabled={submitted || submittingReviewId === item.plat_id}
+                        onClick={() => submitReview(item)}
+                        className="btn-primary mt-4 min-h-12 w-full justify-center gap-3 disabled:opacity-50"
+                      >
+                        {submitted ? <CheckCircle2 className="h-4 w-4" /> : submittingReviewId === item.plat_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                        <span>{submitted ? 'Avis envoyé' : 'Envoyer mon avis'}</span>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <button onClick={() => navigate('/')} className="btn-primary mx-auto w-full sm:w-fit px-8 sm:px-16 h-14">Retour à l'accueil</button>
         </div>
     </div>
@@ -146,6 +272,28 @@ export const PaymentPortal: React.FC = () => {
             </div>
 
             {/* Split Options */}
+            {!isAuthenticated && (
+              <div className="atelier-card border-2 border-on-background p-6 sm:p-8 text-center">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-on-background text-background">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <h2 className="mb-3 text-2xl font-bold text-on-surface">Compte client requis</h2>
+                <p className="mx-auto mb-6 max-w-md text-sm leading-6 text-on-surface-variant">
+                  Créez un compte rapide ou connectez-vous pour régler l'addition et noter les plats après paiement.
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Link to={`/register?redirect=${authRedirect}`} className="btn-primary min-h-14 justify-center gap-3">
+                    <UserPlus className="h-4 w-4" />
+                    <span>Créer un compte</span>
+                  </Link>
+                  <Link to={`/login?redirect=${authRedirect}`} className="btn-secondary min-h-14 justify-center gap-3">
+                    <LogIn className="h-4 w-4" />
+                    <span>Se connecter</span>
+                  </Link>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <button aria-pressed={splitMode === 'ALL'} onClick={() => setSplitMode('ALL')} className={`min-h-28 p-5 sm:p-6 rounded-lg border-2 flex flex-col items-center justify-center gap-3 transition-all ${splitMode === 'ALL' ? 'bg-on-background border-on-background text-background' : 'bg-surface border-outline text-on-background hover:border-on-background'}`}>
                    <Receipt className="w-5 h-5" strokeWidth={1.5}/>
@@ -165,7 +313,7 @@ export const PaymentPortal: React.FC = () => {
                 <div className="atelier-card p-5 sm:p-8 space-y-6">
                     <label className="text-[10px] font-bold text-on-surface-variant tracking-widest">Choisir les articles</label>
                     <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
-                        {session.lignes.map((l: any) => (
+                        {(session.items ?? []).map((l: PaymentItem) => (
                             <button 
                                 key={l.id} onClick={() => toggleItem(l.id)}
                                 className={`w-full p-4 rounded border flex items-center justify-between transition-all ${selectedItems.includes(l.id) ? 'bg-on-background text-background border-on-background' : 'bg-background border-outline text-on-surface-variant'}`}
@@ -174,7 +322,7 @@ export const PaymentPortal: React.FC = () => {
                                     <span className="text-[13px] font-bold uppercase block tracking-tight">{l.plat_nom}</span>
                                     <span className="font-mono text-[10px] opacity-40 uppercase">Qté {l.quantite}</span>
                                 </div>
-                                <span className="font-mono font-bold">{l.montant_restant} DH</span>
+                                <span className="font-mono font-bold">{l.reste_a_payer ?? l.montant_restant} DH</span>
                             </button>
                         ))}
                     </div>
@@ -213,7 +361,7 @@ export const PaymentPortal: React.FC = () => {
                 
                 <div className="w-full space-y-4">
                     <button 
-                        onClick={handlePay} disabled={isPaying || parseFloat(payableAmount) <= 0}
+                        onClick={handlePay} disabled={isPaying || !isAuthenticated || parseFloat(payableAmount) <= 0}
                         className="btn-primary w-full min-h-14 gap-4"
                     >
                         {isPaying ? <Loader2 className="w-5 h-5 animate-spin" /> : <><span>Confirmer le paiement</span><ArrowRight className="w-4 h-4" /></>}

@@ -18,6 +18,7 @@ import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 export const StockPage: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedIngredients, setHasLoadedIngredients] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Ingredient | null>(null);
   const [search, setSearch] = useState('');
@@ -49,6 +50,7 @@ export const StockPage: React.FC = () => {
       toast.error('Erreur chargement inventaire');
     } finally {
       setIsLoading(false);
+      setHasLoadedIngredients(true);
     }
   };
 
@@ -139,7 +141,7 @@ export const StockPage: React.FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
+  if (isLoading && !hasLoadedIngredients) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1}/></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
@@ -170,7 +172,13 @@ export const StockPage: React.FC = () => {
       </header>
 
       <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-background custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {isLoading && (
+          <div className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            Recherche en cours
+          </div>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
           {visibleIngredients.map(i => {
             const isLow = parseFloat(i.stock_actuel) < parseFloat(i.seuil_alerte);
             return (

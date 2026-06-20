@@ -26,7 +26,8 @@ concurrency:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
+  actions: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -188,6 +189,21 @@ jobs:
           npm --prefix app/frontend/backoffice-app run test:unit
           npm --prefix app/frontend/client-app run test:unit
 
+      - name: Run frontend coverage
+        run: |
+          npm --prefix app/frontend/backoffice-app run test:coverage
+          npm --prefix app/frontend/client-app run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: .
+          files: app/frontend/backoffice-app/coverage/lcov.info,app/frontend/client-app/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+          fail_ci_if_error: false
+
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest
@@ -286,6 +302,18 @@ jobs:
 
       - name: Run backend pytest suite
         run: docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test -e DB_USER=root -e DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD || 'root_password' }} backend python -m pytest -q
+
+      - name: Copy coverage report from container
+        run: docker compose cp backend:/app/coverage.xml coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          flags: backend
+          name: backend-coverage
+          fail_ci_if_error: false
 
       - name: Dump backend logs on failure
         if: failure()

@@ -10,10 +10,16 @@ function Write-Step($message) {
 }
 
 function Invoke-Checked($command, $arguments, [switch]$Quiet) {
-    if ($Quiet) {
-        $output = & $command @arguments 2>&1
-    } else {
-        & $command @arguments
+    $prevErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        if ($Quiet) {
+            $output = & $command @arguments 2>&1
+        } else {
+            & $command @arguments
+        }
+    } finally {
+        $ErrorActionPreference = $prevErrorAction
     }
 
     if ($LASTEXITCODE -ne 0) {
@@ -138,6 +144,130 @@ function Wait-Http($url, $label) {
     throw "Timed out waiting for $label at $url"
 }
 
+function Show-DemoQrPage($repoRoot, $clientUrl, $staffUrl) {
+    try {
+        $backofficeRoot = Join-Path $repoRoot "app/frontend/backoffice-app"
+        $qrPackagePath = Join-Path $backofficeRoot "node_modules/qrcode.react"
+        $reactPath = Join-Path $backofficeRoot "node_modules/react"
+
+        if (-not (Test-Path $qrPackagePath) -or -not (Test-Path $reactPath)) {
+            throw "QR dependencies are not installed in app/frontend/backoffice-app/node_modules."
+        }
+
+        $nodeVersion = & node --version 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $nodeVersion) {
+            throw "Node.js is not available."
+        }
+
+        $scriptPath = Join-Path $env:TEMP "tastify-demo-qr-page.js"
+        $pagePath = Join-Path $env:TEMP "tastify-demo-qr-page.html"
+        $script = @'
+const fs = require("fs");
+const path = require("path");
+
+const [appRoot, clientUrl, staffUrl, pagePath] = process.argv.slice(2);
+const React = require(path.join(appRoot, "node_modules", "react"));
+const ReactDOMServer = require(path.join(appRoot, "node_modules", "react-dom", "server"));
+const { QRCodeSVG } = require(path.join(appRoot, "node_modules", "qrcode.react"));
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function renderQr(url) {
+  return ReactDOMServer.renderToStaticMarkup(
+    React.createElement(QRCodeSVG, {
+      value: url,
+      size: 360,
+      level: "M",
+      includeMargin: true
+    })
+  );
+}
+
+const cards = [
+  ["Client telephone", clientUrl],
+  ["Staff telephone", staffUrl]
+].map(([label, url]) => `
+  <section class="card">
+    <h2>${escapeHtml(label)}</h2>
+    ${renderQr(url)}
+    <p>${escapeHtml(url)}</p>
+  </section>
+`).join("");
+
+const html = `<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tastify demo QR codes</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Segoe UI, Arial, sans-serif;
+      background: #f6f7f9;
+      color: #111827;
+      display: grid;
+      place-items: center;
+    }
+    main {
+      width: min(980px, calc(100vw - 40px));
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      padding: 32px 0;
+    }
+    .card {
+      background: white;
+      border: 1px solid #d9dee7;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    svg {
+      width: min(360px, 100%);
+      height: auto;
+      background: white;
+    }
+    p {
+      margin: 16px 0 0;
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <main>${cards}</main>
+</body>
+</html>`;
+
+fs.writeFileSync(pagePath, html, "utf8");
+'@
+
+        Set-Content -Path $scriptPath -Value $script -Encoding ascii
+        Invoke-Checked "node" @($scriptPath, $backofficeRoot, $clientUrl, $staffUrl, $pagePath) -Quiet
+        Start-Process $pagePath
+        Write-Host ""
+        Write-Host "QR codes opened in the browser: $pagePath" -ForegroundColor Green
+    } catch {
+        Write-Host ""
+        Write-Host "QR code page could not be generated automatically: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "Use the telephone URLs above if needed." -ForegroundColor Yellow
+    }
+}
+
 function Show-DemoSummary {
     Write-Host ""
     Write-Host "Tastify demo is ready" -ForegroundColor Green
@@ -149,6 +279,7 @@ function Show-DemoSummary {
     Write-Host "URLs telephone (meme Wi-Fi que le PC):" -ForegroundColor Yellow
     Write-Host "  Client:      $phoneClientUrl"
     Write-Host "  Staff:       $phoneStaffUrl"
+    Show-DemoQrPage $repoRoot $phoneClientUrl $phoneStaffUrl
     Write-Host ""
     Write-Host "Comptes demo:" -ForegroundColor Yellow
     Write-Host "  Gerant/admin:  gerant_test     / password123"
@@ -288,3 +419,4 @@ try {
         }
     }
 }
+

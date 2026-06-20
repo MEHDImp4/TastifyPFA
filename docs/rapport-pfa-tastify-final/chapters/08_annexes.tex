@@ -4,16 +4,6 @@
 \section{Commandes de déploiement et de test}
 Les commandes ci-dessous servent de rappel pour lancer, tester et compiler le projet Tastify et son rapport.
 
-\subsection{Compilation du rapport LaTeX}
-Pour compiler localement le rapport et mettre à jour l'ensemble de la table des matières, de la liste des figures/tableaux et de la bibliographie, les commandes suivantes sont exécutées depuis la racine du dossier du rapport :
-\begin{verbatim}
-cd docs/rapport-pfa-tastify-final
-pdflatex --disable-installer -interaction=nonstopmode main.tex
-bibtex main
-pdflatex --disable-installer -interaction=nonstopmode main.tex
-pdflatex --disable-installer -interaction=nonstopmode main.tex
-\end{verbatim}
-
 \subsection{Lancement et tests de la codebase}
 Les commandes ci-dessous permettent de lancer l'orchestration Docker Compose pour le développement et d'exécuter la suite complète de tests (tests unitaires backend et frontend, et tests end-to-end) :
 \begin{verbatim}

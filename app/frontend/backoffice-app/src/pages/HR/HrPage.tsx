@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { hrApi } from '../../api/inventory_hr';
 import type { Employe } from '../../types/inventory';
 import {
@@ -15,9 +15,32 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const ROLE_TABS = ['ALL', 'GERANT', 'CUISINIER', 'SERVEUR'] as const;
+
+const getEmployeRole = (emp: Employe) => emp.user_details?.role || emp.poste || 'SERVEUR';
+
+const getEmployeSearchText = (emp: Employe) => [
+  emp.id,
+  emp.username,
+  emp.first_name,
+  emp.last_name,
+  emp.email,
+  emp.poste,
+  emp.telephone,
+  emp.cin,
+  emp.user_details?.username,
+  emp.user_details?.first_name,
+  emp.user_details?.last_name,
+  emp.user_details?.email,
+  emp.user_details?.role,
+].filter(Boolean).join(' ').toLowerCase();
+
+const formatRoleLabel = (role: string) => role.replace('_', ' ');
+
 export const HrPage: React.FC = () => {
   const [employes, setEmployes] = useState<Employe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedEmployes, setHasLoadedEmployes] = useState(false);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveFilter] = useState('ALL');
 
@@ -41,6 +64,7 @@ export const HrPage: React.FC = () => {
       toast.error('Erreur chargement personnel');
     } finally {
       setIsLoading(false);
+      setHasLoadedEmployes(true);
     }
   };
 
@@ -78,29 +102,22 @@ export const HrPage: React.FC = () => {
     }
   };
 
-  const normalizedSearch = search.trim().toLowerCase();
-  const visibleEmployes = employes.filter((emp) => {
-    if (activeTab !== 'ALL' && emp.poste !== activeTab) return false;
-    if (!normalizedSearch) return true;
+  const visibleEmployes = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
 
-    return [
-      emp.id,
-      emp.poste,
-      emp.username,
-      emp.first_name,
-      emp.last_name,
-      emp.email,
-      emp.telephone,
-      emp.user_details?.username,
-      emp.user_details?.first_name,
-      emp.user_details?.last_name,
-      emp.user_details?.email,
-    ].join(' ').toLowerCase().includes(normalizedSearch);
-  });
+    return employes.filter((emp) => {
+      const matchesRole = activeTab === 'ALL' || getEmployeRole(emp) === activeTab || emp.poste === activeTab;
+      const matchesSearch = !normalizedSearch || getEmployeSearchText(emp).includes(normalizedSearch);
 
-  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
+      return matchesRole && matchesSearch;
+    });
+  }, [activeTab, employes, search]);
 
-  if (isLoading) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
+  const displayedTotalCount = visibleEmployes.length === employes.length ? totalCount : visibleEmployes.length;
+
+  const totalPages = Math.max(1, Math.ceil(displayedTotalCount / itemsPerPage));
+
+  if (isLoading && !hasLoadedEmployes) return <div className="h-full flex items-center justify-center text-on-background"><Loader2 className="w-8 h-8 animate-spin" strokeWidth={1} /></div>;
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
@@ -129,10 +146,16 @@ export const HrPage: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-8 gap-4 md:gap-8 min-h-0">
+        {isLoading && (
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            Recherche en cours
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
-                {['ALL', 'GERANT', 'CUISINIER', 'SERVEUR'].map(tab => (
+                {ROLE_TABS.map(tab => (
                     <button
                         key={tab}
                         onClick={() => { setActiveFilter(tab); setCurrentPage(1); }}
@@ -145,7 +168,7 @@ export const HrPage: React.FC = () => {
             <div className="flex items-center gap-8 bg-surface border border-outline px-6 py-2.5 rounded-lg">
                 <div className="text-center border-r border-outline pr-8">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Employés</p>
-                    <p className="text-lg font-bold text-on-background mt-0.5">{totalCount}</p>
+                    <p className="text-lg font-bold text-on-background mt-0.5">{displayedTotalCount}</p>
                 </div>
                 <div className="text-center">
                     <p className="text-[8px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">Statut</p>
@@ -188,7 +211,7 @@ export const HrPage: React.FC = () => {
                   <div className="col-span-2 flex justify-center">
                     <div className="flex items-center gap-2 px-3 py-1 bg-surface-container-high border border-outline rounded text-on-background">
                         <Briefcase className="w-3 h-3 opacity-20" />
-                        <span className="text-[9px] font-bold uppercase tracking-widest">{emp.poste}</span>
+                        <span className="text-[9px] font-bold uppercase tracking-widest">{formatRoleLabel(getEmployeRole(emp))}</span>
                     </div>
                   </div>
                   <div className="col-span-2 flex justify-center">
@@ -219,7 +242,7 @@ export const HrPage: React.FC = () => {
 
           <div className="flex-none px-4 md:px-8 h-14 border-t border-outline bg-surface-container-high flex justify-between items-center gap-4">
             <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest opacity-40">
-                Total : {totalCount} employés
+                Total : {displayedTotalCount} employés
             </span>
             {totalPages > 1 && (
                 <div className="flex items-center gap-3">

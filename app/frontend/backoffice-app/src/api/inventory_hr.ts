@@ -12,7 +12,7 @@ export const stockApi = {
   updateIngredient: (id: number, data: Partial<Ingredient>) => api.patch<Ingredient>(`/stock/ingredients/${id}/`, data),
   deleteIngredient: (id: number) => api.delete(`/stock/ingredients/${id}/`),
 
-  getPlatIngredients: () => api.get<PlatIngredient[]>('/stock/plat-ingredients/'),
+  getPlatIngredients: (params?: { plat?: number }) => api.get<PlatIngredient[]>('/stock/plat-ingredients/', { params }),
   createPlatIngredient: (data: Partial<PlatIngredient>) => api.post<PlatIngredient>('/stock/plat-ingredients/', data),
   updatePlatIngredient: (id: number, data: Partial<PlatIngredient>) => api.patch<PlatIngredient>(`/stock/plat-ingredients/${id}/`, data),
   deletePlatIngredient: (id: number) => api.delete(`/stock/plat-ingredients/${id}/`),

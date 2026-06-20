@@ -35,99 +35,101 @@ export const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-background font-body selection:bg-primary/20 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent" />
-      </div>
+    <div className="min-h-[100dvh] bg-background font-body selection:bg-on-background/10 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Decorative background blur */}
+      <div className="absolute inset-0 bg-on-background/5 blur-[120px] rounded-full pointer-events-none" />
 
       <Link
         to="/login"
         aria-label="Retour à la connexion"
-        className="fixed top-6 left-4 sm:top-12 sm:left-10 z-20 group flex items-center gap-3 text-[10px] font-black tracking-[0.2em] text-on-surface-variant hover:text-primary transition-all min-h-[44px] min-w-[44px] justify-center"
+        className="fixed top-6 left-4 sm:top-8 sm:left-8 group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant hover:text-on-background transition-all min-h-[44px] min-w-[44px] justify-center z-20"
       >
-        <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-2" />
+        <ChevronLeft className="w-3.5 h-3.5 animate-none" />
         Retour
       </Link>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-xl bg-surface-container border border-outline-variant rounded-lg p-8 md:p-12 shadow-sm flex flex-col items-center gap-10"
+        className="w-full max-w-md bg-surface border border-outline rounded-2xl p-6 sm:p-10 shadow-premium relative overflow-hidden z-10"
       >
-        <div className="text-center space-y-4">
-          <div className="flex justify-center mb-6">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary border border-primary/20">
-              <Mail className="w-6 h-6" strokeWidth={1.5} />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] -mr-32 -mt-32 pointer-events-none" />
+
+        <div className="space-y-8 relative z-10">
+          <div className="text-center space-y-4 flex flex-col items-center">
+            <div className="w-12 h-12 bg-surface-container-high border border-outline rounded-xl flex items-center justify-center text-accent shadow-premium">
+              <Mail className="w-5 h-5" strokeWidth={2} />
             </div>
-          </div>
-          <h1 className=" text-4xl md:text-5xl font-black text-on-surface tracking-tighter m-0">
-            Mot de passe oublié
-          </h1>
-          <p className="font-sans text-[11px] font-black text-on-surface-variant tracking-[0.2em] leading-relaxed">
-            Recevez un lien de réinitialisation par email
-          </p>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {error && (
-            <motion.div
-              id="forgot-password-error"
-              role="alert"
-              key="forgot-password-error"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="w-full form-error flex items-center gap-3"
-            >
-              <ShieldAlert className="w-4 h-4 text-error" />
-              <p className="font-sans text-sm font-bold text-error">{error}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {submitted ? (
-          <div className="w-full rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center">
-            <p className="font-sans text-xs font-black uppercase tracking-[0.3em] text-on-surface">
-              Instructions envoyées si l'adresse est enregistrée.
-            </p>
-            <p className="mt-4 font-sans text-sm text-on-surface-variant">
-              Vérifiez votre boîte de réception pour le lien de réinitialisation.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} noValidate className="w-full space-y-10">
             <div className="space-y-2">
-              <label htmlFor="forgot-password-email-input" className="font-sans text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] ml-2">
-                Email du compte
-              </label>
-              <div className="relative group">
-                <input
-                  id="forgot-password-email-input"
-                  aria-label="Email du compte"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading}
-                  aria-invalid={Boolean(error)}
-                  aria-describedby={error ? 'forgot-password-error' : undefined}
-                  className="field-control min-h-16 rounded-lg px-6 pr-14 tracking-tight"
-                  placeholder="votre@email.com"
-                />
-                <Mail className="absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2 text-on-surface-variant" />
-              </div>
+              <h1 className="text-3xl font-bold text-on-background tracking-tight m-0 uppercase font-heading">
+                Mot de passe.
+              </h1>
+              <p className="text-[10px] font-bold text-accent uppercase tracking-[0.4em] leading-relaxed">
+                Réinitialisation par email
+              </p>
             </div>
+          </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn-primary w-full min-h-14 gap-4 relative overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Envoyer le lien</span>}
-            </button>
-          </form>
-        )}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                id="forgot-password-error"
+                role="alert"
+                key="forgot-password-error"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="w-full form-error flex items-center gap-3"
+              >
+                <ShieldAlert className="w-4 h-4 text-error shrink-0" />
+                <p className="font-sans text-sm font-semibold text-error">{error}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {submitted ? (
+            <div className="w-full rounded-xl border border-accent/25 bg-accent/5 p-6 text-center space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-accent">
+                Instructions envoyées si l'adresse est enregistrée.
+              </p>
+              <p className="text-xs font-semibold leading-relaxed text-on-surface-muted">
+                Vérifiez votre boîte de réception pour le lien de réinitialisation.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} noValidate className="w-full space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="forgot-password-email-input" className="text-[9px] font-bold text-on-surface-subtle uppercase tracking-[0.3em] ml-2 block">
+                  Email du compte
+                </label>
+                <div className="relative">
+                  <input
+                    id="forgot-password-email-input"
+                    aria-label="Email du compte"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={error ? 'forgot-password-error' : undefined}
+                    className="field-control pr-12"
+                    placeholder="votre@email.com"
+                  />
+                  <Mail className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-subtle" />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="btn-primary w-full min-h-14 tracking-[0.18em] cursor-pointer"
+              >
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-on-primary" /> : <span>Envoyer le lien</span>}
+              </button>
+            </form>
+          )}
+        </div>
       </motion.div>
     </div>
   );

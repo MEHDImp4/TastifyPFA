@@ -1,3 +1,5 @@
+import { expect } from '@playwright/test';
+
 export const STAFF_PASSWORD = 'password123';
 
 export const staffUsers = {
@@ -19,10 +21,22 @@ export const staffUsers = {
 } as const;
 
 export async function loginThroughUi(page: import('@playwright/test').Page, username: string, password: string) {
-  await page.goto('/login');
-  await page.getByTestId('login-username').fill(username);
-  await page.getByTestId('login-password').fill(password);
-  await page.getByTestId('login-submit').click();
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
+
+  const usernameInput = page.getByTestId('login-username');
+  const passwordInput = page.getByTestId('login-password');
+  const submitButton = page.getByTestId('login-submit');
+
+  await usernameInput.waitFor({ state: 'visible' });
+  await passwordInput.waitFor({ state: 'visible' });
+  await submitButton.waitFor({ state: 'visible' });
+  await expect(usernameInput).toBeEnabled();
+  await expect(passwordInput).toBeEnabled();
+  await expect(submitButton).toBeEnabled();
+
+  await usernameInput.fill(username);
+  await passwordInput.fill(password);
+  await submitButton.click();
 }
 
 export async function fulfillRefreshWithStoredAccess(

@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      devOptions: { enabled: true },
+      devOptions: { enabled: false },
       manifest: {
         name: 'Tastify Backoffice',
         short_name: 'Tastify Staff',

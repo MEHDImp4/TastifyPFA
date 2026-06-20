@@ -52,12 +52,16 @@ CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dess
 \label{fig:capture-test-pytest}
 \end{figure}
 
+La figure~\ref{fig:capture-test-pytest} confirme l'exécution complète de la suite backend, avec les tests Django et API validés dans l'environnement local.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_test_vitest.png}
 \caption{Sorties Vitest : back-office et portail client réussis}
 \label{fig:capture-test-vitest}
 \end{figure}
+
+La figure~\ref{fig:capture-test-vitest} regroupe les résultats unitaires frontend et montre que les composants et fonctions testés passent sur les deux applications React.
 
 \begin{figure}[H]
 \centering
@@ -66,12 +70,16 @@ CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dess
 \label{fig:capture-test-playwright}
 \end{figure}
 
+La figure~\ref{fig:capture-test-playwright} documente la validation end-to-end du portail client et isole l'unique échec comme un problème de sélecteur de test.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_test_ci.png}
 \caption{Workflow CI et synthèse des validations locales}
 \label{fig:capture-test-ci}
 \end{figure}
+
+La figure~\ref{fig:capture-test-ci} montre la présence du workflow CI et relie les contrôles automatisés aux validations exécutées localement pour le rapport.
 
 \section{Tests backend}
 Les tests backend sont répartis dans les applications Django. Ils couvrent notamment :

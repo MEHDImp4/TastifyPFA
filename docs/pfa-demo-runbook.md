@@ -20,6 +20,8 @@ Le script affiche les URLs:
 - Client telephone: `http://<IP_DU_PC>:3003`
 - Back-office telephone: `http://<IP_DU_PC>:3000`
 
+Il ouvre aussi une page locale avec deux QR codes: un pour le portail client et un pour le back-office staff.
+
 Pour le paiement QR: depuis le back-office serveur, ouvrir une table avec commande payable, afficher le QR, puis scanner avec le telephone. Le lien doit pointer vers `http://<IP_DU_PC>:3003/pay/<token>`.
 
 ## Comptes demo

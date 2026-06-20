@@ -92,6 +92,10 @@ class TestPaiementAPI:
 
     def test_pay_token_success(self, api_client, setup_order, table):
         commande, _ = setup_order
+        client_user = Utilisateur.objects.create_user(
+            username='qr_client', password='pass', role='CLIENT'
+        )
+        api_client.force_authenticate(user=client_user)
         token = issue_payment_token(table.id, commande.id)
         
         response = api_client.post('/api/paiements/session/pay/', {
@@ -104,9 +108,28 @@ class TestPaiementAPI:
         
         commande.refresh_from_db()
         assert commande.statut == Commande.Statut.PAYEE
+        assert commande.client == client_user
+        assert response.data['client'] == client_user.id
+        assert response.data['review_items'][0]['plat_nom'] == 'Tajine'
+
+    def test_pay_token_requires_authenticated_client(self, api_client, setup_order, table):
+        commande, _ = setup_order
+        token = issue_payment_token(table.id, commande.id)
+
+        response = api_client.post('/api/paiements/session/pay/', {
+            'token': token,
+            'montant': '100.00',
+            'reference_transaction': 'TX123'
+        }, format='json')
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_pay_token_missing_reference(self, api_client, setup_order, table):
         commande, _ = setup_order
+        client_user = Utilisateur.objects.create_user(
+            username='qr_client_ref', password='pass', role='CLIENT'
+        )
+        api_client.force_authenticate(user=client_user)
         token = issue_payment_token(table.id, commande.id)
         
         # reference_transaction is required in serializer

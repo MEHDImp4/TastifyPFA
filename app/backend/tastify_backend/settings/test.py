@@ -1,5 +1,11 @@
 from .base import *
 
+SECRET_KEY = 'tastify-pfa-test-secret-key-long-enough-for-hs256'
+SIMPLE_JWT = {
+    **SIMPLE_JWT,
+    'SIGNING_KEY': SECRET_KEY,
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

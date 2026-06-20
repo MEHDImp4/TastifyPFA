@@ -84,11 +84,6 @@ Le backend est découpé en applications Django spécialisées. Ce choix rend ch
 \bottomrule
 \end{longtable}
 
-\section{API REST et documentation}
-Les routes principales sont regroupées dans un routeur DRF. L'API backend expose notamment les ressources suivantes : catégories, plats, tables, plan-texts, commandes, lignes de commande, employés, shifts, offres, candidatures, réservations, avis, fidélité, récompenses, paramètres et paiements.
-
-La documentation OpenAPI est générée avec \code{drf-spectacular}. Les routes \code{/api/schema/}, \code{/api/docs/} et \code{/api/redoc/} permettent de consulter le schéma et de tester l'API pendant le développement.
-
 \section{Authentification et sécurité}
 L'authentification repose sur \code{djangorestframework-simplejwt}. Le backend émet un access token de courte durée et un refresh token stocké dans un cookie HttpOnly \cite{simplejwt}. Le projet intègre aussi une séparation staff/client pour éviter qu'une session ouverte sur un portail écrase l'autre.
 
@@ -177,7 +172,7 @@ Tastify intègre un moteur de recommandation pour suggérer des plats aux client
 
 L'algorithme, implémenté dans le module \pathcode{apps/menu/ml/recommender.py}, analyse l'historique de toutes les lignes de commande via la méthode \code{compute\_similarities}. Pour chaque paire de plats commandés ensemble dans une même transaction, un score de co-occurrence est incrémenté. Les résultats de cette matrice de similarité symétrique sont stockés dans le cache Redis pour des performances optimales lors de la navigation du client.
 
-Sur la page d'accueil du portail client, les plats recommandés (issus de l'action \code{top-recommendations} de l'API) s'affichent sous la forme de suggestions, enrichies du premier avis positif du plat s'il existe.
+Sur la page d'accueil du portail client, les plats recommandés issus de l'action \code{top-recommendations} s'affichent sous la forme de suggestions, enrichies du premier avis positif du plat s'il existe. Cette action classe les plats par moyenne de \code{sentiment\_score} décroissante, puis par nombre d'avis analysés. Les plats ayant les retours les plus positifs apparaissent donc en premier dans la zone de recommandation.
 
 \section{Interfaces réalisées}
 Les captures suivantes proviennent de l'environnement local de démonstration Tastify. Elles sont intégrées dans le corps du rapport afin de montrer directement les modules livrés.
@@ -189,12 +184,16 @@ Les captures suivantes proviennent de l'environnement local de démonstration Ta
 \label{fig:capture-login-staff}
 \end{figure}
 
+La figure~\ref{fig:capture-login-staff} illustre le point d'entrée réservé au personnel, avec une authentification séparée du portail client.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_dashboard.png}
 \caption{Tableau de bord gérant du back-office}
 \label{fig:capture-dashboard}
 \end{figure}
+
+La figure~\ref{fig:capture-dashboard} présente la vue de pilotage du gérant, où les indicateurs métier sont regroupés pour faciliter le suivi quotidien.
 
 \begin{figure}[H]
 \centering
@@ -203,12 +202,16 @@ Les captures suivantes proviennent de l'environnement local de démonstration Ta
 \label{fig:capture-salle}
 \end{figure}
 
+La figure~\ref{fig:capture-salle} montre l'espace utilisé par le serveur pour visualiser les tables, leurs statuts et l'accès à la prise de commande.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_kds.png}
 \caption{Kitchen Display System côté cuisine}
 \label{fig:capture-kds}
 \end{figure}
+
+La figure~\ref{fig:capture-kds} met en évidence l'écran cuisine, conçu pour suivre les commandes et mettre à jour les statuts de préparation.
 
 \begin{figure}[H]
 \centering
@@ -217,12 +220,16 @@ Les captures suivantes proviennent de l'environnement local de démonstration Ta
 \label{fig:capture-client}
 \end{figure}
 
+La figure~\ref{fig:capture-client} présente le menu public consulté par les clients, avec les informations nécessaires pour choisir les plats disponibles.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_recommandations.png}
-\caption{Portail client : suggestions et plats recommandés avec avis positifs}
+\caption{Portail client : plats recommandés classés selon les avis positifs}
 \label{fig:capture-recommandations}
 \end{figure}
+
+La figure~\ref{fig:capture-recommandations} montre le résultat attendu côté client : les suggestions remontent les plats les mieux évalués par l'analyse de sentiment, avant les plats disposant de moins d'avis positifs.
 
 Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:capture-kds}, \ref{fig:capture-client} et \ref{fig:capture-recommandations} couvrent cinq espaces du projet : pilotage, salle, cuisine, menu et suggestions clients.
 
@@ -233,12 +240,16 @@ Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:captu
 \label{fig:capture-stock-admin}
 \end{figure}
 
+La figure~\ref{fig:capture-stock-admin} montre le suivi des ingrédients et des alertes, utilisé pour anticiper les ruptures de stock.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_reservation_client.png}
 \caption{Portail client : réservation d'une table}
 \label{fig:capture-reservation-client}
 \end{figure}
+
+La figure~\ref{fig:capture-reservation-client} illustre le parcours de réservation côté client, depuis le choix des informations jusqu'à la demande envoyée au restaurant.
 
 \begin{figure}[H]
 \centering
@@ -247,6 +258,8 @@ Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:captu
 \label{fig:capture-checkout-payment}
 \end{figure}
 
+La figure~\ref{fig:capture-checkout-payment} présente l'étape de paiement, y compris la logique de contribution ou de partage de l'addition.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_loyalty_client.png}
@@ -254,12 +267,16 @@ Les figures~\ref{fig:capture-dashboard}, \ref{fig:capture-salle}, \ref{fig:captu
 \label{fig:capture-loyalty-client}
 \end{figure}
 
+La figure~\ref{fig:capture-loyalty-client} montre l'espace fidélité, où le client consulte ses points, son niveau et les récompenses disponibles.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_hr_admin.png}
 \caption{Back-office : gestion des ressources humaines}
 \label{fig:capture-hr-admin}
 \end{figure}
+
+La figure~\ref{fig:capture-hr-admin} illustre la partie ressources humaines du back-office, dédiée au suivi des employés et des informations associées.
 
 Avec les captures d'avis et de sentiment du chapitre~\ref{chap:sentiment}, le rapport documente les parcours essentiels : authentification staff, pilotage, salle, cuisine, portail client, réservation, paiement, fidélité, stocks, avis et ressources humaines.
 

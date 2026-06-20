@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { SettingsPage } from './SettingsPage';
 import { configurationApi } from '../../api/configuration';
@@ -22,6 +22,10 @@ vi.mock('sonner', () => ({
 describe('SettingsPage component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders loading state initially', () => {
@@ -101,6 +105,7 @@ describe('SettingsPage component', () => {
   });
 
   it('renders critical fallback state when fetch fails', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.mocked(configurationApi.getSettings).mockRejectedValue(new Error('Fetch error'));
 
     render(<SettingsPage />);

@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from decimal import Decimal
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -7,6 +8,10 @@ from rest_framework.test import APIClient
 
 from apps.avis.models import AnalyseSentiment, Avis
 from apps.avis.tasks import analyze_review_sentiment, get_hf_api_token, query_hf_api
+from apps.commandes.models import Commande, CommandeLigne
+from apps.menu.models import Categorie, Plat
+from apps.paiements.models import Paiement, PaiementItem
+from apps.tables.models import Table
 
 User = get_user_model()
 
@@ -45,7 +50,7 @@ class TestAvisTasks:
         avis.refresh_from_db()
         analyse = AnalyseSentiment.objects.get(avis=avis)
         assert 'Sentiment analysed' in result
-        assert avis.sentiment_score == 15
+        assert avis.sentiment_score == pytest.approx(0.99)
         assert avis.lang_code == 'en'
         assert analyse.label == AnalyseSentiment.Label.POSITIF
         assert analyse.modele_utilise == 'nlptown/bert-base-multilingual-uncased-sentiment'
@@ -68,7 +73,7 @@ class TestAvisTasks:
         avis.refresh_from_db()
         analyse = AnalyseSentiment.objects.get(avis=avis)
         assert 'Sentiment analysed' in result
-        assert avis.sentiment_score == -15
+        assert avis.sentiment_score == pytest.approx(-0.95)
         assert analyse.label == AnalyseSentiment.Label.NEGATIF
 
     @patch('apps.avis.tasks.predict_sentiment')
@@ -138,18 +143,88 @@ class TestAvisAPI:
         )
         self.url = reverse('avis-list')
 
+    def create_paid_order(self, user=None, with_item=True):
+        user = user or self.user_client
+        table = Table.objects.create(numero=71, capacite=2)
+        categorie = Categorie.objects.create(nom=f'Avis Cat {user.id}', ordre_affichage=1)
+        plat = Plat.objects.create(
+            nom=f'Plat avis {user.id}',
+            categorie=categorie,
+            prix=Decimal('42.00'),
+            temps_preparation=15,
+        )
+        commande = Commande.objects.create(
+            table=table,
+            client=user,
+            statut=Commande.Statut.PAYEE,
+            montant_total=Decimal('42.00'),
+        )
+        ligne = CommandeLigne.objects.create(
+            commande=commande,
+            plat=plat,
+            quantite=1,
+            prix_unitaire=Decimal('42.00'),
+        )
+        paiement = Paiement.objects.create(
+            commande=commande,
+            client=user,
+            montant=Decimal('42.00'),
+            methode=Paiement.Methode.QR,
+            statut=Paiement.Statut.COMPLETE,
+            reference_transaction='TX-AVIS',
+        )
+        if with_item:
+            PaiementItem.objects.create(
+                paiement=paiement,
+                commande_ligne=ligne,
+                montant_contribue=Decimal('42.00'),
+            )
+        return commande, plat
+
     @patch('apps.avis.views.analyze_review_sentiment.delay')
     def test_client_can_create_avis(self, mock_task_delay):
+        commande, plat = self.create_paid_order()
         self.client.force_authenticate(user=self.user_client)
         data = {
+            'commande': commande.id,
+            'plat': plat.id,
             'commentaire': 'Super!',
+            'note': 5,
         }
         response = self.client.post(self.url, data)
         assert response.status_code == 201
         assert response.data['user'] == self.user_client.id
         assert response.data['commentaire'] == 'Super!'
-        assert response.data['note'] is None
+        assert response.data['note'] == 5
         mock_task_delay.assert_called_once_with(response.data['id'])
+
+    def test_client_cannot_review_unpaid_dish(self):
+        commande, plat = self.create_paid_order()
+        other_user = User.objects.create_user(username='unpaid', password='password', role=User.Role.CLIENT)
+
+        self.client.force_authenticate(user=other_user)
+        response = self.client.post(self.url, {
+            'commande': commande.id,
+            'plat': plat.id,
+            'commentaire': 'Pas payé',
+            'note': 2,
+        })
+
+        assert response.status_code == 400
+
+    def test_client_cannot_duplicate_review_for_same_dish(self):
+        commande, plat = self.create_paid_order()
+        Avis.objects.create(user=self.user_client, commande=commande, plat=plat, commentaire='Avant', note=4)
+
+        self.client.force_authenticate(user=self.user_client)
+        response = self.client.post(self.url, {
+            'commande': commande.id,
+            'plat': plat.id,
+            'commentaire': 'Encore',
+            'note': 5,
+        })
+
+        assert response.status_code == 400
 
     def test_client_only_sees_own_avis(self):
         Avis.objects.create(user=self.user_client, commentaire='Avis 1', note=5)

@@ -133,7 +133,18 @@
     text-wrap: pretty;
     line-height: 1.75;
   }
+
+  /* Hide number input spinners for clean layout and to avoid truncation */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
+
 
 @layer components {
   .atelier-card {

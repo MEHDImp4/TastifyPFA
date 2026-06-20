@@ -122,9 +122,9 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* KPI Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {kpis.map((kpi, i) => (
-          <div key={i} className="ops-card p-5 md:p-8 group transition-all cursor-default">
+          <div key={i} className="ops-card p-4 md:p-6 group transition-all cursor-default">
              <div className="flex justify-between items-center mb-6">
                 <span className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.25em]">{kpi.label}</span>
                 <div className="p-2.5 rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10">
@@ -143,9 +143,9 @@ export const DashboardPage: React.FC = () => {
       </section>
 
       {/* Charts Row */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
         {/* Revenue Chart (7 cols) */}
-        <div className="lg:col-span-7 ops-card p-5 md:p-8">
+        <div className="lg:col-span-7 ops-card p-4 md:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary" strokeWidth={2.5} />
@@ -176,7 +176,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Top Dishes Bar Chart (5 cols) */}
-        <div className="lg:col-span-5 ops-card p-5 md:p-8">
+        <div className="lg:col-span-5 ops-card p-4 md:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-accent/5 flex items-center justify-center">
               <ShoppingBag className="w-5 h-5 text-accent" strokeWidth={2.5} />
@@ -203,9 +203,9 @@ export const DashboardPage: React.FC = () => {
 
       {/* Sentiment + Occupancy Row */}
       {data.sentimentStats && data.sentimentStats.total > 0 && (
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Sentiment Analysis */}
-          <div className="ops-card p-5 md:p-8">
+          <div className="ops-card p-4 md:p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-success/5 flex items-center justify-center">
                 <Smile className="w-5 h-5 text-success" strokeWidth={2.5} />
@@ -256,7 +256,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Occupancy Pie */}
-          <div className="ops-card p-5 md:p-8">
+          <div className="ops-card p-4 md:p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
                 <Users className="w-5 h-5 text-primary" strokeWidth={2.5} />
@@ -301,10 +301,10 @@ export const DashboardPage: React.FC = () => {
       )}
 
       {/* Operation Grid */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 mt-6">
 
         {/* Left: Tactical Feed (7 cols) */}
-        <section className="lg:col-span-7 flex flex-col min-h-0">
+        <section className="lg:col-span-7 flex flex-col">
            <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                  <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
@@ -317,7 +317,7 @@ export const DashboardPage: React.FC = () => {
               </button>
            </div>
 
-           <div tabIndex={0} className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
+           <div tabIndex={0} className="pr-4">
               <div className="grid grid-cols-1 gap-4">
                  {activeTickets.length > 0 ? activeTickets.map((ticket, i) => (
                     <motion.div
@@ -361,7 +361,7 @@ export const DashboardPage: React.FC = () => {
         </section>
 
         {/* Right: Alerts (5 cols) */}
-        <section className="lg:col-span-5 flex flex-col min-h-0 ops-card p-6 xl:p-10 overflow-hidden">
+        <section className="lg:col-span-5 flex flex-col ops-card p-6 xl:p-10">
             <div className="flex-none flex items-center gap-4 mb-6 xl:mb-10 border-b border-outline-variant/30 pb-6">
                 <div className="w-10 h-10 rounded-lg bg-error/5 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-error" />
@@ -369,7 +369,7 @@ export const DashboardPage: React.FC = () => {
                 <h2 className="text-xl font-black tracking-tight text-on-surface">Retards cuisine</h2>
             </div>
 
-            <div tabIndex={0} className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-6">
+            <div tabIndex={0} className="space-y-6">
                 <AnimatePresence mode="wait">
                     {groupedTickets.late.length > 0 ? (
                         groupedTickets.late.map((t) => (

@@ -258,9 +258,8 @@ const mockKds = async (page: Parameters<typeof test>[0]['page']) => {
 };
 
 test.describe('authenticated backoffice quality coverage', () => {
-  test.describe('gerant', () => {
-    test.beforeEach(async ({ page }, testInfo) => {
-      test.skip(testInfo.project.name !== 'gerant-chromium');
+  test.describe('gerant @gerant-quality', () => {
+    test.beforeEach(async ({ page }) => {
       await page.route('**/api/users/logout/', async route => {
         await route.fulfill({ status: 200 });
       });
@@ -416,9 +415,8 @@ test.describe('authenticated backoffice quality coverage', () => {
     });
   });
 
-  test.describe('serveur', () => {
-    test.beforeEach(async ({ page }, testInfo) => {
-      test.skip(testInfo.project.name !== 'serveur-chromium');
+  test.describe('serveur @serveur-quality', () => {
+    test.beforeEach(async ({ page }) => {
       await page.route('**/api/users/logout/', async route => {
         await route.fulfill({ status: 200 });
       });
@@ -503,9 +501,8 @@ test.describe('authenticated backoffice quality coverage', () => {
     });
   });
 
-  test.describe('cuisinier', () => {
-    test.beforeEach(async ({ page }, testInfo) => {
-      test.skip(testInfo.project.name !== 'cuisinier-chromium');
+  test.describe('cuisinier @cuisinier-quality', () => {
+    test.beforeEach(async ({ page }) => {
       await page.route('**/api/users/logout/', async route => {
         await route.fulfill({ status: 200 });
       });
