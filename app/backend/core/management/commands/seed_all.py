@@ -8,6 +8,7 @@ from apps.tables.models import Table
 from apps.menu.models import Categorie, Plat
 from apps.hr.models import Employe
 from apps.stock.models import Ingredient, PlatIngredient
+from apps.stock.services import StockService
 from django.db import transaction
 from PIL import Image, ImageDraw
 
@@ -22,6 +23,7 @@ class Command(BaseCommand):
                 self.seed_menu()
                 self.seed_ingredients()
                 self.seed_plat_ingredients()
+                StockService.sync_availability_for_all_plats()
                 self.seed_hr()
             self.stdout.write(self.style.SUCCESS('\nAll seeding tasks completed.'))
         except Exception as exc:

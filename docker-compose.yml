@@ -56,6 +56,10 @@ services:
   celery-worker:
     image: tastifypfa-backend-dev
     env_file: .env
+    environment:
+      RUN_MIGRATIONS_ON_STARTUP: "0"
+      ENSURE_MENU_MEDIA_ON_STARTUP: "0"
+      SEED_ON_STARTUP: "0"
     command: celery -A tastify_backend worker --loglevel=info --concurrency=2
     volumes:
       - ./app/backend:/app
@@ -71,6 +75,10 @@ services:
   celery-beat:
     image: tastifypfa-backend-dev
     env_file: .env
+    environment:
+      RUN_MIGRATIONS_ON_STARTUP: "0"
+      ENSURE_MENU_MEDIA_ON_STARTUP: "0"
+      SEED_ON_STARTUP: "0"
     command: celery -A tastify_backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ./app/backend:/app

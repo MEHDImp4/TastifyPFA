@@ -264,6 +264,7 @@ def _build_payment_items(commande):
         items.append(
             {
                 'id': ligne.id,
+                'plat_id': ligne.plat_id,
                 'plat_nom': ligne.plat.nom,
                 'quantite': ligne.quantite,
                 'prix_unitaire': quantize_amount(ligne.prix_unitaire),

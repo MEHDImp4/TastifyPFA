@@ -151,10 +151,11 @@ class Command(BaseCommand):
                 paiements_created += 1
 
         # ── Active orders (today) ──
+        demo_tables = sorted(tables, key=lambda table: table.numero)[:3]
         active_specs = [
-            (Commande.Statut.EN_COURS,   random.choice(tables), random.choice(serveurs), 2),
-            (Commande.Statut.EN_CUISINE, random.choice(tables), random.choice(serveurs), 3),
-            (Commande.Statut.PRETE,      random.choice(tables), random.choice(serveurs), 1),
+            (Commande.Statut.EN_COURS, demo_tables[0], serveurs[0], 2),
+            (Commande.Statut.EN_CUISINE, demo_tables[1], serveurs[0], 3),
+            (Commande.Statut.PRETE, demo_tables[2], serveurs[0], 1),
         ]
         for statut, table, serveur, nb_plats in active_specs:
             chosen = random.sample(plats, k=min(nb_plats, len(plats)))

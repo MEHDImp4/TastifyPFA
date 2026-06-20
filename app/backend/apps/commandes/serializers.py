@@ -37,6 +37,13 @@ class CommandeLigneSerializer(serializers.ModelSerializer):
             "prix": obj.plat.prix,
         }
 
+    def validate_plat(self, value):
+        if not value.est_active:
+            raise serializers.ValidationError("Ce plat n'est plus dans la carte.")
+        if not value.est_disponible:
+            raise serializers.ValidationError("Ce plat est indisponible pour le moment.")
+        return value
+
 
 class CommandeSerializer(serializers.ModelSerializer):
     lignes = CommandeLigneSerializer(many=True)

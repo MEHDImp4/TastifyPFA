@@ -5,8 +5,7 @@ if [ "${COLLECTSTATIC_ON_STARTUP:-0}" = "1" ]; then
     python manage.py collectstatic --noinput
 fi
 
-# Retry migrations to handle the race condition when backend and
-# celery-worker both run this entrypoint at the same time.
+# Retry migrations while MySQL is finishing its startup.
 migrate_with_retry() {
     n=0
     while [ $n -lt 3 ]; do
@@ -21,7 +20,9 @@ migrate_with_retry() {
     return 1
 }
 
-migrate_with_retry
+if [ "${RUN_MIGRATIONS_ON_STARTUP:-1}" = "1" ]; then
+    migrate_with_retry
+fi
 
 if [ "${ENSURE_MENU_MEDIA_ON_STARTUP:-1}" = "1" ]; then
     python manage.py ensure_menu_media

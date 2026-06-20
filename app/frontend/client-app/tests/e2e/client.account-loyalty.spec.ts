@@ -142,7 +142,8 @@ test.describe('account journey', () => {
       await page.getByRole('button', { name: /Transmettre mon avis/i }).click();
 
       await expect(page.getByText('Avis enregistré')).toBeVisible();
-      await expect(avisPayload).toMatchObject({ note: 5, commentaire: 'Excellent pacing and service' });
+      await expect(avisPayload).toMatchObject({ commentaire: 'Excellent pacing and service' });
+      await expect(avisPayload).not.toHaveProperty('note');
       await expect(page.getByRole('button', { name: /Transmettre mon avis/i })).toHaveCount(0);
     });
 

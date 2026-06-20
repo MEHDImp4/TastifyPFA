@@ -81,7 +81,7 @@ export const AccountPage: React.FC = () => {
     }
     setIsSubmitting(true);
     try {
-        await avisApi.createAvis({ commentaire: comment, note: 5 });
+        await avisApi.createAvis({ commentaire: comment });
         toast.success('Avis enregistré');
         setIsReviewModalOpen(false);
         setComment('');

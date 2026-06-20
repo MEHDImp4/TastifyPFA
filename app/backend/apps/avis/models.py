@@ -35,8 +35,8 @@ class Avis(models.Model):
         blank=True
     )
     
-    # Stockage temporaire pour le score d'analyse
-    sentiment_score = models.IntegerField(null=True, blank=True)
+    # Score normalise entre -1.0 et 1.0 pour le tri de popularite.
+    sentiment_score = models.FloatField(null=True, blank=True)
     lang_code = models.CharField(max_length=10, blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,6 +46,13 @@ class Avis(models.Model):
         verbose_name = 'Avis'
         verbose_name_plural = 'Avis'
         ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'commande', 'plat'],
+                condition=models.Q(commande__isnull=False, plat__isnull=False),
+                name='avis_unique_user_commande_plat',
+            ),
+        ]
 
     def __str__(self):
         return f"Avis {self.id} by {self.user.username} - Note: {self.note}"

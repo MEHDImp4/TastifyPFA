@@ -16,11 +16,13 @@ MODEL_MAP = {
 }
 ARABIC_FALLBACK_MODEL = 'nlptown/bert-base-multilingual-uncased-sentiment'
 
-SCORE_MAP = {
-    'POSITIF': 15,
-    'NEUTRE': 0,
-    'NEGATIF': -15,
-}
+def sentiment_score_for_label(label, confidence):
+    confidence = max(0.0, min(1.0, float(confidence or 0.0)))
+    if label == 'POSITIF':
+        return confidence
+    if label == 'NEGATIF':
+        return -confidence
+    return 0.0
 
 
 def get_hf_api_token():
@@ -145,7 +147,7 @@ def analyze_review_sentiment(avis_id):
     )
 
     avis.lang_code = lang
-    avis.sentiment_score = SCORE_MAP[label]
+    avis.sentiment_score = sentiment_score_for_label(label, confidence)
     avis.save(update_fields=['lang_code', 'sentiment_score', 'updated_at'])
 
     return f'Sentiment analysed ({lang}) via {model_used}: {label} (score={avis.sentiment_score})'

@@ -64,7 +64,11 @@ class CommandeLigneViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             try:
                 StockService.deduct_ingredients_for_plat(instance.plat, instance.quantite)
             except InsufficientStockError as e:
-                logger.error(f"Stock deduction failed during manual prep: {str(e)}")
+                logger.warning(f"Stock deduction blocked during manual prep: {str(e)}")
+                return Response(
+                    {"error": "Stock insuffisant pour démarrer ce plat.", "detail": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         response = super().partial_update(request, *args, **kwargs)
 
@@ -202,11 +206,16 @@ class CommandeViewSet(viewsets.ModelViewSet):
         new_statut = request.data.get('statut')
         if new_statut == Commande.Statut.EN_CUISINE and instance.statut == Commande.Statut.EN_COURS:
             lignes_to_deduct = instance.lignes.filter(statut=CommandeLigne.Statut.EN_ATTENTE)
+            try:
+                StockService.check_stock_for_lines(lignes_to_deduct)
+            except InsufficientStockError as e:
+                logger.warning(f"Stock deduction blocked during order fire: {str(e)}")
+                return Response(
+                    {"error": "Stock insuffisant pour envoyer la commande en cuisine.", "detail": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             for ligne in lignes_to_deduct:
-                try:
-                    StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
-                except InsufficientStockError as e:
-                    logger.error(f"Stock deduction failed during order fire: {str(e)}")
+                StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
 
         return super().partial_update(request, *args, **kwargs)
 
@@ -237,16 +246,21 @@ class CommandeViewSet(viewsets.ModelViewSet):
 
         serializer = CommandeLigneSerializer(data=data, many=True)
         if serializer.is_valid():
-            with transaction.atomic():
-                new_lignes = serializer.save(commande=commande)
-                if commande.statut == Commande.Statut.EN_CUISINE:
-                    for ligne in new_lignes:
-                        try:
+            try:
+                with transaction.atomic():
+                    new_lignes = serializer.save(commande=commande)
+                    if commande.statut == Commande.Statut.EN_CUISINE:
+                        StockService.check_stock_for_lines(new_lignes)
+                        for ligne in new_lignes:
                             StockService.deduct_ingredients_for_plat(ligne.plat, ligne.quantite)
-                        except InsufficientStockError as e:
-                            logger.error(f"Stock deduction failed during add_items: {str(e)}")
 
-                KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
+                    KdsOrchestrator.schedule_reorchestration_after_commit(commande.pk)
+            except InsufficientStockError as e:
+                logger.warning(f"Stock deduction blocked during add_items: {str(e)}")
+                return Response(
+                    {"error": "Stock insuffisant pour ajouter ce plat en cuisine.", "detail": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             
             full_serializer = self.get_serializer(commande)
             return Response(full_serializer.data, status=status.HTTP_201_CREATED)

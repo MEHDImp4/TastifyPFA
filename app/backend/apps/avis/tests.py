@@ -143,12 +143,12 @@ class TestAvisAPI:
         self.client.force_authenticate(user=self.user_client)
         data = {
             'commentaire': 'Super!',
-            'note': 5,
         }
         response = self.client.post(self.url, data)
         assert response.status_code == 201
         assert response.data['user'] == self.user_client.id
         assert response.data['commentaire'] == 'Super!'
+        assert response.data['note'] is None
         mock_task_delay.assert_called_once_with(response.data['id'])
 
     def test_client_only_sees_own_avis(self):

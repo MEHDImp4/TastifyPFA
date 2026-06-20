@@ -2,7 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
 
+from apps.commandes.models import CommandeLigne
 from .exceptions import InvalidTokenError, NoPayableOrderError, AmbiguousPayableOrderError
 from .models import Paiement
 from .serializers import (
@@ -32,9 +34,38 @@ class PaiementViewSet(viewsets.ModelViewSet):
     serializer_class = PaiementSerializer
 
     def get_permissions(self):
-        if self.action in ('resolve', 'equal_split', 'item_split', 'pay_token'):
+        if self.action in ('resolve', 'equal_split', 'item_split'):
             return [AllowAny()]  # Token check is done via HasValidPaymentToken or inside the action
+        if self.action == 'pay_token':
+            return [IsAuthenticated()]
         return [IsAuthenticated()]
+
+    def _review_items_for_payment(self, paiement):
+        paid_item_qs = paiement.items.select_related('commande_ligne__plat').order_by('commande_ligne_id')
+
+        if paid_item_qs.exists():
+            lignes = [item.commande_ligne for item in paid_item_qs]
+        else:
+            lignes = list(
+                CommandeLigne.objects.filter(commande=paiement.commande)
+                .select_related('plat')
+                .order_by('id')
+            )
+
+        seen_plats = set()
+        review_items = []
+        for ligne in lignes:
+            if ligne.plat_id in seen_plats:
+                continue
+            seen_plats.add(ligne.plat_id)
+            review_items.append({
+                'commande_id': paiement.commande_id,
+                'commande_ligne_id': ligne.id,
+                'plat_id': ligne.plat_id,
+                'plat_nom': ligne.plat.nom,
+                'quantite': ligne.quantite,
+            })
+        return review_items
 
     @action(detail=False, methods=['get', 'post'], url_path='session/resolve')
     def resolve(self, request):
@@ -120,6 +151,9 @@ class PaiementViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='session/pay')
     def pay_token(self, request):
+        if request.user.role != 'CLIENT':
+            raise PermissionDenied("Le paiement QR est réservé aux clients connectés.")
+
         serializer = TokenBackedPaymentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -132,8 +166,6 @@ class PaiementViewSet(viewsets.ModelViewSet):
             payload = validate_payment_token(token)
             commande_id = payload['commande_id']
             
-            client = request.user if request.user.is_authenticated and request.user.role == 'CLIENT' else None
-
             paiement = create_payment(
                 commande_id=commande_id,
                 montant=montant,
@@ -141,12 +173,14 @@ class PaiementViewSet(viewsets.ModelViewSet):
                 statut=Paiement.Statut.COMPLETE,
                 reference_transaction=reference,
                 contributions=contributions,
-                client=client
+                client=request.user
             )
             
             reconcile_commande_payment_status(commande_id=commande_id)
             
-            return Response(PaiementSerializer(paiement).data, status=status.HTTP_201_CREATED)
+            response_data = PaiementSerializer(paiement).data
+            response_data['review_items'] = self._review_items_for_payment(paiement)
+            return Response(response_data, status=status.HTTP_201_CREATED)
         except Exception as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 

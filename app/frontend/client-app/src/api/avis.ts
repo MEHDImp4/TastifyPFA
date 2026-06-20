@@ -5,7 +5,7 @@ export interface Avis {
   plat?: number;
   commande?: number;
   commentaire: string;
-  note: number;
+  note?: number | null;
   sentiment_score?: number;
   created_at?: string;
 }

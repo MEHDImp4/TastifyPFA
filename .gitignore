@@ -98,6 +98,7 @@ desktop.ini
 
 # Docker
 docker-compose.override.yml
+.docker-demo-build.hash
 
 # Playwright auth state
 app/frontend/backoffice-app/tests/e2e/.auth/

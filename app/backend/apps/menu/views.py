@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg, Count
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -111,7 +112,18 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='top-recommendations')
     def top_recommendations(self, request):
-        # Version simple: on affiche les premiers plats disponibles du menu.
-        plats = Plat.objects.filter(est_active=True, est_disponible=True).order_by('nom')[:4]
+        # Démo PFA: les plats appréciés sont classés par analyse de sentiment.
+        plats = (
+            Plat.objects.filter(est_active=True, est_disponible=True)
+            .annotate(
+                avg_sentiment=Avg('avis__sentiment_score'),
+                avis_count=Count('avis', filter=models.Q(avis__sentiment_score__isnull=False)),
+            )
+            .order_by(
+                models.F('avg_sentiment').desc(nulls_last=True),
+                '-avis_count',
+                'nom',
+            )[:4]
+        )
         serializer = self.get_serializer(plats, many=True)
         return Response(serializer.data)
