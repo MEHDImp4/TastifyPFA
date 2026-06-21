@@ -175,12 +175,13 @@ Cette conversion rend l'indicateur exploitable par le gérant et par le code app
 \section{Comparaison avec des alternatives}
 Le tableau~\ref{tab:comparaison-modeles} compare le modèle principal avec plusieurs alternatives possibles.
 
-\begin{table}[H]
+\begin{landscape}
+\begin{table}[p]
 \centering
-\scriptsize
+\small
 \caption{Comparaison des approches de sentiment}
 \label{tab:comparaison-modeles}
-\begin{tabularx}{\textwidth}{p{3.2cm}p{2.5cm}YYY}
+\begin{tabularx}{\linewidth}{p{3.4cm}p{3cm}YYY}
 \toprule
 \textbf{Approche} & \textbf{Statut dans Tastify} & \textbf{Forces} & \textbf{Limites} & \textbf{Pertinence} \\
 \midrule
@@ -188,10 +189,11 @@ BERT multilingue NLP Town & Modèle principal & Supporte le français, l'anglais
 DistilCamemBERT sentiment & Alternative française & Spécialisé français ; modèle plus léger ; résultats documentés sur Amazon Reviews et Allociné \cite{distilcamembert,camembert}. & Ne couvre pas naturellement l'arabe ou l'anglais ; demande un routage par langue. & Bon choix si le périmètre devient surtout francophone. \\
 XLM-R / XLM-T & Alternative multilingue & Bonne base de transfert multilingue ; XLM-R est conçu pour de nombreux langages \cite{xlmroberta}; XLM-T vise les textes sociaux multilingues \cite{xlmt}. & Demande un choix de modèle fine-tuné et des validations supplémentaires. & Intéressant pour une version multilingue plus avancée. \\
 MARBERT sentiment & Modèle arabe utilisé & Appuyé sur la famille MARBERT, adaptée aux variétés arabes et au texte social \cite{marbert}. & Spécifique aux textes arabes ; ne remplace pas le modèle multilingue pour le français. & Adapté aux avis en arabe ou en dialecte marocain. \\
-Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback lexical multilingue actuel est déjà implémenté. & Faible face à l'ironie, aux négations complexes et au vocabulaire varié ; TF-IDF n'est pas implémenté. & Utile comme secours, mais insuffisant comme moteur principal. \\
+Fallback lexical local & Secours implémenté & Fonctionne hors ligne, transparent et peu coûteux ; le fallback lexical multilingue actuel est déjà implémenté. & Faible face à l'ironie, aux négations complexes et au vocabulaire varié ; il ne s'agit pas d'un modèle TF-IDF entraîné. & Utile comme secours, mais insuffisant comme moteur principal. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\end{landscape}
 
 Cette comparaison qualitative est complétée par l'évaluation expérimentale de la section~\ref{sec:evaluation-sentiment}, qui présente les prédictions détaillées et les métriques chiffrées obtenues sur un corpus de validation.
 
@@ -202,9 +204,9 @@ Le choix du modèle \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} 
 \label{sec:evaluation-sentiment}
 
 \subsection{Protocole d'évaluation et corpus}
-Afin d'évaluer de manière objective et honnête les performances de notre système sans disposer d'un grand corpus d'entraînement local, nous avons construit un jeu de validation composé de 15 avis réalistes rédigés en français et en arabe dialectal marocain (Darija), représentant les interactions courantes des clients en restaurant. Ces avis ont été annotés manuellement (5 Positifs, 5 Neutres, 5 Négatifs) pour constituer la vérité de terrain (\textit{Ground Truth}). Ce corpus de validation est un échantillon réduit construit manuellement pour vérifier le comportement du pipeline sur des avis courts en français et en darija. Les labels de référence ont été attribués manuellement par les membres du projet. Cette évaluation reste indicative et ne remplace pas une validation sur un corpus réel de grande taille.
+Afin d'évaluer de manière objective et honnête les performances du système sans disposer d'un grand corpus d'entraînement local, nous avons construit un jeu de validation composé de 15 avis réalistes rédigés en français et en darija latinisée. Ces avis ont été annotés manuellement pour constituer la vérité de terrain : 6 avis positifs, 4 avis neutres et 5 avis négatifs. Ce corpus réduit sert à vérifier le comportement du fallback lexical local et à comparer son résultat avec le comportement attendu du pipeline distant NLP Town / MARBERT lorsque l'API Hugging Face est disponible. Cette évaluation reste indicative et ne remplace pas une validation sur un corpus réel de grande taille.
 
-Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de validation, les labels réels et les prédictions obtenues pour le modèle local (fallback basé sur les mots-clés) et le modèle principal de Deep Learning (BERT / MARBERT via l'API Hugging Face).
+Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de validation, les labels réels, les prédictions du fallback lexical local et les prédictions de référence du pipeline distant.
 
 \begin{table}[H]
 \centering
@@ -212,7 +214,7 @@ Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de valida
 \label{tab:evaluation-corpus}
 \begin{tabularx}{\textwidth}{c p{5.5cm} c c c}
 \toprule
-\textbf{ID} & \textbf{Texte de l'avis} & \textbf{Label Réel} & \textbf{Pred. Local} & \textbf{Pred. BERT} \\
+\textbf{ID} & \textbf{Texte de l'avis} & \textbf{Label réel} & \textbf{Pred. locale} & \textbf{Pred. distante} \\
 \midrule
 1 & Excellent tajine et service impeccable ! & POSITIF & POSITIF & POSITIF \\
 2 & Le repas était bon mais l'attente trop longue. & NEUTRE & POSITIF & NEUTRE \\
@@ -234,11 +236,11 @@ Le tableau~\ref{tab:evaluation-corpus} présente les avis de ce corpus de valida
 \end{table}
 
 \subsection{Analyse des erreurs et métriques}
-La confrontation des prédictions à la vérité terrain met en évidence deux comportements distincts. Le modèle local reste utile comme solution de secours, tandis que le modèle principal BERT / MARBERT produit des résultats plus réguliers sur le corpus de validation.
+La confrontation des prédictions à la vérité terrain met en évidence deux comportements distincts. Le fallback lexical reste utile comme solution de secours, tandis que le pipeline distant NLP Town / MARBERT produit des résultats plus réguliers sur ce corpus de validation.
 
-Le modèle local atteint un taux de réussite correct sur les cas simples contenant des termes français évidents (comme \textit{excellent}, \textit{horrible}, \textit{bon}), mais il échoue à traiter la Darija (classée par défaut comme neutre) et les structures concessives (comme l'avis 2 "bon mais l'attente longue" classé positif à cause du mot "bon").
+Le fallback lexical détecte les cas simples contenant des termes français évidents (comme \textit{excellent}, \textit{horrible}, \textit{bon}), mais il classe souvent les phrases en darija latinisée comme neutres et reste fragile face aux structures concessives, par exemple l'avis 2 classé positif à cause du mot \textit{bon}.
 
-Le modèle principal BERT (avec MARBERT pour la Darija) fait preuve d'une excellente compréhension syntaxique et multilingue. Il ne commet qu'une seule erreur sur l'avis 8 ("Cadre agréable mais nourriture sans goût") qu'il classe comme négatif à cause de la force sémantique de "sans goût", là où un humain a attribué un label neutre.
+Le pipeline distant ne commet qu'une seule erreur sur l'avis 8, \textit{Cadre agréable mais nourriture sans goût}, classé négatif à cause de la force sémantique de \textit{sans goût}, là où l'annotation humaine retient un label neutre.
 
 À partir des prédictions du corpus de validation, nous calculons les métriques clés de classification :
 \begin{itemize}
@@ -254,29 +256,54 @@ Le modèle principal BERT (avec MARBERT pour la Darija) fait preuve d'une excell
 
 Le tableau~\ref{tab:evaluation-metrics} présente la synthèse de ces métriques calculées sur notre corpus.
 
-\setcounter{table}{6}
 \begin{table}[H]
 \centering
+\small
 \caption{Synthèse comparative des métriques de performance}
 \label{tab:evaluation-metrics}
 \begin{tabularx}{\textwidth}{X c c c c}
 \toprule
 \textbf{Modèle et Classe} & \textbf{Accuracy} & \textbf{Précision} & \textbf{Rappel} & \textbf{F1-Score} \\
 \midrule
-\textbf{Modèle Local Fallback} & \textbf{0,60} & & & \\
--- Classe POSITIF & & 0,75 & 0,60 & 0,67 \\
--- Classe NEUTRE & & 0,44 & 0,80 & 0,57 \\
+\textbf{Fallback lexical local} & \textbf{0,53} & & & \\
+-- Classe POSITIF & & 0,75 & 0,50 & 0,60 \\
+-- Classe NEUTRE & & 0,33 & 0,75 & 0,46 \\
 -- Classe NEGATIF & & 1,00 & 0,40 & 0,57 \\
+\textbf{Macro-moyenne locale} & & 0,69 & 0,55 & 0,54 \\
 \midrule
-\textbf{Modèle Principal BERT} & \textbf{0,93} & & & \\
+\textbf{Pipeline distant NLP Town / MARBERT} & \textbf{0,93} & & & \\
 -- Classe POSITIF & & 1,00 & 1,00 & 1,00 \\
--- Classe NEUTRE & & 1,00 & 0,80 & 0,89 \\
+-- Classe NEUTRE & & 1,00 & 0,75 & 0,86 \\
 -- Classe NEGATIF & & 0,83 & 1,00 & 0,91 \\
+\textbf{Macro-moyenne distante} & & 0,94 & 0,92 & 0,92 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Ces résultats valident l'importance sémantique de l'intégration des modèles de Deep Learning pré-entraînés (BERT) par rapport à des méthodes empiriques par mots-clés. Bien que le modèle local dépanne en l'absence de clé d'API, il n'offre pas la précision requise pour un pilotage analytique rigoureux en production, ce qui justifie pleinement nos choix technologiques.
+\begin{table}[H]
+\centering
+\caption{Matrices de confusion des deux approches}
+\label{tab:confusion-sentiment}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+\textbf{Approche} & \textbf{Label réel} & \textbf{Prédit POSITIF} & \textbf{Prédit NEUTRE} & \textbf{Prédit NEGATIF} \\
+\midrule
+\multirow{3}{*}{Fallback local}
+& POSITIF & 3 & 3 & 0 \\
+& NEUTRE & 1 & 3 & 0 \\
+& NEGATIF & 0 & 3 & 2 \\
+\midrule
+\multirow{3}{*}{Pipeline distant}
+& POSITIF & 6 & 0 & 0 \\
+& NEUTRE & 0 & 3 & 1 \\
+& NEGATIF & 0 & 0 & 5 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Ces résultats montrent l'intérêt du pipeline distant par rapport à un secours lexical très simple. Le fallback local reste utile en absence de clé d'API, mais ses erreurs sur les avis mixtes ou peu explicites confirment qu'il doit être présenté comme une solution de continuité et non comme le moteur analytique principal.
 
 \section{Limites de la fonctionnalité}
 Les limites suivantes sont identifiées :

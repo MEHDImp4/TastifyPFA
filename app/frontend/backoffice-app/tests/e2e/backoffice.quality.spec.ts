@@ -137,6 +137,22 @@ const expectVisibleLogoutControl = async (page: Parameters<typeof test>[0]['page
   await expect(logoutButton).toBeVisible();
 };
 
+const expectMenuReady = async (page: Parameters<typeof test>[0]['page']) => {
+  await expect(page.getByPlaceholder('Rechercher un plat...')).toBeVisible();
+};
+
+const expectKdsReady = async (page: Parameters<typeof test>[0]['page']) => {
+  await expect(page.getByText('En Préparation')).toBeVisible();
+};
+
+const expectReservationsReady = async (page: Parameters<typeof test>[0]['page']) => {
+  await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
+};
+
+const expectSalleReady = async (page: Parameters<typeof test>[0]['page']) => {
+  await expect(page.getByRole('heading', { name: 'Plan de Salle' })).toBeVisible();
+};
+
 const mockManagerSettings = async (page: Parameters<typeof test>[0]['page']) => {
   await page.route('**/api/settings/', async (route) => {
     await route.fulfill({
@@ -289,11 +305,11 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expectNoBlockingViolations(page);
 
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+      await expectMenuReady(page);
       await expectNoBlockingViolations(page);
 
       await page.goto('/settings');
-      await expect(page.getByRole('heading', { name: 'Paramètres système' })).toBeVisible();
+      await expect(page.getByText('Identité Visuelle & Légale')).toBeVisible();
       await expectNoBlockingViolations(page);
     });
 
@@ -318,7 +334,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockManagerAvis(page);
 
       await page.goto('/stock');
-      await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
+      await expect(page.getByPlaceholder('Rechercher un ingrédient...')).toBeVisible();
       await expect(page.getByText('Safran Atlas')).toBeVisible();
       await page.getByRole('button', { name: /ajouter/i }).click();
       await expect(page.getByRole('heading', { name: /Nouvel ingrédient/i })).toBeVisible();
@@ -326,20 +342,20 @@ test.describe('authenticated backoffice quality coverage', () => {
       await expect(page.getByRole('heading', { name: /Nouvel ingrédient/i })).toHaveCount(0);
 
       await page.goto('/hr');
-      await expect(page.getByRole('heading', { name: 'Ressources humaines' })).toBeVisible();
+      await expect(page.getByText("Toute l'équipe")).toBeVisible();
       await page.getByPlaceholder(/Rechercher nom/i).fill('serveur');
       await expect(page.getByRole('heading', { name: 'Salma Floor' })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Leila Lead' })).toHaveCount(0);
 
       await page.goto('/avis');
-      await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
+      await expect(page.getByPlaceholder('Filtrer les avis...')).toBeVisible();
       await page.getByPlaceholder(/Filtrer les avis/i).fill('dessert');
       await expect(page.getByText('Dessert timing drifted but staff recovered well.')).toBeVisible();
       await expect(page.getByText('Fast service and a calm floor handoff.')).toHaveCount(0);
       await expect(page.getByText('Dessert timing drifted but staff recovered well.')).toBeVisible();
 
       await page.goto('/maintenance');
-      await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'État du système' })).toBeVisible();
       await expect(page.getByText('Journal Événements')).toBeVisible();
       await expect(page.getByText('Support interne')).toBeVisible();
       await expect(page.getByText('admin@tastify.local')).toBeVisible();
@@ -393,17 +409,17 @@ test.describe('authenticated backoffice quality coverage', () => {
         await expectTouchTargetsAtLeast44(page);
 
         await page.goto('/menu');
-        await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+        await expectMenuReady(page);
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
         await page.goto('/stock');
-        await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
+        await expect(page.getByPlaceholder('Rechercher un ingrédient...')).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
         await page.goto('/avis');
-        await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
+        await expect(page.getByPlaceholder('Filtrer les avis...')).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
@@ -436,11 +452,11 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockReservations(page);
 
       await page.goto('/salle');
-      await expect(page.getByText('Main Dining Area')).toBeVisible();
+      await expectSalleReady(page);
       await expectNoBlockingViolations(page);
 
       await page.goto('/reservations');
-      await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+      await expectReservationsReady(page);
       await expectNoBlockingViolations(page);
     });
 
@@ -464,18 +480,18 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 1280, height: 800 });
       await page.goto('/salle');
-      await expect(page.getByText('Main Dining Area')).toBeVisible();
+      await expectSalleReady(page);
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 1024, height: 768 });
       await page.goto('/reservations');
-      await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+      await expectReservationsReady(page);
       await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 430, height: 932 });
       await page.goto('/reservations');
-      await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+      await expectReservationsReady(page);
       await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
     });
@@ -488,12 +504,12 @@ test.describe('authenticated backoffice quality coverage', () => {
         await page.setViewportSize(viewport);
 
         await page.goto('/salle');
-        await expect(page.getByText('Main Dining Area')).toBeVisible();
+        await expectSalleReady(page);
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
         await page.goto('/reservations');
-        await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+        await expectReservationsReady(page);
         await expect(page.getByRole('button', { name: /confirmer/i }).first()).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
@@ -516,11 +532,11 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockKitchenMenuCatalog(page);
 
       await page.goto('/kds');
-      await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+      await expectKdsReady(page);
       await expectNoBlockingViolations(page);
 
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+      await expectMenuReady(page);
       await expectNoBlockingViolations(page);
     });
 
@@ -529,7 +545,7 @@ test.describe('authenticated backoffice quality coverage', () => {
       await mockKds(page);
 
       await page.goto('/kds');
-      await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+      await expectKdsReady(page);
       await page.reload();
       await expect(page).toHaveURL(/\/kds$/);
 
@@ -545,12 +561,12 @@ test.describe('authenticated backoffice quality coverage', () => {
 
       await page.setViewportSize({ width: 1024, height: 768 });
       await page.goto('/kds');
-      await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+      await expectKdsReady(page);
       await expectNoUnexpectedHorizontalOverflow(page);
 
       await page.setViewportSize({ width: 430, height: 932 });
       await page.goto('/menu');
-      await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+      await expectMenuReady(page);
       await expect(page.getByTestId('plat-card-8101')).toBeVisible();
       await expectNoUnexpectedHorizontalOverflow(page);
     });
@@ -563,12 +579,12 @@ test.describe('authenticated backoffice quality coverage', () => {
         await page.setViewportSize(viewport);
 
         await page.goto('/kds');
-        await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+        await expectKdsReady(page);
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);
 
         await page.goto('/menu');
-        await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+        await expectMenuReady(page);
         await expect(page.getByTestId('plat-card-8101')).toBeVisible();
         await expectNoUnexpectedHorizontalOverflow(page);
         await expectTouchTargetsAtLeast44(page);

@@ -124,35 +124,35 @@ test.describe('gerant browser workflows', () => {
 
     await page.goto('/categories');
     await expect(page).toHaveURL(/\/categories$/);
-    await expect(page.getByRole('heading', { name: 'Gestion des catégories' })).toBeVisible();
+    await expect(page.getByTestId('category-create-button')).toBeVisible();
 
     await page.goto('/menu');
     await expect(page).toHaveURL(/\/menu$/);
-    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un plat...')).toBeVisible();
 
     await page.goto('/stock');
     await expect(page).toHaveURL(/\/stock$/);
-    await expect(page.getByRole('heading', { name: 'Stock et logistique' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un ingrédient...')).toBeVisible();
 
     await page.goto('/reservations');
     await expect(page).toHaveURL(/\/reservations$/);
-    await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
 
     await page.goto('/kds');
     await expect(page).toHaveURL(/\/kds$/);
-    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+    await expect(page.getByText('En Préparation')).toBeVisible();
 
     await page.goto('/hr');
     await expect(page).toHaveURL(/\/hr$/);
-    await expect(page.getByRole('heading', { name: 'Ressources humaines' })).toBeVisible();
+    await expect(page.getByText("Toute l'équipe")).toBeVisible();
 
     await page.goto('/loyalty');
     await expect(page).toHaveURL(/\/loyalty$/);
-    await expect(page.getByLabel('Gestion de la fidélité')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Nouvelle Récompense' })).toBeVisible();
 
     await page.goto('/avis');
     await expect(page).toHaveURL(/\/avis$/);
-    await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
+    await expect(page.getByPlaceholder('Filtrer les avis...')).toBeVisible();
 
     await page.goto('/settings');
     await expect(page).toHaveURL(/\/settings$/);
@@ -172,7 +172,7 @@ test.describe('gerant browser workflows', () => {
     await page.goto('/ordering/999');
     await page.waitForLoadState('networkidle');
     await expect(page).toHaveURL(/\/ordering\/999$/);
-    await expect(page.getByText('Active Ticket')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText('Ticket en cours')).toBeVisible({ timeout: 15000 });
   });
 
   test('creates, edits, and deletes a category', async ({ page }) => {
@@ -313,7 +313,7 @@ test.describe('gerant browser workflows', () => {
     });
 
     await page.goto('/loyalty');
-    await expect(page.getByLabel('Gestion de la fidélité')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Nouvelle Récompense' })).toBeVisible();
     await expect(page.getByText('1000.00')).toBeVisible();
     await expect(page.getByTestId('loyalty-reward-8101')).toContainText('Boisson maison');
 
@@ -1244,11 +1244,11 @@ test.describe('gerant browser workflows', () => {
     // The refresh mock in beforeEach shields this test from a network hang.
     await page.goto('/maintenance');
 
-    await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'État du système' })).toBeVisible();
     await expect(page.getByText('Journal Événements')).toBeVisible();
     await expect(page.getByText('Support interne')).toBeVisible();
     await expect(page.getByText('admin@tastify.local')).toBeVisible();
-    await expect(page.getByText('Degraded')).toBeVisible();
+    await expect(page.getByText('Service à surveiller')).toBeVisible();
   });
 
   test('has no critical or serious axe violations on the manager dashboard', async ({ page }) => {

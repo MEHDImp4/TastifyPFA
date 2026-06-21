@@ -363,7 +363,7 @@ export const OrderingPage: React.FC = () => {
           <div className="flex-none p-4 md:p-8 border-b border-outline flex items-center justify-between bg-surface-container-high">
              <div className="flex items-center gap-4">
                 <ShoppingCart className="w-6 h-6 text-on-background opacity-20" strokeWidth={1.5}/>
-                <h2 className="text-sm font-bold text-on-surface uppercase tracking-[0.3em]">Ticket Actuel <span className="sr-only">Active Ticket</span></h2>
+                <h2 className="text-sm font-bold text-on-surface uppercase tracking-[0.3em]">Ticket Actuel <span className="sr-only">Ticket en cours</span></h2>
              </div>
              <div className="bg-on-background text-background px-3 py-1 rounded-md font-mono text-[10px] font-bold tabular-nums">
                {cart.length + (currentCommande?.lignes?.length || 0)} <span className="text-[9px] opacity-40 ml-1 uppercase">PCS</span>

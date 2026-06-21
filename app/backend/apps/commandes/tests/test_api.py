@@ -285,3 +285,22 @@ class ClientTakeawayCommandeApiTestCase(APITestCase):
 
         self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('type', create_response.data)
+
+    def test_client_can_create_takeaway_order_without_table(self):
+        self.client.force_authenticate(user=self.client_user)
+
+        response = self.client.post(
+            self.url,
+            {
+                'type': Commande.Type.EMPORTER,
+                'lignes': [{'plat': self.plat.id, 'quantite': 2}],
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        commande = Commande.objects.get(pk=response.data['id'])
+        self.assertEqual(commande.type, Commande.Type.EMPORTER)
+        self.assertIsNone(commande.table)
+        self.assertEqual(commande.client, self.client_user)
+        self.assertIsNone(commande.serveur)

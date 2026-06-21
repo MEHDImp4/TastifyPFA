@@ -11,6 +11,7 @@ from datetime import timedelta, time, date, datetime
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
@@ -601,17 +602,20 @@ class Command(BaseCommand):
 
                 notes = random.choice(RESERV_NOTES)
                 
-                Reservation.objects.create(
-                    client=client,
-                    table=table,
-                    date_reservation=res_date,
-                    heure_debut=start_time,
-                    heure_fin=end_time,
-                    nombre_personnes=nb_pers,
-                    statut=statut,
-                    notes=notes
-                )
-                created += 1
+                try:
+                    Reservation.objects.create(
+                        client=client,
+                        table=table,
+                        date_reservation=res_date,
+                        heure_debut=start_time,
+                        heure_fin=end_time,
+                        nombre_personnes=nb_pers,
+                        statut=statut,
+                        notes=notes
+                    )
+                    created += 1
+                except ValidationError:
+                    pass
 
         # ── Today's Reservations ──
         # 3 to 6 reservations for today
@@ -639,17 +643,20 @@ class Command(BaseCommand):
 
             notes = random.choice(RESERV_NOTES)
             
-            Reservation.objects.create(
-                client=client,
-                table=table,
-                date_reservation=today,
-                heure_debut=start_time,
-                heure_fin=end_time,
-                nombre_personnes=nb_pers,
-                statut=statut,
-                notes=notes
-            )
-            created += 1
+            try:
+                Reservation.objects.create(
+                    client=client,
+                    table=table,
+                    date_reservation=today,
+                    heure_debut=start_time,
+                    heure_fin=end_time,
+                    nombre_personnes=nb_pers,
+                    statut=statut,
+                    notes=notes
+                )
+                created += 1
+            except ValidationError:
+                pass
 
         # ── Upcoming Reservations (next 7 days) ──
         for days_ahead in range(1, 8):
@@ -672,16 +679,19 @@ class Command(BaseCommand):
                 statut = Reservation.Statut.CONFIRMEE
                 notes = random.choice(RESERV_NOTES)
                 
-                Reservation.objects.create(
-                    client=client,
-                    table=table,
-                    date_reservation=res_date,
-                    heure_debut=start_time,
-                    heure_fin=end_time,
-                    nombre_personnes=nb_pers,
-                    statut=statut,
-                    notes=notes
-                )
-                created += 1
+                try:
+                    Reservation.objects.create(
+                        client=client,
+                        table=table,
+                        date_reservation=res_date,
+                        heure_debut=start_time,
+                        heure_fin=end_time,
+                        nombre_personnes=nb_pers,
+                        statut=statut,
+                        notes=notes
+                    )
+                    created += 1
+                except ValidationError:
+                    pass
 
         self.stdout.write(f'  Reservations: {created} created.')

@@ -68,7 +68,7 @@ test.describe('serveur browser workflows', () => {
 
     await expect(page).toHaveURL(/\/reservations$/);
     await expect(page.getByTestId('nav-reservations')).toHaveClass(/border-primary/);
-    await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
   });
 
   test('renders mocked salle table states and opens ordering from a free table', async ({ page }) => {
@@ -113,17 +113,17 @@ test.describe('serveur browser workflows', () => {
 
     await freeTable.click({ force: true });
     await expect(page).toHaveURL(/\/ordering\/41$/);
-    await expect(page.getByText('Active Ticket')).toBeVisible();
+    await expect(page.getByText('Ticket en cours')).toBeVisible();
   });
 
   test('keeps serveur users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/reservations');
     await expect(page).toHaveURL(/\/reservations$/);
-    await expect(page.getByRole('heading', { name: 'Reservations Admin' })).toBeVisible();
+    await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
 
     await page.goto('/ordering/1');
     await expect(page).toHaveURL(/\/ordering\/1$/);
-    await expect(page.getByText('Active Ticket')).toBeVisible();
+    await expect(page.getByText('Ticket en cours')).toBeVisible();
     await expect(page.getByTestId('order-submit')).toBeVisible();
 
     for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/menu', '/kds']) {
@@ -190,7 +190,7 @@ test.describe('serveur browser workflows', () => {
 
     await page.goto('/ordering/41');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Active Ticket')).toBeVisible();
+    await expect(page.getByText('Ticket en cours')).toBeVisible();
 
     await page.reload();
     await page.waitForLoadState('networkidle');

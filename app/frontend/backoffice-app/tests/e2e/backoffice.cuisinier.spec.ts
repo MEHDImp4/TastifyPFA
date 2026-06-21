@@ -129,10 +129,18 @@ test.describe('cuisinier browser workflows', () => {
     });
   });
 
+  const expectKdsReady = async (page: Parameters<typeof test>[0]['page']) => {
+    await expect(page.getByText('En Préparation')).toBeVisible();
+  };
+
+  const expectMenuReady = async (page: Parameters<typeof test>[0]['page']) => {
+    await expect(page.getByPlaceholder('Rechercher un plat...')).toBeVisible();
+  };
+
   test('lands on the kds route and only sees kitchen navigation', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/kds$/);
-    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+    await expectKdsReady(page);
 
     await expect(page.getByTestId('nav-menu')).toBeVisible();
     await expect(page.getByTestId('nav-kds')).toBeVisible();
@@ -147,13 +155,13 @@ test.describe('cuisinier browser workflows', () => {
 
     await expect(page).toHaveURL(/\/menu$/);
     await expect(page.getByTestId('nav-menu')).toHaveClass(/border-primary/);
-    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+    await expectMenuReady(page);
   });
 
   test('keeps cuisinier users on allowed routes and redirects forbidden ones', async ({ page }) => {
     await page.goto('/menu');
     await expect(page).toHaveURL(/\/menu$/);
-    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+    await expectMenuReady(page);
 
     for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/salle', '/reservations', '/ordering/1']) {
       await page.goto(forbiddenPath);
@@ -188,7 +196,7 @@ test.describe('cuisinier browser workflows', () => {
     await page.reload();
 
     await expect(page).toHaveURL(/\/kds$/);
-    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+    await expectKdsReady(page);
   });
 
   test('lets cuisinier users search and filter the menu registry', async ({ page }) => {
@@ -217,7 +225,7 @@ test.describe('cuisinier browser workflows', () => {
 
     await page.goto('/menu');
 
-    await expect(page.getByRole('heading', { name: 'Gestion des plats' })).toBeVisible();
+    await expectMenuReady(page);
     await expect(page.getByPlaceholder('Rechercher un plat...')).toBeVisible();
     await expect(page.getByTestId('plat-create-button')).toBeVisible();
   });
@@ -280,7 +288,7 @@ test.describe('cuisinier browser workflows', () => {
     await menuButton.click();
 
     await expect(page.getByTestId('nav-kds')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Kitchen Display System' })).toBeVisible();
+    await expectKdsReady(page);
   });
 
   test('advances a kitchen ticket from waiting to preparation and ready', async ({ page }) => {

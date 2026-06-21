@@ -263,17 +263,16 @@ La figure~\ref{fig:seq-avis-sentiment} montre que la création de l'avis reste r
 \section{Modèle logique de données}
 Le modèle logique de données est construit à partir des modèles Django de la codebase. Le tableau~\ref{tab:mld-resume} ne liste pas toutes les colonnes techniques. Il résume les tables structurantes et leurs relations.
 
-\begin{longtable}{p{3.2cm}p{4.2cm}p{6.2cm}}
+\begin{landscape}
+\begin{table}[p]
+\centering
+\small
 \caption{Synthèse du modèle logique de données}
-\label{tab:mld-resume}\\
+\label{tab:mld-resume}
+\begin{tabularx}{\linewidth}{p{4.2cm}p{6.6cm}Y}
 \toprule
 \textbf{Table / entité} & \textbf{Relations principales} & \textbf{Rôle} \\
 \midrule
-\endfirsthead
-\toprule
-\textbf{Table / entité} & \textbf{Relations principales} & \textbf{Rôle} \\
-\midrule
-\endhead
 \code{Utilisateur} & Rôle applicatif. & Compte de connexion et séparation gérant, serveur, cuisinier, client. \\
 \code{Categorie}, \code{Plat} & Catégorie 1..N plats. & Structure de la carte, prix, disponibilité, image et temps de préparation. \\
 \code{Ingredient}, \code{PlatIngredient} & Relation N..M entre plats et ingrédients. & Recettes et quantités requises pour relier menu et stock. \\
@@ -286,7 +285,9 @@ Le modèle logique de données est construit à partir des modèles Django de la
 \code{WeatherData} & Données datées. & Support aux indicateurs et prévisions simples. \\
 \code{Restaurant}\\\code{Configuration} & Configuration unique. & Paramètres du restaurant, identité, devise et réglages de service. \\
 \bottomrule
-\end{longtable}
+\end{tabularx}
+\end{table}
+\end{landscape}
 
 \section{Règles métier principales}
 Les règles suivantes structurent le comportement attendu :

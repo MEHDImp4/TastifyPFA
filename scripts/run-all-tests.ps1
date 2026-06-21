@@ -53,8 +53,8 @@ function Invoke-NativeQuiet($command, $arguments) {
     }
 }
 
-function Wait-Http($url, $label) {
-    $deadline = (Get-Date).AddMinutes(5)
+function Wait-Http($url, $label, [int]$TimeoutMinutes = 5) {
+    $deadline = (Get-Date).AddMinutes($TimeoutMinutes)
     while ((Get-Date) -lt $deadline) {
         try {
             $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
@@ -67,7 +67,25 @@ function Wait-Http($url, $label) {
         }
     }
 
-    throw "Timed out waiting for $label at $url"
+    throw "Timed out after $TimeoutMinutes minute(s) waiting for $label at $url"
+}
+
+function Show-DockerDiagnostics($services = @()) {
+    Write-Host ""
+    Write-Host "Docker diagnostics before cleanup:" -ForegroundColor Yellow
+
+    try {
+        & docker compose ps
+    } catch {
+        Write-Host "Unable to read docker compose service status: $($_.Exception.Message)" -ForegroundColor Red
+    }
+
+    try {
+        $logArgs = @("compose", "logs", "--no-color", "--tail=200") + $services
+        & docker @logArgs
+    } catch {
+        Write-Host "Unable to read docker compose logs: $($_.Exception.Message)" -ForegroundColor Red
+    }
 }
 
 function Test-CommandExists($command) {
@@ -115,7 +133,7 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw "docker compose up failed"
     }
-    Wait-Http "http://127.0.0.1:8000/api/health/" "Backend"
+    Wait-Http "http://127.0.0.1:8000/api/health/" "Backend" 10
 
     Invoke-Checked "Django system checks" "docker" @(
         "compose", "exec", "-T",
@@ -166,6 +184,11 @@ try {
     foreach ($result in $results) {
         Write-Host ("  {0} - {1}s" -f $result.Name, $result.Duration)
     }
+} catch {
+    if ($cleanupOnExit) {
+        Show-DockerDiagnostics @("backend", "db", "redis", "client-app", "backoffice-app")
+    }
+    throw
 } finally {
     if ($cleanupOnExit) {
         Stop-TestStack

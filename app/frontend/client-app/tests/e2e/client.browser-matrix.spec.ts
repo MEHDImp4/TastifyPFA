@@ -100,7 +100,7 @@ test.describe('client expanded browser matrix smoke', () => {
   test('keeps the mobile catalog CTA path visible', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/menu', routeReady);
-    await page.getByRole('button', { name: /Ajouter.*au panier/i }).click();
+    await page.getByRole('button', { name: /Ajouter.*au panier/i }).first().click();
     await expect(page.getByRole('link', { name: /Voir le panier/i })).toBeVisible();
   });
 });

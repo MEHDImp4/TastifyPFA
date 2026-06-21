@@ -127,8 +127,8 @@ function Get-EnvValue($path, $name) {
     return $line.Substring($name.Length + 1)
 }
 
-function Wait-Http($url, $label) {
-    $deadline = (Get-Date).AddMinutes(5)
+function Wait-Http($url, $label, [int]$TimeoutMinutes = 5) {
+    $deadline = (Get-Date).AddMinutes($TimeoutMinutes)
     while ((Get-Date) -lt $deadline) {
         try {
             $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
@@ -141,7 +141,25 @@ function Wait-Http($url, $label) {
         }
     }
 
-    throw "Timed out waiting for $label at $url"
+    throw "Timed out after $TimeoutMinutes minute(s) waiting for $label at $url"
+}
+
+function Show-DockerDiagnostics($services = @()) {
+    Write-Host ""
+    Write-Host "Docker diagnostics before cleanup:" -ForegroundColor Yellow
+
+    try {
+        & docker compose ps
+    } catch {
+        Write-Host "Unable to read docker compose service status: $($_.Exception.Message)" -ForegroundColor Red
+    }
+
+    try {
+        $logArgs = @("compose", "logs", "--no-color", "--tail=200") + $services
+        & docker @logArgs
+    } catch {
+        Write-Host "Unable to read docker compose logs: $($_.Exception.Message)" -ForegroundColor Red
+    }
 }
 
 function Show-DemoQrPage($repoRoot, $clientUrl, $staffUrl) {
@@ -390,7 +408,7 @@ try {
     Invoke-Checked "docker" (Get-ComposeUpArgs -services @("backend") -withBuild:$backendNeedsBuild) -Quiet
 
     Write-Step "Waiting for backend"
-    Wait-Http "http://127.0.0.1:8000/api/health/" "Backend"
+    Wait-Http "http://127.0.0.1:8000/api/health/" "Backend" 10
 
     Write-Step "Loading transactional demo data"
     Invoke-Checked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "seed_transactions") -Quiet
@@ -410,6 +428,11 @@ try {
 
     Show-DemoSummary
     [void](Read-Host)
+} catch {
+    if ($cleanupOnExit) {
+        Show-DockerDiagnostics @("backend", "db", "redis", "client-app", "backoffice-app", "celery-worker", "celery-beat")
+    }
+    throw
 } finally {
     if ($cleanupOnExit) {
         try {

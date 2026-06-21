@@ -12,7 +12,6 @@ import {
   Minus,
   UserPlus,
   Calendar,
-  Sparkles,
   Check,
   PartyPopper
 } from 'lucide-react';
@@ -118,7 +117,6 @@ export const ReservationWizard: React.FC = () => {
                 </div>
  
                 <div className="pt-6 border-t border-outline/50 flex items-center justify-center gap-2 text-on-surface-subtle">
-                    <Sparkles className="w-3.5 h-3.5 text-accent" />
                     <span className="text-[9px] font-bold uppercase tracking-[0.25em]">Compte membre Tastify</span>
                 </div>
               </div>

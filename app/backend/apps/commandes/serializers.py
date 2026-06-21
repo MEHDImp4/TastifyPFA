@@ -111,10 +111,12 @@ class CommandeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         lignes_data = validated_data.pop('lignes')
         request = self.context.get('request')
-        serveur = request.user if request else None
+        user = request.user if request else None
+        serveur = user if user and user.role != 'CLIENT' else None
+        client = user if user and user.role == 'CLIENT' else None
 
         with transaction.atomic():
-            commande = Commande.objects.create(serveur=serveur, **validated_data)
+            commande = Commande.objects.create(serveur=serveur, client=client, **validated_data)
             for ligne_data in lignes_data:
                 CommandeLigne.objects.create(commande=commande, **ligne_data)
             if lignes_data:

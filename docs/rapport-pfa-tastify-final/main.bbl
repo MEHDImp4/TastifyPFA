@@ -36,6 +36,11 @@ Alexis Conneau, Kartikay Khandelwal, Naman Goyal, Vishrav Chaudhary, Guillaume
   2026.
 \newblock Fiche modèle Hugging Face consultée en juin 2026.
 
+\bibitem{davenport1998enterprise}
+Thomas~H. Davenport.
+\newblock Putting the enterprise into the enterprise system.
+\newblock {\em Harvard Business Review}, 1998.
+
 \bibitem{bert}
 Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
 \newblock Bert: Pre-training of deep bidirectional transformers for language
@@ -80,6 +85,18 @@ Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
 \newblock \url{https://django-rest-framework-simplejwt.readthedocs.io/}, 2026.
 \newblock Consulté en juin 2026.
 
+\bibitem{laddition}
+{L'Addition}.
+\newblock Logiciel de caisse restaurant.
+\newblock \url{https://www.laddition.com/}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{lightspeed}
+{Lightspeed}.
+\newblock Lightspeed restaurant pos.
+\newblock \url{https://www.lightspeedhq.com/pos/restaurant/}, 2026.
+\newblock Consulté en juin 2026.
+
 \bibitem{camembert}
 Louis Martin, Benjamin Muller, Pedro Javier~Ortiz Suárez, Yoann Dupont,
   Laurent Romary, Éric Villemonte de~la Clergerie, Djamé Seddah, and Benoît
@@ -92,6 +109,11 @@ Louis Martin, Benjamin Muller, Pedro Javier~Ortiz Suárez, Yoann Dupont,
 \newblock React documentation.
 \newblock \url{https://react.dev/}, 2026.
 \newblock Consulté en juin 2026.
+
+\bibitem{monk2013erp}
+Ellen~F. Monk and Bret~J. Wagner.
+\newblock {\em Concepts in Enterprise Resource Planning}.
+\newblock Cengage Learning, 2013.
 
 \bibitem{nlptown}
 {NLP Town}.
@@ -113,10 +135,22 @@ Louis Martin, Benjamin Muller, Pedro Javier~Ortiz Suárez, Yoann Dupont,
 \newblock \url{https://redis.io/docs/}, 2026.
 \newblock Consulté en juin 2026.
 
+\bibitem{revel}
+{Revel Systems}.
+\newblock Restaurant pos system.
+\newblock \url{https://revelsystems.com/restaurant-pos/}, 2026.
+\newblock Consulté en juin 2026.
+
 \bibitem{tailwind}
 {Tailwind Labs}.
 \newblock Tailwind css documentation.
 \newblock \url{https://tailwindcss.com/docs}, 2026.
+\newblock Consulté en juin 2026.
+
+\bibitem{toast}
+{Toast}.
+\newblock Restaurant pos system.
+\newblock \url{https://pos.toasttab.com/products/restaurant-pos}, 2026.
 \newblock Consulté en juin 2026.
 
 \bibitem{vite}

@@ -110,16 +110,6 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col gap-6 md:gap-10 overflow-y-auto font-sans custom-scrollbar pb-6">
 
-      <div className="flex-none flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end">
-        <div>
-           <h1 className="text-2xl md:text-4xl font-black tracking-tight text-on-surface">Tableau de Bord</h1>
-           <p className="text-[11px] font-bold text-on-surface-variant tracking-[0.12em] sm:tracking-[0.2em] mt-2">Suivi du service en salle et en cuisine</p>
-        </div>
-        <div className="flex min-h-[44px] items-center gap-3 bg-surface-container-high border border-outline-variant px-5 sm:px-8 py-3.5 rounded-xl">
-           <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-           <span className="text-[10px] font-black tracking-widest text-on-surface">Connecté</span>
-        </div>
-      </div>
 
       {/* KPI Section */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

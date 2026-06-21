@@ -168,7 +168,7 @@ Le module stock relie les plats à leurs ingrédients grâce à une table de rec
 Dans cette version, la partie approvisionnement et météo reste limitée à une estimation métier simple, utile pour anticiper certains besoins sans la confondre avec un modèle prédictif avancé entraîné localement.
 
 \section{Moteur de recommandation de plats}
-Tastify intègre un moteur de recommandation pour suggérer des plats aux clients sur le portail public. Ce moteur repose sur une approche de filtrage collaboratif base-item calculée à partir des co-occurrences de commande.
+Tastify intègre un moteur de recommandation pour suggérer des plats aux clients sur le portail public. Le socle prévu pour l'évolution avancée repose sur une logique item-based calculable à partir des co-occurrences de commande.
 
 L'algorithme, implémenté dans le module \pathcode{apps/menu/ml/recommender.py}, analyse l'historique de toutes les lignes de commande via la méthode \code{compute\_similarities}. Pour chaque paire de plats commandés ensemble dans une même transaction, un score de co-occurrence est incrémenté. Les résultats de cette matrice de similarité symétrique sont stockés dans le cache Redis pour des performances optimales lors de la navigation du client.
 

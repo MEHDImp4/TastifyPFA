@@ -196,3 +196,108 @@
     display: none;
   }
 }
+
+/* Custom premium Toast styling matching user image */
+[data-sonner-toaster] {
+  --success-bg: #047857 !important;     /* Emerald 700 */
+  --success-border: #047857 !important;
+  --success-text: #ffffff !important;
+
+  --error-bg: #be123c !important;       /* Rose 700 */
+  --error-border: #be123c !important;
+  --error-text: #ffffff !important;
+
+  --warning-bg: #9a3412 !important;     /* Amber 800 */
+  --warning-border: #9a3412 !important;
+  --warning-text: #ffffff !important;
+
+  --info-bg: #1d4ed8 !important;        /* Blue 700 */
+  --info-border: #1d4ed8 !important;
+  --info-text: #ffffff !important;
+}
+
+[data-sonner-toast] {
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 16px 48px 16px 16px !important; /* Extra padding on right for close button */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Make sure titles and descriptions are white and readable */
+[data-sonner-toast] [data-title] {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+}
+
+[data-sonner-toast] [data-description] {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.85rem !important;
+}
+
+/* Custom Close Button styling */
+[data-sonner-toast] [data-close-button] {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: auto !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  opacity: 0.7 !important;
+  height: 28px !important;
+  width: 28px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  opacity: 1 !important;
+  border: none !important;
+}
+
+/* SVG icon styling to be white */
+[data-sonner-toast] [data-icon] svg {
+  color: #ffffff !important;
+  stroke: currentColor !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Interactive Progress Bar animation at the bottom */
+[data-sonner-toast]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.35);
+  animation: toast-progress-bar 4s linear forwards;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  transform-origin: left;
+}
+
+[data-sonner-toast]:hover::after {
+  animation-play-state: paused;
+}
+
+@keyframes toast-progress-bar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+

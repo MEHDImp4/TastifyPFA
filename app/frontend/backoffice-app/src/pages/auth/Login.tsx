@@ -8,8 +8,7 @@ import {
   ShieldAlert, 
   ShieldCheck, 
   Eye, 
-  EyeOff,
-  User
+  EyeOff
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -65,9 +64,6 @@ export const Login: React.FC = () => {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="flex flex-col items-center mb-12">
-            <div className="w-12 h-12 rounded-full border border-outline flex items-center justify-center mb-6">
-               <User className="w-5 h-5 text-on-surface-variant" strokeWidth={1} />
-            </div>
             <h1 aria-label="Tastify Staff OS" className="text-4xl   tracking-tight text-on-background m-0 lowercase">tastify staff.</h1>
             <p className="text-[10px] font-bold text-[#52525A] uppercase tracking-[0.3em] mt-3">Espace Professionnel</p>
         </motion.div>

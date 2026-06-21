@@ -315,10 +315,6 @@ export const KdsPage: React.FC = () => {
           >
             <ArrowLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
-          <div className="min-w-0">
-            <h1 aria-label="Kitchen Display System" className="text-xl font-black uppercase tracking-tight text-on-surface leading-none">Écran Cuisine</h1>
-            <p className="text-[10px] font-bold text-on-surface tracking-widest mt-1.5">Commandes à préparer</p>
-          </div>
         </div>
         
         <div className="flex w-full flex-col gap-2.5 sm:flex-row sm:items-center lg:w-auto lg:gap-6">

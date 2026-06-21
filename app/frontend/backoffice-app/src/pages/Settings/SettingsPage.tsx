@@ -49,10 +49,6 @@ export const SettingsPage: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
       <header className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
-        <div>
-          <h1 aria-label="Paramètres système" className="text-sm font-bold tracking-widest text-on-background uppercase">Console Système</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Configuration globale de l'établissement</p>
-        </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
           <button onClick={fetchSettings} className="btn-ghost h-10 px-4">
             <RotateCcw className="w-3.5 h-3.5" /> <span>Réinitialiser</span>

@@ -5,7 +5,6 @@ import {
   MapPin,
   Clock,
   Loader2,
-  Sparkles,
   Send,
   ChevronRight
 } from 'lucide-react';
@@ -134,7 +133,6 @@ export const ContactPage: React.FC = () => {
                     <div className="relative z-10 space-y-10">
                         <div className="space-y-4">
                             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-high text-accent border border-outline">
-                                <Sparkles className="w-3.5 h-3.5" />
                                 <span className="text-[9px] font-bold tracking-[0.2em] uppercase">Réponse sous 24 h</span>
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold text-on-background leading-none m-0 uppercase font-heading">Votre message</h2>

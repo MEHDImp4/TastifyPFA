@@ -29,6 +29,7 @@ class Commande(models.Model):
 
     class Type(models.TextChoices):
         SUR_PLACE = 'SUR_PLACE', 'Sur place'
+        EMPORTER = 'EMPORTER', 'À emporter'
 
     # Liaison avec la table (si c'est sur place)
     table = models.ForeignKey(

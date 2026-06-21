@@ -27,24 +27,26 @@ CI et qualité & GitHub Actions, npm scripts & Automatiser lint, typecheck, buil
 \section{Résultats exécutés}
 Le tableau~\ref{tab:resultats-tests} présente les résultats obtenus pendant la préparation finale du rapport. Les captures terminal associées sont intégrées directement après le tableau.
 
-\begin{table}[H]
+\begin{landscape}
+\begin{table}[p]
 \centering
-\scriptsize
+\small
 \caption{Résultats de tests du 21 juin 2026}
 \label{tab:resultats-tests}
-\begin{tabularx}{\textwidth}{p{2.4cm}p{4.9cm}p{3.2cm}Y}
+\begin{tabularx}{\linewidth}{p{3cm}p{8.2cm}p{4cm}Y}
 \toprule
 \textbf{Suite} & \textbf{Commande} & \textbf{Résultat} & \textbf{Lecture} \\
 \midrule
-Backend pytest & \pathcode{docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q} & 346 passed, 1 skipped, couverture 93\%, 6 min 02 s & Couverture large du backend : API, permissions, réservations, commandes, paiements, stock, avis, sentiment, fidélité et WebSocket. \\
-Vitest back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:unit} & 25 tests passed, 8 fichiers, 27.26 s & Les tests unitaires du back-office passent entièrement. \\
-Vitest client & \pathcode{npm --prefix app/frontend/client-app run test:unit} & 4 tests passed, 2 fichiers, 30.39 s & Les tests unitaires du portail client passent entièrement. \\
-Playwright back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:e2e} & 121 passed, 2.9 min & La suite end-to-end staff passe entièrement : authentification, rôles, navigation gérant/serveur/cuisinier, KDS, salle, réservations, menu, stock, RH, avis et maintenance. \\
-Playwright client & \pathcode{npm --prefix app/frontend/client-app run test:e2e} & 79 passed, 2 failed, 3.4 min & La majorité des scénarios client passe. Les deux échecs restants concernent un test de stabilité responsive qui ne retrouve pas le bouton de connexion attendu et un audit visuel desktop interrompu par timeout. \\
+Backend pytest & \pathcode{docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q} & 346 passed, 1 skipped, couverture 93\%, 4 min 37 s & Couverture large du backend : API, permissions, réservations, commandes, paiements, stock, avis, sentiment, fidélité et WebSocket. \\
+Vitest back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:unit} & 25 tests passed, 8 fichiers, 5.39 s & Les tests unitaires du back-office passent entièrement. \\
+Vitest client & \pathcode{npm --prefix app/frontend/client-app run test:unit} & 4 tests passed, 2 fichiers, 12.36 s & Les tests unitaires du portail client passent entièrement. \\
+Playwright back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:e2e} & 121 passed, 1.8 min & La suite end-to-end staff passe entièrement : authentification, rôles, navigation gérant/serveur/cuisinier, KDS, salle, réservations, menu, stock, RH, avis et maintenance. \\
+Playwright client & \pathcode{npm --prefix app/frontend/client-app run test:e2e} & 81 passed, 1.9 min & La suite end-to-end client passe entièrement : accueil, menu, authentification, compte, panier, réservation, paiement, fidélité, accessibilité et robustesse responsive. \\
 CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dessus & Workflow disponible, validation locale exécutée & Le workflow CI automatise les mêmes familles de contrôles ; les rapports intégrés montrent la configuration et les résultats locaux équivalents. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\end{landscape}
 
 \begin{figure}[H]
 \centering
@@ -67,11 +69,11 @@ La figure~\ref{fig:capture-test-vitest} regroupe les résultats unitaires fronte
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_test_playwright.png}
-\caption{Sortie Playwright client : 79 scénarios réussis et deux tests à stabiliser}
+\caption{Sorties Playwright : suites back-office et client réussies}
 \label{fig:capture-test-playwright}
 \end{figure}
 
-La figure~\ref{fig:capture-test-playwright} documente la validation end-to-end du portail client. La relance actuelle conserve 79 scénarios validés et met en évidence deux tests à stabiliser : un contrôle responsive lié au libellé du bouton de connexion et un audit visuel desktop interrompu par timeout.
+La figure~\ref{fig:capture-test-playwright} documente la validation end-to-end des deux interfaces. La relance du 21 juin 2026 confirme que le back-office valide 121 scénarios et que le portail client valide 81 scénarios, sans échec.
 
 \begin{figure}[H]
 \centering
@@ -116,7 +118,7 @@ Réservation & Deux réservations incompatibles sur la même table et le même c
 \end{table}
 
 \section{Tests frontend et end-to-end}
-Les deux frontends possèdent des configurations Vitest et Playwright. Les suites Vitest ont réussi entièrement. La suite Playwright back-office a validé 121 scénarios sur 121. La suite Playwright client a validé 79 scénarios sur 81 ; les deux échecs restants relèvent de tests de qualité et de stabilité à corriger avant de considérer la validation E2E client comme entièrement verte.
+Les deux frontends possèdent des configurations Vitest et Playwright. Les suites Vitest ont réussi entièrement. La suite Playwright back-office a validé 121 scénarios sur 121. La suite Playwright client a validé 81 scénarios sur 81. Les deux interfaces disposent donc d'une validation end-to-end verte sur la relance finale.
 
 \begin{table}[H]
 \centering
@@ -180,4 +182,4 @@ Plusieurs améliorations peuvent être ajoutées dans une version suivante :
 
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-La validation donne une base solide au projet : 346 tests backend réussis, 29 tests unitaires frontend réussis, 121 scénarios Playwright back-office validés et 79 scénarios Playwright client validés. Les deux échecs restants côté client sont identifiés et limités à des tests de stabilité responsive et d'audit visuel desktop, ce qui rend l'état de validation clair, mesurable et exploitable pour la suite.
+La validation donne une base solide au projet : 346 tests backend réussis, 29 tests unitaires frontend réussis, 121 scénarios Playwright back-office validés et 81 scénarios Playwright client validés. L'état final est vert sur les suites relancées le 21 juin 2026, avec une couverture backend globale de 93\%.

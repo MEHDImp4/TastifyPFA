@@ -50,11 +50,11 @@ async function buildCheckoutCart(page: Parameters<typeof test.beforeEach>[0]['pa
   await mockMenuCatalog(page);
   await page.goto('/menu', routeReady);
 
-  await page.getByRole('button', { name: 'Ajouter Harira au panier' }).click();
-  await page.getByRole('button', { name: 'Ajouter Harira au panier' }).click();
+  await page.getByTestId('menu-card-11').getByRole('button', { name: 'Ajouter' }).click();
+  await page.getByTestId('menu-card-11').getByRole('button', { name: 'Ajouter' }).click();
 
   await page.getByRole('button', { name: 'Plats', exact: true }).click();
-  await page.getByRole('button', { name: 'Ajouter Tagine au panier' }).click();
+  await page.getByTestId('menu-card-22').getByRole('button', { name: 'Ajouter' }).click();
 
   await page.getByRole('link', { name: /Voir le panier/i }).click();
 }
@@ -78,15 +78,15 @@ test.describe('checkout journey', () => {
       await seedAuthenticatedUser(page);
       await buildCheckoutCart(page);
 
-      await expect(page.getByText('Harira')).toBeVisible();
-      await expect(page.getByText('Tagine')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Harira' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Tagine' })).toBeVisible();
       await expect(page.getByText(/^92$/)).toBeVisible();
 
       await page.getByRole('button', { name: '10%' }).click();
       await expect(page.getByText(/^100$/)).toBeVisible();
 
       await page.getByRole('button', { name: 'Retirer Tagine du panier' }).click();
-      await expect(page.getByText('Tagine')).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: 'Tagine' })).toHaveCount(0);
       await expect(page.getByText(/^35$/)).toBeVisible();
 
       await page.getByRole('button', { name: 'Augmenter la quantité pour Harira' }).click();
@@ -106,18 +106,20 @@ test.describe('checkout journey', () => {
       await buildCheckoutCart(page);
       await page.getByRole('button', { name: /Valider la commande/i }).click();
 
-      await expect(page.getByText('Une erreur est survenue')).toBeVisible();
-      await expect(page.getByText('Harira')).toBeVisible();
-      await expect(page.getByText('Tagine')).toBeVisible();
+      await expect(page.getByText('boom')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Harira' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Tagine' })).toBeVisible();
       await expect(page.getByRole('button', { name: /Valider la commande/i })).toBeVisible();
     });
 
     test('prevents duplicate order submission while checkout is in flight', async ({ page }) => {
       let submitCount = 0;
+      let submittedOrder: any = null;
 
       await seedAuthenticatedUser(page);
       await page.route('**/api/commandes/', async (route) => {
         submitCount += 1;
+        submittedOrder = route.request().postDataJSON();
         await new Promise((resolve) => setTimeout(resolve, 300));
         await route.fulfill({
           status: 201,
@@ -132,6 +134,13 @@ test.describe('checkout journey', () => {
 
       await expect(page.getByRole('heading', { name: /Merci pour votre commande/i })).toBeVisible();
       expect(submitCount).toBe(1);
+      expect(submittedOrder).toEqual({
+        type: 'EMPORTER',
+        lignes: [
+          { plat: 11, quantite: 2, notes: '' },
+          { plat: 22, quantite: 1, notes: '' },
+        ],
+      });
     });
   });
 });

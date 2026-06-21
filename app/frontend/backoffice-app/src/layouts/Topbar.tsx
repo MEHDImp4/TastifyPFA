@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { Menu, ShieldCheck, User } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { NotificationCenter } from '../components/ui/NotificationCenter';
@@ -14,6 +15,24 @@ export const Topbar: React.FC<TopbarProps> = ({
   isMobileOpen,
 }) => {
   const { username, role } = useAuthStore();
+  const location = useLocation();
+
+  const pageNames: Record<string, string> = {
+    '/': 'Tableau de Bord',
+    '/menu': 'La Carte',
+    '/categories': 'Catégories',
+    '/salle': 'Plan de Salle',
+    '/reservations': 'Réservations',
+    '/kds': 'Cuisine (KDS)',
+    '/stock': 'Stocks',
+    '/hr': 'Personnel',
+    '/avis': 'Avis clients',
+    '/loyalty': 'Fidélité',
+    '/settings': 'Paramètres',
+    '/maintenance': 'Maintenance',
+  };
+
+  const pageName = pageNames[location.pathname] || '';
 
   return (
     <header className="min-h-16 bg-surface border-b border-outline flex items-center justify-between gap-3 px-3 py-2 md:px-8 sticky top-0 z-40">
@@ -26,6 +45,11 @@ export const Topbar: React.FC<TopbarProps> = ({
         >
           <Menu strokeWidth={2} className="w-5 h-5" />
         </button>
+        {pageName && (
+          <span className="text-sm md:text-lg font-black tracking-wider text-on-surface uppercase pl-1 md:pl-0 font-heading">
+            {pageName}
+          </span>
+        )}
       </div>
 
       <div className="flex min-w-0 items-center gap-3 md:gap-8">

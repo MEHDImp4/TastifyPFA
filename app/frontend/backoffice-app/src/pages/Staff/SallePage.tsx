@@ -16,6 +16,7 @@ import {
 import { useSocketStore } from '../../store/socketStore';
 import { useAuthStore } from '../../store/authStore';
 import { toast } from 'sonner';
+import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 
 export const SallePage: React.FC = () => {
   const [tables, setTables] = useState<Table[]>([]);
@@ -27,7 +28,9 @@ export const SallePage: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingTable, setEditingTable] = useState<Table | null>(null);
+  const [tableToDelete, setTableToDelete] = useState<number | null>(null);
 
   const [numero, setNumero] = useState('');
   const [capacite, setCapacite] = useState('2');
@@ -115,13 +118,19 @@ export const SallePage: React.FC = () => {
     }
   };
 
-  const handleDeleteTable = async (tableId: number) => {
-    if (!window.confirm('Voulez-vous vraiment supprimer cette table ?')) return;
+  const requestDeleteTable = (tableId: number) => {
+    setTableToDelete(tableId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteTable = async () => {
+    if (!tableToDelete) return;
     try {
-      await salleApi.deleteTable(tableId);
+      await salleApi.deleteTable(tableToDelete);
       toast.success('Table supprimée');
       setIsEditOpen(false);
       setEditingTable(null);
+      setTableToDelete(null);
       fetchData();
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || 'Erreur lors de la suppression');
@@ -135,8 +144,12 @@ export const SallePage: React.FC = () => {
       <div className="flex-none flex items-center justify-center px-staff-margin min-h-16 py-3 border-b border-outline bg-surface">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-8 w-full max-w-[1600px] justify-between">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-8">
-            <h1 className="text-sm font-bold tracking-widest text-on-background uppercase">Plan de Salle <span className="sr-only">Main Dining Area</span></h1>
-            <div className="hidden sm:flex items-center gap-4 border-l border-outline pl-6 lg:gap-6 lg:pl-8">
+            <div className="text-center sm:text-left">
+              <h1 className="text-sm font-black uppercase tracking-[0.18em] text-on-background">
+                Plan de Salle
+              </h1>
+            </div>
+            <div className="hidden sm:flex items-center gap-4 lg:gap-6">
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 border border-outline bg-background rounded-sm"></div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Libre</span>
@@ -323,7 +336,7 @@ export const SallePage: React.FC = () => {
                 </button>
               </div>
               <button
-                onClick={() => handleDeleteTable(editingTable.id)}
+                onClick={() => requestDeleteTable(editingTable.id)}
                 className="w-full h-12 border border-error/30 text-error rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-error/5 transition-all flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
@@ -333,6 +346,19 @@ export const SallePage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setTableToDelete(null);
+        }}
+        onConfirm={handleDeleteTable}
+        title="Supprimer la table"
+        message="Confirmez-vous la suppression de cette table ? Cette action la retirera du plan de salle."
+        confirmLabel="Supprimer"
+        variant="danger"
+      />
     </div>
   );
 };

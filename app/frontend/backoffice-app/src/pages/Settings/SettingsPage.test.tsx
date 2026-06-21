@@ -31,7 +31,7 @@ describe('SettingsPage component', () => {
   it('renders loading state initially', () => {
     vi.mocked(configurationApi.getSettings).mockReturnValue(new Promise(() => {}));
     render(<SettingsPage />);
-    expect(screen.queryByText('Console Système')).toBeNull();
+    expect(screen.queryByText('Identité Visuelle & Légale')).toBeNull();
   });
 
   it('renders settings fields and saves successfully', async () => {
@@ -76,7 +76,7 @@ describe('SettingsPage component', () => {
     render(<SettingsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Console Système')).toBeDefined();
+      expect(screen.getByText('Identité Visuelle & Légale')).toBeDefined();
     });
 
     const nomInput = screen.getByLabelText("Nom de l'enseigne") as HTMLInputElement;

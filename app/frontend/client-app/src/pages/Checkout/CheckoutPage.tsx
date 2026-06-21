@@ -35,6 +35,19 @@ const itemVariants = {
   }
 };
 
+const getCheckoutErrorMessage = (err: any) => {
+  const data = err?.response?.data;
+  if (typeof data === 'string') return data;
+  if (data?.detail) return data.detail;
+  if (data?.error) return data.error;
+  if (data && typeof data === 'object') {
+    const firstValue = Object.values(data)[0];
+    if (Array.isArray(firstValue) && firstValue.length > 0) return String(firstValue[0]);
+    if (typeof firstValue === 'string') return firstValue;
+  }
+  return 'Une erreur est survenue';
+};
+
 export const CheckoutPage: React.FC = () => {
   const { items, updateQty, removeItem, clearCart } = useCartStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,7 +67,7 @@ export const CheckoutPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await api.post('/commandes/', {
-        type: 'SUR_PLACE',
+        type: 'EMPORTER',
         lignes: items.map(i => ({
           plat: i.plat.id,
           quantite: i.quantite,
@@ -65,7 +78,7 @@ export const CheckoutPage: React.FC = () => {
       clearCart();
       toast.success('Commande validée');
     } catch (err: any) {
-      toast.error('Une erreur est survenue');
+      toast.error(getCheckoutErrorMessage(err));
     } finally {
       isSubmittingRef.current = false;
       setIsSubmitting(false);
@@ -153,10 +166,7 @@ export const CheckoutPage: React.FC = () => {
             className="flex items-center gap-4 sm:gap-6 mb-10 border-b border-outline/50 pb-6"
         >
             <button aria-label="Retour à la carte" onClick={() => navigate('/menu')} className="w-11 h-11 bg-surface rounded-full hover:bg-surface-container-high transition-all duration-300 border border-outline flex items-center justify-center text-on-surface active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
-            <div>
-               <span className="text-[9px] font-bold text-accent tracking-[0.25em] uppercase block mb-0.5">Commande</span>
-               <h1 className="text-2xl sm:text-3xl font-bold text-on-background tracking-tight lowercase font-heading">Mon panier.</h1>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-on-background tracking-tight lowercase font-heading">Mon panier.</h1>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">

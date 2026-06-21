@@ -93,10 +93,6 @@ export const AvisPage: React.FC = () => {
     <div className="flex-1 flex flex-col min-h-0 bg-background font-body selection:bg-on-background/10 overflow-hidden">
 
       <div className="flex-none flex flex-wrap justify-between items-center px-4 md:px-8 py-3 md:py-0 min-h-20 border-b border-outline bg-surface gap-3">
-        <div>
-          <h1 aria-label="Analyse des avis clients" className="text-sm font-bold tracking-widest text-on-background uppercase">Avis clients</h1>
-          <p className="text-[10px] font-bold text-on-surface-variant tracking-widest mt-1 opacity-60">Commentaires et satisfaction des convives</p>
-        </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center md:gap-4">
            <div className="relative group w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant group-focus-within:text-on-background transition-colors" />

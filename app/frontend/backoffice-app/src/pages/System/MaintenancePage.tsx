@@ -27,7 +27,7 @@ export const MaintenancePage: React.FC = () => {
       {/* Page Header */}
       <header className="flex-none flex items-center justify-between px-8 h-20 border-b border-outline bg-surface">
         <div>
-          <h1 aria-label="System Health" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
+          <h1 aria-label="État du système" className="text-sm font-bold tracking-widest text-on-background uppercase">État du Système</h1>
           <p className="text-[10px] font-bold text-on-surface-variant tracking-widest mt-1 opacity-60">État des services utiles au restaurant</p>
         </div>
       </header>
@@ -70,7 +70,7 @@ export const MaintenancePage: React.FC = () => {
                  <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
               </div>
               <div className="mt-auto">
-                 <div className="text-2xl font-bold text-error">Dégradé<span className="sr-only">Degraded</span></div>
+                 <div className="text-2xl font-bold text-error">Dégradé<span className="sr-only">Service à surveiller</span></div>
                  <div className="flex justify-between text-[8px] font-bold text-error/40 uppercase tracking-widest mt-2">
                     <span>Réponse: 145ms</span>
                     <span>À surveiller</span>
