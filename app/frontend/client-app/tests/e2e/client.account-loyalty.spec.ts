@@ -12,6 +12,9 @@ const routeReady = { waitUntil: 'domcontentloaded' } as const;
 test.beforeEach(async ({ page }) => {
   await mockConfig(page);
   await mockRefreshFail(page);
+  await page.route('**/api/loyalty/transactions/', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+  });
 });
 
 test.describe('account journey', () => {
@@ -34,7 +37,7 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 980, tier: 'SILVER', tier_display: 'Silver Member' }),
         });
       });
-      await page.route('**/api/loyalty/rewards/', async (route) => {
+      await page.route('**/api/rewards/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
@@ -66,7 +69,7 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 120, tier: 'BRONZE', tier_display: 'Bronze Member' }),
         });
       });
-      await page.route('**/api/loyalty/rewards/', async (route) => {
+      await page.route('**/api/rewards/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
@@ -111,7 +114,7 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 12450, tier: 'GOLD', tier_display: 'Gold Member' }),
         });
       });
-      await page.route('**/api/loyalty/rewards/', async (route) => {
+      await page.route('**/api/rewards/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
@@ -158,7 +161,7 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 450, tier: 'SILVER', tier_display: 'Silver Member' }),
         });
       });
-      await page.route('**/api/loyalty/rewards/', async (route) => {
+      await page.route('**/api/rewards/', async (route) => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
       });
       await page.route('**/api/commandes/', async (route) => {
@@ -196,7 +199,7 @@ test.describe('account journey', () => {
           body: JSON.stringify({ points: 1200, tier: 'SILVER', tier_display: 'Silver Member' }),
         });
       });
-      await page.route('**/api/loyalty/rewards/', async (route) => {
+      await page.route('**/api/rewards/', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -213,6 +216,78 @@ test.describe('account journey', () => {
       await expect(page.getByText('1200')).toBeVisible();
       await expect(page.getByText('Verrouillé')).toBeVisible();
       await expect(page.getByRole('button', { name: 'En profiter' }).first()).toBeVisible();
+    });
+
+    test('redeems an unlockable reward and refreshes loyalty points plus transaction history', async ({ page }) => {
+      let currentPoints = 1200;
+      let transactions = [
+        {
+          id: 1,
+          points: 1200,
+          type: 'GAIN',
+          type_display: 'Gain',
+          description: 'Paiement commande #2001',
+          created_at: '2026-06-01T12:00:00Z',
+        },
+      ];
+
+      await page.route('**/api/loyalty/my_status/', async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ points: currentPoints, tier: 'SILVER', tier_display: 'Silver Member' }),
+        });
+      });
+      await page.route('**/api/rewards/', async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 9, nom: 'Dessert signature', description: 'Sweet finish', points_requis: 300, est_actif: true },
+          ]),
+        });
+      });
+      await page.route('**/api/loyalty/transactions/', async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(transactions),
+        });
+      });
+      await page.route('**/api/rewards/9/redeem/', async (route) => {
+        currentPoints = 900;
+        transactions = [
+          {
+            id: 2,
+            points: -300,
+            type: 'DEPENSE',
+            type_display: 'Dépense',
+            description: 'Récompense échangée : Dessert signature',
+            created_at: '2026-06-02T12:00:00Z',
+          },
+          ...transactions,
+        ];
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ detail: "Récompense 'Dessert signature' réclamée avec succès !" }),
+        });
+      });
+      await page.route('**/api/reservations/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+      await page.route('**/api/commandes/', async (route) => {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
+      });
+
+      await page.goto('/account', routeReady);
+      await expect(page.getByText(/1200 points/i)).toBeVisible();
+
+      await page.getByRole('button', { name: 'En profiter' }).click();
+
+      await expect(page.getByText(/900 points/i)).toBeVisible();
+      await expect(page.getByText('Récompense échangée : Dessert signature')).toBeVisible();
+      await expect(page.getByText('-300.00 pts')).toBeVisible();
     });
   });
 

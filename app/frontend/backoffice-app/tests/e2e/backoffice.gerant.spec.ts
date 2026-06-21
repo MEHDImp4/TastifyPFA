@@ -38,6 +38,7 @@ test.describe('gerant browser workflows', () => {
     await expect(page.getByTestId('nav-categories')).toBeVisible();
     await expect(page.getByTestId('nav-stock')).toBeVisible();
     await expect(page.getByTestId('nav-hr')).toBeVisible();
+    await expect(page.getByTestId('nav-loyalty')).toBeVisible();
     await expect(page.getByTestId('nav-avis')).toBeVisible();
     await expect(page.getByTestId('nav-settings')).toBeVisible();
 
@@ -145,6 +146,10 @@ test.describe('gerant browser workflows', () => {
     await expect(page).toHaveURL(/\/hr$/);
     await expect(page.getByRole('heading', { name: 'Ressources humaines' })).toBeVisible();
 
+    await page.goto('/loyalty');
+    await expect(page).toHaveURL(/\/loyalty$/);
+    await expect(page.getByLabel('Gestion de la fidélité')).toBeVisible();
+
     await page.goto('/avis');
     await expect(page).toHaveURL(/\/avis$/);
     await expect(page.getByRole('heading', { name: 'Analyse des avis clients' })).toBeVisible();
@@ -221,6 +226,117 @@ test.describe('gerant browser workflows', () => {
     await updatedCard.hover();
     await page.getByTestId('category-delete-3000').click({ force: true });
     await expect(page.getByTestId('category-card-3000')).toBeHidden();
+  });
+
+  test('lets gerant users manage loyalty rewards and see client points', async ({ page }) => {
+    const createdName = `PW Reward ${Date.now()}`;
+    const updatedName = `${createdName} Updated`;
+    let rewards = [
+      {
+        id: 8101,
+        nom: 'Boisson maison',
+        description: 'Mock reward visible before CRUD',
+        points_requis: '50.00',
+        est_actif: true,
+        created_at: '2026-06-01T10:00:00Z',
+        updated_at: '2026-06-01T10:00:00Z',
+      },
+    ];
+
+    await page.route(/\/api\/loyalty\/(?:\?.*)?$/, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 1,
+            username: 'client_test',
+            points: '780.00',
+            tier: 'SILVER',
+            created_at: '2026-06-01T10:00:00Z',
+            updated_at: '2026-06-01T10:00:00Z',
+          },
+          {
+            id: 2,
+            username: 'pfa_guest',
+            points: '220.00',
+            tier: 'BRONZE',
+            created_at: '2026-06-01T10:00:00Z',
+            updated_at: '2026-06-01T10:00:00Z',
+          },
+        ]),
+      });
+    });
+
+    await page.route(/\/api\/rewards\/(?:\?.*)?$/, async (route) => {
+      const method = route.request().method();
+      if (method === 'POST') {
+        const payload = route.request().postDataJSON();
+        const newReward = {
+          id: 8102,
+          ...payload,
+          created_at: '2026-06-02T10:00:00Z',
+          updated_at: '2026-06-02T10:00:00Z',
+        };
+        rewards = [...rewards, newReward];
+        await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(newReward) });
+        return;
+      }
+
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rewards) });
+    });
+
+    await page.route('**/api/rewards/8102/', async (route) => {
+      const method = route.request().method();
+      if (method === 'PATCH') {
+        const payload = route.request().postDataJSON();
+        rewards = rewards.map(reward =>
+          reward.id === 8102
+            ? { ...reward, ...payload, updated_at: '2026-06-03T10:00:00Z' }
+            : reward,
+        );
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(rewards.find(reward => reward.id === 8102)),
+        });
+        return;
+      }
+
+      if (method === 'DELETE') {
+        rewards = rewards.filter(reward => reward.id !== 8102);
+        await route.fulfill({ status: 204 });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/loyalty');
+    await expect(page.getByLabel('Gestion de la fidélité')).toBeVisible();
+    await expect(page.getByText('1000.00')).toBeVisible();
+    await expect(page.getByTestId('loyalty-reward-8101')).toContainText('Boisson maison');
+
+    await page.getByTestId('loyalty-create-button').click();
+    await page.getByLabel('Nom').fill(createdName);
+    await page.getByLabel('Description').fill('Reward guarded for PFA demo coverage.');
+    await page.getByLabel('Points requis').fill('125');
+    await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+    const createdRow = page.getByTestId('loyalty-reward-8102');
+    await expect(createdRow).toContainText(createdName);
+    await expect(createdRow).toContainText('125.00');
+
+    await createdRow.getByRole('button', { name: `Modifier ${createdName}` }).click();
+    await page.getByLabel('Nom').fill(updatedName);
+    await page.getByLabel('Récompense active').uncheck();
+    await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+    await expect(createdRow).toContainText(updatedName);
+    await expect(createdRow.getByRole('button', { name: 'Inactive' })).toBeVisible();
+
+    await createdRow.getByRole('button', { name: `Supprimer ${updatedName}` }).click();
+    await expect(page.getByTestId('loyalty-reward-8102')).toHaveCount(0);
   });
 
   test('creates a category with an uploaded image and renders the saved thumbnail', async ({ page }) => {

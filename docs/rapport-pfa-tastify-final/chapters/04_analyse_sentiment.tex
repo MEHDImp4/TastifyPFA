@@ -96,6 +96,7 @@ Tastify utilise les avis saisis par les utilisateurs de l'application. Le tablea
 \pathcode{AnalyseSentiment.label} & Résultat normalisé : \code{POSITIF}, \code{NEUTRE} ou \code{NEGATIF}. \\
 \pathcode{AnalyseSentiment.score_brut} & Score de confiance renvoyé par Hugging Face ou par le fallback local. \\
 \pathcode{AnalyseSentiment.modele_utilise} & Nom du modèle distant ou de la méthode locale réellement utilisée. \\
+\pathcode{Avis.sentiment_score} & Score métier exploité par le tri et les statistiques : positif entre 0 et 1, négatif entre -1 et 0, neutre à 0. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -144,7 +145,7 @@ Le code du fichier \code{apps/avis/tasks.py} définit les modèles suivants :
   \item \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} pour les avis non arabes ;
   \item \pathcode{moussaKam/MARBERT-sentiment} pour les textes contenant des caractères arabes ;
   \item \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} comme modèle de secours si le modèle arabe ne répond pas ;
-  \item \pathcode{mots-cles-simple} comme secours local lorsque l'API Hugging Face n'est pas disponible ou lorsqu'aucun jeton n'est configuré.
+  \item \pathcode{fallback-lexique-multilingue} comme secours local lorsque l'API Hugging Face n'est pas disponible ou lorsqu'aucun jeton n'est configuré.
 \end{itemize}
 
 Le modèle principal \pathcode{nlptown/bert-base-multilingual-uncased-sentiment} est un BERT multilingue affiné pour l'analyse de sentiment sur des avis produits en six langues, dont le français \cite{nlptown}. Il renvoie une prédiction sous forme d'étoiles de 1 à 5. Le code convertit ensuite cette sortie en trois classes : négatif, neutre ou positif. Ce choix correspond bien à un restaurant, car les commentaires clients ressemblent souvent à des avis courts sur un produit ou un service.
@@ -162,14 +163,14 @@ Les sorties du modèle ne sont pas exposées telles quelles au reste de l'applic
 \toprule
 \textbf{Sortie modèle} & \textbf{Label Tastify} & \textbf{Score métier} \\
 \midrule
-\code{5 stars}, \code{4 stars}, \code{POSITIVE}, \code{LABEL\_2} & \code{POSITIF} & $+15$, avis favorable. \\
+\code{5 stars}, \code{4 stars}, \code{POSITIVE}, \code{LABEL\_2} & \code{POSITIF} & Confiance positive entre $0$ et $1$. \\
 \code{3 stars}, \code{NEUTRAL}, \code{LABEL\_1} & \code{NEUTRE} & $0$, signal sans polarité forte. \\
-\code{1 star}, \code{2 stars}, \code{NEGATIVE}, \code{LABEL\_0} & \code{NEGATIF} & $-15$, avis défavorable à surveiller. \\
+\code{1 star}, \code{2 stars}, \code{NEGATIVE}, \code{LABEL\_0} & \code{NEGATIF} & Confiance négative entre $-1$ et $0$. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Cette conversion rend l'indicateur plus lisible pour le gérant, tout en gardant dans \code{score\_brut} la confiance renvoyée par le modèle.
+Cette conversion rend l'indicateur exploitable par le gérant et par le code applicatif. Le champ \code{score\_brut} conserve la confiance renvoyée par le modèle, tandis que \code{sentiment\_score} transforme cette confiance en valeur signée : positive pour un avis favorable, négative pour un avis défavorable et nulle pour un avis neutre. Ce score est ensuite utilisé pour classer les plats les mieux appréciés et pour produire les indicateurs de satisfaction.
 
 \section{Comparaison avec des alternatives}
 Le tableau~\ref{tab:comparaison-modeles} compare le modèle principal avec plusieurs alternatives possibles.
@@ -187,7 +188,7 @@ BERT multilingue NLP Town & Modèle principal & Supporte le français, l'anglais
 DistilCamemBERT sentiment & Alternative française & Spécialisé français ; modèle plus léger ; résultats documentés sur Amazon Reviews et Allociné \cite{distilcamembert,camembert}. & Ne couvre pas naturellement l'arabe ou l'anglais ; demande un routage par langue. & Bon choix si le périmètre devient surtout francophone. \\
 XLM-R / XLM-T & Alternative multilingue & Bonne base de transfert multilingue ; XLM-R est conçu pour de nombreux langages \cite{xlmroberta}; XLM-T vise les textes sociaux multilingues \cite{xlmt}. & Demande un choix de modèle fine-tuné et des validations supplémentaires. & Intéressant pour une version multilingue plus avancée. \\
 MARBERT sentiment & Modèle arabe utilisé & Appuyé sur la famille MARBERT, adaptée aux variétés arabes et au texte social \cite{marbert}. & Spécifique aux textes arabes ; ne remplace pas le modèle multilingue pour le français. & Adapté aux avis en arabe ou en dialecte marocain. \\
-Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback actuel par mots-clés est déjà implémenté. & Faible face à l'ironie, aux négations et au vocabulaire varié ; TF-IDF n'est pas implémenté. & Utile comme secours, mais insuffisant comme moteur principal. \\
+Mots-clés / TF-IDF local & Fallback partiel & Fonctionne hors ligne, transparent et peu coûteux ; le fallback lexical multilingue actuel est déjà implémenté. & Faible face à l'ironie, aux négations complexes et au vocabulaire varié ; TF-IDF n'est pas implémenté. & Utile comme secours, mais insuffisant comme moteur principal. \\
 \bottomrule
 \end{tabularx}
 \end{table}

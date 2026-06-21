@@ -3,7 +3,7 @@
 
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-La validation de Tastify couvre plusieurs niveaux : backend, frontend, parcours utilisateur, sécurité et intégration. Les tests ont été relancés sur l'environnement local le 17 juin 2026 afin d'intégrer des résultats concrets dans le rapport.
+La validation de Tastify couvre plusieurs niveaux : backend, frontend, parcours utilisateur, sécurité et intégration. Les tests ont été relancés sur l'environnement local le 21 juin 2026 afin d'intégrer des résultats concrets dans le rapport.
 
 \section{Stratégie de tests}
 L'implémentation couvre quatre familles de tests ou de contrôles.
@@ -30,16 +30,17 @@ Le tableau~\ref{tab:resultats-tests} présente les résultats obtenus pendant la
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Résultats de tests du 17 juin 2026}
+\caption{Résultats de tests du 21 juin 2026}
 \label{tab:resultats-tests}
 \begin{tabularx}{\textwidth}{p{2.4cm}p{4.9cm}p{3.2cm}Y}
 \toprule
 \textbf{Suite} & \textbf{Commande} & \textbf{Résultat} & \textbf{Lecture} \\
 \midrule
-Backend pytest & \pathcode{docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q} & 335 passed, 1 skipped, 2 warnings, 3 min 39 s & Couverture large du backend : API, permissions, réservations, commandes, paiements, stock, avis, sentiment et WebSocket. \\
-Vitest back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:unit} & 25 tests passed, 8 fichiers, 4.55 s & Les tests unitaires du back-office passent entièrement. \\
-Vitest client & \pathcode{npm --prefix app/frontend/client-app run test:unit} & 4 tests passed, 2 fichiers, 7.18 s & Les tests unitaires du portail client passent entièrement. \\
-Playwright client & \pathcode{npm --prefix app/frontend/client-app run test:e2e} & 79 passed, 1 failed, 1.6 min & La quasi-totalité des scénarios client passe ; l'échec restant concerne un sélecteur de test ambigu sur deux boutons \code{Ajouter au panier}, pas une règle métier bloquante. \\
+Backend pytest & \pathcode{docker compose exec -T -e DJANGO_SETTINGS_MODULE=tastify_backend.settings.test backend python -m pytest -q} & 346 passed, 1 skipped, couverture 93\%, 6 min 02 s & Couverture large du backend : API, permissions, réservations, commandes, paiements, stock, avis, sentiment, fidélité et WebSocket. \\
+Vitest back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:unit} & 25 tests passed, 8 fichiers, 27.26 s & Les tests unitaires du back-office passent entièrement. \\
+Vitest client & \pathcode{npm --prefix app/frontend/client-app run test:unit} & 4 tests passed, 2 fichiers, 30.39 s & Les tests unitaires du portail client passent entièrement. \\
+Playwright back-office & \pathcode{npm --prefix app/frontend/backoffice-app run test:e2e} & 121 passed, 2.9 min & La suite end-to-end staff passe entièrement : authentification, rôles, navigation gérant/serveur/cuisinier, KDS, salle, réservations, menu, stock, RH, avis et maintenance. \\
+Playwright client & \pathcode{npm --prefix app/frontend/client-app run test:e2e} & 79 passed, 2 failed, 3.4 min & La majorité des scénarios client passe. Les deux échecs restants concernent un test de stabilité responsive qui ne retrouve pas le bouton de connexion attendu et un audit visuel desktop interrompu par timeout. \\
 CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dessus & Workflow disponible, validation locale exécutée & Le workflow CI automatise les mêmes familles de contrôles ; les rapports intégrés montrent la configuration et les résultats locaux équivalents. \\
 \bottomrule
 \end{tabularx}
@@ -48,11 +49,11 @@ CI & \pathcode{.github/workflows/backoffice-ci.yml} et résultats locaux ci-dess
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_test_pytest.png}
-\caption{Sortie pytest backend : 335 tests réussis}
+\caption{Sortie pytest backend : 346 tests réussis}
 \label{fig:capture-test-pytest}
 \end{figure}
 
-La figure~\ref{fig:capture-test-pytest} confirme l'exécution complète de la suite backend, avec les tests Django et API validés dans l'environnement local.
+La figure~\ref{fig:capture-test-pytest} illustre l'exécution de la suite backend. La relance du 21 juin 2026 confirme l'état actualisé : 346 tests réussis, 1 test ignoré et une couverture globale de 93\%.
 
 \begin{figure}[H]
 \centering
@@ -66,11 +67,11 @@ La figure~\ref{fig:capture-test-vitest} regroupe les résultats unitaires fronte
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{capture_test_playwright.png}
-\caption{Sortie Playwright client : 79 scénarios réussis et un sélecteur à corriger}
+\caption{Sortie Playwright client : 79 scénarios réussis et deux tests à stabiliser}
 \label{fig:capture-test-playwright}
 \end{figure}
 
-La figure~\ref{fig:capture-test-playwright} documente la validation end-to-end du portail client et isole l'unique échec comme un problème de sélecteur de test.
+La figure~\ref{fig:capture-test-playwright} documente la validation end-to-end du portail client. La relance actuelle conserve 79 scénarios validés et met en évidence deux tests à stabiliser : un contrôle responsive lié au libellé du bouton de connexion et un audit visuel desktop interrompu par timeout.
 
 \begin{figure}[H]
 \centering
@@ -115,7 +116,7 @@ Réservation & Deux réservations incompatibles sur la même table et le même c
 \end{table}
 
 \section{Tests frontend et end-to-end}
-Les deux frontends possèdent des configurations Vitest et Playwright. Les suites Vitest ont réussi entièrement. La suite Playwright client a validé 79 scénarios sur 80 ; l'unique échec observé concerne le test lui-même, car son sélecteur cible plusieurs boutons ayant un libellé proche. Il ne bloque pas une règle métier et se corrige en sélectionnant la carte ou le plat attendu avant de cliquer.
+Les deux frontends possèdent des configurations Vitest et Playwright. Les suites Vitest ont réussi entièrement. La suite Playwright back-office a validé 121 scénarios sur 121. La suite Playwright client a validé 79 scénarios sur 81 ; les deux échecs restants relèvent de tests de qualité et de stabilité à corriger avant de considérer la validation E2E client comme entièrement verte.
 
 \begin{table}[H]
 \centering
@@ -140,7 +141,7 @@ La validation de la fonctionnalité sentiment couvre les scénarios suivants :
   \item avis positif non arabe avec réponse Hugging Face de type \code{5 stars} ;
   \item avis négatif non arabe avec réponse \code{1 star} ;
   \item commentaire arabe routé vers \pathcode{moussaKam/MARBERT-sentiment} ;
-  \item indisponibilité Hugging Face entraînant l'utilisation de \pathcode{mots-cles-simple} ;
+  \item indisponibilité Hugging Face entraînant l'utilisation de \pathcode{fallback-lexique-multilingue} ;
   \item commentaire vide ne créant pas d'analyse ;
   \item agrégation correcte des labels dans le tableau de bord.
 \end{enumerate}
@@ -179,4 +180,4 @@ Plusieurs améliorations peuvent être ajoutées dans une version suivante :
 
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
-La validation donne une base solide au projet : 335 tests backend réussis, 29 tests unitaires frontend réussis et 79 scénarios Playwright client validés. L'unique échec Playwright identifié relève d'un sélecteur à préciser, ce qui rend l'état de validation clair, mesurable et exploitable pour la suite.
+La validation donne une base solide au projet : 346 tests backend réussis, 29 tests unitaires frontend réussis, 121 scénarios Playwright back-office validés et 79 scénarios Playwright client validés. Les deux échecs restants côté client sont identifiés et limités à des tests de stabilité responsive et d'audit visuel desktop, ce qui rend l'état de validation clair, mesurable et exploitable pour la suite.

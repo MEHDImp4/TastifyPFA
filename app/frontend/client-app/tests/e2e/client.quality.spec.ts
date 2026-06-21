@@ -10,6 +10,7 @@ import {
 const routeReady = { waitUntil: 'domcontentloaded' } as const;
 
 const expectNoBlockingViolations = async (page: Page) => {
+  await page.waitForTimeout(1200);
   const results = await new AxeBuilder({ page }).analyze();
   const blockingViolations = results.violations.filter(({ impact }) =>
     impact === 'critical' || impact === 'serious',
@@ -66,14 +67,14 @@ const mockAccountData = async (page: Page) => {
       ]),
     });
   });
-  await page.route('**/api/loyalty/my_status/', async (route) => {
+  await page.route(/\/api\/loyalty\/my_status\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ points: 1240, tier: 'SILVER', tier_display: 'Silver Member' }),
     });
   });
-  await page.route('**/api/loyalty/rewards/', async (route) => {
+  await page.route(/\/api\/rewards\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -82,32 +83,64 @@ const mockAccountData = async (page: Page) => {
       ]),
     });
   });
+  await page.route(/\/api\/loyalty\/transactions\/(?:\?.*)?$/, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        {
+          id: 1,
+          points: 240,
+          type: 'GAIN',
+          type_display: 'Gain',
+          description: 'Paiement commande #2001',
+          created_at: '2026-06-03T12:00:00Z',
+        },
+      ]),
+    });
+  });
   await page.route('**/api/commandes/', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify([
-        { id: 2001, statut: 'EN_COURS', montant_total: '180', created_at: '2026-06-03T12:00:00Z' },
+        { id: 2001, statut: 'PAYEE', montant_total: '180', created_at: '2026-06-03T12:00:00Z' },
       ]),
     });
   });
 };
 
 const mockLoyaltyData = async (page: Page) => {
-  await page.route('**/api/loyalty/my_status/', async (route) => {
+  await page.route(/\/api\/loyalty\/my_status\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ points: 1240, tier: 'SILVER', tier_display: 'Silver Member' }),
     });
   });
-  await page.route('**/api/loyalty/rewards/', async (route) => {
+  await page.route(/\/api\/rewards\/(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify([
         { id: 1, nom: 'Dessert', description: 'Sweet finish', points_requis: 300, is_available: true, image: null },
         { id: 2, nom: 'Chef Table', description: 'Premium placement', points_requis: 1500, is_available: true, image: null },
+      ]),
+    });
+  });
+  await page.route(/\/api\/loyalty\/transactions\/(?:\?.*)?$/, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        {
+          id: 1,
+          points: 240,
+          type: 'GAIN',
+          type_display: 'Gain',
+          description: 'Paiement commande #2001',
+          created_at: '2026-06-03T12:00:00Z',
+        },
       ]),
     });
   });
@@ -169,6 +202,24 @@ const mockPaymentSession = async (page: Page) => {
   });
   await page.route('**/api/paiements/session/pay/', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
+  });
+};
+
+const seedAuthenticatedClientSession = async (page: Page) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem(
+      'client-auth-storage',
+      JSON.stringify({
+        state: {
+          accessToken: 'mock-access-token',
+          role: 'CLIENT',
+          username: 'client_test',
+          isAuthenticated: true,
+          hasSession: true,
+        },
+        version: 0,
+      }),
+    );
   });
 };
 
@@ -306,6 +357,17 @@ test.describe('client public quality', () => {
 
 test.describe('client authenticated quality', () => {
   test.use({ storageState: AUTHENTICATED_STORAGE_STATE });
+
+  test.beforeEach(async ({ page }) => {
+    await seedAuthenticatedClientSession(page);
+    await page.route('**/api/users/refresh/', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ access: 'mock-access-token', role: 'CLIENT', username: 'client_test' }),
+      });
+    });
+  });
 
   test('keeps account accessible on desktop and after a narrow-viewport refresh', async ({ page }) => {
     await mockAccountData(page);

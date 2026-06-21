@@ -17,6 +17,19 @@ const attemptRefresh = () => {
   return _refreshAttempt;
 };
 
+const waitForAuthHydration = () => {
+  if (useAuthStore.persist.hasHydrated()) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>(resolve => {
+    const unsubscribe = useAuthStore.persist.onFinishHydration(() => {
+      unsubscribe();
+      resolve();
+    });
+  });
+};
+
 export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const { isAuthenticated, setAuth, logoutLocally } = useAuthStore();
@@ -31,6 +44,9 @@ export const AuthBootstrap: React.FC<{ children: React.ReactNode }> = ({ childre
       
       // Fetch public configuration in parallel
       const configPromise = fetchConfig();
+      await waitForAuthHydration();
+      if (!active) return;
+
       const persistedAuth = useAuthStore.getState();
       const hasPersistedToken =
         Boolean(persistedAuth.accessToken) &&

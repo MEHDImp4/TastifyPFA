@@ -12,6 +12,7 @@ import {
   DashboardPage,
   HrPage,
   KdsPage,
+  LoyaltyPage,
   Login,
   MaintenancePage,
   OrderingPage,
@@ -74,6 +75,7 @@ const routeTitles: Record<string, string> = {
   '/stock': 'Tastify Staff — Stock & Logistique',
   '/hr': 'Tastify Staff — Personnel',
   '/avis': 'Tastify Staff — Avis clients',
+  '/loyalty': 'Tastify Staff — Fidélité',
   '/settings': 'Tastify Staff — Paramètres',
   '/maintenance': 'Tastify Staff — Maintenance',
   '/login': 'Tastify Staff — Connexion',
@@ -169,6 +171,11 @@ function App() {
                 <Route path="avis" element={
                   lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <AvisPage />
+                  </RoleRoute>)
+                } />
+                <Route path="loyalty" element={
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
+                    <LoyaltyPage />
                   </RoleRoute>)
                 } />
                 <Route path="settings" element={

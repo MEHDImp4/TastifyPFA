@@ -11,6 +11,7 @@ const loadReservationsPage = () => import('../pages/Staff/ReservationsPage').the
 const loadStockPage = () => import('../pages/Inventory/StockPage').then(module => ({ default: module.StockPage }));
 const loadHrPage = () => import('../pages/HR/HrPage').then(module => ({ default: module.HrPage }));
 const loadAvisPage = () => import('../pages/Avis/AvisPage').then(module => ({ default: module.AvisPage }));
+const loadLoyaltyPage = () => import('../pages/Loyalty/LoyaltyPage').then(module => ({ default: module.LoyaltyPage }));
 const loadSettingsPage = () => import('../pages/Settings/SettingsPage').then(module => ({ default: module.SettingsPage }));
 const loadMaintenancePage = () => import('../pages/System/MaintenancePage').then(module => ({ default: module.MaintenancePage }));
 
@@ -25,6 +26,7 @@ export const ReservationsPage = lazy(loadReservationsPage);
 export const StockPage = lazy(loadStockPage);
 export const HrPage = lazy(loadHrPage);
 export const AvisPage = lazy(loadAvisPage);
+export const LoyaltyPage = lazy(loadLoyaltyPage);
 export const SettingsPage = lazy(loadSettingsPage);
 export const MaintenancePage = lazy(loadMaintenancePage);
 
@@ -39,6 +41,7 @@ export const staffPagePreloads: Record<string, () => Promise<{ default: Componen
   '/stock': loadStockPage,
   '/hr': loadHrPage,
   '/avis': loadAvisPage,
+  '/loyalty': loadLoyaltyPage,
   '/settings': loadSettingsPage,
   '/maintenance': loadMaintenancePage,
 };

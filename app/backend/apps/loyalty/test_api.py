@@ -32,6 +32,15 @@ def active_reward(db):
         est_actif=True
     )
 
+@pytest.fixture
+def inactive_reward(db):
+    return Reward.objects.create(
+        nom="Dessert masqué",
+        description="Une récompense temporairement indisponible",
+        points_requis=Decimal('75.00'),
+        est_actif=False
+    )
+
 @pytest.mark.django_db
 class TestLoyaltyAPI:
     def test_client_can_see_own_status(self, client_api, client_user, loyalty_profile):
@@ -43,7 +52,7 @@ class TestLoyaltyAPI:
         assert response.data['points'] == "100.00"
         assert response.data['username'] == 'client'
 
-    def test_client_can_list_rewards(self, client_api, client_user, active_reward):
+    def test_client_can_list_rewards(self, client_api, client_user, active_reward, inactive_reward):
         client_api.force_authenticate(user=client_user)
         url = reverse('reward-list')
         response = client_api.get(url)
@@ -51,6 +60,48 @@ class TestLoyaltyAPI:
         assert response.status_code == 200
         assert len(response.data) == 1
         assert response.data[0]['nom'] == "Boisson gratuite"
+
+    def test_client_cannot_redeem_inactive_reward(self, client_api, client_user, loyalty_profile, inactive_reward):
+        client_api.force_authenticate(user=client_user)
+        url = reverse('reward-redeem', kwargs={'pk': inactive_reward.pk})
+        response = client_api.post(url)
+
+        assert response.status_code == 404
+        loyalty_profile.refresh_from_db()
+        assert loyalty_profile.points == Decimal('100.00')
+        assert not LoyaltyTransaction.objects.filter(profile=loyalty_profile).exists()
+
+    def test_client_transactions_are_limited_to_own_profile(self, client_api, client_user, db):
+        other_user = User.objects.create_user(username='other_client', password='password', role=User.Role.CLIENT)
+        client_profile = LoyaltyProfile.objects.create(user=client_user, points=Decimal('100.00'))
+        other_profile = LoyaltyProfile.objects.create(user=other_user, points=Decimal('500.00'))
+        LoyaltyTransaction.objects.create(
+            profile=client_profile,
+            points=Decimal('25.00'),
+            type=LoyaltyTransaction.Type.GAIN,
+            description='Client visible gain',
+        )
+        LoyaltyTransaction.objects.create(
+            profile=other_profile,
+            points=Decimal('999.00'),
+            type=LoyaltyTransaction.Type.GAIN,
+            description='Other user hidden gain',
+        )
+
+        client_api.force_authenticate(user=client_user)
+        response = client_api.get(reverse('loyalty-transactions'))
+
+        assert response.status_code == 200
+        assert [transaction['description'] for transaction in response.data] == ['Client visible gain']
+
+    def test_gerant_can_list_inactive_rewards(self, client_api, gerant_user, active_reward, inactive_reward):
+        client_api.force_authenticate(user=gerant_user)
+        url = reverse('reward-list')
+        response = client_api.get(url)
+
+        assert response.status_code == 200
+        names = {reward['nom'] for reward in response.data}
+        assert names == {"Boisson gratuite", "Dessert masqué"}
 
     def test_client_can_redeem_reward(self, client_api, client_user, loyalty_profile, active_reward):
         client_api.force_authenticate(user=client_user)
@@ -62,7 +113,7 @@ class TestLoyaltyAPI:
         assert loyalty_profile.points == Decimal('50.00')
         
         # Check transaction
-        transaction = LoyaltyTransaction.objects.get(profile=loyalty_profile, type='REDEEM')
+        transaction = LoyaltyTransaction.objects.get(profile=loyalty_profile, type=LoyaltyTransaction.Type.DEPENSE)
         assert transaction.points == Decimal('-50.00')
 
     def test_client_insufficient_points_redeem_fails(self, client_api, client_user, active_reward):
@@ -94,3 +145,32 @@ class TestLoyaltyAPI:
         data = {"nom": "Fraude", "points_requis": 0, "est_actif": True}
         response = client_api.post(url, data)
         assert response.status_code == 403
+
+    def test_gerant_can_deactivate_reward(self, client_api, gerant_user, active_reward):
+        client_api.force_authenticate(user=gerant_user)
+        url = reverse('reward-detail', kwargs={'pk': active_reward.pk})
+        response = client_api.patch(url, {"est_actif": False}, format='json')
+
+        assert response.status_code == 200
+        active_reward.refresh_from_db()
+        assert active_reward.est_actif is False
+
+    def test_serveur_cannot_manage_rewards(self, client_api, active_reward, db):
+        serveur = User.objects.create_user(username='serveur', password='password', role=User.Role.SERVEUR)
+        client_api.force_authenticate(user=serveur)
+
+        create_response = client_api.post(reverse('reward-list'), {
+            "nom": "Accès staff refusé",
+            "points_requis": 10,
+            "est_actif": True,
+        })
+        update_response = client_api.patch(
+            reverse('reward-detail', kwargs={'pk': active_reward.pk}),
+            {"est_actif": False},
+            format='json',
+        )
+
+        assert create_response.status_code == 403
+        assert update_response.status_code == 403
+        active_reward.refresh_from_db()
+        assert active_reward.est_actif is True

@@ -24,14 +24,14 @@
   --color-primary-container: #F5EFEB;
   --color-on-primary-container: #3B0909;
 
-  --color-accent: #B45309;
+  --color-accent: #8F3E05;
   --color-on-accent: #FFFFFF;
 
   --color-success: #0F766E;
   --color-error: #BE123C;
   --color-on-success: #FCFAF7;
   --color-on-error: #FCFAF7;
-  --color-focus-ring: #B45309;
+  --color-focus-ring: #8F3E05;
 
   /* Fonts */
   --font-sans: "Karla", system-ui, sans-serif;
@@ -61,7 +61,7 @@
 
   /* Accessible secondary text */
   --color-on-surface-muted: #533E3E;
-  --color-on-surface-subtle: #755B5B;
+  --color-on-surface-subtle: #6B5050;
 
   /* Premium luxury shadows */
   --shadow-premium: 0 16px 40px -12px rgba(59, 9, 9, 0.06);

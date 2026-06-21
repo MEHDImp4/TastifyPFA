@@ -11,6 +11,7 @@ import {
   CalendarDays,
   Map as MapIcon,
   Star,
+  Gift,
   LogOut,
   Settings,
   Activity
@@ -51,6 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       links.push({ to: '/stock', icon: Activity, label: 'Stocks', testid: 'nav-stock' });
       links.push({ to: '/hr', icon: Users, label: 'Personnel', testid: 'nav-hr' });
       links.push({ to: '/avis', icon: Star, label: 'Avis clients', testid: 'nav-avis' });
+      links.push({ to: '/loyalty', icon: Gift, label: 'Fidélité', testid: 'nav-loyalty' });
       links.push({ to: '/settings', icon: Settings, label: 'Paramètres', testid: 'nav-settings' });
     }
 

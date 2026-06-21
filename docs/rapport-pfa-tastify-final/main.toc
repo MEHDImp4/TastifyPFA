@@ -73,14 +73,14 @@
 \contentsline {section}{\numberline {5.1}Stratégie de tests}{45}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Résultats exécutés}{46}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Tests backend}{49}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Tests frontend et end-to-end}{49}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Validation de l'analyse de sentiment}{50}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Tests de charge}{50}{section.5.6}%
+\contentsline {section}{\numberline {5.4}Tests frontend et end-to-end}{50}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Validation de l'analyse de sentiment}{51}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Tests de charge}{51}{section.5.6}%
 \contentsline {section}{\numberline {5.7}Limites du projet}{51}{section.5.7}%
-\contentsline {section}{\numberline {5.8}Perspectives}{51}{section.5.8}%
-\contentsline {section}{Conclusion}{51}{section*.17}%
-\contentsline {chapter}{Conclusion générale}{52}{chapter*.18}%
-\contentsline {chapter}{Bibliographie}{53}{chapter*.18}%
-\contentsline {chapter}{\numberline {A}Annexes}{55}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Commandes de déploiement et de test}{55}{section.A.1}%
-\contentsline {subsection}{\numberline {A.1.1}Lancement et tests de la codebase}{55}{subsection.A.1.1}%
+\contentsline {section}{\numberline {5.8}Perspectives}{52}{section.5.8}%
+\contentsline {section}{Conclusion}{52}{section*.17}%
+\contentsline {chapter}{Conclusion générale}{53}{chapter*.18}%
+\contentsline {chapter}{Bibliographie}{54}{chapter*.18}%
+\contentsline {chapter}{\numberline {A}Annexes}{56}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Commandes de déploiement et de test}{56}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}Lancement et tests de la codebase}{56}{subsection.A.1.1}%

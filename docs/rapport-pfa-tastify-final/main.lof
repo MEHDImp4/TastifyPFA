@@ -29,8 +29,8 @@
 \contentsline {figure}{\numberline {4.14}{\ignorespaces Back-office : gestion des ressources humaines}}{43}{figure.4.14}%
 \contentsline {figure}{\numberline {4.15}{\ignorespaces Organisation du déploiement Docker Compose}}{43}{figure.4.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Sortie pytest backend : 335 tests réussis}}{47}{figure.5.1}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Sortie pytest backend : 346 tests réussis}}{47}{figure.5.1}%
 \contentsline {figure}{\numberline {5.2}{\ignorespaces Sorties Vitest : back-office et portail client réussis}}{47}{figure.5.2}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Sortie Playwright client : 79 scénarios réussis et un sélecteur à corriger}}{48}{figure.5.3}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Workflow CI et synthèse des validations locales}}{48}{figure.5.4}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Sortie Playwright client : 79 scénarios réussis et deux tests à stabiliser}}{48}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Workflow CI et synthèse des validations locales}}{49}{figure.5.4}%
 \addvspace {10\p@ }

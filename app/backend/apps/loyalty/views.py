@@ -1,9 +1,10 @@
+from django.db import transaction
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import LoyaltyProfile, LoyaltyTransaction, Reward
 from .serializers import LoyaltyProfileSerializer, LoyaltyTransactionSerializer, RewardSerializer
-from apps.users.permissions import IsGerant
+from apps.users.permissions import IsClient, IsGerant
 
 class LoyaltyViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -38,35 +39,41 @@ class RewardViewSet(viewsets.ModelViewSet):
     Managers: CRUD.
     Clients: List available rewards.
     """
-    queryset = Reward.objects.filter(est_actif=True)
     serializer_class = RewardSerializer
+
+    def get_queryset(self):
+        queryset = Reward.objects.all().order_by('points_requis', 'nom')
+        if self.request.user.role == 'GERANT':
+            return queryset
+        return queryset.filter(est_actif=True)
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsGerant()]
+        if self.action == 'redeem':
+            return [IsClient()]
         return [permissions.IsAuthenticated()]
 
     @action(detail=True, methods=['post'])
     def redeem(self, request, pk=None):
         reward = self.get_object()
-        profile, created = LoyaltyProfile.objects.get_or_create(user=request.user)
+        with transaction.atomic():
+            profile, _ = LoyaltyProfile.objects.select_for_update().get_or_create(user=request.user)
 
-        if profile.points < reward.points_requis:
-            return Response(
-                {"detail": "Points insuffisants."},
-                status=status.HTTP_400_BAD_REQUEST
+            if profile.points < reward.points_requis:
+                return Response(
+                    {"detail": "Points insuffisants."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            profile.points -= reward.points_requis
+            profile.save(update_fields=['points', 'updated_at'])
+
+            LoyaltyTransaction.objects.create(
+                profile=profile,
+                points=-reward.points_requis,
+                type=LoyaltyTransaction.Type.DEPENSE,
+                description=f"Récompense échangée : {reward.nom}"
             )
-
-        # Atomic deduction
-        profile.points -= reward.points_requis
-        profile.save()
-
-        # Log transaction
-        LoyaltyTransaction.objects.create(
-            profile=profile,
-            points=-reward.points_requis,
-            type='REDEEM',
-            description=f"Échange contre : {reward.nom}"
-        )
 
         return Response({"detail": f"Récompense '{reward.nom}' réclamée avec succès !"})

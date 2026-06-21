@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { loyaltyApi } from '../../api/loyalty';
 import type { LoyaltyProfile, Reward } from '../../api/loyalty';
+import { toast } from 'sonner';
 import { 
   Award, 
   Zap, 
   ChevronRight,
   Gift,
-  Loader2
+  Loader2,
+  ReceiptText
 } from 'lucide-react';
 const getTierClass = (tier?: string) => {
   switch (tier?.toUpperCase()) {
@@ -31,28 +33,43 @@ export const LoyaltyPage: React.FC = () => {
   const [loyalty, setLoyalty] = useState<LoyaltyProfile | null>(null);
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [redeemingId, setRedeemingId] = useState<number | null>(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setLoadError('');
+    try {
+      const [loyaltyRes, rewardsRes] = await Promise.all([
+        loyaltyApi.getMyStatus(),
+        loyaltyApi.getRewards()
+      ]);
+      setLoyalty(loyaltyRes.data);
+      setRewards(rewardsRes.data);
+    } catch (err) {
+      console.error('Erreur lors du chargement des privilèges', err);
+      setLoadError("Impossible de charger votre fidélité pour le moment.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [loyaltyRes, rewardsRes] = await Promise.all([
-          loyaltyApi.getMyStatus().catch(() => ({ data: { points: 1250, tier: 'GOLD', tier_display: 'OR' } as LoyaltyProfile })),
-          loyaltyApi.getRewards().catch(() => ({ data: [
-            { id: 1, nom: "Apéritif de Bienvenue", description: "Offert pour vous et vos invités dès votre arrivée.", points_requis: 500, is_available: true },
-            { id: 2, nom: "Mignardises du Chef", description: "Une sélection de douceurs pour clore votre repas.", points_requis: 1200, is_available: true },
-            { id: 3, nom: "Table Signature", description: "Garantie de la meilleure table de la maison.", points_requis: 3000, is_available: false }
-          ] as Reward[] }))
-        ]);
-        setLoyalty(loyaltyRes.data);
-        setRewards(rewardsRes.data);
-      } catch (err) {
-        console.error('Erreur lors du chargement des privilèges', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const handleRedeem = async (reward: Reward) => {
+    setRedeemingId(reward.id);
+    try {
+      const res = await loyaltyApi.redeemReward(reward.id);
+      toast.success(res.data.detail);
+      await fetchData();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail ?? "Échange impossible.");
+    } finally {
+      setRedeemingId(null);
+    }
+  };
 
   if (isLoading) return (
     <div className="page-shell flex flex-col items-center justify-center relative overflow-hidden">
@@ -65,6 +82,17 @@ export const LoyaltyPage: React.FC = () => {
             <span className="font-sans text-[10px] font-black text-on-surface-subtle uppercase tracking-[0.4em]">Chargement des privilèges</span>
         </motion.div>
         <div className="absolute inset-0 bg-on-background/5 blur-[100px] rounded-full" />
+    </div>
+  );
+
+  if (loadError) return (
+    <div className="page-shell flex flex-col items-center justify-center px-client-margin text-center">
+      <div className="max-w-md space-y-5">
+        <ReceiptText className="w-10 h-10 mx-auto text-accent" strokeWidth={1.5} />
+        <h1 className="text-2xl font-bold text-on-background lowercase font-heading">fidélité indisponible.</h1>
+        <p className="text-sm text-on-surface-muted">{loadError}</p>
+        <button onClick={fetchData} className="btn-primary h-11 px-6">Réessayer</button>
+      </div>
     </div>
   );
 
@@ -124,6 +152,19 @@ export const LoyaltyPage: React.FC = () => {
               </div>
            </div>
         </section>
+
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { title: 'Gagner', text: '1 point gagné par 10 DH payés.' },
+            { title: 'Créditer', text: 'Les points sont ajoutés après un paiement complet lié à votre compte.' },
+            { title: 'Échanger', text: 'Vos points débloquent les récompenses disponibles.' },
+          ].map(item => (
+            <div key={item.title} className="bg-surface border border-outline rounded-xl p-5 shadow-premium">
+              <span className="text-[9px] font-bold text-accent tracking-[0.25em] uppercase">{item.title}</span>
+              <p className="mt-2 text-sm font-semibold text-on-background leading-relaxed">{item.text}</p>
+            </div>
+          ))}
+        </section>
  
         {/* Rewards Grid */}
         <section className="space-y-10">
@@ -138,9 +179,16 @@ export const LoyaltyPage: React.FC = () => {
               </div>
            </div>
  
+           {rewards.length === 0 ? (
+              <div className="py-16 text-center border border-dashed border-outline rounded-xl bg-surface/50">
+                 <Gift className="w-10 h-10 mx-auto mb-3 text-on-surface-subtle" strokeWidth={1.5} />
+                 <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-on-surface-subtle">Aucune récompense disponible</p>
+              </div>
+           ) : (
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {rewards.map((reward, idx) => {
                  const isUnlockable = (loyalty?.points || 0) >= reward.points_requis;
+                 const isRedeeming = redeemingId === reward.id;
                  return (
                     <motion.div
                        key={reward.id}
@@ -164,8 +212,12 @@ export const LoyaltyPage: React.FC = () => {
                           <div className="flex justify-between items-center">
                              <span className="font-mono text-xs font-bold text-accent">{reward.points_requis} points</span>
                              {isUnlockable ? (
-                                <button className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-on-background hover:text-accent transition-colors">
-                                   <span>En profiter</span> <ChevronRight className="w-3.5 h-3.5" />
+                                <button
+                                  onClick={() => handleRedeem(reward)}
+                                  disabled={isRedeeming}
+                                  className="min-h-[44px] flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-on-background hover:text-accent transition-colors disabled:opacity-50"
+                                >
+                                   {isRedeeming ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><span>En profiter</span> <ChevronRight className="w-3.5 h-3.5" /></>}
                                 </button>
                              ) : (
                                 <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-subtle">Verrouillé</span>
@@ -178,6 +230,7 @@ export const LoyaltyPage: React.FC = () => {
                  );
               })}
            </div>
+           )}
         </section>
       </main>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import type { LoyaltyProfile, Reward } from '../../api/loyalty';
+import type { LoyaltyProfile, LoyaltyTransaction, Reward } from '../../api/loyalty';
 import { loyaltyApi } from '../../api/loyalty';
 import type { Reservation } from '../../api/reservations';
 import { reservationApi } from '../../api/reservations';
@@ -33,9 +33,11 @@ export const AccountPage: React.FC = () => {
   const { username, logout } = useAuthStore();
   const [loyalty, setLoyalty] = useState<LoyaltyProfile | null>(null);
   const [rewards, setRewards] = useState<Reward[]>([]);
+  const [transactions, setTransactions] = useState<LoyaltyTransaction[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [orders, setOrders] = useState<Commande[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [redeemingId, setRedeemingId] = useState<number | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [reviewError, setReviewError] = useState('');
@@ -43,31 +45,44 @@ export const AccountPage: React.FC = () => {
   const hasPaidOrders = orders.some(o => o.statut === 'PAYEE');
   useBodyScrollLock(isReviewModalOpen && hasPaidOrders);
 
+  const fetchData = async () => {
+    try {
+      const [loyaltyRes, rewardsRes, transactionsRes, resRes, ordersRes] = await Promise.all([
+        loyaltyApi.getMyStatus(),
+        loyaltyApi.getRewards(),
+        loyaltyApi.getTransactions(),
+        reservationApi.getMyReservations().catch(() => ({ data: [] })),
+        commandesApi.getMyOrders().catch(() => ({ data: [] }))
+      ]);
+      setLoyalty(loyaltyRes.data);
+      setRewards(rewardsRes.data);
+      setTransactions(transactionsRes.data);
+      setReservations(resRes.data);
+      setOrders(ordersRes.data);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des données', err);
+      toast.error('Fidélité indisponible');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [loyaltyRes, rewardsRes, resRes, ordersRes] = await Promise.all([
-          loyaltyApi.getMyStatus().catch(() => ({ data: { points: 1250, tier: 'GOLD', tier_display: 'OR' } as LoyaltyProfile })),
-          loyaltyApi.getRewards().catch(() => ({ data: [
-            { id: 1, nom: "Apéritif de Bienvenue", description: "Offert pour vous et vos invités dès votre arrivée.", points_requis: 500, is_available: true },
-            { id: 2, nom: "Mignardises du Chef", description: "Une sélection de douceurs pour clore votre repas.", points_requis: 1200, is_available: true },
-            { id: 3, nom: "Table Signature", description: "Garantie de la meilleure table de la maison.", points_requis: 3000, is_available: false }
-          ] as Reward[] })),
-          reservationApi.getMyReservations().catch(() => ({ data: [] })),
-          commandesApi.getMyOrders().catch(() => ({ data: [] }))
-        ]);
-        setLoyalty(loyaltyRes.data);
-        setRewards(rewardsRes.data);
-        setReservations(resRes.data);
-        setOrders(ordersRes.data);
-      } catch (err) {
-        console.error('Erreur lors de la récupération des données', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const handleRedeem = async (reward: Reward) => {
+    setRedeemingId(reward.id);
+    try {
+      const res = await loyaltyApi.redeemReward(reward.id);
+      toast.success(res.data.detail);
+      await fetchData();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail ?? "Échange impossible.");
+    } finally {
+      setRedeemingId(null);
+    }
+  };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,6 +188,7 @@ export const AccountPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {rewards.map((reward, idx) => {
                     const isUnlockable = (loyalty?.points || 0) >= reward.points_requis;
+                    const isRedeeming = redeemingId === reward.id;
                     return (
                         <motion.div 
                             key={reward.id}
@@ -193,8 +209,12 @@ export const AccountPage: React.FC = () => {
                             <div className="flex justify-between items-center border-t border-outline/50 pt-4">
                                 <span className="font-mono text-xs font-bold text-accent">{reward.points_requis} points</span>
                                 {isUnlockable ? (
-                                    <button className="min-h-[44px] px-3 -mr-3 text-on-background font-bold text-[10px] uppercase tracking-[0.2em] flex items-center gap-1 rounded-lg hover:text-accent transition-all">
-                                      <span>En profiter</span> <ChevronRight className="w-3.5 h-3.5" />
+                                    <button
+                                      onClick={() => handleRedeem(reward)}
+                                      disabled={isRedeeming}
+                                      className="min-h-[44px] px-3 -mr-3 text-on-background font-bold text-[10px] uppercase tracking-[0.2em] flex items-center gap-1 rounded-lg hover:text-accent transition-all disabled:opacity-50"
+                                    >
+                                      {isRedeeming ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><span>En profiter</span> <ChevronRight className="w-3.5 h-3.5" /></>}
                                     </button>
                                 ) : (
                                     <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-on-surface-subtle">Verrouillé</span>
@@ -203,6 +223,40 @@ export const AccountPage: React.FC = () => {
                         </motion.div>
                     );
                 })}
+            </div>
+        </section>
+
+        <section className="space-y-8">
+            <div className="flex justify-between items-end border-b border-outline/50 pb-5">
+                <div>
+                    <span className="text-[9px] font-bold text-accent tracking-[0.25em] uppercase block mb-1">Points</span>
+                    <h2 className="text-2xl font-bold text-on-background tracking-tight lowercase font-heading">mouvements récents.</h2>
+                </div>
+                <div className="flex items-center gap-2 text-on-surface-subtle">
+                    <History className="w-4 h-4" strokeWidth={2} />
+                    <span className="text-[9px] font-bold tracking-[0.2em] uppercase">Transactions</span>
+                </div>
+            </div>
+
+            <div className="space-y-3">
+                {transactions.length > 0 ? transactions.slice(0, 6).map(tx => (
+                    <div key={tx.id} className="p-4 bg-surface border border-outline rounded-xl flex items-center justify-between gap-4 shadow-premium">
+                        <div>
+                            <h4 className="text-sm font-bold text-on-background">{tx.description}</h4>
+                            <p className="text-[10px] text-on-surface-muted mt-1 uppercase tracking-widest">
+                                {new Date(tx.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                            </p>
+                        </div>
+                        <span className={`font-mono text-sm font-bold ${tx.type === 'GAIN' ? 'text-success' : 'text-error'}`}>
+                            {tx.type === 'GAIN' ? '+' : ''}{Number(tx.points).toFixed(2)} pts
+                        </span>
+                    </div>
+                )) : (
+                    <div className="py-12 text-center border border-dashed border-outline rounded-xl bg-surface/50">
+                        <History className="w-10 h-10 mx-auto mb-3 text-on-surface-subtle" strokeWidth={1.5} />
+                        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-on-surface-subtle">Aucun mouvement de points</p>
+                    </div>
+                )}
             </div>
         </section>
  

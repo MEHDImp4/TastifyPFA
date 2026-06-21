@@ -110,10 +110,13 @@ async function proxyPaymentSessionApis(page: Page, request: APIRequestContext) {
     const browserRequest = route.request();
     const url = new URL(browserRequest.url());
     const backendPath = `${url.pathname}${url.search}`;
+    const authorization = browserRequest.headers()['authorization'];
+    const headers = authorization ? { Authorization: authorization } : undefined;
     const response =
       browserRequest.method() === 'GET'
-        ? await request.get(buildApiUrl(backendPath))
+        ? await request.get(buildApiUrl(backendPath), { headers })
         : await request.post(buildApiUrl(backendPath), {
+            headers,
             data: browserRequest.postDataJSON(),
           });
 
@@ -308,8 +311,15 @@ test.describe('cross-app realism', () => {
       // Fallback: create one if none found in seed
       payableSession = await setupPayableOrder(request, gerantLogin.access);
     }
+    const clientIdentity = await registerClient(request);
 
-    const paymentContext = await browser.newContext();
+    const paymentContext = await browser.newContext({
+      storageState: buildClientBrowserStorageState({
+        accessToken: clientIdentity.login.access,
+        role: clientIdentity.login.role,
+        username: clientIdentity.login.username,
+      }),
+    });
     await seedClientConsent(paymentContext);
     const paymentPage = await paymentContext.newPage();
     await proxyPaymentSessionApis(paymentPage, request);
