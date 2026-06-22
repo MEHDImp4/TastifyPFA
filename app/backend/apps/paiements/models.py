@@ -58,12 +58,13 @@ class Paiement(models.Model):
         max_length=20,
         choices=Statut.choices,
         default=Statut.EN_ATTENTE,
+        db_index=True,
     )
     # ID unique venant du processeur de paiement (Stripe, etc.)
     reference_transaction = models.CharField(max_length=255, blank=True)
     
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
 
     objects = PaiementManager()
 

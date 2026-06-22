@@ -35,6 +35,25 @@ function Test-DockerImage($imageName) {
     return $LASTEXITCODE -eq 0
 }
 
+function Get-FileSha256Hash($path) {
+    if (Get-Command Get-FileHash -ErrorAction SilentlyContinue) {
+        return (Get-FileHash -Path $path -Algorithm SHA256).Hash
+    }
+
+    $stream = [System.IO.File]::OpenRead($path)
+    try {
+        $sha256 = [System.Security.Cryptography.SHA256]::Create()
+        try {
+            $bytes = $sha256.ComputeHash($stream)
+            return (($bytes | ForEach-Object { $_.ToString("x2") }) -join "").ToUpperInvariant()
+        } finally {
+            $sha256.Dispose()
+        }
+    } finally {
+        $stream.Dispose()
+    }
+}
+
 function Get-DemoBuildFingerprint($repoRoot) {
     $trackedFiles = @(
         "docker-compose.yml",
@@ -52,7 +71,7 @@ function Get-DemoBuildFingerprint($repoRoot) {
     $parts = foreach ($relativePath in $trackedFiles) {
         $path = Join-Path $repoRoot $relativePath
         if (Test-Path $path) {
-            $hash = (Get-FileHash -Path $path -Algorithm SHA256).Hash
+            $hash = Get-FileSha256Hash $path
             "${relativePath}:${hash}"
         } else {
             "${relativePath}:missing"

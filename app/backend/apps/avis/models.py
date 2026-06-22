@@ -36,10 +36,10 @@ class Avis(models.Model):
     )
     
     # Score normalise entre -1.0 et 1.0 pour le tri de popularite.
-    sentiment_score = models.FloatField(null=True, blank=True)
+    sentiment_score = models.FloatField(null=True, blank=True, db_index=True)
     lang_code = models.CharField(max_length=10, blank=True, null=True)
     
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -67,10 +67,10 @@ class AnalyseSentiment(models.Model):
 
     # Relation Un-à-Un : Chaque avis a UNE seule analyse de sentiment
     avis           = models.OneToOneField(Avis, on_delete=models.CASCADE, related_name='analyse')
-    label          = models.CharField(max_length=10, choices=Label.choices)
+    label          = models.CharField(max_length=10, choices=Label.choices, db_index=True)
     score_brut     = models.FloatField() # Force du sentiment (ex: 0.98 pour très positif)
     modele_utilise = models.CharField(max_length=100) # Nom de l'IA utilisée
-    date_analyse   = models.DateTimeField(auto_now_add=True)
+    date_analyse   = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         verbose_name = 'Analyse de sentiment'

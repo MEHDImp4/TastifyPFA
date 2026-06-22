@@ -1,0 +1,451 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+\geometry{left=1.45cm,right=1.45cm,top=1.35cm,bottom=1.45cm}
+\hypersetup{hidelinks,pdftitle={Fiche de soutenance PFA Tastify},pdfauthor={Diouri Mehdi et El Kharrazi Ibtihal}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=1pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=1pt}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\titleformat{\section}{\large\bfseries\color{blue!45!black}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{blue!35!black}}{\thesubsection}{0.5em}{}
+
+\definecolor{tastifyblue}{RGB}{28,77,135}
+\definecolor{softblue}{RGB}{237,244,252}
+\definecolor{softgreen}{RGB}{238,248,241}
+\definecolor{softamber}{RGB}{255,247,230}
+\definecolor{softred}{RGB}{255,239,239}
+
+\tcbset{
+  colback=softblue,
+  colframe=tastifyblue,
+  boxrule=0.45pt,
+  arc=1.5mm,
+  left=5pt,
+  right=5pt,
+  top=4pt,
+  bottom=4pt
+}
+
+\newtcolorbox{phrasebox}[1]{title=\textbf{#1},colback=softgreen,colframe=green!35!black}
+\newtcolorbox{alertbox}[1]{title=\textbf{#1},colback=softamber,colframe=orange!70!black}
+\newtcolorbox{riskbox}[1]{title=\textbf{#1},colback=softred,colframe=red!55!black}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\important}[1]{\textbf{\color{blue!45!black}#1}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{Fiche de préparation à la soutenance PFA}}\\
+{\Large \textbf{Tastify -- Plateforme intelligente de gestion de restaurant}}\\
+\vspace{2mm}
+\textbf{Diouri Mehdi et El Kharrazi Ibtihal}\\
+\textit{Fiche personnelle de révision, orientée questions jury}
+\end{center}
+
+\begin{alertbox}{Objectif de cette fiche}
+Lire ce document comme une carte mentale de soutenance : quoi dire au début, quoi montrer pendant la démo, comment défendre les choix techniques, et comment répondre sans paniquer aux questions IA, sécurité, tests, limites et perspectives.
+\end{alertbox}
+
+\section{Ouverture orale prête à dire}
+
+\begin{phrasebox}{Pitch en 45 secondes}
+Bonjour, nous vous présentons \important{Tastify}, une plateforme web pour digitaliser la gestion d'un restaurant. L'idée est de réunir dans un seul système le portail client, le back-office du personnel, la prise de commande, le suivi cuisine, les réservations, les paiements simulés, la fidélité, le stock et l'analyse des avis clients. Notre valeur ajoutée est double : d'abord une gestion opérationnelle en temps réel, ensuite une couche d'intelligence applicative avec l'analyse de sentiment qui transforme les commentaires clients en indicateurs exploitables par le gérant.
+\end{phrasebox}
+
+\begin{phrasebox}{Problématique}
+Dans beaucoup de restaurants, les commandes, les réservations, les paiements, les retours clients et le stock sont dispersés entre plusieurs outils ou gérés manuellement. Cela crée des pertes de temps, des erreurs, un manque de visibilité et une difficulté à exploiter les avis clients. Tastify propose une solution centralisée, testée et démontrable.
+\end{phrasebox}
+
+\begin{phrasebox}{Transition vers la démo}
+Je vais d'abord montrer le parcours client, puis le back-office staff. Ensuite je montrerai le lien temps réel entre serveur et cuisine, le paiement par QR code, et enfin l'analyse de sentiment des avis qui alimente les statistiques.
+\end{phrasebox}
+
+\section{Ce qu'il faut absolument retenir}
+
+\begin{tabularx}{\textwidth}{p{4.2cm}Y}
+\toprule
+\textbf{Sujet} & \textbf{Réponse courte à donner} \\
+\midrule
+But du projet & Digitaliser le restaurant de bout en bout : client, staff, cuisine, stock, paiements, fidélité, avis et analytics. \\
+Architecture & Backend Django REST commun, deux frontends React, MySQL, Redis, Celery, WebSockets et Docker Compose. \\
+Pourquoi deux frontends ? & Les usages sont différents : interface simple côté client, outil opérationnel dense côté staff. \\
+IA & Analyse de sentiment NLP sur les avis : Hugging Face si disponible, fallback local sinon. \\
+Temps réel & WebSockets via Redis pour notifier le staff et synchroniser le KDS cuisine. \\
+Sécurité & JWT, cookies de refresh, permissions DRF et contrôle des rôles côté API. \\
+Tests & 346 tests backend, 93\% de couverture, 121 scénarios Playwright staff, 81 client. \\
+Limite honnête & Paiement simulé et IA dépendante d'un service externe, avec fallback local. \\
+\bottomrule
+\end{tabularx}
+
+\section{Architecture à défendre}
+
+\begin{tcolorbox}[title=\textbf{Vue simple de l'architecture}]
+\begin{center}
+\begin{tabularx}{0.96\textwidth}{Y c Y c Y}
+\textbf{Client React} & $\rightarrow$ & \textbf{API Django REST} & $\rightarrow$ & \textbf{MySQL}\\
+\textbf{Back-office React} & $\rightarrow$ & \textbf{Django Channels} & $\rightarrow$ & \textbf{Redis WebSocket}\\
+\textbf{Avis client} & $\rightarrow$ & \textbf{Celery} & $\rightarrow$ & \textbf{Hugging Face / fallback local}\\
+\end{tabularx}
+\end{center}
+\end{tcolorbox}
+
+\begin{tabularx}{\textwidth}{p{3.4cm}Y}
+\toprule
+\textbf{Composant} & \textbf{Rôle dans Tastify} \\
+\midrule
+Django REST Framework & Expose les API métier : utilisateurs, menu, commandes, tables, réservations, paiements, avis, stock, fidélité. \\
+React client & Portail public : menu, réservation, panier, paiement, compte, fidélité et avis. \\
+React back-office & Interface staff : dashboard, salle, KDS, menu, stock, RH, avis, paramètres. \\
+MySQL & Stockage relationnel des données métier. \\
+Redis & Broker, cache opérationnel et support des WebSockets. \\
+Celery & Traitements asynchrones : analyse de sentiment, tâches de fond, orchestration. \\
+Docker Compose & Lancement reproductible de l'ensemble des services pour la soutenance et le développement. \\
+\bottomrule
+\end{tabularx}
+
+\begin{phrasebox}{Phrase à dire si on demande pourquoi Docker}
+Docker évite le problème du ``ça marche sur ma machine''. Toute la stack démarre avec la même configuration : backend, base de données, Redis, Celery et les deux interfaces. Pour une soutenance, c'est un vrai gain de fiabilité.
+\end{phrasebox}
+
+\section{Démo recommandée en 15 minutes}
+
+\begin{enumerate}
+  \item \textbf{Portail client} : accueil, menu, catégories, plats appréciés.
+  \item \textbf{Expliquer les recommandations} : elles utilisent les avis et les scores de sentiment.
+  \item \textbf{Back-office gérant} : dashboard, statistiques, avis clients, stock.
+  \item \textbf{Serveur} : plan de salle, choisir une table, ajouter des plats, envoyer en cuisine.
+  \item \textbf{Cuisinier} : KDS, passer un plat en préparation puis prêt.
+  \item \textbf{Temps réel} : montrer la notification ou le changement d'état côté staff.
+  \item \textbf{Paiement QR} : générer le QR, scanner, confirmer le paiement.
+  \item \textbf{Table libérée} : vérifier que la commande devient payée et la table disponible.
+  \item \textbf{Avis client} : laisser un commentaire sans étoiles.
+  \item \textbf{Analyse sentiment} : montrer le label et son impact sur les stats.
+\end{enumerate}
+
+\begin{alertbox}{Comptes démo}
+Mot de passe commun : \code{password123}. Comptes : \code{gerant\_test}, \code{serveur\_test}, \code{cuisinier\_test}, \code{client\_test}.
+\end{alertbox}
+
+\section{Fiche IA / NLP}
+
+\subsection{Ce que fait l'IA dans Tastify}
+
+L'IA ne remplace pas le gérant. Elle l'aide à lire rapidement les retours clients. Quand un client écrit un avis, le texte est analysé pour produire :
+\begin{itemize}
+  \item un label : \code{POSITIF}, \code{NEUTRE} ou \code{NEGATIF} ;
+  \item un score de confiance ;
+  \item le modèle utilisé ;
+  \item un score métier exploitable par le dashboard et les recommandations.
+\end{itemize}
+
+\begin{tcolorbox}[title=\textbf{Pipeline de sentiment}]
+Avis client $\rightarrow$ API \code{/api/avis/} $\rightarrow$ sauvegarde rapide $\rightarrow$ tâche Celery $\rightarrow$ Hugging Face ou fallback local $\rightarrow$ stockage du label $\rightarrow$ dashboard et recommandations.
+\end{tcolorbox}
+
+\subsection{Modèles utilisés}
+
+\begin{tabularx}{\textwidth}{p{4.2cm}Y}
+\toprule
+\textbf{Modèle / approche} & \textbf{Utilisation} \\
+\midrule
+\footnotesize\ttfamily nlptown/bert-base-\newline multilingual-uncased-\newline sentiment & Modèle principal pour les avis non arabes. Adapté aux avis courts et multilingues. \\
+\footnotesize\ttfamily moussaKam/\newline MARBERT-sentiment & Modèle spécialisé pour les textes arabes. \\
+Fallback lexical multilingue & Secours local si l'API Hugging Face est indisponible ou non configurée. \\
+\bottomrule
+\end{tabularx}
+
+\begin{phrasebox}{Réponse simple : pourquoi BERT ?}
+BERT comprend le contexte d'une phrase grâce aux mécanismes d'attention. C'est plus robuste qu'une simple liste de mots, surtout quand l'avis est court ou ambigu. Dans Tastify, nous utilisons un modèle déjà entraîné pour les avis, ce qui correspond bien au domaine restaurant.
+\end{phrasebox}
+
+\begin{phrasebox}{Réponse simple : pourquoi un fallback ?}
+Parce qu'une fonctionnalité utile ne doit pas tomber complètement si Internet ou l'API externe ne répond pas. Le fallback est moins précis, mais il garantit une continuité de service pendant la démo et dans un usage dégradé.
+\end{phrasebox}
+
+\subsection{Chiffres IA à connaître}
+
+\begin{tabularx}{\textwidth}{p{5.2cm}Y}
+\toprule
+\textbf{Élément} & \textbf{Résultat à citer} \\
+\midrule
+Corpus de validation & 15 avis réalistes en français et darija latinisée. \\
+Fallback local & Accuracy indicative de 0,53 ; utile comme secours mais limité. \\
+Pipeline distant Hugging Face & Accuracy indicative de 0,93 ; macro-moyenne F1 autour de 0,92. \\
+Erreur typique & Avis mixtes ou ironiques, par exemple positif sur le cadre mais négatif sur la nourriture. \\
+\bottomrule
+\end{tabularx}
+
+\section{Questions jury : réponses prêtes}
+
+\subsection{Architecture et choix techniques}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Pourquoi deux applications frontend ? & Parce que le client et le staff n'ont pas les mêmes besoins. Le client doit avoir une interface simple. Le staff a besoin d'un outil métier plus dense avec salle, KDS, stock et statistiques. \\
+Pourquoi Django REST ? & Django apporte une base solide : ORM, sécurité, authentification, admin, tests et structuration par applications. DRF facilite la création d'API REST maintenables. \\
+Pourquoi React ? & React permet de construire des interfaces dynamiques et réactives, adaptées au panier client, au plan de salle et au KDS. \\
+Pourquoi Redis et Celery ? & Redis sert au temps réel et au broker. Celery déporte les traitements longs, comme l'analyse de sentiment, pour ne pas bloquer l'utilisateur. \\
+Pourquoi WebSocket ? & Le KDS et les notifications staff doivent se mettre à jour sans rafraîchir la page. WebSocket est adapté à ce besoin temps réel. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Modules fonctionnels à défendre}
+
+\begin{tabularx}{\textwidth}{p{3.5cm}Y}
+\toprule
+\textbf{Module} & \textbf{Ce qu'il faut dire} \\
+\midrule
+Menu & Le menu est organisé par catégories et plats. Le staff peut gérer disponibilité, prix, images et composition. Côté client, seuls les plats disponibles doivent être commandables. \\
+Salle & Le plan de salle donne au serveur une vision immédiate des tables libres, occupées ou en paiement. C'est le point d'entrée naturel pour créer une commande sur place. \\
+Commandes & La commande garde les lignes, les quantités et les prix au moment de l'achat. Cela évite qu'une modification future du prix d'un plat change une ancienne commande. \\
+KDS cuisine & Le Kitchen Display System permet au cuisinier de voir les plats à préparer et de changer leur statut. Le serveur est informé en temps réel. \\
+Réservations & Le client peut réserver, et le staff peut suivre les demandes. Le système évite les conflits de disponibilité selon les règles prévues. \\
+Paiements & Le paiement est simulé mais suit une logique métier complète : montant, commande, token QR, confirmation, statut payé et libération de table. \\
+Stock & Les ingrédients, seuils et recettes relient le menu à la réalité cuisine. Un plat dépend de ses ingrédients, pas seulement d'un prix et d'une image. \\
+Avis & Les avis clients sont stockés puis analysés. Le gérant peut voir les retours défavorables et suivre la satisfaction globale. \\
+Fidélité & Le programme fidélité permet de suivre points, récompenses et transactions afin d'encourager le retour client. \\
+Analytics & Le dashboard synthétise les données : revenus, commandes, plats populaires, stock et sentiment client. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ce que le jury teste vraiment}
+
+\begin{tcolorbox}[title=\textbf{Lire entre les lignes}]
+Quand le jury pose une question technique, il ne cherche pas toujours une réponse très longue. Il veut vérifier quatre choses : est-ce que vous comprenez votre architecture, est-ce que vous savez justifier vos choix, est-ce que vous connaissez les limites, et est-ce que vous savez proposer une amélioration réaliste.
+\end{tcolorbox}
+
+\begin{tabularx}{\textwidth}{p{4.4cm}Y}
+\toprule
+\textbf{S'ils demandent...} & \textbf{Ils veulent vérifier...} \\
+\midrule
+Pourquoi cette technologie ? & Que le choix n'est pas aléatoire et répond au besoin métier. \\
+Est-ce sécurisé ? & Que la sécurité est côté backend, pas seulement dans l'interface. \\
+Est-ce vraiment de l'IA ? & Que vous comprenez la différence entre intégrer un modèle et entraîner un modèle. \\
+Est-ce prêt pour production ? & Que vous distinguez prototype PFA, démo robuste et production réelle. \\
+Comment avez-vous testé ? & Que le projet n'est pas seulement visuel, mais validé par des tests. \\
+Quelle est la limite ? & Que vous êtes honnête et capable de prioriser les évolutions. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Sécurité}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Comment gérez-vous les rôles ? & Chaque utilisateur a un rôle : gérant, serveur, cuisinier ou client. Le frontend masque les menus non autorisés, mais la vraie sécurité est appliquée côté API avec les permissions. \\
+Le QR de paiement est-il sécurisé ? & Le QR contient un token signé lié à une commande et à une table. Il ne donne pas un accès général au système. \\
+Le paiement est-il réel ? & Non, c'est une simulation PFA. Mais la structure est prête pour intégrer un prestataire réel comme Stripe, CMI ou PayPal. \\
+Où sont les secrets ? & Les secrets doivent rester dans les variables d'environnement. Ils ne doivent pas être hardcodés dans le code. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Données et modèle relationnel}
+
+\begin{tabularx}{\textwidth}{p{4.2cm}Y}
+\toprule
+\textbf{Entité} & \textbf{Rôle à expliquer simplement} \\
+\midrule
+Utilisateur & Compte avec rôle : client, serveur, cuisinier ou gérant. \\
+Plat / Catégorie & Structure de la carte et disponibilité commerciale. \\
+Ingredient / Recette & Lien entre ce qu'on vend et ce qu'on consomme en stock. \\
+Table & Support de la salle, des commandes sur place et du paiement QR. \\
+Commande / Ligne & Historique de ce qui est commandé, préparé, servi et payé. \\
+Paiement & Trace de l'encaissement simulé et du statut financier de la commande. \\
+Avis / AnalyseSentiment & Texte client, polarité, score et exploitation analytique. \\
+LoyaltyProfile & Suivi des points et récompenses du client. \\
+\bottomrule
+\end{tabularx}
+
+\begin{phrasebox}{Phrase utile sur le modèle de données}
+Le modèle de données suit les objets réels du restaurant : client, table, plat, commande, paiement, ingrédient et avis. Cela rend l'application plus simple à expliquer, parce que chaque table importante correspond à un concept métier concret.
+\end{phrasebox}
+
+\subsection{Métier restaurant}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Quand le stock diminue-t-il ? & Quand un plat part en préparation, pas quand il est juste ajouté au panier. Cela correspond mieux au flux réel en cuisine. \\
+Que se passe-t-il si un ingrédient manque ? & Les recettes relient les plats aux ingrédients. Si un ingrédient est insuffisant, le plat peut devenir indisponible pour éviter de vendre un plat impossible à préparer. \\
+Pourquoi un KDS ? & Le KDS remplace les bons papier en cuisine et réduit les oublis. Le cuisinier voit les commandes et change leur statut en temps réel. \\
+À quoi sert la fidélité ? & Elle améliore la relation client : points, transactions, récompenses et suivi du compte. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{IA : questions plus poussées}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Quelle est la différence IA, ML et Deep Learning ? & L'IA est le domaine général. Le Machine Learning apprend à partir de données. Le Deep Learning est une sous-famille du ML basée sur des réseaux de neurones profonds. BERT appartient à cette famille. \\
+Qu'est-ce que le NLP ? & Le NLP est le traitement automatique du langage naturel. Ici, il sert à classifier un commentaire client en sentiment positif, neutre ou négatif. \\
+Pourquoi ne pas utiliser seulement les étoiles ? & Les étoiles donnent une note explicite, mais le texte contient plus d'information : lenteur, goût, température, service. L'analyse de sentiment valorise le commentaire. \\
+Comment convertissez-vous les sorties ? & Les sorties comme \code{5 stars}, \code{POSITIVE} ou \code{LABEL\_2} sont normalisées en \code{POSITIF}. Les sorties négatives deviennent \code{NEGATIF}; les cas moyens deviennent \code{NEUTRE}. \\
+Pourquoi l'arabe a un modèle séparé ? & Les avis peuvent contenir de l'arabe ou du dialecte. MARBERT est plus adapté à ces textes qu'un modèle général principalement orienté langues européennes. \\
+Comment améliorer l'IA ? & Collecter un corpus réel d'avis Tastify, l'annoter, comparer plusieurs modèles, mieux détecter les langues et combiner texte + note. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Tests et qualité}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Comment avez-vous validé le projet ? & Avec des tests backend pytest, des tests unitaires frontend Vitest, des scénarios end-to-end Playwright et une validation locale complète. \\
+Quels chiffres retenir ? & 346 tests backend réussis, 93\% de couverture, 121 scénarios Playwright back-office et 81 scénarios Playwright client. \\
+Que couvrent les tests ? & Authentification, permissions, commandes, KDS, paiements, stock, réservations, avis, sentiment, WebSockets et parcours client/staff. \\
+Pourquoi les tests E2E ? & Ils vérifient les vrais parcours utilisateur, pas seulement les fonctions isolées. C'est important pour une application métier complète. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Déploiement et environnement}
+
+\begin{tabularx}{\textwidth}{p{5cm}Y}
+\toprule
+\textbf{Question possible} & \textbf{Réponse courte} \\
+\midrule
+Comment lancez-vous la démo ? & Avec Docker Desktop puis \code{start-demo-local.bat}. Le script prépare les services, les données de démo et les URLs. \\
+Quels services tournent ? & Backend Django, base MySQL, Redis, Celery worker, Celery beat et les deux frontends. \\
+Pourquoi pas directement en cloud ? & Le PFA vise d'abord une solution fonctionnelle et démontrable. Le cloud est une perspective avec HTTPS, monitoring, sauvegardes et secrets managés. \\
+Que faire si Hugging Face n'est pas configuré ? & La démo continue avec le fallback local. C'est prévu pour la robustesse. \\
+\bottomrule
+\end{tabularx}
+
+\section{Plan de parole conseillé}
+
+\begin{tabularx}{\textwidth}{p{2.2cm}Y}
+\toprule
+\textbf{Temps} & \textbf{Contenu} \\
+\midrule
+0:00--1:00 & Saluer, présenter Tastify, poser la problématique et annoncer la valeur ajoutée. \\
+1:00--2:30 & Expliquer les acteurs : client, gérant, serveur, cuisinier. Montrer que le système couvre tout le restaurant. \\
+2:30--4:00 & Présenter l'architecture sans trop détailler : deux frontends, backend commun, base, Redis, Celery, Docker. \\
+4:00--11:00 & Faire la démo : portail client, back-office, salle, KDS, paiement QR, avis et sentiment. \\
+11:00--12:30 & Présenter les tests et chiffres de validation. \\
+12:30--14:00 & Présenter limites et perspectives. \\
+14:00--15:00 & Conclusion claire, puis ouverture aux questions. \\
+\bottomrule
+\end{tabularx}
+
+\begin{phrasebox}{Règle d'or pendant la soutenance}
+Ne pas réciter tout le rapport. Pour chaque écran, dire : à quoi ça sert, quel acteur l'utilise, quelle donnée est créée ou mise à jour, et quel choix technique se cache derrière.
+\end{phrasebox}
+
+\section{Transitions orales utiles}
+
+\begin{multicols}{2}
+\begin{itemize}
+  \item Après la problématique : ``Pour répondre à cela, nous avons séparé le système en deux expériences : client et staff.''
+  \item Avant l'architecture : ``Derrière ces interfaces, le backend reste commun pour garder une seule source de vérité.''
+  \item Avant le KDS : ``Ici, l'intérêt n'est pas seulement d'enregistrer une commande, mais de la transmettre immédiatement à la cuisine.''
+  \item Avant le paiement : ``Nous avons simulé le paiement pour valider tout le flux métier sans dépendre d'une banque.''
+  \item Avant l'IA : ``La partie IA intervient après l'expérience client, quand le commentaire devient une donnée exploitable.''
+  \item Avant les tests : ``Pour éviter une simple démonstration visuelle, nous avons validé les parcours critiques par des tests.''
+  \item Avant les limites : ``Le projet est fonctionnel pour le PFA, mais nous avons identifié ce qu'il faudrait renforcer pour une production réelle.''
+\end{itemize}
+\end{multicols}
+
+\section{Questions difficiles : rester honnête}
+
+\begin{riskbox}{Si le jury dit : ``Votre IA est-elle vraiment entraînée par vous ?''}
+Réponse : Non, nous n'avons pas entraîné un grand modèle depuis zéro. Nous avons intégré des modèles pré-entraînés via Hugging Face et nous avons adapté leurs sorties au besoin métier de Tastify. C'est un choix réaliste pour un PFA : exploiter un modèle fiable, l'intégrer proprement, prévoir un fallback et mesurer son comportement sur un corpus de validation.
+\end{riskbox}
+
+\begin{riskbox}{Si le jury dit : ``Le fallback local est faible''}
+Réponse : Oui, et nous le présentons comme une solution de secours, pas comme le moteur principal. Il assure la continuité si l'API externe n'est pas disponible. Une perspective serait de le remplacer par un modèle local léger entraîné sur un corpus d'avis annotés.
+\end{riskbox}
+
+\begin{riskbox}{Si le jury dit : ``Le paiement n'est pas réel''}
+Réponse : C'est volontaire pour le périmètre PFA. Nous avons simulé le paiement pour démontrer le flux métier complet : commande, montant, QR, confirmation, état payé et libération de table. L'intégration d'un vrai prestataire serait une évolution naturelle.
+\end{riskbox}
+
+\begin{riskbox}{Si la démo bug}
+Réponse calme : Je vais expliquer le flux prévu et montrer la partie déjà chargée. L'architecture Docker permet normalement de relancer proprement. Les tests exécutés montrent que les parcours principaux sont validés ; un incident de démo reste un problème d'environnement, pas forcément un problème de conception.
+\end{riskbox}
+
+\section{Limites et perspectives}
+
+\begin{tabularx}{\textwidth}{p{4.2cm}Y}
+\toprule
+\textbf{Limite actuelle} & \textbf{Perspective naturelle} \\
+\midrule
+Paiement simulé & Intégrer Stripe, CMI ou PayPal avec webhooks et rapprochement bancaire. \\
+Corpus IA limité & Construire un corpus réel d'avis Tastify annotés manuellement. \\
+Fallback lexical simple & Ajouter un modèle local léger TF-IDF + classifieur ou un petit transformer local. \\
+Recommandation simple & Ajouter historique client, contraintes de stock et préférences individuelles. \\
+Prévision stock basique & Ajouter une vraie prévision avec historique, saisonnalité et événements. \\
+Tests de charge à finaliser & Construire un scénario Locust avec temps moyen, p95 et taux d'échec. \\
+Production cloud & HTTPS, monitoring, sauvegardes, rotation des secrets et observabilité. \\
+\bottomrule
+\end{tabularx}
+
+\section{Phrases courtes à placer}
+
+\begin{multicols}{2}
+\begin{itemize}
+  \item Tastify centralise le parcours restaurant.
+  \item Le backend commun garantit la cohérence métier.
+  \item La séparation client/staff respecte les usages.
+  \item Les WebSockets rendent la cuisine réactive.
+  \item Celery évite de bloquer l'utilisateur.
+  \item L'IA transforme les avis en indicateurs.
+  \item Le fallback rend la démo robuste.
+  \item Les permissions sont vérifiées côté API.
+  \item Le QR contient un token signé.
+  \item Le paiement est simulé mais le flux métier est complet.
+  \item Les tests couvrent les parcours critiques.
+  \item Les limites sont identifiées et transformées en perspectives.
+\end{itemize}
+\end{multicols}
+
+\section{Checklist de veille et jour J}
+
+\begin{alertbox}{Avant de dormir}
+\begin{itemize}
+  \item Relire le pitch, les chiffres et les questions difficiles.
+  \item Répéter la démo en parlant à voix haute.
+  \item Préparer les onglets : client, gérant, serveur, cuisinier.
+  \item Vérifier Docker Desktop et le téléphone sur le même Wi-Fi si QR prévu.
+\end{itemize}
+\end{alertbox}
+
+\begin{alertbox}{Le jour J}
+\begin{itemize}
+  \item Lancer \code{start-demo-local.bat} au moins 10 minutes avant.
+  \item Garder les comptes démo prêts.
+  \item Désactiver le VPN si le téléphone ne rejoint pas l'IP du PC.
+  \item Si le QR pointe vers \code{localhost}, relancer le script de démo.
+  \item Répondre simplement : problème, choix, preuve, limite, perspective.
+\end{itemize}
+\end{alertbox}
+
+\section{Mini conclusion prête à dire}
+
+\begin{phrasebox}{Conclusion orale}
+Pour conclure, Tastify répond à un besoin concret de digitalisation d'un restaurant. Le projet couvre les parcours client et staff, intègre le temps réel, la gestion du stock, le paiement simulé, la fidélité et une couche IA pour analyser les avis. Les tests montrent une base solide, et les limites restantes ouvrent vers une version production plus complète avec paiement réel, monitoring, corpus IA enrichi et recommandations plus avancées.
+\end{phrasebox}
+
+\end{document}

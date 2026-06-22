@@ -147,6 +147,7 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD', default=config('MYSQL_PASSWORD', default='tastify_password')),
         'HOST': config('DB_HOST', default=config('MYSQL_HOST', default='db')),
         'PORT': config('DB_PORT', default=config('MYSQL_PORT', default='3306')),
+        'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

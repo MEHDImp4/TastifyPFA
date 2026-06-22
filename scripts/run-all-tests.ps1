@@ -92,6 +92,43 @@ function Test-CommandExists($command) {
     return $null -ne (Get-Command $command -ErrorAction SilentlyContinue)
 }
 
+function Test-DockerImageExists($image) {
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        & docker image inspect $image *> $null
+        return $LASTEXITCODE -eq 0
+    } finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
+}
+
+function Assert-RebuildBaseImagesAvailable {
+    if (-not $Rebuild) {
+        return
+    }
+
+    $requiredBaseImages = @(
+        "python:3.12-slim",
+        "node:22-alpine"
+    )
+    $missingBaseImages = @($requiredBaseImages | Where-Object { -not (Test-DockerImageExists $_) })
+
+    if ($missingBaseImages.Count -gt 0) {
+        $imageList = $missingBaseImages -join ", "
+        throw @"
+Cannot run -Rebuild because Docker is missing required base image(s): $imageList.
+
+Docker must be able to resolve and pull missing base images from Docker Hub before a full rebuild.
+Fix Docker Desktop DNS/proxy/internet access, then run:
+  docker pull $($missingBaseImages -join "`n  docker pull ")
+
+For an offline rehearsal that uses existing app images, run without -Rebuild or use:
+  run-pfa-readiness.bat -SkipFullSuite
+"@
+    }
+}
+
 function Stop-TestStack {
     if ($KeepRunning) {
         Write-Host "Keeping Docker test stack running because -KeepRunning was used." -ForegroundColor Yellow
@@ -121,6 +158,7 @@ try {
     }
 
     Invoke-Checked "Docker Desktop available" "docker" @("info", "--format", "{{.ServerVersion}}")
+    Assert-RebuildBaseImagesAvailable
 
     Write-Step "Starting backend test services"
     $cleanupOnExit = $true

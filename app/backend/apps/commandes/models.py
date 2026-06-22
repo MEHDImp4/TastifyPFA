@@ -65,12 +65,13 @@ class Commande(models.Model):
         max_length=20,
         choices=Statut.choices,
         default=Statut.EN_COURS,
+        db_index=True,
     )
     # Montant total calculé automatiquement à partir des lignes
     montant_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
-    est_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    est_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = CommandeManager()

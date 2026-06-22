@@ -45,16 +45,30 @@ export async function fulfillRefreshWithStoredAccess(
   role: 'GERANT' | 'SERVEUR' | 'CUISINIER',
   username: string,
 ) {
-  const access = await page.evaluate(() => {
-    const rawStorage = window.localStorage.getItem('backoffice-auth-storage');
-    if (!rawStorage) return null;
-
+  let access = null;
+  let retries = 5;
+  while (retries > 0) {
     try {
-      return JSON.parse(rawStorage)?.state?.accessToken ?? null;
-    } catch {
-      return null;
+      access = await page.evaluate(() => {
+        const rawStorage = window.localStorage.getItem('backoffice-auth-storage');
+        if (!rawStorage) return null;
+
+        try {
+          return JSON.parse(rawStorage)?.state?.accessToken ?? null;
+        } catch {
+          return null;
+        }
+      });
+      break;
+    } catch (e) {
+      retries--;
+      if (retries === 0) {
+        console.error('Failed to evaluate auth state after retries:', e);
+        break;
+      }
+      await page.waitForTimeout(100);
     }
-  });
+  }
 
   await route.fulfill({
     status: 200,

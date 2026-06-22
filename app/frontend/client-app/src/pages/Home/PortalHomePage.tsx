@@ -143,7 +143,7 @@ export const PortalHomePage = () => {
               <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase">Suggestions</span>
               <h3 className="text-3xl font-bold tracking-tight lowercase font-heading">Les plats appréciés.</h3>
             </div>
-            <Link to="/menu" className="inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-accent transition-all duration-300 py-2 group">
+            <Link to="/menu" className="inline-flex min-h-11 items-center text-[10px] font-bold uppercase tracking-widest text-on-background hover:text-accent transition-all duration-300 py-2 group">
               <span className="border-b border-outline group-hover:border-accent transition-colors pb-1">
                 Découvrir toute la carte
               </span>

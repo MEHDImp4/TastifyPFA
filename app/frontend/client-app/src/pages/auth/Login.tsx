@@ -57,8 +57,8 @@ export const Login: React.FC = () => {
   };
 
   const fadeIn = {
-    hidden: { y: 10, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.4 } }
+    hidden: { y: 0, opacity: 1 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.2 } }
   };
 
   return (

@@ -347,6 +347,7 @@ export const MenuPage: React.FC = () => {
                       {plat.est_disponible ? (
                         <button
                           type="button"
+                          aria-label={`Ajouter ${plat.nom} au panier`}
                           onClick={(e) => {
                             e.stopPropagation();
                             addItem(plat);
