@@ -16,7 +16,7 @@ PyJWT==2.13.0
 Pillow==12.2.0
 django-cleanup==8.1.0
 whitenoise==6.9.0
-pytest==9.0.3
+pytest==9.1.1
 pytest-django==4.9.0
 pytest-mock==3.14.0
 pytest-cov==6.1.1
