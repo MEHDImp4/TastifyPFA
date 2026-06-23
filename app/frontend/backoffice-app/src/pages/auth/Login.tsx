@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/authStore';
@@ -136,9 +136,8 @@ export const Login: React.FC = () => {
             <div className="flex items-center gap-3 text-[#52525A] font-bold text-[9px] uppercase tracking-widest">
                <span>Accès Sécurisé</span>
                <div className="w-1 h-1 rounded-full bg-outline" />
-               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> Connexion sécurisée</span>
+               <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" strokeWidth={1.5} /> Connexion sécurisé</span>
             </div>
-            <Link to="/" className="min-h-[44px] inline-flex items-center text-[10px] font-bold text-on-surface-variant hover:text-on-background transition-colors uppercase tracking-[0.2em]">Retour au portail</Link>
         </motion.div>
       </motion.div>
     </div>

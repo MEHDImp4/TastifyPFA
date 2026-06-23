@@ -437,7 +437,7 @@ test.describe('authenticated backoffice quality coverage', () => {
         await route.fulfill({ status: 200 });
       });
       await page.route('**/api/users/refresh/', async route => {
-        await fulfillRefreshWithStoredAccess(page, route, 'SERVEUR', 'serveur_test');
+        await fulfillRefreshWithStoredAccess(page, route, 'GERANT', 'gerant_test');
       });
       await page.route('**/api/tables/', async route => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });

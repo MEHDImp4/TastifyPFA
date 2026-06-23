@@ -40,6 +40,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
     if (role === 'GERANT' || role === 'SERVEUR') {
       links.push({ to: '/salle', icon: MapIcon, label: 'Plan de Salle', testid: 'nav-salle' });
+    }
+
+    if (role === 'GERANT') {
       links.push({ to: '/reservations', icon: CalendarDays, label: 'Réservations', testid: 'nav-reservations' });
     }
 
@@ -75,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-background/80 z-40 md:hidden backdrop-blur-md"
+          className="fixed inset-0 bg-background/80 z-[100] md:hidden backdrop-blur-md"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -84,9 +87,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         role="navigation"
         aria-label="Navigation principale"
         className={`
-        fixed inset-y-0 left-0 z-50 w-[min(20rem,calc(100vw-2rem))] bg-surface border-r border-outline
+        fixed inset-y-0 left-0 z-[110] w-[min(20rem,calc(100vw-2rem))] bg-surface border-r border-outline
         transform transition-all duration-300
-        md:relative md:flex md:flex-col md:translate-x-0 md:w-64
+        md:relative md:z-20 md:flex md:flex-col md:translate-x-0 md:w-64
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `} style={{ overscrollBehavior: 'contain' }}>
         <div className="p-8 pb-10">

@@ -21,7 +21,7 @@ export const salleApi = {
   updateCommandeStatut: (id: number, statut: string) => api.patch(`/commandes/${id}/`, { statut }),
 
   // Payment methods
-  createManualPayment: (data: { commande: number, montant: string, methode: 'CASH' | 'CARD' }) => 
+  createManualPayment: (data: { commande: number, montant: string, methode: 'ESPECES' | 'CARTE' }) =>
     api.post('/paiements/', data),
   getPaymentQr: (tableId: number) => 
     api.get<{ token: string, payment_url: string }>(`/tables/${tableId}/qr/`),

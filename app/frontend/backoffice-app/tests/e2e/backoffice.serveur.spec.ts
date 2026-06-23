@@ -12,14 +12,20 @@ const expectNoBlockingViolations = async (page: Parameters<typeof test>[0]['page
 };
 
 test.describe('serveur browser workflows', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
     page.on('dialog', dialog => dialog.accept());
 
     await page.route('**/api/users/logout/', async route => {
       await route.fulfill({ status: 200 });
     });
     await page.route('**/api/users/refresh/', async route => {
-      await fulfillRefreshWithStoredAccess(page, route, 'SERVEUR', 'serveur_test');
+      const isReservationTest = 
+        testInfo.title.includes('reservation') || 
+        testInfo.title.includes('booking') || 
+        testInfo.title.includes('fallback client matches');
+      const role = isReservationTest ? 'GERANT' : 'SERVEUR';
+      const username = role === 'GERANT' ? 'gerant_test' : 'serveur_test';
+      await fulfillRefreshWithStoredAccess(page, route, role, username);
     });
     // Default tables mock so any test that navigates to /salle (serveur home) doesn't hang
     await page.route('**/api/tables/', async route => {
@@ -54,21 +60,10 @@ test.describe('serveur browser workflows', () => {
     await expect(page.getByRole('heading', { name: 'Plan de Salle', includeHidden: true })).toBeVisible();
 
     await expect(page.getByTestId('nav-salle')).toBeVisible();
-    await expect(page.getByTestId('nav-reservations')).toBeVisible();
+    await expect(page.getByTestId('nav-reservations')).toHaveCount(0);
     await expect(page.getByTestId('nav-dashboard')).toHaveCount(0);
     await expect(page.getByTestId('nav-categories')).toHaveCount(0);
     await expect(page.getByTestId('nav-kds')).toHaveCount(0);
-  });
-
-  test('keeps the reservations nav active after a direct route load', async ({ page }) => {
-    await page.route(/\/api\/reservations\/(?:\?.*)?$/, async route => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) });
-    });
-    await page.goto('/reservations');
-
-    await expect(page).toHaveURL(/\/reservations$/);
-    await expect(page.getByTestId('nav-reservations')).toHaveClass(/border-primary/);
-    await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
   });
 
   test('renders mocked salle table states and opens ordering from a free table', async ({ page }) => {
@@ -117,16 +112,12 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps serveur users on allowed routes and redirects forbidden ones', async ({ page }) => {
-    await page.goto('/reservations');
-    await expect(page).toHaveURL(/\/reservations$/);
-    await expect(page.getByPlaceholder('Rechercher un client...')).toBeVisible();
-
     await page.goto('/ordering/1');
     await expect(page).toHaveURL(/\/ordering\/1$/);
     await expect(page.getByText('Ticket en cours')).toBeVisible();
     await expect(page.getByTestId('order-submit')).toBeVisible();
 
-    for (const forbiddenPath of ['/categories', '/stock', '/hr', '/avis', '/settings', '/menu', '/kds']) {
+    for (const forbiddenPath of ['/reservations', '/categories', '/stock', '/hr', '/avis', '/settings', '/menu', '/kds']) {
       await page.goto(forbiddenPath);
       await expect(page).toHaveURL(/\/salle$/);
     }
@@ -138,8 +129,8 @@ test.describe('serveur browser workflows', () => {
   });
 
   test('keeps serveur logout working after visiting a secondary route', async ({ page }) => {
-    await page.goto('/reservations');
-    await expect(page).toHaveURL(/\/reservations$/);
+    await page.goto('/ordering/1');
+    await expect(page).toHaveURL(/\/ordering\/1$/);
 
     await page.getByTestId('logout-button').click();
     await expect(page).toHaveURL(/\/login$/);

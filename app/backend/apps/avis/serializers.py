@@ -48,6 +48,6 @@ class AvisSerializer(serializers.ModelSerializer):
         ).exists()
 
         if not (paid_all_or_share or paid_item):
-            raise serializers.ValidationError("Vous ne pouvez noter que les plats que vous avez payés.")
+            raise serializers.ValidationError("Vous ne pouvez commenter que les plats que vous avez payés.")
 
         return attrs

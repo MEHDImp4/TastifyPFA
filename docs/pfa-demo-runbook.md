@@ -9,7 +9,14 @@
    - Client: `http://localhost:3003`
    - Back-office: `http://localhost:3000`
 
-Le script remet une base propre, reconstruit les images Docker, seed les donnees demo et configure les liens QR avec l'adresse IP locale du PC.
+Par defaut, le script lance la demo en mode rapide: il garde les volumes Docker et reutilise les donnees deja seed pour accelerer les relancements. Il configure toujours les liens QR avec l'adresse IP locale du PC.
+
+Commandes utiles:
+
+- `start-demo-local.bat`: lancement rapide, conserve les volumes pour le prochain lancement.
+- `start-demo-local.bat -Reset`: remet une base propre, seed toutes les donnees demo, puis supprime les volumes a la fin.
+- `start-demo-local.bat -Rebuild`: force la reconstruction des images Docker.
+- `start-demo-local.bat -Reset -Rebuild`: reset propre complet avec reconstruction des images.
 
 ## Acces telephone
 
@@ -49,11 +56,12 @@ Mot de passe commun: `password123`
 ## Checklist avant jury
 
 - Docker Desktop demarre correctement.
-- Lancer `start-demo-local.bat` au moins 10 minutes avant la presentation.
+- Lancer `start-demo-local.bat -Reset` une fois avant la presentation si une base totalement propre est necessaire.
+- Relancer ensuite `start-demo-local.bat` en mode rapide au moins 10 minutes avant la presentation.
 - Garder ouverts: client, back-office gerant, back-office cuisinier, back-office serveur.
 - Telephone sur le meme Wi-Fi que le PC.
 - Desactiver VPN si le telephone ne rejoint pas l'IP du PC.
-- Si le QR ouvre `localhost`, relancer `start-demo-local.bat`.
+- Si le QR ouvre `localhost`, relancer `start-demo-local.bat` pour regenerer les URLs avec l'IP du PC.
 - Si HuggingFace n'est pas configure, la demo continue avec l'analyse locale.
 
 ## Points a dire simplement

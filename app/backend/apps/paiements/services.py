@@ -185,6 +185,11 @@ def create_payment(
                     'La somme des contributions doit correspondre au montant paye.'
                 )
 
+        # Si le client paie par QR code, on garde son compte lié à la commande.
+        if client is not None and commande.client is None:
+            commande.client = client
+            commande.save(update_fields=['client', 'updated_at'])
+
         paiement = Paiement.objects.create(
             commande=commande,
             client=client,
@@ -193,11 +198,6 @@ def create_payment(
             statut=statut,
             reference_transaction=reference_transaction,
         )
-
-        # Si le client paie par QR code, on garde son compte lié à la commande.
-        if client is not None and commande.client is None:
-            commande.client = client
-            commande.save(update_fields=['client', 'updated_at'])
 
         if validation is not None:
             for contribution in validation.contributions:

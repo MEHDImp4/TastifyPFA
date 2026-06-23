@@ -16,7 +16,7 @@ export interface Avis {
   id: number;
   user_username: string;
   commentaire: string;
-  note: number;
+  note?: number | null;
   sentiment_score: number | null;
   created_at: string;
 }

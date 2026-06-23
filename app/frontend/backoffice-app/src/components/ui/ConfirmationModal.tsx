@@ -1,4 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, X } from 'lucide-react';
 
@@ -23,6 +24,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   cancelLabel = 'Annuler',
   variant = 'danger'
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const accentColor = variant === 'danger' ? 'text-error' : variant === 'warning' ? 'text-primary' : 'text-primary';
   const buttonBg = variant === 'danger' ? 'bg-error' : 'bg-primary';
 
@@ -33,11 +35,21 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+      const previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => modalRef.current?.focus());
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = previousOverflow;
+      };
     }
   }, [isOpen, handleKeyDown]);
 
-  return (
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" role="alertdialog" aria-modal="true" aria-label={title}>
@@ -46,14 +58,16 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
           />
           
           <motion.div
+            ref={modalRef}
+            tabIndex={-1}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-surface-container border border-outline-variant rounded-lg overflow-hidden"
+            className="relative w-full max-w-md overflow-hidden rounded-xl border border-outline-variant bg-surface-container shadow-2xl outline-none"
           >
             <div className={`h-1.5 w-full ${variant === 'danger' ? 'bg-error' : 'bg-primary'}`} />
             
@@ -95,6 +109,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };

@@ -26,11 +26,13 @@ import {
   Hash,
   UtensilsCrossed,
   ReceiptText,
-  Search
+  Search,
+  LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
+import { useAuthStore } from '../../store/authStore';
 
 // --- Constants ---
 const MUTABLE_COMMANDE_PRIORITY: Record<string, number> = {
@@ -54,6 +56,7 @@ export const OrderingPage: React.FC = () => {
   const { tableId } = useParams<{ tableId: string }>();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const logout = useAuthStore(state => state.logout);
   
   const [table, setTable] = useState<Table | null>(null);
   const [currentCommande, setCurrentCommande] = useState<Commande | null>(null);
@@ -182,7 +185,7 @@ export const OrderingPage: React.FC = () => {
     setIsPayModalOpen(true);
   };
 
-  const handleManualPay = async (methode: 'CASH' | 'CARD') => {
+  const handleManualPay = async (methode: 'ESPECES' | 'CARTE') => {
     if (!currentCommande) return;
     setIsPaying(true);
     try {
@@ -191,7 +194,7 @@ export const OrderingPage: React.FC = () => {
             montant: currentCommande.montant_total,
             methode
         });
-        toast.success(`Paiement ${methode === 'CASH' ? 'Espèces' : 'Carte'} validé`);
+        toast.success(`Paiement ${methode === 'ESPECES' ? 'Espèces' : 'Carte'} validé`);
         setIsPayModalOpen(false);
         navigate('/salle');
     } catch (err) {
@@ -274,6 +277,16 @@ export const OrderingPage: React.FC = () => {
            
            <button onClick={() => fetchData(true)} aria-label="Actualiser la commande" className="btn-icon rounded-lg bg-surface text-on-surface-variant hover:text-on-background active:rotate-180 duration-500">
             <RefreshCcw className="w-5 h-5" strokeWidth={1.5} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => logout()}
+            data-testid="logout-button"
+            aria-label="Se déconnecter"
+            className="btn-icon rounded-lg bg-surface text-on-surface-variant hover:text-error"
+          >
+            <LogOut className="w-5 h-5" strokeWidth={1.5} />
           </button>
 
           {isMobile && (
@@ -540,7 +553,7 @@ export const OrderingPage: React.FC = () => {
                       className="flex flex-col gap-6"
                     >
                       <button 
-                        onClick={() => handleManualPay('CASH')}
+                        onClick={() => handleManualPay('ESPECES')}
                         className="group flex min-h-24 items-center gap-5 p-5 md:gap-6 md:p-8 bg-background border border-outline rounded-lg hover:border-on-background transition-all text-left"
                       >
                          <div className="w-14 h-14 rounded bg-success/5 flex items-center justify-center text-success">
@@ -553,7 +566,7 @@ export const OrderingPage: React.FC = () => {
                       </button>
 
                       <button 
-                        onClick={() => handleManualPay('CARD')}
+                        onClick={() => handleManualPay('CARTE')}
                         className="group flex min-h-24 items-center gap-5 p-5 md:gap-6 md:p-8 bg-background border border-outline rounded-lg hover:border-on-background transition-all text-left"
                       >
                          <div className="w-14 h-14 rounded bg-on-background/5 flex items-center justify-center text-on-background">

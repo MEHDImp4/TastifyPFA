@@ -118,7 +118,7 @@ function App() {
                   <Login />
                 </PublicRoute>)
               } />
-              
+
               <Route path="/ordering/:tableId" element={
                 lazyRoute(<ProtectedRoute>
                   <RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
@@ -126,7 +126,7 @@ function App() {
                   </RoleRoute>
                 </ProtectedRoute>)
               } />
-
+              
               <Route path="/" element={
                 <ProtectedRoute>
                   <AppShell />
@@ -149,7 +149,7 @@ function App() {
                   </RoleRoute>)
                 } />
                 <Route path="reservations" element={
-                  lazyRoute(<RoleRoute allowedRoles={['GERANT', 'SERVEUR']}>
+                  lazyRoute(<RoleRoute allowedRoles={['GERANT']}>
                     <ReservationsPage />
                   </RoleRoute>)
                 } />

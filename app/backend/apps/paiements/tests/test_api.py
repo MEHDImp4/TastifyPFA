@@ -107,7 +107,9 @@ class TestPaiementAPI:
         assert response.data['statut'] == 'COMPLETE'
         
         commande.refresh_from_db()
+        table.refresh_from_db()
         assert commande.statut == Commande.Statut.PAYEE
+        assert table.statut == Table.Statut.LIBRE
         assert commande.client == client_user
         assert response.data['client'] == client_user.id
         assert response.data['review_items'][0]['plat_nom'] == 'Tajine'
@@ -150,6 +152,27 @@ class TestPaiementAPI:
         }, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['reference_transaction'] == ''
+
+    def test_staff_manual_full_payment_marks_order_paid_and_table_free(self, api_client, gerant, setup_order, table):
+        commande, _ = setup_order
+        api_client.force_authenticate(user=gerant)
+
+        table.refresh_from_db()
+        assert table.statut == Table.Statut.OCCUPEE
+
+        response = api_client.post('/api/paiements/', {
+            'commande': commande.id,
+            'montant': '100.00',
+            'methode': 'ESPECES'
+        }, format='json')
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data['statut'] == Paiement.Statut.COMPLETE
+
+        commande.refresh_from_db()
+        table.refresh_from_db()
+        assert commande.statut == Commande.Statut.PAYEE
+        assert table.statut == Table.Statut.LIBRE
 
     def test_staff_manual_payment_en_ligne_rejected(self, api_client, gerant, setup_order):
         commande, _ = setup_order

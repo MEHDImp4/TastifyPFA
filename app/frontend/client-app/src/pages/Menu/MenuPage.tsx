@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Loader2, Search, ShoppingBag, Timer, X, TrendingUp } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import { menuApi } from '../../api/menu';
 import type { Categorie, Plat } from '../../api/menu';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
@@ -8,15 +9,8 @@ import { useConfigStore } from '../../store/configStore';
 import { useCartStore } from '../../store/cartStore';
 import { toast } from 'sonner';
 
-const getPlatRating = (plat: Plat) => {
-  const notes = plat.top_avis?.map(a => a.note).filter((n): n is number => n !== null && n !== undefined) || [];
-  if (notes.length > 0) {
-    const avg = notes.reduce((sum, n) => sum + n, 0) / notes.length;
-    return { rating: avg.toFixed(1), count: notes.length };
-  }
-  const ratingVal = 4.4 + ((plat.id * 7) % 6) * 0.1;
-  const countVal = (plat.id * 13) % 24 + 5;
-  return { rating: ratingVal.toFixed(1), count: countVal };
+export const getPlatReviewSummary = (plat: Plat) => {
+  return { count: plat.top_avis?.length ?? 0 };
 };
 
 const containerVariants = {
@@ -101,6 +95,9 @@ const DishVisual = ({
 };
 
 export const MenuPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [plats, setPlats] = useState<Plat[]>([]);
   const [activeCat, setActiveCat] = useState<number | null | undefined>(undefined);
@@ -121,7 +118,9 @@ export const MenuPage: React.FC = () => {
         const catsRes = await menuApi.getCategories();
         const sortedCats = catsRes.data.sort((a, b) => a.ordre_affichage - b.ordre_affichage);
         setCategories(sortedCats);
-        setActiveCat(null);
+        
+        const initialCat = categoryParam ? parseInt(categoryParam, 10) : null;
+        setActiveCat(initialCat);
       } catch (err) {
         console.error('Failed to load menu categories', err);
         setActiveCat(null);
@@ -132,6 +131,16 @@ export const MenuPage: React.FC = () => {
 
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (activeCat !== undefined) {
+      const currentParam = categoryParam ? parseInt(categoryParam, 10) : null;
+      if (currentParam !== activeCat) {
+        setActiveCat(currentParam);
+        setCurrentPage(1);
+      }
+    }
+  }, [categoryParam]);
 
   useEffect(() => {
     if (activeCat === undefined) return;
@@ -173,6 +182,12 @@ export const MenuPage: React.FC = () => {
   const handleCategoryChange = (categoryId: number | null) => {
     setActiveCat(categoryId);
     setCurrentPage(1);
+    if (categoryId === null) {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', String(categoryId));
+    }
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleSearchChange = (value: string) => {
@@ -270,7 +285,7 @@ export const MenuPage: React.FC = () => {
           <AnimatePresence mode="popLayout">
             {plats.map((plat) => {
               const categoryName = categories.find((cat) => cat.id === plat.categorie)?.nom || 'Plat';
-              const { rating, count } = getPlatRating(plat);
+              const { count } = getPlatReviewSummary(plat);
               return (
                 <motion.article
                   key={plat.id}
@@ -332,11 +347,9 @@ export const MenuPage: React.FC = () => {
 
                     <div className="flex items-center justify-between gap-2 pt-2 mt-auto border-t border-dashed border-outline-variant/60">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-md text-[11px] text-amber-700 font-bold">
-                          <span className="text-xs leading-none">★</span>
-                          <span>{rating}</span>
-                        </div>
-                        <span className="text-[10px] text-on-surface-subtle font-medium">{count} avis</span>
+                        <span className="rounded-md bg-surface-container-high px-2 py-0.5 text-[10px] font-bold text-on-surface-subtle">
+                          {count} avis
+                        </span>
                         {plat.sentiment_score !== null && plat.sentiment_score > 0.3 && (
                           <span className="rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-amber-700">
                             Populaire

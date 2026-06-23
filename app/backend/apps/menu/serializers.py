@@ -27,7 +27,7 @@ class AvisMinimalSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Avis
-        fields = ['id', 'user_username', 'commentaire', 'note', 'sentiment_score', 'created_at']
+        fields = ['id', 'user_username', 'commentaire', 'sentiment_score', 'created_at']
 
 
 class CategorieSerializer(serializers.ModelSerializer):

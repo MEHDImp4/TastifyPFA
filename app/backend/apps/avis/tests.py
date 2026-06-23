@@ -26,7 +26,7 @@ class TestAvisModel:
             note=5,
         )
         assert avis.id is not None
-        assert str(avis) == f"Avis {avis.id} by testuser - Note: 5"
+        assert str(avis) == f"Avis {avis.id} by testuser"
         assert avis.sentiment_score is None
         assert avis.lang_code is None
 
@@ -189,13 +189,12 @@ class TestAvisAPI:
             'commande': commande.id,
             'plat': plat.id,
             'commentaire': 'Super!',
-            'note': 5,
         }
         response = self.client.post(self.url, data)
         assert response.status_code == 201
         assert response.data['user'] == self.user_client.id
         assert response.data['commentaire'] == 'Super!'
-        assert response.data['note'] == 5
+        assert response.data['note'] is None
         mock_task_delay.assert_called_once_with(response.data['id'])
 
     def test_client_cannot_review_unpaid_dish(self):
@@ -207,7 +206,6 @@ class TestAvisAPI:
             'commande': commande.id,
             'plat': plat.id,
             'commentaire': 'Pas payé',
-            'note': 2,
         })
 
         assert response.status_code == 400
@@ -221,7 +219,6 @@ class TestAvisAPI:
             'commande': commande.id,
             'plat': plat.id,
             'commentaire': 'Encore',
-            'note': 5,
         })
 
         assert response.status_code == 400
@@ -248,6 +245,6 @@ class TestAvisAPI:
         assert len(response.data) == 2
 
     def test_unauthenticated_cannot_create_avis(self):
-        data = {'commentaire': 'Unauthorized', 'note': 1}
+        data = {'commentaire': 'Unauthorized'}
         response = self.client.post(self.url, data)
         assert response.status_code == 401

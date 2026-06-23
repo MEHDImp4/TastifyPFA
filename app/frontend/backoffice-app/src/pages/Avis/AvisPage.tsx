@@ -15,6 +15,13 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+export const calculateAvisStats = (items: Avis[]) => ({
+  total: items.length,
+  positive: items.filter(a => (a.sentiment_score || 0) > 0.2).length,
+  neutral: items.filter(a => Math.abs(a.sentiment_score || 0) <= 0.2).length,
+  negative: items.filter(a => (a.sentiment_score || 0) < -0.2).length,
+});
+
 export const AvisPage: React.FC = () => {
   const [avis, setAvis] = useState<Avis[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,17 +80,11 @@ export const AvisPage: React.FC = () => {
     return [
       username,
       a.commentaire,
-      String(a.note ?? ''),
       String(a.id),
     ].join(' ').toLowerCase().includes(normalizedSearch);
   });
 
-  const stats = {
-    avg: (visibleAvis.reduce((sum, a) => sum + (a.note || 5), 0) / (visibleAvis.length || 1)).toFixed(1),
-    positive: visibleAvis.filter(a => (a.sentiment_score || 0) > 0.2).length,
-    neutral: visibleAvis.filter(a => Math.abs(a.sentiment_score || 0) <= 0.2).length,
-    negative: visibleAvis.filter(a => (a.sentiment_score || 0) < -0.2).length,
-  };
+  const stats = calculateAvisStats(visibleAvis);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
@@ -118,7 +119,7 @@ export const AvisPage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
-              { label: 'Note moyenne', val: stats.avg, sub: '/ 5.0', icon: TrendingUp, color: 'text-on-background' },
+              { label: 'Commentaires', val: stats.total, sub: '', icon: TrendingUp, color: 'text-on-background' },
               { label: 'Positifs', val: stats.positive, sub: '', icon: Smile, color: 'text-success' },
               { label: 'Neutres', val: stats.neutral, sub: '', icon: Meh, color: 'text-on-surface-variant' },
               { label: 'Négatifs', val: stats.negative, sub: '', icon: AlertCircle, color: 'text-error' },

@@ -1,5 +1,5 @@
 import { api } from './axios';
-import type { Ingredient, Employe, PlatIngredient } from '../types/inventory';
+import type { Ingredient, Employe, PlatIngredient, Shift, OffreEmploi, Candidature } from '../types/inventory';
 import type { PaginatedResponse, PaginationParams } from './pagination';
 import { toPaginatedResponse } from './pagination';
 
@@ -29,4 +29,18 @@ export const hrApi = {
   createEmploye: (data: any) => api.post<Employe>('/employes/', data),
   updateEmploye: (id: number, data: any) => api.patch<Employe>(`/employes/${id}/`, data),
   deleteEmploye: (id: number) => api.delete(`/employes/${id}/`),
+
+  getShifts: (params?: { employe?: number; jour?: string }) => api.get<Shift[]>('/shifts/', { params }),
+  createShift: (data: Partial<Shift>) => api.post<Shift>('/shifts/', data),
+  deleteShift: (id: number) => api.delete(`/shifts/${id}/`),
+
+  getOffres: (params?: PaginationParams) => api
+    .get<PaginatedResponse<OffreEmploi> | OffreEmploi[]>('/offres/', { params })
+    .then(res => ({ ...res, data: toPaginatedResponse(res.data) })),
+  createOffre: (data: Partial<OffreEmploi>) => api.post<OffreEmploi>('/offres/', data),
+  updateOffre: (id: number, data: Partial<OffreEmploi>) => api.patch<OffreEmploi>(`/offres/${id}/`, data),
+  deleteOffre: (id: number) => api.delete(`/offres/${id}/`),
+
+  getCandidatures: (params?: { offre?: number }) => api.get<Candidature[]>('/candidatures/', { params }),
+  updateCandidatureStatus: (id: number, statut: string) => api.patch<Candidature>(`/candidatures/${id}/`, { statut }),
 };

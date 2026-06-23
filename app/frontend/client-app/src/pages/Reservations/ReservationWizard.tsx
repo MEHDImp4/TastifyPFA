@@ -125,8 +125,8 @@ export const ReservationWizard: React.FC = () => {
   }
  
   return (
-    <div className="page-shell bg-background">
-      <main className="max-w-3xl mx-auto px-client-margin page-section">
+    <div className="page-shell bg-background flex flex-col items-center justify-center min-h-[85vh] p-4 sm:p-6">
+      <main className="w-full max-w-3xl mx-auto px-client-margin py-6">
         <div className="w-full bg-surface border border-outline rounded-2xl flex flex-col overflow-hidden relative shadow-premium">
  
           <div className="px-6 md:px-10 py-6 border-b border-outline/50 bg-surface text-center">

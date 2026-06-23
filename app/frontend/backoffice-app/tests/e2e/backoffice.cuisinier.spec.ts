@@ -121,6 +121,21 @@ const mockKitchenMenuCatalog = async (page: Parameters<typeof test>[0]['page'], 
 
 test.describe('cuisinier browser workflows', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      if (window.localStorage.getItem('backoffice-auth-storage')) return;
+
+      window.localStorage.setItem('backoffice-auth-storage', JSON.stringify({
+        state: {
+          accessToken: 'test-access-token',
+          role: 'CUISINIER',
+          username: 'cuisinier_test',
+          isAuthenticated: true,
+          hasSession: true,
+        },
+        version: 0,
+      }));
+    });
+
     await page.route('**/api/users/logout/', async route => {
       await route.fulfill({ status: 200 });
     });
@@ -289,6 +304,41 @@ test.describe('cuisinier browser workflows', () => {
 
     await expect(page.getByTestId('nav-kds')).toBeVisible();
     await expectKdsReady(page);
+  });
+
+  test('keeps the desktop sidebar reachable when KDS focus mode is active', async ({ page }) => {
+    await page.route('**/api/commandes/?statut=EN_CUISINE,PRETE', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await page.goto('/kds');
+    await page.waitForLoadState('networkidle');
+
+    const navKds = page.getByTestId('nav-kds');
+    await expect(navKds).toBeVisible();
+
+    const focusButton = page.getByTestId('kds-fullscreen-toggle');
+    await expect(focusButton).toHaveText(/Mode focus/);
+    await focusButton.click();
+
+    await expect(focusButton).toHaveText(/Quitter le mode focus/);
+    await expect(navKds).toBeVisible();
+
+    const navLinkIsReachable = await navKds.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const target = document.elementFromPoint(
+        rect.left + rect.width / 2,
+        rect.top + rect.height / 2,
+      );
+
+      return Boolean(target && (element === target || element.contains(target) || target.closest('[data-testid="nav-kds"]') === element));
+    });
+
+    expect(navLinkIsReachable).toBe(true);
   });
 
   test('advances a kitchen ticket from waiting to preparation and ready', async ({ page }) => {

@@ -1,0 +1,520 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\hypersetup{hidelinks,pdftitle={Guide de préparation à la soutenance PFA},pdfauthor={Diouri Mehdi et El Kharrazi Ibtihal}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=0.25em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\risk}[1]{\textbf{Risque :} #1.}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries Guide de préparation à la soutenance PFA\par}
+\vspace{0.8cm}
+{\Large Tastify -- Digitalisation des services de restauration\par}
+\vspace{0.5cm}
+{\large Gestion des commandes, réservations et analyse de sentiment\par}
+\vfill
+\begin{tabular}{rl}
+\textbf{Étudiants :} & Diouri Mehdi et El Kharrazi Ibtihal\\
+\textbf{Encadrante :} & Mme Bensaleh Nouhaila\\
+\textbf{Jury mentionné :} & M. Sraidi Khalid\\
+\textbf{Année universitaire :} & 2025--2026\\
+\textbf{Durée cible :} & 10 minutes maximum
+\end{tabular}
+\vfill
+{\small Document généré uniquement à partir des éléments présents dans le dossier Tastify.}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Vue d'ensemble de la soutenance}
+
+\textbf{Sujet exact.} Tastify est une application web full-stack de digitalisation des services de restauration. Elle centralise la gestion des commandes, des réservations, de la salle, du KDS, du stock, des paiements simulés, de la fidélité, des avis clients et de l'analyse de sentiment.
+
+\textbf{Objectif de la présentation.} Montrer que le projet répond à un besoin métier concret : coordonner salle, cuisine, gestion et client dans un système cohérent, testable et démontrable.
+
+\textbf{Idée centrale à faire retenir.} Tastify n'est pas seulement un menu numérique : c'est un prototype académique de mini-ERP restaurant qui relie les flux métier et exploite les avis clients.
+
+\subsection*{Répartition de temps réaliste}
+
+\begin{longtable}{p{0.8cm}p{5.2cm}p{2.1cm}p{2.2cm}p{4.2cm}}
+\toprule
+\textbf{\#} & \textbf{Slide} & \textbf{Responsable} & \textbf{Durée} & \textbf{Objectif}\\
+\midrule
+1 & TASTIFY & Ibtihal & 15 s & Présenter sujet, équipe, encadrement.\\
+2 & PLAN DE LA PRÉSENTATION & Ibtihal & 20 s & Annoncer le plan.\\
+3 & FLUX DE RESTAURATION & Ibtihal & 25 s & Poser le contexte métier.\\
+4 & Problématique & Ibtihal & 25 s & Formuler le besoin central.\\
+5 & Étude de l'existant & Ibtihal & 30 s & Comparer avec des solutions commerciales.\\
+6 & Solution proposée & Ibtihal & 35 s & Présenter les deux interfaces et les rôles.\\
+7 & Conception & Ibtihal & 10 s & Ouvrir le bloc architecture et fonctionnement.\\
+8 & Architecture & Mehdi & 35 s & Expliquer backend commun, API, WebSocket, Celery.\\
+9 & Commande vers KDS & Mehdi & 30 s & Montrer le flux salle-cuisine.\\
+10 & Traitement avis & Mehdi & 30 s & Expliquer l'asynchrone avec Celery.\\
+11 & Réalisation & Mehdi & 10 s & Ouvrir le bloc technologies et IA.\\
+12 & ML et DL & Mehdi & 25 s & Clarifier les notions.\\
+13 & Pipeline sentiment & Mehdi & 40 s & Décrire données, routage, test, intégration.\\
+14 & Technologies & Mehdi & 25 s & Justifier la stack réelle.\\
+15 & Modèles utilisés & Mehdi & 30 s & Différencier BERT, MARBERT, fallback.\\
+16 & Comparaison performances & Mehdi & 25 s & Présenter les résultats indicatifs.\\
+17 & Métriques pipeline & Mehdi & 25 s & Expliquer precision, recall, F1.\\
+18 & Démonstration & Mehdi & 45 s & Lancer ou commenter la démo courte.\\
+19 & Défis & Ibtihal & 25 s & Montrer les difficultés maîtrisées.\\
+20 & Conclusion & Ibtihal & 30 s & Bilan, limites, perspectives.\\
+21 & Merci & Ibtihal & 10 s & Ouvrir les questions.\\
+\bottomrule
+\end{longtable}
+
+\textbf{Si vous êtes en retard.} Raccourcir d'abord les slides 5, 7, 11, 12 et 19. Ne jamais supprimer la problématique, l'architecture, l'analyse de sentiment, la démonstration courte, les limites et la conclusion.
+
+\section{Répartition entre les deux étudiants}
+
+\textbf{Logique retenue.} Ibtihal ouvre et ferme la soutenance : contexte, besoin, UX, solution, conclusion. Mehdi prend le bloc technique : architecture, backend, flux KDS, sentiment, modèles, métriques et démo technique. Cette répartition suit les contributions décrites dans le rapport.
+
+\begin{longtable}{p{0.8cm}p{2cm}p{2cm}p{5.4cm}p{4.6cm}}
+\toprule
+\textbf{\#} & \textbf{Qui} & \textbf{Durée} & \textbf{Texte oral conseillé} & \textbf{Transition}\\
+\midrule
+1 & Ibtihal & 15 s & Bonjour, nous allons présenter Tastify, notre PFA sur la digitalisation des services de restauration. & Je commence par le plan de notre présentation.\\
+2 & Ibtihal & 20 s & La présentation suit le parcours du projet : contexte, problématique, solution, conception, réalisation, analyse de sentiment, démonstration, défis et perspectives. & Avant la solution, il faut comprendre le flux réel d'un restaurant.\\
+3 & Ibtihal & 25 s & Dans un restaurant, client, serveur, cuisinier et gérant échangent vite. Une information mal transmise peut créer une erreur, un retard ou une rupture. & C'est ce constat qui nous amène à la problématique.\\
+4 & Ibtihal & 25 s & Notre question principale est de centraliser les opérations tout en améliorant la coordination entre salle, cuisine, gestion et clients. & Nous avons aussi regardé les solutions existantes.\\
+5 & Ibtihal & 30 s & Les solutions existantes sont puissantes, mais peuvent être coûteuses ou complexes. Tastify est un prototype académique modulaire. & À partir de cela, voici notre solution.\\
+6 & Ibtihal & 35 s & Tastify propose deux interfaces, un portail client et un back-office staff, reliés au même backend. & Je vais maintenant introduire la partie conception.\\
+7 & Ibtihal & 10 s & Cette partie explique comment Tastify est organisé et comment les flux principaux fonctionnent. & Je laisse la parole à Mehdi pour l'architecture.\\
+8 & Mehdi & 35 s & L'architecture repose sur un backend Django REST Framework, MySQL, Redis, Celery, Django Channels et deux frontends React. & Cette architecture sert notamment au flux de commande.\\
+9 & Mehdi & 30 s & Le serveur crée une commande, le backend l'enregistre, puis la cuisine la reçoit dans le KDS via WebSocket. & Le même principe de traitement séparé existe pour les avis.\\
+10 & Mehdi & 30 s & Un avis est sauvegardé rapidement, puis Celery lance l'analyse de sentiment en arrière-plan. & Nous passons maintenant à la partie réalisation.\\
+11 & Mehdi & 10 s & Cette partie présente les technologies, le pipeline de sentiment et les résultats. & Je commence par clarifier ML et Deep Learning.\\
+12 & Mehdi & 25 s & Le Machine Learning apprend à partir de données. Le Deep Learning utilise des réseaux de neurones profonds. BERT et MARBERT sont des modèles de Deep Learning utilisés via Hugging Face. & Voici le pipeline complet.\\
+13 & Mehdi & 40 s & Le pipeline part du commentaire stocké en base, détecte simplement l'arabe, choisit le modèle, normalise la sortie, puis stocke le résultat. & La stack complète utilisée est la suivante.\\
+14 & Mehdi & 25 s & Python, Django, DRF, React, TypeScript, MySQL, Redis, Celery, Channels, Hugging Face, pytest, Vitest, Playwright et Docker Compose forment la stack réelle. & Pour la partie IA, nous avons trois chemins.\\
+15 & Mehdi & 30 s & Le modèle non arabe est NLP Town BERT multilingue, l'arabe passe vers MARBERT, et le fallback local sert de secours. & Nous avons comparé ces approches sur un petit corpus.\\
+16 & Mehdi & 25 s & Sur 15 avis annotés manuellement, le fallback obtient 0,53 et le pipeline principal 0,93 d'accuracy. Ces chiffres restent indicatifs. & Regardons rapidement les métriques par classe.\\
+17 & Mehdi & 25 s & La precision mesure la qualité des prédictions, le recall mesure les vrais cas retrouvés et le F1-score équilibre les deux. & Je vais maintenant lancer ou commenter la démonstration.\\
+18 & Mehdi & 45 s & La démonstration montre le menu client, la commande staff, le KDS cuisine et les avis avec sentiment. Si la vidéo ne marche pas, je commente les écrans préparés. & Je rends la parole à Ibtihal pour les défis.\\
+19 & Ibtihal & 25 s & Les défis principaux ont été le temps réel, l'asynchrone, les données multilingues et la validation. & Pour conclure, voici le bilan.\\
+20 & Ibtihal & 30 s & Tastify centralise plusieurs modules restaurant et exploite les avis. Les perspectives sont le paiement réel, un corpus IA plus large, les tests de charge et le déploiement. & Nous terminons avec la slide de questions.\\
+21 & Ibtihal & 10 s & Merci pour votre attention. Nous sommes prêts à répondre à vos questions. & --\\
+\bottomrule
+\end{longtable}
+
+\section{Script oral détaillé slide par slide}
+
+\subsection*{Slide 1 -- TASTIFY}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 25 s. \textbf{But :} installer le sujet et l'équipe.
+
+\textbf{À l'écran :} titre Tastify, sujet, étudiants, encadrante, année, jury.
+
+\textbf{Script :} Bonjour, nous allons présenter Tastify, notre projet de fin d'année. Le sujet porte sur la digitalisation des services de restauration : gestion des commandes, réservations et analyse de sentiment. Nous sommes Diouri Mehdi et El Kharrazi Ibtihal, encadrés par Mme Bensaleh Nouhaila.
+
+\textbf{Version courte :} Bonjour, nous présentons Tastify, une application web pour centraliser les services d'un restaurant.
+
+\textbf{Mots techniques :} digitalisation, analyse de sentiment.
+
+\textbf{Questions probables :} Pourquoi ce sujet ? Réponse : parce qu'un restaurant combine plusieurs flux métier liés et faciles à démontrer.
+
+\subsection*{Slide 2 -- PLAN DE LA PRÉSENTATION}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 25 s. \textbf{But :} annoncer le plan.
+
+\textbf{Script :} Nous allons avancer du besoin métier vers la solution : d'abord le contexte et la problématique, puis l'existant, la solution Tastify, la conception, la réalisation, le pipeline d'analyse de sentiment, les résultats, la démonstration, les défis et les perspectives.
+
+\textbf{Version courte :} Le plan suit le projet : besoin, solution, conception, technique, IA, résultats et conclusion.
+
+\textbf{Question probable :} Pourquoi cette progression ? Réponse : elle permet de comprendre le besoin avant les choix techniques.
+
+\subsection*{Slide 3 -- FLUX DE RESTAURATION}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} Un restaurant fonctionne avec un enchaînement rapide. Le client commande, le serveur transmet, la cuisine prépare, le gérant suit les stocks et les indicateurs. Quand ces informations sont séparées, on peut avoir des erreurs, des retards ou des ruptures.
+
+\textbf{Version courte :} Le restaurant est un flux coordonné ; Tastify vise à réduire les ruptures d'information.
+
+\textbf{Question probable :} Quels acteurs sont couverts ? Réponse : client, serveur, cuisinier et gérant.
+
+\subsection*{Slide 4 -- Problématique}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} Notre problématique est de centraliser les opérations d'un restaurant tout en améliorant la coordination entre la salle, la cuisine, la gestion et les clients. Nous voulions éviter une application limitée au menu, et construire un système plus cohérent.
+
+\textbf{Version courte :} Comment centraliser les opérations et fluidifier la coordination du restaurant ?
+
+\textbf{Question probable :} Quelle est la différence avec une application de gestion classique ? Réponse : Tastify relie aussi le KDS, les avis, la fidélité et l'analyse de sentiment.
+
+\subsection*{Slide 5 -- Étude de l'existant}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 40 s.
+
+\textbf{Script :} Les solutions existantes comme Lightspeed, Toast ou Revel sont puissantes. Leur limite, dans notre lecture, est le coût, la complexité ou l'adaptation au contexte local. Tastify n'essaie pas de les remplacer : c'est un prototype académique modulaire pour comprendre et implémenter les flux essentiels.
+
+\textbf{Version courte :} Les solutions commerciales valident le besoin, mais notre projet se concentre sur un prototype modulaire et pédagogique.
+
+\textbf{Question probable :} Tastify est-il commercialisable ? Réponse : pas tel quel ; il faudrait renforcer production, sécurité, paiement réel et support.
+
+\subsection*{Slide 6 -- Solution proposée : Tastify}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 45 s.
+
+\textbf{Script :} Tastify propose deux interfaces. Le portail client sert à consulter le menu, réserver, payer de manière simulée, suivre la fidélité et laisser un avis. Le back-office sert au gérant, serveur et cuisinier : salle, commandes, KDS, stocks, réservations, avis et tableau de bord.
+
+\textbf{Version courte :} Deux interfaces, un backend commun, quatre rôles.
+
+\textbf{Transition exacte :} Je vais maintenant laisser la parole à Mehdi, qui va présenter l'architecture technique.
+
+\textbf{Question probable :} Pourquoi deux frontends ? Réponse : les usages staff et client sont très différents.
+
+\subsection*{Slide 7 -- Conception}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 10 s.
+
+\textbf{Script :} Cette slide ouvre la partie conception. Elle sert de transition : maintenant que le besoin et la solution sont posés, on explique comment Tastify est organisé techniquement.
+
+\textbf{Version courte :} Nous passons à l'architecture et au fonctionnement de Tastify.
+
+\textbf{Question probable :} Pourquoi une slide de séparation ? Réponse : pour rendre la soutenance plus lisible et marquer le changement de bloc.
+
+\subsection*{Slide 8 -- Architecture de Tastify}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 45 s.
+
+\textbf{Script :} L'architecture est découplée. Les deux frontends React consomment le même backend Django REST Framework. MySQL stocke les données. Redis sert au channel layer WebSocket et au broker Celery. Celery exécute les tâches de fond, par exemple l'analyse de sentiment.
+
+\textbf{Version courte :} React côté interfaces, Django côté API, MySQL pour les données, Redis et Celery pour les flux non bloquants.
+
+\textbf{Question probable :} Pourquoi WebSocket ? Réponse : pour mettre à jour le KDS et les événements staff sans recharger.
+
+\subsection*{Slide 9 -- Prise de commande et transmission au KDS}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 40 s.
+
+\textbf{Script :} Le serveur sélectionne une table et ajoute des plats. La commande est enregistrée côté backend, puis la cuisine la voit dans le KDS. Le cuisinier peut changer les statuts : en attente, en préparation, prêt ou servi selon le flux prévu.
+
+\textbf{Version courte :} La commande part de la salle, passe par l'API, puis apparaît côté cuisine.
+
+\textbf{Question probable :} Le serveur et le cuisinier ont-ils les mêmes droits ? Réponse : non, les rôles limitent les actions côté API.
+
+\subsection*{Slide 10 -- Traitement d'un avis client}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 40 s.
+
+\textbf{Script :} Quand un client laisse un avis, l'application enregistre le commentaire. Ensuite Celery lance l'analyse de sentiment en arrière-plan. Le résultat est stocké avec un label, un score et le modèle utilisé.
+
+\textbf{Version courte :} L'avis est enregistré vite ; l'analyse se fait après, sans bloquer le client.
+
+\textbf{Question probable :} Pourquoi asynchrone ? Réponse : pour ne pas dépendre du temps de réponse de Hugging Face dans l'expérience client.
+
+\subsection*{Slide 11 -- Réalisation}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 10 s.
+
+\textbf{Script :} Cette slide ouvre la partie réalisation. On passe des choix de conception à ce qui a été réellement implémenté : technologies, pipeline d'analyse de sentiment, modèles et résultats.
+
+\textbf{Version courte :} Nous passons maintenant à la réalisation concrète.
+
+\textbf{Question probable :} Que faut-il retenir ici ? Réponse : cette slide annonce le bloc technique implémenté.
+
+\subsection*{Slide 12 -- Machine Learning et Deep Learning}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} Le Machine Learning apprend des règles à partir de données. Le Deep Learning est une sous-famille basée sur des réseaux de neurones profonds. Dans notre projet, BERT et MARBERT sont des modèles de Deep Learning déjà pré-entraînés et fine-tunés.
+
+\textbf{Version courte :} Nous n'avons pas entraîné ces modèles ; nous les utilisons et les intégrons dans Tastify.
+
+\textbf{Question probable :} Pourquoi parler de Deep Learning si c'est une API ? Réponse : l'API exécute des modèles de Deep Learning ; notre travail est leur intégration.
+
+\subsection*{Slide 13 -- Étapes du pipeline d'analyse de sentiment}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 45 s.
+
+\textbf{Script :} Le pipeline commence par le commentaire stocké en base MySQL. Le code détecte simplement les caractères arabes, limite le texte envoyé, choisit le modèle Hugging Face, normalise la sortie en positif, neutre ou négatif, puis stocke le résultat. La slide précise bien qu'il n'y a pas d'entraînement complet local : les modèles sont pré-entraînés et fine-tunés par leurs auteurs. Le test présenté repose sur un corpus manuel de 15 avis.
+
+\textbf{Version courte :} Données, prétraitement simple, choix du modèle, prédiction, stockage et exploitation.
+
+\textbf{Question probable :} Quelle est la limite de la détection de langue ? Réponse : elle est simple et doit être améliorée pour les textes mixtes.
+
+\subsection*{Slide 14 -- Outils et technologies utilisés}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} Nous utilisons Django et DRF pour le backend, React, TypeScript et Vite pour les interfaces, MySQL pour la base relationnelle, Redis et Celery pour les traitements non bloquants, Django Channels pour WebSocket, puis pytest, Vitest et Playwright pour les tests.
+
+\textbf{Version courte :} La stack est full-stack web, testée et lancée avec Docker Compose.
+
+\textbf{Question probable :} Pourquoi Docker ? Réponse : pour lancer de manière reproductible tous les services de démo.
+
+\subsection*{Slide 15 -- Modèles utilisés pour l'analyse de sentiment}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 40 s.
+
+\textbf{Script :} Le modèle non arabe est NLP Town BERT multilingue. Pour les textes avec caractères arabes, l'application utilise MARBERT. Si Hugging Face n'est pas disponible, un fallback local par mots-clés classe le commentaire. Ce fallback est utile, mais limité.
+
+\textbf{Version courte :} BERT multilingue, MARBERT pour l'arabe, fallback lexical en secours.
+
+\textbf{Question probable :} Le fallback est-il un modèle ML ? Réponse : non, c'est une règle lexicale locale.
+
+\subsection*{Slide 16 -- Comparaison des performances}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} La comparaison est faite sur 15 avis annotés manuellement. Le fallback local obtient 0,53 d'accuracy, car il rate des avis mixtes ou en darija latinisée. Le pipeline principal obtient 0,93 sur ce corpus. Il faut présenter ce résultat comme indicatif.
+
+\textbf{Version courte :} Les chiffres montrent une tendance sur un petit corpus, pas une validation production.
+
+\textbf{Question probable :} Peut-on généraliser ? Réponse : non, il faudrait un corpus plus large.
+
+\subsection*{Slide 17 -- Métriques du pipeline principal}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} La precision indique si les prédictions d'une classe sont fiables. Le recall indique si on retrouve bien les vrais exemples de cette classe. Le F1-score combine les deux. Ici, les avis neutres sont plus difficiles, car ils mélangent souvent positif et négatif.
+
+\textbf{Version courte :} Precision : qualité des prédictions ; recall : capacité à retrouver les vrais cas ; F1 : équilibre.
+
+\textbf{Question probable :} Pourquoi le neutre est moins bon ? Réponse : les avis neutres sont souvent ambigus.
+
+\subsection*{Slide 18 -- DÉMONSTRATION DE L'APPLICATION TASTIFY}
+\textbf{Responsable :} Mehdi. \textbf{Durée max :} 45 s à 1 min.
+
+\textbf{Script :} Cette démonstration montre le parcours principal de Tastify : menu client, commande côté staff, KDS cuisine, puis avis et analyse de sentiment. Si la vidéo se lance correctement, je la laisse tourner brièvement et je commente seulement les étapes clés. Si elle ne se lance pas, je montre les écrans déjà préparés.
+
+\textbf{Version courte :} La démo prouve que les modules communiquent : client, staff, cuisine et avis.
+
+\textbf{Question probable :} Est-ce une vraie démo complète ? Réponse : c'est une démonstration courte de soutenance ; les détails complets peuvent être montrés si le jury le demande.
+
+\subsection*{Slide 19 -- Défis rencontrés et solutions}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 35 s.
+
+\textbf{Script :} Les difficultés principales ont été la coordination entre salle et cuisine, le traitement asynchrone, la séparation des rôles et la validation. Les solutions ont été WebSocket avec Redis, Celery, permissions par rôle et tests pytest, Vitest et Playwright.
+
+\textbf{Version courte :} Les défis ont été traités par architecture, rôles, asynchrone et tests.
+
+\textbf{Question probable :} Quel défi a été le plus important ? Réponse : garder la cohérence entre commandes, KDS, paiement et stock.
+
+\subsection*{Slide 20 -- Conclusion et perspectives}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 40 s.
+
+\textbf{Script :} Tastify centralise les modules principaux d'un restaurant et ajoute l'exploitation des avis clients. Le projet reste un prototype académique. Les perspectives sont le paiement réel, un corpus IA plus large, les tests de charge, le déploiement production et le monitoring.
+
+\textbf{Version courte :} Le bilan est positif, mais les limites sont clairement identifiées.
+
+\textbf{Question probable :} Que feriez-vous ensuite ? Réponse : paiement réel, données IA plus riches et déploiement production sécurisé.
+
+\subsection*{Slide 21 -- Merci / Questions-Réponses}
+\textbf{Responsable :} Ibtihal. \textbf{Durée max :} 15 s.
+
+\textbf{Script :} Merci pour votre attention. Nous sommes prêts à répondre à vos questions.
+
+\section{Glossaire technique anti-questions pièges}
+
+\begin{longtable}{p{2.8cm}p{4cm}p{4cm}p{4cm}}
+\toprule
+\textbf{Terme} & \textbf{Définition simple} & \textbf{Dans Tastify} & \textbf{Erreur à éviter}\\
+\midrule
+ERP & Système qui centralise plusieurs fonctions d'une organisation. & Tastify est présenté comme prototype académique de mini-ERP restaurant. & Dire que Tastify remplace un ERP commercial complet.\\
+API & Point d'entrée permettant aux applications de communiquer. & Les frontends consomment les API Django REST Framework. & Confondre API et interface visuelle.\\
+REST API & API organisée autour de ressources et méthodes HTTP. & Routes pour plats, tables, commandes, avis, réservations. & Dire que tout passe par WebSocket.\\
+Django & Framework web Python. & Backend, modèles, logique métier. & Dire que Django est le frontend.\\
+DRF & Extension Django pour créer des API REST. & Viewsets, serializers, permissions. & Oublier les permissions côté API.\\
+React & Bibliothèque frontend. & Back-office et portail client. & Dire que React stocke les données métier.\\
+MySQL & Base relationnelle. & Stocke utilisateurs, commandes, avis, paiements. & Dire que Redis remplace MySQL.\\
+Redis & Stockage rapide utilisé comme broker et channel layer. & WebSocket staff et Celery. & Le présenter comme base principale.\\
+Celery & Système de tâches de fond. & Analyse de sentiment et traitements asynchrones. & Dire que Celery est obligatoire pour afficher toutes les pages.\\
+WebSocket & Canal de communication ouvert entre client et serveur. & Mise à jour staff et KDS. & Dire "temps réel" sans expliquer WebSocket/Redis.\\
+JWT & Jeton d'authentification. & Access token et refresh cookie. & Croire que cacher un menu frontend suffit à sécuriser.\\
+KDS & Écran cuisine de suivi des commandes. & Le cuisinier voit et met à jour les statuts. & Le confondre avec une caisse.\\
+NLP & Traitement automatique du langage naturel. & Analyse des commentaires clients. & Dire que NLP veut dire seulement traduction.\\
+Analyse de sentiment & Classification d'un texte en positif, neutre, négatif. & Avis clients analysés et stockés. & Promettre une compréhension parfaite.\\
+Fine-tuning & Adaptation d'un modèle pré-entraîné à une tâche. & Les modèles Hugging Face utilisés sont déjà fine-tunés. & Dire que le fine-tuning a été fait localement.\\
+Fallback & Solution de secours. & Fallback lexical local si Hugging Face manque. & Le vendre comme équivalent au modèle principal.\\
+Accuracy & Part de prédictions correctes. & 0,53 fallback, 0,93 pipeline principal sur 15 avis. & Généraliser ces chiffres sans contexte.\\
+Precision & Qualité des prédictions d'une classe. & Utile pour vérifier les faux positifs. & Confondre avec accuracy.\\
+Recall & Capacité à retrouver les vrais cas d'une classe. & Important pour ne pas rater les avis négatifs. & Confondre avec precision.\\
+F1-score & Équilibre entre precision et recall. & Présenté par classe sur le pipeline principal. & Le présenter comme une note générale unique.\\
+\bottomrule
+\end{longtable}
+
+\section{Démonstration : deux scénarios}
+
+\subsection{Scénario A : vidéo intégrée}
+
+\textbf{Moment idéal.} Slide 18, directement au moment prévu dans la présentation.
+
+\textbf{Durée idéale.} 45 secondes à 1 minute 30. Ne pas dépasser ce temps, sinon la conclusion sera trop rapide.
+
+\textbf{Avant de lancer.} Dire : "Nous allons montrer rapidement le parcours principal : menu client, commande staff, KDS cuisine et avis analysé."
+
+\textbf{Pendant la vidéo.} Parler peu. Commentaire de 20 à 40 secondes : "Ici, on voit le portail client et le back-office. Le serveur crée une commande liée à une table, la cuisine la reçoit dans le KDS, puis le paiement simulé et l'avis client montrent comment les modules communiquent."
+
+\textbf{Après la vidéo.} Dire : "La vidéo montre le flux complet. Si vous le souhaitez, nous pouvons détailler une partie précise en direct."
+
+\textbf{Si la vidéo ne fonctionne pas.} Dire : "Nous avons prévu un plan B : les écrans sont déjà ouverts, je vais commenter le même parcours directement."
+
+\subsection{Scénario B : démonstration en direct}
+
+\textbf{Avant la soutenance.}
+\begin{itemize}
+  \item Docker Desktop ouvert.
+  \item `start-demo-local.bat` lancé au moins 10 minutes avant.
+  \item Onglets prêts : `http://localhost:3000`, `http://localhost:3003`.
+  \item Comptes prêts : `gerant\_test`, `serveur\_test`, `cuisinier\_test`, `client\_test`, mot de passe `password123`.
+  \item Notifications coupées, chargeur branché, captures ouvertes en secours.
+\end{itemize}
+
+\textbf{Pendant la démo.}
+\begin{longtable}{p{3.5cm}p{5.2cm}p{3cm}p{3.2cm}}
+\toprule
+\textbf{Action} & \textbf{Phrase exacte} & \textbf{Valeur} & \textbf{Alternative}\\
+\midrule
+Portail client/menu & Voici la partie client : consulter les plats, voir les suggestions et préparer une commande. & Expérience client. & Montrer capture client.\\
+Salle serveur & Côté serveur, je sélectionne une table et je crée une commande. & Lien table-commande. & Montrer capture salle.\\
+KDS cuisine & La commande arrive côté cuisine dans le KDS. & Coordination salle-cuisine. & Montrer capture KDS.\\
+Paiement simulé & Le QR mène vers une page de paiement simulé avec token signé. & Flux réaliste sans paiement bancaire. & Expliquer sans scanner.\\
+Avis client & Le client laisse un avis ; l'analyse est faite en tâche de fond. & Sentiment exploité. & Montrer page avis.\\
+Dashboard avis & Le gérant suit les retours et statistiques. & Aide à la décision. & Montrer capture dashboard.\\
+\bottomrule
+\end{longtable}
+
+\textbf{Parcours ultra-court.} Salle -> KDS -> avis analysé -> conclusion. Une minute maximum.
+
+\section{Cinquante questions-réponses de jury}
+
+\begin{enumerate}
+\item Pourquoi ce domaine ? Parce qu'un restaurant combine commande, cuisine, stock, paiement et avis dans un flux concret.
+\item Quelle est la problématique ? Centraliser les opérations et améliorer la coordination salle-cuisine-gestion-client.
+\item Qui utilise Tastify ? Gérant, serveur, cuisinier et client.
+\item Quelle valeur par rapport à un menu numérique ? Tastify relie plusieurs modules métier.
+\item Pourquoi mini-ERP ? Parce qu'il centralise plusieurs fonctions, mais reste un prototype académique.
+\item Quelle limite principale ? Paiement réel, production cloud et tests de charge restent des perspectives.
+\item Contribution personnelle ? Mehdi : backend, intégration, tests et déploiement. Ibtihal : frontends, UX, documentation, UML et validation.
+\item Qu'est-ce qui est vraiment développé ? Les modules présents dans le code : menu, tables, commandes, KDS, stock, RH, réservations, paiements, avis, analytics, fidélité, configuration.
+\item Pourquoi Django ? Structure, ORM, sécurité, écosystème.
+\item Pourquoi DRF ? API REST, serializers, viewsets et permissions.
+\item Pourquoi React ? Interfaces interactives séparées et testables.
+\item Pourquoi deux frontends ? Les besoins staff et client sont différents.
+\item Pourquoi MySQL ? Données relationnelles et cohérence métier.
+\item Pourquoi Redis ? WebSocket staff et broker Celery.
+\item Pourquoi Celery ? Tâches de fond sans bloquer l'utilisateur.
+\item Comment fonctionne le temps réel ? WebSocket avec Django Channels et Redis pour staff/KDS.
+\item Comment sécuriser les rôles ? Permissions DRF côté backend ; le frontend ne fait que guider l'affichage.
+\item Où sont les routes API ? Dans le routeur Django et les modules spécialisés.
+\item Cycle d'une commande ? Table, plats, commande, KDS, préparation, service, paiement simulé.
+\item Quand le stock diminue ? Selon les recettes et mouvements de stock.
+\item Si un ingrédient manque ? Le gérant voit les seuils et les disponibilités sont contrôlées.
+\item KDS ? Écran cuisine pour suivre et changer les statuts.
+\item Réservation ? Création client, disponibilité, confirmation ou annulation staff.
+\item Paiement réel ? Non, simulation avec logique de réconciliation.
+\item QR paiement ? Token signé temporaire lié à table et commande.
+\item Fidélité ? Profil client, points, transactions et récompenses.
+\item Avis ? Commentaires analysés et visibles côté gérant.
+\item Démo à montrer ? Menu, salle, KDS, paiement simulé, avis.
+\item Analyse de sentiment ? Classification d'un avis en positif, neutre ou négatif.
+\item Entrée du modèle ? Le commentaire texte de l'avis.
+\item Avez-vous entraîné BERT/MARBERT ? Non, modèles pré-entraînés/fine-tunés via Hugging Face.
+\item Pourquoi BERT ? Adapté au contexte des avis courts multilingues.
+\item Pourquoi MARBERT ? Adapté aux textes arabes.
+\item Choix modèle ? Détection simple de caractères arabes.
+\item Sans clé Hugging Face ? Fallback lexical local.
+\item Pourquoi fallback 0,53 ? Mots-clés limités, avis mixtes difficiles.
+\item Pourquoi pipeline 0,93 ? Résultat indicatif sur 15 avis annotés.
+\item Precision vs recall ? Precision : qualité des prédictions ; recall : vrais cas retrouvés.
+\item Pourquoi neutre difficile ? Les avis neutres mélangent souvent positif et négatif.
+\item Pourquoi Deep Learning via API ? Les modèles exécutés sont des modèles Deep Learning ; l'intégration est applicative.
+\item Lancement démo ? Docker Desktop puis `start-demo-local.bat`.
+\item Comptes démo ? `gerant\_test`, `serveur\_test`, `cuisinier\_test`, `client\_test`.
+\item Tests ? pytest, Vitest, Playwright.
+\item Couverture 93 \% ? Couverture backend indiquée dans le rapport.
+\item Si Celery tombe ? Les tâches de fond sont retardées.
+\item Si Redis tombe ? WebSocket et broker Celery sont impactés.
+\item Difficultés ? Rôles, KDS, cohérence commandes/paiements/stocks, sentiment.
+\item Pourquoi Docker Compose ? Reproductibilité de l'environnement complet.
+\item Manque pour production ? HTTPS, monitoring, sauvegardes, secrets, tests de charge, paiement réel.
+\item Un mois de plus ? Paiement réel, corpus IA plus large, tests de charge et déploiement sécurisé.
+\end{enumerate}
+
+\section{Questions personnelles pour chaque étudiant}
+
+\subsection*{Questions possibles à Mehdi}
+\begin{enumerate}
+\item Explique le backend Django et le découpage en apps. Référence : `app/backend/apps`.
+\item Explique le routeur API. Référence : `tastify\_backend/api\_router.py`.
+\item Explique JWT et permissions. Référence : `apps/users`.
+\item Explique Redis et WebSocket. Référence : `core/consumers.py`, `core/routing.py`.
+\item Explique Celery et l'analyse de sentiment. Référence : `apps/avis/tasks.py`.
+\item Explique le fallback local. Référence : `apps/avis/sentiment\_service.py`.
+\item Explique le paiement QR. Référence : `apps/paiements/tokens.py`.
+\item Explique Docker Compose. Référence : `docker-compose.yml`.
+\item Explique les tests backend. Référence : chapitre tests du rapport.
+\item Explique une limite technique importante. Réponse attendue : paiement réel, production, charge, corpus IA.
+\end{enumerate}
+
+\subsection*{Questions possibles à Ibtihal}
+\begin{enumerate}
+\item Explique le besoin métier. Référence : chapitre contexte.
+\item Explique les acteurs. Référence : gérant, serveur, cuisinier, client.
+\item Explique pourquoi deux interfaces. Référence : frontends client et staff.
+\item Explique le parcours client. Référence : menu, réservation, paiement, fidélité, avis.
+\item Explique le parcours staff. Référence : dashboard, salle, KDS, stock, RH.
+\item Explique les diagrammes UML. Référence : chapitre conception.
+\item Explique l'étude de l'existant. Référence : Lightspeed, Toast, Revel.
+\item Explique la conclusion et les perspectives. Référence : slide 17.
+\item Explique la validation fonctionnelle. Référence : tests Playwright et captures.
+\item Explique les limites à dire honnêtement. Réponse attendue : prototype académique, paiement simulé, IA indicative.
+\end{enumerate}
+
+\section{Simulation de soutenance}
+
+\begin{longtable}{p{2cm}p{2cm}p{6cm}p{5cm}}
+\toprule
+\textbf{Temps} & \textbf{Qui} & \textbf{À dire} & \textbf{À raccourcir si besoin}\\
+\midrule
+0--1 min & Ibtihal & Titre, plan, contexte restaurant. & Détails du plan.\\
+1--2 min & Ibtihal & Problématique et existant. & Tableau comparatif.\\
+2--4 min & Ibtihal puis Mehdi & Solution, deux interfaces, architecture. & Exemples secondaires.\\
+4--6 min & Mehdi & Commande vers KDS, traitement avis, technologies. & Liste complète des outils.\\
+6--8 min & Mehdi & Pipeline sentiment, modèles, métriques. & Théorie ML/DL.\\
+8--9 min & Mehdi & Slide 18 : vidéo ou démo très courte. & Garder seulement menu -> KDS -> avis.\\
+9--10 min & Ibtihal & Slides 19 à 21 : défis, limites, conclusion et ouverture questions. & Ne jamais supprimer les limites.\\
+\bottomrule
+\end{longtable}
+
+\textbf{Version 8 minutes.} Supprimer les détails de l'étude de l'existant, passer les slides 7 et 11 en une phrase, réduire ML/DL à une phrase, présenter seulement une métrique globale et faire une démo de 30 à 45 secondes.
+
+\section{Check-list de la veille et du jour J}
+
+\textbf{Ce soir.} Relire les scripts, répéter deux fois, tester transitions, vérifier présentation, vidéo, polices, liens, captures, comptes de test, chargeur, adaptateurs et clé USB.
+
+\textbf{Demain matin.} Ordinateur chargé, Docker Desktop lancé si démo live, présentation ouverte, vidéo ouverte localement, notifications coupées, navigateur prêt, chargeur branché.
+
+\textbf{10 erreurs à éviter.} Lire les slides, dépasser 10 minutes, promettre un paiement réel, dire que BERT a été entraîné localement, généraliser les métriques IA, oublier Redis/Celery, minimiser les limites, faire une démo longue, se contredire sur les rôles, regarder seulement l'écran.
+
+\section{Évaluation comme un jury}
+
+\begin{longtable}{p{5cm}p{2cm}p{8cm}}
+\toprule
+\textbf{Critère} & \textbf{Points} & \textbf{Amélioration rapide}\\
+\midrule
+Maîtrise du sujet & 2 & Savoir expliquer le besoin en une phrase.\\
+Cohérence rapport / présentation / code & 2 & Garder les mêmes termes : Django, React, MySQL, Redis, Celery.\\
+Expression orale & 2 & Phrases courtes, pas de lecture.\\
+Répartition entre étudiants & 2 & Blocs cohérents, transitions exactes.\\
+Précision technique & 2 & Expliquer API, WebSocket, Celery, fallback.\\
+Démonstration & 2 & Vidéo prête et démo live courte en secours.\\
+Gestion du temps & 2 & Chronométrer deux répétitions.\\
+Réponses aux questions & 2 & Réviser les 10 questions dangereuses.\\
+Honnêteté sur les limites & 2 & Dire clairement paiement simulé et corpus réduit.\\
+Qualité visuelle & 2 & Ouvrir la présentation avant, vérifier affichage et vidéo.\\
+\bottomrule
+\end{longtable}
+
+\textbf{Objectif réaliste.} Viser 16/20 ou plus en étant clair, honnête, rapide et cohérent.
+
+\end{document}

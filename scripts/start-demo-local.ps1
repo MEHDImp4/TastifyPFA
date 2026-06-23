@@ -1,5 +1,7 @@
 param(
-    [switch]$Rebuild
+    [switch]$Rebuild,
+    [switch]$Reset,
+    [switch]$RefreshDemoData
 )
 
 $ErrorActionPreference = "Stop"
@@ -28,6 +30,25 @@ function Invoke-Checked($command, $arguments, [switch]$Quiet) {
         }
         throw "$command $($arguments -join ' ') failed with exit code $LASTEXITCODE"
     }
+}
+
+function Invoke-CaptureChecked($command, $arguments) {
+    $prevErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $output = & $command @arguments 2>&1
+    } finally {
+        $ErrorActionPreference = $prevErrorAction
+    }
+
+    if ($LASTEXITCODE -ne 0) {
+        if ($output) {
+            $output | Select-Object -Last 80 | ForEach-Object { Write-Host $_ }
+        }
+        throw "$command $($arguments -join ' ') failed with exit code $LASTEXITCODE"
+    }
+
+    return $output
 }
 
 function Test-DockerImage($imageName) {
@@ -161,6 +182,34 @@ function Wait-Http($url, $label, [int]$TimeoutMinutes = 5) {
     }
 
     throw "Timed out after $TimeoutMinutes minute(s) waiting for $label at $url"
+}
+
+function Test-DemoTransactionalDataExists {
+    $script = "from apps.commandes.models import Commande; from apps.avis.models import Avis; print('ready' if Commande.objects.exists() and Avis.objects.exists() else 'missing')"
+    $output = Invoke-CaptureChecked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "shell", "-c", $script)
+    $status = $output |
+        Where-Object { $_ -match "^(ready|missing)$" } |
+        Select-Object -Last 1
+
+    return $status -eq "ready"
+}
+
+function Test-DemoShowcaseDataExists {
+    $script = "from django.utils import timezone; from apps.paiements.models import Paiement; from apps.avis.models import AnalyseSentiment; from apps.tables.models import Table; today=timezone.localdate(); ready=Paiement.objects.completed().filter(updated_at__date=today).exists() and AnalyseSentiment.objects.count() >= 20 and Table.objects.filter(numero__in=[1,3,4,16,25], statut='OCCUPEE').count() >= 5; print('ready' if ready else 'missing')"
+    $output = Invoke-CaptureChecked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "shell", "-c", $script)
+    $status = $output |
+        Where-Object { $_ -match "^(ready|missing)$" } |
+        Select-Object -Last 1
+
+    return $status -eq "ready"
+}
+
+function Show-DemoDataSummary {
+    $script = "from django.utils import timezone; from django.db.models import Sum; from apps.paiements.models import Paiement; from apps.commandes.models import Commande; from apps.tables.models import Table; from apps.avis.models import AnalyseSentiment; today=timezone.localdate(); revenue=Paiement.objects.completed().filter(updated_at__date=today).aggregate(total=Sum('montant'))['total'] or 0; hf=AnalyseSentiment.objects.exclude(modele_utilise='fallback-lexique-multilingue').count(); print(f'CA jour: {revenue:.2f} DH'); print(f'Commandes jour: {Commande.objects.filter(created_at__date=today).count()}'); print(f'Tables occupees: {Table.objects.filter(statut=Table.Statut.OCCUPEE).count()}'); print(f'Avis analyses HF/non-fallback: {hf}/{AnalyseSentiment.objects.count()}')"
+    $output = Invoke-CaptureChecked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "shell", "-c", $script)
+    Write-Host ""
+    Write-Host "Donnees demo:" -ForegroundColor Yellow
+    $output | ForEach-Object { Write-Host "  $_" }
 }
 
 function Show-DockerDiagnostics($services = @()) {
@@ -325,13 +374,25 @@ function Show-DemoSummary {
     Write-Host "  Client:        client_test     / password123"
     Write-Host ""
     Write-Host "Quand la presentation est terminee, appuie sur Entree ici."
-    Write-Host "Le script supprimera automatiquement les conteneurs et volumes Docker de demo." -ForegroundColor Cyan
+    if ($Reset) {
+        Write-Host "Mode reset: le script supprimera les conteneurs et volumes Docker de demo a la fin." -ForegroundColor Cyan
+    } else {
+        Write-Host "Mode rapide: le script arretera les conteneurs en gardant les volumes pour le prochain lancement." -ForegroundColor Cyan
+        Write-Host "Pour repartir avec une base propre: start-demo-local.bat -Reset" -ForegroundColor Cyan
+    }
 }
 
-function Stop-DemoStack {
-    Write-Step "Stopping and cleaning Docker demo stack"
-    Invoke-Checked "docker" @("compose", "down", "--volumes", "--remove-orphans") -Quiet
-    Write-Host "Docker demo stack removed." -ForegroundColor Green
+function Stop-DemoStack([switch]$RemoveVolumes) {
+    if ($RemoveVolumes) {
+        Write-Step "Stopping and cleaning Docker demo stack"
+        Invoke-Checked "docker" @("compose", "down", "--volumes", "--remove-orphans") -Quiet
+        Write-Host "Docker demo stack removed." -ForegroundColor Green
+        return
+    }
+
+    Write-Step "Stopping Docker demo stack"
+    Invoke-Checked "docker" @("compose", "stop") -Quiet
+    Write-Host "Docker demo stack stopped. Volumes were kept for a faster next launch." -ForegroundColor Green
 }
 
 $cleanupOnExit = $false
@@ -416,12 +477,18 @@ try {
         Write-Host "Using cached Docker images. Code changes are mounted automatically." -ForegroundColor Green
     }
 
-    Write-Step "Resetting Docker demo data"
     $cleanupOnExit = $true
-    Invoke-Checked "docker" @("compose", "down", "--volumes", "--remove-orphans") -Quiet
+    if ($Reset) {
+        Write-Step "Resetting Docker demo data"
+        Invoke-Checked "docker" @("compose", "down", "--volumes", "--remove-orphans") -Quiet
+    } else {
+        Write-Step "Preparing fast Docker demo launch"
+        Write-Host "Keeping existing Docker volumes. Use -Reset for a clean database." -ForegroundColor Green
+    }
 
-    Write-Step "Starting database and cache"
-    Invoke-Checked "docker" (Get-ComposeUpArgs -services @("db", "redis") -withBuild:$false) -Quiet
+    Write-Step "Starting database, cache, and web apps"
+    $frontendNeedsBuild = $clientNeedsBuild -or $backofficeNeedsBuild
+    Invoke-Checked "docker" (Get-ComposeUpArgs -services @("db", "redis", "client-app", "backoffice-app") -withBuild:$frontendNeedsBuild) -Quiet
 
     Write-Step "Starting backend"
     Invoke-Checked "docker" (Get-ComposeUpArgs -services @("backend") -withBuild:$backendNeedsBuild) -Quiet
@@ -429,12 +496,25 @@ try {
     Write-Step "Waiting for backend"
     Wait-Http "http://127.0.0.1:8000/api/health/" "Backend" 10
 
-    Write-Step "Loading transactional demo data"
-    Invoke-Checked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "seed_transactions") -Quiet
+    $shouldSeedShowcase = $Reset -or $RefreshDemoData
+    if (-not $shouldSeedShowcase) {
+        Write-Step "Checking PFA showcase demo data"
+        $shouldSeedShowcase = -not (Test-DemoShowcaseDataExists)
+    }
 
-    Write-Step "Starting frontend and background services"
-    $frontendNeedsBuild = $clientNeedsBuild -or $backofficeNeedsBuild
-    Invoke-Checked "docker" (Get-ComposeUpArgs -services @("client-app", "backoffice-app", "celery-worker", "celery-beat") -withBuild:$frontendNeedsBuild) -Quiet
+    if ($shouldSeedShowcase) {
+        Write-Step "Loading PFA showcase demo data"
+        if ($Reset) {
+            Invoke-Checked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "seed_all") -Quiet
+        }
+        Invoke-Checked "docker" @("compose", "exec", "-T", "backend", "python", "manage.py", "seed_demo_showcase", "--require-hf") -Quiet
+    } else {
+        Write-Host "PFA showcase demo data already present. Skipping seed_demo_showcase." -ForegroundColor Green
+    }
+    Show-DemoDataSummary
+
+    Write-Step "Starting background services"
+    Invoke-Checked "docker" (Get-ComposeUpArgs -services @("celery-worker", "celery-beat") -withBuild:$false) -Quiet
     Save-DemoBuildFingerprint $repoRoot
 
     Write-Step "Waiting for web apps"
@@ -455,7 +535,7 @@ try {
 } finally {
     if ($cleanupOnExit) {
         try {
-            Stop-DemoStack
+            Stop-DemoStack -RemoveVolumes:$Reset
         } catch {
             Write-Host "Docker cleanup failed: $($_.Exception.Message)" -ForegroundColor Red
         }

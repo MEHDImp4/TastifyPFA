@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:10,000
+Tastify centralise le parcours restaurant : client, salle, cuisine, paiement et avis.
+
+2
+00:00:10,000 --> 00:00:25,000
+Le portail client présente la carte, les catégories et les plats appréciés.
+
+3
+00:00:25,000 --> 00:00:45,000
+Le gérant suit les revenus, les commandes, le stock et les retours clients.
+
+4
+00:00:45,000 --> 00:01:05,000
+Le serveur sélectionne une table, ajoute des plats et envoie la commande en cuisine.
+
+5
+00:01:05,000 --> 00:01:20,000
+La cuisine reçoit la commande dans le KDS et met à jour son avancement.
+
+6
+00:01:20,000 --> 00:01:40,000
+Le paiement simulé par QR ou lien sécurisé clôture la commande.
+
+7
+00:01:40,000 --> 00:01:55,000
+Le client se connecte et laisse un avis analysé par le système.
+
+8
+00:01:55,000 --> 00:02:10,000
+La commande est payée, la table est libérée et les données remontent au dashboard.

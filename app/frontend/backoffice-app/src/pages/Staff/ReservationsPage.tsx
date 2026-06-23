@@ -118,13 +118,17 @@ export const ReservationsPage: React.FC = () => {
   const executeDelete = async () => {
     if (!reservationToDelete) return;
     try {
-        await reservationApi.cancelReservation(reservationToDelete);
+        await reservationApi.deleteReservation(reservationToDelete);
         toast.success('Réservation supprimée');
         fetchReservations();
     } catch (err) {
         toast.error('Suppression impossible');
+        console.error('Failed to delete reservation', err);
+    } finally {
+        setIsDeleteModalOpen(false);
+        setReservationToDelete(null);
+        setActiveMenuId(null);
     }
-    setReservationToDelete(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -376,7 +380,11 @@ export const ReservationsPage: React.FC = () => {
 
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setReservationToDelete(null);
+          setActiveMenuId(null);
+        }}
         onConfirm={executeDelete}
         title="Supprimer la réservation"
         message="Confirmez-vous la suppression définitive de cette réservation ?"

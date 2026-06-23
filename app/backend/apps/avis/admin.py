@@ -4,8 +4,8 @@ from .models import Avis, AnalyseSentiment
 
 @admin.register(Avis)
 class AvisAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'plat', 'note', 'sentiment_score', 'lang_code', 'created_at')
-    list_filter = ('note', 'lang_code')
+    list_display = ('id', 'user', 'plat', 'sentiment_score', 'lang_code', 'created_at')
+    list_filter = ('lang_code',)
     search_fields = ('commentaire', 'user__username')
     readonly_fields = ('sentiment_score', 'lang_code', 'created_at', 'updated_at')
     ordering = ('-created_at',)

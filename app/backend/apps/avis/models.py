@@ -55,7 +55,7 @@ class Avis(models.Model):
         ]
 
     def __str__(self):
-        return f"Avis {self.id} by {self.user.username} - Note: {self.note}"
+        return f"Avis {self.id} by {self.user.username}"
 
 
 # Cette classe stocke le résultat de l'analyse automatique par l'IA (BERT)

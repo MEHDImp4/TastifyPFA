@@ -122,5 +122,5 @@ class CandidatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidature
         fields = '__all__'
-        read_only_fields = ['statut', 'created_at']
+        read_only_fields = ['created_at']
 

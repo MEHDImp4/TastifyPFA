@@ -17,7 +17,6 @@ import {
   LogIn,
   MessageSquare,
   Send,
-  Star,
   UserPlus
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -39,6 +38,12 @@ type ReviewItem = {
   quantite: number;
 };
 
+export const buildReviewPayload = (item: ReviewItem, commentaire: string) => ({
+  commande: item.commande_id,
+  plat: item.plat_id,
+  commentaire: commentaire.trim(),
+});
+
 export const PaymentPortal: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
@@ -48,7 +53,7 @@ export const PaymentPortal: React.FC = () => {
   const [isPaying, setIsPaying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
-  const [reviewDrafts, setReviewDrafts] = useState<Record<number, { note: number; commentaire: string }>>({});
+  const [reviewDrafts, setReviewDrafts] = useState<Record<number, { commentaire: string }>>({});
   const [submittedReviews, setSubmittedReviews] = useState<Record<number, boolean>>({});
   const [submittingReviewId, setSubmittingReviewId] = useState<number | null>(null);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -136,11 +141,10 @@ export const PaymentPortal: React.FC = () => {
     }
   };
 
-  const updateReviewDraft = (platId: number, values: Partial<{ note: number; commentaire: string }>) => {
+  const updateReviewDraft = (platId: number, values: Partial<{ commentaire: string }>) => {
     setReviewDrafts(prev => ({
       ...prev,
       [platId]: {
-        note: prev[platId]?.note ?? 5,
         commentaire: prev[platId]?.commentaire ?? '',
         ...values,
       },
@@ -148,7 +152,7 @@ export const PaymentPortal: React.FC = () => {
   };
 
   const submitReview = async (item: ReviewItem) => {
-    const draft = reviewDrafts[item.plat_id] ?? { note: 5, commentaire: '' };
+    const draft = reviewDrafts[item.plat_id] ?? { commentaire: '' };
     if (!draft.commentaire.trim()) {
       toast.error('Ajoutez un commentaire pour ce plat.');
       return;
@@ -156,12 +160,7 @@ export const PaymentPortal: React.FC = () => {
 
     setSubmittingReviewId(item.plat_id);
     try {
-      await avisApi.createAvis({
-        commande: item.commande_id,
-        plat: item.plat_id,
-        note: draft.note,
-        commentaire: draft.commentaire.trim(),
-      });
+      await avisApi.createAvis(buildReviewPayload(item, draft.commentaire));
       setSubmittedReviews(prev => ({ ...prev, [item.plat_id]: true }));
       toast.success('Merci pour votre avis');
     } catch (err: any) {
@@ -190,31 +189,17 @@ export const PaymentPortal: React.FC = () => {
               <div className="mb-10 space-y-4 text-left">
                 <div className="flex items-center gap-3 border-b border-outline pb-4">
                   <MessageSquare className="h-4 w-4 text-on-surface-variant" />
-                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-on-surface">Noter les plats payés</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-on-surface">Commenter les plats payés</h3>
                 </div>
                 {reviewItems.map((item) => {
-                  const draft = reviewDrafts[item.plat_id] ?? { note: 5, commentaire: '' };
+                  const draft = reviewDrafts[item.plat_id] ?? { commentaire: '' };
                   const submitted = submittedReviews[item.plat_id];
                   return (
                     <div key={`${item.commande_ligne_id}-${item.plat_id}`} className="rounded-xl border border-outline bg-background p-4 sm:p-5">
-                      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="mb-4">
                         <div>
                           <p className="text-base font-bold text-on-surface">{item.plat_nom}</p>
                           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">Qté {item.quantite}</p>
-                        </div>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((note) => (
-                            <button
-                              key={note}
-                              type="button"
-                              aria-label={`${note} étoile${note > 1 ? 's' : ''}`}
-                              disabled={submitted}
-                              onClick={() => updateReviewDraft(item.plat_id, { note })}
-                              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-outline bg-surface transition-colors hover:border-on-background disabled:opacity-50"
-                            >
-                              <Star className={`h-4 w-4 ${note <= draft.note ? 'fill-current text-accent' : 'text-on-surface-variant'}`} />
-                            </button>
-                          ))}
                         </div>
                       </div>
                       <textarea
@@ -279,7 +264,7 @@ export const PaymentPortal: React.FC = () => {
                 </div>
                 <h2 className="mb-3 text-2xl font-bold text-on-surface">Compte client requis</h2>
                 <p className="mx-auto mb-6 max-w-md text-sm leading-6 text-on-surface-variant">
-                  Créez un compte rapide ou connectez-vous pour régler l'addition et noter les plats après paiement.
+                  Créez un compte rapide ou connectez-vous pour régler l'addition et commenter les plats après paiement.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <Link to={`/register?redirect=${authRedirect}`} className="btn-primary min-h-14 justify-center gap-3">

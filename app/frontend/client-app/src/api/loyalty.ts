@@ -3,7 +3,7 @@ import { api } from './axios';
 export interface LoyaltyProfile {
   id?: number;
   username?: string;
-  points: number;
+  points: number | string;
   tier: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM';
   tier_display?: string;
   created_at?: string;
@@ -14,13 +14,18 @@ export interface Reward {
   id: number;
   nom: string;
   description: string;
-  points_requis: number;
+  points_requis: number | string;
   est_actif?: boolean;
   is_available?: boolean;
   image?: string;
   created_at?: string;
   updated_at?: string;
 }
+
+export const toLoyaltyNumber = (value: number | string | null | undefined): number => {
+  const parsed = typeof value === 'string' ? Number.parseFloat(value) : Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
 
 export interface LoyaltyTransaction {
   id: number;

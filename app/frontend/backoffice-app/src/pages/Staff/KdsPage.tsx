@@ -10,7 +10,9 @@ import {
   RotateCcw,
   Check,
   Zap,
-  PlayCircle
+  PlayCircle,
+  Maximize,
+  Minimize
 } from 'lucide-react';
 
 // --- Utilitaires ---
@@ -192,6 +194,7 @@ export const KdsPage: React.FC = () => {
   const navigate = useNavigate();
   const { tickets, setTickets, updateLigneStatut } = useKdsStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [isFocusMode, setIsFocusMode] = useState(false);
   
   const [clearedTickets, setClearedTickets] = useState<number[]>(() => {
     try {
@@ -253,6 +256,19 @@ export const KdsPage: React.FC = () => {
     previousTicketsRef.current = tickets.length;
   }, [tickets.length, isLoading]);
 
+  useEffect(() => {
+    if (!isFocusMode) return undefined;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsFocusMode(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isFocusMode]);
+
   const handleUpdateItem = async (ligneId: number, currentStatut: string) => {
     let nextStatut = '';
     if (currentStatut === 'EN_ATTENTE') nextStatut = 'EN_PREPARATION';
@@ -298,12 +314,18 @@ export const KdsPage: React.FC = () => {
     { id: 'PRETE', label: 'Prêt au Service' },
   ];
 
+  const handleFocusModeToggle = () => {
+    setIsFocusMode((current) => !current);
+  };
+
   if (isLoading) return <div className="h-full flex items-center justify-center text-primary bg-background"><Loader2 className="w-16 h-16 animate-spin" /></div>;
 
   const visibleTickets = tickets.filter(t => !clearedTickets.includes(t.id));
 
   return (
-    <div className="flex-1 flex flex-col bg-background font-sans selection:bg-primary/20 overflow-y-auto lg:overflow-hidden">
+    <div
+      className={`flex-1 flex flex-col bg-background font-sans selection:bg-primary/20 overflow-y-auto lg:overflow-hidden ${isFocusMode ? 'min-h-0' : ''}`}
+    >
       
       {/* KDS Header */}
       <header className="flex-none min-h-16 bg-surface-container-high border-b border-outline-variant px-4 py-3 md:px-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between z-20">
@@ -336,6 +358,18 @@ export const KdsPage: React.FC = () => {
             className="btn-secondary min-h-11 px-6 rounded-lg text-[11px] active:scale-95"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Actualiser
+          </button>
+
+          <button
+            type="button"
+            onClick={handleFocusModeToggle}
+            aria-pressed={isFocusMode}
+            aria-label={isFocusMode ? 'Quitter le mode focus du KDS' : 'Activer le mode focus du KDS'}
+            data-testid="kds-fullscreen-toggle"
+            className="btn-secondary min-h-11 px-6 rounded-lg text-[11px] active:scale-95"
+          >
+            {isFocusMode ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+            {isFocusMode ? 'Quitter le mode focus' : 'Mode focus'}
           </button>
         </div>
       </header>

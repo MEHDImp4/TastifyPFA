@@ -169,7 +169,7 @@ export const SallePage: React.FC = () => {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setIsEditMode(!isEditMode)} 
-                className={`min-h-[40px] px-4 border rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
+                className={`min-h-[44px] px-4 border rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                   isEditMode ? 'bg-on-background text-background border-on-background' : 'border-outline-variant text-on-background hover:border-on-background'
                 }`}
               >
@@ -179,7 +179,7 @@ export const SallePage: React.FC = () => {
               {isEditMode && (
                 <button 
                   onClick={handleOpenCreate} 
-                  className="min-h-[40px] px-4 bg-primary text-on-primary rounded-lg text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all flex items-center gap-2"
+                  className="min-h-[44px] px-4 bg-primary text-on-primary rounded-lg text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all flex items-center gap-2"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Ajouter Table</span>
