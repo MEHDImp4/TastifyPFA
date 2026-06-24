@@ -104,7 +104,7 @@ jobs:
             org.opencontainers.image.description=TastifyPFA ${{ matrix.service }} container
 
       - name: Build image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
