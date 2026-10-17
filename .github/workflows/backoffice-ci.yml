@@ -271,7 +271,7 @@ jobs:
 
       - name: Upload Python dependency audit
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: backend-pip-audit
           path: pip-audit.json
@@ -325,7 +325,7 @@ jobs:
 
       - name: Upload backend logs
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: backend-docker-logs
           path: backend-docker.log
@@ -379,7 +379,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: client-playwright-report
           path: app/frontend/client-app/playwright-report
@@ -387,7 +387,7 @@ jobs:
 
       - name: Upload Playwright traces
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: client-playwright-test-results
           path: app/frontend/client-app/test-results
@@ -446,7 +446,7 @@ jobs:
 
       - name: Upload matrix Playwright reports
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: expanded-browser-playwright-reports
           path: |
@@ -498,7 +498,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: backoffice-playwright-report
           path: app/frontend/backoffice-app/playwright-report
@@ -506,7 +506,7 @@ jobs:
 
       - name: Upload Playwright traces
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: backoffice-playwright-test-results
           path: app/frontend/backoffice-app/test-results
@@ -575,7 +575,7 @@ jobs:
 
       - name: Upload load test artifacts
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: load-test-artifacts
           path: artifacts/load-tests
@@ -619,7 +619,7 @@ jobs:
 
       - name: Upload nightly load test artifacts
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: nightly-load-test-artifacts
           path: artifacts/load-tests
@@ -673,7 +673,7 @@ jobs:
 
       - name: Upload cross-app realism report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-app-realism-report
           path: app/frontend/client-app/playwright-report
@@ -681,7 +681,7 @@ jobs:
 
       - name: Upload cross-app realism traces
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-app-realism-test-results
           path: app/frontend/client-app/test-results
@@ -759,7 +759,7 @@ jobs:
 
       - name: Upload device-lab preflight reports
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: device-lab-preflight-reports
           path: |
